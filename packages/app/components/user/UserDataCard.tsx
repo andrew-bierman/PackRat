@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
 import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import { truncateString } from '../../utils/truncateString';
 import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
@@ -196,11 +196,11 @@ const UserDataCard = ({
           </RStack>
         </RStack>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Link href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
+          <RLink href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
             <RText color="gray" fontWeight="bold">
               View Details
             </RText>
-          </Link>
+          </RLink>
         </View>
       </View>
     </View>

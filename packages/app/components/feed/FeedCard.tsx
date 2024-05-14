@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { TouchableOpacity, View } from 'react-native';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading, ContextMenu } from '@packrat/ui';
@@ -144,7 +144,7 @@ export default function Card({
                       width: '100%',
                     }}
                   >
-                    <Link
+                    <RLink
                       href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
                       style={{ textDecoration: 'none' }}
                     >
@@ -154,7 +154,7 @@ export default function Card({
                       >
                         {truncatedName}
                       </RText>
-                    </Link>
+                    </RLink>
                     <RStack
                       style={{
                         flexDirection: 'row',
@@ -231,7 +231,7 @@ export default function Card({
                       gap: 8,
                     }}
                   >
-                    <Link
+                    <RLink
                       href={`/profile/${
                         type === 'pack' ? owner_id : owner?.id
                       }`}
@@ -240,7 +240,7 @@ export default function Card({
                       <RText color={currentTheme.colors.textColor}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
                       </RText>
-                    </Link>
+                    </RLink>
                     <View
                       style={{
                         flexDirection: 'row',

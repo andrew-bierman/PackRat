@@ -13,7 +13,7 @@ import {
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@packrat/config';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
@@ -99,7 +99,7 @@ export default function Login() {
               <RText fontSize={14} color="grey">
                 I'm a new user.
               </RText>
-              <Link href="/register" style={{ textDecoration: 'none' }}>
+              <RLink href="/register">
                 <RText
                   style={{
                     color: '#818cf8',
@@ -109,11 +109,11 @@ export default function Login() {
                 >
                   Sign Up
                 </RText>
-              </Link>
+              </RLink>
             </RStack>
 
             <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Link href="/password-reset" style={{ textDecoration: 'none' }}>
+              <RLink href="/password-reset">
                 <RText
                   style={{
                     color: '#818cf8',
@@ -123,7 +123,7 @@ export default function Login() {
                 >
                   Reset Password?
                 </RText>
-              </Link>
+              </RLink>
             </RStack>
             {/* Google Login starts */}
             <RStack

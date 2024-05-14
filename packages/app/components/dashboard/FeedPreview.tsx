@@ -1,6 +1,6 @@
 import React from 'react';
 import { RText, RStack } from '@packrat/ui';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import { View } from 'react-native';
 import Carousel from '../carousel';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -27,7 +27,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
       {feedData?.map((item: FeedItem, index: number) => {
         const linkStr = `/${item.type}/${item.id}`;
         return linkStr ? (
-          <Link
+          <RLink
             href={linkStr}
             key={`${linkStr}`}
             style={{ textDecoration: 'none' }}
@@ -58,7 +58,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                 {item.description}
               </RText>
             </View>
-          </Link>
+          </RLink>
         ) : null;
       })}
     </Carousel>

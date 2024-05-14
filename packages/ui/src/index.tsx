@@ -12,6 +12,7 @@ import RSeparator from './RSeparator';
 import RHeading from './RHeading';
 import RSelect from './RSelect';
 import RLabel from './RLabel';
+import RLink from './RLink';
 import RCheckbox from './RCheckbox';
 import RRadio from './RRadio';
 import RTooltip from './RTooltip';
@@ -54,6 +55,7 @@ export {
   RCheckbox,
   RStack,
   RLabel,
+  RLink,
   RSelect,
   RSeparator,
   RSwitch,
