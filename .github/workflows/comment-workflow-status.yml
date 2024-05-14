@@ -1,8 +1,10 @@
 name: Workflow Status Commenter
 
 on:
-  pull_request_target:
-    types: [opened, synchronize, reopened]
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
   workflow_run:
     workflows:
       [
