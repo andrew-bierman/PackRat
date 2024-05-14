@@ -4,6 +4,6 @@
   "private": true,
   "main": "src/index.js",
   "dependencies": {
-    "react-native": "0.73.6"
+    "react-native": "0.74.1"
   }
 }
