@@ -2,9 +2,9 @@ name: Workflow Status Commenter
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
   workflow_run:
     workflows:
       [
@@ -27,17 +27,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Determine branch name
+        id: get-branch
+        run: |
+          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Fetch workflow runs
         id: fetch-workflows
         uses: actions/github-script@0.9.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const config = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              branch: context.payload.pull_request.head.ref
-            };
+            const branch = process.env.BRANCH_NAME;
             const workflows = [
                 'android-preview-build-local',
                 'Run Tests',
@@ -46,9 +47,9 @@ jobs:
                 'EAS Local Build',
             ];
             const response = await github.rest.actions.listWorkflowRunsForRepo({
-              owner: config.owner,
-              repo: config.repo,
-              branch: config.branch,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: branch,
               status: 'completed',
               per_page: 100 // Adjust this as needed
             });
@@ -83,6 +84,7 @@ jobs:
           echo "::set-output name=body::${commentBody}"
 
       - name: Comment on PR
+        if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
