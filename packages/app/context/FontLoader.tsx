@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 // import { SplashScreen } from 'expo-router';
-import { APP } from '@env';
+import { APP } from '@packrat/config';
 
 // Expo vector icons
 import {
