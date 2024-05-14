@@ -33,7 +33,7 @@
     "@tanstack/react-table": "^8.10.7",
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "esbuild": "^0.19.5",
-    "expo-image-picker": "^14.7.1",
+    "expo-image-picker": "~15.0.4",
     "jotai": "^2.6.4",
     "react": "18.2.0",
     "react-hook-form": "^7.50.1",

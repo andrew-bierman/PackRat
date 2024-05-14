@@ -55,7 +55,9 @@
             "deploymentTarget": "13.4"
           }
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {
