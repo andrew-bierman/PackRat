@@ -18,11 +18,13 @@ export const useCopyClipboard = (link: string) => {
           console.error('Failed to copy text to clipboard', err);
         });
     } else {
-      Clipboard.setStringAsync(copyLink).then(() => {
-        console.log('Text copied to clipboard');
-      }).catch((err) => {
-        console.error('Failed to copy text to clipboard', err);
-      });
+      Clipboard.setStringAsync(copyLink)
+        .then(() => {
+          console.log('Text copied to clipboard');
+        })
+        .catch((err) => {
+          console.error('Failed to copy text to clipboard', err);
+        });
     }
 
     setIsCopied(true);

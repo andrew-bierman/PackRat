@@ -1,1 +1,1 @@
-export * from './LmButton'
+export * from './LmButton';

@@ -1,6 +1,12 @@
-import { ThemeName } from 'tamagui'
+import { ThemeName } from 'tamagui';
 
-export type ThemeColors = 'primary' | 'secondary' | 'info' | 'warning' | 'success' | 'error'
+export type ThemeColors =
+  | 'primary'
+  | 'secondary'
+  | 'info'
+  | 'warning'
+  | 'success'
+  | 'error';
 export const colormap: { [k in ThemeColors]: ThemeName } = {
   success: 'green',
   error: 'red',
@@ -8,4 +14,4 @@ export const colormap: { [k in ThemeColors]: ThemeName } = {
   primary: 'blue',
   secondary: 'gray' as ThemeName,
   warning: 'orange',
-}
+};

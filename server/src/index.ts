@@ -59,4 +59,4 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
 // SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
 
-export default app; 
+export default app;

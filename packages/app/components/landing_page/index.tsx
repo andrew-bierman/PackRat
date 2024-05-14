@@ -140,15 +140,15 @@ const LandingPage = () => {
           </RStack>
         </View>
         <View style={styles.buttonContainer}>
-        <Link href="/sign-in">
-          <RButton
-            style={styles.getStartedButton}
-            onPress={() => {
-              /* Add navigation to the sign in screen */
-            }}
-          >
-            <RText style={styles.footerText}>Get Started</RText>
-          </RButton>
+          <Link href="/sign-in">
+            <RButton
+              style={styles.getStartedButton}
+              onPress={() => {
+                /* Add navigation to the sign in screen */
+              }}
+            >
+              <RText style={styles.footerText}>Get Started</RText>
+            </RButton>
           </Link>
         </View>
         <StatusBar style="auto" />

@@ -1,15 +1,15 @@
-import { memo } from 'react'
+import { memo } from 'react';
 import {
   Line as _Line,
   Path as _Path,
   Polyline as _Polyline,
   Rect as _Rect,
   Svg as _Svg,
-} from 'react-native-svg'
-import { themed } from './themed'
+} from 'react-native-svg';
+import { themed } from './themed';
 
 const Icon = (props) => {
-  const { color = 'black', size = 24, ...otherProps } = props
+  const { color = 'black', size = 24, ...otherProps } = props;
   return (
     <_Svg viewBox="0 0 256 256" {...otherProps} height={size} width={size}>
       <_Rect width="256" height="256" fill="none" />
@@ -75,8 +75,8 @@ const Icon = (props) => {
         strokeWidth="16"
       />
     </_Svg>
-  )
-}
-Icon.displayName = 'CalendarRegular'
-const CalendarRegular = memo(themed(Icon))
-export { CalendarRegular }
+  );
+};
+Icon.displayName = 'CalendarRegular';
+const CalendarRegular = memo(themed(Icon));
+export { CalendarRegular };
