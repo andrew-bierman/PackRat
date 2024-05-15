@@ -59,8 +59,10 @@ jobs:
 
       - name: Create Comment Body
         id: create-table
+        env:
+          WORKFLOW_RESULTS: ${{ steps.fetch-workflows.outputs.result }}
         run: |
-          const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.result }}');
+          const workflows = JSON.parse('${{ env.WORKFLOW_RESULTS }}');
           let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
 
           workflows.forEach(workflow => {
