@@ -2,7 +2,5 @@
   "name": "@packrat/config",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.js",
-  "dependencies": {
-  }
+  "main": "src/index.js"
 }
