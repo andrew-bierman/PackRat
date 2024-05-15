@@ -1,4 +1,3 @@
-import { GEOAPIFY_KEY } from '@env';
 import axios from 'app/config/axios';
 
 /**

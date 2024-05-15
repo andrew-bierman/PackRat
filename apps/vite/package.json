@@ -8,14 +8,15 @@
     "build:tsc": "tsc || exit 0",
     "build:vite": "vite build --debug",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules .tamagui"
   },
   "dependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@packrat/ui": "*",
     "@packrat/validations": "*",
     "@react-native/assets-registry": "0.74.81",
-    "@tamagui/vite-plugin": "^1.96.0",
+    "@tamagui/vite-plugin": "1.96.0",
     "@tanstack/react-router": "^1.16.5",
     "@tanstack/router-devtools": "^1.16.5",
     "@tanstack/router-vite-plugin": "^1.16.5",

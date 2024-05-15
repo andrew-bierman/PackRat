@@ -2,8 +2,6 @@ import { appRouter } from '../../routes/trpcRouter';
 import { createCallerFactory } from '../../trpc';
 import { createId } from '@paralleldrive/cuid2';
 import { DbClient } from '../../db/client';
-import { env } from 'cloudflare:test';
-import { faker } from '@faker-js/faker';
 
 const TEST_USER = {
   email: 'test@test.com',
@@ -43,18 +41,3 @@ export async function setupTest(env: Record<string, any>) {
 }
 
 export type trpcCaller = Awaited<ReturnType<typeof setupTest>>;
-
-export const generateMockUser = async (
-  user = {
-    email: faker.internet.email(),
-    name: faker.person.firstName(),
-    username: faker.internet.userName(),
-    password: faker.internet.password(),
-  },
-) => {
-  const caller = await setupTest(env);
-
-  const testUser = await caller.signUp(user);
-
-  return testUser;
-};

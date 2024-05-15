@@ -27,7 +27,6 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
 
   const {
     addNewPackAsync,
-    response,
     isError,
     isLoading,
     setIsPublic,
@@ -40,8 +39,10 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
    */
   const handleAddPack = async (data) => {
     try {
-      await addNewPackAsync(data);
+      const response = await addNewPackAsync(data);
+
       onSuccess?.();
+
       if (!response?.id) {
         return;
       }
@@ -82,7 +83,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder={'Is Public'}
           />
           <SubmitButton
-            style={{ width: '300px', marginTop: 40, marginBottom:20 }}
+            style={{ width: '300px', marginTop: 40, marginBottom: 20 }}
             onSubmit={handleAddPack}
           >
             <RText style={{ color: currentTheme.colors.text }}>

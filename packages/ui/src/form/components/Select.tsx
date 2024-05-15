@@ -1,4 +1,5 @@
 import { LmSelectRhf, type LmSelectRhfProps } from '../lib';
+export { LmSelect as Select } from '../lib';
 
 interface Props
   extends LmSelectRhfProps<{ label: string | number; value: any }> {}

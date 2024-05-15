@@ -1,17 +1,11 @@
 import { eq, and } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { userFavoritePacks } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class UserFavoritePacks {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(userId: string, packId: string) {
     try {
-      const record = (await this.createInstance())
+      const record = await DbClient.instance
         .insert(userFavoritePacks)
         .values({ userId, packId })
         .returning();
@@ -25,7 +19,7 @@ export class UserFavoritePacks {
 
   async delete(userId: string, packId: string) {
     try {
-      return (await this.createInstance())
+      return await DbClient.instance
         .delete(userFavoritePacks)
         .where(
           and(
@@ -35,7 +29,7 @@ export class UserFavoritePacks {
         )
         .returning();
     } catch (error) {
-      throw new Errro(
+      throw new Error(
         `Failed to delete the user favorite pack record: ${error.message}`,
       );
     }

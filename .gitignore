@@ -1,6 +1,8 @@
 mongodb-data
 *.env
 .env.local
+.env.production
+.env.old
 node_modules
 # yarn.lock
 # dist
@@ -33,6 +35,8 @@ drizzle.config.d.ts
 
 # Tamagui
 .tamagui
+
+*.apk
 
 # Logs
 logs

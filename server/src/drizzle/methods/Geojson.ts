@@ -1,16 +1,10 @@
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { type InsertGeoJson, geojson } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class GeoJson {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(geoJSONData: InsertGeoJson) {
     try {
-      const db = await this.createInstance();
+      const db = DbClient.instance;
       const record = await db
         .insert(geojson)
         .values(geoJSONData)

@@ -14,3 +14,8 @@ export type TripType = {
   is_public: boolean;
   type: string | 'trip';
 };
+
+export enum TripActivity {
+  HIKING = 'hiking',
+  RUNNING = 'running',
+}

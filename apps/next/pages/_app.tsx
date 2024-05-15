@@ -18,6 +18,9 @@ import { Navigation, Navbar } from 'app/components/navigation';
 import { PortalProvider } from 'tamagui';
 import { Container, MainContentWeb } from '@packrat/ui';
 
+import * as WebBrowser from 'expo-web-browser';
+WebBrowser.maybeCompleteAuthSession();
+
 if (process.env.NODE_ENV === 'production') {
   require('../public/tamagui.css');
 }

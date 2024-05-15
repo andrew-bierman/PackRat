@@ -24,7 +24,7 @@ export const editGlobalItemAsDuplicateService = async (
   quantity: number,
   unit: string,
   type: string,
-): Promise<object> => {
+) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);

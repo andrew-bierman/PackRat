@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { LmButton, LmButtonProps } from '@tamagui-extras/core';
+import { LmButton, LmButtonProps } from '../../../extras/lib/core/src';
 
 export function LmResetButtonRhf(props: LmButtonProps) {
   const { reset } = useFormContext();
