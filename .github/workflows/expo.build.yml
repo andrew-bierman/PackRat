@@ -12,8 +12,8 @@ concurrency:
 
 env: # Define a shared environment variable for android and ios build.
   MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-  EXPO_PUBLIC_CLIENT_URL: ${{ vars.EXPO_PUBLIC_CLIENT_URL }}
-  EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
+  EXPO_PUBLIC_CLIENT_URL: ${{ secrets.EXPO_PUBLIC_CLIENT_URL }}
+  EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
   EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN: ${{ secrets.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN }}
 
 jobs:
