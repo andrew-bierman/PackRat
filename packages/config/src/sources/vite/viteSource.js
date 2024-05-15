@@ -1,1 +1,1 @@
-export const viteSource = import.meta.env,
+export const viteSource = import.meta.env
