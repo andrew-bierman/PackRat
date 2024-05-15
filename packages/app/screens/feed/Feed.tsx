@@ -110,8 +110,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       />
     );
 
-    console.log("filteredData", filteredData)
-
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
         <FlatList

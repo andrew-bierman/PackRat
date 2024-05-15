@@ -9,7 +9,6 @@ import MapPreview from './MapPreview';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWebMap } from 'app/hooks/map/useWebMap';
 import useGpxUpload from './useGpxUpload';
-import { RText } from '@packrat/ui';
 // import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken =

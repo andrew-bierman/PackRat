@@ -95,9 +95,6 @@ export default function TripCard({
           <MapContainer shape={shape} />
         )
       ) : isSearch ? (
-        {
-          console.log('searchRef searchRef', searchRef)
-        }
         <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       ) : (
         <RStack style={{ width: '80%' }}>

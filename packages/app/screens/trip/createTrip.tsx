@@ -17,7 +17,6 @@ import {
   TripSearchCard,
   TripTrailCard,
 } from 'app/components/trip/TripCards';
-import { MultiStepForm } from 'components/MultistepForm';
 
 export default function Trips() {
   const styles = useCustomStyles(loadStyles);
@@ -38,13 +37,11 @@ export default function Trips() {
     filteredTrails,
   } = useTripsData();
 
-
   const { isValid, setDateRange, togglePlace, tripStore } = useCreateTripForm(
     weatherData,
     currentDestination,
     photonDetails,
   );
-
 
   const dateRange = {
     start_date: tripStore.start_date,

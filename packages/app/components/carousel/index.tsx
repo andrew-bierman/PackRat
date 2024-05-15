@@ -20,7 +20,6 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
-  console.log('currentIndex', currentIndex)
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
     const newIndex = Math.round(contentOffset.x / itemWidth);
@@ -28,7 +27,6 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   };
 
   const scrollToIndex = (index: number) => {
-    console.log('scrollViewRef.current', scrollViewRef.current)
     if (index >= 0 && index < children.length && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
         x: index * (itemWidth + 20),
@@ -42,7 +40,7 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   return (
     <RStack
       style={{
-        width: Platform.OS === 'web' ? '95%' : width * 0.9,
+        width: Platform.OS === 'web' ? '100%' : width * 0.9,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',

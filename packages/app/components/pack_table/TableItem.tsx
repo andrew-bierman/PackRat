@@ -41,9 +41,7 @@ const TableItem = ({
   const [activeModal, setActiveModal] = useState<ModalName>(null);
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
-  console.log('hasPermissions', hasPermissions)
   const openModal = (modalName: ModalName) => () => {
-    console.log('model name', modalName);
     setActiveModal(modalName);
   };
 
@@ -69,7 +67,6 @@ const TableItem = ({
     <RText px={0}>{`${formatNumber(weight)} ${unit}`}</RText>,
     <RText px={0}>{quantity}</RText>,
   ];
-  console.log('Platform.OS', hasPermissions)
   if (hasPermissions) {
     
     if (
@@ -77,10 +74,8 @@ const TableItem = ({
       Platform.OS === 'ios' ||
       window.innerWidth < 900
     ) {
-      console.log('This one 1')
       rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
     } else {
-      console.log('This one 4')
       rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }

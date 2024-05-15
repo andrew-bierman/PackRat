@@ -15,10 +15,12 @@ export const useCurrentDestination = () => {
       );
     });
   }, [osm.osmId, osm.osmType, data]);
+
   const latLng = useMemo(() => {
     if (!currentDestination) return {};
 
     return parseCoordinates(currentDestination);
   }, [currentDestination]);
+  
   return { currentDestination, latLng, isError, isLoading };
 };

@@ -8,8 +8,6 @@ const webClientId = import.meta.env.VITE_PUBLIC_GOOGLE_ID as string;
 const iosClientId = String(process.env.IOS_CLIENT_ID);
 const androidClientId = String(process.env.ANDROID_CLIENT_ID);
 
-console.log('webClientId', androidClientId)
-
 export const useGoogleAuth = () => {
   const [token, setToken] = useState('');
   const sessionSignIn = useSessionSignIn();

@@ -56,7 +56,6 @@ export default function Card({
   itemPacks,
 }: CardProps) {
   const user = useAuthUser();
-  console.log('owner_id', owner_id)
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
 

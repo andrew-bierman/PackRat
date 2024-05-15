@@ -34,7 +34,6 @@ export const TableContainer = ({
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
-  console.log('hasPermissionshasPermissions', hasPermissions)
   const {
     isLoading,
     error,
