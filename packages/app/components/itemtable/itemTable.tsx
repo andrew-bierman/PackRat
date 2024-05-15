@@ -148,7 +148,7 @@ export const ItemsTable = ({
    * @return {undefined} This function doesn't return anything.
    */
   const handleNextPage = () => {
-    setPage(page + 1)
+    setPage(page + 1);
   };
   /**
    * Handles the action of going to the previous page.
@@ -236,11 +236,7 @@ export const ItemsTable = ({
             disabled={page < 2}
             onPress={handlePreviousPage}
           >
-            <AntDesign
-              name="left"
-              size={16}
-              color='white'
-            />
+            <AntDesign name="left" size={16} color="white" />
           </RButton>
           <RButton
             style={{
@@ -255,11 +251,7 @@ export const ItemsTable = ({
             disabled={page === totalPages}
             onPress={handleNextPage}
           >
-            <AntDesign
-              name="right"
-              size={16}
-              color='white'
-            />
+            <AntDesign name="right" size={16} color="white" />
           </RButton>
         </View>
       </View>

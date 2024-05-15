@@ -68,8 +68,8 @@ export function LmStarRating({
               ? colorActiveHover
               : colorActive
             : hovered
-            ? colorHover
-            : color;
+              ? colorHover
+              : color;
           return (
             <SizableStack
               key={`${currentRating}`}

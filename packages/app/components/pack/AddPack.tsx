@@ -39,8 +39,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
    */
   const handleAddPack = async (data) => {
     try {
-
-    const response = await addNewPackAsync(data);
+      const response = await addNewPackAsync(data);
 
       onSuccess?.();
 
@@ -51,9 +50,8 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
         router.push(`/pack/${response.id}`);
         return;
       }
-    
-      setPackIdParam(response.id);
 
+      setPackIdParam(response.id);
     } catch {}
   };
 
@@ -85,7 +83,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder={'Is Public'}
           />
           <SubmitButton
-            style={{ width: '300px', marginTop: 40, marginBottom:20 }}
+            style={{ width: '300px', marginTop: 40, marginBottom: 20 }}
             onSubmit={handleAddPack}
           >
             <RText style={{ color: currentTheme.colors.text }}>

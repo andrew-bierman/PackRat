@@ -1,4 +1,4 @@
-import { styled, ThemeableStack } from 'tamagui'
+import { styled, ThemeableStack } from 'tamagui';
 
 export const LmGrid = styled(ThemeableStack, {
   variants: {
@@ -60,7 +60,7 @@ export const LmGrid = styled(ThemeableStack, {
           return {
             alignItems: 'center',
             justifyContent: 'center',
-          }
+          };
         }
       },
     },
@@ -143,4 +143,4 @@ export const LmGrid = styled(ThemeableStack, {
       }),
     },
   } as const,
-})
+});

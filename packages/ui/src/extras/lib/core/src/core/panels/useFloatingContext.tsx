@@ -1,4 +1,4 @@
-import type { UseFloatingOptions } from '@floating-ui/react'
+import type { UseFloatingOptions } from '@floating-ui/react';
 import {
   safePolygon,
   useDismiss,
@@ -7,11 +7,17 @@ import {
   useHover,
   useInteractions,
   useRole,
-} from '@floating-ui/react'
-import { useCallback } from 'react'
+} from '@floating-ui/react';
+import { useCallback } from 'react';
 
 // Custom floating context to override the Popper on web
-export const useFloatingContext = ({ open, setOpen, disable, disableFocus, hoverable }) => {
+export const useFloatingContext = ({
+  open,
+  setOpen,
+  disable,
+  disableFocus,
+  hoverable,
+}) => {
   return useCallback(
     (props: UseFloatingOptions) => {
       const floating = useFloating({
@@ -23,10 +29,10 @@ export const useFloatingContext = ({ open, setOpen, disable, disableFocus, hover
             event?.type === 'mouseenter' ||
             event?.type === 'mouseleave'
               ? 'hover'
-              : 'press'
-          setOpen(val, type)
+              : 'press';
+          setOpen(val, type);
         },
-      }) as any
+      }) as any;
       const { getReferenceProps, getFloatingProps } = useInteractions([
         hoverable
           ? useHover(floating.context, {
@@ -49,14 +55,14 @@ export const useFloatingContext = ({ open, setOpen, disable, disableFocus, hover
         useDismiss(floating.context, {
           enabled: !disable,
         }),
-      ])
+      ]);
       return {
         ...floating,
         open,
         getReferenceProps,
         getFloatingProps,
-      }
+      };
     },
-    [open, setOpen, disable, disableFocus, hoverable]
-  )
-}
+    [open, setOpen, disable, disableFocus, hoverable],
+  );
+};

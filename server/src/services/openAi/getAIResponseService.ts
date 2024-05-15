@@ -46,7 +46,7 @@ export const getAIResponseService = async (
     const isAI = current === 'AI:';
     const content = historyArray[index + 1]; // Content is the next item
     const role = isAI ? 'assistant' : 'user';
-    if (content && content.trim()) {
+    if (content?.trim()) {
       // Check if content exists and is not just whitespace
       accumulator.push({ role, content: content.trim() });
     }

@@ -1,11 +1,16 @@
-import React, { memo } from 'react'
-import { Circle as _Circle, Line as _Line, Rect as _Rect, Svg as _Svg } from 'react-native-svg'
+import React, { memo } from 'react';
+import {
+  Circle as _Circle,
+  Line as _Line,
+  Rect as _Rect,
+  Svg as _Svg,
+} from 'react-native-svg';
 
-import { themed } from './themed'
-import { IconProps } from './IconProps'
+import { themed } from './themed';
+import { IconProps } from './IconProps';
 
 const Icon = (props: IconProps) => {
-  const { color = 'black', size = 24, ...otherProps } = props
+  const { color = 'black', size = 24, ...otherProps } = props;
   return (
     <_Svg viewBox="0 0 256 256" {...otherProps} height={size} width={size}>
       <_Rect width="256" height="256" fill="none" />
@@ -108,9 +113,9 @@ const Icon = (props: IconProps) => {
         strokeWidth="16"
       />
     </_Svg>
-  )
-}
+  );
+};
 
-Icon.displayName = 'SunRegular'
+Icon.displayName = 'SunRegular';
 
-export const SunRegular = memo<IconProps>(themed(Icon))
+export const SunRegular = memo<IconProps>(themed(Icon));

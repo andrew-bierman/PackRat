@@ -1,3 +1,3 @@
-import {styled, ThemeableStack} from "tamagui";
+import { styled, ThemeableStack } from 'tamagui';
 
-export const LmAspectRatio = styled(ThemeableStack, {})
+export const LmAspectRatio = styled(ThemeableStack, {});

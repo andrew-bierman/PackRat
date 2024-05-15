@@ -1,15 +1,15 @@
-import { memo } from 'react'
+import { memo } from 'react';
 import {
   Circle as _Circle,
   Line as _Line,
   Path as _Path,
   Rect as _Rect,
   Svg as _Svg,
-} from 'react-native-svg'
-import { themed } from './themed'
+} from 'react-native-svg';
+import { themed } from './themed';
 
 const Icon = (props) => {
-  const { color = 'black', size = 24, ...otherProps } = props
+  const { color = 'black', size = 24, ...otherProps } = props;
   return (
     <_Svg viewBox="0 0 256 256" {...otherProps} height={size} width={size}>
       <_Rect width="256" height="256" fill="none" />
@@ -34,8 +34,8 @@ const Icon = (props) => {
       />
       <_Circle cx="128" cy="180" r="12" fill={`${color}`} />
     </_Svg>
-  )
-}
-Icon.displayName = 'WarningRegular'
-const WarningRegular = memo(themed(Icon))
-export { WarningRegular }
+  );
+};
+Icon.displayName = 'WarningRegular';
+const WarningRegular = memo(themed(Icon));
+export { WarningRegular };

@@ -1,14 +1,19 @@
-import { Popover, PopoverContentProps, PopoverProps, useControllableState } from 'tamagui'
-import { ReactNode } from 'react'
-import { LmSheet, LmSheetProps } from './LmSheet'
+import {
+  Popover,
+  PopoverContentProps,
+  PopoverProps,
+  useControllableState,
+} from 'tamagui';
+import { ReactNode } from 'react';
+import { LmSheet, LmSheetProps } from './LmSheet';
 
 export type LmPopoverProps = PopoverProps & {
-  trigger?: ReactNode
-  hideArrow?: boolean
-  contentProps?: Omit<PopoverContentProps, 'ref'>
-  isBouncy?: boolean
-  sheetProps?: LmSheetProps
-}
+  trigger?: ReactNode;
+  hideArrow?: boolean;
+  contentProps?: Omit<PopoverContentProps, 'ref'>;
+  isBouncy?: boolean;
+  sheetProps?: LmSheetProps;
+};
 
 export function LmPopover({
   trigger,
@@ -19,12 +24,12 @@ export function LmPopover({
   sheetProps,
   ...popoverProps
 }: LmPopoverProps) {
-  const { onOpenChange, open, defaultOpen, ...rest } = popoverProps
+  const { onOpenChange, open, defaultOpen, ...rest } = popoverProps;
   const [currentOpen, setOpen] = useControllableState({
     onChange: onOpenChange,
     defaultProp: defaultOpen,
     prop: open,
-  })
+  });
   return (
     <Popover size="$5" {...rest} open={currentOpen} onOpenChange={setOpen}>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
@@ -55,9 +60,11 @@ export function LmPopover({
         padding={contentProps?.padding || 0}
         {...contentProps}
       >
-        {!hideArrow && <Popover.Arrow borderWidth={1} borderColor="$borderColor" />}
+        {!hideArrow && (
+          <Popover.Arrow borderWidth={1} borderColor="$borderColor" />
+        )}
         {children}
       </Popover.Content>
     </Popover>
-  )
+  );
 }
