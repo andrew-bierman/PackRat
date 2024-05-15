@@ -6,6 +6,7 @@ import { useAuthUser } from 'app/auth/hooks';
 export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
   const [typeId, setTypeId] = useState(itemTypeId);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userInput, setUserInput] = useState('');
   // const [parsedMessages, setParsedMessages] = useState([]);
@@ -67,13 +68,15 @@ export const useChat = (itemTypeId = null) => {
    * @return {Promise<void>} This function returns nothing.
    */
   const handleSendMessage = async (userMessage) => {
+    setIsLoading(true);
+    setUserInput('');
     await getAIResponse({
       userId: user.id,
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
     });
-    refetch();
-    setUserInput('');
+    await refetch();
+    setIsLoading(false);
   };
 
   return {
@@ -81,6 +84,7 @@ export const useChat = (itemTypeId = null) => {
     typeId,
     parsedMessages,
     userInput,
+    isLoading,
     handleSendMessage,
     setUserInput,
     setTypeId,

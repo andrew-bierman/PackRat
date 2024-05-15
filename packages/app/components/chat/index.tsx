@@ -12,6 +12,8 @@ import {
   Form,
   FormInput,
   FormSelect,
+  RButton,
+  RInput,
   RStack,
   SubmitButton,
 } from '@packrat/ui';
@@ -114,6 +116,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     handleSendMessage,
     setUserInput,
     setTypeId,
+    isLoading,
   } = useChat({ itemTypeId });
 
   return (
@@ -129,22 +132,21 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
           <MessageList messages={parsedMessages} />
         </ScrollView>
-        <Form
-        // validationSchema={sendMessage}
-        >
-          <RStack style={{ marginTop: 16, gap: 8 }}>
-            <FormInput
-              name="message"
-              placeholder="Type a message..."
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              onChangeText={(text) => setUserInput(text)}
-            />
-            <SubmitButton onSubmit={handleSendMessage}>
-              <Text style={styles.sendText}>Send</Text>
-            </SubmitButton>
-          </RStack>
-        </Form>
+        <RStack style={{ marginTop: 16, gap: 8 }}>
+          <RInput
+            placeholder="Type a message..."
+            value={userInput}
+            onChangeText={(text) => setUserInput(text)}
+          />
+          <RButton
+            disabled={!userInput}
+            onClick={() => handleSendMessage({ message: userInput })}
+          >
+            <Text style={styles.sendText}>
+              {isLoading ? 'Loading...' : 'Send'}
+            </Text>
+          </RButton>
+        </RStack>
       </RStack>
     </View>
   );
