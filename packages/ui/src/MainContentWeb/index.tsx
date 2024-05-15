@@ -1,5 +1,14 @@
-import { View, styled } from 'tamagui';
+import { View, ViewProps } from 'tamagui';
 
-export const MainContentWeb = styled(View, {
-  paddingTop: 83,
-});
+interface ExtendedViewProps extends ViewProps {
+  paddingTop?: number;
+}
+
+export const MainContentWeb: React.FC<ExtendedViewProps> = (props) => (
+  <View
+    style={{
+      paddingTop: 83,
+    }}
+    {...props}
+  />
+);

@@ -1,4 +1,4 @@
-import { Input, InputProps, Stack, TextArea } from 'tamagui';
+import { Input, InputProps, Stack as OriginalStack, TextArea } from 'tamagui';
 import { forwardRef, useId, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
@@ -8,6 +8,8 @@ import {
   EyeSlashRegular,
   IconProps,
 } from '../../extras/lib/core/src';
+
+const Stack: any = OriginalStack;
 
 export type LmInputProps = InputProps &
   LmFormContainerBaseTypes & {
@@ -43,10 +45,14 @@ export const LmInput = forwardRef(function LmInputEl(
   };
   if (error) {
     currentInputProps.theme = 'red';
-    currentInputProps.borderColor = error ? '$red8' : undefined;
+    currentInputProps.style = {
+      borderColor: error ? '$red8' : undefined,
+    };
   }
   if (fullWidth) {
-    currentInputProps.minWidth = '100%';
+    currentInputProps.style = {
+      minWidth: '100%',
+    };
   }
 
   let secureTextEntry = !!(rest.secureTextEntry || isPassword);

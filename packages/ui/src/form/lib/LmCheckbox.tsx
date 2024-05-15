@@ -1,27 +1,31 @@
 import { ReactNode, useId } from 'react';
 import {
-  Checkbox,
+  Checkbox as OriginalCheckbox,
   CheckboxProps,
   FontSizeTokens,
   Label,
   LabelProps,
-  Paragraph,
+  Paragraph as OriginalParagraph,
   ParagraphProps,
   SizeTokens,
-  XStack,
+  XStack as OriginalXStack,
   XStackProps,
   YStack,
 } from 'tamagui';
 import { CheckRegular, MinusRegular } from '../../extras/lib/core/src';
 
+const Checkbox: any = OriginalCheckbox;
+const Paragraph: any = OriginalParagraph;
+const XStack: any = OriginalXStack;
+
 export type LmCheckboxProps = XStackProps & {
-  checkboxProps?: Omit<CheckboxProps, 'disabled'>;
+  checkboxProps?: Omit<CheckboxProps, 'disabled'> & { borderColor?: string };
   label?: ReactNode;
   onChange?: CheckboxProps['onCheckedChange'];
   value?: boolean;
   error?: boolean;
   helperText?: ReactNode;
-  helperTextProps?: ParagraphProps;
+  helperTextProps?: ParagraphProps & { color?: string };
   size?: SizeTokens;
   required?: boolean;
   labelProps?: Omit<LabelProps, 'htmlFor' | 'ref'>;
