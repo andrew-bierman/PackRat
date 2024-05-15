@@ -28,8 +28,7 @@ jobs:
 
       - name: Determine branch name
         id: get-branch
-        run: |
-          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Fetch workflow runs
         id: fetch-workflows
@@ -55,39 +54,41 @@ jobs:
             });
 
             const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
-            return JSON.stringify(filteredRuns);
+            return { filteredRuns: filteredRuns };
 
       - name: Create Comment Body
         id: create-table
+        uses: actions/github-script@v6
         env:
           WORKFLOW_RESULTS: ${{ steps.fetch-workflows.outputs.result }}
-        run: |
-          const workflows = JSON.parse('${{ env.WORKFLOW_RESULTS }}');
-          let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
+        with:
+          script: |
+            const workflows = JSON.parse('${{ env.WORKFLOW_RESULTS }}');
+            let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
 
-          workflows.forEach(workflow => {
-            let emoji;
-            switch (workflow.conclusion) {
-              case 'success':
-                emoji = '✅';
-                break;
-              case 'failure':
-                emoji = '❌';
-                break;
-              case 'cancelled':
-                emoji = '🚫';
-                break;
-              case null:
-                emoji = '🔄';
-                break;
-              default:
-                emoji = '⏺️';
-            }
+            workflows.forEach(workflow => {
+              let emoji;
+              switch (workflow.conclusion) {
+                case 'success':
+                  emoji = '✅';
+                  break;
+                case 'failure':
+                  emoji = '❌';
+                  break;
+                case 'cancelled':
+                  emoji = '🚫';
+                  break;
+                case null:
+                  emoji = '🔄';
+                  break;
+                default:
+                  emoji = '⏺️';
+              }
 
-            commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
-          });
+              commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
+            });
 
-          echo "::set-output name=body::${commentBody}"
+            return { body: commentBody };
 
       - name: Comment on PR
         if: github.event_name == 'pull_request'
