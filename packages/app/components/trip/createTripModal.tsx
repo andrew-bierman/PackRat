@@ -56,7 +56,7 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
       footerButtons={[
         {
           label: 'Save',
-          color: "#6F9CDE",
+          color: '#6F9CDE',
           onClick: (_, closeModal) => submitTrigger(closeModal),
         },
       ]}

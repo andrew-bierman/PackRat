@@ -99,7 +99,6 @@ const TableItem = ({
         showTrigger={false}
         isOpen={activeModal === 'edit'}
         onClose={closeModal}
-        
       >
         <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
       </EditPackItemModal>
