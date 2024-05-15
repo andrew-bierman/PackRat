@@ -9,6 +9,13 @@ node_modules/
 package-lock.json
 package.json
 
+# Next.js build directory
+.next/
+.vercel/
+
+# Vite build directory
+dist/
+
 # README and other markdowns might be formatted, but if you're facing errors, you can ignore them
 README.md
 

@@ -1,20 +1,14 @@
 import { eq, and } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import {
   itemPacks as ItemPacksTable,
   type InsertItemPack,
 } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class ItemPacks {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async create(itemPack: InsertItemPack) {
     try {
-      const record = (await this.createInstance())
+      const record = await DbClient.instance
         .insert(ItemPacksTable)
         .values(itemPack)
         .returning()
@@ -27,7 +21,7 @@ export class ItemPacks {
 
   async delete(itemId: string, packId: string) {
     try {
-      const deletedRecord = (await this.createInstance())
+      const deletedRecord = await DbClient.instance
         .delete(ItemPacksTable)
         .where(
           and(
@@ -44,9 +38,7 @@ export class ItemPacks {
   }
 
   async updateRelation({ oldItemId, newItemId, packId }) {
-    await (
-      await this.createInstance()
-    )
+    await DbClient.instance
       .delete(ItemPacksTable)
       .where(
         and(
@@ -56,7 +48,7 @@ export class ItemPacks {
       )
       .execute();
     const newRelation = { itemId: newItemId, packId };
-    await (await this.createInstance())
+    await await DbClient.instance
       .insert(ItemPacksTable)
       .values(newRelation)
       .returning()

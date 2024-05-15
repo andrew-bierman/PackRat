@@ -16,7 +16,7 @@ import {
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'app/hooks/router';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
 import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
@@ -98,7 +98,7 @@ export default function Register() {
                 <RText fontSize={14} color="grey">
                   Already a User?
                 </RText>
-                <Link href="/sign-in">
+                <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
                   <RText
                     style={{
                       color: '#818cf8',
@@ -108,7 +108,7 @@ export default function Register() {
                   >
                     Login Here
                   </RText>
-                </Link>
+                </RLink>
               </RStack>
               {/* Google register */}
               <RStack

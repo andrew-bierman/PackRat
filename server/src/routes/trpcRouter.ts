@@ -157,7 +157,7 @@ export const appRouter = trpcRouter({
   deletePack: deletePackRoute(), // Done
   scorePack: scorePackRoute(), // Done
   duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
-  // // osm routes
+  // osm routes - currently breaking tests, see patch file
   getPhotonResults: getPhotonResultsRoute(),
   getTrailsOSM: getTrailsOSMRoute(),
   getParksOSM: getParksOSMRoute(),

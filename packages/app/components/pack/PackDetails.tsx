@@ -7,7 +7,7 @@ import { RButton, RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, View, FlatList } from 'react-native';
 import { theme } from '../../theme';
-import { CLIENT_URL } from '@env';
+import { CLIENT_URL } from '@packrat/config';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';

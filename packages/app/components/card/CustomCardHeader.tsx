@@ -2,7 +2,7 @@ import React from 'react';
 import { RStack, RText } from '@packrat/ui';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 import useTheme from '../../hooks/useTheme';
@@ -15,10 +15,10 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   return (
     <>
       <RStack style={{ flex: 1 }}>
-        <RText>{title}</RText>
+        {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
       <View>
-        <Link href={`/profile/${data.owner_id.id || data.owner_id}`}>
+        <RLink href={`/profile/${data.owner_id.id || data.owner_id}`} style={{ textDecoration: 'none' }}>
           <RText>
             {user?.id === data.owner_id
               ? 'Your Profile'
@@ -28,7 +28,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
                     : 'Profile'
                 }`}
           </RText>
-        </Link>
+        </RLink>
       </View>
       {link && (
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

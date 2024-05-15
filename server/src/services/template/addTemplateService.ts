@@ -19,7 +19,7 @@ export const addTemplateService = async (
   try {
     const userClass = new User();
     const templateClass = new Template();
-    const user = await userClass.findById(createdBy);
+    const user = await userClass.findUser({ userId: createdBy });
     if (!user) {
       throw new Error('User not found!');
     }

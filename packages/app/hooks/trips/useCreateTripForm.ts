@@ -45,6 +45,7 @@ export const useCreateTripForm = (
     tripStore: createTripFormValues,
     isValid,
     togglePlace,
+    setTripValue,
     setDateRange,
   };
 };

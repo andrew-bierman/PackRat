@@ -3,7 +3,7 @@ import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ViewProps } from 'react-native';
 
-import { RIconButton } from '@packrat/ui';
+import RIconButton from '../RIconButton';
 
 interface ExtendedDropdownMenuProps extends ViewProps {
   css?: string;
@@ -81,13 +81,13 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
           style={{ padding: 0 }}
         />
       </DropdownMenu.Trigger>
-      <CustomContent>
+      <DropdownMenu.Content>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
           <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
-      </CustomContent>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 };

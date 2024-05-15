@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
 import { View, Modal, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';

@@ -3,7 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
 import { TouchableOpacity, View } from 'react-native';
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import { RText, RStack, RHeading, ContextMenu } from '@packrat/ui';
@@ -103,10 +103,11 @@ export default function Card({
   const truncatedDestination = truncateString(destination, 25);
   const formattedWeight = convertWeight(total_weight, 'g', weightUnit);
   // const formattedWeight = formatNumber(total_weight); // TODO convert to user preference once implemented
-  const quantity = itemPacks?.reduce(
-    (accumulator, currentValue) => accumulator + currentValue?.item?.quantity,
-    0,
-  ) ?? 0;
+  const quantity =
+    itemPacks?.reduce(
+      (accumulator, currentValue) => accumulator + currentValue?.item?.quantity,
+      0,
+    ) ?? 0;
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
@@ -143,8 +144,9 @@ export default function Card({
                       width: '100%',
                     }}
                   >
-                    <Link
+                    <RLink
                       href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
+                      style={{ textDecoration: 'none' }}
                     >
                       <RText
                         fontSize={18}
@@ -152,7 +154,7 @@ export default function Card({
                       >
                         {truncatedName}
                       </RText>
-                    </Link>
+                    </RLink>
                     <RStack
                       style={{
                         flexDirection: 'row',
@@ -229,15 +231,16 @@ export default function Card({
                       gap: 8,
                     }}
                   >
-                    <Link
+                    <RLink
                       href={`/profile/${
                         type === 'pack' ? owner_id : owner?.id
                       }`}
+                      style={{ textDecoration: 'none' }}
                     >
                       <RText color={currentTheme.colors.textColor}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
                       </RText>
-                    </Link>
+                    </RLink>
                     <View
                       style={{
                         flexDirection: 'row',

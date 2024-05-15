@@ -8,9 +8,7 @@ import { Trip } from '../../drizzle/methods/trip';
  * @param {string} queryBy - The query parameter to sort the trips.
  * @return {Promise<object[]>} The public trips.
  */
-export const getPublicTripsService = async (
-  queryBy: string,
-): Promise<object[]> => {
+export const getPublicTripsService = async (queryBy: string) => {
   try {
     const tripClass = new Trip();
     const publicTrips = await tripClass.findPublicTrips(queryBy);
