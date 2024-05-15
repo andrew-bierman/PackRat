@@ -54,16 +54,14 @@ jobs:
             });
 
             const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
-            return { filteredRuns: filteredRuns };
+            return filteredRuns;
 
       - name: Create Comment Body
         id: create-table
         uses: actions/github-script@v6
-        env:
-          WORKFLOW_RESULTS: ${{ steps.fetch-workflows.outputs.result }}
         with:
           script: |
-            const workflows = JSON.parse('${{ env.WORKFLOW_RESULTS }}');
+            const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.result }}');
             let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
 
             workflows.forEach(workflow => {
