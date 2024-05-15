@@ -52,14 +52,13 @@ jobs:
               per_page: 100 // Adjust this as needed
             });
             const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
-            return { runs: filteredRuns };
-
+            return filteredRuns;
       - name: Create Comment Body
         id: create-table
         uses: actions/github-script@v6
         with:
           script: |
-            const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.runs }}');
+            const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.result }}');
             let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
             workflows.forEach(workflow => {
               let emoji;
@@ -82,12 +81,11 @@ jobs:
               commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
             });
             core.setOutput('body', commentBody);
+            console.log(`Comment Body: ${commentBody}`);
             return { body: commentBody };
-
       - name: Debugging Outputs
         run: |
-          echo "Comment Body: ${{ steps.create-table.outputs.body }}"
-
+            echo "Comment Body: ${{ steps.create-table.outputs.body }}"
       - name: Find or Create Comment
         id: find-or-create-comment
         uses: peter-evans/find-comment@v3
