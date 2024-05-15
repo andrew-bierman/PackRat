@@ -97,9 +97,31 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment on Push
-        if: github.event_name == 'push' || github.event_name == 'workflow_run'
-        uses: peter-evans/create-or-update-comment@v4
+        if: github.event_name == 'push'
+        uses: actions/github-script@v6
         with:
-          issue-number: ${{ github.event.workflow_run.id }}
-          body: ${{ steps.create-table.outputs.body }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { context } = require('@actions/github');
+            const body = `## Workflow Status Comment\n\n${{ steps.create-table.outputs.body }}`;
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.run_id,
+              body: body
+            });
+
+      - name: Comment on Workflow Run
+        if: github.event_name == 'workflow_run'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { context } = require('@actions/github');
+            const body = `## Workflow Status Comment\n\n${{ steps.create-table.outputs.body }}`;
+            await github.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.workflow_run.head_sha,
+              body: body
+            });
