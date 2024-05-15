@@ -54,7 +54,7 @@ jobs:
             });
 
             const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
-            return filteredRuns;
+            return { result: JSON.stringify(filteredRuns) };
 
       - name: Create Comment Body
         id: create-table
@@ -86,27 +86,46 @@ jobs:
               commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
             });
 
-            core.setOutput('body', commentBody);
-            console.log(`Comment Body: ${commentBody}`);
             return { body: commentBody };
 
       - name: Debugging Outputs
         run: |
             echo "Comment Body: ${{ steps.create-table.outputs.body }}"
 
-      - name: Find or Create Comment
-        id: find-or-create-comment
+      - name: Find or Create Comment on Pull Request
+        if: github.event_name == 'pull_request'
+        id: find-or-create-comment-pr
         uses: peter-evans/find-comment@v3
         with:
-          issue-number: ${{ github.event.pull_request.number || github.run_id }}
+          issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: '## Workflow Status'
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create or Update Comment
+      - name: Create or Update Comment on Pull Request
+        if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v4
         with:
-          comment-id: ${{ steps.find-or-create-comment.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number || github.run_id }}
+          comment-id: ${{ steps.find-or-create-comment-pr.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.create-table.outputs.body }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find or Create Comment on Push
+        if: github.event_name == 'push'
+        id: find-or-create-comment-push
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.run_id }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Workflow Status'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or Update Comment on Push
+        if: github.event_name == 'push'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-or-create-comment-push.outputs.comment-id }}
+          issue-number: ${{ github.run_id }}
           body: ${{ steps.create-table.outputs.body }}
           token: ${{ secrets.GITHUB_TOKEN }}
