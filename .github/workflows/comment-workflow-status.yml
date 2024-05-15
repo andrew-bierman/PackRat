@@ -21,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-      actions: read
-
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,18 +33,19 @@ jobs:
 
       - name: Fetch workflow runs
         id: fetch-workflows
-        uses: actions/github-script@0.9.0
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const branch = process.env.BRANCH_NAME;
             const workflows = [
-                'android-preview-build-local',
-                'Run Tests',
-                'Node.js CI',
-                'Node.js CI for Development Environment',
-                'EAS Local Build',
+              'android-preview-build-local',
+              'Run Tests',
+              'Node.js CI',
+              'Node.js CI for Development Environment',
+              'EAS Local Build',
             ];
+
             const response = await github.rest.actions.listWorkflowRunsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -53,6 +53,7 @@ jobs:
               status: 'completed',
               per_page: 100 // Adjust this as needed
             });
+
             const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
             return filteredRuns;
 
@@ -61,6 +62,7 @@ jobs:
         run: |
           const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.result }}');
           let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
+
           workflows.forEach(workflow => {
             let emoji;
             switch (workflow.conclusion) {
@@ -79,8 +81,10 @@ jobs:
               default:
                 emoji = '⏺️';
             }
+
             commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
           });
+
           echo "::set-output name=body::${commentBody}"
 
       - name: Comment on PR
@@ -88,5 +92,13 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.create-table.outputs.body }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on Push
+        if: github.event_name == 'push' || github.event_name == 'workflow_run'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.workflow_run.id }}
           body: ${{ steps.create-table.outputs.body }}
           token: ${{ secrets.GITHUB_TOKEN }}
