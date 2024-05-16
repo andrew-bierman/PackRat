@@ -1,7 +1,5 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
 import { Row } from 'react-native-table-component';
@@ -12,7 +10,7 @@ import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
-import * as DropdownMenu from 'zeego/dropdown-menu';
+
 
 type ModalName = 'edit' | 'delete';
 
@@ -80,6 +78,7 @@ const TableItem = ({
     }
   }
 
+  
   /*
   * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
