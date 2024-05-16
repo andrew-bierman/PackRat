@@ -21,7 +21,7 @@ export const usePasswordResetForm = () => {
       await resetPassword({ password, resetToken });
       setIsPasswordUpdated(true);
     } catch (error) {
-      console.log('Error here', error);
+      
     }
   };
 

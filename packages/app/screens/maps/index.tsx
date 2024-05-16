@@ -79,8 +79,8 @@ export default function DownloadedMaps() {
                   padding: 20,
                 }}
                 onPress={() => {
-                  console.log('pack object', pack);
-                  console.log('pack metadata', pack.metadata);
+                  
+                  
                   setPack(pack);
                   setShowMap(true);
                 }}

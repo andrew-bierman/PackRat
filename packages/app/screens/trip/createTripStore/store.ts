@@ -43,7 +43,7 @@ export const createTripReducer = (
 ) => {
   if (action.type === 'setDateRange') {
     try {
-      console.log({ action });
+      
       const { start_date: startDate, end_date: endDate } = action.payload;
       const numberOfNights =
         startDate && endDate
@@ -65,7 +65,7 @@ export const createTripReducer = (
         duration,
       };
     } catch (e) {
-      console.log(e);
+      
       return state;
     }
   }
@@ -74,7 +74,7 @@ export const createTripReducer = (
     payload: { name, value },
   } = action;
 
-  console.log({ name, value });
+  
 
   return {
     ...state,

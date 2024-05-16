@@ -47,20 +47,20 @@ export const useChat = (itemTypeId = null) => {
   // );
 
   // useEffect(() => {
-  //   console.log('conversation:', conversation);
+  //   
   //   setParsedMessages(
   //     conversation ? parseConversationHistory(conversation.history) : [],
   //   );
   // }, [conversationId]);
 
-  // console.log('parsedMessages:', parsedMessages);/
+  // /
 
   // Compute parsedMessages directly
   const parsedMessages = conversations
     ? parseConversationHistory(conversations)
     : [];
 
-  // console.log('parsedMessages:', parsedMessages);
+  // 
 
   /**
    * Handles sending a message.

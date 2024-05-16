@@ -9,12 +9,12 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const useGpxUpload = (setShape) => {
   const handleGpxUpload = async () => {
-    console.log('clikedd');
+    
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/gpx+xml',
       });
-      console.log('result', result);
+      
       if (result.type === 'success') {
         const base64Gpx = result.uri.split(',')[1];
         const gpxString = atob(base64Gpx);

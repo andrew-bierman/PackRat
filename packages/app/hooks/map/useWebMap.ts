@@ -113,7 +113,7 @@ const useMapEffects = ({
       const mapDim = fullMapDiemention;
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log('trailCenter in useEffect', trailCenter);
+      
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
       setDownloadable(isShapeDownloadable(shape));
@@ -147,7 +147,7 @@ const useMapEffects = ({
         if (isPoint(shape)) {
           addPoints(mapInstance);
         } else if (isPolygonOrMultiPolygon(shape)) {
-          console.log('it is polygon');
+          
           addPolygons(mapInstance);
         } else {
           addTrailLayer(mapInstance);
@@ -195,7 +195,7 @@ const useMapEffects = ({
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
+    
   }, [shape]);
 };
 
@@ -310,7 +310,7 @@ const useMapActions = ({
       await handleGpxDownload(gpx);
       setDownloading(false);
     } catch (error) {
-      console.log('error', error);
+      
       setDownloading(false);
     }
   };
@@ -377,7 +377,7 @@ const useMapActions = ({
         }
       }
     } catch (error) {
-      console.log('error', error);
+      
     }
   };
 
