@@ -10,6 +10,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env: # Define a shared environment variable for android and ios build.
+  MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+  EXPO_PUBLIC_CLIENT_URL: ${{ secrets.EXPO_PUBLIC_CLIENT_URL }}
+  EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+  EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN: ${{ secrets.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN }}
+
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -31,9 +37,9 @@ jobs:
       - name: Run Local Build for Android
         working-directory: ./apps/expo
         run: |
-          eas build --non-interactive --platform android --local
+          eas build --profile preview --platform android --local --non-interactive
         env:
-          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          EXPO_PUBLIC_ANDROID_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_ANDROID_CLIENT_ID }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
@@ -60,9 +66,9 @@ jobs:
       - name: Run Local Build for iOS
         working-directory: ./apps/expo
         run: |
-          eas build --non-interactive --platform ios --local
+          eas build --profile preview --platform ios --local --non-interactive
         env:
-          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          EXPO_PUBLIC_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_IOS_CLIENT_ID }}
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3
