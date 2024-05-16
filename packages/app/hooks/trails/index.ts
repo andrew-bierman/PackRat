@@ -25,7 +25,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
     },
   );
 
-  console.log(data, 'data!!!!!!!');
+  
 
   // React.useEffect(() => {
   let filteredTrails = [];

@@ -162,149 +162,86 @@ const ProfileSettingsIndexLazyRoute = ProfileSettingsIndexLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/destination/query': {
-      id: '/destination/query'
-      path: '/destination/query'
-      fullPath: '/destination/query'
       preLoaderRoute: typeof DestinationQueryLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/$id': {
-      id: '/pack/$id'
-      path: '/pack/$id'
-      fullPath: '/pack/$id'
       preLoaderRoute: typeof PackIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/create': {
-      id: '/pack/create'
-      path: '/pack/create'
-      fullPath: '/pack/create'
       preLoaderRoute: typeof PackCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/$id': {
-      id: '/profile/$id'
-      path: '/profile/$id'
-      fullPath: '/profile/$id'
       preLoaderRoute: typeof ProfileIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/trip/$tripId': {
-      id: '/trip/$tripId'
-      path: '/trip/$tripId'
-      fullPath: '/trip/$tripId'
       preLoaderRoute: typeof TripTripIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/trip/create': {
-      id: '/trip/create'
-      path: '/trip/create'
-      fullPath: '/trip/create'
       preLoaderRoute: typeof TripCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/about/': {
-      id: '/about/'
-      path: '/about/'
-      fullPath: '/about/'
       preLoaderRoute: typeof AboutIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/appearance/': {
-      id: '/appearance/'
-      path: '/appearance/'
-      fullPath: '/appearance/'
       preLoaderRoute: typeof AppearanceIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard/'
-      fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/feed/': {
-      id: '/feed/'
-      path: '/feed/'
-      fullPath: '/feed/'
       preLoaderRoute: typeof FeedIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/items/': {
-      id: '/items/'
-      path: '/items/'
-      fullPath: '/items/'
       preLoaderRoute: typeof ItemsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/map/': {
-      id: '/map/'
-      path: '/map/'
-      fullPath: '/map/'
       preLoaderRoute: typeof MapIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/maps/': {
-      id: '/maps/'
-      path: '/maps/'
-      fullPath: '/maps/'
       preLoaderRoute: typeof MapsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/packs/': {
-      id: '/packs/'
-      path: '/packs/'
-      fullPath: '/packs/'
       preLoaderRoute: typeof PacksIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/password-reset/': {
-      id: '/password-reset/'
-      path: '/password-reset/'
-      fullPath: '/password-reset/'
       preLoaderRoute: typeof PasswordResetIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
-      id: '/profile/'
-      path: '/profile/'
-      fullPath: '/profile/'
       preLoaderRoute: typeof ProfileIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/register/': {
-      id: '/register/'
-      path: '/register/'
-      fullPath: '/register/'
       preLoaderRoute: typeof RegisterIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/sign-in/': {
-      id: '/sign-in/'
-      path: '/sign-in/'
-      fullPath: '/sign-in/'
       preLoaderRoute: typeof SignInIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/trips/': {
-      id: '/trips/'
-      path: '/trips/'
-      fullPath: '/trips/'
       preLoaderRoute: typeof TripsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/settings/': {
-      id: '/profile/settings/'
-      path: '/profile/settings/'
-      fullPath: '/profile/settings/'
       preLoaderRoute: typeof ProfileSettingsIndexLazyImport
       parentRoute: typeof rootRoute
     }
@@ -313,7 +250,7 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
+export const routeTree = rootRoute.addChildren([
   IndexRoute,
   DestinationQueryLazyRoute,
   PackIdLazyRoute,
@@ -335,6 +272,6 @@ export const routeTree = rootRoute.addChildren({
   SignInIndexLazyRoute,
   TripsIndexLazyRoute,
   ProfileSettingsIndexLazyRoute,
-})
+])
 
 /* prettier-ignore-end */

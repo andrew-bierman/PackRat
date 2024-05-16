@@ -12,7 +12,7 @@ export const useCopyClipboard = (link: string) => {
       navigator.clipboard
         .writeText(copyLink)
         .then(() => {
-          console.log('Text copied to clipboard');
+          
         })
         .catch((err) => {
           console.error('Failed to copy text to clipboard', err);
@@ -20,7 +20,7 @@ export const useCopyClipboard = (link: string) => {
     } else {
       Clipboard.setStringAsync(copyLink)
         .then(() => {
-          console.log('Text copied to clipboard');
+          
         })
         .catch((err) => {
           console.error('Failed to copy text to clipboard', err);

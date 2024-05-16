@@ -9,7 +9,7 @@ export const getErrorMessageFromError = (e: unknown) => {
 
   const responseData = e.response?.data;
 
-  console.log({ responseData });
+  
   return (
     responseData?.[0]?.error?.message ||
     responseData?.error?.message ||
