@@ -66,7 +66,7 @@ jobs:
       - name: Run Local Build for iOS
         working-directory: ./apps/expo
         run: |
-          eas build --profile preview --platform android --local --non-interactive
+          eas build --profile preview --platform ios --local --non-interactive
         env:
           EXPO_PUBLIC_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_IOS_CLIENT_ID }}
 
