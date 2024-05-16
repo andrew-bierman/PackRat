@@ -36,7 +36,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
   // }, []);
 
   const [shape, setShape] = useState(shapeProp);
-  console.log('WebMap shape', shape);
+  
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -81,7 +81,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
 
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log('trailCenter in useEffect', trailCenter);
+      
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
@@ -116,7 +116,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
         if (isPoint(shape)) {
           addPoints(mapInstance);
         } else if (isPolygonOrMultiPolygon(shape)) {
-          console.log('it is polygon');
+          
           addPolygons(mapInstance);
         } else {
           addTrailLayer(mapInstance);
@@ -167,9 +167,9 @@ export const useWebMap = ({ shape: shapeProp }) => {
       map.current.setZoom(zoomLevelRef.current);
     }
 
-    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
+    
 
-    // console.log("mapInstance", mapInstance);
+    // 
   }, [shape]);
 
   /**
@@ -307,7 +307,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
 
       setDownloading(false);
     } catch (error) {
-      console.log('error', error);
+      
       setDownloading(false);
     }
   };
@@ -453,10 +453,10 @@ export const useWebMap = ({ shape: shapeProp }) => {
         }
       }
     } catch (error) {
-      console.log('error', error);
+      
     }
   };
-  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not');
+  
   return {
     mapContainer,
     lng,

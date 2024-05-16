@@ -1,13 +1,13 @@
 import {
-  Button,
-  Input,
-  ListItem,
-  ListItemTitle,
-  ScrollView,
+  Button as OriginalButton,
+  Input as OriginalInput,
+  ListItem as OriginalListItem,
+  ListItemTitle as OriginalListItemTitle,
+  ScrollView as OriginalScrollView,
   SizeTokens,
   ThemeName,
   XGroup,
-  XStack,
+  XStack as OriginalXStack,
   YGroup,
   YStack,
 } from 'tamagui';
@@ -31,6 +31,13 @@ import {
   usePopoverState,
 } from '../../extras/lib/core/src';
 import { Platform, useWindowDimensions } from 'react-native';
+
+const Input: any = OriginalInput;
+const XStack: any = OriginalXStack;
+const ListItemTitle: any = OriginalListItemTitle;
+const ListItem: any = OriginalListItem;
+const Button: any = OriginalButton;
+const ScrollView: any = OriginalScrollView;
 
 type Option = { label: string; value: string | number };
 export type LmAutocompleteProps = LmFormContainerBaseTypes & {
@@ -159,11 +166,13 @@ export function LmAutocomplete({
               mainAxis: 15,
               crossAxis: -30,
             }}
-            contentProps={{
-              minWidth: popoverWidth ? popoverWidth : undefined,
-              maxWidth: '100%',
-              ...popoverProps?.contentProps,
-            }}
+            contentProps={
+              {
+                minWidth: popoverWidth ? popoverWidth : undefined,
+                maxWidth: '100%',
+                ...popoverProps?.contentProps,
+              } as any
+            }
             trigger={
               <Button
                 size={size}
