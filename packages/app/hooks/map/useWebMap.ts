@@ -127,10 +127,6 @@ const useMapEffects = ({
 
   // Effect to initialize and configure Mapbox map
   useEffect(() => {
-    console.log(
-      !mapFullscreen || !isPolygonOrMultiPolygon(shape),
-      'is polygon or not',
-    );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     if (!lng || !lat) return;
     try {
