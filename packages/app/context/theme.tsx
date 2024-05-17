@@ -1,20 +1,37 @@
-import { createContext, useReducer } from 'react';
+import {
+  type PropsWithChildren,
+  createContext,
+  useReducer,
+  useEffect,
+} from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { useStorage } from '../hooks/storage/useStorage';
+
+enum ThemeEnum {
+  DARK = 'DARK',
+  LIGHT = 'LIGHT',
+}
+
+type ThemeType = `${ThemeEnum}`;
+
+const DEFAULT_THEME = ThemeEnum.DARK as ThemeType;
 
 const initialState = {
-  isDark: false,
-  isLight: true,
+  isDark: DEFAULT_THEME === ThemeEnum.DARK,
+  isLight: DEFAULT_THEME === ThemeEnum.LIGHT,
   currentTheme: theme,
 };
+
+/**
+ * Enables dark mode by updating the state object.
+ *
+ * @param {object} state - The current state object.
+ * @return {object} The updated state object with dark mode enabled.
+ */
+
 const handlers = {
-  /**
-   * Enables dark mode by updating the state object.
-   *
-   * @param {object} state - The current state object.
-   * @return {object} The updated state object with dark mode enabled.
-   */
   ENABLE_DARK_MODE: (state) => ({
     ...state,
     isDark: true,
@@ -34,10 +51,12 @@ const handlers = {
     currentTheme: theme,
   }),
 };
+
 const reducer = (state, action) => {
   const handler = handlers[action.type];
   return handler ? handler(state, action) : state;
 };
+
 const ThemeContext = createContext({
   ...initialState,
   platform: 'JWT',
@@ -49,15 +68,21 @@ const ThemeContext = createContext({
   },
 });
 
-/**
- * Creates a ThemeProvider component that wraps the provided children with a context provider for managing the theme state.
- *
- * @param {Object} props - The properties object.
- * @param {ReactNode} props.children - The children components to be wrapped.
- * @return {ReactNode} - The wrapped children components.
- */
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [[isThemeLoading, storedTheme], setStoredTheme] = useStorage('theme');
+
+  /**
+   *  Initialize app theme based on stored theme preference or else default theme
+   */
+  useEffect(() => {
+    if (storedTheme) {
+      dispatch({ type: `ENABLE_${storedTheme}_MODE` });
+    } else {
+      dispatch({ type: `ENABLE_${DEFAULT_THEME}_MODE` });
+      setStoredTheme(DEFAULT_THEME);
+    }
+  }, [isThemeLoading]);
 
   /**
    * Enable dark mode.
@@ -66,6 +91,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableDarkMode = () => {
     dispatch({ type: 'ENABLE_DARK_MODE' });
+    setStoredTheme(ThemeEnum.DARK);
   };
   /**
    * Enables light mode.
@@ -75,6 +101,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableLightMode = () => {
     dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    setStoredTheme(ThemeEnum.LIGHT);
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
