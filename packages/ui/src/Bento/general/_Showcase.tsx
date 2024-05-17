@@ -23,7 +23,7 @@ import {
   View,
 } from 'tamagui';
 import useSWR from 'swr';
-import { useRouter } from 'next/router';
+import { useRouter } from '@packrat/crosspath';
 import { isZodNumber } from '@ts-react/form/lib/src/isZodTypeEqual';
 import { Hide } from '../forms/layouts/components/layoutParts';
 
@@ -40,7 +40,11 @@ export const Showcase = YStack.styleable<{
 
   const media = useMedia();
 
-  const query = useRouter().query;
+  const query = {
+    section: false,
+    part: false,
+  };
+  
   const codePath =
     query.section &&
     query.part &&
