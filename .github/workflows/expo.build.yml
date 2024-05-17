@@ -66,6 +66,7 @@ jobs:
       - name: Run Local Build for iOS
         working-directory: ./apps/expo
         run: |
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --profile preview --platform ios --local --non-interactive
         env:
           EXPO_PUBLIC_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_IOS_CLIENT_ID }}
