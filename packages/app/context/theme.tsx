@@ -4,24 +4,19 @@ import {
   useReducer,
   useEffect,
 } from 'react';
-import { theme, darkTheme } from '../theme';
+import { getTheme } from '../theme';
+import { ThemeEnum, type ThemeType } from '../theme/types';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
 import { useStorage } from '../hooks/storage/useStorage';
 
-enum ThemeEnum {
-  DARK = 'DARK',
-  LIGHT = 'LIGHT',
-}
+const DEFAULT_THEME = ThemeEnum.LIGHT as ThemeType;
 
-type ThemeType = `${ThemeEnum}`;
-
-const DEFAULT_THEME = ThemeEnum.DARK as ThemeType;
-
+// Set default theme in initial state
 const initialState = {
   isDark: DEFAULT_THEME === ThemeEnum.DARK,
   isLight: DEFAULT_THEME === ThemeEnum.LIGHT,
-  currentTheme: theme,
+  currentTheme: getTheme(DEFAULT_THEME),
 };
 
 /**
@@ -36,7 +31,7 @@ const handlers = {
     ...state,
     isDark: true,
     isLight: false,
-    currentTheme: darkTheme,
+    currentTheme: getTheme(ThemeEnum.DARK),
   }),
   /**
    * Enables light mode by updating the state object.
@@ -48,7 +43,7 @@ const handlers = {
     ...state,
     isDark: false,
     isLight: true,
-    currentTheme: theme,
+    currentTheme: getTheme(ThemeEnum.LIGHT),
   }),
 };
 
@@ -73,13 +68,13 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [[isThemeLoading, storedTheme], setStoredTheme] = useStorage('theme');
 
   /**
-   *  Initialize app theme based on stored theme preference or else default theme
+   * Initializes the app theme based on the stored theme preference.
+   * If no preference is stored, sets the default theme preference in local storage.
    */
   useEffect(() => {
     if (storedTheme) {
       dispatch({ type: `ENABLE_${storedTheme}_MODE` });
     } else {
-      dispatch({ type: `ENABLE_${DEFAULT_THEME}_MODE` });
       setStoredTheme(DEFAULT_THEME);
     }
   }, [isThemeLoading]);
