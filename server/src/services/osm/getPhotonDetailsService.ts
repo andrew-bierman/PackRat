@@ -21,8 +21,6 @@ export async function getPhotonDetailsService(id, type, osmUri) {
   }
 
   const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
-
-  console.log('overpassQuery', overpassQuery);
   const response = await fetch(osmUri, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },

@@ -36,7 +36,6 @@ export const useWebMap = ({ shape: shapeProp }) => {
   // }, []);
 
   const [shape, setShape] = useState(shapeProp);
-  console.log('WebMap shape', shape);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -166,8 +165,6 @@ export const useWebMap = ({ shape: shapeProp }) => {
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-
-    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
 
     // console.log("mapInstance", mapInstance);
   }, [shape]);

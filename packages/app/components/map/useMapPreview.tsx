@@ -83,7 +83,7 @@ const useMapPreviewData = (shape, processedShape) => {
         ? `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`
         : `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
           ',',
-        )}]/900x400?padding=50,30,30,30`,,
+        )}]/900x400?padding=50,30,30,30`,
     };
 
     setMapPreviewData(data);

@@ -21,7 +21,7 @@ export const useTripsData = () => {
       osm_type: osm?.osmType,
     },
   });
-
+  
   const {
     data: weatherData,
     isLoading: weatherLoading,
