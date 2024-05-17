@@ -92,6 +92,7 @@ const useMapEffects = ({
   map,
   mapContainer,
   mapStyle,
+  setMapStyle,
   lng,
   lat,
   zoomLevel,
@@ -104,6 +105,10 @@ const useMapEffects = ({
   setZoomLevel,
   setDownloadable,
   fullMapDiemention,
+  addPoints,
+  addPolygons,
+  addTrailLayer,
+  removeTrailLayer,
 }) => {
   // Effect to handle shape data and calculate bounds
   useEffect(() => {
@@ -113,7 +118,7 @@ const useMapEffects = ({
       const mapDim = fullMapDiemention;
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      
+
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
       setDownloadable(isShapeDownloadable(shape));
@@ -147,7 +152,6 @@ const useMapEffects = ({
         if (isPoint(shape)) {
           addPoints(mapInstance);
         } else if (isPolygonOrMultiPolygon(shape)) {
-          
           addPolygons(mapInstance);
         } else {
           addTrailLayer(mapInstance);
@@ -195,7 +199,6 @@ const useMapEffects = ({
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-    
   }, [shape]);
 };
 
@@ -203,6 +206,8 @@ const useMapEffects = ({
 const useMapActions = ({
   map,
   shape,
+  mapStyle,
+  setMapStyle,
   setDownloading,
   userLng,
   userLat,
@@ -310,7 +315,6 @@ const useMapActions = ({
       await handleGpxDownload(gpx);
       setDownloading(false);
     } catch (error) {
-      
       setDownloading(false);
     }
   };
@@ -376,9 +380,7 @@ const useMapActions = ({
           });
         }
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   // Function to open location in Google Maps
@@ -474,26 +476,6 @@ export const useWebMap = ({ shape: shapeProp }) => {
     previewMapDiemension,
   } = useMapState(shapeProp);
 
-  // Side effects hook
-  useMapEffects({
-    shape,
-    map,
-    mapContainer,
-    mapStyle,
-    lng,
-    lat,
-    zoomLevel,
-    zoomLevelRef,
-    trailCenterPointRef,
-    mapFullscreen,
-    showUserLocation,
-    setLng,
-    setLat,
-    setZoomLevel,
-    setDownloadable,
-    fullMapDiemention,
-  });
-
   // Actions hook
   const {
     removeTrailLayer,
@@ -511,6 +493,8 @@ export const useWebMap = ({ shape: shapeProp }) => {
   } = useMapActions({
     map,
     shape,
+    mapStyle,
+    setMapStyle,
     setDownloading,
     userLng,
     userLat,
@@ -519,6 +503,31 @@ export const useWebMap = ({ shape: shapeProp }) => {
     setShowUserLocation,
     setMapFullscreen,
     setShowModal,
+  });
+
+  // Side effects hook
+  useMapEffects({
+    shape,
+    map,
+    mapContainer,
+    mapStyle,
+    setMapStyle,
+    lng,
+    lat,
+    zoomLevel,
+    zoomLevelRef,
+    trailCenterPointRef,
+    mapFullscreen,
+    showUserLocation,
+    setLng,
+    setLat,
+    setZoomLevel,
+    setDownloadable,
+    fullMapDiemention,
+    addPoints,
+    addPolygons,
+    addTrailLayer,
+    removeTrailLayer,
   });
 
   return {
