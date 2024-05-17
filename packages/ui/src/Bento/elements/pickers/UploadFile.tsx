@@ -1,29 +1,29 @@
-import { File } from '@tamagui/lucide-icons'
-import { Upload } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
-import { Button, Label, Text, View } from 'tamagui'
+import { File } from '@tamagui/lucide-icons';
+import { Upload } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
+import { Button, Label, Text, View } from 'tamagui';
 
-import { useFilePicker } from './hooks/useFilePicker'
-import { MediaTypeOptions } from './types'
+import { useFilePicker } from './hooks/useFilePicker';
+import { MediaTypeOptions } from './types';
 
 /** ------ EXAMPLE ------ */
 export function UploadFile() {
-  const id = useId()
-  const [file, setFile] = useState<File>()
+  const id = useId();
+  const [file, setFile] = useState<File>();
   const { open, getInputProps, getRootProps, dragStatus } = useFilePicker({
     typeOfPicker: 'file',
     mediaTypes: [MediaTypeOptions.All],
     multiple: false, // Added as per requirement
     onPick: ({ webFiles, nativeFiles }) => {
       if (webFiles?.length) {
-        setFile(webFiles[0])
+        setFile(webFiles[0]);
       } else if (nativeFiles?.length) {
-        setFile(nativeFiles[0] as any)
+        setFile(nativeFiles[0] as any);
       }
     },
-  })
+  });
 
-  const { isDragActive } = dragStatus
+  const { isDragActive } = dragStatus;
 
   return (
     // @ts-ignore reason: getRootProps() which is web specific return some react-native incompatible props, but it's fine
@@ -75,7 +75,12 @@ export function UploadFile() {
           <View id={id} tag="input" width={0} height={0} {...getInputProps()} />
 
           {file && (
-            <View width="100%" alignItems="center" justifyContent="center" t="$4.5">
+            <View
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              t="$4.5"
+            >
               <View
                 flexDirection="row"
                 theme="alt1"
@@ -86,7 +91,12 @@ export function UploadFile() {
                 <View flexShrink={0}>
                   <File color="$color" size={'$1'} />
                 </View>
-                <Text t="$1" ellipsizeMode="head" fontSize={'$3'} whiteSpace="nowrap">
+                <Text
+                  t="$1"
+                  ellipsizeMode="head"
+                  fontSize={'$3'}
+                  whiteSpace="nowrap"
+                >
                   {file.name}
                 </Text>
               </View>
@@ -97,7 +107,7 @@ export function UploadFile() {
       {/* need an empty input div just have image drop feature in the web */}
       {/*  @ts-ignore */}
     </View>
-  )
+  );
 }
 
-UploadFile.fileName = 'UploadFile'
+UploadFile.fileName = 'UploadFile';

@@ -1,14 +1,14 @@
-import { Globe2, Search, X } from '@tamagui/lucide-icons'
-import type { SizeTokens } from 'tamagui'
-import { Adapt, Image, Popover, ScrollView, Text, View, isWeb } from 'tamagui'
-import { Input } from './components/inputsParts'
-import { useState, useMemo, useEffect } from 'react'
+import { Globe2, Search, X } from '@tamagui/lucide-icons';
+import type { SizeTokens } from 'tamagui';
+import { Adapt, Image, Popover, ScrollView, Text, View, isWeb } from 'tamagui';
+import { Input } from './components/inputsParts';
+import { useState, useMemo, useEffect } from 'react';
 import {
   getSupportedRegionCodes,
   parsePhoneNumber,
   getCountryCodeForRegionCode,
-} from 'awesome-phonenumber'
-import { RovingFocusGroup } from '@tamagui/roving-focus'
+} from 'awesome-phonenumber';
+import { RovingFocusGroup } from '@tamagui/roving-focus';
 
 /**
  * in case you want to integrate it with zod validation, following snippet can be used
@@ -23,25 +23,25 @@ const phoneCodes = getSupportedRegionCodes().map((code) => {
   return {
     name: code,
     flag: `https://flagsapi.com/${code}/flat/64.png`,
-  }
-})
+  };
+});
 
 type RegionFilterInputProps = {
-  setRegionCode: (regionCode: string) => void
-  setOpen: (open: boolean) => void
-  open: boolean
-}
+  setRegionCode: (regionCode: string) => void;
+  setOpen: (open: boolean) => void;
+  open: boolean;
+};
 
 function RegionFilterInput(props: RegionFilterInputProps) {
-  const { setRegionCode, setOpen, open } = props
-  const [filter, setFilter] = useState('')
-  const [reset, setReset] = useState(0)
+  const { setRegionCode, setOpen, open } = props;
+  const [filter, setFilter] = useState('');
+  const [reset, setReset] = useState(0);
 
   const phoneCodesFiltered = useMemo(() => {
     return phoneCodes.filter((item) => {
-      return item.name.toLowerCase().includes(filter.toLowerCase())
-    })
-  }, [filter])
+      return item.name.toLowerCase().includes(filter.toLowerCase());
+    });
+  }, [filter]);
 
   return (
     <RovingFocusGroup
@@ -66,8 +66,8 @@ function RegionFilterInput(props: RegionFilterInputProps) {
           />
           <Input.Icon
             onPress={() => {
-              setFilter('')
-              setReset(reset === 0 ? 1 : 0)
+              setFilter('');
+              setReset(reset === 0 ? 1 : 0);
             }}
             pointerEvents="auto"
             zIndex={10}
@@ -86,8 +86,8 @@ function RegionFilterInput(props: RegionFilterInputProps) {
                 {...(isWeb && {
                   onKeyDown: (e: KeyboardEvent) => {
                     if (e.key === 'Enter') {
-                      setRegionCode(item.name)
-                      setOpen(false)
+                      setRegionCode(item.name);
+                      setOpen(false);
                     }
                   },
                 })}
@@ -98,8 +98,8 @@ function RegionFilterInput(props: RegionFilterInputProps) {
               >
                 <View
                   onPress={() => {
-                    setRegionCode(item.name)
-                    setOpen(false)
+                    setRegionCode(item.name);
+                    setOpen(false);
                   }}
                   group="item"
                   borderColor="$borderColor"
@@ -135,28 +135,28 @@ function RegionFilterInput(props: RegionFilterInputProps) {
                   </Text>
                 </View>
               </RovingFocusGroup.Item>
-            )
+            );
           })}
         </ScrollView>
       )}
     </RovingFocusGroup>
-  )
+  );
 }
 
 type RegionSelectBoxProps = {
-  regionCode: string
-  setRegionCode: (regionCode: string) => void
-  containerWidth?: number
-}
+  regionCode: string;
+  setRegionCode: (regionCode: string) => void;
+  containerWidth?: number;
+};
 
 function RegionSelectBox(props: RegionSelectBoxProps) {
-  const { regionCode, setRegionCode, containerWidth } = props
+  const { regionCode, setRegionCode, containerWidth } = props;
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const selectedItem = useMemo(
     () => phoneCodes.find((item) => item.name === regionCode)!,
-    [regionCode]
-  )
+    [regionCode],
+  );
 
   return (
     <Popover
@@ -174,7 +174,11 @@ function RegionSelectBox(props: RegionSelectBoxProps) {
           <Input.Button paddingHorizontal="$2" onPress={() => setOpen(true)}>
             {regionCode ? (
               <>
-                <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
+                <Image
+                  source={{ uri: selectedItem.flag }}
+                  width={20}
+                  height={20}
+                />
               </>
             ) : (
               <>
@@ -215,43 +219,47 @@ function RegionSelectBox(props: RegionSelectBoxProps) {
         ]}
         padding={0}
       >
-        <RegionFilterInput open={open} setOpen={setOpen} setRegionCode={setRegionCode} />
+        <RegionFilterInput
+          open={open}
+          setOpen={setOpen}
+          setRegionCode={setRegionCode}
+        />
       </Popover.Content>
     </Popover>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ **/
 export function PhoneInputExample({ size }: { size?: SizeTokens }) {
-  const [regionCode, setRegionCode] = useState('US')
-  const [phoneNumber, setPhoneNumber] = useState('+1')
-  const [isValid, setIsValid] = useState(false)
-  const [containerWidth, setContainerWidth] = useState<number>()
+  const [regionCode, setRegionCode] = useState('US');
+  const [phoneNumber, setPhoneNumber] = useState('+1');
+  const [isValid, setIsValid] = useState(false);
+  const [containerWidth, setContainerWidth] = useState<number>();
 
   useEffect(() => {
     if (regionCode) {
-      setPhoneNumber('+' + getCountryCodeForRegionCode(regionCode) + ' ')
+      setPhoneNumber('+' + getCountryCodeForRegionCode(regionCode) + ' ');
     }
-  }, [regionCode])
+  }, [regionCode]);
 
   const handlePhoneNumberChange = (text: string) => {
-    text = !phoneNumber && text !== '+' ? `+${text}` : text
-    const parsed = parsePhoneNumber(text)
+    text = !phoneNumber && text !== '+' ? `+${text}` : text;
+    const parsed = parsePhoneNumber(text);
     // Note: parsed object has a lot of info about the number
     if (parsed.regionCode) {
-      setRegionCode(parsed.regionCode)
+      setRegionCode(parsed.regionCode);
     } else {
-      setRegionCode('')
+      setRegionCode('');
     }
-    setPhoneNumber(parsed.number?.international || text)
-    setIsValid(parsed.valid)
-  }
+    setPhoneNumber(parsed.number?.international || text);
+    setIsValid(parsed.valid);
+  };
   return (
     <View flexDirection="column" height={100}>
       <Input size={size} gapScale={0.5}>
         <Input.Box
           onLayout={(e) => {
-            setContainerWidth(e.nativeEvent.layout.width)
+            setContainerWidth(e.nativeEvent.layout.width);
           }}
           alignSelf="center"
           theme={isValid ? 'green' : undefined}
@@ -274,7 +282,7 @@ export function PhoneInputExample({ size }: { size?: SizeTokens }) {
         </Input.Box>
       </Input>
     </View>
-  )
+  );
 }
 
-PhoneInputExample.fileName = 'PhoneInput'
+PhoneInputExample.fileName = 'PhoneInput';

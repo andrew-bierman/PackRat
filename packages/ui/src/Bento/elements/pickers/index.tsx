@@ -1,2 +1,2 @@
-export * from './ImagePicker'
-export * from './UploadFile'
+export * from './ImagePicker';
+export * from './UploadFile';

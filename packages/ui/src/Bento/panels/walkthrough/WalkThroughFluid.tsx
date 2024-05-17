@@ -1,6 +1,6 @@
-import { AccordionDemo, GroupDemo } from '@tamagui/demos'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { View } from 'react-native'
+import { AccordionDemo, GroupDemo } from '@tamagui/demos';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { View } from 'react-native';
 import {
   AnimatePresence,
   Button,
@@ -16,82 +16,82 @@ import {
   createStyledContext,
   useEvent,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 const { Provider: WalkThroughStateProvider, useStyledContext: useWalkThrough } =
   createStyledContext<{
-    activeStep: number
-    numberOfSteps: number
-    nextStep: () => void
-    prevStep: () => void
+    activeStep: number;
+    numberOfSteps: number;
+    nextStep: () => void;
+    prevStep: () => void;
     itemsDim: {
-      x: number
-      y: number
-      width: number
-      height: number
-    }[]
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    }[];
     upsertItemDim: (param: {
-      index: number
+      index: number;
       data: {
-        x: number
-        y: number
-        width: number
-        height: number
-      }
-    }) => void
-  }>()
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
+    }) => void;
+  }>();
 
-const PORTAL_WALKTHROUGH_HOST_NAME = 'walkthrough'
-const PORTAL_WALKTHROUGH_DIALOG_HOST_NAME = 'walkthrough-dialog'
+const PORTAL_WALKTHROUGH_HOST_NAME = 'walkthrough';
+const PORTAL_WALKTHROUGH_DIALOG_HOST_NAME = 'walkthrough-dialog';
 
 function WalkThroughComp({
   numberOfSteps,
   children,
 }: {
-  numberOfSteps: number
-  children: React.ReactNode
+  numberOfSteps: number;
+  children: React.ReactNode;
 }) {
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeStep, setActiveStep] = useState(0);
   const nextStep = useEvent(() => {
-    setActiveStep(activeStep + 1)
-  })
+    setActiveStep(activeStep + 1);
+  });
   const prevStep = useEvent(() => {
     if (activeStep >= 0) {
-      setActiveStep(activeStep - 1)
+      setActiveStep(activeStep - 1);
     }
-  })
+  });
 
   const [itemsDim, setItemsDim] = useState<
     {
-      x: number
-      y: number
-      width: number
-      height: number
+      x: number;
+      y: number;
+      width: number;
+      height: number;
     }[]
-  >([])
+  >([]);
 
   const upsertItemDim = useEvent(
     (param: {
-      index: number
+      index: number;
       data: {
-        x: number
-        y: number
-        width: number
-        height: number
-      }
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+      };
     }) => {
-      const { index, data } = param
+      const { index, data } = param;
       setItemsDim((itemsDim) => {
-        const newItemsDim = [...itemsDim]
-        newItemsDim[index] = data
-        return newItemsDim
-      })
-    }
-  )
+        const newItemsDim = [...itemsDim];
+        newItemsDim[index] = data;
+        return newItemsDim;
+      });
+    },
+  );
 
-  const lastActiveStep = useRef(activeStep)
+  const lastActiveStep = useRef(activeStep);
   useEffect(() => {
-    lastActiveStep.current = activeStep
-  }, [activeStep])
+    lastActiveStep.current = activeStep;
+  }, [activeStep]);
 
   const value = {
     activeStep,
@@ -100,14 +100,16 @@ function WalkThroughComp({
     numberOfSteps,
     upsertItemDim,
     itemsDim,
-  }
+  };
 
-  const popoverRef = useRef<Popover | null>(null)
+  const popoverRef = useRef<Popover | null>(null);
 
   useEffect(() => {
-    if (itemsDim.length !== numberOfSteps) return
-    popoverRef.current?.anchorTo(itemsDim[activeStep] || itemsDim[numberOfSteps - 1])
-  }, [activeStep, itemsDim])
+    if (itemsDim.length !== numberOfSteps) return;
+    popoverRef.current?.anchorTo(
+      itemsDim[activeStep] || itemsDim[numberOfSteps - 1],
+    );
+  }, [activeStep, itemsDim]);
 
   return (
     <PortalProvider rootHostName={PORTAL_WALKTHROUGH_HOST_NAME}>
@@ -134,7 +136,10 @@ function WalkThroughComp({
             placement="bottom"
             size="$0.5"
             ref={popoverRef}
-            open={activeStep <= numberOfSteps - 1 && itemsDim.length === numberOfSteps}
+            open={
+              activeStep <= numberOfSteps - 1 &&
+              itemsDim.length === numberOfSteps
+            }
           >
             <Popover.Trigger />
             <Popover.Content
@@ -156,36 +161,36 @@ function WalkThroughComp({
       </PortalItem>
       <WalkThroughStateProvider {...value}>{children}</WalkThroughStateProvider>
     </PortalProvider>
-  )
+  );
 }
-WalkThroughComp.displayName = 'WalkThrough'
+WalkThroughComp.displayName = 'WalkThrough';
 
 function Tour({
   children,
   stepNumber,
   renderDialog,
 }: {
-  children: React.ReactElement<any>
-  stepNumber: number
+  children: React.ReactElement<any>;
+  stepNumber: number;
   renderDialog: (props: {
-    nextStep: () => void
-    prevStep: () => void
-    numberOfSteps: number
-    activeStep: number
-  }) => React.ReactNode
+    nextStep: () => void;
+    prevStep: () => void;
+    numberOfSteps: number;
+    activeStep: number;
+  }) => React.ReactNode;
 }) {
   const { activeStep, numberOfSteps, nextStep, prevStep, upsertItemDim } =
-    useWalkThrough()
-  const showTour = activeStep === stepNumber
-  const itemRef = useRef<View | null>(null)
-  const absoluteItemRef = useRef<View | null>(null)
+    useWalkThrough();
+  const showTour = activeStep === stepNumber;
+  const itemRef = useRef<View | null>(null);
+  const absoluteItemRef = useRef<View | null>(null);
   const [dim, setDim] = useState<{
-    width: number
-    height: number
-    pageX: number
-    pageY: number
-  }>()
-  const { pageX, pageY } = dim || {}
+    width: number;
+    height: number;
+    pageX: number;
+    pageY: number;
+  }>();
+  const { pageX, pageY } = dim || {};
 
   const measureDim = useEvent(() => {
     itemRef.current?.measure((_, __, width, height, pageX, pageY) => {
@@ -194,7 +199,7 @@ function Tour({
         height,
         pageX,
         pageY,
-      })
+      });
       upsertItemDim({
         index: stepNumber,
         data: {
@@ -203,9 +208,9 @@ function Tour({
           width,
           height,
         },
-      })
-    })
-  })
+      });
+    });
+  });
 
   const measureAbsoluteDim = useEvent(() => {
     absoluteItemRef.current?.measure((_, __, width, height, pageX, pageY) => {
@@ -217,13 +222,13 @@ function Tour({
           width,
           height,
         },
-      })
-    })
-  })
+      });
+    });
+  });
 
   useEffect(() => {
-    measureDim()
-  }, [stepNumber])
+    measureDim();
+  }, [stepNumber]);
 
   return (
     <>
@@ -235,7 +240,7 @@ function Tour({
             pointerEvents: showTour ? 'none' : undefined,
             alignSelf: 'flex-start',
           }),
-          [showTour, dim]
+          [showTour, dim],
         )}
         ref={itemRef}
       >
@@ -262,13 +267,13 @@ function Tour({
           renderDialog({ nextStep, prevStep, numberOfSteps, activeStep })}
       </PortalItem>
     </>
-  )
+  );
 }
-Tour.displayName = 'WalkThrough.Tour'
+Tour.displayName = 'WalkThrough.Tour';
 
 const WalkThrough = withStaticProperties(WalkThroughComp, {
   Tour,
-})
+});
 
 function DialogContent({
   nextStep,
@@ -277,14 +282,14 @@ function DialogContent({
   title,
   currentStep,
 }: {
-  nextStep: () => void
-  prevStep: () => void
-  numberOfSteps: number
-  title: string
-  currentStep: number
+  nextStep: () => void;
+  prevStep: () => void;
+  numberOfSteps: number;
+  title: string;
+  currentStep: number;
 }) {
-  const isLastStep = currentStep === numberOfSteps - 1
-  const isFirstStep = currentStep === 0
+  const isLastStep = currentStep === numberOfSteps - 1;
+  const isFirstStep = currentStep === 0;
   return (
     <ThemeableStack
       borderWidth={2}
@@ -313,7 +318,7 @@ function DialogContent({
         </Button>
       </XStack>
     </ThemeableStack>
-  )
+  );
 }
 
 export function WalkThroughFluidDemo() {
@@ -350,7 +355,7 @@ export function WalkThroughFluidDemo() {
         </WalkThrough.Tour>
       </YStack>
     </WalkThrough>
-  )
+  );
 }
 
-WalkThroughFluidDemo.fileName = 'WalkThroughFluid'
+WalkThroughFluidDemo.fileName = 'WalkThroughFluid';

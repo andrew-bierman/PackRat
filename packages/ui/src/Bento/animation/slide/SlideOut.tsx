@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, Button, H2, Image, Text, Theme, View } from 'tamagui'
+import { useEffect, useState } from 'react';
+import { AnimatePresence, Button, H2, Image, Text, Theme, View } from 'tamagui';
 
 const axises = {
   left: {
@@ -16,39 +16,39 @@ const axises = {
   },
   bottom: { axis: 'y', value: 100 },
   none: { axis: 'y', value: 0 },
-}
+};
 
 const item = {
   id: 1,
   name: 'Animation is cool',
   price: '100',
   image: '/bento/images/coffee3.jpg',
-}
+};
 
 function SlideOut({
   direction,
 }: {
-  direction: 'left' | 'right' | 'top' | 'bottom' | 'none'
+  direction: 'left' | 'right' | 'top' | 'bottom' | 'none';
 }) {
-  const axis = axises[direction]
+  const axis = axises[direction];
 
-  const [show, setShow] = useState(true)
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
     if (direction !== 'none') {
-      let secondTimeout: NodeJS.Timeout
+      let secondTimeout: NodeJS.Timeout;
       const timeout = setTimeout(() => {
-        setShow(false)
+        setShow(false);
         secondTimeout = setTimeout(() => {
-          setShow(true)
-        }, 1000)
-      }, 500)
+          setShow(true);
+        }, 1000);
+      }, 500);
       return () => {
-        clearTimeout(timeout)
-        clearTimeout(secondTimeout)
-      }
+        clearTimeout(timeout);
+        clearTimeout(secondTimeout);
+      };
     }
-  }, [direction])
+  }, [direction]);
 
   return (
     <AnimatePresence>
@@ -97,12 +97,14 @@ function SlideOut({
         </View>
       )}
     </AnimatePresence>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function SlideOutDemo() {
-  const [direction, setDirection] = useState<'left' | 'right' | 'top' | 'bottom'>('left')
+  const [direction, setDirection] = useState<
+    'left' | 'right' | 'top' | 'bottom'
+  >('left');
   return (
     <View flexDirection="column" maxWidth="100%" gap="$6">
       <Text fontSize="$6" lineHeight="$6">
@@ -131,7 +133,7 @@ export function SlideOutDemo() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
-SlideOutDemo.fileName = 'SlideOut'
+SlideOutDemo.fileName = 'SlideOut';

@@ -3,21 +3,21 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import * as React from 'react'
-import { useMedia } from 'tamagui'
-import { Avatar, Separator, Text, View, XStack, YStack } from 'tamagui'
-import { Table } from './common/tableParts'
+} from '@tanstack/react-table';
+import * as React from 'react';
+import { useMedia } from 'tamagui';
+import { Avatar, Separator, Text, View, XStack, YStack } from 'tamagui';
+import { Table } from './common/tableParts';
 
 type Person = {
-  fullName: string
-  username: string
-  age: number
-  visits: number
-  status: string
-  role: string
-  avatar?: string
-}
+  fullName: string;
+  username: string;
+  age: number;
+  visits: number;
+  status: string;
+  role: string;
+  avatar?: string;
+};
 
 const defaultData: Person[] = [
   {
@@ -129,10 +129,10 @@ const defaultData: Person[] = [
     ({
       ...row,
       avatar: `https://i.pravatar.cc/150?img=${index + 1}`,
-    }) as Person
-)
+    }) as Person,
+);
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
 const columns = [
   columnHelper.accessor(
@@ -143,7 +143,7 @@ const columns = [
     }),
     {
       cell: (info) => {
-        const { fullName, userName, image } = info.getValue()
+        const { fullName, userName, image } = info.getValue();
         return (
           <View flexDirection="row" alignItems="center" gap="$3" ml="$2">
             <Avatar circular size="$5">
@@ -157,11 +157,11 @@ const columns = [
               </Text>
             </View>
           </View>
-        )
+        );
       },
       header: () => 'Name',
       id: 'user_base',
-    }
+    },
   ),
   columnHelper.accessor('age', {
     header: () => 'Age',
@@ -172,15 +172,15 @@ const columns = [
     header: 'Status',
     footer: (info) => info.column.id,
     cell: (info) => {
-      const val = info.renderValue()
-      return <StatusButton status={val?.toLocaleLowerCase() ?? ''} />
+      const val = info.renderValue();
+      return <StatusButton status={val?.toLocaleLowerCase() ?? ''} />;
     },
   }),
   columnHelper.accessor('role', {
     header: 'Role',
     footer: (info) => info.column.id,
   }),
-]
+];
 
 const StatusButton = ({ status }: { status: string }) => {
   return (
@@ -205,27 +205,28 @@ const StatusButton = ({ status }: { status: string }) => {
         {status}
       </Text>
     </View>
-  )
-}
+  );
+};
 
 /** ------ EXAMPLE ------ */
 export function UsersTable() {
-  const [data, setData] = React.useState(() => [...defaultData])
+  const [data, setData] = React.useState(() => [...defaultData]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
-  const headerGroups = table.getHeaderGroups()
-  const tableRows = table.getRowModel().rows
-  const footerGroups = table.getFooterGroups()
+  const headerGroups = table.getHeaderGroups();
+  const tableRows = table.getRowModel().rows;
+  const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght = tableRows.length + headerGroups.length + footerGroups.length
-  const rowCounter = React.useRef(-1)
-  rowCounter.current = -1
-  const { sm, xs } = useMedia()
+  const allRowsLenght =
+    tableRows.length + headerGroups.length + footerGroups.length;
+  const rowCounter = React.useRef(-1);
+  rowCounter.current = -1;
+  const { sm, xs } = useMedia();
 
   if (sm) {
     return (
@@ -243,7 +244,10 @@ export function UsersTable() {
             >
               <XStack ml="$3" mt="$2.5" gap="$2">
                 <Avatar circular size="$3">
-                  <Avatar.Image accessibilityLabel="Profile image" src={row.avatar} />
+                  <Avatar.Image
+                    accessibilityLabel="Profile image"
+                    src={row.avatar}
+                  />
                   <Avatar.Fallback backgroundColor="$gray6" />
                 </Avatar>
                 <View>
@@ -261,30 +265,39 @@ export function UsersTable() {
                 {Object.entries(row)
                   .filter(
                     ([name]) =>
-                      !['avatar', 'fullName', 'username', 'status'].includes(name)
+                      !['avatar', 'fullName', 'username', 'status'].includes(
+                        name,
+                      ),
                   )
                   .map(([name, value], i) => {
                     return (
                       <>
                         <View key={i} fd="row" justifyContent="space-between">
-                          <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
+                          <Text>
+                            {name.charAt(0).toUpperCase() + name.slice(1)}
+                          </Text>
                           <Text color="$gray10">{value}</Text>
                         </View>
                         {i !==
                           Object.entries(row).filter(
                             ([name]) =>
-                              !['avatar', 'fullName', 'username', 'status'].includes(name)
+                              ![
+                                'avatar',
+                                'fullName',
+                                'username',
+                                'status',
+                              ].includes(name),
                           ).length -
                             1 && <Separator />}
                       </>
-                    )
+                    );
                   })}
               </View>
             </View>
-          )
+          );
         })}
       </YStack>
-    )
+    );
   }
 
   return (
@@ -299,7 +312,7 @@ export function UsersTable() {
     >
       <Table.Head>
         {headerGroups.map((headerGroup) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               rowLocation={
@@ -335,17 +348,20 @@ export function UsersTable() {
                   <Text>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Head>
       <Table.Body>
         {tableRows.map((row) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               hoverStyle={{
@@ -384,17 +400,20 @@ export function UsersTable() {
                     flexRender(cell.column.columnDef.cell, cell.getContext())
                   ) : (
                     <Text theme="alt1">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </Text>
                   )}
                 </Table.Cell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Body>
     </Table>
-  )
+  );
 }
 
-UsersTable.fileName = 'UsersTable'
+UsersTable.fileName = 'UsersTable';

@@ -1,6 +1,6 @@
-import { useId, useState } from 'react'
-import { H2, Label, RadioGroup, SizableText, Text, View } from 'tamagui'
-import { Card } from './components/radioParts'
+import { useId, useState } from 'react';
+import { H2, Label, RadioGroup, SizableText, Text, View } from 'tamagui';
+import { Card } from './components/radioParts';
 
 const data = [
   {
@@ -18,11 +18,11 @@ const data = [
     label: 'Visa',
     description: 'This is a secure 128-bit SSL encrypted payment',
   },
-]
+];
 /** ------ EXAMPLE ------ */
 export function VerticalWithDescription() {
-  const [value, setValue] = useState('vd-visa')
-  const uniqueId = useId()
+  const [value, setValue] = useState('vd-visa');
+  const uniqueId = useId();
   return (
     <View
       flexDirection="column"
@@ -52,18 +52,25 @@ export function VerticalWithDescription() {
         </View>
       </RadioGroup>
     </View>
-  )
+  );
 }
 
 type ItemProps = {
-  id: string
-  label: string
-  description: string
-  setValue: (value: string) => void
-  uniqueId: string
-  selected: boolean
-}
-const Item = ({ id, label, description, setValue, uniqueId, selected }: ItemProps) => {
+  id: string;
+  label: string;
+  description: string;
+  setValue: (value: string) => void;
+  uniqueId: string;
+  selected: boolean;
+};
+const Item = ({
+  id,
+  label,
+  description,
+  setValue,
+  uniqueId,
+  selected,
+}: ItemProps) => {
   return (
     <Card
       flexDirection="row"
@@ -96,7 +103,7 @@ const Item = ({ id, label, description, setValue, uniqueId, selected }: ItemProp
         </SizableText>
       </View>
     </Card>
-  )
-}
+  );
+};
 
-VerticalWithDescription.fileName = 'VerticalWithDescription'
+VerticalWithDescription.fileName = 'VerticalWithDescription';

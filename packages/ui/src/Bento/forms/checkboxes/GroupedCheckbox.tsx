@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { Avatar, Text, View, YGroup, debounce } from 'tamagui'
-import { Checkboxes } from './common/checkboxParts'
+import { Check } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import { Avatar, Text, View, YGroup, debounce } from 'tamagui';
+import { Checkboxes } from './common/checkboxParts';
 
 /** ------ EXAMPLE ------ */
 const items = [
@@ -26,9 +26,9 @@ const items = [
     checked: false,
     image: `https://i.pravatar.cc/150?img=20`,
   },
-]
+];
 
-type Item = (typeof items)[number]
+type Item = (typeof items)[number];
 export function GroupedCheckbox() {
   const [values, setValues] = useState<Record<string, boolean>>(() =>
     items.reduce(
@@ -36,13 +36,13 @@ export function GroupedCheckbox() {
         ...a,
         [b.id]: b.checked,
       }),
-      {}
-    )
-  )
+      {},
+    ),
+  );
 
   const onValuesChange = debounce((values: any) => {
-    setValues(values)
-  })
+    setValues(values);
+  });
 
   return (
     <Checkboxes values={values} onValuesChange={onValuesChange}>
@@ -64,19 +64,13 @@ export function GroupedCheckbox() {
         </Checkboxes.Group>
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-GroupedCheckbox.fileName = 'GroupedCheckbox'
+GroupedCheckbox.fileName = 'GroupedCheckbox';
 
-function Item({
-  item,
-  checked,
-}: {
-  item: Item
-  checked: boolean
-}) {
-  const { id, image } = item
+function Item({ item, checked }: { item: Item; checked: boolean }) {
+  const { id, image } = item;
 
   return (
     <YGroup.Item>
@@ -120,7 +114,11 @@ function Item({
               </Text>
             </View>
 
-            <Checkboxes.Checkbox marginLeft="auto" id={id} alignSelf="flex-start">
+            <Checkboxes.Checkbox
+              marginLeft="auto"
+              id={id}
+              alignSelf="flex-start"
+            >
               <Checkboxes.Checkbox.Indicator>
                 <Check />
               </Checkboxes.Checkbox.Indicator>
@@ -133,12 +131,12 @@ function Item({
             fontWeight="300"
             col="$gray9"
           >
-            Laborum velit velit occaecat eiusmod laboris tempor. Lorem qui quis deserunt
-            culpa. Ad eiusmod magna ad proident exercitation laborum qui quis
-            reprehenderit occaecat.
+            Laborum velit velit occaecat eiusmod laboris tempor. Lorem qui quis
+            deserunt culpa. Ad eiusmod magna ad proident exercitation laborum
+            qui quis reprehenderit occaecat.
           </Text>
         </View>
       </Checkboxes.Card>
     </YGroup.Item>
-  )
+  );
 }

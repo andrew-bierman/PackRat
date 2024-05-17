@@ -1,1 +1,1 @@
-export * from './Fullpage'
+export * from './Fullpage';

@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import type { TamaguiElement } from 'tamagui'
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import type { TamaguiElement } from 'tamagui';
 import {
   View,
   isWeb,
@@ -9,55 +9,59 @@ import {
   withStaticProperties,
   H3,
   Button,
-} from 'tamagui'
+} from 'tamagui';
 
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
->(undefined)
+>(undefined);
 
 const Container = View.styleable(({ children, ...rest }) => {
-  const [_containerRef, setContainerRef] = useState<TamaguiElement | null>(null)
-  const [perspectiveRef, setPerspectiveRef] = useState<TamaguiElement | null>(null)
-  const [isMouseEntered, setIsMouseEntered] = useState(false)
+  const [_containerRef, setContainerRef] = useState<TamaguiElement | null>(
+    null,
+  );
+  const [perspectiveRef, setPerspectiveRef] = useState<TamaguiElement | null>(
+    null,
+  );
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
 
-  const containerRef = _containerRef as HTMLDivElement
+  const containerRef = _containerRef as HTMLDivElement;
 
   useEffect(() => {
     if (perspectiveRef && isWeb) {
-      ;(perspectiveRef as HTMLDivElement).style.perspective = '1000px'
+      (perspectiveRef as HTMLDivElement).style.perspective = '1000px';
     }
-  }, [perspectiveRef])
+  }, [perspectiveRef]);
 
   useEffect(() => {
     if (containerRef && isWeb) {
-      containerRef.style.transformStyle = 'preserve-3d'
-      containerRef.style.transition = `50ms linear`
+      containerRef.style.transformStyle = 'preserve-3d';
+      containerRef.style.transition = `50ms linear`;
     }
-  }, [containerRef])
+  }, [containerRef]);
 
-  let handleMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void
-  let handleMouseEnter: () => void
-  let handleMouseLeave: () => void
+  let handleMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void;
+  let handleMouseEnter: () => void;
+  let handleMouseLeave: () => void;
 
   if (isWeb) {
     handleMouseMove = (e) => {
-      if (!containerRef) return
-      const { left, top, width, height } = containerRef.getBoundingClientRect()
-      const x = (e.clientX - left - width / 2) / 25
-      const y = (e.clientY - top - height / 2) / 25
-      containerRef.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`
-    }
+      if (!containerRef) return;
+      const { left, top, width, height } = containerRef.getBoundingClientRect();
+      const x = (e.clientX - left - width / 2) / 25;
+      const y = (e.clientY - top - height / 2) / 25;
+      containerRef.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+    };
 
     handleMouseEnter = () => {
-      setIsMouseEntered(true)
-      if (!containerRef) return
-    }
+      setIsMouseEntered(true);
+      if (!containerRef) return;
+    };
 
     handleMouseLeave = () => {
-      if (!containerRef) return
-      setIsMouseEntered(false)
-      containerRef.style.transform = `rotateY(0deg) rotateX(0deg)`
-    }
+      if (!containerRef) return;
+      setIsMouseEntered(false);
+      containerRef.style.transform = `rotateY(0deg) rotateX(0deg)`;
+    };
   }
 
   return (
@@ -83,35 +87,37 @@ const Container = View.styleable(({ children, ...rest }) => {
         </View>
       </View>
     </MouseEnterContext.Provider>
-  )
-})
+  );
+});
 
 const Body = View.styleable(({ children, ...rest }, forwardedRef) => {
-  const [perspectiveRef, setPerspectiveRef] = useState<TamaguiElement | null>(null)
+  const [perspectiveRef, setPerspectiveRef] = useState<TamaguiElement | null>(
+    null,
+  );
 
-  const composedRef = useComposedRefs(forwardedRef, setPerspectiveRef)
+  const composedRef = useComposedRefs(forwardedRef, setPerspectiveRef);
 
   useEffect(() => {
     if (perspectiveRef && isWeb) {
-      ;(perspectiveRef as HTMLDivElement).style.transformStyle = 'preserve-3d'
+      (perspectiveRef as HTMLDivElement).style.transformStyle = 'preserve-3d';
     }
-  }, [perspectiveRef])
+  }, [perspectiveRef]);
 
   return (
     <View ref={(ref) => composedRef(ref as any)} {...rest}>
       {children}
     </View>
-  )
-})
+  );
+});
 
 type ItemProps = {
-  translateX?: number | string
-  translateY?: number | string
-  translateZ?: number | string
-  rotateX?: number | string
-  rotateY?: number | string
-  rotateZ?: number | string
-}
+  translateX?: number | string;
+  translateY?: number | string;
+  translateZ?: number | string;
+  rotateX?: number | string;
+  rotateY?: number | string;
+  rotateZ?: number | string;
+};
 const Item = View.styleable<ItemProps>(
   ({
     translateX = 0,
@@ -123,52 +129,52 @@ const Item = View.styleable<ItemProps>(
     children,
     ...rest
   }) => {
-    const [ref, setRef] = useState<TamaguiElement | null>(null)
-    const [isMouseEntered] = useMouseEnter()
+    const [ref, setRef] = useState<TamaguiElement | null>(null);
+    const [isMouseEntered] = useMouseEnter();
 
     useEffect(() => {
       if (isWeb) {
-        handleAnimations()
+        handleAnimations();
       }
-    }, [isMouseEntered])
+    }, [isMouseEntered]);
 
     useEffect(() => {
       if (isWeb && ref) {
-        ;(ref as HTMLElement).style.transition = 'all 200ms linear'
+        (ref as HTMLElement).style.transition = 'all 200ms linear';
       }
-    }, [ref])
+    }, [ref]);
 
     const handleAnimations = () => {
-      if (!ref) return
+      if (!ref) return;
       if (isMouseEntered) {
-        ;(ref as HTMLElement).style.transform =
-          `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`
+        (ref as HTMLElement).style.transform =
+          `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
       } else {
-        ;(ref as HTMLElement).style.transform =
-          `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`
+        (ref as HTMLElement).style.transform =
+          `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
       }
-    }
+    };
 
     return (
       <View ref={(ref) => setRef(ref)} {...rest}>
         {children}
       </View>
-    )
-  }
-)
+    );
+  },
+);
 
 const Card = withStaticProperties(Container, {
   Body,
   Item,
-})
+});
 
 export const useMouseEnter = () => {
-  const context = useContext(MouseEnterContext)
+  const context = useContext(MouseEnterContext);
   if (context === undefined) {
-    throw new Error('useMouseEnter must be used within a MouseEnterProvider')
+    throw new Error('useMouseEnter must be used within a MouseEnterProvider');
   }
-  return context
-}
+  return context;
+};
 
 /** ------ EXAMPLE ------ */
 export function InteractiveCardExample() {
@@ -225,7 +231,7 @@ export function InteractiveCardExample() {
         </Card.Item>
       </Card.Body>
     </Card>
-  )
+  );
 }
 
-InteractiveCardExample.fileName = 'InteractiveCard'
+InteractiveCardExample.fileName = 'InteractiveCard';

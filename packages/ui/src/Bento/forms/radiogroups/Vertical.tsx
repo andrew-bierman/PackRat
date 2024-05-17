@@ -1,6 +1,6 @@
-import { useId, useState } from 'react'
-import { H2, Label, RadioGroup, Text, View } from 'tamagui'
-import { Card } from './components/radioParts'
+import { useId, useState } from 'react';
+import { H2, Label, RadioGroup, Text, View } from 'tamagui';
+import { Card } from './components/radioParts';
 
 const data = [
   {
@@ -15,11 +15,11 @@ const data = [
     id: 'ver-1-visa',
     label: 'Visa',
   },
-]
+];
 /** ------ EXAMPLE ------ */
 export function Vertical() {
-  const uniqueId = useId()
-  const [value, setValue] = useState('hor-visa')
+  const uniqueId = useId();
+  const [value, setValue] = useState('hor-visa');
   return (
     <View
       flexDirection="column"
@@ -65,7 +65,7 @@ export function Vertical() {
         ))}
       </RadioGroup>
     </View>
-  )
+  );
 }
 
-Vertical.fileName = 'Vertical'
+Vertical.fileName = 'Vertical';

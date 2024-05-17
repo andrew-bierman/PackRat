@@ -1,2 +1,2 @@
-export * from './AvatarsTooltip'
-export * from './AvatarsTooltipFancy'
+export * from './AvatarsTooltip';
+export * from './AvatarsTooltipFancy';

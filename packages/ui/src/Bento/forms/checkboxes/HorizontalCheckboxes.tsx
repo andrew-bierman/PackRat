@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { Text, YStack, debounce } from 'tamagui'
-import { Checkboxes } from './common/checkboxParts'
+import { Check } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import { Text, YStack, debounce } from 'tamagui';
+import { Checkboxes } from './common/checkboxParts';
 
 const items = [
   {
@@ -20,17 +20,17 @@ const items = [
     label: 'Visa',
     checked: false,
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function HorizontalCheckboxes() {
   const [values, setValues] = useState<Record<string, boolean>>(() =>
-    items.reduce((a, b) => ({ ...a, [b.id]: b.checked }), {})
-  )
+    items.reduce((a, b) => ({ ...a, [b.id]: b.checked }), {}),
+  );
 
   const onValuesChange = debounce((values: any) => {
-    setValues(values)
-  })
+    setValues(values);
+  });
 
   return (
     <Checkboxes
@@ -44,7 +44,12 @@ export function HorizontalCheckboxes() {
       <Text fontSize="$5" lineHeight="$5" fontWeight="300" col="$gray10">
         Select your payment method
       </Text>
-      <Checkboxes.FocusGroup flexDirection="row" gap="$4" flexWrap="wrap" rowGap="$2">
+      <Checkboxes.FocusGroup
+        flexDirection="row"
+        gap="$4"
+        flexWrap="wrap"
+        rowGap="$2"
+      >
         {items.map(({ id, label, checked }) => (
           <Checkboxes.FocusGroup.Item
             flex={1}
@@ -60,19 +65,19 @@ export function HorizontalCheckboxes() {
         ))}
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-HorizontalCheckboxes.fileName = 'HorizontalCheckboxes'
+HorizontalCheckboxes.fileName = 'HorizontalCheckboxes';
 
 function Item({
   id,
   label,
   checked,
 }: {
-  id: string
-  label: string
-  checked: boolean
+  id: string;
+  label: string;
+  checked: boolean;
 }) {
   return (
     <Checkboxes.Card
@@ -96,5 +101,5 @@ function Item({
         {label}
       </Checkboxes.Checkbox.Label>
     </Checkboxes.Card>
-  )
+  );
 }

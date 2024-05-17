@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
-import { Text, View, debounce } from 'tamagui'
-import { Checkboxes } from './common/checkboxParts'
+import { Check } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
+import { Text, View, debounce } from 'tamagui';
+import { Checkboxes } from './common/checkboxParts';
 
 const items = [
   {
@@ -23,19 +23,19 @@ const items = [
     description: 'This is a secure 128-bit SSL encrypted payment',
     checked: false,
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function HorizontalWithDescriptionCheckboxes() {
-  const uniqueId = useId()
+  const uniqueId = useId();
 
   const [values, setValues] = useState(() =>
-    items.reduce((a, b) => ({ ...a, [b.id]: b.checked }), {})
-  )
+    items.reduce((a, b) => ({ ...a, [b.id]: b.checked }), {}),
+  );
 
   const onValuesChange = debounce((values: any) => {
-    setValues(values)
-  })
+    setValues(values);
+  });
 
   return (
     <Checkboxes
@@ -77,13 +77,20 @@ export function HorizontalWithDescriptionCheckboxes() {
           </Checkboxes.FocusGroup.Item>
         ))}
         {/* a trick to avoid last flex item to be stretch out */}
-        <View flexDirection="row" key="last" flex={1} flexShrink={1} flexBasis={300} />
+        <View
+          flexDirection="row"
+          key="last"
+          flex={1}
+          flexShrink={1}
+          flexBasis={300}
+        />
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-HorizontalWithDescriptionCheckboxes.fileName = 'HorizontalWithDescriptionCheckboxes'
+HorizontalWithDescriptionCheckboxes.fileName =
+  'HorizontalWithDescriptionCheckboxes';
 
 function Item({
   id,
@@ -91,10 +98,10 @@ function Item({
   description,
   uniqueId,
 }: {
-  id: string
-  label: string
-  description: string
-  uniqueId: string
+  id: string;
+  label: string;
+  description: string;
+  uniqueId: string;
 }) {
   return (
     <Checkboxes.Card
@@ -132,5 +139,5 @@ function Item({
         </Text>
       </View>
     </Checkboxes.Card>
-  )
+  );
 }

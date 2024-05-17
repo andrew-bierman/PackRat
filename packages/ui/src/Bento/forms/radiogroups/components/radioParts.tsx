@@ -1,4 +1,4 @@
-import { View, styled } from 'tamagui'
+import { View, styled } from 'tamagui';
 
 export const Card = styled(View, {
   variants: {
@@ -31,4 +31,4 @@ export const Card = styled(View, {
   defaultVariants: {
     unstyled: process.env.TAMAGUI_HEADLESS === '1',
   },
-})
+});

@@ -1,23 +1,35 @@
-import type { FormProps } from 'tamagui'
-import { AnimatePresence, Button, Form, H2, RadioGroup, Spinner, View } from 'tamagui'
-import { Input, InputContext } from '../inputs/components/inputsParts'
-import type { ComponentProps } from 'react'
-import { useState } from 'react'
-import { Eye, EyeOff, Info } from '@tamagui/lucide-icons'
-import { FormCard } from './components/layoutParts'
-import { z } from 'zod'
-import { createTsForm, useTsController, createUniqueFieldSchema } from '@ts-react/form'
+import type { FormProps } from 'tamagui';
+import {
+  AnimatePresence,
+  Button,
+  Form,
+  H2,
+  RadioGroup,
+  Spinner,
+  View,
+} from 'tamagui';
+import { Input, InputContext } from '../inputs/components/inputsParts';
+import type { ComponentProps } from 'react';
+import { useState } from 'react';
+import { Eye, EyeOff, Info } from '@tamagui/lucide-icons';
+import { FormCard } from './components/layoutParts';
+import { z } from 'zod';
+import {
+  createTsForm,
+  useTsController,
+  createUniqueFieldSchema,
+} from '@ts-react/form';
 
 type TextInputProps = {
-  label: string
-  labelId: string
-  placeholder?: string
-}
+  label: string;
+  labelId: string;
+  placeholder?: string;
+};
 const TextInput = (props: TextInputProps) => {
-  const { label, labelId, placeholder } = props
-  const { field, error } = useTsController<string>()
-  const { onChange, onBlur, ...filedRest } = field
-  const { size } = InputContext.useStyledContext()
+  const { label, labelId, placeholder } = props;
+  const { field, error } = useTsController<string>();
+  const { onChange, onBlur, ...filedRest } = field;
+  const { size } = InputContext.useStyledContext();
   return (
     <Input
       {...(error && {
@@ -64,22 +76,22 @@ const TextInput = (props: TextInputProps) => {
         )}
       </AnimatePresence>
     </Input>
-  )
-}
+  );
+};
 
 const passwordSchema = createUniqueFieldSchema(
   z.string().min(6, {
     message: 'must be at least 6 characters',
   }),
-  'password'
-)
+  'password',
+);
 
-type PasswordInputProps = TextInputProps & {}
+type PasswordInputProps = TextInputProps & {};
 const PasswordInput = (props: PasswordInputProps) => {
-  const { label, labelId, placeholder } = props
-  const [showPassword, setShowPassword] = useState(false)
-  const { field, error } = useTsController<string>()
-  const { size } = InputContext.useStyledContext()
+  const { label, labelId, placeholder } = props;
+  const [showPassword, setShowPassword] = useState(false);
+  const { field, error } = useTsController<string>();
+  const { size } = InputContext.useStyledContext();
   return (
     <Input
       {...(error && {
@@ -97,7 +109,10 @@ const PasswordInput = (props: PasswordInputProps) => {
           onChangeText={field.onChange}
           value={field.value}
         />
-        <Input.Icon cursor="pointer" onPress={() => setShowPassword(!showPassword)}>
+        <Input.Icon
+          cursor="pointer"
+          onPress={() => setShowPassword(!showPassword)}
+        >
           {showPassword ? <Eye color="$gray11" /> : <EyeOff color="$gray11" />}
         </Input.Icon>
       </Input.Box>
@@ -130,25 +145,25 @@ const PasswordInput = (props: PasswordInputProps) => {
         )}
       </AnimatePresence>
     </Input>
-  )
-}
+  );
+};
 
 // schema is both for validation and mapping to a specific component
-const radioSchema = createUniqueFieldSchema(z.string(), 'radio')
+const radioSchema = createUniqueFieldSchema(z.string(), 'radio');
 type MyRadioProps = {
-  id: string
-  title: string
+  id: string;
+  title: string;
   values: {
-    value: string
-    label: string
-    labelId: string
-  }[]
-}
+    value: string;
+    label: string;
+    labelId: string;
+  }[];
+};
 const MyRadio = (props: MyRadioProps) => {
-  const { id, title, values } = props
-  const { field } = useTsController<string>()
-  const { onChange, ...restField } = field
-  const { size } = InputContext.useStyledContext()
+  const { id, title, values } = props;
+  const { field } = useTsController<string>();
+  const { onChange, ...restField } = field;
+  const { size } = InputContext.useStyledContext();
   return (
     <View gap="$2">
       <H2 size={size} fontFamily="$body">
@@ -172,34 +187,34 @@ const MyRadio = (props: MyRadioProps) => {
         ))}
       </RadioGroup>
     </View>
-  )
-}
+  );
+};
 
 const twoInputSchema = z.object({
   firstInput: z.string().min(1, { message: 'This field is required' }),
   secondInput: z.string().min(1, { message: 'This field is required' }),
-})
+});
 
 type TwoInputProps = {
   values: {
     firstInput: {
-      label: string
-      labelId: string
-      placeholder: string
-    }
+      label: string;
+      labelId: string;
+      placeholder: string;
+    };
     secondInput: {
-      label: string
-      labelId: string
-      placeholder: string
-    }
-  }
-}
+      label: string;
+      labelId: string;
+      placeholder: string;
+    };
+  };
+};
 const TwoInput = (props: TwoInputProps) => {
-  const { values } = props
-  const { field, error } = useTsController<z.infer<typeof twoInputSchema>>()
-  const { value, onChange, onBlur } = field
+  const { values } = props;
+  const { field, error } = useTsController<z.infer<typeof twoInputSchema>>();
+  const { value, onChange, onBlur } = field;
 
-  const { size } = InputContext.useStyledContext()
+  const { size } = InputContext.useStyledContext();
   return (
     <View
       flexWrap="wrap"
@@ -230,7 +245,7 @@ const TwoInput = (props: TwoInputProps) => {
               onChange({
                 ...value,
                 firstInput: text,
-              })
+              });
             }}
             value={value?.firstInput}
           />
@@ -284,7 +299,7 @@ const TwoInput = (props: TwoInputProps) => {
               onChange({
                 ...value,
                 secondInput: text,
-              })
+              });
             }}
             value={value?.secondInput}
           />
@@ -319,8 +334,8 @@ const TwoInput = (props: TwoInputProps) => {
         </AnimatePresence>
       </Input>
     </View>
-  )
-}
+  );
+};
 
 // create the mapping, you need this once per project
 const mapping = [
@@ -328,7 +343,7 @@ const mapping = [
   [radioSchema, MyRadio],
   [passwordSchema, PasswordInput],
   [twoInputSchema, TwoInput],
-] as const // 👈 `as const` is necessary
+] as const; // 👈 `as const` is necessary
 
 const schema = z
   .object({
@@ -346,54 +361,58 @@ const schema = z
   })
   .refine(
     (data) => {
-      return data.password === data.confirmedPassword
+      return data.password === data.confirmedPassword;
     },
     {
       message: 'Passwords do not match',
       path: ['confirmedPassword'],
-    }
-  )
+    },
+  );
 
 const FormComponent = (props: FormProps) => {
-  const { ...rest } = props
+  const { ...rest } = props;
   return (
     <Form asChild {...rest}>
       <FormCard flexDirection="column" gap="$5" tag="form">
         {props.children}
       </FormCard>
     </Form>
-  )
-}
+  );
+};
 
 const _SchemaForm = createTsForm(mapping, {
   FormComponent,
-})
+});
 
 const SchemaForm: typeof _SchemaForm = ({ ...props }) => {
-  const renderAfter: ComponentProps<typeof _SchemaForm>['renderAfter'] = props.renderAfter
-    ? (vars) => props.renderAfter?.(vars)
-    : undefined
+  const renderAfter: ComponentProps<typeof _SchemaForm>['renderAfter'] =
+    props.renderAfter ? (vars) => props.renderAfter?.(vars) : undefined;
 
   return (
     <_SchemaForm {...props} renderAfter={renderAfter}>
-      {(fields: Record<string, ReturnType<typeof useTsController>>, context: any) => {
+      {(
+        fields: Record<string, ReturnType<typeof useTsController>>,
+        context: any,
+      ) => {
         //@ts-ignore
-        return props.children ? props.children(fields, context) : Object.values(fields)
+        return props.children
+          ? props.children(fields, context)
+          : Object.values(fields);
       }}
     </_SchemaForm>
-  )
-}
+  );
+};
 
 export function SignupValidatedTsForm() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (data: z.infer<typeof schema>) => {
-    console.info('data is ', data)
-    setLoading(true)
+    console.info('data is ', data);
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }
+      setLoading(false);
+    }, 2000);
+  };
 
   return (
     <InputContext.Provider size="$4">
@@ -501,7 +520,7 @@ export function SignupValidatedTsForm() {
         )}
       />
     </InputContext.Provider>
-  )
+  );
 }
 
-SignupValidatedTsForm.fileName = 'SignupValidatedTsForm'
+SignupValidatedTsForm.fileName = 'SignupValidatedTsForm';

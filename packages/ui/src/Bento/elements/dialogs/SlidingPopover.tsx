@@ -1,5 +1,5 @@
-import * as React from 'react'
-import type { PopoverProps } from 'tamagui'
+import * as React from 'react';
+import type { PopoverProps } from 'tamagui';
 import {
   AnimatePresence,
   H2,
@@ -9,44 +9,44 @@ import {
   XStack,
   YStack,
   styled,
-} from 'tamagui'
+} from 'tamagui';
 
-import { Crown, Moon, Waves } from '@tamagui/lucide-icons'
-import type { LayoutRectangle } from 'react-native'
+import { Crown, Moon, Waves } from '@tamagui/lucide-icons';
+import type { LayoutRectangle } from 'react-native';
 
-const order = ['', 'takeout', 'bento', 'studio']
+const order = ['', 'takeout', 'bento', 'studio'];
 
 const SlidingPopoverContext = React.createContext({
   id: '',
   setActive(id: string, layout: LayoutRectangle) {},
   setInactive(id: string) {},
   close() {},
-})
+});
 
 const SlidingPopover = (props: PopoverProps) => {
-  const popoverRef = React.useRef<Popover>(null)
-  const [active, setActive] = React.useState('')
+  const popoverRef = React.useRef<Popover>(null);
+  const [active, setActive] = React.useState('');
 
   const val = React.useMemo(() => {
     return {
       id: active,
       setActive(id: string, layout: LayoutRectangle) {
-        setActive(id)
-        popoverRef.current?.anchorTo(layout)
+        setActive(id);
+        popoverRef.current?.anchorTo(layout);
       },
       close: () => {
-        setActive('')
+        setActive('');
       },
       setInactive(id: string) {
         setActive((cur) => {
           if (!cur || cur === id) {
-            return ''
+            return '';
           }
-          return id
-        })
+          return id;
+        });
       },
-    }
-  }, [active])
+    };
+  }, [active]);
 
   return (
     <Popover open={!!active} ref={popoverRef} {...props}>
@@ -55,28 +55,28 @@ const SlidingPopover = (props: PopoverProps) => {
         {props.children}
       </SlidingPopoverContext.Provider>
     </Popover>
-  )
-}
+  );
+};
 
 const SlidingPopoverTrigger = YStack.styleable<{ id: string }>(
   ({ id, ...props }, ref) => {
-    const context = React.useContext(SlidingPopoverContext)
-    const [layout, setLayout] = React.useState<LayoutRectangle>()
+    const context = React.useContext(SlidingPopoverContext);
+    const [layout, setLayout] = React.useState<LayoutRectangle>();
 
     return (
       <YStack
         onMouseEnter={() => {
           if (layout) {
-            context.setActive(id, layout)
+            context.setActive(id, layout);
           }
         }}
         onMouseLeave={() => {
-          context.setInactive(id)
+          context.setInactive(id);
         }}
         onPress={() => {
           setTimeout(() => {
-            context.close()
-          }, 400)
+            context.close();
+          }, 400);
         }}
         onLayout={(e) =>
           setLayout({
@@ -90,21 +90,21 @@ const SlidingPopoverTrigger = YStack.styleable<{ id: string }>(
         ref={ref}
         {...props}
       />
-    )
-  }
-)
+    );
+  },
+);
 
 const SlidingPopoverContent = () => {
-  const context = React.useContext(SlidingPopoverContext)
-  const last = React.useRef(context.id)
+  const context = React.useContext(SlidingPopoverContext);
+  const last = React.useRef(context.id);
 
-  const curI = order.indexOf(context.id)
-  const lastI = order.indexOf(last.current)
-  const going = curI > lastI ? 1 : -1
+  const curI = order.indexOf(context.id);
+  const lastI = order.indexOf(last.current);
+  const going = curI > lastI ? 1 : -1;
 
   React.useEffect(() => {
-    last.current = context.id
-  }, [context.id])
+    last.current = context.id;
+  }, [context.id]);
 
   return (
     <Popover.Content
@@ -164,8 +164,8 @@ const SlidingPopoverContent = () => {
         </AnimatePresence>
       </YStack>
     </Popover.Content>
-  )
-}
+  );
+};
 
 const Frame = styled(YStack, {
   animation: '200ms',
@@ -190,13 +190,17 @@ const Frame = styled(YStack, {
       }),
     },
   } as const,
-})
+});
 
 const TooltipLabelLarge = ({
   title,
   subtitle,
   icon,
-}: { icon: any; title: string; subtitle: string }) => {
+}: {
+  icon: any;
+  title: string;
+  subtitle: string;
+}) => {
   return (
     <YStack f={1} ai="center" p="$7" br="$4" ov="hidden">
       <H2 f={1} fow="600" size="$8">
@@ -211,12 +215,12 @@ const TooltipLabelLarge = ({
         {icon}
       </YStack>
     </YStack>
-  )
-}
+  );
+};
 
 const TouchableArea = styled(View, {
   padding: '$3',
-})
+});
 
 /** ---------- EXAMPLE --------- */
 export const SlidingPopoverDemo = () => {
@@ -244,7 +248,7 @@ export const SlidingPopoverDemo = () => {
         </SlidingPopoverTrigger>
       </XStack>
     </SlidingPopover>
-  )
-}
+  );
+};
 
-SlidingPopoverDemo.fileName = 'SlidingPopover'
+SlidingPopoverDemo.fileName = 'SlidingPopover';

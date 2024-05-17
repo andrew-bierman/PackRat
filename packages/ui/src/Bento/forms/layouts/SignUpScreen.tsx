@@ -1,6 +1,6 @@
-import { Camera, Check, Eye, EyeOff } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
-import { Image } from 'react-native'
+import { Camera, Check, Eye, EyeOff } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
+import { Image } from 'react-native';
 import {
   AnimatePresence,
   Button,
@@ -14,30 +14,30 @@ import {
   Theme,
   View,
   useEvent,
-} from 'tamagui'
-import { FormCard } from './components/layoutParts'
-import { Input } from '../inputs/components/inputsParts'
+} from 'tamagui';
+import { FormCard } from './components/layoutParts';
+import { Input } from '../inputs/components/inputsParts';
 
 /** simulate signin */
 function useSignIn() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   return {
     status: status,
     signUp: () => {
-      setStatus('loading')
+      setStatus('loading');
       setTimeout(() => {
-        setStatus('success')
-      }, 2000)
+        setStatus('success');
+      }, 2000);
     },
-  }
+  };
 }
 
 /** ------ EXAMPLE ------ */
 export function SignUpScreen() {
-  const uniqueId = useId()
-  const { signUp, status } = useSignIn()
-  const [showPassword, setShowPassword] = useState(false)
-  const [receiveNotification, setReceiveNotification] = useState(false)
+  const uniqueId = useId();
+  const { signUp, status } = useSignIn();
+  const [showPassword, setShowPassword] = useState(false);
+  const [receiveNotification, setReceiveNotification] = useState(false);
   return (
     <FormCard>
       <View
@@ -64,7 +64,9 @@ export function SignUpScreen() {
             $group-window-gtXs={{ minWidth: 'inherit' }}
           >
             <Input size="$4">
-              <Input.Label htmlFor={uniqueId + 'first-name'}>First Name</Input.Label>
+              <Input.Label htmlFor={uniqueId + 'first-name'}>
+                First Name
+              </Input.Label>
               <Input.Box minWidth="100%">
                 <Input.Area id={uniqueId + 'first-name'} />
               </Input.Box>
@@ -72,7 +74,9 @@ export function SignUpScreen() {
           </View>
           <View flexDirection="column" flex={1} gap="$1">
             <Input size="$4">
-              <Input.Label htmlFor={uniqueId + 'last-name'}>Last Name</Input.Label>
+              <Input.Label htmlFor={uniqueId + 'last-name'}>
+                Last Name
+              </Input.Label>
               <Input.Box>
                 <Input.Area id={uniqueId + 'last-name'} />
               </Input.Box>
@@ -82,9 +86,19 @@ export function SignUpScreen() {
         <Input size="$4">
           <Input.Label htmlFor={uniqueId + 'password'}>Password</Input.Label>
           <Input.Box>
-            <Input.Area id={uniqueId + 'password'} secureTextEntry={!showPassword} />
-            <Input.Icon cursor="pointer" onPress={() => setShowPassword(!showPassword)}>
-              {showPassword ? <Eye color="$gray11" /> : <EyeOff color="$gray11" />}
+            <Input.Area
+              id={uniqueId + 'password'}
+              secureTextEntry={!showPassword}
+            />
+            <Input.Icon
+              cursor="pointer"
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? (
+                <Eye color="$gray11" />
+              ) : (
+                <EyeOff color="$gray11" />
+              )}
             </Input.Icon>
           </Input.Box>
         </Input>
@@ -104,7 +118,9 @@ export function SignUpScreen() {
             </Input.Box>
           </Input>
           <Input flex={1} size="$4">
-            <Input.Label htmlFor={uniqueId + 'postal'}>Postal code / ZIP</Input.Label>
+            <Input.Label htmlFor={uniqueId + 'postal'}>
+              Postal code / ZIP
+            </Input.Label>
             <Input.Box>
               <Input.Area
                 inputMode="decimal"
@@ -229,10 +245,10 @@ export function SignUpScreen() {
         </Theme>
       </View>
     </FormCard>
-  )
+  );
 }
 
-SignUpScreen.fileName = 'SignUpScreen'
+SignUpScreen.fileName = 'SignUpScreen';
 
 export function VerticalCheckboxes() {
   const [values, setValues] = useState([
@@ -246,15 +262,15 @@ export function VerticalCheckboxes() {
       label: 'Designer',
       checked: false,
     },
-  ])
+  ]);
   const toggleValue = (value: string) => {
     setValues((prev) =>
       prev.map((item) => ({
         ...item,
         checked: item.id === value ? !item.checked : item.checked,
-      }))
-    )
-  }
+      })),
+    );
+  };
   return (
     <View flexDirection="column" gap="$2.5">
       <SizableText size="$5">Customize content</SizableText>
@@ -275,7 +291,7 @@ export function VerticalCheckboxes() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 function Item({
@@ -284,12 +300,12 @@ function Item({
   label,
   checked,
 }: {
-  id: string
-  toggleValue: (value: string) => void
-  label: string
-  checked: boolean
+  id: string;
+  toggleValue: (value: string) => void;
+  label: string;
+  checked: boolean;
 }) {
-  const onCheckedChange = useEvent(() => toggleValue(id))
+  const onCheckedChange = useEvent(() => toggleValue(id));
   return (
     <View flexDirection="row" width={150} alignItems="center" gap="$3">
       <Checkbox id={id} checked={checked} onCheckedChange={onCheckedChange}>
@@ -302,5 +318,5 @@ function Item({
         {label}
       </Label>
     </View>
-  )
+  );
 }

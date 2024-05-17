@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
-import { Heart, Minus, Plus, Trash } from '@tamagui/lucide-icons'
-import { useEffect, useState } from 'react'
+import { faker } from '@faker-js/faker';
+import { Heart, Minus, Plus, Trash } from '@tamagui/lucide-icons';
+import { useEffect, useState } from 'react';
 import {
   Button,
   Image,
@@ -12,11 +12,11 @@ import {
   XGroup,
   styled,
   isWeb,
-} from 'tamagui'
-import { useMedia } from 'tamagui'
-import { Dimensions } from 'react-native'
+} from 'tamagui';
+import { useMedia } from 'tamagui';
+import { Dimensions } from 'react-native';
 
-const bagImages = ['bag1.jpg', 'bag2.jpg', 'bag3.webp', 'bag4.webp']
+const bagImages = ['bag1.jpg', 'bag2.jpg', 'bag3.webp', 'bag4.webp'];
 const bagNames = [
   'Leather Bag',
   'Canvas Bag',
@@ -28,13 +28,13 @@ const bagNames = [
   'Hobo Bag',
   'Clutch',
   'Duffle Bag',
-]
+];
 
 const StyledText = styled(Text, {
   color: '$color',
   fontSize: '$4',
   lineHeight: '$4',
-})
+});
 
 const getItems = () => {
   return Array.from({ length: 10 }).map((_, i) => ({
@@ -52,11 +52,13 @@ const getItems = () => {
         value: faker.commerce.productMaterial(),
       },
     ],
-    image: 'http://www.tamagui.dev/bento/images/bag/' + bagImages[i % bagImages.length],
-  }))
-}
+    image:
+      'http://www.tamagui.dev/bento/images/bag/' +
+      bagImages[i % bagImages.length],
+  }));
+};
 
-type Items = ReturnType<typeof getItems>
+type Items = ReturnType<typeof getItems>;
 
 const CartTotal = () => {
   return (
@@ -112,18 +114,18 @@ const CartTotal = () => {
         </Button>
       </View>
     </View>
-  )
-}
+  );
+};
 
 /** ------ EXAMPLE ------ */
 export function Fullpage() {
-  const [items, setItems] = useState<Items>([])
+  const [items, setItems] = useState<Items>([]);
 
-  const { sm, xs } = useMedia()
+  const { sm, xs } = useMedia();
 
   useEffect(() => {
-    setItems(getItems())
-  }, [])
+    setItems(getItems());
+  }, []);
   return (
     <View flexDirection="column" maxHeight={910} height={'100%'} width="100%">
       <ScrollView
@@ -148,19 +150,19 @@ export function Fullpage() {
       </ScrollView>
       {isWeb && <CartTotal />}
     </View>
-  )
+  );
 }
 
-Fullpage.fileName = 'Fullpage'
+Fullpage.fileName = 'Fullpage';
 
 const Item = ({ item }: { item: Items[number] }) => {
-  const { sm, xxs, xs } = useMedia()
-  const [layoutWidth, setLayoutWidth] = useState(0)
+  const { sm, xxs, xs } = useMedia();
+  const [layoutWidth, setLayoutWidth] = useState(0);
 
   const onLayout = (event) => {
-    const { width } = event.nativeEvent.layout
-    setLayoutWidth(width)
-  }
+    const { width } = event.nativeEvent.layout;
+    setLayoutWidth(width);
+  };
 
   return (
     <View
@@ -274,11 +276,11 @@ const Item = ({ item }: { item: Items[number] }) => {
         </Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const ItemCounter = View.styleable((props, ref) => {
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(1);
 
   return (
     <XGroup ref={ref} {...props}>
@@ -314,5 +316,5 @@ const ItemCounter = View.styleable((props, ref) => {
         />
       </XGroup.Item>
     </XGroup>
-  )
-})
+  );
+});

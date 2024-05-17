@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { FlatList } from 'react-native'
+import { useState } from 'react';
+import { FlatList } from 'react-native';
 import {
   Avatar,
   Button,
@@ -10,29 +10,23 @@ import {
   View,
   styled,
   useWindowDimensions as useDimensions,
-} from 'tamagui'
-import { useWindowDimensions } from 'tamagui'
+} from 'tamagui';
+import { useWindowDimensions } from 'tamagui';
 
-const items = Array.from({ length: 100 }).map((_, index) => index)
+const items = Array.from({ length: 100 }).map((_, index) => index);
 
-const List = styled(FlatList<number>, {})
+const List = styled(FlatList<number>, {});
 
-const renderItem = ({
-  item,
-  index,
-}: {
-  item: number
-  index: number
-}) => {
-  return <Item data={{ index }} key={item} />
-}
+const renderItem = ({ item, index }: { item: number; index: number }) => {
+  return <Item data={{ index }} key={item} />;
+};
 export function FlatGrid() {
-  const [baseWidth, setBaseWidth] = useState(300)
-  const [padding, setPadding] = useState(20)
+  const [baseWidth, setBaseWidth] = useState(300);
+  const [padding, setPadding] = useState(20);
 
-  const { width: deviceWidth, height: deviceHeight } = useWindowDimensions()
+  const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
 
-  const numberOfColumns = Math.round((deviceWidth - padding) / baseWidth)
+  const numberOfColumns = Math.round((deviceWidth - padding) / baseWidth);
 
   return (
     <List
@@ -50,14 +44,14 @@ export function FlatGrid() {
       renderItem={renderItem}
       height={deviceHeight}
     />
-  )
+  );
 }
 
-FlatGrid.fileName = 'FlatGrid'
+FlatGrid.fileName = 'FlatGrid';
 
 function Item({ data }: { data: { index: number } }) {
-  const { index } = data
-  const PADDING = 16
+  const { index } = data;
+  const PADDING = 16;
   return (
     <View
       flexDirection="column"
@@ -119,5 +113,5 @@ function Item({ data }: { data: { index: number } }) {
         </View>
       </View>
     </View>
-  )
+  );
 }

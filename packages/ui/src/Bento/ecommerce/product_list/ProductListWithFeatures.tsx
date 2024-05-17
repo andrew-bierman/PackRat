@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import {
   Anchor,
   Circle,
@@ -10,18 +10,18 @@ import {
   XStack,
   YStack,
   styled,
-} from 'tamagui'
-import { getProducts } from './data/products'
+} from 'tamagui';
+import { getProducts } from './data/products';
 
-const Link = Anchor
+const Link = Anchor;
 
-type Product = ReturnType<typeof getProducts>[0]
+type Product = ReturnType<typeof getProducts>[0];
 
 const StyledText = styled(Text, {
   color: '$color',
   fontSize: '$4',
   lineHeight: '$4',
-})
+});
 
 function Item({ item }: { item: Product }) {
   return (
@@ -81,20 +81,20 @@ function Item({ item }: { item: Product }) {
         </YStack>
       </YStack>
     </Link>
-  )
+  );
 }
 
 // spacers are a method to avoid streteched items at the end
 const someSpacers = Array.from({ length: 5 }).map((_c, index) => (
   <YStack key={index + 'sp'} flexBasis={300} flexGrow={1} flexShrink={1} />
-))
+));
 
 /** ------ EXAMPLE ------ */
 export function ProductListWithFeatures() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
-    setProducts(getProducts())
-  }, [])
+    setProducts(getProducts());
+  }, []);
   return (
     <XStack
       maxWidth="100%"
@@ -113,7 +113,7 @@ export function ProductListWithFeatures() {
       ))}
       {someSpacers}
     </XStack>
-  )
+  );
 }
 
-ProductListWithFeatures.fileName = 'ProductListWithFeatures'
+ProductListWithFeatures.fileName = 'ProductListWithFeatures';

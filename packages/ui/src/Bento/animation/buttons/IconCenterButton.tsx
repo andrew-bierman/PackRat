@@ -1,21 +1,21 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import type { LayoutRectangle } from 'react-native'
-import { Button, Stack } from 'tamagui'
+import { Check } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import type { LayoutRectangle } from 'react-native';
+import { Button, Stack } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function IconCenterButton() {
-  const [move, setMove] = useState(false)
-  const [buttonWidth, setWidth] = useState(100)
-  const [iconDim, setIconDim] = useState<LayoutRectangle>()
+  const [move, setMove] = useState(false);
+  const [buttonWidth, setWidth] = useState(100);
+  const [iconDim, setIconDim] = useState<LayoutRectangle>();
 
-  const iconScale = 1.8
+  const iconScale = 1.8;
 
   return (
     <Button
       size="$4"
       onPress={() => {
-        setMove(!move)
+        setMove(!move);
       }}
       overflow="hidden"
       {...(move && {
@@ -33,11 +33,15 @@ export function IconCenterButton() {
           <Check />
         </Button.Icon>
       </Stack>
-      <Button.Text animation="medium" x={move ? buttonWidth : 0} opacity={move ? 0 : 1}>
+      <Button.Text
+        animation="medium"
+        x={move ? buttonWidth : 0}
+        opacity={move ? 0 : 1}
+      >
         Accept Terms
       </Button.Text>
     </Button>
-  )
+  );
 }
 
-IconCenterButton.fileName = 'IconCenterButton'
+IconCenterButton.fileName = 'IconCenterButton';

@@ -6,8 +6,8 @@ import {
   ChevronRight,
   ChevronUp,
   ChevronsUpDown,
-} from '@tamagui/lucide-icons'
-import type { GroupingState } from '@tanstack/react-table'
+} from '@tamagui/lucide-icons';
+import type { GroupingState } from '@tanstack/react-table';
 import {
   createColumnHelper,
   flexRender,
@@ -15,9 +15,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import * as React from 'react'
-import { Dimensions, Platform } from 'react-native'
+} from '@tanstack/react-table';
+import * as React from 'react';
+import { Dimensions, Platform } from 'react-native';
 import {
   Button,
   Input,
@@ -29,21 +29,21 @@ import {
   useMedia,
   ScrollView,
   useWindowDimensions,
-} from 'tamagui'
+} from 'tamagui';
 
-import { makeData } from './utils/makeData'
-import { Table } from './common/tableParts'
+import { makeData } from './utils/makeData';
+import { Table } from './common/tableParts';
 
 type Person = {
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  status: string
-  progress: number
-}
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  status: string;
+  progress: number;
+};
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
 const columns = [
   columnHelper.accessor('firstName', {
@@ -73,28 +73,35 @@ const columns = [
     header: 'Progress',
     footer: (info) => info.column.id,
   }),
-]
+];
 
 const FooterContainer = ({
   children,
   Footer,
-}: { children: React.ReactNode; Footer: React.ElementType }) => {
+}: {
+  children: React.ReactNode;
+  Footer: React.ElementType;
+}) => {
   if (Platform.OS !== 'web') {
     return (
       <>
         {children}
         <Footer />
       </>
-    )
+    );
   }
-  return children
-}
+  return children;
+};
 
 const Footer = ({
   table,
   screenWidth,
   tableWidth: TABLE_WIDTH,
-}: { table: any; screenWidth: number; tableWidth: number }) => {
+}: {
+  table: any;
+  screenWidth: number;
+  tableWidth: number;
+}) => {
   return (
     <View
       position="absolute"
@@ -188,8 +195,8 @@ const Footer = ({
           })}
           defaultValue={String(table.getState().pagination.pageIndex + 1)}
           onChangeText={(text) => {
-            const page = text ? Number(text) - 1 : 0
-            table.setPageIndex(page)
+            const page = text ? Number(text) - 1 : 0;
+            table.setPageIndex(page);
           }}
           maxWidth={45}
           minWidth={45}
@@ -197,17 +204,17 @@ const Footer = ({
         />
       </View>
     </View>
-  )
-}
+  );
+};
 /** ------ EXAMPLE ------ */
 export function SortableTable() {
-  const [data, setData] = React.useState<Person[]>([])
-  const [grouping, setGrouping] = React.useState<GroupingState>([])
-  const { width: windowWidth } = useWindowDimensions()
+  const [data, setData] = React.useState<Person[]>([]);
+  const [grouping, setGrouping] = React.useState<GroupingState>([]);
+  const { width: windowWidth } = useWindowDimensions();
 
   React.useEffect(() => {
-    setData(makeData(10000))
-  }, [])
+    setData(makeData(10000));
+  }, []);
 
   const table = useReactTable({
     data,
@@ -228,27 +235,32 @@ export function SortableTable() {
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
-  })
+  });
 
-  const headerGroups = table.getHeaderGroups()
-  const tableRows = table.getRowModel().rows
-  const footerGroups = table.getFooterGroups()
+  const headerGroups = table.getHeaderGroups();
+  const tableRows = table.getRowModel().rows;
+  const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght = tableRows.length + headerGroups.length + footerGroups.length
-  const rowCounter = React.useRef(-1)
-  rowCounter.current = -1
+  const allRowsLenght =
+    tableRows.length + headerGroups.length + footerGroups.length;
+  const rowCounter = React.useRef(-1);
+  rowCounter.current = -1;
 
-  const CELL_WIDTH = '$15'
-  const TABLE_WIDTH = getTokenValue(CELL_WIDTH) * columns.length
+  const CELL_WIDTH = '$15';
+  const TABLE_WIDTH = getTokenValue(CELL_WIDTH) * columns.length;
 
-  const { sm } = Platform.OS === 'web' ? useMedia() : { sm: true }
+  const { sm } = Platform.OS === 'web' ? useMedia() : { sm: true };
 
-  const screenWidth = windowWidth - 15
+  const screenWidth = windowWidth - 15;
 
   return (
     <FooterContainer
       Footer={() => (
-        <Footer screenWidth={screenWidth} tableWidth={TABLE_WIDTH} table={table} />
+        <Footer
+          screenWidth={screenWidth}
+          tableWidth={TABLE_WIDTH}
+          table={table}
+        />
       )}
     >
       <ScrollView horizontal maxWidth={screenWidth}>
@@ -277,7 +289,7 @@ export function SortableTable() {
           >
             <Table.Head position="absolute" zIndex="$1" maxWidth={TABLE_WIDTH}>
               {headerGroups.map((headerGroup) => {
-                rowCounter.current++
+                rowCounter.current++;
                 return (
                   <Table.Row
                     backgrounded
@@ -297,7 +309,7 @@ export function SortableTable() {
                   >
                     {headerGroup.headers.map((header) => {
                       const isSortableHeader =
-                        header.id === 'firstName' || header.id === 'age'
+                        header.id === 'firstName' || header.id === 'age';
                       return (
                         <Table.HeaderCell
                           cellLocation={
@@ -311,7 +323,9 @@ export function SortableTable() {
                         >
                           <View
                             flexDirection="row"
-                            cursor={header.column.getCanSort() ? 'pointer' : 'none'}
+                            cursor={
+                              header.column.getCanSort() ? 'pointer' : 'none'
+                            }
                             onPress={
                               isSortableHeader
                                 ? header.column.getToggleSortingHandler()
@@ -325,7 +339,7 @@ export function SortableTable() {
                                 ? null
                                 : flexRender(
                                     header.column.columnDef.header,
-                                    header.getContext()
+                                    header.getContext(),
                                   )}
                             </Text>
                             {{
@@ -337,15 +351,15 @@ export function SortableTable() {
                             }[header.column.getIsSorted() || 'noSort'] ?? null}
                           </View>
                         </Table.HeaderCell>
-                      )
+                      );
                     })}
                   </Table.Row>
-                )
+                );
               })}
             </Table.Head>
             <Table.Body mt="$8">
               {tableRows.map((row, index) => {
-                rowCounter.current++
+                rowCounter.current++;
                 return (
                   <Table.Row
                     minWidth={TABLE_WIDTH}
@@ -373,22 +387,29 @@ export function SortableTable() {
                         key={cell.id}
                       >
                         <Text color="$gray11">
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
                         </Text>
                       </Table.Cell>
                     ))}
                   </Table.Row>
-                )
+                );
               })}
             </Table.Body>
           </Table>
           {!sm && (
-            <Footer screenWidth={screenWidth} tableWidth={TABLE_WIDTH} table={table} />
+            <Footer
+              screenWidth={screenWidth}
+              tableWidth={TABLE_WIDTH}
+              table={table}
+            />
           )}
         </View>
       </ScrollView>
     </FooterContainer>
-  )
+  );
 }
 
-SortableTable.fileName = 'SortableTable'
+SortableTable.fileName = 'SortableTable';

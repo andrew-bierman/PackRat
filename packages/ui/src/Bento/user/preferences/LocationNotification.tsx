@@ -1,8 +1,14 @@
-import { getFontSized } from '@tamagui/get-font-sized'
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { Check, ChevronDown, ChevronUp, Info, Mail } from '@tamagui/lucide-icons'
-import { useMemo, useState } from 'react'
-import type { FontSizeTokens, SelectProps } from 'tamagui'
+import { getFontSized } from '@tamagui/get-font-sized';
+import { LinearGradient } from '@tamagui/linear-gradient';
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Info,
+  Mail,
+} from '@tamagui/lucide-icons';
+import { useMemo, useState } from 'react';
+import type { FontSizeTokens, SelectProps } from 'tamagui';
 import {
   Adapt,
   Button,
@@ -17,7 +23,7 @@ import {
   getTokenValue,
   styled,
   Text,
-} from 'tamagui'
+} from 'tamagui';
 
 const languages = [
   { name: 'English', shortcut: 'EN', flag: 'US' },
@@ -31,7 +37,7 @@ const languages = [
   { name: 'Japanese', shortcut: 'JA', flag: 'JP' },
   { name: 'Chinese', shortcut: 'ZH', flag: 'CN' },
   { name: 'Korean', shortcut: 'KO', flag: 'KR' },
-]
+];
 
 const countries = [
   { name: 'Japan', flag: 'JP' },
@@ -45,29 +51,29 @@ const countries = [
   { name: 'Saudi Arabia', flag: 'SA' },
   { name: 'Germany', flag: 'DE' },
   { name: 'Russia', flag: 'RU' },
-]
+];
 
 const languagesArray = Array.from({ length: 10 }, (_, i) => ({
   name: languages[i].name,
   shortcut: languages[i].shortcut,
   flag: `https://flagsapi.com/${languages[i].flag}/flat/64.png`,
-}))
+}));
 
 const locationsArray = Array.from({ length: 10 }, (_, i) => ({
   name: countries[i].name,
   flag: `https://flagsapi.com/${countries[i].flag}/flat/64.png`,
-}))
+}));
 
 type DataItem = {
-  name: string
-  shortcut?: string
-  flag: string
-}
+  name: string;
+  shortcut?: string;
+  flag: string;
+};
 
 function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
-  const [val, setVal] = useState('0')
+  const [val, setVal] = useState('0');
 
-  const selectedItem = data[Number(val)]
+  const selectedItem = data[Number(val)];
 
   return (
     <Select
@@ -78,7 +84,12 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
       {...rest}
     >
       <Select.Trigger width="100%" iconAfter={ChevronDown}>
-        <View flexDirection="row" gap="$3" justifyContent="center" alignItems="center">
+        <View
+          flexDirection="row"
+          gap="$3"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
           <SizableText marginRight="auto">{`${selectedItem.name} ${
             selectedItem.shortcut ? `(${selectedItem.shortcut})` : ''
@@ -152,7 +163,11 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Image source={{ uri: item.flag }} width={20} height={20} />
+                      <Image
+                        source={{ uri: item.flag }}
+                        width={20}
+                        height={20}
+                      />
                       <SizableText marginRight="auto">{`${item.name} ${
                         item.shortcut ? `(${item.shortcut})` : ''
                       }`}</SizableText>
@@ -160,9 +175,9 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
                         <Check size={16} />
                       </Select.ItemIndicator>
                     </Select.Item>
-                  )
+                  );
                 }),
-              [data]
+              [data],
             )}
           </Select.Group>
         </Select.Viewport>
@@ -187,7 +202,7 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
         </Select.ScrollDownButton>
       </Select.Content>
     </Select>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
@@ -232,13 +247,23 @@ export function LocationNotification() {
       <Separator marginHorizontal="$-4" />
       <View flexDirection="column" gap="$4">
         <View flexDirection="column" gap="$1">
-          <Label size="$4" lineHeight="$1" htmlFor="select-language" fontWeight="600">
+          <Label
+            size="$4"
+            lineHeight="$1"
+            htmlFor="select-language"
+            fontWeight="600"
+          >
             Language:
           </Label>
           <GeneralSelect id="select-language" data={languagesArray} />
         </View>
         <View flexDirection="column" gap="$1">
-          <Label size="$4" lineHeight="$1" htmlFor="select-location" fontWeight="600">
+          <Label
+            size="$4"
+            lineHeight="$1"
+            htmlFor="select-location"
+            fontWeight="600"
+          >
             Location:
           </Label>
           <GeneralSelect id="select-location" data={locationsArray} />
@@ -266,15 +291,18 @@ export function LocationNotification() {
         </Button>
       </View>
     </View>
-  )
+  );
 }
 
-LocationNotification.fileName = 'LocationNotification'
+LocationNotification.fileName = 'LocationNotification';
 
 const Banner = ({
   size = '$3',
   children,
-}: { size?: FontSizeTokens; children?: React.ReactNode }) => {
+}: {
+  size?: FontSizeTokens;
+  children?: React.ReactNode;
+}) => {
   return (
     <View
       flexDirection="row"
@@ -287,8 +315,8 @@ const Banner = ({
       <Info size={getTokenValue(size as any, 'size') * 0.5} />
       <SizableText size={size}>{children}</SizableText>
     </View>
-  )
-}
+  );
+};
 
 export const SizableText = styled(Text, {
   name: 'SizableText',
@@ -303,7 +331,7 @@ export const SizableText = styled(Text, {
   defaultVariants: {
     size: '$true',
   },
-})
+});
 const radioData = [
   {
     title: 'Promotions',
@@ -317,10 +345,10 @@ const radioData = [
     title: 'Big Announcements',
     desc: 'Updates about only major releases.',
   },
-]
+];
 
 function RadioList() {
-  const [value, setValue] = useState(radioData[0].title)
+  const [value, setValue] = useState(radioData[0].title);
   return (
     <RadioGroup value={value} onValueChange={setValue}>
       <View flexDirection="column" gap="$3">
@@ -350,5 +378,5 @@ function RadioList() {
         ))}
       </View>
     </RadioGroup>
-  )
+  );
 }

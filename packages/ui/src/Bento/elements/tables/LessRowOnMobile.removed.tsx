@@ -8,21 +8,21 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { useMedia } from 'tamagui'
-import * as React from 'react'
-import { Avatar, H4, Separator, Text, View } from 'tamagui'
-import { Table } from './common/tableParts'
+} from '@tanstack/react-table';
+import { useMedia } from 'tamagui';
+import * as React from 'react';
+import { Avatar, H4, Separator, Text, View } from 'tamagui';
+import { Table } from './common/tableParts';
 
 type Person = {
-  fullName: string
-  username: string
-  age: number
-  visits: number
-  status: string
-  role: string
-  avatar?: string
-}
+  fullName: string;
+  username: string;
+  age: number;
+  visits: number;
+  status: string;
+  role: string;
+  avatar?: string;
+};
 
 const defaultData: Person[] = [
   {
@@ -134,10 +134,10 @@ const defaultData: Person[] = [
     ({
       ...row,
       avatar: `https://i.pravatar.cc/150?img=${index + 1}`,
-    }) as Person
-)
+    }) as Person,
+);
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
 const columns = [
   columnHelper.accessor(
@@ -148,7 +148,7 @@ const columns = [
     }),
     {
       cell: (info) => {
-        const { fullName, userName, image } = info.getValue()
+        const { fullName, userName, image } = info.getValue();
         return (
           <View flexDirection="row" alignItems="center" gap="$3">
             <Avatar circular size="$5">
@@ -160,11 +160,11 @@ const columns = [
               <Text theme="alt1">{userName}</Text>
             </View>
           </View>
-        )
+        );
       },
       header: () => 'Name',
       id: 'user_base',
-    }
+    },
   ),
   columnHelper.accessor('age', {
     header: () => 'Age',
@@ -175,7 +175,7 @@ const columns = [
     header: 'Status',
     footer: (info) => info.column.id,
     cell: (info) => {
-      const val = info.renderValue()
+      const val = info.renderValue();
       return (
         <Text
           col="$color9"
@@ -188,34 +188,35 @@ const columns = [
         >
           {info.renderValue()}
         </Text>
-      )
+      );
     },
   }),
   columnHelper.accessor('role', {
     header: 'Role',
     footer: (info) => info.column.id,
   }),
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function LessRowOnMobile() {
-  const [data, setData] = React.useState(() => [...defaultData])
+  const [data, setData] = React.useState(() => [...defaultData]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
-  const headerGroups = table.getHeaderGroups()
-  const tableRows = table.getRowModel().rows
-  const footerGroups = table.getFooterGroups()
+  const headerGroups = table.getHeaderGroups();
+  const tableRows = table.getRowModel().rows;
+  const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght = tableRows.length + headerGroups.length + footerGroups.length
-  const rowCounter = React.useRef(-1)
-  rowCounter.current = -1
+  const allRowsLenght =
+    tableRows.length + headerGroups.length + footerGroups.length;
+  const rowCounter = React.useRef(-1);
+  rowCounter.current = -1;
 
-  const { sm } = useMedia()
+  const { sm } = useMedia();
 
   if (sm) {
     // TODO put in flashlist
@@ -243,12 +244,12 @@ export function LessRowOnMobile() {
                   </Text>
                   <Text>{value}</Text>
                 </View>
-              )
+              );
             })}
           </View>
         </View>
-      )
-    })
+      );
+    });
   }
 
   return (
@@ -263,7 +264,7 @@ export function LessRowOnMobile() {
     >
       <Table.Head>
         {headerGroups.map((headerGroup) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               backgrounded
@@ -300,17 +301,20 @@ export function LessRowOnMobile() {
                   <Text>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Head>
       <Table.Body>
         {tableRows.map((row) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               rowLocation={
@@ -346,17 +350,20 @@ export function LessRowOnMobile() {
                     flexRender(cell.column.columnDef.cell, cell.getContext())
                   ) : (
                     <Text theme="alt2">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </Text>
                   )}
                 </Table.Cell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Body>
     </Table>
-  )
+  );
 }
 
-LessRowOnMobile.fileName = 'LessRowOnMobile'
+LessRowOnMobile.fileName = 'LessRowOnMobile';

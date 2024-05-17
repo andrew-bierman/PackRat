@@ -1,4 +1,4 @@
-import { Button, Theme } from 'tamagui'
+import { Button, Theme } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function ButtonPulse() {
@@ -16,7 +16,7 @@ export function ButtonPulse() {
         <Button.Text>Press me</Button.Text>
       </Button>
     </Theme>
-  )
+  );
 }
 
-ButtonPulse.fileName = 'ButtonPulse'
+ButtonPulse.fileName = 'ButtonPulse';

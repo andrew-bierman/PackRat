@@ -1,6 +1,15 @@
-import { getFontSized } from '@tamagui/get-font-sized'
-import { Clock4, Laptop2, MinusCircle } from '@tamagui/lucide-icons'
-import { Avatar, Button, Circle, Separator, Text, Theme, View, styled } from 'tamagui'
+import { getFontSized } from '@tamagui/get-font-sized';
+import { Clock4, Laptop2, MinusCircle } from '@tamagui/lucide-icons';
+import {
+  Avatar,
+  Button,
+  Circle,
+  Separator,
+  Text,
+  Theme,
+  View,
+  styled,
+} from 'tamagui';
 
 const data = {
   absent: [
@@ -39,7 +48,7 @@ const data = {
       avatar: 'https://i.pravatar.cc/150?img=5',
     },
   ],
-}
+};
 
 const SizableText = styled(Text, {
   name: 'SizableText',
@@ -54,7 +63,7 @@ const SizableText = styled(Text, {
   defaultVariants: {
     size: '$true',
   },
-})
+});
 
 /** ------ EXAMPLE ------ */
 export function StatusTracker() {
@@ -72,7 +81,11 @@ export function StatusTracker() {
       borderColor="$color5"
       borderWidth={1}
     >
-      <View flexDirection="row" alignItems="center" justifyContent="space-between">
+      <View
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <View alignItems="center" flexDirection="row" theme="alt1" gap="$3">
           <Laptop2 size={16} />
           <SizableText size="$4">Status Tracker</SizableText>
@@ -102,16 +115,19 @@ export function StatusTracker() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
-StatusTracker.fileName = 'StatusTracker'
+StatusTracker.fileName = 'StatusTracker';
 
 function User({
   user,
   type,
-}: { type: keyof typeof data; user: (typeof data)['absent'][0] }) {
-  const { name, replacedBy, avatar, job, min } = user
+}: {
+  type: keyof typeof data;
+  user: (typeof data)['absent'][0];
+}) {
+  const { name, replacedBy, avatar, job, min } = user;
   return (
     <View flexDirection="row" alignItems="center" gap="$3">
       <View>
@@ -171,5 +187,5 @@ function User({
         </Theme>
       </View>
     </View>
-  )
+  );
 }

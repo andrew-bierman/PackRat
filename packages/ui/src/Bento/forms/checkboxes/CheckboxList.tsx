@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useEffect, useId, useState } from 'react'
-import { Text, View, Avatar, debounce, Label, Separator } from 'tamagui'
-import { Checkboxes } from './common/checkboxParts'
+import { Check } from '@tamagui/lucide-icons';
+import { useEffect, useId, useState } from 'react';
+import { Text, View, Avatar, debounce, Label, Separator } from 'tamagui';
+import { Checkboxes } from './common/checkboxParts';
 
 const items = [
   {
@@ -39,20 +39,20 @@ const items = [
     key: 'latte',
     avatar: 'https://tamagui.dev/bento/images/coffee5.jpg',
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function CheckboxList() {
-  const [values, setValues] = useState<Record<string, boolean>>([] as any)
-  const uniqueId = useId()
+  const [values, setValues] = useState<Record<string, boolean>>([] as any);
+  const uniqueId = useId();
 
   useEffect(() => {
-    setValues(Object.fromEntries(items.map((item) => [item.key, false])))
-  }, [])
+    setValues(Object.fromEntries(items.map((item) => [item.key, false])));
+  }, []);
 
   const onValuesChange = debounce((values: any) => {
-    setValues(values)
-  })
+    setValues(values);
+  });
 
   return (
     <Checkboxes
@@ -80,10 +80,20 @@ export function CheckboxList() {
           alignSelf="center"
           alignItems="center"
         >
-          <Checkboxes.Title alignSelf="center" paddingHorizontal="$10" lineHeight={'$2'}>
+          <Checkboxes.Title
+            alignSelf="center"
+            paddingHorizontal="$10"
+            lineHeight={'$2'}
+          >
             Coffee
           </Checkboxes.Title>
-          <Text fontSize="$3" fontWeight="$3" lineHeight="$3" theme="alt1" marginTop="$2">
+          <Text
+            fontSize="$3"
+            fontWeight="$3"
+            lineHeight="$3"
+            theme="alt1"
+            marginTop="$2"
+          >
             Make your choice.
           </Text>
         </View>
@@ -101,21 +111,21 @@ export function CheckboxList() {
         </View>
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-CheckboxList.fileName = 'CheckboxList'
+CheckboxList.fileName = 'CheckboxList';
 
 function CheckboxItem({
   item,
   isLastItem,
   uniqueId,
 }: {
-  item: (typeof items)[number]
-  isLastItem: boolean
-  uniqueId: string
+  item: (typeof items)[number];
+  isLastItem: boolean;
+  uniqueId: string;
 }) {
-  const { desc, title, key } = item
+  const { desc, title, key } = item;
 
   return (
     <Checkboxes.Card
@@ -146,8 +156,16 @@ function CheckboxItem({
         <Avatar.Fallback borderColor="$background" />
       </Avatar>
       <View flexDirection="column" flex={1}>
-        <View flexDirection="row" alignItems="center" justifyContent="space-between">
-          <Checkboxes.Checkbox.Label size="$4" lineHeight="$2" htmlFor={key + uniqueId}>
+        <View
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Checkboxes.Checkbox.Label
+            size="$4"
+            lineHeight="$2"
+            htmlFor={key + uniqueId}
+          >
             {title}
           </Checkboxes.Checkbox.Label>
           <Checkboxes.Checkbox marginLeft="auto" id={key + uniqueId}>
@@ -161,5 +179,5 @@ function CheckboxItem({
         </Text>
       </View>
     </Checkboxes.Card>
-  )
+  );
 }

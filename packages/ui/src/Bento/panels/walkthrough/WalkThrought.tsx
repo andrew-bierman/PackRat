@@ -1,6 +1,6 @@
-import { AccordionDemo, GroupDemo } from '@tamagui/demos'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { View, useWindowDimensions } from 'react-native'
+import { AccordionDemo, GroupDemo } from '@tamagui/demos';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { View, useWindowDimensions } from 'react-native';
 import {
   AnimatePresence,
   Button,
@@ -15,51 +15,54 @@ import {
   createStyledContext,
   useEvent,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 const { Provider: WalkThroughStateProvider, useStyledContext: useWalkThrough } =
   createStyledContext<{
-    activeStep: number
-    numberOfSteps: number
-    nextStep: () => void
-    prevStep: () => void
-  }>()
+    activeStep: number;
+    numberOfSteps: number;
+    nextStep: () => void;
+    prevStep: () => void;
+  }>();
 
 function Tour({
   children,
   stepNumber,
   renderDialog,
 }: {
-  children: React.ReactNode
-  stepNumber: number
+  children: React.ReactNode;
+  stepNumber: number;
   renderDialog: (props: {
-    nextStep: () => void
-    prevStep: () => void
-    numberOfSteps: number
-    activeStep: number
-  }) => React.ReactNode
+    nextStep: () => void;
+    prevStep: () => void;
+    numberOfSteps: number;
+    activeStep: number;
+  }) => React.ReactNode;
 }) {
-  const { activeStep, numberOfSteps, nextStep, prevStep } = useWalkThrough()
-  const showTour = activeStep === stepNumber
-  const itemRef = useRef<View | null>(null)
+  const { activeStep, numberOfSteps, nextStep, prevStep } = useWalkThrough();
+  const showTour = activeStep === stepNumber;
+  const itemRef = useRef<View | null>(null);
   const [dim, setDim] = useState<{
-    width: number
-    height: number
-    pageX: number
-    pageY: number
-  }>()
-  const { pageX, pageY } = dim || {}
+    width: number;
+    height: number;
+    pageX: number;
+    pageY: number;
+  }>();
+  const { pageX, pageY } = dim || {};
 
   useEffect(() => {
     itemRef.current?.measure((_x, _y, width, height, pageX, pageY) => {
-      setDim({ width, height, pageX, pageY })
-    })
-  }, [children])
+      setDim({ width, height, pageX, pageY });
+    });
+  }, [children]);
 
   return (
     <>
       <View
         aria-hidden
-        style={useMemo(() => ({ opacity: 0, pointerEvents: 'none' }), [showTour])}
+        style={useMemo(
+          () => ({ opacity: 0, pointerEvents: 'none' }),
+          [showTour],
+        )}
         key={stepNumber}
         ref={itemRef}
       >
@@ -67,7 +70,13 @@ function Tour({
       </View>
       {dim && (
         <PortalItem hostName="walkthrough">
-          <Popover stayInFrame allowFlip placement="bottom" size="$0.5" open={showTour}>
+          <Popover
+            stayInFrame
+            allowFlip
+            placement="bottom"
+            size="$0.5"
+            open={showTour}
+          >
             <Popover.Trigger asChild>
               <Stack
                 key={stepNumber}
@@ -104,34 +113,34 @@ function Tour({
         </PortalItem>
       )}
     </>
-  )
+  );
 }
 function WalkThroughImpl({
   numberOfSteps,
   children,
 }: {
-  numberOfSteps: number
-  children: React.ReactNode
+  numberOfSteps: number;
+  children: React.ReactNode;
 }) {
-  const [activeStep, setActiveStep] = useState(1)
+  const [activeStep, setActiveStep] = useState(1);
   const nextStep = useEvent(() => {
     if (activeStep <= numberOfSteps) {
-      setActiveStep(activeStep + 1)
+      setActiveStep(activeStep + 1);
     }
-  })
+  });
   const prevStep = useEvent(() => {
     if (activeStep > 0) {
-      setActiveStep(activeStep - 1)
+      setActiveStep(activeStep - 1);
     }
-  })
+  });
   const value = {
     activeStep,
     nextStep,
     prevStep,
     numberOfSteps,
-  }
+  };
 
-  const { height: screenHeight, width: screenWidth } = useWindowDimensions()
+  const { height: screenHeight, width: screenWidth } = useWindowDimensions();
   return (
     <PortalProvider rootHostName="walkthrough">
       <PortalItem hostName="walkthrough">
@@ -153,12 +162,12 @@ function WalkThroughImpl({
       </PortalItem>
       <WalkThroughStateProvider {...value}>{children}</WalkThroughStateProvider>
     </PortalProvider>
-  )
+  );
 }
 
 const WalkThrough = withStaticProperties(WalkThroughImpl, {
   Tour,
-})
+});
 
 function Dialog({
   nextStep,
@@ -167,14 +176,14 @@ function Dialog({
   title,
   currentStep,
 }: {
-  nextStep: () => void
-  prevStep: () => void
-  numberOfSteps: number
-  title: string
-  currentStep: number
+  nextStep: () => void;
+  prevStep: () => void;
+  numberOfSteps: number;
+  title: string;
+  currentStep: number;
 }) {
-  const isLastStep = currentStep === numberOfSteps
-  const isFirstStep = currentStep === 0
+  const isLastStep = currentStep === numberOfSteps;
+  const isFirstStep = currentStep === 0;
   return (
     <ThemeableStack
       borderWidth={2}
@@ -202,7 +211,7 @@ function Dialog({
         </Button>
       </XStack>
     </ThemeableStack>
-  )
+  );
 }
 
 export function WalkThroughDemo() {
@@ -239,7 +248,7 @@ export function WalkThroughDemo() {
         </WalkThrough.Tour>
       </YStack>
     </WalkThrough>
-  )
+  );
 }
 
-WalkThroughDemo.fileName = 'WalkThrough'
+WalkThroughDemo.fileName = 'WalkThrough';

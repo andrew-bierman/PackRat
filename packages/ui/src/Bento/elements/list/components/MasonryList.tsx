@@ -5,49 +5,49 @@ import type {
   ScrollViewProps,
   StyleProp,
   ViewStyle,
-} from 'react-native'
-import type { MutableRefObject, ReactElement } from 'react'
-import React, { memo, useState } from 'react'
-import { RefreshControl, ScrollView, View } from 'react-native'
-import { YStack, styled } from 'tamagui'
+} from 'react-native';
+import type { MutableRefObject, ReactElement } from 'react';
+import React, { memo, useState } from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
+import { YStack, styled } from 'tamagui';
 
 interface Props<T> extends Omit<ScrollViewProps, 'refreshControl'> {
-  innerRef?: MutableRefObject<ScrollView | undefined>
-  loading?: boolean
-  refreshing?: RefreshControlProps['refreshing']
-  onRefresh?: RefreshControlProps['onRefresh']
-  refreshControl?: boolean
-  onEndReached?: () => void
-  onEndReachedThreshold?: number
-  style?: StyleProp<ViewStyle>
-  data: T[]
-  renderItem: ({ item, i }: { item: T; i: number }) => ReactElement
-  LoadingView?: React.ComponentType<any> | React.ReactElement | null
-  ListHeaderComponent?: React.ReactNode | null
-  ListEmptyComponent?: React.ComponentType<any> | React.ReactElement | null
-  ListFooterComponent?: React.ComponentType<any> | React.ReactElement | null
-  ListHeaderComponentStyle?: StyleProp<ViewStyle>
-  contentContainerStyle?: StyleProp<ViewStyle>
-  containerStyle?: StyleProp<ViewStyle>
-  numColumns?: number
-  keyExtractor?: ((item: T | any, index: number) => string) | undefined
-  refreshControlProps?: Omit<RefreshControlProps, 'onRefresh' | 'refreshing'>
+  innerRef?: MutableRefObject<ScrollView | undefined>;
+  loading?: boolean;
+  refreshing?: RefreshControlProps['refreshing'];
+  onRefresh?: RefreshControlProps['onRefresh'];
+  refreshControl?: boolean;
+  onEndReached?: () => void;
+  onEndReachedThreshold?: number;
+  style?: StyleProp<ViewStyle>;
+  data: T[];
+  renderItem: ({ item, i }: { item: T; i: number }) => ReactElement;
+  LoadingView?: React.ComponentType<any> | React.ReactElement | null;
+  ListHeaderComponent?: React.ReactNode | null;
+  ListEmptyComponent?: React.ComponentType<any> | React.ReactElement | null;
+  ListFooterComponent?: React.ComponentType<any> | React.ReactElement | null;
+  ListHeaderComponentStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  numColumns?: number;
+  keyExtractor?: ((item: T | any, index: number) => string) | undefined;
+  refreshControlProps?: Omit<RefreshControlProps, 'onRefresh' | 'refreshing'>;
 }
 
 const isCloseToBottom = (
   { layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent,
-  onEndReachedThreshold: number
+  onEndReachedThreshold: number,
 ): boolean => {
-  const paddingToBottom = contentSize.height * onEndReachedThreshold
+  const paddingToBottom = contentSize.height * onEndReachedThreshold;
 
   return (
     Math.ceil(layoutMeasurement.height + contentOffset.y) >=
     contentSize.height - paddingToBottom
-  )
-}
+  );
+};
 
 function MasonryListImpl<T>(props: Props<T>): ReactElement {
-  const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const {
     refreshing,
@@ -73,9 +73,9 @@ function MasonryListImpl<T>(props: Props<T>): ReactElement {
     keyboardShouldPersistTaps = 'handled',
     refreshControl = true,
     refreshControlProps,
-  } = props
+  } = props;
 
-  const { style, ...propsWithoutStyle } = props
+  const { style, ...propsWithoutStyle } = props;
 
   return (
     <ScrollView
@@ -90,9 +90,9 @@ function MasonryListImpl<T>(props: Props<T>): ReactElement {
           <RefreshControl
             refreshing={!!(refreshing || isRefreshing)}
             onRefresh={() => {
-              setIsRefreshing(true)
-              onRefresh?.()
-              setIsRefreshing(false)
+              setIsRefreshing(true);
+              onRefresh?.();
+              setIsRefreshing(false);
             }}
             {...refreshControlProps}
           />
@@ -100,12 +100,12 @@ function MasonryListImpl<T>(props: Props<T>): ReactElement {
       }
       scrollEventThrottle={16}
       onScroll={(e) => {
-        const nativeEvent: NativeScrollEvent = e.nativeEvent
+        const nativeEvent: NativeScrollEvent = e.nativeEvent;
         if (isCloseToBottom(nativeEvent, onEndReachedThreshold || 0.0)) {
-          onEndReached?.()
+          onEndReached?.();
         }
 
-        onScroll?.(e)
+        onScroll?.(e);
       }}
     >
       <>
@@ -134,16 +134,20 @@ function MasonryListImpl<T>(props: Props<T>): ReactElement {
                     .map((el, i) => {
                       if (i % numColumns === num) {
                         return (
-                          <View key={keyExtractor?.(el, i) || `masonry-row-${num}-${i}`}>
+                          <View
+                            key={
+                              keyExtractor?.(el, i) || `masonry-row-${num}-${i}`
+                            }
+                          >
                             {renderItem({ item: el, i })}
                           </View>
-                        )
+                        );
                       }
-                      return null
+                      return null;
                     })
                     .filter((e) => !!e)}
                 </YStack>
-              )
+              );
             })}
           </YStack>
         )}
@@ -151,11 +155,11 @@ function MasonryListImpl<T>(props: Props<T>): ReactElement {
         {ListFooterComponent}
       </>
     </ScrollView>
-  )
+  );
 }
 
 export const MasonryList = memo(
   styled(MasonryListImpl, {
     name: 'MasonryList',
-  })
-)
+  }),
+);

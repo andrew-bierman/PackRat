@@ -1,15 +1,15 @@
-import type { FC, ReactElement } from 'react'
-import { Image, View, Text } from 'tamagui'
-import { useMemo } from 'react'
+import type { FC, ReactElement } from 'react';
+import { Image, View, Text } from 'tamagui';
+import { useMemo } from 'react';
 
-import { MasonryList } from './components/MasonryList'
-import type { Product } from './data/products'
-import { useData } from './data/products'
-import { LinearGradient } from 'tamagui/linear-gradient'
-import { useWindowDimensions } from 'tamagui'
+import { MasonryList } from './components/MasonryList';
+import type { Product } from './data/products';
+import { useData } from './data/products';
+import { LinearGradient } from 'tamagui/linear-gradient';
+import { useWindowDimensions } from 'tamagui';
 
 const ProductItem: FC<{ item: Product }> = ({ item }) => {
-  const heightFactor = useMemo(() => Math.random() < 0.5, [])
+  const heightFactor = useMemo(() => Math.random() < 0.5, []);
 
   return (
     <View flexDirection="column" key={item.id} mb="$6" flex={1} gap="$3">
@@ -61,23 +61,23 @@ const ProductItem: FC<{ item: Product }> = ({ item }) => {
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 export const MasonryListExample = () => {
-  const { data } = useData()
-  const { width: deviceWidth } = useWindowDimensions()
-  const numberOfColumns = Math.max(Math.round(deviceWidth / 300), 1)
+  const { data } = useData();
+  const { width: deviceWidth } = useWindowDimensions();
+  const numberOfColumns = Math.max(Math.round(deviceWidth / 300), 1);
 
   const renderItem = ({
     item,
     i,
   }: {
-    item: (typeof data)[0]
-    i: number
+    item: (typeof data)[0];
+    i: number;
   }): ReactElement => {
-    return <ProductItem item={item} />
-  }
+    return <ProductItem item={item} />;
+  };
 
   return (
     <View
@@ -105,7 +105,7 @@ export const MasonryListExample = () => {
         renderItem={renderItem}
       />
     </View>
-  )
-}
+  );
+};
 
-MasonryListExample.fileName = 'MasonryListExample'
+MasonryListExample.fileName = 'MasonryListExample';

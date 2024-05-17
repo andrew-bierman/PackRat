@@ -1,7 +1,7 @@
-import { Code, Eye, Info, Link, Minus, Plus } from '@tamagui/lucide-icons'
-import React, { useRef, useState } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { useToastController } from '@tamagui/toast'
+import { Code, Eye, Info, Link, Minus, Plus } from '@tamagui/lucide-icons';
+import React, { useRef, useState } from 'react';
+import type { SizeTokens } from 'tamagui';
+import { useToastController } from '@tamagui/toast';
 
 import {
   YGroup,
@@ -21,57 +21,67 @@ import {
   Text,
   useMedia,
   View,
-} from 'tamagui'
-import useSWR from 'swr'
-import { useRouter } from 'next/router'
-import { isZodNumber } from '@ts-react/form/lib/src/isZodTypeEqual'
-import { Hide } from '../forms/layouts/components/layoutParts'
+} from 'tamagui';
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { isZodNumber } from '@ts-react/form/lib/src/isZodTypeEqual';
+import { Hide } from '../forms/layouts/components/layoutParts';
 
 export const Showcase = YStack.styleable<{
-  children: React.ReactNode
-  title: string
-  fileName: string
-  short?: boolean
-  isInput?: boolean
+  children: React.ReactNode;
+  title: string;
+  fileName: string;
+  short?: boolean;
+  isInput?: boolean;
 }>(({ children, title, short, isInput, fileName, ...rest }, ref) => {
-  const [view, setView] = useState<'code' | 'preview'>('preview')
-  const [phoneFocused, setPhoneFocused] = useState(false)
-  const toast = useToastController()
+  const [view, setView] = useState<'code' | 'preview'>('preview');
+  const [phoneFocused, setPhoneFocused] = useState(false);
+  const toast = useToastController();
 
-  const media = useMedia()
+  const media = useMedia();
 
-  const query = useRouter().query
+  const query = useRouter().query;
   const codePath =
     query.section &&
     query.part &&
-    `/api/bento/code/${query.section}/${query.part}/${fileName}`
+    `/api/bento/code/${query.section}/${query.part}/${fileName}`;
 
   const fetcher = async (url: string) => {
-    const res = await fetch(url, { headers: { 'Content-Type': 'application/json' } })
+    const res = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+    });
     if (!res.ok) {
-      const error = new Error('An error occurred while fetching the data.') as any
-      error.info = await res.json()
-      error.status = res.status
-      throw error
+      const error = new Error(
+        'An error occurred while fetching the data.',
+      ) as any;
+      error.info = await res.json();
+      error.status = res.status;
+      throw error;
     }
-    return res.text()
-  }
+    return res.text();
+  };
 
   const { data, error, isLoading } = useSWR<string>(
     view === 'code' ? codePath : null, // Only fetch when view is set to 'code'
     fetcher,
-    { shouldRetryOnError: false, revalidateOnFocus: false }
-  )
+    { shouldRetryOnError: false, revalidateOnFocus: false },
+  );
 
   const iDontHaveAccess =
-    error?.status === 403 || error?.status === 401 || error?.status === 500
+    error?.status === 403 || error?.status === 401 || error?.status === 500;
 
-  const minHeight = short ? 300 : 510
-  const deviceWidth = 500 //width
+  const minHeight = short ? 300 : 510;
+  const deviceWidth = 500; //width
 
   return (
     <SizeProvider>
-      <YStack zIndex={phoneFocused ? 10000 : 1} gap="$3" my="$-2" ref={ref} {...rest}>
+      <YStack
+        zIndex={phoneFocused ? 10000 : 1}
+        gap="$3"
+        my="$-2"
+        ref={ref}
+        {...rest}
+      >
         <XStack als="flex-end" justifyContent="space-between" gap="$3">
           <Button
             //@ts-ignore
@@ -82,9 +92,9 @@ export const Showcase = YStack.styleable<{
             size="$3"
             onPress={() => {
               navigator.clipboard.writeText(
-                window.location.href.split('#')[0] + `#${fileName}`
-              )
-              toast.show('Link copied to clipboard')
+                window.location.href.split('#')[0] + `#${fileName}`,
+              );
+              toast.show('Link copied to clipboard');
             }}
           >
             <Button.Icon>
@@ -159,11 +169,20 @@ export const Showcase = YStack.styleable<{
                   minHeight={minHeight}
                   overflow="hidden"
                 >
-                  <YStack height="100%" width="100%" maxWidth={isInput ? 300 : '100%'}>
+                  <YStack
+                    height="100%"
+                    width="100%"
+                    maxWidth={isInput ? 300 : '100%'}
+                  >
                     {children}
                   </YStack>
                 </XStack>
-                <SizeController position="absolute" right={10} top={0} bottom={0} />
+                <SizeController
+                  position="absolute"
+                  right={10}
+                  top={0}
+                  bottom={0}
+                />
               </ResizableBox>
             </XStack>
             <YStack
@@ -182,7 +201,9 @@ export const Showcase = YStack.styleable<{
               }}
               overflow="hidden"
             >
-              <PhoneFrame setPhoneFocused={setPhoneFocused}>{children}</PhoneFrame>
+              <PhoneFrame setPhoneFocused={setPhoneFocused}>
+                {children}
+              </PhoneFrame>
             </YStack>
           </XStack>
         ) : isLoading ? (
@@ -223,16 +244,16 @@ export const Showcase = YStack.styleable<{
         )}
       </YStack>
     </SizeProvider>
-  )
-})
+  );
+});
 
 const MessagesFrame = (props: {
-  title: string
-  minHeight: number
-  hideDragHandle?: boolean
-  children: React.ReactNode
+  title: string;
+  minHeight: number;
+  hideDragHandle?: boolean;
+  children: React.ReactNode;
 }) => {
-  const { title, minHeight, children } = props
+  const { title, minHeight, children } = props;
   return (
     <XStack mih={minHeight} width="100%" position="relative">
       <H2
@@ -280,13 +301,13 @@ const MessagesFrame = (props: {
         </ResizableBox>
       </XStack>
     </XStack>
-  )
-}
+  );
+};
 
-const PHONE_SCALE = 0.75
+const PHONE_SCALE = 0.75;
 
 const PhoneFrame = (props: any) => {
-  const query = useRouter().query
+  const query = useRouter().query;
 
   return (
     <YStack
@@ -313,11 +334,11 @@ const PhoneFrame = (props: any) => {
       }}
       onPress={() => {
         if (!props.phoneFocused) {
-          props.setPhoneFocused(true)
+          props.setPhoneFocused(true);
         }
       }}
       onBlur={() => {
-        props.setPhoneFocused(false)
+        props.setPhoneFocused(false);
       }}
     >
       <YStack fullscreen>
@@ -334,23 +355,28 @@ const PhoneFrame = (props: any) => {
         transformOrigin="left top"
       >
         <PhoneScaleProvider scale={0.53}>
-          <YStack width="100%" height="100%" borderRadius="$8" overflow="hidden">
+          <YStack
+            width="100%"
+            height="100%"
+            borderRadius="$8"
+            overflow="hidden"
+          >
             {props.children}
           </YStack>
         </PhoneScaleProvider>
       </YStack>
     </YStack>
-  )
-}
+  );
+};
 
 export const { Provider: PhoneScaleProvider, useStyledContext: usePhoneScale } =
   createStyledContext({
     scale: 1,
     invertScale: 1.464,
-  })
+  });
 
 export const ShowcaseChildWrapper = ScrollView.styleable((props, ref) => {
-  const { sm } = useMedia()
+  const { sm } = useMedia();
 
   return (
     <ScrollView
@@ -365,8 +391,8 @@ export const ShowcaseChildWrapper = ScrollView.styleable((props, ref) => {
       width="100%"
       {...props}
     />
-  )
-})
+  );
+});
 
 // export const ShowcaseChildWrapper = ScrollView.styleable((props, ref) => {
 //   return (
@@ -386,49 +412,51 @@ export const ShowcaseChildWrapper = ScrollView.styleable((props, ref) => {
 // })
 
 type ResizableBoxExtraProps = {
-  hideDragHandle?: boolean
-}
+  hideDragHandle?: boolean;
+};
 const ResizableBox = XStack.styleable<ResizableBoxExtraProps>(
   ({ children, hideDragHandle, ...rest }, ref) => {
-    const [width, setWidth] = useState<number | string>('100%')
-    const startX = useRef(null)
-    const initialWidth = useRef<number>()
-    const containerRef = useRef<HTMLDivElement>()
+    const [width, setWidth] = useState<number | string>('100%');
+    const startX = useRef(null);
+    const initialWidth = useRef<number>();
+    const containerRef = useRef<HTMLDivElement>();
 
     useIsomorphicLayoutEffect(() => {
-      initialWidth.current = containerRef.current?.getBoundingClientRect().width as number
-    }, [containerRef.current])
+      initialWidth.current = containerRef.current?.getBoundingClientRect()
+        .width as number;
+    }, [containerRef.current]);
 
     const handleMouseMove = useEvent((e) => {
       if (startX.current !== null) {
-        let finalWidth = width
+        let finalWidth = width;
         if (typeof finalWidth === 'string') {
-          finalWidth = containerRef.current?.getBoundingClientRect().width as number
-          initialWidth.current = finalWidth
+          finalWidth = containerRef.current?.getBoundingClientRect()
+            .width as number;
+          initialWidth.current = finalWidth;
         }
         if (finalWidth) {
-          const newWidth = finalWidth + e.clientX - startX.current
+          const newWidth = finalWidth + e.clientX - startX.current;
           if (newWidth > initialWidth.current! + 10) {
-            handleMouseUp()
-            return
+            handleMouseUp();
+            return;
           }
-          setWidth(Math.min(Math.max(newWidth, 320), initialWidth.current!))
-          startX.current = e.clientX
+          setWidth(Math.min(Math.max(newWidth, 320), initialWidth.current!));
+          startX.current = e.clientX;
         }
       }
-    })
+    });
 
     const handleMouseUp = useEvent(() => {
-      startX.current = null
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-    })
+      startX.current = null;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    });
 
     const handleDragStart = useEvent((e) => {
-      startX.current = e.clientX
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
-    })
+      startX.current = e.clientX;
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    });
 
     return (
       <XStack
@@ -483,9 +511,9 @@ const ResizableBox = XStack.styleable<ResizableBoxExtraProps>(
           </YStack>
         </XStack>
       </XStack>
-    )
-  }
-)
+    );
+  },
+);
 
 export function Hint({ children }: { children: React.ReactNode }) {
   return (
@@ -509,10 +537,10 @@ export function Hint({ children }: { children: React.ReactNode }) {
       <Info color="$color" size={18} />
       <SizableText size="$4">{children}</SizableText>
     </ThemeableStack>
-  )
+  );
 }
 
-export default ResizableBox
+export default ResizableBox;
 
 /** ---------- SIZE CONTROLLER ----------- */
 
@@ -524,12 +552,18 @@ export const { Provider: RawSizeProvider, useStyledContext: useSize } =
     setSize: (size: SizeTokens) => {},
     showController: false,
     setShowController: (val: boolean) => {},
-  })
+  });
 
 const SizeProvider = ({ children }: { children: any }) => {
-  const [sizes, setSizes] = useState<SizeTokens[]>(['$3', '$4', '$5', '$6', '$7'])
-  const [size, setSize] = useState<SizeTokens>('$3')
-  const [showController, setShowController] = useState(false)
+  const [sizes, setSizes] = useState<SizeTokens[]>([
+    '$3',
+    '$4',
+    '$5',
+    '$6',
+    '$7',
+  ]);
+  const [size, setSize] = useState<SizeTokens>('$3');
+  const [showController, setShowController] = useState(false);
   return (
     <RawSizeProvider
       sizes={sizes}
@@ -541,22 +575,22 @@ const SizeProvider = ({ children }: { children: any }) => {
     >
       {children}
     </RawSizeProvider>
-  )
-}
+  );
+};
 
 export const WithSize = ({ children }: { children: any }) => {
-  const { size, showController, setShowController } = useSize()
+  const { size, showController, setShowController } = useSize();
 
   if (!showController) {
-    setShowController(true)
+    setShowController(true);
   }
 
-  return React.cloneElement(children, { size })
-}
+  return React.cloneElement(children, { size });
+};
 
 export const SizeController = YGroup.styleable((props, ref) => {
-  const { size, sizes, setSize, showController } = useSize()
-  if (!showController) return null
+  const { size, sizes, setSize, showController } = useSize();
+  if (!showController) return null;
   return (
     <YGroup
       ref={ref}
@@ -573,8 +607,8 @@ export const SizeController = YGroup.styleable((props, ref) => {
           chromeless
           py="$6"
           onPress={() => {
-            const index = sizes.indexOf(size)
-            setSize(sizes[index + 1 >= sizes.length ? 4 : index + 1])
+            const index = sizes.indexOf(size);
+            setSize(sizes[index + 1 >= sizes.length ? 4 : index + 1]);
           }}
         >
           <Button.Icon>
@@ -588,8 +622,8 @@ export const SizeController = YGroup.styleable((props, ref) => {
           chromeless
           py="$6"
           onPress={() => {
-            const index = sizes.indexOf(size)
-            setSize(sizes[index - 1 < 0 ? 0 : index - 1])
+            const index = sizes.indexOf(size);
+            setSize(sizes[index - 1 < 0 ? 0 : index - 1]);
           }}
         >
           <Button.Icon>
@@ -598,8 +632,8 @@ export const SizeController = YGroup.styleable((props, ref) => {
         </Button>
       </YGroup.Item>
     </YGroup>
-  )
-})
+  );
+});
 
 const PhoneSVG = () => (
   <svg width="100%" height="100%" viewBox="0 0 715 1467">
@@ -646,4 +680,4 @@ const PhoneSVG = () => (
       </clipPath>
     </defs>
   </svg>
-)
+);

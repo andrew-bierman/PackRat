@@ -1,13 +1,13 @@
-import { useId, useState } from 'react'
-import { H2, Label, RadioGroup, Text, View } from 'tamagui'
-import { Card } from './components/radioParts'
+import { useId, useState } from 'react';
+import { H2, Label, RadioGroup, Text, View } from 'tamagui';
+import { Card } from './components/radioParts';
 
-const items = ['PayPal', 'Mastercard', 'Visa']
+const items = ['PayPal', 'Mastercard', 'Visa'];
 
 /** ------ EXAMPLE ------ */
 export function Horizontal() {
-  const uniqueId = useId()
-  const [value, setValue] = useState('hor-visa')
+  const uniqueId = useId();
+  const [value, setValue] = useState('hor-visa');
   return (
     <View flexDirection="column" width="100%" maxWidth={600} gap="$4">
       <View flexDirection="column">
@@ -55,7 +55,7 @@ export function Horizontal() {
         ))}
       </RadioGroup>
     </View>
-  )
+  );
 }
 
-Horizontal.fileName = 'Horizontal'
+Horizontal.fileName = 'Horizontal';

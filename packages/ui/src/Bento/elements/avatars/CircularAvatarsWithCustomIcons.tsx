@@ -1,8 +1,8 @@
-import { Ban, SunDim } from '@tamagui/lucide-icons'
-import type { ReactElement } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { Circle, View } from 'tamagui'
-import { Avatar } from './components/Avatar'
+import { Ban, SunDim } from '@tamagui/lucide-icons';
+import type { ReactElement } from 'react';
+import type { SizeTokens } from 'tamagui';
+import { Circle, View } from 'tamagui';
+import { Avatar } from './components/Avatar';
 
 /** ------ EXAMPLE ------ */
 export function CircularAvatarsWithCustomIcons() {
@@ -52,10 +52,10 @@ export function CircularAvatarsWithCustomIcons() {
         size="$8"
       />
     </View>
-  )
+  );
 }
 
-CircularAvatarsWithCustomIcons.fileName = 'CircularAvatarsWithCustomIcons'
+CircularAvatarsWithCustomIcons.fileName = 'CircularAvatarsWithCustomIcons';
 
 function Item({ size, Icon }: { size: SizeTokens; Icon: ReactElement }) {
   return (
@@ -66,5 +66,5 @@ function Item({ size, Icon }: { size: SizeTokens; Icon: ReactElement }) {
         <Avatar.Fallback backgroundColor="$background" />
       </Avatar.Content>
     </Avatar>
-  )
+  );
 }

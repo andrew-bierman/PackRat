@@ -8,9 +8,9 @@ import {
   ChevronLast,
   ChevronLeft,
   ChevronRight,
-} from '@tamagui/lucide-icons'
-import type { GroupingState } from '@tanstack/react-table'
-import { useMedia } from 'tamagui'
+} from '@tamagui/lucide-icons';
+import type { GroupingState } from '@tanstack/react-table';
+import { useMedia } from 'tamagui';
 import {
   createColumnHelper,
   flexRender,
@@ -18,9 +18,9 @@ import {
   getGroupedRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import * as React from 'react'
-import { Platform } from 'react-native'
+} from '@tanstack/react-table';
+import * as React from 'react';
+import { Platform } from 'react-native';
 import {
   Button,
   Input,
@@ -31,21 +31,21 @@ import {
   getTokenValue,
   H4,
   Separator,
-} from 'tamagui'
+} from 'tamagui';
 
-import { makeData } from './utils/makeData'
-import { Table } from './common/tableParts'
+import { makeData } from './utils/makeData';
+import { Table } from './common/tableParts';
 
 type Person = {
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  status: string
-  progress: number
-}
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  status: string;
+  progress: number;
+};
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
 const columns = [
   columnHelper.accessor('firstName', {
@@ -76,16 +76,16 @@ const columns = [
     header: 'Progress',
     footer: (info) => info.column.id,
   }),
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function PaginatedTable() {
-  const [data, setData] = React.useState<Person[]>([])
-  const [grouping, setGrouping] = React.useState<GroupingState>([])
+  const [data, setData] = React.useState<Person[]>([]);
+  const [grouping, setGrouping] = React.useState<GroupingState>([]);
 
   React.useEffect(() => {
-    setData(makeData(10000))
-  }, [])
+    setData(makeData(10000));
+  }, []);
 
   const table = useReactTable({
     data,
@@ -106,20 +106,21 @@ export function PaginatedTable() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     debugTable: true,
-  })
+  });
 
-  const headerGroups = table.getHeaderGroups()
-  const tableRows = table.getRowModel().rows
-  const footerGroups = table.getFooterGroups()
+  const headerGroups = table.getHeaderGroups();
+  const tableRows = table.getRowModel().rows;
+  const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght = tableRows.length + headerGroups.length + footerGroups.length
-  const rowCounter = React.useRef(-1)
-  rowCounter.current = -1
+  const allRowsLenght =
+    tableRows.length + headerGroups.length + footerGroups.length;
+  const rowCounter = React.useRef(-1);
+  rowCounter.current = -1;
 
-  const CELL_WIDTH = '$15'
-  const TABLE_WIDTH = getTokenValue(CELL_WIDTH) * columns.length
+  const CELL_WIDTH = '$15';
+  const TABLE_WIDTH = getTokenValue(CELL_WIDTH) * columns.length;
 
-  const { sm } = useMedia()
+  const { sm } = useMedia();
 
   if (sm) {
     // TODO put in flashlist
@@ -149,12 +150,12 @@ export function PaginatedTable() {
                   </Text>
                   <Text>{value}</Text>
                 </View>
-              )
+              );
             })}
           </View>
         </View>
-      )
-    })
+      );
+    });
   }
 
   return (
@@ -169,7 +170,7 @@ export function PaginatedTable() {
       >
         <Table.Head>
           {headerGroups.map((headerGroup) => {
-            rowCounter.current++
+            rowCounter.current++;
             return (
               <Table.Row
                 backgrounded
@@ -197,17 +198,20 @@ export function PaginatedTable() {
                     <Text>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </Text>
                   </Table.HeaderCell>
                 ))}
               </Table.Row>
-            )
+            );
           })}
         </Table.Head>
         <Table.Body>
           {tableRows.map((row) => {
-            rowCounter.current++
+            rowCounter.current++;
             return (
               <Table.Row
                 rowLocation={
@@ -231,12 +235,15 @@ export function PaginatedTable() {
                     key={cell.id}
                   >
                     <Text color="$gray11">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </Text>
                   </Table.Cell>
                 ))}
               </Table.Row>
-            )
+            );
           })}
         </Table.Body>
       </Table>
@@ -268,7 +275,10 @@ export function PaginatedTable() {
             </Button>
           </XGroup.Item>
           <XGroup.Item>
-            <Button onPress={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            <Button
+              onPress={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
               <TButton.Icon>
                 <ChevronRight />
               </TButton.Icon>
@@ -296,7 +306,8 @@ export function PaginatedTable() {
         >
           <Text>Page</Text>
           <Text fontSize="$5" fontWeight="$5" lineHeight="$5">
-            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount()}
           </Text>
         </View>
         <View
@@ -315,15 +326,15 @@ export function PaginatedTable() {
             })}
             defaultValue={String(table.getState().pagination.pageIndex + 1)}
             onChangeText={(text) => {
-              const page = text ? Number(text) - 1 : 0
-              table.setPageIndex(page)
+              const page = text ? Number(text) - 1 : 0;
+              table.setPageIndex(page);
             }}
             className="border p-1 rounded w-16"
           />
         </View>
       </View>
     </View>
-  )
+  );
 }
 
-PaginatedTable.fileName = 'PaginatedTable'
+PaginatedTable.fileName = 'PaginatedTable';

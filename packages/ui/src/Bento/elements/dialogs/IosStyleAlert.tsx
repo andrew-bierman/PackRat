@@ -7,62 +7,65 @@ import {
   View,
   createContext,
   useEvent,
-} from 'tamagui'
-import type { AlertDialogContentProps } from 'tamagui'
-import { useState } from 'react'
+} from 'tamagui';
+import type { AlertDialogContentProps } from 'tamagui';
+import { useState } from 'react';
 
 type AlertButton = {
-  title: string
-  action: () => void
-  style: 'default' | 'cancel' | 'destructive'
-}
+  title: string;
+  action: () => void;
+  style: 'default' | 'cancel' | 'destructive';
+};
 
 type AlertParam = {
-  title: string
-  message: string
-  buttons: AlertButton[]
-  content?: React.ReactNode
-}
+  title: string;
+  message: string;
+  buttons: AlertButton[];
+  content?: React.ReactNode;
+};
 
 interface AlertDialogContextProps {
-  open: boolean
-  title: string
-  message: string
-  buttons: AlertButton[]
-  content?: React.ReactNode
-  alert: (param: AlertParam) => void
+  open: boolean;
+  title: string;
+  message: string;
+  buttons: AlertButton[];
+  content?: React.ReactNode;
+  alert: (param: AlertParam) => void;
 }
 
-const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>('Alert', {
-  open: false,
-  title: '',
-  message: '',
-  buttons: [],
-  alert: () => {},
-  content: null,
-})
+const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>(
+  'Alert',
+  {
+    open: false,
+    title: '',
+    message: '',
+    buttons: [],
+    alert: () => {},
+    content: null,
+  },
+);
 
 type AlertProps = AlertDialogContentProps & {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 const Alert = ({ children, ...rest }: AlertProps) => {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [message, setMessage] = useState('')
-  const [buttons, setButtons] = useState<AlertButton[]>([])
-  const [content, setContent] = useState<React.ReactNode>(null)
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
+  const [buttons, setButtons] = useState<AlertButton[]>([]);
+  const [content, setContent] = useState<React.ReactNode>(null);
 
   const alert = useEvent(({ title, message, buttons, content }: AlertParam) => {
-    setTitle(title)
-    setMessage(message)
-    setButtons(buttons)
-    setOpen(true)
-    setContent(content)
-  })
+    setTitle(title);
+    setMessage(message);
+    setButtons(buttons);
+    setOpen(true);
+    setContent(content);
+  });
 
   const closeDialog = useEvent(() => {
-    setOpen(false)
-  })
+    setOpen(false);
+  });
 
   return (
     <AlertProvider
@@ -129,14 +132,19 @@ const Alert = ({ children, ...rest }: AlertProps) => {
               justifyContent="flex-start"
             >
               {buttons.map((button, index) => {
-                const makeItVertical = buttons.length > 2
+                const makeItVertical = buttons.length > 2;
                 const Base =
-                  button.style === 'cancel' ? AlertDialog.Cancel : AlertDialog.Action
-                const color = button.style === 'destructive' ? '$red10' : '$blue10'
+                  button.style === 'cancel'
+                    ? AlertDialog.Cancel
+                    : AlertDialog.Action;
+                const color =
+                  button.style === 'destructive' ? '$red10' : '$blue10';
                 return (
                   <View
                     borderRightWidth={index === 0 && !makeItVertical ? 1 : 0}
-                    borderBottomWidth={makeItVertical && index < buttons.length ? 1 : 0}
+                    borderBottomWidth={
+                      makeItVertical && index < buttons.length ? 1 : 0
+                    }
                     borderColor="$borderColor"
                     key={index}
                     {...(!makeItVertical && {
@@ -156,7 +164,9 @@ const Alert = ({ children, ...rest }: AlertProps) => {
                           opacity={0.9}
                           fontSize={16}
                           color={color}
-                          fontWeight={button.style === 'default' ? '500' : '400'}
+                          fontWeight={
+                            button.style === 'default' ? '500' : '400'
+                          }
                           focusStyle={{
                             opacity: 1,
                           }}
@@ -169,7 +179,7 @@ const Alert = ({ children, ...rest }: AlertProps) => {
                       </Button>
                     </Base>
                   </View>
-                )
+                );
               })}
             </View>
           </AlertDialog.Content>
@@ -177,11 +187,11 @@ const Alert = ({ children, ...rest }: AlertProps) => {
       </AlertDialog>
       {children}
     </AlertProvider>
-  )
-}
+  );
+};
 
 const AlertDialogTest = () => {
-  const { alert } = useAlert('AlertTest')
+  const { alert } = useAlert('AlertTest');
 
   const buttons: AlertButton[] = [
     {
@@ -198,7 +208,7 @@ const AlertDialogTest = () => {
         // do some
       },
     },
-  ]
+  ];
 
   const buttons2: AlertButton[] = [
     {
@@ -221,7 +231,7 @@ const AlertDialogTest = () => {
       style: 'destructive',
       action: () => {},
     },
-  ]
+  ];
 
   return (
     <View flexDirection="row" gap="$5">
@@ -232,7 +242,7 @@ const AlertDialogTest = () => {
             message: 'Hey honey, are you back home ?',
             buttons,
             content: <Input height="$3" placeholder="Your message here" />,
-          })
+          });
         }}
       >
         Open Alert
@@ -244,14 +254,14 @@ const AlertDialogTest = () => {
             message: 'Hey, please let me know if you are back home ?',
             buttons: buttons2,
             content: <Input height="$3" placeholder="Your message here" />,
-          })
+          });
         }}
       >
         Open Alert 2
       </Button>
     </View>
-  )
-}
+  );
+};
 
 /** ---------- EXAMPLE --------- */
 export const IosStyleAlert = () => {
@@ -259,7 +269,7 @@ export const IosStyleAlert = () => {
     <Alert width={300}>
       <AlertDialogTest />
     </Alert>
-  )
-}
+  );
+};
 
-IosStyleAlert.fileName = 'IosStyleAlert'
+IosStyleAlert.fileName = 'IosStyleAlert';

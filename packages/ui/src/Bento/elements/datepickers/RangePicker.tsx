@@ -1,13 +1,13 @@
 import {
   DatePickerProvider as _DatePickerProvider,
   useDatePickerContext,
-} from '@rehookify/datepicker'
-import type { DPDay } from '@rehookify/datepicker'
-import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
-import { useEffect, useMemo, useState } from 'react'
-import type { GetProps } from 'tamagui'
-import { AnimatePresence, Button, H3, Separator, View } from 'tamagui'
-import { DatePicker } from './common/dateParts'
+} from '@rehookify/datepicker';
+import type { DPDay } from '@rehookify/datepicker';
+import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
+import { useEffect, useMemo, useState } from 'react';
+import type { GetProps } from 'tamagui';
+import { AnimatePresence, Button, H3, Separator, View } from 'tamagui';
+import { DatePicker } from './common/dateParts';
 import {
   DatePickerInput,
   HeaderTypeProvider,
@@ -17,9 +17,9 @@ import {
   YearRangeSlider,
   swapOnClick,
   useHeaderType,
-} from './common/dateParts'
-import { Platform } from 'react-native'
-import { useDateAnimation } from './DatePicker'
+} from './common/dateParts';
+import { Platform } from 'react-native';
+import { useDateAnimation } from './DatePicker';
 
 const RANGE_STYLE: { [key: string]: GetProps<typeof View> } = {
   'in-range': {
@@ -54,39 +54,39 @@ const RANGE_STYLE: { [key: string]: GetProps<typeof View> } = {
     borderBottomLeftRadius: 0,
   },
   '': {},
-}
+};
 
 function Calendar({
   calenderIndex = 0,
   order,
 }: {
-  calenderIndex?: number
-  order?: 'first' | 'last'
+  calenderIndex?: number;
+  order?: 'first' | 'last';
 }) {
-  const { setHeader } = useHeaderType()
+  const { setHeader } = useHeaderType();
   const {
     data: { calendars, weekDays },
     propGetters: { dayButton, subtractOffset },
-  } = useDatePickerContext()
+  } = useDatePickerContext();
 
-  const { days, year, month } = calendars[calenderIndex]
+  const { days, year, month } = calendars[calenderIndex];
 
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
       days.reduce((acc, day, i) => {
         if (i % 7 === 0) {
-          acc.push([])
+          acc.push([]);
         }
-        acc[acc.length - 1].push(day)
-        return acc
+        acc[acc.length - 1].push(day);
+        return acc;
       }, [] as DPDay[][]),
-    [days]
-  )
+    [days],
+  );
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'month',
-  })
+  });
 
   return (
     <View flexDirection="column" gap="$4">
@@ -98,7 +98,11 @@ function Calendar({
         justifyContent="space-between"
       >
         {order === 'first' ? (
-          <Button circular size="$4" {...swapOnClick(subtractOffset({ months: 1 }))}>
+          <Button
+            circular
+            size="$4"
+            {...swapOnClick(subtractOffset({ months: 1 }))}
+          >
             <Button.Icon scaleIcon={1.5}>
               <ChevronLeft />
             </Button.Icon>
@@ -139,7 +143,11 @@ function Calendar({
         {Platform.select({
           web:
             order === 'last' ? (
-              <Button circular size="$4" {...swapOnClick(subtractOffset({ months: -1 }))}>
+              <Button
+                circular
+                size="$4"
+                {...swapOnClick(subtractOffset({ months: -1 }))}
+              >
                 <Button.Icon scaleIcon={1.5}>
                   <ChevronRight />
                 </Button.Icon>
@@ -148,7 +156,11 @@ function Calendar({
               <View />
             ),
           native: (
-            <Button circular size="$4" {...swapOnClick(subtractOffset({ months: -1 }))}>
+            <Button
+              circular
+              size="$4"
+              {...swapOnClick(subtractOffset({ months: -1 }))}
+            >
               <Button.Icon scaleIcon={1.5}>
                 <ChevronRight />
               </Button.Icon>
@@ -158,11 +170,19 @@ function Calendar({
       </View>
       <AnimatePresence key={prevNextAnimationKey}>
         <View
-        // animation="medium"
-        {...prevNextAnimation()} gap="$3">
+          // animation="medium"
+          {...prevNextAnimation()}
+          gap="$3"
+        >
           <View flexDirection="row" gap="$1">
             {weekDays.map((day) => (
-              <SizableText theme="alt1" key={day} ta="center" width={45} size="$4">
+              <SizableText
+                theme="alt1"
+                key={day}
+                ta="center"
+                width={45}
+                size="$4"
+              >
                 {day}
               </SizableText>
             ))}
@@ -181,7 +201,9 @@ function Calendar({
                         minWidth={46}
                         {...swapOnClick(dayButton(d))}
                         backgroundColor={
-                          d.selected && d.inCurrentMonth ? '$background' : 'transparent'
+                          d.selected && d.inCurrentMonth
+                            ? '$background'
+                            : 'transparent'
                         }
                         themeInverse={d.selected}
                         {...RANGE_STYLE[d.range]}
@@ -207,25 +229,25 @@ function Calendar({
                           {d.day}
                         </Button.Text>
                       </Button>
-                    )
+                    );
                   })}
                 </View>
-              )
+              );
             })}
           </View>
         </View>
       </AnimatePresence>
     </View>
-  )
+  );
 }
 
 function DatePickerBody() {
-  const [header, setHeader] = useState<'month' | 'year' | 'day'>('day')
+  const [header, setHeader] = useState<'month' | 'year' | 'day'>('day');
 
   const {
     data: { calendars, years },
     propGetters: { subtractOffset, previousYearsButton, nextYearsButton },
-  } = useDatePickerContext()
+  } = useDatePickerContext();
 
   return (
     <HeaderTypeProvider type={header} setHeader={setHeader}>
@@ -250,28 +272,28 @@ function DatePickerBody() {
             </H3>
             <MonthPicker
               onChange={() => {
-                setHeader('day')
+                setHeader('day');
               }}
             />
           </View>
         )}
       </View>
     </HeaderTypeProvider>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function RangePicker() {
-  const now = new Date()
-  const [selectedDates, onDatesChange] = useState<Date[]>([])
-  const [offsetDate, onOffsetChange] = useState<Date>(now)
-  const [open, setOpen] = useState(false)
+  const now = new Date();
+  const [selectedDates, onDatesChange] = useState<Date[]>([]);
+  const [offsetDate, onOffsetChange] = useState<Date>(now);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (selectedDates.length === 2) {
-      setOpen(false)
+      setOpen(false);
     }
-  }, [selectedDates])
+  }, [selectedDates]);
 
   // uncomment this to limit the range of dates
   //   const M = now.getMonth()
@@ -304,7 +326,7 @@ export function RangePicker() {
           }${selectedDates[1]?.toDateString() || ''}`}
           placeholder="Start date - End date"
           onReset={() => {
-            onDatesChange([])
+            onDatesChange([]);
           }}
           onButtonPress={() => setOpen(true)}
           width={260}
@@ -316,7 +338,7 @@ export function RangePicker() {
         <DatePickerBody />
       </DatePicker.Content>
     </DatePicker>
-  )
+  );
 }
 
-RangePicker.fileName = 'RangePicker'
+RangePicker.fileName = 'RangePicker';

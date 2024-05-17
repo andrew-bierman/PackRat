@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 const bags = {
   Clutch: '/bag/bag1.jpg',
   'Duffle Bag': '/bag/bag2.jpg',
@@ -9,7 +9,7 @@ const bags = {
   Tote: '/bag/bag1.jpg',
   Weekender: '/bag/bag4.webp',
   Wristlet: '/bag/bag2.jpg',
-}
+};
 
 const watchNames = {
   'Analog Watch': '/watches/watch1.webp',
@@ -22,7 +22,7 @@ const watchNames = {
   'Pilot Watch': '/watches/watch8.webp',
   Smartwatch: '/watches/watch9.webp',
   'Sports Watch': '/watches/watch10.webp',
-}
+};
 
 const shoeNames = {
   'Ballet Flat': '/shoes/shoe2.webp',
@@ -35,7 +35,7 @@ const shoeNames = {
   Pump: '/shoes/shoe8.png',
   Sandal: '/shoes/shoe9.jpg',
   Sneaker: '/shoes/shoe10.webp',
-}
+};
 
 const jacketNames = {
   'Bomber Jacket': '/jacket/jacket1.jpg',
@@ -48,22 +48,22 @@ const jacketNames = {
   'Trench Coat': '/jacket/jacket8.jpg',
   Windbreaker: '/jacket/jacket9.jpg',
   Overcoat: '/jacket/jacket10.jpg',
-}
+};
 
 export const getProducts = () => {
-  const allImages = [bags, watchNames, shoeNames, jacketNames]
+  const allImages = [bags, watchNames, shoeNames, jacketNames];
   return Array.from({ length: 20 })
     .fill(0)
     .map((_, i) => {
-      const category = allImages[i % allImages.length]
-      const name = Object.keys(category)[i % 10]
-      const image = category[name]
+      const category = allImages[i % allImages.length];
+      const name = Object.keys(category)[i % 10];
+      const image = category[name];
       return {
         id: i,
         name,
         price: faker.commerce.price(),
         discount: faker.number.int({ min: 10, max: 50 }),
         image: `/bento/images/${image}`,
-      }
-    })
-}
+      };
+    });
+};

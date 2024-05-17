@@ -1,5 +1,5 @@
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { useEffect, useState } from 'react'
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { useEffect, useState } from 'react';
 import {
   Anchor,
   Button,
@@ -11,23 +11,28 @@ import {
   View,
   XStack,
   styled,
-} from 'tamagui'
-import { getProducts } from './data/products'
+} from 'tamagui';
+import { getProducts } from './data/products';
 
-const Link = Anchor
+const Link = Anchor;
 
 const StyledText = styled(Text, {
   color: '$color',
   fontSize: '$4',
   lineHeight: '$4',
-})
+});
 
-type Product = ReturnType<typeof getProducts>[0]
+type Product = ReturnType<typeof getProducts>[0];
 
 function Item({ item }: { item: Product }) {
   return (
     // Note: you can also use `Link` from solito/link
-    <Link overflow="hidden" width={300} href="#" textDecorationColor="transparent">
+    <Link
+      overflow="hidden"
+      width={300}
+      href="#"
+      textDecorationColor="transparent"
+    >
       <View gap="$4">
         <View
           height={300}
@@ -88,15 +93,15 @@ function Item({ item }: { item: Product }) {
         </Button>
       </View>
     </Link>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function ProductListBestItems() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
-    setProducts(getProducts())
-  }, [])
+    setProducts(getProducts());
+  }, []);
   return (
     <ScrollView
       horizontal
@@ -109,7 +114,7 @@ export function ProductListBestItems() {
         <Item key={item.id} item={item} />
       ))}
     </ScrollView>
-  )
+  );
 }
 
-ProductListBestItems.fileName = 'ProductListBestItems'
+ProductListBestItems.fileName = 'ProductListBestItems';

@@ -1,3 +1,3 @@
-export * from './ButtonLoading'
-export * from './ButtonPulse'
-export * from './IconCenterButton'
+export * from './ButtonLoading';
+export * from './ButtonPulse';
+export * from './IconCenterButton';

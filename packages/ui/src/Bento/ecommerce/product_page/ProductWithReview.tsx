@@ -1,9 +1,9 @@
-import { faker } from '@faker-js/faker'
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { Dot, Minus, Plus, Star } from '@tamagui/lucide-icons'
-import { RovingFocusGroup } from '@tamagui/roving-focus'
-import { useEffect, useState } from 'react'
-import type { ColorTokens } from 'tamagui'
+import { faker } from '@faker-js/faker';
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { Dot, Minus, Plus, Star } from '@tamagui/lucide-icons';
+import { RovingFocusGroup } from '@tamagui/roving-focus';
+import { useEffect, useState } from 'react';
+import type { ColorTokens } from 'tamagui';
 import {
   Avatar,
   Button,
@@ -18,9 +18,9 @@ import {
   debounce,
   styled,
   Text,
-} from 'tamagui'
-import { useMedia } from 'tamagui'
-import { getFontSized } from '@tamagui/get-font-sized'
+} from 'tamagui';
+import { useMedia } from 'tamagui';
+import { getFontSized } from '@tamagui/get-font-sized';
 
 const product = {
   title: 'Winter Jacket',
@@ -66,7 +66,7 @@ const product = {
     'Zippered hand pockets',
     'Elastic cuffs',
   ],
-}
+};
 
 export const SizableText = styled(Text, {
   name: 'SizableText',
@@ -81,14 +81,16 @@ export const SizableText = styled(Text, {
   defaultVariants: {
     size: '$true',
   },
-})
+});
 
 /** ------ EXAMPLE ------ */
 export function ProductWithReview() {
-  const [selectedPicture, setSelectedPicture] = useState(product.pictures[0].picture)
-  const [tempPicture, setTempPicture] = useState<string | null>(null)
-  const setDebounceTempPicture = debounce(setTempPicture, 100)
-  const { xs } = useMedia()
+  const [selectedPicture, setSelectedPicture] = useState(
+    product.pictures[0].picture,
+  );
+  const [tempPicture, setTempPicture] = useState<string | null>(null);
+  const setDebounceTempPicture = debounce(setTempPicture, 100);
+  const { xs } = useMedia();
   return (
     <ScrollView width="100%">
       <View
@@ -170,94 +172,102 @@ export function ProductWithReview() {
                       paddingHorizontal: '$2',
                     }}
                   >
-                    {product.pictures.map(({ picture, meta: { colorName } }, index) => (
-                      <RovingFocusGroup.Item
-                        key={picture}
-                        asChild="except-style"
-                        focusable
-                        active={picture === selectedPicture}
-                      >
-                        <View
-                          flexGrow={1}
-                          borderRadius="$2"
-                          onFocus={() => setDebounceTempPicture(picture)}
-                          onHoverIn={() => setDebounceTempPicture(picture)}
-                          onHoverOut={() => setDebounceTempPicture(null)}
-                          onBlur={() => setDebounceTempPicture(null)}
-                          onPress={() => setSelectedPicture(picture)}
-                          //@ts-ignore
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              setSelectedPicture(picture)
-                            }
-                          }}
-                          cursor="pointer"
-                          outlineStyle="solid"
-                          outlineOffset={3}
-                          outlineWidth={2}
-                          hoverStyle={{
-                            outlineColor: '$gray9',
-                          }}
-                          pressStyle={{
-                            outlineOffset: 4,
-                          }}
-                          outlineColor={
-                            picture === selectedPicture
-                              ? '$gray10'
-                              : ('transparent' as any)
-                          }
-                          overflow="hidden"
-                          height={173}
-                          $group-window-sm={{
-                            height: 160,
-                          }}
-                          $group-window-xs={{
-                            height: 140,
-                          }}
-                          $group-window-xxs={{
-                            height: 100,
-                          }}
+                    {product.pictures.map(
+                      ({ picture, meta: { colorName } }, index) => (
+                        <RovingFocusGroup.Item
+                          key={picture}
+                          asChild="except-style"
+                          focusable
+                          active={picture === selectedPicture}
                         >
-                          <View width="100%" height="100%">
-                            <Image
-                              key={picture}
-                              src={picture}
-                              source={{ uri: `https://random.imagecdn.app/250/${150}` }}
-                              width="100%"
-                              height={'100%'}
-                              aspectRatio={1}
-                              resizeMode="center"
-                              backgroundColor="$color2"
-                              borderRadius="$2"
-                            />
-                          </View>
-                          {!xs && (
-                            <View
-                              width="100%"
-                              animation="bouncy"
-                              position="absolute"
-                              justifyContent="center"
-                              alignItems="center"
-                              paddingTop="$2.5"
-                              paddingBottom="$4"
-                              backgroundColor="rgba(0,0,0,0.7)"
-                              bottom={0}
-                              y={15}
-                              opacity={0.7}
-                              {...((selectedPicture === picture ||
-                                tempPicture === picture) && {
-                                y: 10,
-                                opacity: 1,
-                              })}
-                            >
-                              <Text fontSize="$3" lineHeight="$1" color="#fff">
-                                {colorName}
-                              </Text>
+                          <View
+                            flexGrow={1}
+                            borderRadius="$2"
+                            onFocus={() => setDebounceTempPicture(picture)}
+                            onHoverIn={() => setDebounceTempPicture(picture)}
+                            onHoverOut={() => setDebounceTempPicture(null)}
+                            onBlur={() => setDebounceTempPicture(null)}
+                            onPress={() => setSelectedPicture(picture)}
+                            //@ts-ignore
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                setSelectedPicture(picture);
+                              }
+                            }}
+                            cursor="pointer"
+                            outlineStyle="solid"
+                            outlineOffset={3}
+                            outlineWidth={2}
+                            hoverStyle={{
+                              outlineColor: '$gray9',
+                            }}
+                            pressStyle={{
+                              outlineOffset: 4,
+                            }}
+                            outlineColor={
+                              picture === selectedPicture
+                                ? '$gray10'
+                                : ('transparent' as any)
+                            }
+                            overflow="hidden"
+                            height={173}
+                            $group-window-sm={{
+                              height: 160,
+                            }}
+                            $group-window-xs={{
+                              height: 140,
+                            }}
+                            $group-window-xxs={{
+                              height: 100,
+                            }}
+                          >
+                            <View width="100%" height="100%">
+                              <Image
+                                key={picture}
+                                src={picture}
+                                source={{
+                                  uri: `https://random.imagecdn.app/250/${150}`,
+                                }}
+                                width="100%"
+                                height={'100%'}
+                                aspectRatio={1}
+                                resizeMode="center"
+                                backgroundColor="$color2"
+                                borderRadius="$2"
+                              />
                             </View>
-                          )}
-                        </View>
-                      </RovingFocusGroup.Item>
-                    ))}
+                            {!xs && (
+                              <View
+                                width="100%"
+                                animation="bouncy"
+                                position="absolute"
+                                justifyContent="center"
+                                alignItems="center"
+                                paddingTop="$2.5"
+                                paddingBottom="$4"
+                                backgroundColor="rgba(0,0,0,0.7)"
+                                bottom={0}
+                                y={15}
+                                opacity={0.7}
+                                {...((selectedPicture === picture ||
+                                  tempPicture === picture) && {
+                                  y: 10,
+                                  opacity: 1,
+                                })}
+                              >
+                                <Text
+                                  fontSize="$3"
+                                  lineHeight="$1"
+                                  color="#fff"
+                                >
+                                  {colorName}
+                                </Text>
+                              </View>
+                            )}
+                          </View>
+                        </RovingFocusGroup.Item>
+                      ),
+                    )}
                   </ScrollView>
                 </RovingFocusGroup>
               </View>
@@ -345,8 +355,16 @@ export function ProductWithReview() {
               </View>
             </View>
             <Separator width="100%" />
-            <View width="100%" flexDirection="row" justifyContent="space-between">
-              <View gap="$5" flexDirection="column" justifyContent="space-between">
+            <View
+              width="100%"
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <View
+                gap="$5"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
                 <View flexDirection="column" gap="$2">
                   <SizableText size="$5">Colors</SizableText>
                   <ColorSelector />
@@ -370,7 +388,12 @@ export function ProductWithReview() {
               </View>
             </View>
             <Separator width="100%" />
-            <View flexDirection="column" maxWidth="100%" flexShrink={1} gap="$3">
+            <View
+              flexDirection="column"
+              maxWidth="100%"
+              flexShrink={1}
+              gap="$3"
+            >
               <SizableText size="$6">Description</SizableText>
               <SizableText theme="alt1" flexShrink={1} size="$4">
                 {product.description}
@@ -379,7 +402,11 @@ export function ProductWithReview() {
             <Separator width="100%" />
             <View flexDirection="column" gap="$3">
               <SizableText size="$6">Details</SizableText>
-              <View flexDirection="column" alignItems="flex-start" paddingLeft="$2">
+              <View
+                flexDirection="column"
+                alignItems="flex-start"
+                paddingLeft="$2"
+              >
                 {product.features.map((feature) => (
                   <View
                     key={feature}
@@ -415,10 +442,10 @@ export function ProductWithReview() {
         </View>
       </View>
     </ScrollView>
-  )
+  );
 }
 
-ProductWithReview.fileName = 'ProductWithReview'
+ProductWithReview.fileName = 'ProductWithReview';
 
 const colors = [
   {
@@ -427,9 +454,9 @@ const colors = [
   },
   { name: 'blue', code: '$blue9' },
   { name: 'green', code: '$green9' },
-]
+];
 function ColorSelector() {
-  const [selectedColor, setSelectedColor] = useState(colors[0])
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
 
   return (
     <View flexDirection="row" gap="$3">
@@ -446,18 +473,20 @@ function ColorSelector() {
           outlineOffset={2}
           outlineStyle="solid"
           outlineColor={
-            (selectedColor === color ? '$borderPress' : 'transparent') as ColorTokens
+            (selectedColor === color
+              ? '$borderPress'
+              : 'transparent') as ColorTokens
           }
           circular
         />
       ))}
     </View>
-  )
+  );
 }
-const sizes = ['S', 'M', 'L']
+const sizes = ['S', 'M', 'L'];
 
 function SizeSelector() {
-  const [selectedSize, setSelectedSize] = useState(sizes[0])
+  const [selectedSize, setSelectedSize] = useState(sizes[0]);
 
   return (
     <View flexDirection="row" gap="$2">
@@ -471,7 +500,9 @@ function SizeSelector() {
           borderRadius="$2"
           key={size}
           borderWidth={2}
-          borderColor={(selectedSize === size ? '$borderPress' : '$borderColor') as any}
+          borderColor={
+            (selectedSize === size ? '$borderPress' : '$borderColor') as any
+          }
           justifyContent="center"
           alignItems="center"
         >
@@ -484,11 +515,11 @@ function SizeSelector() {
         </View>
       ))}
     </View>
-  )
+  );
 }
 
 const ItemCounter = XGroup.styleable((props, ref) => {
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(1);
 
   return (
     <XGroup width={122} ref={ref} {...props}>
@@ -527,8 +558,8 @@ const ItemCounter = XGroup.styleable((props, ref) => {
         </Button>
       </XGroup.Item>
     </XGroup>
-  )
-})
+  );
+});
 
 const getReview = () =>
   Array.from({ length: 10 })
@@ -539,16 +570,16 @@ const getReview = () =>
       avatar: faker.image.avatar(),
       rate: faker.number.float({ min: 1, max: 5, precision: 0.5 }),
       review: faker.word.words(15),
-    }))
+    }));
 
-type ReviewsArray = ReturnType<typeof getReview>
+type ReviewsArray = ReturnType<typeof getReview>;
 
 function Reviews() {
-  const [reviews, setReviews] = useState<ReviewsArray>([])
-  const { sm, xs } = useMedia()
+  const [reviews, setReviews] = useState<ReviewsArray>([]);
+  const { sm, xs } = useMedia();
   useEffect(() => {
-    setReviews(getReview())
-  }, [])
+    setReviews(getReview());
+  }, []);
   return (
     <View
       flexDirection="row"
@@ -597,47 +628,54 @@ function Reviews() {
         />
       )}
     </View>
-  )
+  );
 }
 
 type ReviewProps = {
-  review: ReviewsArray[0]
-}
+  review: ReviewsArray[0];
+};
 
-const Review = View.styleable<ReviewProps>(({ review, ...rest }, forwardRef) => {
-  return (
-    <View
-      flexDirection="column"
-      gap="$4"
-      borderRadius="$4"
-      padding="$4"
-      backgroundColor="$color1"
-      {...rest}
-      ref={forwardRef}
-    >
-      <View flexDirection="row" alignItems="center" gap="$3">
-        <Avatar circular size="$3">
-          <Avatar.Image resizeMode="contain" source={{ uri: review.avatar }} />
-          <Avatar.Fallback />
-        </Avatar>
-        <View flexDirection="column" gap="$1">
-          <SizableText size="$5">{review.fullname}</SizableText>
-          <View flexDirection="row" gap="$1">
-            {Array.from({ length: 5 })
-              .fill(0)
-              .map((_, index) => (
-                <Star
-                  key={index}
-                  size={12}
-                  color={index < Math.floor(review.rate) ? '$yellow9' : '$gray9'}
-                />
-              ))}
+const Review = View.styleable<ReviewProps>(
+  ({ review, ...rest }, forwardRef) => {
+    return (
+      <View
+        flexDirection="column"
+        gap="$4"
+        borderRadius="$4"
+        padding="$4"
+        backgroundColor="$color1"
+        {...rest}
+        ref={forwardRef}
+      >
+        <View flexDirection="row" alignItems="center" gap="$3">
+          <Avatar circular size="$3">
+            <Avatar.Image
+              resizeMode="contain"
+              source={{ uri: review.avatar }}
+            />
+            <Avatar.Fallback />
+          </Avatar>
+          <View flexDirection="column" gap="$1">
+            <SizableText size="$5">{review.fullname}</SizableText>
+            <View flexDirection="row" gap="$1">
+              {Array.from({ length: 5 })
+                .fill(0)
+                .map((_, index) => (
+                  <Star
+                    key={index}
+                    size={12}
+                    color={
+                      index < Math.floor(review.rate) ? '$yellow9' : '$gray9'
+                    }
+                  />
+                ))}
+            </View>
           </View>
         </View>
+        <SizableText size="$4" theme="alt1" opacity={0.7}>
+          {review.review}
+        </SizableText>
       </View>
-      <SizableText size="$4" theme="alt1" opacity={0.7}>
-        {review.review}
-      </SizableText>
-    </View>
-  )
-})
+    );
+  },
+);

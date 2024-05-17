@@ -1,6 +1,6 @@
-import type { SizeTokens } from 'tamagui'
-import { View } from 'tamagui'
-import { Input } from './components/inputsParts'
+import type { SizeTokens } from 'tamagui';
+import { View } from 'tamagui';
+import { Input } from './components/inputsParts';
 
 /** ------ EXAMPLE ------ */
 export function InputWithLabelDemo({
@@ -9,10 +9,10 @@ export function InputWithLabelDemo({
   focusOnMount = false,
   onChangeText,
 }: {
-  size?: SizeTokens
-  focusOnMount?: boolean
-  labelText?: string
-  onChangeText?: (text: string) => void
+  size?: SizeTokens;
+  focusOnMount?: boolean;
+  labelText?: string;
+  onChangeText?: (text: string) => void;
 }) {
   return (
     <View flexDirection="column" justifyContent="center" alignItems="center">
@@ -30,7 +30,7 @@ export function InputWithLabelDemo({
         </Input.Box>
       </Input>
     </View>
-  )
+  );
 }
 
-InputWithLabelDemo.fileName = 'InputWithLabel'
+InputWithLabelDemo.fileName = 'InputWithLabel';

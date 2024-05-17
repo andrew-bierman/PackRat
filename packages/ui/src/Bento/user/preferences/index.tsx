@@ -1,1 +1,1 @@
-export * from './LocationNotification'
+export * from './LocationNotification';

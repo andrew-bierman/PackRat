@@ -5,57 +5,60 @@ import {
   View,
   createContext,
   useEvent,
-} from 'tamagui'
-import type { AlertDialogContentProps } from 'tamagui'
-import { useState } from 'react'
+} from 'tamagui';
+import type { AlertDialogContentProps } from 'tamagui';
+import { useState } from 'react';
 
 type AlertButton = {
-  title: string
-  action: () => void
-  style: 'default' | 'cancel' | 'destructive'
-}
+  title: string;
+  action: () => void;
+  style: 'default' | 'cancel' | 'destructive';
+};
 
 type AlertParam = {
-  title: string
-  message: string
-  buttons: AlertButton[]
-}
+  title: string;
+  message: string;
+  buttons: AlertButton[];
+};
 
 interface AlertDialogContextProps {
-  open: boolean
-  title: string
-  message: string
-  buttons: AlertButton[]
-  alert: (param: AlertParam) => void
+  open: boolean;
+  title: string;
+  message: string;
+  buttons: AlertButton[];
+  alert: (param: AlertParam) => void;
 }
 
-const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>('Alert', {
-  open: false,
-  title: '',
-  message: '',
-  buttons: [],
-  alert: () => {},
-})
+const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>(
+  'Alert',
+  {
+    open: false,
+    title: '',
+    message: '',
+    buttons: [],
+    alert: () => {},
+  },
+);
 
 type AlertProps = AlertDialogContentProps & {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 const Alert = ({ children, ...rest }: AlertProps) => {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [message, setMessage] = useState('')
-  const [buttons, setButtons] = useState<AlertButton[]>([])
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
+  const [buttons, setButtons] = useState<AlertButton[]>([]);
 
   const alert = useEvent(({ title, message, buttons }: AlertParam) => {
-    setTitle(title)
-    setMessage(message)
-    setButtons(buttons)
-    setOpen(true)
-  })
+    setTitle(title);
+    setMessage(message);
+    setButtons(buttons);
+    setOpen(true);
+  });
 
   const closeDialog = useEvent(() => {
-    setOpen(false)
-  })
+    setOpen(false);
+  });
 
   return (
     <AlertProvider
@@ -101,20 +104,25 @@ const Alert = ({ children, ...rest }: AlertProps) => {
           >
             <View>
               <AlertDialog.Title size="$3">{title}</AlertDialog.Title>
-              <AlertDialog.Description theme="alt1">{message}</AlertDialog.Description>
+              <AlertDialog.Description theme="alt1">
+                {message}
+              </AlertDialog.Description>
             </View>
             <View flexDirection="row" gap="$4" justifyContent="flex-end">
               {buttons.map((button, index) => {
                 const Base =
-                  button.style === 'cancel' ? AlertDialog.Cancel : AlertDialog.Action
-                const color = button.style === 'destructive' ? '$red10' : '$color'
+                  button.style === 'cancel'
+                    ? AlertDialog.Cancel
+                    : AlertDialog.Action;
+                const color =
+                  button.style === 'destructive' ? '$red10' : '$color';
                 return (
                   <Base key={index} asChild>
                     <Button chromeless onPress={button.action}>
                       <Button.Text color={color}>{button.title}</Button.Text>
                     </Button>
                   </Base>
-                )
+                );
               })}
             </View>
           </AlertDialog.Content>
@@ -122,11 +130,11 @@ const Alert = ({ children, ...rest }: AlertProps) => {
       </AlertDialog>
       {children}
     </AlertProvider>
-  )
-}
+  );
+};
 
 const AlertDialogTest = (props: any) => {
-  const { alert } = useAlert('AlertTest')
+  const { alert } = useAlert('AlertTest');
 
   const buttons: AlertButton[] = [
     {
@@ -143,7 +151,7 @@ const AlertDialogTest = (props: any) => {
         // do some
       },
     },
-  ]
+  ];
 
   return (
     <Button
@@ -152,13 +160,13 @@ const AlertDialogTest = (props: any) => {
           title: 'Warning',
           message: 'Are you sure you want to delete all your data?',
           buttons,
-        })
+        });
       }}
     >
       Open Alert
     </Button>
-  )
-}
+  );
+};
 
 /** ---------- EXAMPLE --------- */
 export const AlertDemo = () => {
@@ -166,7 +174,7 @@ export const AlertDemo = () => {
     <Alert width={300}>
       <AlertDialogTest />
     </Alert>
-  )
-}
+  );
+};
 
-AlertDemo.fileName = 'Alert'
+AlertDemo.fileName = 'Alert';

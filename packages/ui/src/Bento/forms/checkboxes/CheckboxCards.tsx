@@ -1,7 +1,7 @@
-import { Check, Clock, Dot } from '@tamagui/lucide-icons'
-import { Checkboxes } from './common/checkboxParts'
-import { useState } from 'react'
-import { Text, View, debounce } from 'tamagui'
+import { Check, Clock, Dot } from '@tamagui/lucide-icons';
+import { Checkboxes } from './common/checkboxParts';
+import { useState } from 'react';
+import { Text, View, debounce } from 'tamagui';
 
 const packages = [
   {
@@ -31,7 +31,7 @@ const packages = [
     itemsCounts: 18,
     color: 'yellow',
   },
-] as const
+] as const;
 
 /** ------ EXAMPLE ------ */
 export function CheckboxCards() {
@@ -39,12 +39,12 @@ export function CheckboxCards() {
     Toys: false,
     Books: false,
     Clothes: false,
-  })
+  });
 
   // Note: debounce is used to prevent multiple state updates that could toggle previous values
   const toggleValues = debounce((values: any) => {
-    setValues((prev) => ({ ...prev, ...values }))
-  }, 10)
+    setValues((prev) => ({ ...prev, ...values }));
+  }, 10);
 
   return (
     <Checkboxes
@@ -58,7 +58,12 @@ export function CheckboxCards() {
     >
       <Checkboxes.Title>Select your Gift</Checkboxes.Title>
 
-      <Checkboxes.FocusGroup width="100%" flexDirection="row" gap="$3" flexWrap="wrap">
+      <Checkboxes.FocusGroup
+        width="100%"
+        flexDirection="row"
+        gap="$3"
+        flexWrap="wrap"
+      >
         {packages.map((item) => (
           <Checkboxes.FocusGroup.Item
             value={item.title}
@@ -82,7 +87,12 @@ export function CheckboxCards() {
                     borderRadius="$4"
                   >
                     <Dot marginLeft={-9} marginRight={-3} color="$color10" />
-                    <Text color="$color11" fontSize="$4" fontWeight="$4" lineHeight="$4">
+                    <Text
+                      color="$color11"
+                      fontSize="$4"
+                      fontWeight="$4"
+                      lineHeight="$4"
+                    >
                       {item.title}
                     </Text>
                   </View>
@@ -103,7 +113,12 @@ export function CheckboxCards() {
                   {item.description}
                 </Text>
               </View>
-              <View flexDirection="row" gap="$2" marginTop="auto" alignItems="center">
+              <View
+                flexDirection="row"
+                gap="$2"
+                marginTop="auto"
+                alignItems="center"
+              >
                 <Clock color="$color10" size={14} />
                 <Text fontWeight="300" theme="alt2">
                   last bought 2 hr ago
@@ -114,7 +129,7 @@ export function CheckboxCards() {
         ))}
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-CheckboxCards.fileName = 'CheckboxCards'
+CheckboxCards.fileName = 'CheckboxCards';

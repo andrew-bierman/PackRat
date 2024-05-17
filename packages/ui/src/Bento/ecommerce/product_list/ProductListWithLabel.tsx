@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react'
-import { Anchor, H2, Image, SizableText, Square, Stack, XStack, YStack } from 'tamagui'
-import { getProducts } from './data/products'
+import { useEffect, useState } from 'react';
+import {
+  Anchor,
+  H2,
+  Image,
+  SizableText,
+  Square,
+  Stack,
+  XStack,
+  YStack,
+} from 'tamagui';
+import { getProducts } from './data/products';
 
-const Link = Anchor
+const Link = Anchor;
 
-type Product = ReturnType<typeof getProducts>[0]
+type Product = ReturnType<typeof getProducts>[0];
 
-const premiums = [3, 6, 12, 15, 20, 25]
-const bestSellers = [1, 5, 10, 13, 18, 23]
+const premiums = [3, 6, 12, 15, 20, 25];
+const bestSellers = [1, 5, 10, 13, 18, 23];
 
 function Item({ item, index }: { item: Product; index: number }) {
-  const isPremium = premiums.includes(index)
-  const isBestSeller = bestSellers.includes(index)
-  const showLabel = isPremium || isBestSeller
-  const labelText = isPremium ? 'Premium' : isBestSeller ? 'Best Seller' : ''
+  const isPremium = premiums.includes(index);
+  const isBestSeller = bestSellers.includes(index);
+  const showLabel = isPremium || isBestSeller;
+  const labelText = isPremium ? 'Premium' : isBestSeller ? 'Best Seller' : '';
   return (
     <Link
       flexGrow={1}
@@ -85,20 +94,20 @@ function Item({ item, index }: { item: Product; index: number }) {
         </YStack>
       </YStack>
     </Link>
-  )
+  );
 }
 
 // spacers are a method to avoid streteched items at the end
 const someSpacers = Array.from({ length: 5 }).map((_c, index) => (
   <YStack key={index + 'sp'} flexBasis={300} flexGrow={1} flexShrink={1} />
-))
+));
 
 /** ------ EXAMPLE ------ */
 export function ProductListWithLabel() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
-    setProducts(getProducts())
-  }, [])
+    setProducts(getProducts());
+  }, []);
   return (
     <XStack
       flexWrap="wrap"
@@ -117,7 +126,7 @@ export function ProductListWithLabel() {
       ))}
       {someSpacers}
     </XStack>
-  )
+  );
 }
 
-ProductListWithLabel.fileName = 'ProductListWithLabel'
+ProductListWithLabel.fileName = 'ProductListWithLabel';

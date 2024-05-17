@@ -1,10 +1,10 @@
-import { User, Cable } from '@tamagui/lucide-icons'
-import { useRef } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { View } from 'tamagui'
-import { Input } from './components/inputsParts'
-import { useForwardFocus } from './hooks/useForwardFocus'
-import type { TextInput } from 'react-native'
+import { User, Cable } from '@tamagui/lucide-icons';
+import { useRef } from 'react';
+import type { SizeTokens } from 'tamagui';
+import { View } from 'tamagui';
+import { Input } from './components/inputsParts';
+import { useForwardFocus } from './hooks/useForwardFocus';
+import type { TextInput } from 'react-native';
 
 /**
  * note: make sure to use the same width for the input and the container
@@ -12,8 +12,8 @@ import type { TextInput } from 'react-native'
 
 /** ------ EXAMPLE ------ */
 export function InputBothSideIconsExample({ size }: { size?: SizeTokens }) {
-  const inputRef = useRef<TextInput>(null)
-  const focusTrigger = useForwardFocus(inputRef)
+  const inputRef = useRef<TextInput>(null);
+  const focusTrigger = useForwardFocus(inputRef);
 
   return (
     <View justifyContent="center" alignItems="center">
@@ -33,7 +33,7 @@ export function InputBothSideIconsExample({ size }: { size?: SizeTokens }) {
         </Input.Box>
       </Input>
     </View>
-  )
+  );
 }
 
-InputBothSideIconsExample.fileName = 'InputBothSideIcons'
+InputBothSideIconsExample.fileName = 'InputBothSideIcons';

@@ -1,9 +1,17 @@
-import { useEffect, useState } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { AnimatePresence, Button, Spinner, View, YStack, XGroup, XStack } from 'tamagui'
-import { Plug, Home, Settings, Folder, Heart } from '@tamagui/lucide-icons'
+import { useEffect, useState } from 'react';
+import type { SizeTokens } from 'tamagui';
+import {
+  AnimatePresence,
+  Button,
+  Spinner,
+  View,
+  YStack,
+  XGroup,
+  XStack,
+} from 'tamagui';
+import { Plug, Home, Settings, Folder, Heart } from '@tamagui/lucide-icons';
 
-const sizes = ['$4', '$5', '$6'] as const
+const sizes = ['$4', '$5', '$6'] as const;
 
 /** ------ EXAMPLE ------ */
 export function ButtonsWithLoaders() {
@@ -210,15 +218,19 @@ export function ButtonsWithLoaders() {
         </Button>
       </View>
     </YStack>
-  )
+  );
 }
 
-ButtonsWithLoaders.fileName = 'ButtonsWithLoaders'
+ButtonsWithLoaders.fileName = 'ButtonsWithLoaders';
 
 function EachButton({ size }: { size: SizeTokens }) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   return (
-    <Button space={loading ? '$2' : 0} onPress={() => setLoading(!loading)} size={size}>
+    <Button
+      space={loading ? '$2' : 0}
+      onPress={() => setLoading(!loading)}
+      size={size}
+    >
       <AnimatePresence>
         {loading && (
           <Button.Icon>
@@ -236,5 +248,5 @@ function EachButton({ size }: { size: SizeTokens }) {
       </AnimatePresence>
       <Button.Text>Click</Button.Text>
     </Button>
-  )
+  );
 }

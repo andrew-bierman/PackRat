@@ -1,5 +1,5 @@
-import { Label, Text } from 'tamagui'
-import { Avatar } from './components/Avatar'
+import { Label, Text } from 'tamagui';
+import { Avatar } from './components/Avatar';
 
 /** ------ EXAMPLE ------ */
 export function AvatarWithTitle() {
@@ -13,7 +13,7 @@ export function AvatarWithTitle() {
         Joseph London
       </Label>
     </Avatar>
-  )
+  );
 }
 
-AvatarWithTitle.fileName = 'AvatarWithTitle'
+AvatarWithTitle.fileName = 'AvatarWithTitle';

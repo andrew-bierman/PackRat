@@ -1,8 +1,8 @@
-import { Folder } from '@tamagui/lucide-icons'
-import type { SizeTokens } from 'tamagui'
-import { Button, View, YStack } from 'tamagui'
+import { Folder } from '@tamagui/lucide-icons';
+import type { SizeTokens } from 'tamagui';
+import { Button, View, YStack } from 'tamagui';
 
-const sizes = ['$4', '$5', '$6'] as const
+const sizes = ['$4', '$5', '$6'] as const;
 
 /** ------ EXAMPLE ------ */
 export function RoundedButtons() {
@@ -109,7 +109,7 @@ export function RoundedButtons() {
         </Button>
       </View>
     </YStack>
-  )
+  );
 }
 
-RoundedButtons.fileName = 'RoundedButtons'
+RoundedButtons.fileName = 'RoundedButtons';

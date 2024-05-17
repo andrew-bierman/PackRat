@@ -55,8 +55,8 @@
 
 // tamagui one
 
-import type { ColorTokens, FontSizeTokens, SizeTokens } from '@tamagui/core'
-import { getSize } from '@tamagui/get-token'
+import type { ColorTokens, FontSizeTokens, SizeTokens } from '@tamagui/core';
+import { getSize } from '@tamagui/get-token';
 import {
   createSwitch,
   View,
@@ -68,7 +68,7 @@ import {
   useGetThemedIcon,
   withStaticProperties,
   SwitchStyledContext,
-} from 'tamagui'
+} from 'tamagui';
 
 export const SwitchThumb = styled(View, {
   name: 'SwitchThumb',
@@ -89,11 +89,11 @@ export const SwitchThumb = styled(View, {
 
     size: {
       '...size': (val) => {
-        const size = getSwitchHeight(val)
+        const size = getSwitchHeight(val);
         return {
           height: size,
           width: size,
-        }
+        };
       },
     },
   } as const,
@@ -101,12 +101,12 @@ export const SwitchThumb = styled(View, {
   defaultVariants: {
     unstyled: process.env.TAMAGUI_HEADLESS === '1' ? true : false,
   },
-})
+});
 
 const getSwitchHeight = (val: SizeTokens) =>
-  Math.round(getVariableValue(getSize(val)) * 0.65)
+  Math.round(getVariableValue(getSize(val)) * 0.65);
 
-const getSwitchWidth = (val: SizeTokens) => getSwitchHeight(val) * 2
+const getSwitchWidth = (val: SizeTokens) => getSwitchHeight(val) * 2;
 
 export const SwitchFrame = styled(View, {
   name: 'Switch',
@@ -139,13 +139,13 @@ export const SwitchFrame = styled(View, {
 
     size: {
       '...size': (val) => {
-        const height = getSwitchHeight(val) + 4
-        const width = getSwitchWidth(val) + 4
+        const height = getSwitchHeight(val) + 4;
+        const width = getSwitchWidth(val) + 4;
         return {
           height,
           minHeight: height,
           width,
-        }
+        };
       },
     },
   } as const,
@@ -153,7 +153,7 @@ export const SwitchFrame = styled(View, {
   defaultVariants: {
     unstyled: process.env.TAMAGUI_HEADLESS === '1' ? true : false,
   },
-})
+});
 
 const SwitchIconFrame = styled(View, {
   position: 'absolute',
@@ -164,16 +164,16 @@ const SwitchIconFrame = styled(View, {
   variants: {
     placement: {
       right: (_, { props, tokens }) => {
-        const amount = tokens.space[(props as any).size as any].val * 0.35
+        const amount = tokens.space[(props as any).size as any].val * 0.35;
         return {
           right: amount,
-        }
+        };
       },
       left: (_, { props, tokens }) => {
-        const amount = tokens.space[(props as any).size as any].val * 0.35
+        const amount = tokens.space[(props as any).size as any].val * 0.35;
         return {
           left: amount,
-        }
+        };
       },
     },
     size: {
@@ -183,39 +183,46 @@ const SwitchIconFrame = styled(View, {
   defaultVariants: {
     placement: 'right',
   },
-})
+});
 
 const getIconSize = (size: FontSizeTokens, scale: number) => {
   return (
-    (typeof size === 'number' ? size * 0.5 : getFontSize(size as FontSizeTokens)) * scale
-  )
-}
+    (typeof size === 'number'
+      ? size * 0.5
+      : getFontSize(size as FontSizeTokens)) * scale
+  );
+};
 export const SwitchIcon = SwitchIconFrame.styleable<{
-  scaleIcon?: number
-  color?: ColorTokens | string
+  scaleIcon?: number;
+  color?: ColorTokens | string;
 }>((props, ref) => {
-  const { children, color: colorProp, scaleIcon = 1.2, ...rest } = props
-  const { size } = SwitchStyledContext.useStyledContext()
+  const { children, color: colorProp, scaleIcon = 1.2, ...rest } = props;
+  const { size } = SwitchStyledContext.useStyledContext();
 
-  const theme = useTheme()
+  const theme = useTheme();
   const color = getVariable(
-    colorProp || theme[colorProp as any]?.get('web') || theme.color10?.get('web')
-  )
-  const iconSize = getIconSize(size as FontSizeTokens, scaleIcon)
+    colorProp ||
+      theme[colorProp as any]?.get('web') ||
+      theme.color10?.get('web'),
+  );
+  const iconSize = getIconSize(size as FontSizeTokens, scaleIcon);
 
-  const getThemedIcon = useGetThemedIcon({ size: iconSize, color: color as any })
+  const getThemedIcon = useGetThemedIcon({
+    size: iconSize,
+    color: color as any,
+  });
   return (
     <SwitchIconFrame ref={ref} {...rest}>
       {getThemedIcon(children)}
     </SwitchIconFrame>
-  )
-})
+  );
+});
 
 const SwitchComp = createSwitch({
   Frame: SwitchFrame,
   Thumb: SwitchThumb,
-})
+});
 
 export const Switch = withStaticProperties(SwitchComp, {
   Icon: SwitchIcon,
-})
+});

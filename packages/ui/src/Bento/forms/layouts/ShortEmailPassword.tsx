@@ -1,7 +1,7 @@
-import { Button, Theme, View } from 'tamagui'
-import { Mail, Lock } from '@tamagui/lucide-icons'
-import { Input } from '../inputs/components/inputsParts'
-import { FormCard } from './components/layoutParts'
+import { Button, Theme, View } from 'tamagui';
+import { Mail, Lock } from '@tamagui/lucide-icons';
+import { Input } from '../inputs/components/inputsParts';
+import { FormCard } from './components/layoutParts';
 
 /** -------- EXAMPLE ------------ */
 export function ShortEmailPassword() {
@@ -17,7 +17,12 @@ export function ShortEmailPassword() {
         borderWidth: 0,
       }}
     >
-      <View flexDirection="column" gap="$2.5" alignItems="center" minWidth={'100%'}>
+      <View
+        flexDirection="column"
+        gap="$2.5"
+        alignItems="center"
+        minWidth={'100%'}
+      >
         <Input size="$4" minWidth="100%">
           <Input.Box>
             <Input.Icon>
@@ -31,7 +36,11 @@ export function ShortEmailPassword() {
             <Input.Icon>
               <Lock />
             </Input.Icon>
-            <Input.Area secureTextEntry paddingLeft={0} placeholder="Password" />
+            <Input.Area
+              secureTextEntry
+              paddingLeft={0}
+              placeholder="Password"
+            />
           </Input.Box>
         </Input>
         <View
@@ -52,7 +61,7 @@ export function ShortEmailPassword() {
         </View>
       </View>
     </FormCard>
-  )
+  );
 }
 
-ShortEmailPassword.fileName = 'ShortEmailPassword'
+ShortEmailPassword.fileName = 'ShortEmailPassword';

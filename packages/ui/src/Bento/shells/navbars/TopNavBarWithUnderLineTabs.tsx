@@ -1,7 +1,7 @@
-import { Bell, Menu } from '@tamagui/lucide-icons'
-import type { StackProps, TabLayout, TabsTabProps } from 'tamagui'
+import { Bell, Menu } from '@tamagui/lucide-icons';
+import type { StackProps, TabLayout, TabsTabProps } from 'tamagui';
 
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   Anchor,
   AnimatePresence,
@@ -17,13 +17,13 @@ import {
   isWeb,
   styled,
   useEvent,
-} from 'tamagui'
-import { useMedia } from 'tamagui'
+} from 'tamagui';
+import { useMedia } from 'tamagui';
 
-const Link = Anchor
+const Link = Anchor;
 
-import { useWindowDimensions } from 'tamagui'
-import { Drawer } from '../common/Drawer'
+import { useWindowDimensions } from 'tamagui';
+import { Drawer } from '../common/Drawer';
 
 // how to use with URL params:
 // import { createParam } from 'solito'
@@ -50,23 +50,23 @@ const links = [
     title: 'Contact',
     slug: 'contact',
   },
-]
+];
 
 const useTabs = () => {
   const [tabState, setTabState] = useState<{
-    currentTab: string
+    currentTab: string;
     /**
      * Layout of the Tab user might intend to select (hovering / focusing)
      */
-    intentAt: TabLayout | null
+    intentAt: TabLayout | null;
     /**
      * Layout of the Tab user selected
      */
-    activeAt: TabLayout | null
+    activeAt: TabLayout | null;
     /**
      * Used to get the direction of activation for animating the active indicator
      */
-    prevActiveAt: TabLayout | null
+    prevActiveAt: TabLayout | null;
   }>({
     activeAt: null,
 
@@ -75,16 +75,17 @@ const useTabs = () => {
     intentAt: null,
 
     prevActiveAt: null,
-  })
-  const setCurrentTab = (currentTab: string) => setTabState({ ...tabState, currentTab })
+  });
+  const setCurrentTab = (currentTab: string) =>
+    setTabState({ ...tabState, currentTab });
 
   const setIntentIndicator = (intentAt: TabLayout | null) =>
-    setTabState({ ...tabState, intentAt })
+    setTabState({ ...tabState, intentAt });
 
   const setActiveIndicator = (activeAt: TabLayout | null) =>
-    setTabState({ ...tabState, prevActiveAt: tabState.activeAt, activeAt })
+    setTabState({ ...tabState, prevActiveAt: tabState.activeAt, activeAt });
 
-  const { activeAt, intentAt, currentTab } = tabState
+  const { activeAt, intentAt, currentTab } = tabState;
   /**
 
    * -1: from left
@@ -97,11 +98,11 @@ const useTabs = () => {
 
   const handleOnInteraction: TabsTabProps['onInteraction'] = (type, layout) => {
     if (type === 'select') {
-      setActiveIndicator(layout)
+      setActiveIndicator(layout);
     } else {
-      setIntentIndicator(layout)
+      setIntentIndicator(layout);
     }
-  }
+  };
 
   // Note: the following code is very important
   // const params = useParams()
@@ -118,17 +119,18 @@ const useTabs = () => {
     activeAt,
     intentAt,
     handleOnInteraction,
-  }
-}
+  };
+};
 
 /** ------ EXAMPLE ------ */
 export function TopNavBarWithUnderLineTabs() {
-  const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } = useTabs()
-  const [triggerOpen, setTriggerOpen] = useState(false)
+  const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } =
+    useTabs();
+  const [triggerOpen, setTriggerOpen] = useState(false);
   const closeTrigger = useEvent(() => {
-    setTriggerOpen(false)
-  })
-  const { sm } = useMedia()
+    setTriggerOpen(false);
+  });
+  const { sm } = useMedia();
   return (
     <View flexDirection="column" height={610} width="100%">
       <View
@@ -163,7 +165,11 @@ export function TopNavBarWithUnderLineTabs() {
           </View>
         )}
         {!sm && (
-          <Tabs value={currentTab} onValueChange={setCurrentTab} orientation="horizontal">
+          <Tabs
+            value={currentTab}
+            onValueChange={setCurrentTab}
+            orientation="horizontal"
+          >
             <View flexDirection="column">
               <AnimatePresence>
                 {intentAt && (
@@ -229,19 +235,19 @@ export function TopNavBarWithUnderLineTabs() {
       </View>
       <View flexDirection="row" backgroundColor="$background" height="100%" />
     </View>
-  )
+  );
 }
 
-TopNavBarWithUnderLineTabs.fileName = 'TopNavBarWithUnderLineTabs'
+TopNavBarWithUnderLineTabs.fileName = 'TopNavBarWithUnderLineTabs';
 
 function ProfileDropdown({
   triggerOpen,
   setTriggerOpen,
   closeTrigger,
 }: {
-  triggerOpen: boolean
-  setTriggerOpen: (open: boolean) => void
-  closeTrigger: () => void
+  triggerOpen: boolean;
+  setTriggerOpen: (open: boolean) => void;
+  closeTrigger: () => void;
 }) {
   return (
     <Popover
@@ -293,7 +299,7 @@ function ProfileDropdown({
         </DropDownItem>
       </Popover.Content>
     </Popover>
-  )
+  );
 }
 
 const DropDownItem = styled(View, {
@@ -314,7 +320,7 @@ const DropDownItem = styled(View, {
     paddingHorizontal: '$2',
     paddingVertical: '$1',
   },
-})
+});
 
 const DropDownText = styled(Text, {
   fontWeight: '$2',
@@ -325,7 +331,7 @@ const DropDownText = styled(Text, {
     fontSize: '$1',
     lineHeight: '$1',
   },
-})
+});
 
 const NavLink = View.styleable<{ href: string }>(
   ({ children, href = '#', ...rest }, ref) => {
@@ -353,21 +359,21 @@ const NavLink = View.styleable<{ href: string }>(
           </Text>
         </Link>
       </View>
-    )
-  }
-)
+    );
+  },
+);
 
 /** SIDEBAR */
 function SideBar() {
-  const [open, setOpen] = useState(false)
-  const toggle = useEvent(() => setOpen(!open))
+  const [open, setOpen] = useState(false);
+  const toggle = useEvent(() => setOpen(!open));
   return (
     <View
       flexDirection="row"
       {...(isWeb && {
         onKeyDown: (e: KeyboardEvent) => {
           if (e.key === 'Escape') {
-            setOpen(false)
+            setOpen(false);
           }
         },
       })}
@@ -379,15 +385,19 @@ function SideBar() {
       </Button>
       <SideBarContent open={open} onOpenChange={() => setOpen(false)} />
     </View>
-  )
+  );
 }
 
 function SideBarContent({
   onOpenChange,
   open,
-}: { onOpenChange: () => void; open: boolean }) {
-  const { activeAt, currentTab, handleOnInteraction, intentAt, setCurrentTab } = useTabs()
-  const { height, width } = useWindowDimensions()
+}: {
+  onOpenChange: () => void;
+  open: boolean;
+}) {
+  const { activeAt, currentTab, handleOnInteraction, intentAt, setCurrentTab } =
+    useTabs();
+  const { height, width } = useWindowDimensions();
 
   /**
    * Note: we also have <Drawer.Portal/> that renders the drawer content in the root
@@ -512,10 +522,13 @@ function SideBarContent({
         </Drawer.Portal>
       </Drawer>
     </View>
-  )
+  );
 }
 
-const TabsRovingIndicator = ({ active, ...props }: { active?: boolean } & StackProps) => {
+const TabsRovingIndicator = ({
+  active,
+  ...props
+}: { active?: boolean } & StackProps) => {
   return (
     <View
       flexDirection="column"
@@ -535,5 +548,5 @@ const TabsRovingIndicator = ({ active, ...props }: { active?: boolean } & StackP
       })}
       {...props}
     />
-  )
-}
+  );
+};

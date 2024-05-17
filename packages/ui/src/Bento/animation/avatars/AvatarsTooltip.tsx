@@ -1,7 +1,14 @@
-import type { SizeTokens } from 'tamagui'
-import { Avatar, Paragraph, Tooltip, View, styled, withStaticProperties } from 'tamagui'
+import type { SizeTokens } from 'tamagui';
+import {
+  Avatar,
+  Paragraph,
+  Tooltip,
+  View,
+  styled,
+  withStaticProperties,
+} from 'tamagui';
 
-const items = ['Developer', 'User', 'Athlete', 'User', 'Designer']
+const items = ['Developer', 'User', 'Athlete', 'User', 'Designer'];
 
 /** ------ EXAMPLE ------ */
 export function AvatarsTooltip() {
@@ -19,8 +26,9 @@ export function AvatarsTooltip() {
             animation="lazy"
             cursor="pointer"
           >
-            <AvatarTip restMs={0}
-            // delay={0}
+            <AvatarTip
+              restMs={0}
+              // delay={0}
             >
               <AvatarTip.Trigger>
                 <Item
@@ -68,10 +76,10 @@ export function AvatarsTooltip() {
         ))}
       </View>
     </View>
-  )
+  );
 }
 
-AvatarsTooltip.fileName = 'AvatarsTooltip'
+AvatarsTooltip.fileName = 'AvatarsTooltip';
 
 function Item({ imageUrl, size }: { imageUrl: string; size: SizeTokens }) {
   return (
@@ -79,7 +87,7 @@ function Item({ imageUrl, size }: { imageUrl: string; size: SizeTokens }) {
       <Avatar.Image src={imageUrl} />
       <Avatar.Fallback backgroundColor="$background" />
     </Avatar>
-  )
+  );
 }
 
 const AvatarTooltipContent = styled(Tooltip.Content, {
@@ -97,10 +105,10 @@ const AvatarTooltipContent = styled(Tooltip.Content, {
       },
     },
   ],
-})
+});
 
 const AvatarTip = withStaticProperties(Tooltip, {
   Trigger: Tooltip.Trigger,
   Content: AvatarTooltipContent,
   Arrow: Tooltip.Arrow,
-})
+});

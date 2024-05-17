@@ -1,5 +1,5 @@
-import { Facebook, Github } from '@tamagui/lucide-icons'
-import { useState } from 'react'
+import { Facebook, Github } from '@tamagui/lucide-icons';
+import { useState } from 'react';
 import {
   AnimatePresence,
   Button,
@@ -10,27 +10,27 @@ import {
   Spinner,
   Theme,
   View,
-} from 'tamagui'
-import { Input } from '../inputs/components/inputsParts'
-import { FormCard } from './components/layoutParts'
+} from 'tamagui';
+import { Input } from '../inputs/components/inputsParts';
+import { FormCard } from './components/layoutParts';
 
 /** simulate signin */
 function useSignIn() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   return {
     status: status,
     signIn: () => {
-      setStatus('loading')
+      setStatus('loading');
       setTimeout(() => {
-        setStatus('success')
-      }, 2000)
+        setStatus('success');
+      }, 2000);
     },
-  }
+  };
 }
 
 /** ------ EXAMPLE ------ */
 export function SignInScreen() {
-  const { signIn, status } = useSignIn()
+  const { signIn, status } = useSignIn();
   return (
     <FormCard>
       <View
@@ -126,7 +126,12 @@ export function SignInScreen() {
               alignSelf="center"
               alignItems="center"
             >
-              <View flexDirection="row" width="100%" alignItems="center" gap="$4">
+              <View
+                flexDirection="row"
+                width="100%"
+                alignItems="center"
+                gap="$4"
+              >
                 <Separator />
                 <Paragraph>Or</Paragraph>
                 <Separator />
@@ -151,25 +156,25 @@ export function SignInScreen() {
         <SignUpLink />
       </View>
     </FormCard>
-  )
+  );
 }
 
-SignInScreen.fileName = 'SignInScreen'
+SignInScreen.fileName = 'SignInScreen';
 
 // Swap for your own Link
 const Link = ({
   href,
   children,
 }: {
-  href: string
-  children: React.ReactNode
+  href: string;
+  children: React.ReactNode;
 }) => {
   return (
     <View href={href} tag="a">
       {children}
     </View>
-  )
-}
+  );
+};
 
 const SignUpLink = () => {
   return (
@@ -186,8 +191,8 @@ const SignUpLink = () => {
         </SizableText>
       </Paragraph>
     </Link>
-  )
-}
+  );
+};
 
 const ForgotPasswordLink = () => {
   return (
@@ -203,5 +208,5 @@ const ForgotPasswordLink = () => {
         Forgot your password?
       </Paragraph>
     </Link>
-  )
-}
+  );
+};

@@ -1,8 +1,8 @@
-import { faker } from '@faker-js/faker'
-import { Phone } from '@tamagui/lucide-icons'
-import { useEffect, useState } from 'react'
-import type { ColorTokens } from 'tamagui'
-import { Avatar, Button, Circle, Separator, Text, View, YGroup } from 'tamagui'
+import { faker } from '@faker-js/faker';
+import { Phone } from '@tamagui/lucide-icons';
+import { useEffect, useState } from 'react';
+import type { ColorTokens } from 'tamagui';
+import { Avatar, Button, Circle, Separator, Text, View, YGroup } from 'tamagui';
 
 // Define more descriptive status options
 const statusOptions = [
@@ -46,7 +46,7 @@ const statusOptions = [
     status: 'Taking a Break',
     color: 'brown',
   },
-]
+];
 
 // Function to generate a person with a random descriptive status
 const getPersonList = () => {
@@ -55,18 +55,18 @@ const getPersonList = () => {
     name: faker.person.fullName(),
     status: statusOptions[Math.floor(Math.random() * statusOptions.length)],
     image: faker.image.avatar(),
-  }))
-  return personsList
-}
+  }));
+  return personsList;
+};
 
-type PersonList = ReturnType<typeof getPersonList>
+type PersonList = ReturnType<typeof getPersonList>;
 
 export function List() {
-  const [personsList, setPersonsList] = useState<PersonList>([])
+  const [personsList, setPersonsList] = useState<PersonList>([]);
 
   useEffect(() => {
-    setPersonsList(getPersonList())
-  }, [])
+    setPersonsList(getPersonList());
+  }, []);
   return (
     <YGroup width="100%" justifyContent="center" alignItems="center">
       <View
@@ -85,10 +85,10 @@ export function List() {
         ))}
       </View>
     </YGroup>
-  )
+  );
 }
 
-List.fileName = 'List'
+List.fileName = 'List';
 
 function Item({ person }: { person: PersonList[number] }) {
   return (
@@ -122,7 +122,13 @@ function Item({ person }: { person: PersonList[number] }) {
         </View>
         <View flexDirection="column" flexShrink={1} justifyContent="center">
           <Text selectable>{person.name}</Text>
-          <Text selectable fontSize="$2" lineHeight="$2" fontWeight="$2" theme="alt1">
+          <Text
+            selectable
+            fontSize="$2"
+            lineHeight="$2"
+            fontWeight="$2"
+            theme="alt1"
+          >
             {person.status.status}
           </Text>
         </View>
@@ -133,5 +139,5 @@ function Item({ person }: { person: PersonList[number] }) {
         </Button>
       </View>
     </YGroup.Item>
-  )
+  );
 }

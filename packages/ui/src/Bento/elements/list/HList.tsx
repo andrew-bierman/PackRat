@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker'
-import { useEffect, useState } from 'react'
-import { Image, ScrollView, Text, View, styled } from 'tamagui'
+import { faker } from '@faker-js/faker';
+import { useEffect, useState } from 'react';
+import { Image, ScrollView, Text, View, styled } from 'tamagui';
 
 const getData = () =>
   Array.from({ length: 50 })
@@ -12,15 +12,15 @@ const getData = () =>
         height: 600,
       }),
       id: faker.string.uuid(),
-    }))
+    }));
 
-type Data = ReturnType<typeof getData>
+type Data = ReturnType<typeof getData>;
 
 export function HList() {
-  const [data, setData] = useState<Data>([])
+  const [data, setData] = useState<Data>([]);
   useEffect(() => {
-    setData(getData())
-  }, [])
+    setData(getData());
+  }, []);
   return (
     <ScrollView horizontal padding="$6">
       <View flexDirection="row" gap="$4">
@@ -29,10 +29,10 @@ export function HList() {
         ))}
       </View>
     </ScrollView>
-  )
+  );
 }
 
-HList.fileName = 'HList'
+HList.fileName = 'HList';
 
 function HListItem({ item }: { item: Data[number] }) {
   return (
@@ -63,7 +63,7 @@ function HListItem({ item }: { item: Data[number] }) {
         </View>
       </HListInner>
     </HListFrame>
-  )
+  );
 }
 
 const HListFrame = styled(View, {
@@ -75,11 +75,11 @@ const HListFrame = styled(View, {
   backgroundColor: '$background',
   shadowColor: '$shadowColor',
   shadowRadius: 3,
-})
+});
 
 const HListInner = styled(View, {
   width: 200,
   height: 200,
   ov: 'hidden',
   borderRadius: '$5',
-})
+});

@@ -1,5 +1,5 @@
-import { Avatar, Button, Separator, Text, TextArea, View } from 'tamagui'
-import { File, Share } from '@tamagui/lucide-icons'
+import { Avatar, Button, Separator, Text, TextArea, View } from 'tamagui';
+import { File, Share } from '@tamagui/lucide-icons';
 
 /** ------ EXAMPLE ------ */
 export function AvatarNameContentAction() {
@@ -14,10 +14,18 @@ export function AvatarNameContentAction() {
       maxWidth="100%"
       gap="$3.5"
     >
-      <View flexDirection="row" alignItems="center" justifyContent="flex-start" gap="$2">
+      <View
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        gap="$2"
+      >
         <Button chromeless circular bordered>
           <Avatar circular size="$3.5">
-            <Avatar.Image aria-label="user photo" src="https://i.pravatar.cc/123" />
+            <Avatar.Image
+              aria-label="user photo"
+              src="https://i.pravatar.cc/123"
+            />
             <Avatar.Fallback backgroundColor="$gray10" />
           </Avatar>
         </Button>
@@ -58,7 +66,7 @@ export function AvatarNameContentAction() {
         </Button>
       </View>
     </View>
-  )
+  );
 }
 
-AvatarNameContentAction.fileName = 'AvatarNameContentAction'
+AvatarNameContentAction.fileName = 'AvatarNameContentAction';

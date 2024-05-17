@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { H2, Text, Label, RadioGroup, View } from 'tamagui'
-import { Card } from './components/radioParts'
+import { useState } from 'react';
+import { H2, Text, Label, RadioGroup, View } from 'tamagui';
+import { Card } from './components/radioParts';
 
 const data = [
   {
@@ -23,10 +23,10 @@ const data = [
     label: 'American Express',
     description: `This is a secure 128-bit SSL encrypted payment`,
   },
-]
+];
 /** ------ EXAMPLE ------ */
 export function HorizontalWithDescription() {
-  const [value, setValue] = useState('vd-visa')
+  const [value, setValue] = useState('vd-visa');
   return (
     <View
       flexDirection="column"
@@ -43,7 +43,13 @@ export function HorizontalWithDescription() {
         </Text>
       </View>
       <RadioGroup flexShrink={1} value={value} onValueChange={setValue}>
-        <View flexDirection="row" flexShrink={1} flexWrap="wrap" gap="$4" rowGap="$2">
+        <View
+          flexDirection="row"
+          flexShrink={1}
+          flexWrap="wrap"
+          gap="$4"
+          rowGap="$2"
+        >
           {data.map(({ id, label, description }) => (
             <Item
               key={id}
@@ -55,20 +61,26 @@ export function HorizontalWithDescription() {
             />
           ))}
           {/* a trick to avoid last flex item to be stretch out */}
-          <View flexDirection="row" key="last" flex={1} flexShrink={1} flexBasis={300} />
+          <View
+            flexDirection="row"
+            key="last"
+            flex={1}
+            flexShrink={1}
+            flexBasis={300}
+          />
         </View>
       </RadioGroup>
     </View>
-  )
+  );
 }
 
 type ItemProps = {
-  id: string
-  label: string
-  description: string
-  setValue: (val: string) => void
-  selected: boolean
-}
+  id: string;
+  label: string;
+  description: string;
+  setValue: (val: string) => void;
+  selected: boolean;
+};
 
 const Item = ({ id, label, description, setValue, selected }: ItemProps) => {
   return (
@@ -104,7 +116,7 @@ const Item = ({ id, label, description, setValue, selected }: ItemProps) => {
         </Text>
       </View>
     </Card>
-  )
-}
+  );
+};
 
-HorizontalWithDescription.fileName = 'HorizontalWithDescription'
+HorizontalWithDescription.fileName = 'HorizontalWithDescription';

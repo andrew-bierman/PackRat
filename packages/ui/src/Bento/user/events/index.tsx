@@ -1,2 +1,2 @@
-export * from './Meeting'
-export * from './StatusTracker'
+export * from './Meeting';
+export * from './StatusTracker';

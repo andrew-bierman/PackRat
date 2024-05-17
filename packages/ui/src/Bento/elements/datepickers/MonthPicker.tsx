@@ -1,7 +1,7 @@
-import { DatePickerProvider as _DatePickerProvider } from '@rehookify/datepicker'
-import { useState } from 'react'
-import { View } from 'tamagui'
-import { DatePicker } from './common/dateParts'
+import { DatePickerProvider as _DatePickerProvider } from '@rehookify/datepicker';
+import { useState } from 'react';
+import { View } from 'tamagui';
+import { DatePicker } from './common/dateParts';
 import {
   DatePickerInput,
   HeaderTypeProvider,
@@ -10,35 +10,37 @@ import {
   YearRangeSlider,
   YearSlider,
   useHeaderType,
-} from './common/dateParts'
+} from './common/dateParts';
 
 function CalendarHeader() {
-  const { type: header } = useHeaderType()
+  const { type: header } = useHeaderType();
   if (header === 'year') {
-    return <YearRangeSlider />
+    return <YearRangeSlider />;
   }
-  return <YearSlider />
+  return <YearSlider />;
 }
 
 function DatePickerBody() {
-  const [header, setHeader] = useState<'month' | 'year' | 'day'>('month')
+  const [header, setHeader] = useState<'month' | 'year' | 'day'>('month');
 
   return (
     <HeaderTypeProvider type={header} setHeader={setHeader}>
       <View flexDirection="column" alignItems="center" gap="$2">
         <CalendarHeader />
         {header === 'month' && <MonthPicker />}
-        {header === 'year' && <YearPicker onChange={() => setHeader('month')} />}
+        {header === 'year' && (
+          <YearPicker onChange={() => setHeader('month')} />
+        )}
       </View>
     </HeaderTypeProvider>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function MonthPickerInput() {
-  const [selectedDates, onDatesChange] = useState<Date[]>([])
-  const [offsetDate, setOffsetDate] = useState<Date>()
-  const [open, setOpen] = useState(false)
+  const [selectedDates, onDatesChange] = useState<Date[]>([]);
+  const [offsetDate, setOffsetDate] = useState<Date>();
+  const [open, setOpen] = useState(false);
 
   return (
     <DatePicker
@@ -52,7 +54,7 @@ export function MonthPickerInput() {
         selectedDates,
         offsetDate,
         onOffsetChange: (offset) => {
-          setOffsetDate(offset)
+          setOffsetDate(offset);
         },
         calendar: {
           startDay: 1,
@@ -69,7 +71,7 @@ export function MonthPickerInput() {
             }) || ''
           }
           onReset={() => {
-            setOffsetDate(undefined)
+            setOffsetDate(undefined);
           }}
           onButtonPress={() => setOpen(true)}
         />
@@ -80,7 +82,7 @@ export function MonthPickerInput() {
         <DatePickerBody />
       </DatePicker.Content>
     </DatePicker>
-  )
+  );
 }
 
-MonthPickerInput.fileName = 'MonthPicker'
+MonthPickerInput.fileName = 'MonthPicker';

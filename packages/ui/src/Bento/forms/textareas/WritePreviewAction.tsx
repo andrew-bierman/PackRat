@@ -1,12 +1,17 @@
-import { Paperclip, Send } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { Button, Separator, Text, Tabs, TextArea, View, styled } from 'tamagui'
+import { Paperclip, Send } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import { Button, Separator, Text, Tabs, TextArea, View, styled } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function WritePreviewAction() {
-  const [activeTab, setActiveTab] = useState('write')
+  const [activeTab, setActiveTab] = useState('write');
   return (
-    <Tabs width={500} maxWidth="100%" value={activeTab} onValueChange={setActiveTab}>
+    <Tabs
+      width={500}
+      maxWidth="100%"
+      value={activeTab}
+      onValueChange={setActiveTab}
+    >
       <View
         width="100%"
         overflow="hidden"
@@ -80,7 +85,12 @@ export function WritePreviewAction() {
               </Button.Icon>
             </Button>
           </View>
-          <Button themeInverse alignSelf="flex-end" size="$4" borderRadius="$10">
+          <Button
+            themeInverse
+            alignSelf="flex-end"
+            size="$4"
+            borderRadius="$10"
+          >
             <Button.Icon>
               <Send />
             </Button.Icon>
@@ -89,10 +99,10 @@ export function WritePreviewAction() {
         </View>
       </View>
     </Tabs>
-  )
+  );
 }
 
-WritePreviewAction.fileName = 'WritePreviewAction'
+WritePreviewAction.fileName = 'WritePreviewAction';
 
 const StyledTab = styled(Tabs.Tab, {
   unstyled: true,
@@ -119,10 +129,10 @@ const StyledTab = styled(Tabs.Tab, {
       },
     },
   } as const,
-})
+});
 
 const StyledTextArea = styled(TextArea, {
   unstyled: true,
   height: 200,
   padding: '$3',
-})
+});

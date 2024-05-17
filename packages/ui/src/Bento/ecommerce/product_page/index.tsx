@@ -1,1 +1,1 @@
-export * from './ProductWithReview'
+export * from './ProductWithReview';

@@ -1,60 +1,72 @@
-import { AlertDialog, Button, Separator, View, createContext, useEvent } from 'tamagui'
-import type { AlertDialogContentProps, ThemeName, ThemeTokens } from 'tamagui'
-import { isValidElement, useState } from 'react'
-import { Info } from '@tamagui/lucide-icons'
+import {
+  AlertDialog,
+  Button,
+  Separator,
+  View,
+  createContext,
+  useEvent,
+} from 'tamagui';
+import type { AlertDialogContentProps, ThemeName, ThemeTokens } from 'tamagui';
+import { isValidElement, useState } from 'react';
+import { Info } from '@tamagui/lucide-icons';
 
 type AlertButton = {
-  title: string
-  action: () => void
-  style: 'active' | 'cancel'
-}
+  title: string;
+  action: () => void;
+  style: 'active' | 'cancel';
+};
 
 type AlertParam = {
-  title: string
-  message: string
-  buttons: AlertButton[]
-  theme?: ThemeName
-  icon?: React.ReactNode
-}
+  title: string;
+  message: string;
+  buttons: AlertButton[];
+  theme?: ThemeName;
+  icon?: React.ReactNode;
+};
 
 interface AlertDialogContextProps {
-  alert: (param: AlertParam) => void
+  alert: (param: AlertParam) => void;
 }
 
-const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>('Alert', {
-  alert: () => {},
-})
+const [AlertProvider, useAlert] = createContext<AlertDialogContextProps>(
+  'Alert',
+  {
+    alert: () => {},
+  },
+);
 
 type AlertProps = AlertDialogContentProps & {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const renderComponent = (Component: any) => {
-  if (!Component) return null
-  if (isValidElement(Component)) return Component
-  return <Component />
-}
+  if (!Component) return null;
+  if (isValidElement(Component)) return Component;
+  return <Component />;
+};
 
 const Alert = ({ children, ...rest }: AlertProps) => {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState('')
-  const [message, setMessage] = useState('')
-  const [buttons, setButtons] = useState<AlertButton[]>([])
-  const [icon, setIcon] = useState<React.ReactNode>()
-  const [theme, setTheme] = useState<ThemeName>()
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState('');
+  const [message, setMessage] = useState('');
+  const [buttons, setButtons] = useState<AlertButton[]>([]);
+  const [icon, setIcon] = useState<React.ReactNode>();
+  const [theme, setTheme] = useState<ThemeName>();
 
-  const alert = useEvent(({ title, message, buttons, icon, theme }: AlertParam) => {
-    setTitle(title)
-    setMessage(message)
-    setButtons(buttons)
-    setOpen(true)
-    setIcon(renderComponent(icon))
-    setTheme(theme)
-  })
+  const alert = useEvent(
+    ({ title, message, buttons, icon, theme }: AlertParam) => {
+      setTitle(title);
+      setMessage(message);
+      setButtons(buttons);
+      setOpen(true);
+      setIcon(renderComponent(icon));
+      setTheme(theme);
+    },
+  );
 
   const closeDialog = useEvent(() => {
-    setOpen(false)
-  })
+    setOpen(false);
+  });
 
   return (
     <AlertProvider alert={alert}>
@@ -95,7 +107,11 @@ const Alert = ({ children, ...rest }: AlertProps) => {
             <View paddingBottom="$2" flexDirection="row" gap="$3">
               {icon}
               <View flexShrink={1}>
-                <AlertDialog.Title fontWeight="500" fontSize={20} letterSpacing={1}>
+                <AlertDialog.Title
+                  fontWeight="500"
+                  fontSize={20}
+                  letterSpacing={1}
+                >
                   {title}
                 </AlertDialog.Title>
                 <AlertDialog.Description opacity={0.8} flexShrink={1}>
@@ -113,11 +129,17 @@ const Alert = ({ children, ...rest }: AlertProps) => {
             >
               {buttons.map((button, index) => {
                 const Base =
-                  button.style === 'cancel' ? AlertDialog.Cancel : AlertDialog.Action
-                const color = button.style === 'active' ? '$color10' : '$color'
+                  button.style === 'cancel'
+                    ? AlertDialog.Cancel
+                    : AlertDialog.Action;
+                const color = button.style === 'active' ? '$color10' : '$color';
                 return (
                   <Base key={index} asChild>
-                    <Button unstyled borderRadius={1000_000} onPress={button.action}>
+                    <Button
+                      unstyled
+                      borderRadius={1000_000}
+                      onPress={button.action}
+                    >
                       <Button.Text
                         opacity={0.8}
                         color={color}
@@ -130,7 +152,7 @@ const Alert = ({ children, ...rest }: AlertProps) => {
                       </Button.Text>
                     </Button>
                   </Base>
-                )
+                );
               })}
             </View>
           </AlertDialog.Content>
@@ -138,11 +160,11 @@ const Alert = ({ children, ...rest }: AlertProps) => {
       </AlertDialog>
       {children}
     </AlertProvider>
-  )
-}
+  );
+};
 
 const AlertDialogTest = (props: any) => {
-  const { alert } = useAlert('AlertTest')
+  const { alert } = useAlert('AlertTest');
 
   const buttons: AlertButton[] = [
     {
@@ -159,7 +181,7 @@ const AlertDialogTest = (props: any) => {
         // do some
       },
     },
-  ]
+  ];
 
   return (
     <Button
@@ -174,13 +196,13 @@ const AlertDialogTest = (props: any) => {
             </View>
           ),
           theme: 'red',
-        })
+        });
       }}
     >
       Open Alert
     </Button>
-  )
-}
+  );
+};
 
 /** ---------- EXAMPLE --------- */
 export const AlertWithIcon = () => {
@@ -188,7 +210,7 @@ export const AlertWithIcon = () => {
     <Alert width={300}>
       <AlertDialogTest />
     </Alert>
-  )
-}
+  );
+};
 
-AlertWithIcon.fileName = 'AlertWithIcon'
+AlertWithIcon.fileName = 'AlertWithIcon';

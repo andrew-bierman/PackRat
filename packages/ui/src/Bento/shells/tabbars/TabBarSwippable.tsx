@@ -1,50 +1,59 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import type { ViewStyle } from 'react-native'
-import { Animated, PanResponder } from 'react-native'
-import type { TabsContentProps } from 'tamagui'
-import { H5, Separator, Tabs, Text, View, debounce, useEvent, useTheme } from 'tamagui'
-import { usePhoneScale } from '../../general/_Showcase'
+import React, { useEffect, useMemo, useRef } from 'react';
+import type { ViewStyle } from 'react-native';
+import { Animated, PanResponder } from 'react-native';
+import type { TabsContentProps } from 'tamagui';
+import {
+  H5,
+  Separator,
+  Tabs,
+  Text,
+  View,
+  debounce,
+  useEvent,
+  useTheme,
+} from 'tamagui';
+import { usePhoneScale } from '../../general/_Showcase';
 
-const tabs = ['Tab 1', 'Tab 2', 'Tab 3']
+const tabs = ['Tab 1', 'Tab 2', 'Tab 3'];
 
 /** ------ EXAMPLE ------ */
 export const TabbarSwippable = () => {
-  const boxHPosition = useRef(new Animated.Value(0)).current
-  const [activeTabIndex, _setActiveTabIndex] = React.useState(0)
-  const setActiveTabIndex = debounce(_setActiveTabIndex, 100)
-  const activeTabRef = useRef(activeTabIndex)
-  activeTabRef.current = activeTabIndex
-  const dragging = useRef(false)
-  const theme = useTheme()
-  const [pointerWidth, setPointerWidth] = React.useState(100)
+  const boxHPosition = useRef(new Animated.Value(0)).current;
+  const [activeTabIndex, _setActiveTabIndex] = React.useState(0);
+  const setActiveTabIndex = debounce(_setActiveTabIndex, 100);
+  const activeTabRef = useRef(activeTabIndex);
+  activeTabRef.current = activeTabIndex;
+  const dragging = useRef(false);
+  const theme = useTheme();
+  const [pointerWidth, setPointerWidth] = React.useState(100);
 
   // Note: you should remove the following line in your code
-  const { scale } = usePhoneScale()
+  const { scale } = usePhoneScale();
 
-  const pointerWidthRef = useRef(pointerWidth)
-  pointerWidthRef.current = pointerWidth
+  const pointerWidthRef = useRef(pointerWidth);
+  pointerWidthRef.current = pointerWidth;
 
   const chagenActiveTab = useEvent((activeTabIndex) => {
-    setActiveTabIndex(activeTabIndex)
-    boxHPosition.flattenOffset()
+    setActiveTabIndex(activeTabIndex);
+    boxHPosition.flattenOffset();
     Animated.spring(boxHPosition, {
       toValue: activeTabIndex * pointerWidthRef.current,
       useNativeDriver: true,
-    }).start()
-  })
+    }).start();
+  });
 
   useEffect(() => {
-    chagenActiveTab(activeTabIndex)
-  }, [pointerWidth])
+    chagenActiveTab(activeTabIndex);
+  }, [pointerWidth]);
 
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderGrant: () => {
-        boxHPosition.extractOffset()
-        boxHPosition.setValue(0)
-        dragging.current = true
+        boxHPosition.extractOffset();
+        boxHPosition.setValue(0);
+        dragging.current = true;
       },
       onPanResponderMove: Animated.event([null, { dx: boxHPosition }], {
         useNativeDriver: true,
@@ -53,23 +62,23 @@ export const TabbarSwippable = () => {
         const nearestTab = Math.max(
           Math.min(
             Math.round(gestureState.dx / pointerWidthRef.current),
-            tabs.length - 1 - activeTabRef.current
+            tabs.length - 1 - activeTabRef.current,
           ),
-          -activeTabRef.current
-        )
+          -activeTabRef.current,
+        );
 
-        let nextTabIndex = activeTabRef.current + nearestTab
+        let nextTabIndex = activeTabRef.current + nearestTab;
 
         Animated.spring(boxHPosition, {
           toValue: nearestTab * pointerWidthRef.current,
           useNativeDriver: true,
-        }).start()
-        dragging.current = false
+        }).start();
+        dragging.current = false;
 
-        setActiveTabIndex(nextTabIndex)
+        setActiveTabIndex(nextTabIndex);
       },
-    })
-  ).current
+    }),
+  ).current;
 
   const animatedStyle = useMemo(
     () =>
@@ -90,8 +99,8 @@ export const TabbarSwippable = () => {
         shadowRadius: 2.22,
         elevation: 3,
       }) as ViewStyle,
-    [theme.color2.val, theme.color11.val, pointerWidth]
-  )
+    [theme.color2.val, theme.color11.val, pointerWidth],
+  );
 
   return (
     <Tabs
@@ -124,11 +133,11 @@ export const TabbarSwippable = () => {
           paddingVertical={'$4'}
           height="$6"
           onLayout={(e) => {
-            const width = e.nativeEvent.layout.width
+            const width = e.nativeEvent.layout.width;
             // Note: you should remove the following line in your code
-            const scaledWidth = width + width * (1 - scale)
+            const scaledWidth = width + width * (1 - scale);
             // Note: use width instead of scaledWidth in your code
-            setPointerWidth(scaledWidth / 3)
+            setPointerWidth(scaledWidth / 3);
           }}
         >
           <Animated.View style={animatedStyle} {...panResponder.panHandlers} />
@@ -143,7 +152,7 @@ export const TabbarSwippable = () => {
               flexShrink={1}
               pe={activeTabIndex === index ? 'none' : 'auto'}
               onPress={(type) => {
-                chagenActiveTab(index)
+                chagenActiveTab(index);
               }}
             >
               <Text
@@ -170,10 +179,10 @@ export const TabbarSwippable = () => {
         <H5>Content 3</H5>
       </TabsContent>
     </Tabs>
-  )
-}
+  );
+};
 
-TabbarSwippable.fileName = 'TabBarSwippable'
+TabbarSwippable.fileName = 'TabBarSwippable';
 
 const TabsContent = (props: TabsContentProps) => {
   return (
@@ -194,5 +203,5 @@ const TabsContent = (props: TabsContentProps) => {
     >
       {props.children}
     </Tabs.Content>
-  )
-}
+  );
+};

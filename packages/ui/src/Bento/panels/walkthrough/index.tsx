@@ -1,2 +1,2 @@
-export * from './WalkThroughFluid'
-export * from './WalkThrought'
+export * from './WalkThroughFluid';
+export * from './WalkThrought';

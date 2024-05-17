@@ -1,8 +1,8 @@
-import { Ban, Moon } from '@tamagui/lucide-icons'
-import type { ReactElement } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { Circle, View } from 'tamagui'
-import { Avatar } from './components/Avatar'
+import { Ban, Moon } from '@tamagui/lucide-icons';
+import type { ReactElement } from 'react';
+import type { SizeTokens } from 'tamagui';
+import { Circle, View } from 'tamagui';
+import { Avatar } from './components/Avatar';
 
 /** ------ EXAMPLE ------ */
 
@@ -35,7 +35,11 @@ export function RoundedAvatarsWithCustomIcons() {
       />
       <Item
         Icon={
-          <Avatar.Icon backgroundColor="$blue8" placement="bottom-right" offset={5}>
+          <Avatar.Icon
+            backgroundColor="$blue8"
+            placement="bottom-right"
+            offset={5}
+          >
             <Circle />
           </Avatar.Icon>
         }
@@ -43,7 +47,11 @@ export function RoundedAvatarsWithCustomIcons() {
       />
       <Item
         Icon={
-          <Avatar.Icon backgroundColor="$green8" placement="bottom-right" offset={5}>
+          <Avatar.Icon
+            backgroundColor="$green8"
+            placement="bottom-right"
+            offset={5}
+          >
             <Circle>
               <Avatar.Text color="#fff" size="$3">
                 7
@@ -54,10 +62,10 @@ export function RoundedAvatarsWithCustomIcons() {
         size="$7"
       />
     </View>
-  )
+  );
 }
 
-RoundedAvatarsWithCustomIcons.fileName = 'RoundedAvatarsWithCustomIcons'
+RoundedAvatarsWithCustomIcons.fileName = 'RoundedAvatarsWithCustomIcons';
 
 function Item({ size, Icon }: { size: SizeTokens; Icon: ReactElement }) {
   return (
@@ -68,5 +76,5 @@ function Item({ size, Icon }: { size: SizeTokens; Icon: ReactElement }) {
         <Avatar.Fallback backgroundColor="$background" />
       </Avatar.Content>
     </Avatar>
-  )
+  );
 }

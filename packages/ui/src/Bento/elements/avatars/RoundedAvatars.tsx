@@ -1,6 +1,6 @@
-import type { SizeTokens } from 'tamagui'
-import { View } from 'tamagui'
-import { Avatar } from './components/Avatar'
+import type { SizeTokens } from 'tamagui';
+import { View } from 'tamagui';
+import { Avatar } from './components/Avatar';
 
 /** ------ EXAMPLE ------ */
 export function RoundedAvatars() {
@@ -18,10 +18,10 @@ export function RoundedAvatars() {
       <Item size="$6" />
       <Item size="$7" />
     </View>
-  )
+  );
 }
 
-RoundedAvatars.fileName = 'RoundedAvatars'
+RoundedAvatars.fileName = 'RoundedAvatars';
 
 function Item({ size }: { size: SizeTokens }) {
   return (
@@ -31,5 +31,5 @@ function Item({ size }: { size: SizeTokens }) {
         <Avatar.Fallback backgroundColor="$gray6" />
       </Avatar.Content>
     </Avatar>
-  )
+  );
 }

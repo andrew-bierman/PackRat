@@ -1,57 +1,57 @@
-import { useState } from 'react'
-import { Button, View, isWeb, Text } from 'tamagui'
-import { usePhoneScale } from '../../general/_Showcase'
+import { useState } from 'react';
+import { Button, View, isWeb, Text } from 'tamagui';
+import { usePhoneScale } from '../../general/_Showcase';
 
 type CustomTabBarProps = {
   state: {
-    index: number
-    routes: { name: string; key: string }[]
-  }
+    index: number;
+    routes: { name: string; key: string }[];
+  };
   descriptors: {
     [key: string]: {
       options: {
-        tabBarLabel?: string
-        title?: string
-      }
-    }
-  }
+        tabBarLabel?: string;
+        title?: string;
+      };
+    };
+  };
   navigation: {
     // Note: use types from react-navigation in your code
-    navigate?: any
-    emit?: any
-  }
-}
+    navigate?: any;
+    emit?: any;
+  };
+};
 
 const CustomTabBar = View.styleable<CustomTabBarProps>(
   ({ state, descriptors, navigation, ...rest }, ref) => {
-    const [tabWidth, setTabWidth] = useState(100)
-    const [hoveredIndex, setHoveredIndex] = useState(state.index)
+    const [tabWidth, setTabWidth] = useState(100);
+    const [hoveredIndex, setHoveredIndex] = useState(state.index);
     // Note: you should remove the following line in your code
-    const { scale } = usePhoneScale()
+    const { scale } = usePhoneScale();
     return (
       <View
         flexDirection="row"
         maxWidth="100%"
         onLayout={(e) => {
-          const width = e.nativeEvent.layout.width
+          const width = e.nativeEvent.layout.width;
           // Note: you should remove the following line in your code
-          const scaledWidth = width + width * (1 - scale)
+          const scaledWidth = width + width * (1 - scale);
           // Note: use width instead of scaledWidth in your code
-          setTabWidth(scaledWidth / state.routes.length)
+          setTabWidth(scaledWidth / state.routes.length);
         }}
         {...rest}
         ref={ref}
       >
         {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key]
+          const { options } = descriptors[route.key];
           const label =
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
               : options.title !== undefined
                 ? options.title
-                : route.name
+                : route.name;
 
-          const isFocused = state.index === index
+          const isFocused = state.index === index;
 
           const onPress = () => {
             if (!isWeb) {
@@ -59,16 +59,16 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
                 type: 'tabPress',
                 target: route.key,
                 canPreventDefault: true,
-              })
+              });
 
               if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate(route.name)
+                navigation.navigate(route.name);
               }
             } else {
               // navigate to the route using nextjs router
-              navigation.navigate(route.name)
+              navigation.navigate(route.name);
             }
-          }
+          };
 
           return (
             <Button
@@ -84,16 +84,18 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
               onPress={onPress}
               {...(isWeb && {
                 onMouseEnter: () => {
-                  setHoveredIndex(index)
+                  setHoveredIndex(index);
                 },
                 onMouseLeave: () => {
-                  setHoveredIndex(state.index)
+                  setHoveredIndex(state.index);
                 },
               })}
             >
-              <Text color={isFocused ? '$color10' : '$gray10Light'}>{label}</Text>
+              <Text color={isFocused ? '$color10' : '$gray10Light'}>
+                {label}
+              </Text>
             </Button>
-          )
+          );
         })}
         <View
           bottom={0}
@@ -116,9 +118,9 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
           position="absolute"
         />
       </View>
-    )
-  }
-)
+    );
+  },
+);
 
 /** ------ EXAMPLE ------ */
 export function Tabbar() {
@@ -126,7 +128,7 @@ export function Tabbar() {
   // get the current route index
 
   // uncomment the commented code if you are using with nextjs
-  const currentRouteIndex = 0 // router.routes.findIndex((route) => route.name === router.route);
+  const currentRouteIndex = 0; // router.routes.findIndex((route) => route.name === router.route);
 
   // don't use state in your app, just use plain object
   const [state, setState] = useState({
@@ -138,14 +140,14 @@ export function Tabbar() {
       { name: '/contact', key: 'Contact' },
       // Add other routes as needed
     ],
-  })
+  });
 
   const descriptors = {
     Home: { options: { title: 'Home' } },
     About: { options: { title: 'About' } },
     Contact: { options: { title: 'Contact' } },
     // Add other descriptors as needed
-  }
+  };
 
   return (
     <View
@@ -180,15 +182,15 @@ export function Tabbar() {
             setState((prevState) => ({
               ...prevState,
               index: prevState.routes.findIndex((r) => r.name === route),
-            }))
+            }));
           },
         }}
       />
     </View>
-  )
+  );
 }
 
-Tabbar.fileName = 'TabBar'
+Tabbar.fileName = 'TabBar';
 
 /**
  * on native we need to use it with react-navigation

@@ -1,18 +1,28 @@
-import { AnimatePresence, Button, H1, Label, RadioGroup, Spinner, View } from 'tamagui'
-import { Input } from '../inputs/components/inputsParts'
-import { useState } from 'react'
-import { Eye, EyeOff, Info } from '@tamagui/lucide-icons'
-import { FormCard } from './components/layoutParts'
-import { useForm, Controller } from 'react-hook-form'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  AnimatePresence,
+  Button,
+  H1,
+  Label,
+  RadioGroup,
+  Spinner,
+  View,
+} from 'tamagui';
+import { Input } from '../inputs/components/inputsParts';
+import { useState } from 'react';
+import { Eye, EyeOff, Info } from '@tamagui/lucide-icons';
+import { FormCard } from './components/layoutParts';
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const schema = z
   .object({
     firstName: z.string().min(1, { message: 'First name is required' }),
     lastName: z.string().min(1, { message: 'Last name is required' }),
     email: z.string().email({ message: 'Invalid email format' }),
-    password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+    password: z
+      .string()
+      .min(6, { message: 'Password must be at least 6 characters' }),
     confirmedPassword: z
       .string()
       .min(6, { message: 'Confirm password must be at least 6 characters' }),
@@ -24,12 +34,12 @@ const schema = z
   .refine((data) => data.password === data.confirmedPassword, {
     message: 'Passwords do not match',
     path: ['confirmedPassword'],
-  })
+  });
 
 export function SignupValidatedHookForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -46,13 +56,13 @@ export function SignupValidatedHookForm() {
       postalCode: '',
       accountType: 'business',
     },
-  })
+  });
   const onSubmit = (data: z.infer<typeof schema>) => {
-    setLoading(true)
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }
+      setLoading(false);
+    }, 2000);
+  };
 
   return (
     <FormCard>
@@ -203,7 +213,11 @@ export function SignupValidatedHookForm() {
               >
                 <Input.Label>Email</Input.Label>
                 <Input.Box>
-                  <Input.Area placeholder="" onChangeText={onChange} value={value} />
+                  <Input.Area
+                    placeholder=""
+                    onChangeText={onChange}
+                    value={value}
+                  />
                 </Input.Box>
                 <AnimatePresence>
                   {errors.email && (
@@ -261,7 +275,11 @@ export function SignupValidatedHookForm() {
                     cursor="pointer"
                     onPress={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <Eye color="$gray11" /> : <EyeOff color="$gray11" />}
+                    {showPassword ? (
+                      <Eye color="$gray11" />
+                    ) : (
+                      <EyeOff color="$gray11" />
+                    )}
                   </Input.Icon>
                 </Input.Box>
                 <AnimatePresence>
@@ -307,7 +325,9 @@ export function SignupValidatedHookForm() {
                 onBlur={onBlur}
                 size="$4"
               >
-                <Input.Label htmlFor={'confirmed password'}>Confirm Password</Input.Label>
+                <Input.Label htmlFor={'confirmed password'}>
+                  Confirm Password
+                </Input.Label>
                 <Input.Box>
                   <Input.Area
                     id={'confirmed password'}
@@ -351,7 +371,9 @@ export function SignupValidatedHookForm() {
                       <Input.Icon padding={0}>
                         <Info />
                       </Input.Icon>
-                      <Input.Info>{errors.confirmedPassword.message}</Input.Info>
+                      <Input.Info>
+                        {errors.confirmedPassword.message}
+                      </Input.Info>
                     </View>
                   )}
                 </AnimatePresence>
@@ -478,7 +500,7 @@ export function SignupValidatedHookForm() {
         </View>
       </View>
     </FormCard>
-  )
+  );
 }
 
-SignupValidatedHookForm.fileName = 'SignupValidatedHookForm'
+SignupValidatedHookForm.fileName = 'SignupValidatedHookForm';

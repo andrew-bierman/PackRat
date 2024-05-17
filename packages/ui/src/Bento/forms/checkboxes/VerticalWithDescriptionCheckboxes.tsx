@@ -1,7 +1,7 @@
-import { Check } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
-import { Text, View, debounce } from 'tamagui'
-import { Checkboxes } from './common/checkboxParts'
+import { Check } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
+import { Text, View, debounce } from 'tamagui';
+import { Checkboxes } from './common/checkboxParts';
 
 const items = [
   {
@@ -23,19 +23,19 @@ const items = [
     description: 'This is a secure 128-bit SSL encrypted payment',
     defaultChecked: false,
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function VerticalWithDescriptionCheckboxes() {
-  const uniqueId = useId()
+  const uniqueId = useId();
 
   const [values, setValues] = useState(() =>
-    items.reduce((a, b) => ({ ...a, [b.id]: b.defaultChecked }), {})
-  )
+    items.reduce((a, b) => ({ ...a, [b.id]: b.defaultChecked }), {}),
+  );
 
   const onValuesChange = debounce((values: any) => {
-    setValues(values)
-  })
+    setValues(values);
+  });
 
   return (
     <Checkboxes
@@ -52,24 +52,29 @@ export function VerticalWithDescriptionCheckboxes() {
       <Checkboxes.FocusGroup minWidth="100%" flexWrap="wrap" gap="$2">
         {items.map(({ id, label, description }) => (
           <Checkboxes.FocusGroup.Item value={id} key={id}>
-            <Item description={description} label={label} uniqueId={id + uniqueId} />
+            <Item
+              description={description}
+              label={label}
+              uniqueId={id + uniqueId}
+            />
           </Checkboxes.FocusGroup.Item>
         ))}
       </Checkboxes.FocusGroup>
     </Checkboxes>
-  )
+  );
 }
 
-VerticalWithDescriptionCheckboxes.fileName = 'VerticalWithDescriptionCheckboxes'
+VerticalWithDescriptionCheckboxes.fileName =
+  'VerticalWithDescriptionCheckboxes';
 
 function Item({
   label,
   description,
   uniqueId,
 }: {
-  label: string
-  description: string
-  uniqueId: string
+  label: string;
+  description: string;
+  uniqueId: string;
 }) {
   return (
     <Checkboxes.Card
@@ -114,5 +119,5 @@ function Item({
         </Text>
       </View>
     </Checkboxes.Card>
-  )
+  );
 }

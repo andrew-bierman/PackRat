@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react'
-import type { Control, UseFormRegister, UseFormSetValue } from 'react-hook-form'
-import { Controller, useForm, useFormState } from 'react-hook-form'
-import type { SizeTokens } from 'tamagui'
+import { useEffect, useState } from 'react';
+import type {
+  Control,
+  UseFormRegister,
+  UseFormSetValue,
+} from 'react-hook-form';
+import { Controller, useForm, useFormState } from 'react-hook-form';
+import type { SizeTokens } from 'tamagui';
 import {
   AnimatePresence,
   H3,
@@ -12,7 +16,7 @@ import {
   View,
   Button,
   XStack,
-} from 'tamagui'
+} from 'tamagui';
 
 import {
   CheckCircle2,
@@ -21,19 +25,19 @@ import {
   LockKeyhole,
   Mail,
   Smartphone,
-} from '@tamagui/lucide-icons'
-import { InputWithLabelDemo } from './InputWithLabel'
+} from '@tamagui/lucide-icons';
+import { InputWithLabelDemo } from './InputWithLabel';
 
 interface CodeConfirmationInputProps {
-  id: number
-  size?: SizeTokens
-  codeSize: number
-  secureTextEntry?: boolean
-  control: Control<FormFields, any>
-  register: UseFormRegister<FormFields>
-  setValue: UseFormSetValue<FormFields>
-  switchInputPlace: (currentField: number, value: string) => void
-  onSubmit: () => void
+  id: number;
+  size?: SizeTokens;
+  codeSize: number;
+  secureTextEntry?: boolean;
+  control: Control<FormFields, any>;
+  register: UseFormRegister<FormFields>;
+  setValue: UseFormSetValue<FormFields>;
+  switchInputPlace: (currentField: number, value: string) => void;
+  onSubmit: () => void;
 }
 
 function CodeConfirmationInput({
@@ -47,7 +51,7 @@ function CodeConfirmationInput({
   switchInputPlace,
   onSubmit,
 }: CodeConfirmationInputProps) {
-  useFormState
+  useFormState;
   return (
     <Controller
       name={`code${id}`}
@@ -66,43 +70,43 @@ function CodeConfirmationInput({
             if (code.length === codeSize) {
               // Paste logic
 
-              const digits = code.split('')
+              const digits = code.split('');
               digits.forEach((digit, index) => {
                 // Set each digit to the corresponding input
-                setValue(`code${index}`, digit)
-              })
+                setValue(`code${index}`, digit);
+              });
 
-              onSubmit()
+              onSubmit();
             } else {
               // Manual input logic
 
               // Only take the first digit (disables multiple digits in one input)
-              onChange(code.split('')[0])
+              onChange(code.split('')[0]);
               // Focus next input
-              switchInputPlace(id, code)
+              switchInputPlace(id, code);
 
               // Submit on last input
               if (id === codeSize - 1) {
-                onSubmit()
+                onSubmit();
               }
             }
           }}
           onKeyPress={(e) => {
-            const event = e.nativeEvent
+            const event = e.nativeEvent;
             if (event.key === 'Backspace') {
               // Prevent the backspace key from navigating back
-              event.preventDefault()
+              event.preventDefault();
 
               if (value !== '') {
                 // Reset input field
-                onChange('')
+                onChange('');
               } else {
                 // Set focus to the previous input
-                switchInputPlace(id, value)
+                switchInputPlace(id, value);
               }
             }
             if (event.key === 'Enter') {
-              onSubmit()
+              onSubmit();
             }
           }}
           inputMode="numeric"
@@ -127,18 +131,18 @@ function CodeConfirmationInput({
         />
       )}
     />
-  )
+  );
 }
 
 interface CodeConfirmationProps {
-  size?: SizeTokens
-  codeSize: number
-  secureText?: boolean
-  onEnter: (code: number) => void
+  size?: SizeTokens;
+  codeSize: number;
+  secureText?: boolean;
+  onEnter: (code: number) => void;
 }
 
 interface FormFields {
-  [key: string]: string
+  [key: string]: string;
 }
 
 function CodeConfirmation({
@@ -147,60 +151,60 @@ function CodeConfirmation({
   secureText,
   onEnter,
 }: CodeConfirmationProps) {
-  const defaultValues = Array.from({ length: codeSize }, (_, i) => `code${i}`).reduce(
-    (acc, key) => ({ ...acc, [key]: '' }),
-    {}
-  )
+  const defaultValues = Array.from(
+    { length: codeSize },
+    (_, i) => `code${i}`,
+  ).reduce((acc, key) => ({ ...acc, [key]: '' }), {});
 
   const { control, setFocus, register, handleSubmit, setValue, formState } =
     useForm<FormFields>({
       defaultValues: defaultValues,
-    })
+    });
 
   const switchInputPlace = (currentInput: number, value: string) => {
     if (value === '') {
-      setFocus(`code${currentInput - 1}`)
+      setFocus(`code${currentInput - 1}`);
     } else {
-      setFocus(`code${currentInput + 1}`)
+      setFocus(`code${currentInput + 1}`);
     }
-  }
+  };
 
   const onSubmit = handleSubmit((data) => {
-    const code = Number(Object.values(data).join(''))
-    onEnter(code)
-  })
+    const code = Number(Object.values(data).join(''));
+    onEnter(code);
+  });
 
-  const [translateX, setTranslateX] = useState(0)
-  const [isValid, setValid] = useState(true)
+  const [translateX, setTranslateX] = useState(0);
+  const [isValid, setValid] = useState(true);
 
   useEffect(() => {
     if (Object.keys(formState.errors).length > 0) {
-      setValid(false)
+      setValid(false);
     }
-  }, [formState.isValidating])
+  }, [formState.isValidating]);
 
   // shake animation
   useEffect(() => {
-    let interval: number | null = null
+    let interval: number | null = null;
 
     interval = window.setInterval(() => {
       if (isValid) {
-        setTranslateX(0)
+        setTranslateX(0);
       } else {
-        setValid(false)
+        setValid(false);
         setTranslateX((prevState) => {
-          if (prevState === 0) return -16
-          if (prevState < 0) return Math.abs(prevState) - 2
-          setValid(true)
-          return -(prevState - 2)
-        })
+          if (prevState === 0) return -16;
+          if (prevState < 0) return Math.abs(prevState) - 2;
+          setValid(true);
+          return -(prevState - 2);
+        });
       }
-    }, 50)
+    }, 50);
 
     return () => {
-      if (interval) window.clearInterval(interval)
-    }
-  }, [isValid])
+      if (interval) window.clearInterval(interval);
+    };
+  }, [isValid]);
 
   return (
     <Form onSubmit={onSubmit}>
@@ -229,11 +233,11 @@ function CodeConfirmation({
                 switchInputPlace={switchInputPlace}
                 onSubmit={onSubmit}
               />
-            )
+            );
           })}
       </View>
     </Form>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
@@ -242,42 +246,44 @@ export function OneTimeCodeInputExample({
   codeSize = 4,
   secureText = false,
 }: {
-  size?: SizeTokens
-  codeSize?: number
-  secureText?: boolean
+  size?: SizeTokens;
+  codeSize?: number;
+  secureText?: boolean;
 }) {
-  const [code, setCode] = useState<number>()
-  const [codeEntered, setCodeEntered] = useState(false)
-  const [verified, setVerified] = useState(true)
-  const [email, setEmail] = useState<string | null>(null)
-  const [activeInterface, setActiveInterface] = useState<'email' | 'code'>('code')
+  const [code, setCode] = useState<number>();
+  const [codeEntered, setCodeEntered] = useState(false);
+  const [verified, setVerified] = useState(true);
+  const [email, setEmail] = useState<string | null>(null);
+  const [activeInterface, setActiveInterface] = useState<'email' | 'code'>(
+    'code',
+  );
 
   const handleEnter = (code: number) => {
-    setCode(code)
-  }
+    setCode(code);
+  };
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: NodeJS.Timeout;
     if (code !== undefined) {
       timer = setTimeout(() => {
-        setCodeEntered(true)
-      }, 2500)
+        setCodeEntered(true);
+      }, 2500);
     }
 
-    return () => clearTimeout(timer)
-  }, [code])
+    return () => clearTimeout(timer);
+  }, [code]);
 
   //NOTE: for testing purposes
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: NodeJS.Timeout;
     if (codeEntered === true) {
       timer = setTimeout(() => {
-        setVerified(false)
-      }, 2000)
+        setVerified(false);
+      }, 2000);
     }
 
-    return () => clearTimeout(timer)
-  }, [codeEntered])
+    return () => clearTimeout(timer);
+  }, [codeEntered]);
 
   return (
     <View alignItems="center" justifyContent="center" gap="$4">
@@ -309,7 +315,10 @@ export function OneTimeCodeInputExample({
                   </Paragraph>
                 )}
               </AnimatePresence>
-              <View enterStyle={{ opacity: 0.5, scale: 1.5 }} animation="bouncy">
+              <View
+                enterStyle={{ opacity: 0.5, scale: 1.5 }}
+                animation="bouncy"
+              >
                 <CheckCircle2 color="$green10" />
               </View>
             </View>
@@ -483,7 +492,7 @@ export function OneTimeCodeInputExample({
         </Paragraph>
       </View>
     </View>
-  )
+  );
 }
 
-OneTimeCodeInputExample.fileName = 'OneTimeCodeInput'
+OneTimeCodeInputExample.fileName = 'OneTimeCodeInput';

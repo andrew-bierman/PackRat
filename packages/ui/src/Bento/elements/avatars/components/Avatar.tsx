@@ -1,6 +1,11 @@
-import { getFontSized } from '@tamagui/get-font-sized'
-import { forwardRef } from 'react'
-import type { ColorTokens, FontSizeTokens, GetProps, SizeTokens } from 'tamagui'
+import { getFontSized } from '@tamagui/get-font-sized';
+import { forwardRef } from 'react';
+import type {
+  ColorTokens,
+  FontSizeTokens,
+  GetProps,
+  SizeTokens,
+} from 'tamagui';
 import {
   View,
   Avatar as TAvatar,
@@ -12,15 +17,15 @@ import {
   useGetThemedIcon,
   useTheme,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 
 const AvatarContext = createStyledContext<{
-  size: SizeTokens
-  color?: ColorTokens | string
+  size: SizeTokens;
+  color?: ColorTokens | string;
 }>({
   size: '$true',
   color: undefined,
-})
+});
 
 const AvatarIconFrame = styled(View, {
   context: AvatarContext,
@@ -54,13 +59,13 @@ const AvatarIconFrame = styled(View, {
     },
     offset: {
       ':number': (val, { props }) => {
-        const placement = (props as any).placement
-        const yDir = placement.includes('top') ? -1 : 1
-        const xDir = placement.includes('left') ? -1 : 1
+        const placement = (props as any).placement;
+        const yDir = placement.includes('top') ? -1 : 1;
+        const xDir = placement.includes('left') ? -1 : 1;
         return {
           x: val * xDir,
           y: val * yDir,
-        }
+        };
       },
     },
     size: {
@@ -68,7 +73,7 @@ const AvatarIconFrame = styled(View, {
         return {
           width: tokens.size[val].val * 0.33,
           height: tokens.size[val].val * 0.33,
-        }
+        };
       },
     },
   } as const,
@@ -76,35 +81,41 @@ const AvatarIconFrame = styled(View, {
   defaultVariants: {
     placement: 'top-right',
   },
-})
+});
 
 // aligns icons to natural font size
 const getIconSize = (size: FontSizeTokens, scale: number) => {
   return (
-    (typeof size === 'number' ? size * 0.5 : getFontSize(size as FontSizeTokens) * 0.75) *
-    scale
-  )
-}
+    (typeof size === 'number'
+      ? size * 0.5
+      : getFontSize(size as FontSizeTokens) * 0.75) * scale
+  );
+};
 
 export const AvatarIcon = AvatarIconFrame.styleable<{ scaleIcon?: number }>(
   (props, ref) => {
-    const { children, scaleIcon = 1, ...rest } = props
-    const { size, color: colorProp } = AvatarContext.useStyledContext()
+    const { children, scaleIcon = 1, ...rest } = props;
+    const { size, color: colorProp } = AvatarContext.useStyledContext();
 
-    const theme = useTheme()
+    const theme = useTheme();
     const color = getVariable(
-      colorProp || theme[colorProp as any]?.get('web') || theme.color10?.get('web')
-    )
-    const iconSize = getIconSize(size as FontSizeTokens, scaleIcon)
+      colorProp ||
+        theme[colorProp as any]?.get('web') ||
+        theme.color10?.get('web'),
+    );
+    const iconSize = getIconSize(size as FontSizeTokens, scaleIcon);
 
-    const getThemedIcon = useGetThemedIcon({ size: iconSize, color: color as any })
+    const getThemedIcon = useGetThemedIcon({
+      size: iconSize,
+      color: color as any,
+    });
     return (
       <AvatarIconFrame ref={ref} {...rest}>
         {getThemedIcon(children)}
       </AvatarIconFrame>
-    )
-  }
-)
+    );
+  },
+);
 
 const AvatarWrapper = styled(View, {
   context: AvatarContext,
@@ -114,7 +125,7 @@ const AvatarWrapper = styled(View, {
       '...size': {} as any,
     },
   } as const,
-})
+});
 
 const AvatarText = styled(Text, {
   context: AvatarContext,
@@ -129,21 +140,23 @@ const AvatarText = styled(Text, {
   defaultVariants: {
     size: '$true',
   },
-})
+});
 
-const AvatarContent = forwardRef<GetProps<typeof TAvatar>, any>((props, ref) => {
-  const { size } = AvatarContext.useStyledContext()
-  return (
-    <TAvatar
-      borderWidth="$1"
-      borderColor="$color1"
-      elevation={5}
-      size={size}
-      ref={ref}
-      {...props}
-    />
-  )
-})
+const AvatarContent = forwardRef<GetProps<typeof TAvatar>, any>(
+  (props, ref) => {
+    const { size } = AvatarContext.useStyledContext();
+    return (
+      <TAvatar
+        borderWidth="$1"
+        borderColor="$color1"
+        elevation={5}
+        size={size}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 
 export const Avatar = withStaticProperties(AvatarWrapper, {
   Content: AvatarContent,
@@ -151,4 +164,4 @@ export const Avatar = withStaticProperties(AvatarWrapper, {
   Fallback: TAvatar.Fallback,
   Icon: AvatarIcon,
   Text: AvatarText,
-})
+});

@@ -1,15 +1,26 @@
-import { faker } from '@faker-js/faker'
-import { Check } from '@tamagui/lucide-icons'
-import { useEffect, useState } from 'react'
-import { FlatList } from 'react-native'
-import { AnimatePresence, Avatar, Button, Text, Theme, View, styled } from 'tamagui'
+import { faker } from '@faker-js/faker';
+import { Check } from '@tamagui/lucide-icons';
+import { useEffect, useState } from 'react';
+import { FlatList } from 'react-native';
+import {
+  AnimatePresence,
+  Avatar,
+  Button,
+  Text,
+  Theme,
+  View,
+  styled,
+} from 'tamagui';
 
 const List = styled(FlatList<Message>, {
   backgroundColor: '$background',
   gap: '$3',
-})
+});
 
-const avatars = ['https://i.pravatar.cc/150?img=6', 'https://i.pravatar.cc/150?img=8']
+const avatars = [
+  'https://i.pravatar.cc/150?img=6',
+  'https://i.pravatar.cc/150?img=8',
+];
 
 const getMessages = () =>
   Array.from({ length: 50 })
@@ -19,25 +30,25 @@ const getMessages = () =>
       time: faker.date.recent().toLocaleTimeString(),
       itsMe: i % 2 === 0,
       avatar: avatars[i % 2],
-    }))
+    }));
 
-type Message = ReturnType<typeof getMessages>[0]
+type Message = ReturnType<typeof getMessages>[0];
 
 const renderItem = ({
   item: message,
   index,
 }: {
-  item: Message
-  index: number
+  item: Message;
+  index: number;
 }) => {
-  return <ChatItem index={index + 1} key={message.time} item={message} />
-}
+  return <ChatItem index={index + 1} key={message.time} item={message} />;
+};
 export function ChatList() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    setMessages(getMessages())
-  }, [])
+    setMessages(getMessages());
+  }, []);
 
   return (
     <View
@@ -56,31 +67,31 @@ export function ChatList() {
         windowSize={2}
       />
     </View>
-  )
+  );
 }
 
-ChatList.fileName = 'ChatList'
+ChatList.fileName = 'ChatList';
 
 function ChatItem({ item, index }: { item: Message; index: number }) {
-  const { message, time, avatar, itsMe } = item
-  const [showMessage, setShowMessage] = useState(false)
-  const showDelay = index * 300
-  const [start, setStart] = useState(false)
+  const { message, time, avatar, itsMe } = item;
+  const [showMessage, setShowMessage] = useState(false);
+  const showDelay = index * 300;
+  const [start, setStart] = useState(false);
 
   useEffect(() => {
     // run animations after initial render calms down
-    ;(globalThis.requestIdleCallback || setTimeout)(() => {
-      setStart(true)
-    })
-  }, [])
+    (globalThis.requestIdleCallback || setTimeout)(() => {
+      setStart(true);
+    });
+  }, []);
 
   useEffect(() => {
-    if (!start) return
+    if (!start) return;
     const timeout = setTimeout(() => {
-      setShowMessage((prev) => !prev)
-    }, showDelay)
-    return () => clearTimeout(timeout)
-  }, [start, showDelay])
+      setShowMessage((prev) => !prev);
+    }, showDelay);
+    return () => clearTimeout(timeout);
+  }, [start, showDelay]);
 
   return (
     <AnimatePresence>
@@ -126,13 +137,23 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
                 borderRadius="$6"
                 flexShrink={1}
               >
-                <Text fontSize="$3" fontWeight="$3" lineHeight="$3" flexShrink={1}>
+                <Text
+                  fontSize="$3"
+                  fontWeight="$3"
+                  lineHeight="$3"
+                  flexShrink={1}
+                >
                   {message}
                 </Text>
               </View>
             </Theme>
             <View flexDirection={itsMe ? 'row' : 'row-reverse'} gap="$2">
-              <Text color="$color7" fontSize="$3" fontWeight="$3" lineHeight="$3">
+              <Text
+                color="$color7"
+                fontSize="$3"
+                fontWeight="$3"
+                lineHeight="$3"
+              >
                 {time}
               </Text>
               <Check size={16} color="green" />
@@ -141,5 +162,5 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
         </View>
       )}
     </AnimatePresence>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button, H2, Image, Text, Theme, View } from 'tamagui'
+import { useState } from 'react';
+import { Button, H2, Image, Text, Theme, View } from 'tamagui';
 
 const axises = {
   left: {
@@ -15,21 +15,21 @@ const axises = {
     value: -100,
   },
   bottom: { axis: 'y', value: 100 },
-}
+};
 
 const item = {
   id: 1,
   name: 'Animation is cool',
   price: '100',
   image: '/bento/images/coffee4.jpg',
-}
+};
 
 function SlideIn({
   direction,
 }: {
-  direction: 'left' | 'right' | 'top' | 'bottom'
+  direction: 'left' | 'right' | 'top' | 'bottom';
 }) {
-  const axis = axises[direction]
+  const axis = axises[direction];
 
   return (
     <View
@@ -73,12 +73,14 @@ function SlideIn({
         <H2 size="$4">{item.name}</H2>
       </View>
     </View>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function SlideInDemo() {
-  const [direction, setDirection] = useState<'left' | 'right' | 'top' | 'bottom'>('left')
+  const [direction, setDirection] = useState<
+    'left' | 'right' | 'top' | 'bottom'
+  >('left');
   return (
     <View maxWidth="100%" gap="$6">
       <Text fontSize="$6" lineHeight="$6">
@@ -107,7 +109,7 @@ export function SlideInDemo() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
-SlideInDemo.fileName = 'SlideIn'
+SlideInDemo.fileName = 'SlideIn';

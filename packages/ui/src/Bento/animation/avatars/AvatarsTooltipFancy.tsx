@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import type { SizeTokens, TamaguiElement } from 'tamagui'
+import { useEffect, useRef, useState } from 'react';
+import type { SizeTokens, TamaguiElement } from 'tamagui';
 import {
   Avatar,
   Paragraph,
@@ -8,9 +8,9 @@ import {
   isWeb,
   styled,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 
-const items = ['Developer', 'User', 'Athlete', 'User', 'Designer']
+const items = ['Developer', 'User', 'Athlete', 'User', 'Designer'];
 
 /** ------ EXAMPLE ------ */
 export function AvatarsTooltipFancy() {
@@ -22,20 +22,20 @@ export function AvatarsTooltipFancy() {
         ))}
       </View>
     </View>
-  )
+  );
 }
 
-AvatarsTooltipFancy.fileName = 'AvatarsTooltipFancy'
+AvatarsTooltipFancy.fileName = 'AvatarsTooltipFancy';
 
 function Item(props: { item: string; index: number }) {
-  const { item, index } = props
-  const [innerRef, setInnerRef] = useState<TamaguiElement | null>(null)
-  const [outerRef, setOuterRef] = useState<TamaguiElement | null>(null)
-  const [position, setPosition] = useState({ degree: '0deg', x: 0 })
+  const { item, index } = props;
+  const [innerRef, setInnerRef] = useState<TamaguiElement | null>(null);
+  const [outerRef, setOuterRef] = useState<TamaguiElement | null>(null);
+  const [position, setPosition] = useState({ degree: '0deg', x: 0 });
 
   useCircleInteraction(innerRef, outerRef, ({ degree, x }) => {
-    setPosition({ degree, x })
-  })
+    setPosition({ degree, x });
+  });
 
   return (
     <View
@@ -70,7 +70,7 @@ function Item(props: { item: string; index: number }) {
         </AvatarTip.Content>
       </AvatarTip>
     </View>
-  )
+  );
 }
 
 const AvatarTooltipContent = styled(Tooltip.Content, {
@@ -88,50 +88,50 @@ const AvatarTooltipContent = styled(Tooltip.Content, {
       },
     },
   ],
-})
+});
 
 const AvatarTip = withStaticProperties(Tooltip, {
   Trigger: Tooltip.Trigger,
   Content: AvatarTooltipContent,
   Arrow: Tooltip.Arrow,
-})
+});
 
 function useCircleInteraction(
   innerRef: any,
   outerRef: any,
-  callback: (arg0: { degree: string; x: number }) => void
+  callback: (arg0: { degree: string; x: number }) => void,
 ) {
-  if (!isWeb) return
+  if (!isWeb) return;
   useEffect(() => {
     function handleMouseMove(event: MouseEvent) {
-      const innerRect = innerRef.getBoundingClientRect()
-      const circleCenterX = innerRect.left + innerRect.width / 2
-      const circleWidth = innerRect.width
+      const innerRect = innerRef.getBoundingClientRect();
+      const circleCenterX = innerRect.left + innerRect.width / 2;
+      const circleWidth = innerRect.width;
 
-      const relativeX = event.clientX - circleCenterX
+      const relativeX = event.clientX - circleCenterX;
 
-      let degree = (relativeX / (circleWidth / 2)) * -45
+      let degree = (relativeX / (circleWidth / 2)) * -45;
 
       if (degree > 45) {
-        degree = 45
+        degree = 45;
       } else if (degree < -45) {
-        degree = -45
+        degree = -45;
       }
 
-      degree /= 2
+      degree /= 2;
 
       if (typeof callback === 'function') {
-        callback({ degree: degree + 'deg', x: -relativeX })
+        callback({ degree: degree + 'deg', x: -relativeX });
       }
     }
     if (innerRef && outerRef) {
-      innerRef.addEventListener('mousemove', handleMouseMove)
+      innerRef.addEventListener('mousemove', handleMouseMove);
     }
 
     return () => {
       if (innerRef && outerRef) {
-        innerRef.removeEventListener('mousemove', handleMouseMove)
+        innerRef.removeEventListener('mousemove', handleMouseMove);
       }
-    }
-  }, [innerRef, callback])
+    };
+  }, [innerRef, callback]);
 }

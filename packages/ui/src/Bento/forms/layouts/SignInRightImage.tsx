@@ -1,6 +1,6 @@
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { Facebook, Github } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { Facebook, Github } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
 import {
   Anchor,
   AnimatePresence,
@@ -13,31 +13,36 @@ import {
   Text,
   Theme,
   View,
-} from 'tamagui'
+} from 'tamagui';
 
-import { Input } from '../inputs/components/inputsParts'
-import { Hide } from './components/layoutParts'
+import { Input } from '../inputs/components/inputsParts';
+import { Hide } from './components/layoutParts';
 
 /** simulate signin */
 function useSignIn() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   return {
     status: status,
     signIn: () => {
-      setStatus('loading')
+      setStatus('loading');
       setTimeout(() => {
-        setStatus('success')
-      }, 2000)
+        setStatus('success');
+      }, 2000);
     },
-  }
+  };
 }
 
 /** ------ EXAMPLE ------ */
 export function SignInRightImage() {
-  const uniqueId = useId()
-  const { signIn, status } = useSignIn()
+  const uniqueId = useId();
+  const { signIn, status } = useSignIn();
   return (
-    <View flexDirection="row" minWidth="100%" height="100%" alignItems="stretch">
+    <View
+      flexDirection="row"
+      minWidth="100%"
+      height="100%"
+      alignItems="stretch"
+    >
       <View
         flexDirection="column"
         justifyContent="center"
@@ -62,7 +67,10 @@ export function SignInRightImage() {
             <Input size="$4" minWidth="100%">
               <Input.Label htmlFor={uniqueId + 'email'}>Email</Input.Label>
               <Input.Box>
-                <Input.Area id={uniqueId + 'email'} placeholder="email@example.com" />
+                <Input.Area
+                  id={uniqueId + 'email'}
+                  placeholder="email@example.com"
+                />
               </Input.Box>
             </Input>
           </View>
@@ -73,7 +81,9 @@ export function SignInRightImage() {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Input.Label htmlFor={uniqueId + 'password'}>Password</Input.Label>
+                <Input.Label htmlFor={uniqueId + 'password'}>
+                  Password
+                </Input.Label>
                 <ForgotPasswordLink />
               </View>
               <Input.Box>
@@ -129,7 +139,12 @@ export function SignInRightImage() {
                 alignSelf="center"
                 alignItems="center"
               >
-                <View flexDirection="row" width="100%" alignItems="center" gap="$4">
+                <View
+                  flexDirection="row"
+                  width="100%"
+                  alignItems="center"
+                  gap="$4"
+                >
                   <Separator />
                   <Paragraph>Or</Paragraph>
                   <Separator />
@@ -176,10 +191,10 @@ export function SignInRightImage() {
         </View>
       </Hide>
     </View>
-  )
+  );
 }
 
-SignInRightImage.fileName = 'SignInRightImage'
+SignInRightImage.fileName = 'SignInRightImage';
 
 const SignUpLink = () => {
   return (
@@ -196,8 +211,8 @@ const SignUpLink = () => {
         </Text>
       </Paragraph>
     </Anchor>
-  )
-}
+  );
+};
 
 const ForgotPasswordLink = () => {
   return (
@@ -213,5 +228,5 @@ const ForgotPasswordLink = () => {
         Forgot your password?
       </Paragraph>
     </Anchor>
-  )
-}
+  );
+};

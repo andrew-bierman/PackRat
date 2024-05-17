@@ -1,7 +1,7 @@
-import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { useId, useMemo, useState } from 'react'
-import { Input } from '../inputs/components/inputsParts'
+import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { useId, useMemo, useState } from 'react';
+import { Input } from '../inputs/components/inputsParts';
 import {
   Adapt,
   Button,
@@ -16,8 +16,8 @@ import {
   Spacer,
   View,
   debounce,
-} from 'tamagui'
-import { Checkboxes } from '../checkboxes/common/checkboxParts'
+} from 'tamagui';
+import { Checkboxes } from '../checkboxes/common/checkboxParts';
 
 const notifications = [
   {
@@ -32,24 +32,24 @@ const notifications = [
     title: 'Events',
     desc: 'Get notified when new events are published',
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 
 export function SignUpTwoSideScreen() {
-  const uniqueId = useId()
-  const [marriageState, setMarriageState] = useState('single')
+  const uniqueId = useId();
+  const [marriageState, setMarriageState] = useState('single');
 
   const [values, setValues] = useState({
     Books: false,
     Courses: false,
     Events: false,
-  })
+  });
 
   // Note: debounce is used to prevent multiple state updates that could toggle previous values
   const toggleValues = debounce((values: any) => {
-    setValues((prev) => ({ ...prev, ...values }))
-  }, 10)
+    setValues((prev) => ({ ...prev, ...values }));
+  }, 10);
 
   return (
     <View flexDirection="row" width="100%" mih="100%">
@@ -113,7 +113,9 @@ export function SignUpTwoSideScreen() {
           >
             <View flexDirection="column" gap="$1">
               <Input size="$4">
-                <Input.Label htmlFor={uniqueId + '1-first-name'}>First Name</Input.Label>
+                <Input.Label htmlFor={uniqueId + '1-first-name'}>
+                  First Name
+                </Input.Label>
                 <Input.Box>
                   <Input.Area id={uniqueId + '1-first-name'} />
                 </Input.Box>
@@ -121,7 +123,9 @@ export function SignUpTwoSideScreen() {
             </View>
             <View flexDirection="column" gap="$1">
               <Input size="$4">
-                <Input.Label htmlFor={uniqueId + '1-last-name'}>Last Name</Input.Label>
+                <Input.Label htmlFor={uniqueId + '1-last-name'}>
+                  Last Name
+                </Input.Label>
                 <Input.Box>
                   <Input.Area id={uniqueId + '1-last-name'} />
                 </Input.Box>
@@ -143,14 +147,18 @@ export function SignUpTwoSideScreen() {
                     <RadioGroup.Indicator />
                   </RadioGroup.Item>
 
-                  <Input.Label htmlFor={uniqueId + 'single'}>Single</Input.Label>
+                  <Input.Label htmlFor={uniqueId + 'single'}>
+                    Single
+                  </Input.Label>
                 </View>
                 <View flexDirection="row" alignItems="center" gap="$3">
                   <RadioGroup.Item id={uniqueId + 'married'} value="married">
                     <RadioGroup.Indicator />
                   </RadioGroup.Item>
 
-                  <Input.Label htmlFor={uniqueId + 'married'}>Married</Input.Label>
+                  <Input.Label htmlFor={uniqueId + 'married'}>
+                    Married
+                  </Input.Label>
                 </View>
               </RadioGroup>
             </View>
@@ -169,7 +177,9 @@ export function SignUpTwoSideScreen() {
           </View>
           <View flexDirection="column" gap="$4" flex={1} flexBasis={200}>
             <Input size="$4">
-              <Input.Label htmlFor={uniqueId + '1-depart'}>Department</Input.Label>
+              <Input.Label htmlFor={uniqueId + '1-depart'}>
+                Department
+              </Input.Label>
               <Input.Box>
                 <Input.Area id={uniqueId + '1-depart'} />
               </Input.Box>
@@ -200,7 +210,7 @@ export function SignUpTwoSideScreen() {
               <Checkboxes.FocusGroup>
                 <Checkboxes.Group>
                   {notifications.map((item) => {
-                    const { title, desc } = item
+                    const { title, desc } = item;
                     return (
                       <Checkboxes.FocusGroup.Item value={title} key={title}>
                         <Checkboxes.Group.Item>
@@ -234,7 +244,7 @@ export function SignUpTwoSideScreen() {
                           </Checkboxes.Card>
                         </Checkboxes.Group.Item>
                       </Checkboxes.FocusGroup.Item>
-                    )
+                    );
                   })}
                 </Checkboxes.Group>
               </Checkboxes.FocusGroup>
@@ -257,10 +267,10 @@ export function SignUpTwoSideScreen() {
         </View>
       </View>
     </View>
-  )
+  );
 }
 
-SignUpTwoSideScreen.fileName = 'SignUpTwoSide'
+SignUpTwoSideScreen.fileName = 'SignUpTwoSide';
 
 const countries = [
   { name: 'Spain', flag: 'ES' },
@@ -278,17 +288,22 @@ const countries = [
   ...item,
   flag: `https://flagsapi.com/${item.flag}/flat/64.png`,
   shortName: item.flag,
-}))
+}));
 
 function CountrySelect({ data, id }: { data: typeof countries; id: string }) {
-  const [val, setVal] = useState('0')
+  const [val, setVal] = useState('0');
 
-  const selectedItem = data[Number(val)]
+  const selectedItem = data[Number(val)];
 
   return (
     <Select id={id} value={val} onValueChange={setVal} disablePreventBodyScroll>
       <Select.Trigger width="100%" iconAfter={ChevronDown}>
-        <View flexDirection="row" gap="$3" justifyContent="center" alignItems="center">
+        <View
+          flexDirection="row"
+          gap="$3"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
           <Text marginRight="auto">{`${selectedItem.name} ${
             selectedItem.shortName ? `(${selectedItem.shortName})` : ''
@@ -362,7 +377,11 @@ function CountrySelect({ data, id }: { data: typeof countries; id: string }) {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <Image source={{ uri: item.flag }} width={20} height={20} />
+                      <Image
+                        source={{ uri: item.flag }}
+                        width={20}
+                        height={20}
+                      />
                       <Text marginRight="auto">{`${item.name} ${
                         item.shortName ? `(${item.shortName})` : ''
                       }`}</Text>
@@ -370,9 +389,9 @@ function CountrySelect({ data, id }: { data: typeof countries; id: string }) {
                         <Check size={16} />
                       </Select.ItemIndicator>
                     </Select.Item>
-                  )
+                  );
                 }),
-              [data]
+              [data],
             )}
           </Select.Group>
         </Select.Viewport>
@@ -397,5 +416,5 @@ function CountrySelect({ data, id }: { data: typeof countries; id: string }) {
         </Select.ScrollDownButton>
       </Select.Content>
     </Select>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { LinearGradient } from '@tamagui/linear-gradient'
-import type { SizeTokens, ThemeName } from 'tamagui'
-import { Avatar, Button, View, styled, Text, Circle } from 'tamagui'
-import { ChevronDown, MapPin, User2 } from '@tamagui/lucide-icons'
-import { getFontSized } from '@tamagui/get-font-sized'
+import { LinearGradient } from '@tamagui/linear-gradient';
+import type { SizeTokens, ThemeName } from 'tamagui';
+import { Avatar, Button, View, styled, Text, Circle } from 'tamagui';
+import { ChevronDown, MapPin, User2 } from '@tamagui/lucide-icons';
+import { getFontSized } from '@tamagui/get-font-sized';
 
 export const SizableText = styled(Text, {
   name: 'SizableText',
@@ -17,7 +17,7 @@ export const SizableText = styled(Text, {
   defaultVariants: {
     size: '$true',
   },
-})
+});
 
 const data = [
   {
@@ -39,7 +39,7 @@ const data = [
     theme: 'green' as ThemeName,
     department: null,
   },
-]
+];
 
 /** ------ EXAMPLE ------ */
 export function Example() {
@@ -49,10 +49,10 @@ export function Example() {
         <Meeting key={item.title} item={item} />
       ))}
     </View>
-  )
+  );
 }
 
-Example.fileName = 'Meeting'
+Example.fileName = 'Meeting';
 
 function Meeting({ item }: { item: (typeof data)[0] }) {
   return (
@@ -74,7 +74,11 @@ function Meeting({ item }: { item: (typeof data)[0] }) {
         fullscreen
       />
       <View flexDirection="column">
-        <View flexDirection="row" justifyContent="space-between" alignItems="center">
+        <View
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <SizableText>{item.title}</SizableText>
           <Button circular size="$2">
             <Button.Icon>
@@ -96,7 +100,11 @@ function Meeting({ item }: { item: (typeof data)[0] }) {
           <SizableText>{item.whereIs}</SizableText>
         </View>
       )}
-      <View flexDirection="row" justifyContent="space-between" alignItems="center">
+      <View
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <SizableText color="$color11" size="$1">
           {item.label}
         </SizableText>
@@ -121,10 +129,10 @@ function Meeting({ item }: { item: (typeof data)[0] }) {
         )}
       </View>
     </View>
-  )
+  );
 }
 
-const users = [1, 2, 3]
+const users = [1, 2, 3];
 export function Users() {
   return (
     <View
@@ -138,15 +146,27 @@ export function Users() {
       alignItems="center"
     >
       {users.map((item, index) => (
-        <View zIndex={index} marginLeft={index !== 0 ? '$-2' : undefined} key={item}>
-          <User size="$2" imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`} />
+        <View
+          zIndex={index}
+          marginLeft={index !== 0 ? '$-2' : undefined}
+          key={item}
+        >
+          <User
+            size="$2"
+            imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`}
+          />
         </View>
       ))}
-      <SizableText size="$2" fontWeight="200" marginHorizontal="$1" marginRight="$2.5">
+      <SizableText
+        size="$2"
+        fontWeight="200"
+        marginHorizontal="$1"
+        marginRight="$2.5"
+      >
         +2
       </SizableText>
     </View>
-  )
+  );
 }
 
 function User({ size, imageUrl }: { size: SizeTokens; imageUrl?: string }) {
@@ -155,5 +175,5 @@ function User({ size, imageUrl }: { size: SizeTokens; imageUrl?: string }) {
       <Avatar.Image accessibilityLabel="Cam" src={imageUrl} />
       <Avatar.Fallback backgroundColor="$background" />
     </Avatar>
-  )
+  );
 }

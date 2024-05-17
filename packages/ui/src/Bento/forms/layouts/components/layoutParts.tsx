@@ -1,6 +1,6 @@
-import { View, styled } from 'tamagui'
-import { useMedia } from 'tamagui'
-import type { MediaQueryKey } from '@tamagui/web'
+import { View, styled } from 'tamagui';
+import { useMedia } from 'tamagui';
+import type { MediaQueryKey } from '@tamagui/web';
 
 export const FormCard = styled(View, {
   tag: 'form',
@@ -26,16 +26,19 @@ export const FormCard = styled(View, {
     borderRadius: 0,
     paddingHorizontal: '$1',
   },
-})
+});
 
 export const Hide = ({
   children,
   when = 'sm',
-}: { children: React.ReactNode; when: MediaQueryKey }) => {
-  const hide = useMedia()[when]
+}: {
+  children: React.ReactNode;
+  when: MediaQueryKey;
+}) => {
+  const hide = useMedia()[when];
 
   if (hide) {
-    return null
+    return null;
   }
-  return children
-}
+  return children;
+};

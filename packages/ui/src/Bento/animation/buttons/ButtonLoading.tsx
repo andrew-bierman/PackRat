@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, Button, Spinner, Theme, View } from 'tamagui'
+import { useEffect, useState } from 'react';
+import { AnimatePresence, Button, Spinner, Theme, View } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function ButtonLoading() {
@@ -35,18 +35,18 @@ export function ButtonLoading() {
         <ButtonLoadingExample />
       </Theme>
     </View>
-  )
+  );
 }
 
 function ButtonLoadingExample() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     // toggle loading state after every 1 second
     const interval = setInterval(() => {
-      setLoading(!loading)
-    }, 3000)
-    return () => clearInterval(interval as NodeJS.Timeout)
-  })
+      setLoading(!loading);
+    }, 3000);
+    return () => clearInterval(interval as NodeJS.Timeout);
+  });
   return (
     <Button onPress={() => setLoading(!loading)} size="$5">
       <View
@@ -72,7 +72,7 @@ function ButtonLoadingExample() {
         <Button.Text>Click</Button.Text>
       </View>
     </Button>
-  )
+  );
 }
 
-ButtonLoading.fileName = 'ButtonLoading'
+ButtonLoading.fileName = 'ButtonLoading';

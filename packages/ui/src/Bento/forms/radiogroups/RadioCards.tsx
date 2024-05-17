@@ -1,8 +1,8 @@
-import { Clock, Dot } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import type { ThemeName } from 'tamagui'
-import { Card } from './components/radioParts'
-import { H2, RadioGroup, Text, View, useEvent } from 'tamagui'
+import { Clock, Dot } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import type { ThemeName } from 'tamagui';
+import { Card } from './components/radioParts';
+import { H2, RadioGroup, Text, View, useEvent } from 'tamagui';
 
 const packages = [
   {
@@ -29,13 +29,13 @@ const packages = [
     itemsCounts: 621,
     color: 'blue',
   },
-]
+];
 
-type Item = (typeof packages)[number]
+type Item = (typeof packages)[number];
 
 /** ------ EXAMPLE ------ */
 export function RadioCards() {
-  const [value, setValue] = useState<string>()
+  const [value, setValue] = useState<string>();
 
   return (
     <View
@@ -60,22 +60,22 @@ export function RadioCards() {
         </View>
       </RadioGroup>
     </View>
-  )
+  );
 }
 
-RadioCards.fileName = 'RadioCards'
+RadioCards.fileName = 'RadioCards';
 
 function Item({
   selected,
   setValue,
   item,
 }: {
-  selected: boolean
-  setValue: (value: string) => void
-  item: Item
+  selected: boolean;
+  setValue: (value: string) => void;
+  item: Item;
 }) {
-  const { title, description, color } = item
-  const onPress = useEvent(() => setValue(title))
+  const { title, description, color } = item;
+  const onPress = useEvent(() => setValue(title));
   return (
     <Card
       onPress={onPress}
@@ -121,5 +121,5 @@ function Item({
         </Text>
       </View>
     </Card>
-  )
+  );
 }

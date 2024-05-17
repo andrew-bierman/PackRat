@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { AnimatePresence, Button, Text, View, XGroup, styled } from 'tamagui'
-import { useWindowDimensions } from 'tamagui'
+import { useState } from 'react';
+import { AnimatePresence, Button, Text, View, XGroup, styled } from 'tamagui';
+import { useWindowDimensions } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export const AnimatedNumbers = () => {
-  const [numbers, setNumbers] = useState(100_000)
-  const len = `${numbers}`.length
-  const { width } = useWindowDimensions()
+  const [numbers, setNumbers] = useState(100_000);
+  const len = `${numbers}`.length;
+  const { width } = useWindowDimensions();
 
-  const WIDTH = width * 0.6
-  const NUM_WIDTH = WIDTH / 3
+  const WIDTH = width * 0.6;
+  const NUM_WIDTH = WIDTH / 3;
 
   return (
     <View justifyContent="center" alignItems="center" maxWidth="100%" gap="$5">
@@ -17,7 +17,7 @@ export const AnimatedNumbers = () => {
         <XGroup.Item>
           <Button
             onPress={() => {
-              setNumbers(Math.ceil(Math.random() * 1_000_000))
+              setNumbers(Math.ceil(Math.random() * 1_000_000));
             }}
           >
             Next
@@ -26,7 +26,7 @@ export const AnimatedNumbers = () => {
         <XGroup.Item>
           <Button
             onPress={() => {
-              setNumbers(+`${numbers}1`)
+              setNumbers(+`${numbers}1`);
             }}
           >
             Add
@@ -35,7 +35,7 @@ export const AnimatedNumbers = () => {
         <XGroup.Item>
           <Button
             onPress={() => {
-              setNumbers(+`${numbers}`.slice(0, -1))
+              setNumbers(+`${numbers}`.slice(0, -1));
             }}
           >
             Remove
@@ -52,11 +52,11 @@ export const AnimatedNumbers = () => {
       >
         <AnimatePresence initial={false}>
           {`${numbers}`.split('').map((num, i) => {
-            const key = `${i}${num}`
+            const key = `${i}${num}`;
             const x = (() => {
-              const indexFromCenter = i + 0.5 - len / 2
-              return Math.min(NUM_WIDTH, WIDTH / len) * indexFromCenter
-            })()
+              const indexFromCenter = i + 0.5 - len / 2;
+              return Math.min(NUM_WIDTH, WIDTH / len) * indexFromCenter;
+            })();
 
             return (
               <AnimatedNumber
@@ -75,15 +75,15 @@ export const AnimatedNumbers = () => {
               >
                 {num}
               </AnimatedNumber>
-            )
+            );
           })}
         </AnimatePresence>
       </View>
     </View>
-  )
-}
+  );
+};
 
-AnimatedNumbers.fileName = 'NumberSlider'
+AnimatedNumbers.fileName = 'NumberSlider';
 
 const AnimatedNumber = styled(Text, {
   fontFamily: '$silkscreen',
@@ -97,4 +97,4 @@ const AnimatedNumber = styled(Text, {
   '$group-window-xs': {
     fontSize: '$8',
   },
-})
+});

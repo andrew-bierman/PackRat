@@ -1,3 +1,3 @@
-export * from './ButtonsWithLeftIcons'
-export * from './ButtonsWithLoaders'
-export * from './RoundedButtons'
+export * from './ButtonsWithLeftIcons';
+export * from './ButtonsWithLoaders';
+export * from './RoundedButtons';

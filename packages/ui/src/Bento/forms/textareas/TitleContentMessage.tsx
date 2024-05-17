@@ -1,5 +1,5 @@
-import { Info } from '@tamagui/lucide-icons'
-import { Label, Text, TextArea, View } from 'tamagui'
+import { Info } from '@tamagui/lucide-icons';
+import { Label, Text, TextArea, View } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function TitleContentMessage() {
@@ -28,7 +28,7 @@ export function TitleContentMessage() {
         </Text>
       </View>
     </View>
-  )
+  );
 }
 
-TitleContentMessage.fileName = 'TitleContentMessage'
+TitleContentMessage.fileName = 'TitleContentMessage';

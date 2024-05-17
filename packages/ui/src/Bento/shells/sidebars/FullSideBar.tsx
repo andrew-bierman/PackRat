@@ -1,6 +1,6 @@
-import { Bell, Menu } from '@tamagui/lucide-icons'
-import { RovingFocusGroup } from '@tamagui/roving-focus'
-import { useState } from 'react'
+import { Bell, Menu } from '@tamagui/lucide-icons';
+import { RovingFocusGroup } from '@tamagui/roving-focus';
+import { useState } from 'react';
 import {
   Avatar,
   Button,
@@ -12,10 +12,10 @@ import {
   isWeb,
   styled,
   useEvent,
-} from 'tamagui'
-import { useWindowDimensions } from 'tamagui'
-import { useMedia } from 'tamagui'
-import { Drawer } from '../common/Drawer'
+} from 'tamagui';
+import { useWindowDimensions } from 'tamagui';
+import { useMedia } from 'tamagui';
+import { Drawer } from '../common/Drawer';
 
 const Link = styled(Text, {
   tag: 'a',
@@ -43,16 +43,16 @@ const Link = styled(Text, {
   '$group-window-xs': {
     paddingVertical: '$2.5',
   },
-})
+});
 
 /** ------ EXAMPLE ------ */
 export function FullSideBar() {
-  const [triggerOpen, setTriggerOpen] = useState(false)
+  const [triggerOpen, setTriggerOpen] = useState(false);
   const closeTrigger = useEvent(() => {
-    setTriggerOpen(false)
-  })
-  const [openDrawer, setOpenDrawer] = useState(false)
-  const { sm } = useMedia()
+    setTriggerOpen(false);
+  });
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const { sm } = useMedia();
   return (
     <View flexDirection="column" height={610} width="100%" marginTop="$2">
       <View flexDirection="row" height="100%" width="100%">
@@ -82,19 +82,28 @@ export function FullSideBar() {
               {...(isWeb && {
                 onKeyDown: (e: KeyboardEvent) => {
                   if (e.key === 'Escape') {
-                    setOpenDrawer(false)
+                    setOpenDrawer(false);
                   }
                 },
               })}
             >
-              <Button circular chromeless onPress={() => setOpenDrawer(!openDrawer)}>
+              <Button
+                circular
+                chromeless
+                onPress={() => setOpenDrawer(!openDrawer)}
+              >
                 <Button.Icon>
                   <Menu size="$1" />
                 </Button.Icon>
               </Button>
             </View>
           )}
-          <View flexDirection="row" marginLeft="auto" alignItems="center" gap="$2">
+          <View
+            flexDirection="row"
+            marginLeft="auto"
+            alignItems="center"
+            gap="$2"
+          >
             <Button theme="alt1" circular chromeless padding={0} size="$3">
               <Button.Icon>
                 <Bell color="$color" size="$1" />
@@ -110,19 +119,19 @@ export function FullSideBar() {
       </View>
       {sm && <FloatingSideBar open={openDrawer} setOpen={setOpenDrawer} />}
     </View>
-  )
+  );
 }
 
-FullSideBar.fileName = 'FullSideBar'
+FullSideBar.fileName = 'FullSideBar';
 
 function ProfileDropdown({
   triggerOpen,
   setTriggerOpen,
   closeTrigger,
 }: {
-  triggerOpen: boolean
-  setTriggerOpen: (open: boolean) => void
-  closeTrigger: () => void
+  triggerOpen: boolean;
+  setTriggerOpen: (open: boolean) => void;
+  closeTrigger: () => void;
 }) {
   return (
     <Popover
@@ -190,7 +199,7 @@ function ProfileDropdown({
         </DropDownItem>
       </Popover.Content>
     </Popover>
-  )
+  );
 }
 
 const DropDownItem = styled(View, {
@@ -211,7 +220,7 @@ const DropDownItem = styled(View, {
     paddingHorizontal: '$2',
     paddingVertical: '$1',
   },
-})
+});
 
 const DropDownText = styled(Text, {
   fontWeight: '$2',
@@ -222,7 +231,7 @@ const DropDownText = styled(Text, {
     fontSize: '$1',
     lineHeight: '$1',
   },
-})
+});
 
 /** SIDEBAR AND DRAWER */
 function Sidebar() {
@@ -237,21 +246,24 @@ function Sidebar() {
     >
       <SideBarContent />
     </View>
-  )
+  );
 }
 
 function FloatingSideBar({
   open,
   setOpen,
-}: { open: boolean; setOpen: (open: boolean) => void }) {
-  const { height, width } = useWindowDimensions()
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) {
+  const { height, width } = useWindowDimensions();
   return (
     <View
       flexDirection="column"
       {...(isWeb && {
         onKeyDown: (e: KeyboardEvent) => {
           if (e.key === 'Escape') {
-            setOpen(false)
+            setOpen(false);
           }
         },
       })}
@@ -282,7 +294,7 @@ function FloatingSideBar({
         </Drawer.Swipeable>
       </Drawer>
     </View>
-  )
+  );
 }
 
 const SideBarContent = View.styleable((props, ref) => {
@@ -308,7 +320,10 @@ const SideBarContent = View.styleable((props, ref) => {
         <View flexDirection="row" alignItems="center" gap="$2.5">
           <Avatar borderRadius="$true" size="$4" padding="$4">
             <Avatar.Image scale={0.6} src="/favicon.svg" />
-            <Avatar.Fallback backgroundColor="$color11" borderColor="$color11" />
+            <Avatar.Fallback
+              backgroundColor="$color11"
+              borderColor="$color11"
+            />
           </Avatar>
           <H4 fontSize="$6" col="$color12">
             Hi User!
@@ -337,11 +352,15 @@ const SideBarContent = View.styleable((props, ref) => {
                     {item}
                   </NavLink>
                 </RovingFocusGroup.Item>
-              )
+              ),
             )}
           </RovingFocusGroup>
         </View>
-        <View backgroundColor="$backgroundFocus" padding="$2.5" paddingLeft="$5">
+        <View
+          backgroundColor="$backgroundFocus"
+          padding="$2.5"
+          paddingLeft="$5"
+        >
           <Text fontSize="$5" lineHeight="$5" fontWeight="400" col="$color12">
             User
           </Text>
@@ -359,53 +378,55 @@ const SideBarContent = View.styleable((props, ref) => {
         </View>
       </View>
     </View>
-  )
-})
+  );
+});
 
-const NavLink = Link.styleable(({ children, href = '#', onPress, ...rest }, ref: any) => {
-  /**
-   * use the following logic in to check if the route is active
-   * const router = useRouter();
-   * const currentPath = router.pathname;
-   * const isActive = href === currentPath;
-   */
-  const isActive = false
+const NavLink = Link.styleable(
+  ({ children, href = '#', onPress, ...rest }, ref: any) => {
+    /**
+     * use the following logic in to check if the route is active
+     * const router = useRouter();
+     * const currentPath = router.pathname;
+     * const isActive = href === currentPath;
+     */
+    const isActive = false;
 
-  return (
-    <Link
-      ref={ref}
-      onPress={onPress}
-      href={href}
-      active={isActive}
-      borderRadius={5}
-      /** uncomment this line in your app */
-      // active={isActive}
-      //@ts-ignore
-      group="navLink"
-      draggable={false}
-      {...rest}
-    >
-      <Text
-        fontSize="$5"
-        fontWeight="$5"
-        lineHeight="$5"
-        color="$color11"
-        opacity={0.7}
-        // opacity={isActive ? 1 : 0.9}
-        $group-navLink-hover={{
-          opacity: 1,
-        }}
-        $group-navLink-focus={{
-          opacity: 1,
-        }}
-        $group-window-xs={{
-          fontSize: '$3',
-          fontWeight: '$3',
-          lineHeight: '$3',
-        }}
+    return (
+      <Link
+        ref={ref}
+        onPress={onPress}
+        href={href}
+        active={isActive}
+        borderRadius={5}
+        /** uncomment this line in your app */
+        // active={isActive}
+        //@ts-ignore
+        group="navLink"
+        draggable={false}
+        {...rest}
       >
-        {children}
-      </Text>
-    </Link>
-  )
-})
+        <Text
+          fontSize="$5"
+          fontWeight="$5"
+          lineHeight="$5"
+          color="$color11"
+          opacity={0.7}
+          // opacity={isActive ? 1 : 0.9}
+          $group-navLink-hover={{
+            opacity: 1,
+          }}
+          $group-navLink-focus={{
+            opacity: 1,
+          }}
+          $group-window-xs={{
+            fontSize: '$3',
+            fontWeight: '$3',
+            lineHeight: '$3',
+          }}
+        >
+          {children}
+        </Text>
+      </Link>
+    );
+  },
+);

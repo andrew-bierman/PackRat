@@ -1,21 +1,35 @@
-import { useEffect, useState } from 'react'
-import { Anchor, H2, Image, Stack, Text, XStack, YStack, styled } from 'tamagui'
-import { getProducts } from './data/products'
+import { useEffect, useState } from 'react';
+import {
+  Anchor,
+  H2,
+  Image,
+  Stack,
+  Text,
+  XStack,
+  YStack,
+  styled,
+} from 'tamagui';
+import { getProducts } from './data/products';
 
-const Link = Anchor
+const Link = Anchor;
 
-type Product = ReturnType<typeof getProducts>[0]
+type Product = ReturnType<typeof getProducts>[0];
 
 const StyledText = styled(Text, {
   color: '$color',
   fontSize: '$4',
   lineHeight: '$4',
-})
+});
 
 function Item({ item }: { item: Product }) {
   return (
     // Note: you can also use `Link` from solito/link
-    <Link flexGrow={1} flexBasis={300} href="#" textDecorationColor="transparent">
+    <Link
+      flexGrow={1}
+      flexBasis={300}
+      href="#"
+      textDecorationColor="transparent"
+    >
       <YStack
         paddingBottom="$2"
         borderBottomWidth={1}
@@ -43,13 +57,13 @@ function Item({ item }: { item: Product }) {
         </YStack>
       </YStack>
     </Link>
-  )
+  );
 }
 
 // spacers are a method to avoid streteched items at the end
 const someSpacers = Array.from({ length: 5 }).map((_c, index) => (
   <YStack key={index + 'sp'} flexBasis={300} flexGrow={1} flexShrink={1} />
-))
+));
 /**
  *  Note: if you have a lot of items, you can use a FlatList instead, Flatlist are more performant
  *        we also have a FlatGrid component that uses FlatList check that
@@ -58,10 +72,10 @@ const someSpacers = Array.from({ length: 5 }).map((_c, index) => (
 
 /** ------ EXAMPLE ------ */
 export function ProductList() {
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
-    setProducts(getProducts())
-  }, [])
+    setProducts(getProducts());
+  }, []);
   return (
     <XStack
       maxWidth="100%"
@@ -80,7 +94,7 @@ export function ProductList() {
       ))}
       {someSpacers}
     </XStack>
-  )
+  );
 }
 
-ProductList.fileName = 'ProductList'
+ProductList.fileName = 'ProductList';

@@ -1,6 +1,14 @@
-import { useState } from 'react'
-import { Avatar, Label, RadioGroup, Text, YGroup, View, useEvent } from 'tamagui'
-import { Card } from './components/radioParts'
+import { useState } from 'react';
+import {
+  Avatar,
+  Label,
+  RadioGroup,
+  Text,
+  YGroup,
+  View,
+  useEvent,
+} from 'tamagui';
+import { Card } from './components/radioParts';
 
 const items = [
   {
@@ -21,13 +29,13 @@ const items = [
     id: 'gr-visa',
     image: `https://i.pravatar.cc/150?img=20`,
   },
-]
+];
 
-type Item = (typeof items)[number]
+type Item = (typeof items)[number];
 
 /** ------ EXAMPLE ------ */
 export function GroupedRadio() {
-  const [value, setValue] = useState('gr-paypal')
+  const [value, setValue] = useState('gr-paypal');
   return (
     <View
       flexDirection="column"
@@ -48,22 +56,22 @@ export function GroupedRadio() {
         </YGroup>
       </RadioGroup>
     </View>
-  )
+  );
 }
 
-GroupedRadio.fileName = 'GroupedRadio'
+GroupedRadio.fileName = 'GroupedRadio';
 
 function Item({
   selected,
   setValue,
   item,
 }: {
-  selected: boolean
-  setValue: (value: string) => void
-  item: Item
+  selected: boolean;
+  setValue: (value: string) => void;
+  item: Item;
 }) {
-  const { description, id, image, title } = item
-  const onPress = useEvent(() => setValue(id))
+  const { description, id, image, title } = item;
+  const onPress = useEvent(() => setValue(id));
   return (
     <YGroup.Item>
       <Card
@@ -129,5 +137,5 @@ function Item({
         </View>
       </Card>
     </YGroup.Item>
-  )
+  );
 }

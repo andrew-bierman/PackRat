@@ -1,4 +1,4 @@
-import { H1, ScrollView, Text, View, styled } from 'tamagui'
+import { H1, ScrollView, Text, View, styled } from 'tamagui';
 
 const data = [
   {
@@ -25,7 +25,7 @@ const data = [
     title: 'Estimated arrival',
     value: '1-2 business days',
   },
-]
+];
 
 /** ---- EXAMPLE ------ */
 export function ItemValueList() {
@@ -49,18 +49,24 @@ export function ItemValueList() {
         </H1>
         <View width="100%">
           {data.map((item, index) => {
-            const isLastItem = index === data.length - 1
-            return <Row isLastItem={isLastItem} key={index} item={item} />
+            const isLastItem = index === data.length - 1;
+            return <Row isLastItem={isLastItem} key={index} item={item} />;
           })}
         </View>
       </View>
     </ScrollView>
-  )
+  );
 }
 
-ItemValueList.fileName = 'ItemValueList'
+ItemValueList.fileName = 'ItemValueList';
 
-const Row = ({ item, isLastItem }: { item: (typeof data)[0]; isLastItem: boolean }) => {
+const Row = ({
+  item,
+  isLastItem,
+}: {
+  item: (typeof data)[0];
+  isLastItem: boolean;
+}) => {
   return (
     <View
       justifyContent="space-between"
@@ -92,20 +98,20 @@ const Row = ({ item, isLastItem }: { item: (typeof data)[0]; isLastItem: boolean
         {item.value}
       </SizeableText>
     </View>
-  )
-}
+  );
+};
 
 const SizeableText = styled(Text, {
   variants: {
     size: {
       '...fontSize': (val, { font }) => {
-        if (!font) return {}
+        if (!font) return {};
         return {
           fontSize: font.size[val],
           lineHeight: font.lineHeight[val],
           fontWeight: font.weight[val],
-        }
+        };
       },
     },
   },
-})
+});

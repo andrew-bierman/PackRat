@@ -1,10 +1,10 @@
-import { AlertCircle } from '@tamagui/lucide-icons'
-import React, { useId, useRef } from 'react'
-import type { SizeTokens } from 'tamagui'
-import { View } from 'tamagui'
-import { Input } from './components/inputsParts'
-import type { TextInput } from 'react-native'
-import { useForwardFocus } from './hooks/useForwardFocus'
+import { AlertCircle } from '@tamagui/lucide-icons';
+import React, { useId, useRef } from 'react';
+import type { SizeTokens } from 'tamagui';
+import { View } from 'tamagui';
+import { Input } from './components/inputsParts';
+import type { TextInput } from 'react-native';
+import { useForwardFocus } from './hooks/useForwardFocus';
 
 /**
  * note: make sure to use the same width for the Input and the Input.Area
@@ -12,11 +12,11 @@ import { useForwardFocus } from './hooks/useForwardFocus'
 
 /** ------ EXAMPLE ------ */
 export function InputWithErrorDemo({ size }: { size?: SizeTokens }) {
-  const uniqueId = useId()
-  const [error, setError] = React.useState(true)
+  const uniqueId = useId();
+  const [error, setError] = React.useState(true);
 
-  const inputRef = useRef<TextInput>(null)
-  const focusTrigger = useForwardFocus(inputRef)
+  const inputRef = useRef<TextInput>(null);
+  const focusTrigger = useForwardFocus(inputRef);
   return (
     <View flexDirection="column" justifyContent="center" alignItems="center">
       <Input
@@ -43,7 +43,7 @@ export function InputWithErrorDemo({ size }: { size?: SizeTokens }) {
         <Input.Info>Your email is invalid.</Input.Info>
       </Input>
     </View>
-  )
+  );
 }
 
-InputWithErrorDemo.fileName = 'InputWithError'
+InputWithErrorDemo.fileName = 'InputWithError';

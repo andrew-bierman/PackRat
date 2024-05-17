@@ -1,21 +1,23 @@
-import { Plug, Home, Settings, Folder, Heart } from '@tamagui/lucide-icons'
-import type { ReactElement } from 'react'
-import React from 'react'
-import type { SizeTokens, ThemeName } from 'tamagui'
-import { Theme, XStack, YStack } from 'tamagui'
-import { Button, View, XGroup } from 'tamagui'
+import { Plug, Home, Settings, Folder, Heart } from '@tamagui/lucide-icons';
+import type { ReactElement } from 'react';
+import React from 'react';
+import type { SizeTokens, ThemeName } from 'tamagui';
+import { Theme, XStack, YStack } from 'tamagui';
+import { Button, View, XGroup } from 'tamagui';
 
-const renderComponent = (Component?: React.ReactElement | React.ComponentType) => {
-  if (!Component) return null
-  if (React.isValidElement(Component)) return Component
-  const Comp = Component as React.ComponentType
-  return <Comp />
-}
+const renderComponent = (
+  Component?: React.ReactElement | React.ComponentType,
+) => {
+  if (!Component) return null;
+  if (React.isValidElement(Component)) return Component;
+  const Comp = Component as React.ComponentType;
+  return <Comp />;
+};
 
 const buttonVariations = [
   { name: 'Outlined', value: 'outlined' },
   { name: 'Text', value: 'text' },
-]
+];
 /** ------ EXAMPLE ------ */
 export function ButtonsWithLeftIcons() {
   return (
@@ -215,7 +217,7 @@ export function ButtonsWithLeftIcons() {
         </XGroup>
       </View>
     </YStack>
-  )
+  );
 }
 
-ButtonsWithLeftIcons.fileName = 'ButtonsWithLeftIcons'
+ButtonsWithLeftIcons.fileName = 'ButtonsWithLeftIcons';

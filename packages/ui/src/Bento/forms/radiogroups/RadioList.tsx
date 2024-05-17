@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { Card } from './components/radioParts'
-import { Avatar, H3, Label, RadioGroup, Text, View } from 'tamagui'
+import { useState } from 'react';
+import { Card } from './components/radioParts';
+import { Avatar, H3, Label, RadioGroup, Text, View } from 'tamagui';
 
 const data = {
   rs_americano: {
@@ -38,15 +38,21 @@ const data = {
     key: 'rs_latte',
     avatar: 'http://www.tamagui.dev/bento/images/coffee5.jpg',
   },
-}
+};
 
-type Item = { checked: boolean; desc: string; title: string; key: string; avatar: string }
+type Item = {
+  checked: boolean;
+  desc: string;
+  title: string;
+  key: string;
+  avatar: string;
+};
 
 /** ------ EXAMPLE ------ */
 export function RadioList() {
-  const [selected, setSelected] = useState<string>()
+  const [selected, setSelected] = useState<string>();
 
-  const items = Object.values(data)
+  const items = Object.values(data);
   return (
     <View
       borderColor="$color6"
@@ -99,7 +105,7 @@ export function RadioList() {
         </View>
       </RadioGroup>
     </View>
-  )
+  );
 }
 
 function Item({
@@ -107,11 +113,11 @@ function Item({
   setSelected,
   selected,
 }: {
-  item: Item
-  selected: boolean
-  setSelected: (value: string) => void
+  item: Item;
+  selected: boolean;
+  setSelected: (value: string) => void;
 }) {
-  const { desc, title, key } = item
+  const { desc, title, key } = item;
   return (
     <Card
       borderRadius={0}
@@ -124,7 +130,7 @@ function Item({
       alignItems="stretch"
       justifyContent="space-between"
       onPress={() => {
-        setSelected(key)
+        setSelected(key);
       }}
       borderLeftWidth={0}
       borderRightWidth={0}
@@ -156,7 +162,7 @@ function Item({
         </RadioGroup.Item>
       </View>
     </Card>
-  )
+  );
 }
 
-RadioList.fileName = 'RadioList'
+RadioList.fileName = 'RadioList';

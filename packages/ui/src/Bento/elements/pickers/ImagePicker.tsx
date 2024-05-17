@@ -1,14 +1,14 @@
-import { X } from '@tamagui/lucide-icons'
-import { useId, useState } from 'react'
-import { Button, Image, Label, ScrollView, View, XStack } from 'tamagui'
+import { X } from '@tamagui/lucide-icons';
+import { useId, useState } from 'react';
+import { Button, Image, Label, ScrollView, View, XStack } from 'tamagui';
 
-import { useFilePicker } from './hooks/useFilePicker'
-import { MediaTypeOptions } from './types'
+import { useFilePicker } from './hooks/useFilePicker';
+import { MediaTypeOptions } from './types';
 
 /** ------ EXAMPLE ------ */
 export function ImagePicker() {
-  const id = useId()
-  const [images, setImages] = useState<string[]>([])
+  const id = useId();
+  const [images, setImages] = useState<string[]>([]);
   const { open, getInputProps, getRootProps, dragStatus } = useFilePicker({
     typeOfPicker: 'image',
     mediaTypes: [MediaTypeOptions.Images],
@@ -16,15 +16,18 @@ export function ImagePicker() {
 
     onPick: ({ webFiles, nativeFiles }) => {
       if (webFiles?.length) {
-        const pickedImages = webFiles?.map((file) => URL.createObjectURL(file))
-        setImages((images) => [...images, ...pickedImages])
+        const pickedImages = webFiles?.map((file) => URL.createObjectURL(file));
+        setImages((images) => [...images, ...pickedImages]);
       } else if (nativeFiles?.length) {
-        setImages((images) => [...images, ...nativeFiles.map((file) => file.uri)])
+        setImages((images) => [
+          ...images,
+          ...nativeFiles.map((file) => file.uri),
+        ]);
       }
     },
-  })
+  });
 
-  const { isDragActive } = dragStatus
+  const { isDragActive } = dragStatus;
 
   return (
     // @ts-ignore reason: getRootProps() which is web specific return some react-native incompatible props, but it's fine
@@ -94,7 +97,7 @@ export function ImagePicker() {
               />
               <Button
                 onPress={() => {
-                  setImages(images.filter((_, index) => index !== i))
+                  setImages(images.filter((_, index) => index !== i));
                 }}
                 right={0}
                 y={-6}
@@ -110,7 +113,7 @@ export function ImagePicker() {
         </XStack>
       </ScrollView>
     </View>
-  )
+  );
 }
 
-ImagePicker.fileName = 'ImagePicker'
+ImagePicker.fileName = 'ImagePicker';

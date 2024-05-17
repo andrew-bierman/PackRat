@@ -1,37 +1,37 @@
-import type { SizeTokens } from 'tamagui'
+import type { SizeTokens } from 'tamagui';
 import {
   ThemeableStack,
   createStyledContext,
   styled,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 
 type AlignCells = {
-  y: 'center' | 'start' | 'end'
-  x: 'center' | 'start' | 'end'
-}
+  y: 'center' | 'start' | 'end';
+  x: 'center' | 'start' | 'end';
+};
 
-type AlignHeaderCells = AlignCells
+type AlignHeaderCells = AlignCells;
 
 const TableContext = createStyledContext<{
-  cellWidth: SizeTokens | number
-  cellHeight: SizeTokens | number
+  cellWidth: SizeTokens | number;
+  cellHeight: SizeTokens | number;
   alignHeaderCells: {
-    y: 'center' | 'start' | 'end'
-    x: 'center' | 'start' | 'end'
-  }
+    y: 'center' | 'start' | 'end';
+    x: 'center' | 'start' | 'end';
+  };
   alignCells: {
-    y: 'center' | 'start' | 'end'
-    x: 'center' | 'start' | 'end'
-  }
-  borderColor: string
+    y: 'center' | 'start' | 'end';
+    x: 'center' | 'start' | 'end';
+  };
+  borderColor: string;
 }>({
   cellWidth: '$8',
   cellHeight: '$8',
   alignHeaderCells: { x: 'start', y: 'center' },
   alignCells: { x: 'center', y: 'center' },
   borderColor: '$borderColor',
-})
+});
 
 /** Table Components */
 const Row = styled(ThemeableStack, {
@@ -43,21 +43,21 @@ const Row = styled(ThemeableStack, {
       first: () => {
         return {
           borderBottomWidth: 0.5,
-        }
+        };
       },
       last: () => {
         return {
           borderBottomWidth: 0,
-        }
+        };
       },
       middle: () => {
         return {
           borderBottomWidth: 0.5,
-        }
+        };
       },
     },
   },
-})
+});
 
 const Cell = styled(ThemeableStack, {
   tag: 'td',
@@ -70,39 +70,39 @@ const Cell = styled(ThemeableStack, {
       '...size': (name, { tokens }) => {
         return {
           width: tokens.size[name],
-        }
+        };
       },
     },
     cellHeight: {
       '...size': (name, { tokens }) => {
         return {
           minHeight: tokens.size[name],
-        }
+        };
       },
     },
     alignCells: (val: AlignCells) => {
       return {
         alignItems: val.y === 'center' ? 'center' : `flex-${val.y}`,
         justifyContent: val.x === 'center' ? 'center' : `flex-${val.x}`,
-      }
+      };
     },
     cellLocation: {
       first: () => {
-        return {}
+        return {};
       },
       last: () => {
         return {
           borderLeftWidth: 0.5,
-        }
+        };
       },
       middle: () => {
         return {
           borderLeftWidth: 0.5,
-        }
+        };
       },
     },
   } as const,
-})
+});
 
 const HeaderCell = styled(ThemeableStack, {
   tag: 'th',
@@ -117,7 +117,7 @@ const HeaderCell = styled(ThemeableStack, {
       '...size': (name, { tokens }) => {
         return {
           width: tokens.size[name],
-        }
+        };
       },
     },
 
@@ -125,47 +125,47 @@ const HeaderCell = styled(ThemeableStack, {
       return {
         alignItems: val.y === 'center' ? 'center' : `flex-${val.y}`,
         justifyContent: val.x === 'center' ? 'center' : `flex-${val.x}`,
-      }
+      };
     },
 
     cellLocation: {
       first: () => {
-        return {}
+        return {};
       },
       last: () => {
         return {
           borderLeftWidth: 1,
-        }
+        };
       },
       middle: () => {
         return {
           borderLeftWidth: 1,
-        }
+        };
       },
     },
   } as const,
-})
+});
 
 const TableBody = styled(ThemeableStack, {
   tag: 'tbody',
   flexDirection: 'column',
   context: TableContext,
   flexShrink: 1,
-})
+});
 
 const TableHead = styled(ThemeableStack, {
   tag: 'thead',
   flexDirection: 'column',
   context: TableContext,
   flexShrink: 1,
-})
+});
 
 const TableFoot = styled(ThemeableStack, {
   tag: 'tfoot',
   flexDirection: 'column',
   context: TableContext,
   flexShrink: 1,
-})
+});
 
 const TableComp = styled(ThemeableStack, {
   tag: 'table',
@@ -176,18 +176,18 @@ const TableComp = styled(ThemeableStack, {
     /** just added these empty variants to avoid ts erros on Table */
     cellWidth: {
       '...size': () => {
-        return {}
+        return {};
       },
     },
     cellHeight: {
       '...size': () => {
-        return {}
+        return {};
       },
     },
     alignHeaderCells: (val) => ({}),
     alignCells: (val) => ({}),
   },
-})
+});
 
 export const Table = withStaticProperties(TableComp, {
   Head: TableHead,
@@ -196,4 +196,4 @@ export const Table = withStaticProperties(TableComp, {
   Cell,
   HeaderCell,
   Foot: TableFoot,
-})
+});

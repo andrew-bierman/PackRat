@@ -3,20 +3,20 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from '@tanstack/react-table'
-import { useMedia } from 'tamagui'
-import * as React from 'react'
-import { Separator, Text, View, YStack, getTokenValue } from 'tamagui'
-import { Table } from './common/tableParts'
+} from '@tanstack/react-table';
+import { useMedia } from 'tamagui';
+import * as React from 'react';
+import { Separator, Text, View, YStack, getTokenValue } from 'tamagui';
+import { Table } from './common/tableParts';
 
 type Person = {
-  firstName: string
-  lastName: string
-  age: number
-  visits: number
-  status: string
-  progress: number
-}
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  status: string;
+  progress: number;
+};
 
 const defaultData: Person[] = [
   {
@@ -43,9 +43,9 @@ const defaultData: Person[] = [
     status: 'Complicated',
     progress: 10,
   },
-]
+];
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
 const columns = [
   columnHelper.accessor('firstName', {
@@ -75,29 +75,30 @@ const columns = [
     header: 'Progress',
     footer: (info) => info.column.id,
   }),
-]
+];
 
-const CELL_WIDTH = '$15'
+const CELL_WIDTH = '$15';
 
 /** ------ EXAMPLE ------ */
 export function BasicTable() {
-  const [data, setData] = React.useState(() => [...defaultData])
+  const [data, setData] = React.useState(() => [...defaultData]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
-  const { sm } = useMedia()
+  const { sm } = useMedia();
 
-  const headerGroups = table.getHeaderGroups()
-  const tableRows = table.getRowModel().rows
-  const footerGroups = table.getFooterGroups()
+  const headerGroups = table.getHeaderGroups();
+  const tableRows = table.getRowModel().rows;
+  const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght = tableRows.length + headerGroups.length + footerGroups.length
-  const rowCounter = React.useRef(-1)
-  rowCounter.current = -1
+  const allRowsLenght =
+    tableRows.length + headerGroups.length + footerGroups.length;
+  const rowCounter = React.useRef(-1);
+  rowCounter.current = -1;
 
   if (sm) {
     return (
@@ -118,19 +119,23 @@ export function BasicTable() {
                   return (
                     <View key={i}>
                       <View fd="row" justifyContent="space-between">
-                        <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
+                        <Text>
+                          {name.charAt(0).toUpperCase() + name.slice(1)}
+                        </Text>
                         <Text color="$gray10">{value}</Text>
                       </View>
-                      {i !== Object.entries(row).length - 1 && <Separator mt="$3" />}
+                      {i !== Object.entries(row).length - 1 && (
+                        <Separator mt="$3" />
+                      )}
                     </View>
-                  )
+                  );
                 })}
               </View>
             </View>
-          )
+          );
         })}
       </YStack>
-    )
+    );
   }
 
   return (
@@ -144,7 +149,7 @@ export function BasicTable() {
     >
       <Table.Head>
         {headerGroups.map((headerGroup) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               backgrounded
@@ -172,17 +177,20 @@ export function BasicTable() {
                   <Text>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Head>
       <Table.Body>
         {tableRows.map((row) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               rowLocation={
@@ -211,12 +219,12 @@ export function BasicTable() {
                 </Table.Cell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Body>
       <Table.Foot>
         {footerGroups.map((footerGroup) => {
-          rowCounter.current++
+          rowCounter.current++;
           return (
             <Table.Row
               rowLocation={
@@ -242,16 +250,19 @@ export function BasicTable() {
                   <Text>
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.footer, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.footer,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-          )
+          );
         })}
       </Table.Foot>
     </Table>
-  )
+  );
 }
 
-BasicTable.fileName = 'Basic'
+BasicTable.fileName = 'Basic';

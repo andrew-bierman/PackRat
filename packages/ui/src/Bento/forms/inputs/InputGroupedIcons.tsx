@@ -3,10 +3,10 @@ import {
   ChevronLast,
   ChevronLeft,
   ChevronRight,
-} from '@tamagui/lucide-icons'
-import type { SizeTokens } from 'tamagui'
-import { View } from 'tamagui'
-import { Input } from './components/inputsParts'
+} from '@tamagui/lucide-icons';
+import type { SizeTokens } from 'tamagui';
+import { View } from 'tamagui';
+import { Input } from './components/inputsParts';
 
 /** ------ EXAMPLE ------ */
 export function InputGroupedIconsExample({ size }: { size?: SizeTokens }) {
@@ -57,7 +57,7 @@ export function InputGroupedIconsExample({ size }: { size?: SizeTokens }) {
         </Input.Box>
       </Input>
     </View>
-  )
+  );
 }
 
-InputGroupedIconsExample.fileName = 'InputGroupedIcons'
+InputGroupedIconsExample.fileName = 'InputGroupedIcons';

@@ -1,4 +1,4 @@
-import { Avatar, Button, TextArea, View } from 'tamagui'
+import { Avatar, Button, TextArea, View } from 'tamagui';
 
 /** ------ EXAMPLE ------ */
 export function AvatarOutContentAction() {
@@ -6,7 +6,10 @@ export function AvatarOutContentAction() {
     <View flexDirection="row" width={500} maxWidth="100%" gap="$3">
       <Button chromeless circular bordered>
         <Avatar flexShrink={1} circular size="$3.5">
-          <Avatar.Image aria-label="user photo" src="https://i.pravatar.cc/123" />
+          <Avatar.Image
+            aria-label="user photo"
+            src="https://i.pravatar.cc/123"
+          />
           <Avatar.Fallback backgroundColor="$gray10" />
         </Avatar>
       </Button>
@@ -22,7 +25,7 @@ export function AvatarOutContentAction() {
         </Button>
       </View>
     </View>
-  )
+  );
 }
 
-AvatarOutContentAction.fileName = 'AvatarOutContentAction'
+AvatarOutContentAction.fileName = 'AvatarOutContentAction';

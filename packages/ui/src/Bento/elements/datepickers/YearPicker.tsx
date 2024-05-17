@@ -1,11 +1,15 @@
-import { DatePickerProvider as _DatePickerProvider } from '@rehookify/datepicker'
-import { useEffect, useState } from 'react'
-import { View } from 'tamagui'
-import { DatePicker } from './common/dateParts'
-import { DatePickerInput, YearPicker, YearRangeSlider } from './common/dateParts'
+import { DatePickerProvider as _DatePickerProvider } from '@rehookify/datepicker';
+import { useEffect, useState } from 'react';
+import { View } from 'tamagui';
+import { DatePicker } from './common/dateParts';
+import {
+  DatePickerInput,
+  YearPicker,
+  YearRangeSlider,
+} from './common/dateParts';
 
 function CalendarHeader() {
-  return <YearRangeSlider />
+  return <YearRangeSlider />;
 }
 
 function DatePickerBody() {
@@ -14,18 +18,18 @@ function DatePickerBody() {
       <CalendarHeader />
       <YearPicker />
     </View>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
 export function YearPickerInput() {
-  const [selectedDates, onDatesChange] = useState<Date[]>([])
-  const [offsetDate, setOffsetDate] = useState<Date>()
-  const [open, setOpen] = useState(false)
+  const [selectedDates, onDatesChange] = useState<Date[]>([]);
+  const [offsetDate, setOffsetDate] = useState<Date>();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setOpen(false)
-  }, [offsetDate])
+    setOpen(false);
+  }, [offsetDate]);
 
   return (
     <DatePicker
@@ -40,9 +44,9 @@ export function YearPickerInput() {
         offsetDate,
         onOffsetChange: (offset) => {
           if (offset) {
-            offset.setMonth(0)
+            offset.setMonth(0);
           }
-          setOffsetDate(offset)
+          setOffsetDate(offset);
         },
         calendar: {
           startDay: 1,
@@ -58,7 +62,7 @@ export function YearPickerInput() {
           }
           placeholder="Select year"
           onReset={() => {
-            setOffsetDate(undefined)
+            setOffsetDate(undefined);
           }}
           onButtonPress={() => setOpen(true)}
         />
@@ -69,7 +73,7 @@ export function YearPickerInput() {
         <DatePickerBody />
       </DatePicker.Content>
     </DatePicker>
-  )
+  );
 }
 
-YearPickerInput.fileName = 'YearPicker'
+YearPickerInput.fileName = 'YearPicker';

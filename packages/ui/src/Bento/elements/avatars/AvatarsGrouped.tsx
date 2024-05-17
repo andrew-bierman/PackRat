@@ -1,9 +1,9 @@
-import type { SizeTokens } from 'tamagui'
-import { View, getTokenValue } from 'tamagui'
-import { Avatar } from './components/Avatar'
-import React, { useState } from 'react'
+import type { SizeTokens } from 'tamagui';
+import { View, getTokenValue } from 'tamagui';
+import { Avatar } from './components/Avatar';
+import React, { useState } from 'react';
 
-const items = [1, 2, 3, 4, 5]
+const items = [1, 2, 3, 4, 5];
 
 /** ------ EXAMPLE ------ */
 export function AvatarsGrouped() {
@@ -12,21 +12,33 @@ export function AvatarsGrouped() {
       <AvatarGroup
         size="$3"
         items={items.map((index) => (
-          <Item size="$3" imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`} />
+          <Item
+            size="$3"
+            imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`}
+          />
         ))}
       />
       <AvatarGroup
         size="$6"
         items={items.map((index) => (
-          <Item size="$6" imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`} />
+          <Item
+            size="$6"
+            imageUrl={`https://i.pravatar.cc/150?img=${index + 1}`}
+          />
         ))}
       />
     </View>
-  )
+  );
 }
 
-function AvatarGroup({ size, items }: { size: SizeTokens; items: React.ReactNode[] }) {
-  const [hovered, setHovered] = useState(false)
+function AvatarGroup({
+  size,
+  items,
+}: {
+  size: SizeTokens;
+  items: React.ReactNode[];
+}) {
+  const [hovered, setHovered] = useState(false);
 
   return (
     <View
@@ -38,7 +50,9 @@ function AvatarGroup({ size, items }: { size: SizeTokens; items: React.ReactNode
         <View
           key={index}
           zIndex={index}
-          marginLeft={index !== 0 ? -(getTokenValue(size as any) ?? 20) * 1.5 : undefined}
+          marginLeft={
+            index !== 0 ? -(getTokenValue(size as any) ?? 20) * 1.5 : undefined
+          }
           animation="bouncy"
           x={0}
           {...(hovered && {
@@ -49,10 +63,10 @@ function AvatarGroup({ size, items }: { size: SizeTokens; items: React.ReactNode
         </View>
       ))}
     </View>
-  )
+  );
 }
 
-AvatarsGrouped.fileName = 'AvatarsGrouped'
+AvatarsGrouped.fileName = 'AvatarsGrouped';
 
 function Item({ imageUrl, size }: { imageUrl: string; size: SizeTokens }) {
   return (
@@ -62,5 +76,5 @@ function Item({ imageUrl, size }: { imageUrl: string; size: SizeTokens }) {
         <Avatar.Fallback backgroundColor="$background" />
       </Avatar.Content>
     </Avatar>
-  )
+  );
 }
