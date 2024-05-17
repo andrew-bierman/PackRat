@@ -85,7 +85,7 @@
 //       const firebaseUser = userCredential.user;
 //       setAuth(firebaseUser);
 //     } catch (error) {
-//       console.log(error);
+//       
 //     }
 //   };
 
@@ -95,7 +95,7 @@
 //       const firebaseUser = userCredential.user;
 //       setAuth(firebaseUser);
 //     } catch (error) {
-//       console.log(error);
+//       
 //     }
 //   };
 
@@ -106,7 +106,7 @@
 //   const signUpWithEmailPasswordProvider = async (email, password) => {
 //     try {
 //       const newUser = await createUserWithEmailAndPassword(email, password);
-//       console.log({ newUser });
+//       
 
 //     } catch (e) {
 //       console.log("Error", e)

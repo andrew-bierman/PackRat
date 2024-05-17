@@ -28,8 +28,16 @@ const ScrollButton = ({ direction, onPress, disabled }: ScrollButtonProps) => {
       style={styles.scrollButton}
       disabled={disabled}
     >
-      {direction === 'left' && <Text style={[styles.iconStyles, {color: isDark? 'white':  'grey', }]}>&lang;</Text>}
-      {direction != 'left' && <Text style={[styles.iconStyles, {color: isDark? 'white':  'grey', }]}>&rang;</Text>}
+      {direction === 'left' && (
+        <Text style={[styles.iconStyles, { color: isDark ? 'white' : 'grey' }]}>
+          &lang;
+        </Text>
+      )}
+      {direction != 'left' && (
+        <Text style={[styles.iconStyles, { color: isDark ? 'white' : 'grey' }]}>
+          &rang;
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

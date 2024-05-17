@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Dimensions } from 'react-native';
 import mapboxgl from 'mapbox-gl';
 import togpx from 'togpx';
-
 import {
   calculateZoomLevel,
   findTrailCenter,
@@ -17,91 +16,123 @@ import {
 } from 'app/utils/mapFunctions';
 import { saveFile } from 'app/utils/fileSaver/fileSaver.web';
 
-export const useWebMap = ({ shape: shapeProp }) => {
-  // useEffect(() => {
-  //   // temporary solution to fix mapbox-gl-js missing css error
-  //   if (Platform.OS === 'web') {
-  //     // inject mapbox css into head
-  //     const link = document.createElement('link');
-  //     link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-  //     link.rel = 'stylesheet';
-  //     document.head.appendChild(link);
-
-  //     // inject mapbox js into head
-  //     const script = document.createElement('script');
-  //     script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-  //     script.async = true;
-  //     document.head.appendChild(script);
-  //   }
-  // }, []);
-
+// Hook to handle state management
+const useMapState = (shapeProp) => {
+  // State to store the shape data
   const [shape, setShape] = useState(shapeProp);
-  console.log('WebMap shape', shape);
-
+  // Refs for map container and instance
   const mapContainer = useRef(null);
   const map = useRef(null);
+  // States for map coordinates and zoom level
   const [lng, setLng] = useState(-77.0369);
   const [lat, setLat] = useState(38.9072);
-
-  // consts
-  const dw = Dimensions.get('screen').width;
-  const dh = Dimensions.get('screen').height;
-  const fullMapDiemention = useMemo(() => ({ width: dw, height: 360 }), [dw]);
-  const previewMapDiemension = { width: dw * 0.9, height: 220 };
-
   const [zoomLevel, setZoomLevel] = useState(10);
   const [trailCenterPoint, setTrailCenterPoint] = useState(null);
   const zoomLevelRef = useRef(10);
   const trailCenterPointRef = useRef(null);
-
+  // States for UI and user interaction
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [downloading, setDownloading] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
-
   const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
   const [showUserLocation, setShowUserLocation] = useState(false);
   const [userLng, setUserLng] = useState(null);
   const [userLat, setUserLat] = useState(null);
-
-  // download variables
   const [downloadable, setDownloadable] = useState(false);
 
+  // Dimensions for full and preview map
+  const dw = Dimensions.get('screen').width;
+  const fullMapDiemention = useMemo(() => ({ width: dw, height: 360 }), [dw]);
+  const previewMapDiemension = { width: dw * 0.9, height: 220 };
+
+  // Effect to update shape when shapeProp changes
   useEffect(() => {
-    // update the shape state when a new shapeProp gets passed
     if (shapeProp !== shape) setShape(shapeProp);
   }, [shapeProp]);
 
+  return {
+    shape,
+    setShape,
+    mapContainer,
+    map,
+    lng,
+    setLng,
+    lat,
+    setLat,
+    zoomLevel,
+    setZoomLevel,
+    trailCenterPoint,
+    setTrailCenterPoint,
+    zoomLevelRef,
+    trailCenterPointRef,
+    mapFullscreen,
+    setMapFullscreen,
+    downloading,
+    setDownloading,
+    showModal,
+    setShowModal,
+    mapStyle,
+    setMapStyle,
+    showUserLocation,
+    setShowUserLocation,
+    userLng,
+    setUserLng,
+    userLat,
+    setUserLat,
+    downloadable,
+    setDownloadable,
+    fullMapDiemention,
+    previewMapDiemension,
+  };
+};
+
+// Hook to handle side effects
+const useMapEffects = ({
+  shape,
+  map,
+  mapContainer,
+  mapStyle,
+  setMapStyle,
+  lng,
+  lat,
+  zoomLevel,
+  zoomLevelRef,
+  trailCenterPointRef,
+  mapFullscreen,
+  showUserLocation,
+  setLng,
+  setLat,
+  setZoomLevel,
+  setDownloadable,
+  fullMapDiemention,
+  addPoints,
+  addPolygons,
+  addTrailLayer,
+  removeTrailLayer,
+}) => {
+  // Effect to handle shape data and calculate bounds
   useEffect(() => {
     if (shape?.features[0]?.geometry?.coordinates?.length >= 1) {
       let bounds = getShapeSourceBounds(shape);
       bounds = bounds[0].concat(bounds[1]);
-
       const mapDim = fullMapDiemention;
-
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);
-      console.log('trailCenter in useEffect', trailCenter);
 
       zoomLevelRef.current = latZoom;
       trailCenterPointRef.current = trailCenter;
-
       setDownloadable(isShapeDownloadable(shape));
     }
   }, [shape, fullMapDiemention]);
 
+  // Effect to initialize and configure Mapbox map
   useEffect(() => {
-    console.log(
-      !mapFullscreen || !isPolygonOrMultiPolygon(shape),
-      'is polygon or not',
-    );
     if (!mapFullscreen && !isPolygonOrMultiPolygon(shape)) return;
     if (!lng || !lat) return;
     try {
       const mapInstance = new mapboxgl.Map({
         container: mapContainer.current,
         style: mapStyle,
-        // center: [lng, lat],
         center:
           trailCenterPointRef.current &&
           !isNaN(trailCenterPointRef.current[0]) &&
@@ -112,11 +143,11 @@ export const useWebMap = ({ shape: shapeProp }) => {
         interactive: mapFullscreen,
       });
 
+      // Map load event handler
       mapInstance.on('load', () => {
         if (isPoint(shape)) {
           addPoints(mapInstance);
         } else if (isPolygonOrMultiPolygon(shape)) {
-          console.log('it is polygon');
           addPolygons(mapInstance);
         } else {
           addTrailLayer(mapInstance);
@@ -139,10 +170,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
           });
         }
 
-        // const marker = new mapboxgl.Marker()
-        //   .setLngLat([lng, lat])
-        //   .addTo(mapInstance);
-
+        // Map move event handler
         mapInstance.on('move', () => {
           const { lng, lat } = mapInstance.getCenter();
           setLng(lng.toFixed(4));
@@ -157,6 +185,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
     }
   }, [mapFullscreen]);
 
+  // Effect to handle shape changes and update map layers
   useEffect(() => {
     if (map.current && isPoint(shape)) {
       addPoints(map.current);
@@ -166,50 +195,47 @@ export const useWebMap = ({ shape: shapeProp }) => {
       map.current.setCenter(trailCenterPointRef.current);
       map.current.setZoom(zoomLevelRef.current);
     }
-
-    console.log('trailCenterPointRef.current', trailCenterPointRef.current);
-
-    // console.log("mapInstance", mapInstance);
   }, [shape]);
+};
 
-  /**
-   * Removes the existing source and layers for the trail-cap and trail from the map instance.
-   *
-   * @param {object} mapInstance - The map instance to remove the layers and source from.
-   */
+// Hook to handle actions
+const useMapActions = ({
+  map,
+  shape,
+  mapStyle,
+  setMapStyle,
+  setDownloading,
+  userLng,
+  userLat,
+  setUserLng,
+  setUserLat,
+  setShowUserLocation,
+  setMapFullscreen,
+  setShowModal,
+}) => {
+  // Function to remove trail layer from map
   const removeTrailLayer = (mapInstance) => {
-    // Remove existing source and layers if they exist
     if (mapInstance.getLayer('trail-cap')) {
       mapInstance.removeLayer('trail-cap');
     }
-
     if (mapInstance.getSource('trail-cap')) {
       mapInstance.removeSource('trail-cap');
     }
-
     if (mapInstance.getLayer('trail')) {
       mapInstance.removeLayer('trail');
     }
-
     if (mapInstance.getSource('trail')) {
       mapInstance.removeSource('trail');
     }
   };
 
-  /**
-   * Adds a trail layer to the given map instance.
-   *
-   * @param {Object} mapInstance - The map instance to add the trail layer to.
-   */
+  // Function to add trail layer to map
   const addTrailLayer = (mapInstance) => {
     const processedShape = processShapeData(shape);
-
-    // Add new source and layers
     mapInstance.addSource('trail', {
       type: 'geojson',
       data: processedShape || shape,
     });
-
     mapInstance.addLayer({
       id: 'trail',
       type: 'line',
@@ -220,8 +246,6 @@ export const useWebMap = ({ shape: shapeProp }) => {
         'line-opacity': 1,
       },
     });
-
-    // Add circle cap to the line ends
     mapInstance.addLayer({
       id: 'trail-cap',
       type: 'circle',
@@ -234,12 +258,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
     });
   };
 
-  /**
-   * Adds points to the map instance.
-   *
-   * @param {type} mapInstance - The map instance to add points to.
-   * @return {type} None
-   */
+  // Function to add point markers to map
   const addPoints = (mapInstance) => {
     if (mapInstance) {
       const pointLatLong = shape?.features[0]?.geometry?.coordinates;
@@ -258,11 +277,7 @@ export const useWebMap = ({ shape: shapeProp }) => {
     }
   };
 
-  /**
-   * Adds polygons to the map instance.
-   *
-   * @param {object} mapInstance - The map instance to add the polygons to.
-   */
+  // Function to add polygon layers to map
   const addPolygons = (mapInstance) => {
     if (mapInstance) {
       mapInstance.addLayer({
@@ -280,120 +295,39 @@ export const useWebMap = ({ shape: shapeProp }) => {
       mapInstance.setCenter(multiPolygonBounds(shape.features[0]));
     }
   };
-  /**
-   * Fetches the GPX download and handles the download process.
-   * This function sets the state of 'downloading' to true and then tries to fetch the GPX data
-   * using the provided shape and options. After receiving the GPX data, it calls the 'handleGpxDownload'
-   * function to handle the download. If there is an error during the process, it logs the error to the console.
-   *
-   * @return {Promise<void>} A promise that resolves when the GPX download is complete.
-   */
+
+  // Function to fetch and download GPX file
   const fetchGpxDownload = async () => {
     setDownloading(true);
-
     try {
       const options = {
-        creator: 'PackRat', // Hardcoded creator option
+        creator: 'PackRat',
         metadata: {
-          name: shape.name || '', // Extract name from geoJSON (if available)
-          desc: shape.description || '', // Extract description from geoJSON (if available)
+          name: shape.name || '',
+          desc: shape.description || '',
         },
-        //   featureTitle: (properties) => properties.name || "", // Extract feature title from properties (if available)
-        //   featureDescription: (properties) => properties.description || "", // Extract feature description from properties (if available)
       };
       const gpx = togpx(shape, options);
-
       await handleGpxDownload(gpx);
-
       setDownloading(false);
     } catch (error) {
-      console.log('error', error);
       setDownloading(false);
     }
   };
 
-  /**
-   * Enables full screen mode.
-   *
-   * @return {void}
-   */
+  // Function to enable fullscreen mode
   const enableFullScreen = () => {
     setMapFullscreen(true);
     setShowModal(true);
   };
 
-  /**
-   * Disable full screen.
-   *
-   * @return {undefined} No return value.
-   */
+  // Function to disable fullscreen mode
   const disableFullScreen = () => {
     setMapFullscreen(false);
     setShowModal(false);
   };
 
-  const setMapboxStyle = useCallback(
-    (style) => {
-      if (map.current) {
-        // Step 1: remove sources, layers, etc.
-        removeTrailLayer(map.current);
-
-        // Step 2: change the style
-        map.current.setStyle(style);
-
-        // Step 3: add the sources, layers, etc. back once the style has loaded
-        if (isPoint(shape)) {
-          map.current.on('style.load', () => addPoints(map.current));
-        } else if (isPolygonOrMultiPolygon) {
-          // Add Polygon
-        } else {
-          map.current.on('style.load', () => {
-            addTrailLayer(map.current);
-          });
-        }
-      }
-    },
-    [addTrailLayer, removeTrailLayer],
-  );
-
-  /**
-   * Updates the map style and mapbox style to the specified style.
-   *
-   * @param {style} style - The style to set for the map and mapbox.
-   * @return {void} This function does not return a value.
-   */
-  const handleChangeMapStyle = (style) => {
-    setMapStyle(style);
-    setMapboxStyle(style);
-  };
-
-  const openMaps = () => {
-    const pointLatLong = shape?.features[0]?.geometry?.coordinates;
-    const { type } = shape.features[0].geometry;
-    if (type !== 'Point') {
-      const [latlng] = pointLatLong;
-      window.open(`https://maps.google.com?q=${latlng[1]},${latlng[0]}`);
-    } else {
-      const [lng, lat] = pointLatLong;
-      window.open(`https://maps.google.com?q=${lat},${lng}`);
-    }
-
-    // console.log()
-    // if(type !== 'Point') {
-
-    // } else {
-    //   window.open(`https://maps.google.com?q=${lat},${lng}`);
-    // }
-  };
-
-  /**
-   * Handles the download of a GPX file.
-   *
-   * @param {Object} gpxData - The GPX data to be downloaded.
-   * @param {string} [filename="trail"] - The name of the file to be downloaded.
-   * @param {string} [extension="gpx"] - The extension of the file to be downloaded.
-   * @return {Promise<void>} - A promise that resolves when the download is complete.
-   */
+  // Function to handle GPX file download
   const handleGpxDownload = async (
     gpxData,
     filename = shape?.features[0]?.properties?.name ?? 'trail',
@@ -405,36 +339,26 @@ export const useWebMap = ({ shape: shapeProp }) => {
     }
   };
 
-  /**
-   * Fetches the user's location and updates the map accordingly.
-   *
-   * @return {Promise<void>} A Promise that resolves when the location is fetched and the map is updated.
-   */
+  // Function to fetch user location
   const fetchLocation = async () => {
     try {
       const location = await getLocation();
-
       if (location) {
         const { latitude, longitude } = location.coords;
         setUserLng(longitude);
         setUserLat(latitude);
         setShowUserLocation(true);
-
         if (map.current) {
           map.current.flyTo({
             center: [longitude, latitude],
             zoom: 14,
           });
-
-          // Remove existing user location layer if it exists
           if (map.current.getLayer('user-location')) {
             map.current.removeLayer('user-location');
           }
           if (map.current.getSource('user-location')) {
             map.current.removeSource('user-location');
           }
-
-          // Add new user location layer
           map.current.addLayer({
             id: 'user-location',
             type: 'circle',
@@ -452,11 +376,156 @@ export const useWebMap = ({ shape: shapeProp }) => {
           });
         }
       }
-    } catch (error) {
-      console.log('error', error);
+    } catch (error) {}
+  };
+
+  // Function to open location in Google Maps
+  const openMaps = () => {
+    const pointLatLong = shape?.features[0]?.geometry?.coordinates;
+    const { type } = shape.features[0].geometry;
+    if (type !== 'Point') {
+      const [latlng] = pointLatLong;
+      window.open(`https://maps.google.com?q=${latlng[1]},${latlng[0]}`);
+    } else {
+      const [lng, lat] = pointLatLong;
+      window.open(`https://maps.google.com?q=${lat},${lng}`);
     }
   };
-  console.log(isPolygonOrMultiPolygon(shape) || showModal, 'polygon or not');
+
+  // Function to set Mapbox style
+  const setMapboxStyle = useCallback(
+    (style) => {
+      if (map.current) {
+        removeTrailLayer(map.current);
+        map.current.setStyle(style);
+        if (isPoint(shape)) {
+          map.current.on('style.load', () => addPoints(map.current));
+        } else if (isPolygonOrMultiPolygon) {
+          // Add Polygon
+        } else {
+          map.current.on('style.load', () => {
+            addTrailLayer(map.current);
+          });
+        }
+      }
+    },
+    [addTrailLayer, removeTrailLayer],
+  );
+
+  // Function to change map style
+  const handleChangeMapStyle = (style) => {
+    setMapStyle(style);
+    setMapboxStyle(style);
+  };
+
+  return {
+    removeTrailLayer,
+    addTrailLayer,
+    addPoints,
+    addPolygons,
+    fetchGpxDownload,
+    enableFullScreen,
+    disableFullScreen,
+    handleGpxDownload,
+    fetchLocation,
+    openMaps,
+    setMapboxStyle,
+    handleChangeMapStyle,
+  };
+};
+
+// Main hook to combine state, effects, and actions
+export const useWebMap = ({ shape: shapeProp }) => {
+  // State management hook
+  const {
+    shape,
+    setShape,
+    mapContainer,
+    map,
+    lng,
+    setLng,
+    lat,
+    setLat,
+    zoomLevel,
+    setZoomLevel,
+    trailCenterPoint,
+    setTrailCenterPoint,
+    zoomLevelRef,
+    trailCenterPointRef,
+    mapFullscreen,
+    setMapFullscreen,
+    downloading,
+    setDownloading,
+    showModal,
+    setShowModal,
+    mapStyle,
+    setMapStyle,
+    showUserLocation,
+    setShowUserLocation,
+    userLng,
+    setUserLng,
+    userLat,
+    setUserLat,
+    downloadable,
+    setDownloadable,
+    fullMapDiemention,
+    previewMapDiemension,
+  } = useMapState(shapeProp);
+
+  // Actions hook
+  const {
+    removeTrailLayer,
+    addTrailLayer,
+    addPoints,
+    addPolygons,
+    fetchGpxDownload,
+    enableFullScreen,
+    disableFullScreen,
+    handleGpxDownload,
+    fetchLocation,
+    openMaps,
+    setMapboxStyle,
+    handleChangeMapStyle,
+  } = useMapActions({
+    map,
+    shape,
+    mapStyle,
+    setMapStyle,
+    setDownloading,
+    userLng,
+    userLat,
+    setUserLng,
+    setUserLat,
+    setShowUserLocation,
+    setMapFullscreen,
+    setShowModal,
+  });
+
+  // Side effects hook
+  useMapEffects({
+    shape,
+    map,
+    mapContainer,
+    mapStyle,
+    setMapStyle,
+    lng,
+    lat,
+    zoomLevel,
+    zoomLevelRef,
+    trailCenterPointRef,
+    mapFullscreen,
+    showUserLocation,
+    setLng,
+    setLat,
+    setZoomLevel,
+    setDownloadable,
+    fullMapDiemention,
+    addPoints,
+    addPolygons,
+    addTrailLayer,
+    removeTrailLayer,
+  });
+
   return {
     mapContainer,
     lng,

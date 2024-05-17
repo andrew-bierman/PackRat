@@ -1,20 +1,20 @@
-import { Card, CardProps, H2, Paragraph, ThemeName } from 'tamagui'
-import { PropsWithChildren, ReactNode } from 'react'
-import { LmImage } from './LmImage'
+import { Card, CardProps, H2, Paragraph, ThemeName } from 'tamagui';
+import { PropsWithChildren, ReactNode } from 'react';
+import { LmImage } from './LmImage';
 
 export type LmCardProps = PropsWithChildren<
   CardProps & {
-    bouncy?: boolean
-    title?: string
-    subTitle?: string
-    footer?: ReactNode
+    bouncy?: boolean;
+    title?: string;
+    subTitle?: string;
+    footer?: ReactNode;
     image?: {
-      width: number
-      height: number
-      src: string
-    }
+      width: number;
+      height: number;
+      src: string;
+    };
   }
->
+>;
 
 export const LmCard = ({
   bouncy,
@@ -65,5 +65,5 @@ export const LmCard = ({
         </Card.Background>
       )}
     </Card>
-  )
-}
+  );
+};

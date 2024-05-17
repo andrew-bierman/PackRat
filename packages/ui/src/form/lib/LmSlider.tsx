@@ -1,15 +1,23 @@
 import {
   ColorTokens,
-  Slider,
+  Slider as OriginalSlider,
   SliderProps,
   SliderThumbProps,
   styled,
   Text,
-  XStack,
+  XStack as OriginalXStack,
 } from 'tamagui';
 import { useId, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
+
+const XStack: any = OriginalXStack;
+const Slider: any = OriginalSlider;
+
+interface CustomSliderTrackProps {
+  colorCustom?: string;
+  children: (props: any) => React.ReactElement;
+}
 
 const CustomSliderTrack = styled(Slider.Track, {
   variants: {
@@ -17,18 +25,19 @@ const CustomSliderTrack = styled(Slider.Track, {
       ':string': (color) => {
         return {
           backgroundColor: color,
-        };
+        } as any;
       },
     },
   } as const,
-});
+}) as React.FC<CustomSliderTrackProps>;
+
 const CustomSliderTrackActive = styled(Slider.TrackActive, {
   variants: {
     colorCustom: {
       ':string': (color: string) => {
         return {
           backgroundColor: color,
-        };
+        } as any;
       },
     },
   } as const,
@@ -79,7 +88,7 @@ export function LmSlider({
       <XStack space alignItems={'center'}>
         <Slider
           size="$2"
-          width={150}
+          width={150 as any}
           defaultValue={value}
           max={5}
           step={1}
@@ -94,7 +103,9 @@ export function LmSlider({
           <CustomSliderTrack
             colorCustom={!colorActiveOnly ? trackColor : undefined}
           >
-            <CustomSliderTrackActive colorCustom={trackColor} />
+            {(props: any) => (
+              <CustomSliderTrackActive colorCustom={trackColor} {...props} />
+            )}
           </CustomSliderTrack>
           <Slider.Thumb
             bordered={false}

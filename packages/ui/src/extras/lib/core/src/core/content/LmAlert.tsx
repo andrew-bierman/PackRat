@@ -8,25 +8,25 @@ import {
   useThemeName,
   XStack,
   XStackProps,
-} from 'tamagui'
+} from 'tamagui';
 import {
   CheckCircleRegular,
   IconProps,
   InfoRegular,
   WarningCircleRegular,
   WarningRegular,
-} from './icons'
+} from './icons';
 
-type Severity = 'default' | 'error' | 'info' | 'warning' | 'success'
+type Severity = 'default' | 'error' | 'info' | 'warning' | 'success';
 export type LmAlertProps = CardProps & {
-  severity?: Severity
-  text?: string
-  outlined?: boolean
-  hideIcon?: boolean
-  paragraphProps?: ParagraphProps
-  xStackProps?: XStackProps
-  iconProps?: IconProps
-}
+  severity?: Severity;
+  text?: string;
+  outlined?: boolean;
+  hideIcon?: boolean;
+  paragraphProps?: ParagraphProps;
+  xStackProps?: XStackProps;
+  iconProps?: IconProps;
+};
 
 const severityColor: { [k in Severity]: ColorProp } = {
   default: '$gray3',
@@ -34,20 +34,24 @@ const severityColor: { [k in Severity]: ColorProp } = {
   info: '$blue10',
   warning: '$orange10',
   success: '$green10',
-}
+};
 
 type AlertIconProps = {
-  severity?: Severity
-  outlined?: boolean
-  shouldInvert?: boolean
-}
+  severity?: Severity;
+  outlined?: boolean;
+  shouldInvert?: boolean;
+};
 
-function AlertIcon({ severity = 'default', outlined, shouldInvert }: AlertIconProps) {
-  const props: { color?: ColorTokens } = {}
+function AlertIcon({
+  severity = 'default',
+  outlined,
+  shouldInvert,
+}: AlertIconProps) {
+  const props: { color?: ColorTokens } = {};
   if (outlined) {
-    props.color = severityColor[severity] as ColorTokens
+    props.color = severityColor[severity] as ColorTokens;
   } else if (shouldInvert) {
-    props.color = 'white'
+    props.color = 'white';
   }
   return {
     default: <InfoRegular {...props} />,
@@ -55,7 +59,7 @@ function AlertIcon({ severity = 'default', outlined, shouldInvert }: AlertIconPr
     info: <InfoRegular {...props} />,
     warning: <WarningRegular {...props} />,
     success: <CheckCircleRegular {...props} />,
-  }[severity]
+  }[severity];
 }
 
 export function LmAlert({
@@ -69,8 +73,8 @@ export function LmAlert({
   iconProps,
   ...rest
 }: LmAlertProps) {
-  const theme = useThemeName()
-  let shouldInverse = theme === 'light' && severity !== 'default' && !outlined
+  const theme = useThemeName();
+  let shouldInverse = theme === 'light' && severity !== 'default' && !outlined;
   return (
     <Card
       bordered={outlined}
@@ -94,7 +98,13 @@ export function LmAlert({
         />
         {text && (
           <Paragraph
-            color={outlined ? severityColor[severity] : shouldInverse ? 'white' : undefined}
+            color={
+              outlined
+                ? severityColor[severity]
+                : shouldInverse
+                  ? 'white'
+                  : undefined
+            }
             {...paragraphProps}
           >
             {text}
@@ -103,5 +113,5 @@ export function LmAlert({
         {children}
       </XStack>
     </Card>
-  )
+  );
 }

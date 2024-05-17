@@ -1,14 +1,28 @@
-import { Avatar, AvatarProps, FontSizeTokens, ImageProps, Paragraph, ParagraphProps } from 'tamagui'
+import {
+  Avatar,
+  AvatarProps,
+  FontSizeTokens,
+  ImageProps,
+  Paragraph,
+  ParagraphProps,
+} from 'tamagui';
 
 export type LmAvatarProps = AvatarProps & {
-  color?: AvatarProps['backgroundColor']
-  src?: string
-  letter?: string
-  letterProps?: ParagraphProps
-  imageProps?: ImageProps
-}
+  color?: AvatarProps['backgroundColor'];
+  src?: string;
+  letter?: string;
+  letterProps?: ParagraphProps;
+  imageProps?: ImageProps;
+};
 
-export function LmAvatar({ color, src, letter, letterProps, imageProps, ...rest }: LmAvatarProps) {
+export function LmAvatar({
+  color,
+  src,
+  letter,
+  letterProps,
+  imageProps,
+  ...rest
+}: LmAvatarProps) {
   return (
     <Avatar
       circular={rest.circular ?? true}
@@ -42,5 +56,5 @@ export function LmAvatar({ color, src, letter, letterProps, imageProps, ...rest 
         <Avatar.Fallback backgroundColor={color || '$gray10'} />
       )}
     </Avatar>
-  )
+  );
 }

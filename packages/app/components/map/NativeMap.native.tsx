@@ -85,7 +85,7 @@ function NativeMap({ shape: shapeProp }) {
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
-    console.log(latLong.join(','), 'lat long');
+    
     const scheme = Platform.select({
       ios: 'maps://0,0?q=',
       android: 'geo:0,0?q=',
@@ -118,8 +118,8 @@ function NativeMap({ shape: shapeProp }) {
             isPoint(shape)
               ? pointLatLong
               : isPolygonOrMultiPolygon(shape)
-              ? multiPolygonBounds(shape.features[0])
-              : trailCenterPoint
+                ? multiPolygonBounds(shape.features[0])
+                : trailCenterPoint
           }
           animationMode={'flyTo'}
           animationDuration={2000}
@@ -149,7 +149,7 @@ function NativeMap({ shape: shapeProp }) {
             id="destination"
             coordinate={pointLatLong}
             onSelected={() => {
-              console.log('selected');
+              
               openMaps(pointLatLong);
             }}
           >

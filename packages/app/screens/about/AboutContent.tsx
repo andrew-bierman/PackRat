@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text , ScrollView} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { RButton, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
@@ -17,7 +17,7 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
     useTheme();
 
   const styles = useCustomStyles(loadStyles);
-  console.log('isDark, isLight', isDark, isLight);
+  
 
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 

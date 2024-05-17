@@ -1,4 +1,4 @@
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import {
   RStack,
   RText,
@@ -162,11 +162,11 @@ export default function UserDataContainer({
               <DataList data={data} />
             </>
           ) : currentUser?.id === userId ? (
-            <Link href="/">
+            <RLink href="/" style={{ textDecoration: 'none' }}>
               <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>
-            </Link>
+            </RLink>
           ) : (
             <></>
           )}

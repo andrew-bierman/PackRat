@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode } from 'react';
 import {
   AlertDialog,
   AlertDialogContentProps,
@@ -8,20 +8,20 @@ import {
   XStack,
   XStackProps,
   YStack,
-} from 'tamagui'
+} from 'tamagui';
 
 export type LmAlertDialogProps = AlertDialogProps & {
-  dialogContentProps?: AlertDialogContentProps
-  trigger?: ReactNode
-  cancelButton?: ReactNode
-  actionButton?: ReactNode
-  contentStackProps?: XStackProps
-  actionStackProps?: XStackProps
-  title: string
-  titleProps?: AlertDialogTitleProps
-  description: string
-  descriptionProps?: AlertDialogDescriptionProps
-}
+  dialogContentProps?: AlertDialogContentProps;
+  trigger?: ReactNode;
+  cancelButton?: ReactNode;
+  actionButton?: ReactNode;
+  contentStackProps?: XStackProps;
+  actionStackProps?: XStackProps;
+  title: string;
+  titleProps?: AlertDialogTitleProps;
+  description: string;
+  descriptionProps?: AlertDialogDescriptionProps;
+};
 
 export function LmAlertDialog({
   trigger,
@@ -70,15 +70,21 @@ export function LmAlertDialog({
         >
           <YStack space {...contentStackProps}>
             <AlertDialog.Title {...titleProps}>{title}</AlertDialog.Title>
-            <AlertDialog.Description {...descriptionProps}>{description}</AlertDialog.Description>
+            <AlertDialog.Description {...descriptionProps}>
+              {description}
+            </AlertDialog.Description>
 
             <XStack space="$3" justifyContent="flex-end" {...actionStackProps}>
-              {cancelButton && <AlertDialog.Cancel asChild>{cancelButton}</AlertDialog.Cancel>}
-              {actionButton && <AlertDialog.Action asChild>{actionButton}</AlertDialog.Action>}
+              {cancelButton && (
+                <AlertDialog.Cancel asChild>{cancelButton}</AlertDialog.Cancel>
+              )}
+              {actionButton && (
+                <AlertDialog.Action asChild>{actionButton}</AlertDialog.Action>
+              )}
             </XStack>
           </YStack>
         </AlertDialog.Content>
       </AlertDialog.Portal>
     </AlertDialog>
-  )
+  );
 }

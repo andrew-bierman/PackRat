@@ -65,7 +65,7 @@ export const ThemeProvider = ({ children }) => {
    * @return {undefined} No return value.
    */
   const enableDarkMode = () => {
-    console.log('enableDarkMode');
+    
     dispatch({ type: 'ENABLE_DARK_MODE' });
   };
   /**
@@ -75,7 +75,7 @@ export const ThemeProvider = ({ children }) => {
    * @return {void} - This function does not return any value.
    */
   const enableLightMode = () => {
-    console.log('enableLightMode');
+    
     dispatch({ type: 'ENABLE_LIGHT_MODE' });
   };
 
