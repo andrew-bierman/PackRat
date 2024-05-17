@@ -17,7 +17,6 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
     useTheme();
 
   const styles = useCustomStyles(loadStyles);
-  
 
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 

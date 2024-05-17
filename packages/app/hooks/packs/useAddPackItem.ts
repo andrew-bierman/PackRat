@@ -11,8 +11,7 @@ export const useAddPackItem = () => {
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });
-      
-      
+
       const newQueryData = {
         ...previousPack,
         items: [
@@ -31,15 +30,13 @@ export const useAddPackItem = () => {
           },
         ],
       };
-      
+
       utils.getPackById.setData({ packId: newItem.packId }, newQueryData);
       return {
         previousPack,
       };
     },
     onError: (err, newItem, context) => {
-      
-      
       // if (context.previousPack) {
       //   utils.getPackById.setData(
       //     { packId: newItem.packId },

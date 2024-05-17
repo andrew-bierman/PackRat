@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  
+
   return {
     container: {
       flex: 1,

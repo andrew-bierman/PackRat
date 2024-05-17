@@ -79,8 +79,6 @@ export default function DownloadedMaps() {
                   padding: 20,
                 }}
                 onPress={() => {
-                  
-                  
                   setPack(pack);
                   setShowMap(true);
                 }}

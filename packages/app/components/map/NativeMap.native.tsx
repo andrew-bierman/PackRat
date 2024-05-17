@@ -85,7 +85,6 @@ function NativeMap({ shape: shapeProp }) {
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
-    
     const scheme = Platform.select({
       ios: 'maps://0,0?q=',
       android: 'geo:0,0?q=',
@@ -149,7 +148,6 @@ function NativeMap({ shape: shapeProp }) {
             id="destination"
             coordinate={pointLatLong}
             onSelected={() => {
-              
               openMaps(pointLatLong);
             }}
           >

@@ -45,7 +45,6 @@ export const getTrailsRapid = async (
 
     return trailsArray;
   } catch (error) {
-    
     console.error('error:' + error);
     return [];
   }

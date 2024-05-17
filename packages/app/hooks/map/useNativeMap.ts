@@ -47,8 +47,8 @@ export const useNativeMap = ({ shape: shapeProp }) => {
   // console.log("🚀 ~ file: NativeMap.native.js:99 ~ NativeMap ~ bounds:", bounds)
   bounds = bounds[0].concat(bounds[1]);
   const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
-  // 
-  // 
+  //
+  //
 
   // effects
   useEffect(() => {
@@ -93,7 +93,6 @@ export const useNativeMap = ({ shape: shapeProp }) => {
    * @param {Event} event - The press event object.
    */
   function onMapPress(event) {
-    
     // if (trailCenterPoint) {
     //   mapViewFullScreenRef?.current.setCamera({
     //     centerCoordinate: trailCenterPoint,
@@ -109,7 +108,6 @@ export const useNativeMap = ({ shape: shapeProp }) => {
    * @returns {void}
    */
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {
