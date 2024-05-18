@@ -69,7 +69,6 @@ export const useAddNewPack = () => {
       };
     },
     onError: (_error, _pack, context) => {
-      
       utils.getPacks.setData(
         {
           ownerId: _pack.owner_id,

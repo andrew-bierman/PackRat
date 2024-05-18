@@ -38,7 +38,6 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
-  
 
   return (
     <View

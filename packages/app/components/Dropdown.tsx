@@ -21,7 +21,7 @@
 //   width,
 //   style,
 // }) => {
-//   // 
+//   //
 
 //   const items =
 //   data?.map((item, index) => {

@@ -11,17 +11,13 @@ export const useCopyClipboard = (link: string) => {
     if (Platform.OS === 'web') {
       navigator.clipboard
         .writeText(copyLink)
-        .then(() => {
-          
-        })
+        .then(() => {})
         .catch((err) => {
           console.error('Failed to copy text to clipboard', err);
         });
     } else {
       Clipboard.setStringAsync(copyLink)
-        .then(() => {
-          
-        })
+        .then(() => {})
         .catch((err) => {
           console.error('Failed to copy text to clipboard', err);
         });

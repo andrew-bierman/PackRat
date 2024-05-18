@@ -27,8 +27,8 @@ export function useGetAIResponse() {
     //   };
     // },
     // onError: (err, { userId, conversationId, userInput }, context) => {
-    //   
-    //   
+    //
+    //
     //   if (context.previousConversation) {
     //     queryTrpc.getConversationById.setData(
     //       { conversationId },

@@ -20,9 +20,7 @@ export const usePasswordResetForm = () => {
     try {
       await resetPassword({ password, resetToken });
       setIsPasswordUpdated(true);
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   return {
