@@ -33,7 +33,6 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
         name: packName,
         is_public: currentPack.is_public,
       });
-      console.log(currentPack.items)
       for (const item of currentPack.items) {
         await addPackItem({
           name: item.name,
@@ -49,7 +48,6 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
 
       router.push(`/pack/${response.id}`);
       setPackIdParam(response.id);
-      console.log('copied pack');
     } catch (e) {
       console.error(e);
     }

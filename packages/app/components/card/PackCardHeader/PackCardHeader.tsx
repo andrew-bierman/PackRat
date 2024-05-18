@@ -37,7 +37,6 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
   const router = useRouter();
   const { editPack } = useEditPack();
   const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
-  console.log(isCopyPackModalOpen)
 
   const handleSavePack = () => {
     const packDetails = {
@@ -88,7 +87,6 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
         }
         link={link}
         actionsComponent={
-          user?.id === data.owner_id && (
             <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
@@ -97,14 +95,12 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
                 <RButton
                   onPress={() => {
                     setIsCopyPackModalOpen(true);
-                    console.log('open');
                   }}
                 >
                   Copy Pack
                 </RButton>
               </YStack>
             </ThreeDotsMenu>
-          )
         }
       />
       <CopyPackModal
