@@ -9,8 +9,7 @@ import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
 import useGpxUpload from './useGpxUpload';
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ';
+mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';
