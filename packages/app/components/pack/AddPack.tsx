@@ -72,13 +72,13 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ width: '100%', textAlign: 'left' }}
           />
-          <RLabel>Is Public:</RLabel>
           <FormSelect
+          label='Is Public'
             onValueChange={handleonValueChange}
             options={packSelectOptions}
             name="isPublic"
             style={{ width: '300px' }}
-            width="300px"
+            width="290px"
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />

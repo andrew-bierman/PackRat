@@ -240,7 +240,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
 const loadStyles = () => ({
   container: {
     marginTop: 20,
-    marginBottom: 15,
+    marginBottom: 115,
     maxWidth: 400,
     width: '100%',
     display: 'flex',
