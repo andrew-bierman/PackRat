@@ -44,7 +44,6 @@ const MapButtonsOverlay = ({
   progress,
   navigateToMaps,
 }: MapButtonsOverlayProps) => {
-  
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

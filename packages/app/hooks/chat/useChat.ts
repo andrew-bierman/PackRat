@@ -47,7 +47,7 @@ export const useChat = (itemTypeId = null) => {
   // );
 
   // useEffect(() => {
-  //   
+  //
   //   setParsedMessages(
   //     conversation ? parseConversationHistory(conversation.history) : [],
   //   );
@@ -60,7 +60,7 @@ export const useChat = (itemTypeId = null) => {
     ? parseConversationHistory(conversations)
     : [];
 
-  // 
+  //
 
   /**
    * Handles sending a message.

@@ -3,7 +3,11 @@ import * as Google from 'expo-auth-session/providers/google';
 
 import { queryTrpc } from 'app/trpc';
 import { useSessionSignIn } from './useSessionSignIn';
-import { WEB_CLIENT_ID, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from '@packrat/config';
+import {
+  WEB_CLIENT_ID,
+  IOS_CLIENT_ID,
+  ANDROID_CLIENT_ID,
+} from '@packrat/config';
 
 const webClientId = String(WEB_CLIENT_ID);
 const iosClientId = String(IOS_CLIENT_ID);

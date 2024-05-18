@@ -13,9 +13,7 @@ export const getGeoCode = async (addressArray: string[]): Promise<any> => {
     .then((result) => {
       resultReturn = result;
     })
-    .catch((error) => {
-      
-    });
+    .catch((error) => {});
 
   return resultReturn;
 };
