@@ -3,13 +3,14 @@ import { useWebMap } from 'app/hooks/map/useWebMap';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import mapboxgl from 'mapbox-gl';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Modal, View } from 'react-native';
 import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
 import useGpxUpload from './useGpxUpload';
 
-mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ';
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';
@@ -65,10 +66,19 @@ const WebMap = ({ shape: shapeProp }) => {
   );
 
   // TODO: Fix this. The modal is not working as expected.
-  return element;
+  // return element;
+
+  return (
+    <>
+      <Modal animationType={'fade'} transparent={false} visible={showModal}>
+        {element}
+      </Modal>
+      {!showModal && element}
+    </>
+  );
 
   // return showModal ? (
-  //   <Modal animationType={'fade'} transparent={false} visible={true}>
+  //   <Modal animationType={'fade'} transparent={false} visible={showModal}>
   //     {element}
   //   </Modal>
   // ) : (
