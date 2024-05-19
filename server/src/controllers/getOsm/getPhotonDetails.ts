@@ -6,6 +6,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure } from '../../trpc';
 import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsService';
+import { TripActivity } from '@packrat/validations';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -30,11 +31,11 @@ import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsServ
 export function getPhotonDetailsRoute() {
   return publicProcedure
     .input(
-      z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
+      z.object({ id: z.union([z.string(), z.number()]), type: z.string(), activity: z.nativeEnum(TripActivity).optional() }),
     )
     .query(async (opts) => {
-      const { id, type } = opts.input;
+      const { id, type, activity } = opts.input;
       const { env }: any = opts.ctx;
-      return await getPhotonDetailsService(id, type, env.OSM_URI);
+      return await getPhotonDetailsService(id, {type, activity, osmUri: env.OSM_URI});
     });
 }

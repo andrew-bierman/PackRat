@@ -8,8 +8,17 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../theme';
 import { TripMapCard } from 'app/components/trip/TripCards';
 import { useFetchSinglePack } from 'app/hooks/packs';
-import { RSkeleton, RText } from '@packrat/ui';
+import {
+  Form,
+  RSkeleton,
+  RStack,
+  RText,
+  SubmitButton,
+  FormInput,
+  BImagePicker,
+} from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
+import { useTripImages } from 'app/hooks/trips';
 
 const TableContainerComponent = ({ currentPack }) => {
   const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack);
@@ -35,7 +44,7 @@ const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
 );
 
 const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
-  data?.geojson?.features?.length && (
+  data?.geojson?.features?.length ? (
     // data?.geojson && (
     <TripMapCard
       shape={data.geojson}
@@ -43,13 +52,37 @@ const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
       //   data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
       // }
     />
-  );
+  ) : null;
 
 const ScoreContainerComponent = ({ data, isOwner }) => (
   <View style={{ marginTop: '5%' }}>
     <ScoreContainer type="trip" data={data} isOwner={isOwner} />
   </View>
 );
+
+const TripReview = ({ data }) => {
+  const { addTripImage } = useTripImages();
+  return data.is_completed ? (
+    <Form>
+      <RStack style={{ marginTop: 16, gap: 8, padding: 18 }}>
+        <RStack>
+          <BImagePicker
+            onChange={(images) => addTripImage(data.id, images[0])}
+          />
+        </RStack>
+        <FormInput
+          name="message"
+          placeholder="Type a message..."
+          multiline
+          value={''}
+        />
+        <SubmitButton>
+          <RText>Send</RText>
+        </SubmitButton>
+      </RStack>
+    </Form>
+  ) : null;
+};
 
 const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
@@ -83,5 +116,6 @@ export {
   WeatherCardComponent,
   TripCardComponent,
   ScoreContainerComponent,
+  TripReview,
   loadStyles,
 };

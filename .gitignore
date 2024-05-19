@@ -4,6 +4,7 @@ mongodb-data
 .env.production
 .env.old
 node_modules
+local-files
 # yarn.lock
 # dist
 old/

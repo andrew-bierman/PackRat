@@ -305,10 +305,24 @@ export const trip = sqliteTable('trip', {
     onDelete: 'set null',
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
+  is_completed: integer('is_completed', { mode: 'boolean' }).default(false),
+  comment: text('comment'),
   type: text('type').default('trip'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("trips"): undefined,
+});
+
+export const tripImages = sqliteTable('trip_images', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  path: text('path').notNull(),
+  trip_id: text('trip_id').references(() => trip.id, {
+    onDelete: 'cascade',
+  }),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const tripGeojsons = sqliteTable(
@@ -340,6 +354,7 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
   }),
   // geojsons: many(tripGeojsons),
   tripGeojsons: many(tripGeojsons),
+  tripImages: many(tripImages),
 }));
 
 export const conversation = sqliteTable('conversation', {
@@ -477,6 +492,7 @@ export const selectUserSchema = createSelectSchema(user);
 
 export type Trip = InferSelectModel<typeof trip>;
 export type InsertTrip = InferInsertModel<typeof trip>;
+export type InsertTripImage = InferInsertModel<typeof tripImages>;
 export const insertTripSchema = createInsertSchema(trip);
 export const selectTripSchema = createSelectSchema(trip);
 

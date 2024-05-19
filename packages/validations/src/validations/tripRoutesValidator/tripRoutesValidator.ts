@@ -81,3 +81,21 @@ export const queryTrip = z.object({
   queryBy: z.string(),
   tripId: z.string(),
 });
+
+export const completeTrip = z.object({
+  tripId: z.string(),
+});
+
+export const editTripComment = z.object({
+  tripId: z.string(),
+  comment: z.string(),
+});
+
+export const addTripImage = z.object({
+  tripId: z.string(),
+  image: z.string(),
+});
+
+export const deleteTripImage = z.object({
+  path: z.string(),
+});

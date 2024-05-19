@@ -10,6 +10,7 @@ import {
   EditableText,
   RIconButton,
   RStack,
+  ZDropdown,
 } from '@packrat/ui';
 import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
@@ -83,13 +84,13 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
       link={link}
       actionsComponent={
         user?.id === data.owner_id && (
-          <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
-            <YStack space="$1">
-              <RButton onPress={handleEdit}>Edit</RButton>
-              <RButton onPress={handleSavePack}>Save</RButton>
-              <RButton onPress={handleDeletePack}>Delete</RButton>
-            </YStack>
-          </ThreeDotsMenu>
+          <ZDropdown 
+            dropdownItems={[
+              {label: 'Edit', onSelect: handleEdit },
+              {label: 'Save', onSelect: handleSavePack },
+              {label: 'Delete', onSelect: handleDeletePack },
+            ]}
+          />
         )
       }
     />

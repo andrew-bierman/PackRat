@@ -24,9 +24,11 @@ import {
   addTripRoute,
   deleteTripRoute,
   editTripRoute,
+  completeTripRoute,
   getPublicTripsRoute,
   getTripByIdRoute,
   getTripsRoute,
+  addTripImageRoute,
 } from '../controllers/trip';
 import {
   addTemplateRoute,
@@ -138,6 +140,8 @@ export const appRouter = trpcRouter({
   getTripById: getTripByIdRoute(),
   addTrip: addTripRoute(),
   editTrip: editTripRoute(),
+  completeTrip: completeTripRoute(),
+  addTripImage: addTripImageRoute(),
   deleteTrip: deleteTripRoute(),
   // templates routes
   getTemplates: getTemplatesRoute(),

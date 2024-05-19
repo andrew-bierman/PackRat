@@ -1,6 +1,6 @@
 import osmtogeojson from 'osmtogeojson';
 
-export async function getPhotonDetailsService(id, type, osmUri) {
+export async function getPhotonDetailsService(id, {type, osmUri, activity}) {
   type = type.toLowerCase(); // Standardize osm_type to be lowercase
 
   switch (type) {
@@ -20,7 +20,7 @@ export async function getPhotonDetailsService(id, type, osmUri) {
       break;
   }
 
-  const overpassQuery = `[out:json][timeout:25];${type}(${id});(._;>;);out body;`;
+  const overpassQuery = `[out:json][timeout:25];${type}(${id})${activity ? `(${activity})` : ''};(._;>;);out body;`;
 
   console.log('overpassQuery', overpassQuery);
   const response = await fetch(osmUri, {

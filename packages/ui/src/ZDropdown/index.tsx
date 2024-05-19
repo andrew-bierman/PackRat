@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { Platform, Dimensions } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -92,7 +94,28 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
   );
 };
 
-export default {
-  Web: ZDropdownWeb,
-  Native: ZDropdownNative,
-};
+const ZDropdown = ({ dropdownItems = [] }) => {
+
+  const [dimensions, setDimensions] = useState(Dimensions.get('window'));
+
+  useEffect(() => {
+    const onChange = ({ window }) => {
+      setDimensions(window);
+    };
+
+    Dimensions.addEventListener('change', onChange);
+  }, []);
+
+  return (
+    <>
+      {Platform.OS === 'android' ||
+      Platform.OS === 'ios' ||
+      dimensions.width < 900 ?
+        <ZDropdownNative dropdownItems={dropdownItems} /> : 
+        <ZDropdownWeb dropdownItems={dropdownItems} />
+      }
+    </>
+  )
+}
+
+export default ZDropdown;

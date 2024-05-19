@@ -17,6 +17,7 @@ import {
   WeatherCardComponent,
   TripCardComponent,
   ScoreContainerComponent,
+  TripReview,
   loadStyles,
 } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
@@ -27,6 +28,7 @@ const SECTION = {
   TABLE: 'TABLE',
   WEATHER: 'WEATHER',
   TRIP: 'TRIP',
+  REVIEW: 'REVIEW',
   SCORE: 'SCORE',
 };
 
@@ -137,6 +139,14 @@ export function TripDetails() {
                     case SECTION.TRIP:
                       return (
                         <TripCardComponent
+                          data={data}
+                          weatherObject={weatherObject}
+                          currentTheme={currentTheme}
+                        />
+                      );
+                    case SECTION.REVIEW:
+                      return (
+                        <TripReview
                           data={data}
                           weatherObject={weatherObject}
                           currentTheme={currentTheme}

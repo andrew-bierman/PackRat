@@ -68,22 +68,14 @@ const TableItem = ({
     ];
   }
 
-  let rowData = [
+  const rowData = [
     <RText px={8}>{name}</RText>,
     <RText px={8}>{`${formatNumber(weight)} ${unit}`}</RText>,
     <RText px={8}>{quantity}</RText>,
   ];
 
   if (hasPermissions) {
-    if (
-      Platform.OS === 'android' ||
-      Platform.OS === 'ios' ||
-      window.innerWidth < 900
-    ) {
-      rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
-    } else {
-      rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
-    }
+    rowData.push(<ZDropdown dropdownItems={rowActionItems} />);
   }
 
   /*

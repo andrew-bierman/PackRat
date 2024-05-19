@@ -1,0 +1,1 @@
+ALTER TABLE trip ADD `is_completed` integer DEFAULT false;

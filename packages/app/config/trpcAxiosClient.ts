@@ -6,6 +6,7 @@ const REQUESTS_TO_SKIP_SUCCESS_MESSAGE = [
   'getMe',
   'signUp',
   'signIn',
+  'completeTrip',
   'resetPasswordEmail',
   'resetPassword',
 ];
