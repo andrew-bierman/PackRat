@@ -7,7 +7,7 @@ import { viteSource } from './sources/vite';
 
 // Simplifying environment variable access using logical OR
 const API_URL =
-  viteSource.VITE_PUBLIC_API_URL ||
+  import.meta.env.VITE_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
   process.env.EXPO_PUBLIC_API_URL;
 const WEB_CLIENT_ID =

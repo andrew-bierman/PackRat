@@ -17,7 +17,7 @@
     "test:expect": "mocha 'generated/test/**/*.spec.js'",
     "test:generate": "npx openapi-generator url http://localhost:3000/swagger.json -d ./generated -t javascript",
     "test": "vitest spec",
-    "wrangler:dev": "npx wrangler dev --port 8787 --local",
+    "wrangler:dev": "npx wrangler dev --port 8787",
     "wrangler:dev2": "npx wrangler pages dev --proxy 3001 --local --persist-to=./db.sqlite --d1=DB -- npm run dev",
     "generate": "drizzle-kit generate:sqlite --schema=./src/db/schema.ts --out=./migrations",
     "migrate": "yarn run migrate:local",
