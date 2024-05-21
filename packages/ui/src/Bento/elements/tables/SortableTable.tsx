@@ -44,7 +44,7 @@ type Person = {
 };
 
 const columnHelper = createColumnHelper<Person>();
-
+/*
 const columns = [
   columnHelper.accessor('firstName', {
     cell: (info) => info.getValue(),
@@ -74,7 +74,7 @@ const columns = [
     footer: (info) => info.column.id,
   }),
 ];
-
+*/
 const FooterContainer = ({
   children,
   Footer,
@@ -97,12 +97,13 @@ const Footer = ({
   table,
   screenWidth,
   tableWidth: TABLE_WIDTH,
+  pagination = false,
 }: {
   table: any;
   screenWidth: number;
   tableWidth: number;
 }) => {
-  return (
+  return pagination ? (
     <View
       position="absolute"
       bottom={'$3'}
@@ -204,17 +205,12 @@ const Footer = ({
         />
       </View>
     </View>
-  );
+  ): null;
 };
 /** ------ EXAMPLE ------ */
-export function SortableTable() {
-  const [data, setData] = React.useState<Person[]>([]);
+export function SortableTable({data, columns, pagination = false}) {
   const [grouping, setGrouping] = React.useState<GroupingState>([]);
   const { width: windowWidth } = useWindowDimensions();
-
-  React.useEffect(() => {
-    setData(makeData(10000));
-  }, []);
 
   const table = useReactTable({
     data,
@@ -226,13 +222,13 @@ export function SortableTable() {
        * and `table.setPageSize(Number(e.target.value))` to set page size
        * for more info refet to tanstack/table documentation
        */
-      //   pagination: {
-      //     pageSize: 10,
-      //     pageIndex: 1,
-      //   },
+        // pagination: {
+        //   pageSize: 20,
+        //   pageIndex: 1,
+        // },
     },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
   });
@@ -246,7 +242,7 @@ export function SortableTable() {
   const rowCounter = React.useRef(-1);
   rowCounter.current = -1;
 
-  const CELL_WIDTH = '$15';
+  const CELL_WIDTH = '$18';
   const TABLE_WIDTH = getTokenValue(CELL_WIDTH) * columns.length;
 
   const { sm } = Platform.OS === 'web' ? useMedia() : { sm: true };
@@ -265,7 +261,7 @@ export function SortableTable() {
     >
       <ScrollView horizontal maxWidth={screenWidth}>
         <View
-          overflow="scroll"
+          overflow="auto"
           flex={1}
           flexDirection="column"
           gap="$4"
@@ -411,5 +407,7 @@ export function SortableTable() {
     </FooterContainer>
   );
 }
+
+export {createColumnHelper}
 
 SortableTable.fileName = 'SortableTable';

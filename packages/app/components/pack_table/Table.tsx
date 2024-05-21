@@ -1,6 +1,6 @@
-import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
-import { FlatList, Platform, View } from 'react-native';
-import { Cell, Row, Table } from 'react-native-table-component';
+import React from 'react';
+import { RButton, RSkeleton, RStack, RText } from '@packrat/ui';
+import { Platform, View, Text } from 'react-native';
 import { usePackTable } from 'app/hooks/packs/usePackTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './packtable.style';
@@ -13,6 +13,20 @@ import {
 } from './TableHelperComponents';
 import TableItem from './TableItem';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
+import { Tables } from '@packrat/ui';
+const { SortableTable, createColumnHelper } = Tables;
+interface Pack {
+  id: string;
+  name: string;
+  quantity: number;
+  weight: number;
+  unit: string;
+  category: {
+    name: string;
+  };
+}
+
+const columnHelper = createColumnHelper<Pack>();
 
 interface TableContainerProps {
   currentPack: any;
@@ -56,6 +70,29 @@ export const TableContainer = ({
   const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
   let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
   const { deletePackItem } = useDeletePackItem();
+  const columns = [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor((row) => row.category.name, {
+      id: 'category',
+      header: 'Category',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('weight', {
+      header: 'Weight',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('unit', {
+      header: 'Unit',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('quantity', {
+      header: 'Quantity',
+      cell: (info) => info.getValue(),
+    }),
+  ];
 
   if (
     Platform.OS === 'android' ||
@@ -69,44 +106,10 @@ export const TableContainer = ({
   const isWeb = Platform.OS === 'web';
 
   return (
-    <View style={[styles.container, !isWeb && { width: '100%' }]}>
+    <View style={[styles.container, { width: '100%' }]}>
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
-            <TitleRow title="Pack List" />
-            <Row
-              flexArr={flexArr}
-              data={headerRow.map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
-              ))}
-              style={styles.head}
-            />
-            <FlatList
-              data={Object.entries(groupedData)}
-              keyExtractor={([category, items]) => category}
-              renderItem={({ item: [category, items] }) => (
-                <>
-                  <CategoryRow category={category} />
-                  <FlatList
-                    data={items}
-                    keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) => (
-                      <TableItem
-                        itemData={item}
-                        onDelete={deletePackItem}
-                        handleCheckboxChange={handleCheckboxChange}
-                        flexArr={flexArr}
-                        currentPack={currentPack}
-                        hasPermissions={hasPermissions}
-                        refetch={refetch}
-                        setRefetch={setRefetch}
-                      />
-                    )}
-                  />
-                </>
-              )}
-            />
-          </Table>
+          <SortableTable columns={columns} data={data} />
           {copy ? (
             <RButton
               style={{
