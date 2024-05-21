@@ -32,7 +32,7 @@ export const editGlobalItemAsDuplicateService = async (
   const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
   const ItemPacksClass = new ItemPacks();
-  category = await itemCategoryClass.findItemCategory({ name: type });
+  category = (await itemCategoryClass.findItemCategory({ name: type })) || null;
   if (!category) {
     category = await itemCategoryClass.create({
       name: type as 'Food' | 'Water' | 'Essentials',

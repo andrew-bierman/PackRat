@@ -24,6 +24,12 @@ export const editItemService = async (
   quantity?: number,
   type?: 'Food' | 'Water' | 'Essentials',
 ) => {
+  const itemClass = new Item();
+  const item = await itemClass.findItem({ id });
+  if (!item) {
+    throw new Error(`Item with id ${id} not found`);
+  }
+
   let category:
     | {
         id: string;
@@ -33,7 +39,8 @@ export const editItemService = async (
       }
     | null
     | undefined;
-  const itemClass = new Item();
+
+  // const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
   if (type && !categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
@@ -45,7 +52,8 @@ export const editItemService = async (
       });
     }
   }
-  const item = await itemClass.findItem({ id });
+
+  // const item = await itemClass.findItem({ id });
   const newItem = await itemClass.update(id, {
     name: name || item.name,
     weight: weight || item.weight,
