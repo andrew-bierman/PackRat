@@ -35,8 +35,6 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
           </Text>
         ))}
       </View>
-      <View style={desktopContainer}>
-        <RStack style={{ flexDirection: 'row' }}>
           <View style={styles.buttonContainer}>
             <RButton style={styles.githubButton} onPress={handleGithubLink}>
               <RStack style={{ flexDirection: 'row' }}>
@@ -64,8 +62,6 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
               </HStack>
             </Button> */}
           </View>
-        </RStack>
-      </View>
     </ScrollView>
   );
 };
