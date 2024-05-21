@@ -49,7 +49,7 @@ const loadStyles = (theme) => {
         currentTheme.colors.background === '#1A1A1D'
           ? currentTheme.colors.text
           : 'black',
-      fontSize: Platform.OS === 'web' ? 12 : 8,
+      fontSize: Platform.OS === 'web' ? 14 : 12,
     },
     row: {
       flexDirection: 'row',

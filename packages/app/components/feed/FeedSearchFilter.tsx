@@ -135,10 +135,10 @@ const FeedSearchFilter = ({
             </RStack>
           )}
           <RStack
-            style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            style={{ flexDirection: 'row', gap:Platform.OS === 'web' ? 10 : 60 , alignItems: 'center' }}
           >
             <RText
-              fontSize={17}
+              fontSize={Platform.OS === 'web' ? 17 : 15}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
@@ -150,7 +150,7 @@ const FeedSearchFilter = ({
               onValueChange={handleSortChange}
               placeholder="Sort By"
               style={styles.dropdown}
-              width={160}
+              width= {Platform.OS === 'web' ? 150 : 100}
             />
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
