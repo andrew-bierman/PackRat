@@ -150,7 +150,8 @@ const FeedSearchFilter = ({
               onValueChange={handleSortChange}
               placeholder="Sort By"
               style={styles.dropdown}
-              width= {Platform.OS === 'web' ? 150 : 100}
+              width= {Platform.OS === 'web' ? 150 : 120}
+              
             />
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -200,6 +201,7 @@ const loadStyles = (theme: any) => {
       justifyContent: 'space-around',
       alignItems: 'center',
     },
+    
   };
 };
 

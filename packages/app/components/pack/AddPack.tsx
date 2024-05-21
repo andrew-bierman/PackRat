@@ -160,7 +160,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width:Platform.OS === 'web'?"200px" : "100%",
+      width:Platform.OS === 'web'?"200px" : "65%",
       marginTop: 40,
       marginBottom: 20,
     },
