@@ -175,35 +175,23 @@ function calculateZoomLevel(bounds, mapDim) {
  * @return {array} The center coordinates of the trail.
  */
 function findTrailCenter(shape) {
+  console.log('Finding trail center...', shape);
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
-  let latitudes;
-  let longitudes;
+  // Flatten the coordinates array for Polygon geometries
+  const flattenedCoords = trailCoords[0].flat();
 
-  // Handle the case where there's only one pair of coordinates
-  if (trailCoords.length === 1) {
-    console.log(
-      'Single coordinate found, using as trail center.',
-      trailCoords[0],
-    );
-    return trailCoords[0];
-  }
-
-  if (Array.isArray(trailCoords[0][0])) {
-    // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
-    latitudes = trailCoords.map((coord) => coord[0][0]);
-    longitudes = trailCoords.map((coord) => coord[0][1]);
-  } else {
-    // If the coordinates are in the format: [[lat, lng], [lat, lng], ...]
-    latitudes = trailCoords.map((coord) => coord[0]);
-    longitudes = trailCoords.map((coord) => coord[1]);
-  }
+  const latitudes = flattenedCoords.map((coord) => coord[1]);
+  const longitudes = flattenedCoords.map((coord) => coord[0]);
 
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
   const avgLongitude =
     longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
 
-  return [avgLatitude, avgLongitude];
+  console.log('Average latitude:', avgLatitude);
+  console.log('Average longitude:', avgLongitude);
+
+  return [avgLongitude, avgLatitude];
 }
 
 /**
