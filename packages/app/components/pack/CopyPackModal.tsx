@@ -21,7 +21,6 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
   } = useAddNewPack();
 
   const {
-    // mutation: addPackItemMutation
     isLoading: addItemLoading,
     isError: addItemError,
     addPackItem,

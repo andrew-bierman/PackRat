@@ -1,16 +1,19 @@
-import React from 'react';
-import { RStack, RText } from '@packrat/ui';
+import React, { useState } from 'react';
+import { RButton, RStack, RText } from '@packrat/ui';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
 import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 import useTheme from '../../hooks/useTheme';
+import { CopyPackModal } from 'app/components/pack/CopyPackModal';
 
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);
   const user = useAuthUser();
   const { isDark } = useTheme();
+  const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
+
 
   return (
     <>
@@ -30,32 +33,25 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
           </RText>
         </RLink>
       </View>
-      {link && (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {isCopied ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <MaterialCommunityIcons
-                name="check"
-                size={24}
-                color="green"
-                onPress={() => handleCopyLink(link)}
-              />
-              <RText color="green">Copied</RText>
-            </View>
-          ) : (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <MaterialCommunityIcons
-                name="link"
-                size={24}
-                color={isDark ? 'white' : 'black'}
-                onPress={() => handleCopyLink(link)}
-              />
-              <RText style={{ color: isDark ? 'white' : 'black' }}>Copy</RText>
-            </View>
-          )}
-        </View>
-      )}
+      <RButton
+        onPress={() => {
+          setIsCopyPackModalOpen(true);
+        }}
+        style={{backgroundColor:'transparent'}}
+      >
+        <RText style={{color:'black'}}>
+          Copy Pack
+        </RText>
+      </RButton>
+      
       {actionsComponent}
+      <CopyPackModal
+        currentPack={data}
+        isOpen={isCopyPackModalOpen}
+        onClose={() => {
+          setIsCopyPackModalOpen(false);
+        }}
+      />
     </>
   );
 };

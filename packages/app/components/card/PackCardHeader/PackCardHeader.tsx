@@ -23,10 +23,9 @@ import { CopyPackModal } from '../../pack/CopyPackModal';
 interface PackCardHeaderProps {
   data: any;
   title: string;
-  link: string;
 }
 
-export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
+export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
   const handleDeletePack = useDeletePack(data.id);
@@ -36,7 +35,6 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
-  const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
 
   const handleSavePack = () => {
     const packDetails = {
@@ -85,31 +83,17 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
             />
           </RStack>
         }
-        link={link}
         actionsComponent={
+          user?.id === data.owner_id && (
             <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>
                 <RButton onPress={handleDeletePack}>Delete</RButton>
-                <RButton
-                  onPress={() => {
-                    setIsCopyPackModalOpen(true);
-                  }}
-                >
-                  Copy Pack
-                </RButton>
               </YStack>
             </ThreeDotsMenu>
+          )
         }
-      />
-      <CopyPackModal
-        currentPack={data}
-        isOpen={isCopyPackModalOpen}
-        onClose={() => {
-          setIsCopyPackModalOpen(false);
-          
-        }}
       />
     </>
   );
