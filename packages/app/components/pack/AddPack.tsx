@@ -70,20 +70,18 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder="Name"
             name="name"
             label="Name"
-            style={{ width: '100%', textAlign: 'left' }}
+            style={{textAlign: 'left', width:200 }}
           />
-          <RLabel>Is Public:</RLabel>
           <FormSelect
             onValueChange={handleonValueChange}
             options={packSelectOptions}
-            name="isPublic"
-            style={{ width: '300px' }}
-            width="300px"
+            name = 'isPublic'
+            label='Is Public'
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
           <SubmitButton
-            style={{ width: '300px', marginTop: 40, marginBottom: 20 }}
+            style={styles.btn}
             onSubmit={handleAddPack}
           >
             <RText style={{ color: currentTheme.colors.text }}>
@@ -120,6 +118,7 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
+      flex:1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -133,12 +132,12 @@ const loadStyles = (theme, appTheme) => {
         : currentTheme.colors.white,
     },
     desktopStyle: {
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 25,
       gap: 5,
-      flex: 1,
     },
 
     mobileStyle: {
@@ -161,13 +160,9 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      backgroundColor: currentTheme.colors.cardIconColor,
-      paddingHorizontal: 25,
-      paddingVertical: 15,
-      textAlign: 'center',
-      alignItems: 'center',
-      color: appTheme.colors.text,
-      width: '50%',
+      width:Platform.OS === 'web'?"200px" : "65%",
+      marginTop: 40,
+      marginBottom: 20,
     },
   };
 };
