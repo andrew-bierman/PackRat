@@ -16,6 +16,7 @@ import { AddItem } from '../item/AddItem';
 import { useScreenWidth } from 'app/hooks/common';
 import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
+import Layout from 'app/components/layout/Layout';
 
 interface ItemsTableProps {
   limit: number;
@@ -160,7 +161,8 @@ export const ItemsTable = ({
   };
 
   return (
-    <ScrollView>
+    <Layout>
+      <ScrollView>
       <View
         style={{
           paddingVertical: 16,
@@ -257,5 +259,6 @@ export const ItemsTable = ({
       </View>
       <PaginationLimit limit={limit} setLimit={setLimit} />
     </ScrollView>
+    </Layout>
   );
 };

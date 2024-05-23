@@ -17,6 +17,7 @@ import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
+import Layout from 'app/components/layout/Layout';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -100,7 +101,8 @@ export default function UserDataContainer({
   }
 
   return (
-    <LargeCard
+    <Layout>
+      <LargeCard
       customStyle={{
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
@@ -173,5 +175,6 @@ export default function UserDataContainer({
         </RStack>
       </RStack>
     </LargeCard>
+    </Layout>
   );
 }

@@ -20,7 +20,7 @@ export const Navbar = () => {
   }, [isScrolled, currentTheme, screenWidth]);
 
   return (
-    <>
+    
       <SafeAreaView style={styles.safeArea}>
         <Container>
           <View style={styles.container}>
@@ -43,7 +43,7 @@ export const Navbar = () => {
           </View>
         </Container>
       </SafeAreaView>
-    </>
+    
   );
 };
 
@@ -69,7 +69,6 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     safeArea: {
       backgroundColor,
       width: '100%',
-      maxWidth: 1140,
       margin: 'auto',
       transition: NavbarStyles.transition,
       ...(isFloating
@@ -84,14 +83,13 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
         ? {
             position: 'fixed',
             top: 0,
-            left: screenWidth <= 1140 ? 0 : 'calc(50% - 570px)',
             zIndex: 100,
             width: '100vw',
           }
         : {}),
     },
     container: {
-      width: '100%',
+      width: '100vw',
       maxWidth: '100%', // Ensure container does not exceed the viewport width
       flex: 1, // Ensure container can grow to fit content
       backgroundColor,
