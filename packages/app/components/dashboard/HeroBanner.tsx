@@ -151,6 +151,8 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
+      position:'relative',
+      zIndex:1,
     },
     title: {
       fontSize: 24,
