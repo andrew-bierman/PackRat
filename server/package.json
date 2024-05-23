@@ -106,7 +106,7 @@
     "trpc-playground": "^1.0.4",
     "uuid": "^9.0.0",
     "validator": "^13.9.0",
-    "zod": "^3.22.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@anatine/zod-mock": "^3.13.4",
