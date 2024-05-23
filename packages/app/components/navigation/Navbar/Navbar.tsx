@@ -18,6 +18,7 @@ export const Navbar = () => {
   const styles = useMemo(() => {
     return StyleSheet.create(loadStyles(currentTheme, isScrolled, screenWidth));
   }, [isScrolled, currentTheme, screenWidth]);
+  const navigate = useNavigate();
 
   return (
     
@@ -36,6 +37,9 @@ export const Navbar = () => {
                 height={40}
                 style={styles.logo}
                 alt="PackRat Logo"
+                onClick={() => {
+                  navigate('/');
+                }}
               />
               <Text style={styles.logoText}>PackRat</Text>
             </View>
@@ -114,6 +118,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     logo: {
       marginRight: 10,
+      cursor:'pointer',
     },
     logoText: {
       color: currentTheme.colors.text,
