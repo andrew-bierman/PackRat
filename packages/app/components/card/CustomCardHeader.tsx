@@ -14,14 +14,16 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isDark } = useTheme();
   const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
 
-
   return (
     <>
       <RStack style={{ flex: 1 }}>
         {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
       <View>
-        <RLink href={`/profile/${data?.owner_id?.id || data?.owner_id}`} style={{ textDecoration: 'none' }}>
+        <RLink
+          href={`/profile/${data?.owner_id?.id || data?.owner_id}`}
+          style={{ textDecoration: 'none' }}
+        >
           <RText>
             {user?.id === data.owner_id
               ? 'Your Profile'
@@ -33,18 +35,16 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
           </RText>
         </RLink>
       </View>
+      {user?.id !== data.owner_id && (
       <RButton
         onPress={() => {
           setIsCopyPackModalOpen(true);
         }}
-        style={{backgroundColor:'transparent'}}
+        style={{ backgroundColor: 'transparent' }}
       >
-        <RText style={{color:'black'}}>
-          Copy Pack
-        </RText>
+        <RText style={{ color: 'black' }}>Copy Pack</RText>
       </RButton>
-      
-      {actionsComponent}
+      )}{actionsComponent}
       <CopyPackModal
         currentPack={data}
         isOpen={isCopyPackModalOpen}
