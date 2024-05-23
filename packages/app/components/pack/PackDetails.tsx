@@ -18,6 +18,8 @@ import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import Layout from 'app/components/layout/Layout';
+
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -58,7 +60,8 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <View
+    <Layout>
+      <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -134,6 +137,7 @@ export function PackDetails() {
         </>
       )}
     </View>
+    </Layout>
   );
 }
 

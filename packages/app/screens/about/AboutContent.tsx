@@ -6,6 +6,7 @@ import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
 import loadStyles from './about.style';
+import Layout from 'app/components/layout/Layout';
 
 interface AboutContentProps {
   desktopContainer: any;
@@ -21,7 +22,8 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 
   return (
-    <ScrollView>
+   <Layout>
+     <ScrollView>
       <View style={styles.textContainer}>
         <View style={styles.headerContainer}>
           <Text style={[isDark ? styles.headerDark : styles.header]}>
@@ -67,6 +69,7 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
         </RStack>
       </View>
     </ScrollView>
+   </Layout>
   );
 };
 

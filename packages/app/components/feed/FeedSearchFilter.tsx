@@ -16,6 +16,7 @@ import {
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
+import Layout from 'app/components/layout/Layout';
 
 const dataValues = [
   'Favorite',
@@ -57,6 +58,7 @@ const FeedSearchFilter = ({
   const onSearch = (search) => setSearchQuery(search);
 
   return (
+    <Layout>
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
         <Form>
@@ -166,6 +168,7 @@ const FeedSearchFilter = ({
         marginLeft={0}
       />
     </View>
+    </Layout>
   );
 };
 

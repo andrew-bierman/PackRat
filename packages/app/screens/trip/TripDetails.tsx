@@ -21,6 +21,7 @@ import {
 } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
 import { formatTripActivityLabel } from 'app/utils/tripUtils';
+import Layout from 'app/components/layout/Layout';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -53,7 +54,8 @@ export function TripDetails() {
   if (isError) return <RText>There was an error</RText>;
 
   return (
-    <View
+    <Layout>
+       <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -161,5 +163,6 @@ export function TripDetails() {
         link={link}
       />
     </View>
+    </Layout>
   );
 }

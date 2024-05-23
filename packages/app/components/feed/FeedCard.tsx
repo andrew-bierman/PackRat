@@ -13,6 +13,7 @@ import { useAuthUser } from 'app/auth/hooks';
 import { useRouter } from 'app/hooks/router';
 import { useItemWeightUnit } from 'app/hooks/items';
 import { convertWeight } from 'app/utils/convertWeight';
+import Layout from "app/components/layout/Layout";
 
 interface CardProps {
   type: string;
@@ -113,7 +114,8 @@ export default function Card({
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
 
   return (
-    <ContextMenu.Root>
+   <Layout>
+      <ContextMenu.Root>
       <ContextMenu.Trigger>
         <View
           style={{
@@ -355,5 +357,6 @@ export default function Card({
         </ContextMenu.Item>
       </ContextMenu.Content>
     </ContextMenu.Root>
+   </Layout>
   );
 }
