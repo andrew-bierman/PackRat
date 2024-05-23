@@ -80,7 +80,6 @@ const MessageList = ({ messages }: MessageListProps) => {
       data={messages}
       renderItem={({ item }) => <MessageBubble message={item} />}
       keyExtractor={(item, index) => index.toString()}
-      style={{ maxWidth: 500, maxHeight: 500, flex: 1 }}
     />
   );
 };
@@ -120,8 +119,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   } = useChat({ itemTypeId });
 
   return (
-    <View style={styles.container}>
-      <RStack style={{ alignItems: 'center' }}>
+    <View style={{maxHeight:280 }}>
+      <RStack style={{ alignItems: 'center'}}>
         {showChatSelector && (
           <>
             {!parsedMessages?.length && (
@@ -129,9 +128,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             )}
           </>
         )}
-        <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
           <MessageList messages={parsedMessages} />
-        </ScrollView>
         <RStack style={{ marginTop: 16, gap: 8 }}>
           <RInput
             placeholder="Type a message..."
@@ -158,7 +155,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   return (
     <View style={styles.container}>
       <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
-        <ChatComponent itemTypeId={itemTypeId} />
+        <ChatComponent  itemTypeId={itemTypeId} />
       </BaseModal>
     </View>
   );
