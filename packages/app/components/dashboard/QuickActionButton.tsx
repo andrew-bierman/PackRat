@@ -24,7 +24,7 @@ const QuickActionButton = ({
         <RCard.Header padded alignItems="center">
           <MaterialIcons
             name={iconName}
-            size={24}
+            size={27}
             color={theme.colors.iconColor}
             style={styles.icon}
           />
@@ -39,21 +39,24 @@ const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     container: {
-      margin: 10,
+      margin: 10, 
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      // paddingHorizontal: 40,
-      // paddingVertical: 60,
+      paddingRight: 50,
+      paddingLeft: 50,
+      paddingTop: 30,
+      paddingBottom: 30,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {
       marginBottom: 10,
     },
     text: {
-      fontSize: 12,
+      fontSize: 18,
+      fontWeight:'bold',
       color: currentTheme.colors.iconColor,
     },
   };
