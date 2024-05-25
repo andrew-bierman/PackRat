@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text , ScrollView} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { RButton, RStack } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
 import loadStyles from './about.style';
+import Layout from 'app/components/layout/Layout';
 
 interface AboutContentProps {
   desktopContainer: any;
@@ -17,12 +18,12 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
     useTheme();
 
   const styles = useCustomStyles(loadStyles);
-  console.log('isDark, isLight', isDark, isLight);
 
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 
   return (
-    <ScrollView>
+   <Layout>
+     <ScrollView>
       <View style={styles.textContainer}>
         <View style={styles.headerContainer}>
           <Text style={[isDark ? styles.headerDark : styles.header]}>
@@ -36,8 +37,6 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
           </Text>
         ))}
       </View>
-      <View style={desktopContainer}>
-        <RStack style={{ flexDirection: 'row' }}>
           <View style={styles.buttonContainer}>
             <RButton style={styles.githubButton} onPress={handleGithubLink}>
               <RStack style={{ flexDirection: 'row' }}>
@@ -65,9 +64,8 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
               </HStack>
             </Button> */}
           </View>
-        </RStack>
-      </View>
     </ScrollView>
+   </Layout>
   );
 };
 

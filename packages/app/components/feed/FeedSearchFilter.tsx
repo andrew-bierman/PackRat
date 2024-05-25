@@ -16,6 +16,7 @@ import {
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
+import Layout from 'app/components/layout/Layout';
 
 const dataValues = [
   'Favorite',
@@ -57,6 +58,7 @@ const FeedSearchFilter = ({
   const onSearch = (search) => setSearchQuery(search);
 
   return (
+    <Layout>
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
         <Form>
@@ -135,10 +137,10 @@ const FeedSearchFilter = ({
             </RStack>
           )}
           <RStack
-            style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            style={{ flexDirection: 'row', gap:Platform.OS === 'web' ? 10 : 60 , alignItems: 'center' }}
           >
             <RText
-              fontSize={17}
+              fontSize={Platform.OS === 'web' ? 17 : 15}
               fontWeight="bold"
               color={currentTheme.colors.textColor}
             >
@@ -150,7 +152,8 @@ const FeedSearchFilter = ({
               onValueChange={handleSortChange}
               placeholder="Sort By"
               style={styles.dropdown}
-              width={160}
+              width= {Platform.OS === 'web' ? 150 : 120}
+              
             />
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -166,6 +169,7 @@ const FeedSearchFilter = ({
         marginLeft={0}
       />
     </View>
+    </Layout>
   );
 };
 
@@ -200,6 +204,7 @@ const loadStyles = (theme: any) => {
       justifyContent: 'space-around',
       alignItems: 'center',
     },
+    
   };
 };
 

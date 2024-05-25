@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
 import { View, Modal, Alert } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
@@ -9,12 +9,11 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const useGpxUpload = (setShape) => {
   const handleGpxUpload = async () => {
-    console.log('clikedd');
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: 'application/gpx+xml',
       });
-      console.log('result', result);
+
       if (result.type === 'success') {
         const base64Gpx = result.uri.split(',')[1];
         const gpxString = atob(base64Gpx);

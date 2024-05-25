@@ -48,9 +48,6 @@ export const useEditPackItem = (isItemPage) => {
       };
     },
     onError: (err, editedItem, context) => {
-      console.log('Error');
-      console.log(err);
-
       // if (context.previousPack) {
       //   // Restore the previous pack data in case of an error
       //   utils.getPackById.setData(

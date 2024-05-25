@@ -12,6 +12,8 @@ import {
   Form,
   FormInput,
   FormSelect,
+  RButton,
+  RInput,
   RStack,
   SubmitButton,
 } from '@packrat/ui';
@@ -78,7 +80,6 @@ const MessageList = ({ messages }: MessageListProps) => {
       data={messages}
       renderItem={({ item }) => <MessageBubble message={item} />}
       keyExtractor={(item, index) => index.toString()}
-      style={{ maxWidth: 500, maxHeight: 500, flex: 1 }}
     />
   );
 };
@@ -114,11 +115,12 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     handleSendMessage,
     setUserInput,
     setTypeId,
+    isLoading,
   } = useChat({ itemTypeId });
 
   return (
-    <View style={styles.container}>
-      <RStack style={{ alignItems: 'center' }}>
+    <View style={{maxHeight:280 }}>
+      <RStack style={{ alignItems: 'center'}}>
         {showChatSelector && (
           <>
             {!parsedMessages?.length && (
@@ -126,25 +128,22 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             )}
           </>
         )}
-        <ScrollView style={{ maxWidth: 500, maxHeight: 500 }}>
           <MessageList messages={parsedMessages} />
-        </ScrollView>
-        <Form
-        // validationSchema={sendMessage}
-        >
-          <RStack style={{ marginTop: 16, gap: 8 }}>
-            <FormInput
-              name="message"
-              placeholder="Type a message..."
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              onChangeText={(text) => setUserInput(text)}
-            />
-            <SubmitButton onSubmit={handleSendMessage}>
-              <Text style={styles.sendText}>Send</Text>
-            </SubmitButton>
-          </RStack>
-        </Form>
+        <RStack style={{ marginTop: 16, gap: 8 }}>
+          <RInput
+            placeholder="Type a message..."
+            value={userInput}
+            onChangeText={(text) => setUserInput(text)}
+          />
+          <RButton
+            disabled={!userInput}
+            onClick={() => handleSendMessage({ message: userInput })}
+          >
+            <Text style={styles.sendText}>
+              {isLoading ? 'Loading...' : 'Send'}
+            </Text>
+          </RButton>
+        </RStack>
       </RStack>
     </View>
   );
@@ -156,7 +155,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   return (
     <View style={styles.container}>
       <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
-        <ChatComponent itemTypeId={itemTypeId} />
+        <ChatComponent  itemTypeId={itemTypeId} />
       </BaseModal>
     </View>
   );

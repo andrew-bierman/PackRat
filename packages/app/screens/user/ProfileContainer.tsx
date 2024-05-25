@@ -10,6 +10,7 @@ import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
 import { useProfile } from 'app/hooks/user';
+import Layout from 'app/components/layout/Layout';
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -56,7 +57,8 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <View style={{ width: '90%', ...styles.infoSection }}>
+    <Layout>
+      <View style={{ width: '90%', ...styles.infoSection }}>
       <RStack
         style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
       >
@@ -139,6 +141,7 @@ const Header = ({
       </RStack>
       {error ? <RText>{error}</RText> : null}
     </View>
+    </Layout>
   );
 };
 
@@ -266,6 +269,7 @@ const loadStyles = (theme) => {
     },
     infoSection: {
       flexDirection: 'column',
+      alignSelf:'center',
       backgroundColor: currentTheme.colors.white,
       alignItems: 'center',
       borderRadius: 12,

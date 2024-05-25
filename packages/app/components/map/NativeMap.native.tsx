@@ -8,14 +8,12 @@ import {
   Alert,
   Linking,
 } from 'react-native';
-// import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
 import { AlertDialog } from 'native-base';
 import { RButton, RInput } from '@packrat/ui';
 
-// get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
 import { theme } from '../../theme';
 import MapButtonsOverlay from './MapButtonsOverlay';
@@ -87,7 +85,6 @@ function NativeMap({ shape: shapeProp }) {
 
   const pointLatLong = shape?.features[0]?.geometry?.coordinates;
   const openMaps = (latLong) => {
-    console.log(latLong.join(','), 'lat long');
     const scheme = Platform.select({
       ios: 'maps://0,0?q=',
       android: 'geo:0,0?q=',
@@ -120,8 +117,8 @@ function NativeMap({ shape: shapeProp }) {
             isPoint(shape)
               ? pointLatLong
               : isPolygonOrMultiPolygon(shape)
-              ? multiPolygonBounds(shape.features[0])
-              : trailCenterPoint
+                ? multiPolygonBounds(shape.features[0])
+                : trailCenterPoint
           }
           animationMode={'flyTo'}
           animationDuration={2000}
@@ -151,7 +148,6 @@ function NativeMap({ shape: shapeProp }) {
             id="destination"
             coordinate={pointLatLong}
             onSelected={() => {
-              console.log('selected');
               openMaps(pointLatLong);
             }}
           >

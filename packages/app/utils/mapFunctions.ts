@@ -177,17 +177,20 @@ function calculateZoomLevel(bounds, mapDim) {
  * @return {array} The center coordinates of the trail.
  */
 function findTrailCenter(shape) {
+  console.log('Finding trail center...', shape);
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
-  if (trailCoords.length === 1) {
-    return trailCoords[0];
-  }
+  // Flatten the coordinates array for Polygon geometries
+  const flattenedCoords = trailCoords[0].flat();
 
-  const latitudes = trailCoords.map((coord) => coord[1]);
-  const longitudes = trailCoords.map((coord) => coord[0]);
+  const latitudes = flattenedCoords.map((coord) => coord[1]);
+  const longitudes = flattenedCoords.map((coord) => coord[0]);
 
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
   const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+
+  console.log('Average latitude:', avgLatitude);
+  console.log('Average longitude:', avgLongitude);
 
   return [avgLongitude, avgLatitude];
 }
@@ -333,6 +336,7 @@ const multiPolygonBounds = (multipolygonData) => {
 
   const centerLng = (minX + maxX) / 2;
   const centerLat = (minY + maxY) / 2;
+
   return [centerLng, centerLat];
 };
 

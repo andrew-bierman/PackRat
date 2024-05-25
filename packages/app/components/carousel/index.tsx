@@ -29,7 +29,7 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   const scrollToIndex = (index: number) => {
     if (index >= 0 && index < children.length && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
-        x: index * (itemWidth + 20),
+        x: index * 220,
         y: 0,
         animated: true,
       });

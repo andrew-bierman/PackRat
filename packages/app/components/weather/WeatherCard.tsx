@@ -279,7 +279,6 @@ export default function WeatherCard({
         style={styles.card}
       >
         {restOfWeek.map((day, index) => {
-          console.log('dayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', day);
           return (
             <RStack key={index} style={styles.weatherInfo}>
               <RText style={{ color: styles.tempColor.color }}>{day}</RText>

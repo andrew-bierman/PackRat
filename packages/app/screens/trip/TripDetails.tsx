@@ -6,7 +6,7 @@ import { View } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
 import { Platform, StyleSheet, FlatList, Dimensions, Text } from 'react-native';
-import { CLIENT_URL } from '@env';
+import { CLIENT_URL } from '@packrat/config';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
@@ -20,6 +20,8 @@ import {
   loadStyles,
 } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
+import { formatTripActivityLabel } from 'app/utils/tripUtils';
+import Layout from 'app/components/layout/Layout';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -52,7 +54,8 @@ export function TripDetails() {
   if (isError) return <RText>There was an error</RText>;
 
   return (
-    <View
+    <Layout>
+       <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -83,6 +86,13 @@ export function TripDetails() {
                             <RStack>
                               <Text style={styles.descriptionText}>
                                 Description: {data?.description}
+                              </Text>
+                            </RStack>
+                          )}
+                          {data?.type && (
+                            <RStack>
+                              <Text style={styles.descriptionText}>
+                                Activity: {formatTripActivityLabel(data?.type)}
                               </Text>
                             </RStack>
                           )}
@@ -153,5 +163,6 @@ export function TripDetails() {
         link={link}
       />
     </View>
+    </Layout>
   );
 }

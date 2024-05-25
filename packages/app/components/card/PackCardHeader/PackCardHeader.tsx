@@ -48,7 +48,7 @@ export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {
       title={
         <RStack
           style={{
-            display:'flex',
+            display: 'flex',
             alignItems: 'center',
             flexDirection: 'row',
           }}

@@ -1,0 +1,7 @@
+body {
+  background-color: rgb(2, 132, 199) !important;
+}
+
+*:focus {
+  outline: none;
+}

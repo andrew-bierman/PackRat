@@ -41,16 +41,16 @@ async function runDiagnostics() {
       name: 'appName',
       message: 'Select an app to diagnose:',
       choices: ['bun-server', 'expo', 'next', 'tauri', 'vite'],
-    }
+    },
   ]);
 
   const configFileNames = {
-    'expo': ['app.json'],
-    'next': ['next.config.js'],
-    'vite': ['vite.config.js'],
+    expo: ['app.json'],
+    next: ['next.config.js'],
+    vite: ['vite.config.js'],
     // Assuming generic checks for Bun and Tauri, adjust based on real config files
     'bun-server': ['package.json'],
-    'tauri': ['package.json'],
+    tauri: ['package.json'],
   };
 
   await checkConfigFiles(response.appName, configFileNames[response.appName]);

@@ -9,12 +9,13 @@ import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import Layout from 'app/components/layout/Layout';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <>
+    <Layout>
       <RScrollView contentContainerStyle={styles.content} horizontal={false}>
         <RStack
           style={[
@@ -39,7 +40,7 @@ const Dashboard = () => {
           </View>
         </RStack>
       </RScrollView>
-    </>
+    </Layout>
   );
 };
 

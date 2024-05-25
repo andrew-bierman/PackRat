@@ -74,7 +74,8 @@ const DataList = ({ data }: DataListProps) => {
           </View>
         </BaseModal>
       ) : (
-        <BaseDialog
+        <View style={{marginLeft :20}}>
+          <BaseDialog
           title="See all"
           trigger="See all"
           footerButtons={[
@@ -105,6 +106,7 @@ const DataList = ({ data }: DataListProps) => {
             maxToRenderPerBatch={2}
           />
         </BaseDialog>
+        </View>
       )}
     </>
   );

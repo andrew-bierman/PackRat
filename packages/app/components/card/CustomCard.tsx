@@ -38,7 +38,6 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
-  console.log(data);
 
   return (
     <View
@@ -81,6 +80,8 @@ export const CustomCard = ({
                 justifyContent: 'center',
                 paddingRight: 16,
                 paddingLeft: 16,
+                position:'relative',
+                zIndex:'1',
               }}
             >
               <SearchItem />

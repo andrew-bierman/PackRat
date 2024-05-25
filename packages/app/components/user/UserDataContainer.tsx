@@ -1,4 +1,4 @@
-import { Link } from '@packrat/crosspath';
+import { RLink } from '@packrat/ui';
 import {
   RStack,
   RText,
@@ -17,6 +17,7 @@ import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View, FlatList } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
+import Layout from 'app/components/layout/Layout';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -100,7 +101,8 @@ export default function UserDataContainer({
   }
 
   return (
-    <LargeCard
+    <Layout>
+      <LargeCard
       customStyle={{
         backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
       }}
@@ -162,16 +164,17 @@ export default function UserDataContainer({
               <DataList data={data} />
             </>
           ) : currentUser?.id === userId ? (
-            <Link href="/">
+            <RLink href="/" style={{ textDecoration: 'none' }}>
               <RButton style={{ color: currentTheme.colors.white }}>
                 {`Create your first ${typeUppercaseSingular}`}
               </RButton>
-            </Link>
+            </RLink>
           ) : (
             <></>
           )}
         </RStack>
       </RStack>
     </LargeCard>
+    </Layout>
   );
 }

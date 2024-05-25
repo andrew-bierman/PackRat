@@ -1,38 +1,25 @@
-name: android-build-apk
+name: android-build-apk-gradlew
+
 on:
   push:
     branches: ['**']
   pull_request:
     branches: ['**']
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  install-and-test:
+  build-android-gradlew:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
-  build-android:
-    needs: install-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - name: Setup Standard Environment
+        uses: ./.github/actions/setup-standard-environment
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
-          cache: yarn
-
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Prebuild
         run: |
@@ -46,6 +33,7 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
+        
         with:
           name: app-release.apk
           path: android/app/build/outputs/apk/release/

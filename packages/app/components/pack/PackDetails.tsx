@@ -7,7 +7,7 @@ import { RButton, RText } from '@packrat/ui';
 import { DetailsComponent } from '../details';
 import { Dimensions, Platform, View, FlatList } from 'react-native';
 import { theme } from '../../theme';
-import { CLIENT_URL } from '@env';
+import { CLIENT_URL } from '@packrat/config';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
 import { AddItem } from '../item/AddItem';
@@ -18,6 +18,8 @@ import { usePackId } from 'app/hooks/packs/usePackId';
 import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import Layout from 'app/components/layout/Layout';
+
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -58,7 +60,8 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <View
+    <Layout>
+      <View
       style={[
         styles.mainContainer,
         Platform.OS == 'web'
@@ -134,6 +137,7 @@ export function PackDetails() {
         </>
       )}
     </View>
+    </Layout>
   );
 }
 

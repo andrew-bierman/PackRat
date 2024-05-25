@@ -1,34 +1,51 @@
-import { Platform } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
+import { ViewProps } from 'react-native';
 
-import { RIconButton } from '@packrat/ui';
+import RIconButton from '../RIconButton';
 
-const CustomContent = styled(DropdownMenu.Content, {
-  backgroundColor: 'white',
-  minWidth: 160,
-  shadowColor: '#000',
-  borderRadius: 8,
-  shadowOffset: {
-    width: 0,
-    height: 8,
-  },
-  shadowOpacity: 0.2,
-  shadowRadius: 16,
-  padding: 12,
+interface ExtendedDropdownMenuProps extends ViewProps {
+  css?: string;
+}
+
+interface ExtendedDropdownMenuItemProps extends ViewProps {
+  css?: string;
+  onSelect?: () => void;
+}
+
+const ExtendedDropdownMenuContent =
+  DropdownMenu.Content as React.ComponentType<ExtendedDropdownMenuProps>;
+
+const CustomContent = styled(ExtendedDropdownMenuContent, {
+  css: `
+    background-color: white;
+    min-width: 160px;
+    shadow-color: #000;
+    border-radius: 8px;
+    shadow-offset: {
+      width: 0;
+      height: 8px;
+    };
+    shadow-opacity: 0.2;
+    shadow-radius: 16px;
+    padding: 12px;
+  `,
 });
 
-const DropdownMenuContent = DropdownMenu.create(CustomContent, 'Content');
+const ExtendedDropdownMenuItem =
+  DropdownMenu.Item as React.ComponentType<ExtendedDropdownMenuItemProps>;
 
-const CustomItem = styled(DropdownMenu.Item, {
-  padding: 10,
-  backgroundColor: 'white',
-  flexDirection: 'row',
-  alignItems: 'center',
-  hoverStyle: {
-    backgroundColor: 'gray',
-  },
+const CustomItem = styled(ExtendedDropdownMenuItem, {
+  css: `
+    padding: 10px;
+    background-color: white;
+    flex-direction: row;
+    align-items: center;
+    &:hover {
+      background-color: gray;
+    }
+  `,
 });
 
 const DropdownMenuItem = DropdownMenu.create(CustomItem, 'Item');
@@ -45,7 +62,7 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
       </DropdownMenu.Trigger>
       <CustomContent>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <CustomItem key={label} onSelect={onSelect()}>
+          <CustomItem key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </CustomItem>
         ))}
@@ -64,13 +81,13 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
           style={{ padding: 0 }}
         />
       </DropdownMenu.Trigger>
-      <CustomContent>
+      <DropdownMenu.Content>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect()}>
+          <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
-      </CustomContent>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 };

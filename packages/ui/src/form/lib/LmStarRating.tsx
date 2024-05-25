@@ -2,7 +2,7 @@ import { SizableStack, SizeTokens, XStack, XStackProps } from 'tamagui';
 import { ComponentType, useId, useState } from 'react';
 import { LmFormFieldContainer } from './LmFormFieldContainer';
 import { LmFormContainerBaseTypes } from './formContainerTypes';
-import { IconProps, StarFill } from '@tamagui-extras/core';
+import { IconProps, StarFill } from '../../extras/lib/core/src';
 
 export type LmStarRatingProps = LmFormContainerBaseTypes & {
   count?: number;
@@ -68,8 +68,8 @@ export function LmStarRating({
               ? colorActiveHover
               : colorActive
             : hovered
-            ? colorHover
-            : color;
+              ? colorHover
+              : color;
           return (
             <SizableStack
               key={`${currentRating}`}
