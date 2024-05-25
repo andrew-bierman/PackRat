@@ -10,7 +10,7 @@ const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 
 interface PlacesAutocompleteProps {
-  onSelect: (geoJSON: any) => void;
+  onSelect?: (geoJSON: any) => void;
   placeholder?: string;
 }
 

@@ -31,15 +31,15 @@ const dataValues = [
 ];
 
 interface FeedSearchFilterProps {
-  feedType: string | null;
+  feedType?: string | null;
   isSortHidden: boolean;
-  handleSortChange: (value: string) => void;
-  handleTogglePack: () => void;
-  handleToggleTrip: () => void;
-  selectedTypes: { pack: boolean; trip: boolean };
-  queryString: string;
-  setSearchQuery: (query: string) => void;
-  handleCreateClick: () => void;
+  handleSortChange?: (value: string) => void;
+  handleTogglePack?: () => void;
+  handleToggleTrip?: () => void;
+  selectedTypes?: { pack: boolean; trip: boolean };
+  queryString?: string;
+  setSearchQuery?: (query: string) => void;
+  handleCreateClick?: () => void;
   value?: string;
   onChange?: (value: string) => void;
 }

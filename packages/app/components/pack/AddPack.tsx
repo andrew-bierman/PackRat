@@ -1,11 +1,9 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import {
-  RButton,
   RText,
-  RLabel,
   Form,
-  FormSelect,
+  FormSelect as OriginalFormSelect,
   FormInput,
   SubmitButton,
   useModal,
@@ -16,6 +14,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
+
+const FormSelect: any = OriginalFormSelect;
 
 export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
@@ -70,20 +70,17 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder="Name"
             name="name"
             label="Name"
-            style={{textAlign: 'left', width:200 }}
+            style={{ textAlign: 'left', width: 200 }}
           />
           <FormSelect
             onValueChange={handleonValueChange}
             options={packSelectOptions}
-            name = 'isPublic'
-            label='Is Public'
+            name="isPublic"
+            label="Is Public"
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
-          <SubmitButton
-            style={styles.btn}
-            onSubmit={handleAddPack}
-          >
+          <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
@@ -118,7 +115,7 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
-      flex:1,
+      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -160,7 +157,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width:Platform.OS === 'web'?"200px" : "65%",
+      width: Platform.OS === 'web' ? '200px' : '65%',
       marginTop: 40,
       marginBottom: 20,
     },

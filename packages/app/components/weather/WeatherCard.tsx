@@ -8,12 +8,13 @@ import {
   FontAwesome5,
   Octicons,
 } from '@expo/vector-icons';
-import { RImage, RStack, RText } from '@packrat/ui';
+import { RImage, RStack as OriginalRStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+
+const RStack: any = OriginalRStack;
 
 interface WeatherObject {
   name: string;
