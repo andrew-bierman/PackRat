@@ -1,19 +1,23 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
-  Button,
+  Button as OriginalButton,
   Dialog,
   Fieldset,
-  Input,
-  Label,
+  Input as OriginalInput,
+  Label as OriginalLabel,
   Paragraph,
   TooltipSimple,
   Unspaced,
-  XStack,
-  YStack,
+  XStack as OriginalXStack,
 } from 'tamagui';
 
 import { BaseDialog } from '@packrat/ui';
 import { SelectDemoItem } from '../select';
+
+const Label: any = OriginalLabel;
+const XStack: any = OriginalXStack;
+const Button: any = OriginalButton;
+const Input: any = OriginalInput;
 
 export const DialogDemo = () => {
   return (

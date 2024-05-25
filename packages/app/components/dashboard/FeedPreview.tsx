@@ -1,5 +1,5 @@
 import React from 'react';
-import { RText, RStack } from '@packrat/ui';
+import { RText as OriginalRText, RStack } from '@packrat/ui';
 import { RLink } from '@packrat/ui';
 import { View } from 'react-native';
 import Carousel from '../carousel';
@@ -17,6 +17,7 @@ interface FeedItem {
 interface FeedPreviewScrollProps {
   itemWidth: number;
 }
+const RText: any = OriginalRText;
 
 const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   const styles = useCustomStyles(loadStyles);

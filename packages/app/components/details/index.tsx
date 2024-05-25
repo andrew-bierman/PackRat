@@ -42,7 +42,7 @@ export const DetailsComponent = ({
                 </>
               }
               footer={data?.details}
-              destination={null}
+              // destination={null}
               type="pack"
             />
           </>

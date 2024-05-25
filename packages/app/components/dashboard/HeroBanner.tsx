@@ -1,5 +1,5 @@
 import React from 'react';
-import { RStack, RText, RButton } from '@packrat/ui';
+import { RStack, RText as OriginalRText, RButton } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import LargeCard from '../card/LargeCard';
@@ -12,7 +12,7 @@ import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+const RText: any = OriginalRText;
 
 interface HeroSectionProps {
   onSelect: (selectedResult: SearchResult) => void;
@@ -151,8 +151,8 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
-      position:'relative',
-      zIndex:1,
+      position: 'relative',
+      zIndex: 1,
     },
     title: {
       fontSize: 24,

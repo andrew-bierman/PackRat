@@ -1,10 +1,11 @@
-import { TouchableOpacity, Text, View } from 'react-native';
-import { RCard } from '@packrat/ui';
+import { TouchableOpacity, Text } from 'react-native';
+import { RCard as OriginalRCard } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+
+const RCard: any = OriginalRCard;
 
 interface QuickActionButtonProps {
   onPress: () => void;

@@ -1,6 +1,8 @@
-import { RStack, RText } from '@packrat/ui';
+import { RStack, RText as OriginalRText } from '@packrat/ui';
 import { SearchInput } from 'app/components/SearchInput';
 import { useSearchItem } from './useSearchItem';
+
+const RText: any = OriginalRText;
 
 export const SearchItem = () => {
   const { searchString, handleSearchResultClick, results, setSearchString } =
@@ -18,7 +20,7 @@ export const SearchItem = () => {
   );
 };
 
-const ResultItem = ({ item }) => {
+const ResultItem = ({ item }: any) => {
   return (
     <RStack style={{ flexDirection: 'row' }}>
       <RText fontWeight="400">{item.name}</RText>

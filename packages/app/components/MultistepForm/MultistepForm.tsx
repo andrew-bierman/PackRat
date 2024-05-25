@@ -5,6 +5,11 @@ import { useMultiStepForm } from './useMultiStepForm';
 import { ProgressBar } from './ProgressBar';
 import { Sidebar } from './Sidebar';
 
+interface StepData {
+  component?: React.ComponentType;
+  [key: string]: any;
+}
+
 // TODO move to packages, we need to inject styles in this component, need to think what is the best way to do it
 
 export const MultiStepForm = ({ steps = [] }) => {
@@ -19,7 +24,7 @@ export const MultiStepForm = ({ steps = [] }) => {
     isFirstStep,
   } = useMultiStepForm(steps);
 
-  const { component: CurrentComponent, ...props } = currentStepData;
+  const { component: CurrentComponent, ...props } = currentStepData as StepData;
 
   if (!steps.length) return null;
 

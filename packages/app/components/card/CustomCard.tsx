@@ -68,21 +68,23 @@ export const CustomCard = ({
           {type === 'trip' ? (
             <TripCardHeader data={data} title={title} link={link} />
           ) : (
-            <PackCardHeader data={data} title={title} link={link} />
+            <PackCardHeader data={data} title={title} link={link || ''} />
           )}
         </View>
         <RSeparator />
-        {type === 'pack' && authUser.id === data.owner_id ? (
+        {type === 'pack' && authUser?.id === data.owner_id.id ? (
           <>
             <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingRight: 16,
-                paddingLeft: 16,
-                position:'relative',
-                zIndex:'1',
-              }}
+              style={
+                {
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingRight: 16,
+                  paddingLeft: 16,
+                  position: 'relative',
+                  zIndex: '1',
+                } as any
+              }
             >
               <SearchItem />
             </View>

@@ -20,7 +20,7 @@ import { Platform } from 'react-native';
 interface PackCardHeaderProps {
   data: any;
   title: string;
-  link: string;
+  link?: string;
 }
 
 export const PackCardHeader = ({ data, title, link }: PackCardHeaderProps) => {

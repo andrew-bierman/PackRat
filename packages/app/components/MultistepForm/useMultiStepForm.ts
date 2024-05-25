@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
-export const useMultiStepForm = (steps = []) => {
+interface Step {
+  sidebarData?: any;
+}
+
+export const useMultiStepForm = (steps: Step[] = []) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const nextStep = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RStack, RText } from '@packrat/ui';
+import { RStack, RText as OriginalRText } from '@packrat/ui';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
@@ -7,6 +7,7 @@ import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
 import { useAuthUser } from 'app/auth/hooks';
 import useTheme from '../../hooks/useTheme';
 
+const RText: any = OriginalRText;
 export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);
   const user = useAuthUser();

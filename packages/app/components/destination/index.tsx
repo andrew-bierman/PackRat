@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { RButton, RStack, RText } from '@packrat/ui';
+import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import MapContainer from 'app/components/map/MapContainer';
 import { defaultShape } from '../../utils/mapFunctions';
@@ -16,7 +16,8 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
-import { zIndex } from '@tamagui/themes/types/tokens';
+
+const RText: any = OriginalRText;
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -61,7 +62,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
           if (index < 3 && typeof value === 'string') {
             return (
               <RText key={key} style={styles.languageText}>
-                {`${key.split(':')[1].toUpperCase()}: ${value}`}
+                {`${(key.split(':')[1] || '').toUpperCase()}: ${value}`}
               </RText>
             );
           }
