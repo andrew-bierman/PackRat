@@ -31,9 +31,9 @@ export const useQuickActions = () => {
    *
    * @param {string} action - The selected action.
    */
-  const handleActionSelect = (action) => {
+  const handleActionSelect = (action: string) => {
     const selectedAction = quickActionData.find((a) => a.action === action);
-    if (selectedAction) {
+    if (selectedAction && selectedAction.href) {
       router.push(selectedAction.href);
     }
   };

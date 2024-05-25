@@ -1,6 +1,6 @@
 import { queryTrpc } from '../../trpc';
 
-export const useUserTrips = (ownerId) => {
+export const useUserTrips = (ownerId: string | undefined) => {
   // If ownerId is not provided, don’t run the query.
   const enabled = !!ownerId;
 

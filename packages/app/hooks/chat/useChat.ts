@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';

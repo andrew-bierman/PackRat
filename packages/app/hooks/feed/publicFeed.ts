@@ -1,7 +1,25 @@
 import { queryTrpc } from '../../trpc';
 
+type DataType = {
+  type: string;
+  id: string;
+  duration: string;
+  name: string;
+  description: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  pack_id: string | null;
+  owner_id: string | null;
+  is_public: boolean | null;
+  //  ... rest
+}[];
+
+type OptionalDataType = {
+  [K in keyof DataType]?: DataType[K];
+}[];
+
 export const usePublicFeed = (queryString, selectedTypes) => {
-  let data = [];
+  let data: OptionalDataType = [];
   let isLoading = true;
   try {
     const queryOptions = {
