@@ -9,70 +9,50 @@ import * as React from 'react';
 import { Separator, Text, View, YStack, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 
-type Person = {
-  firstName: string;
-  lastName: string;
-  age: number;
-  visits: number;
-  status: string;
-  progress: number;
-};
+interface Category {
+  id: string;
+  name: string;
+}
 
-const defaultData: Person[] = [
-  {
-    firstName: 'hary',
-    lastName: 'potter',
-    age: 24,
-    visits: 100,
-    status: 'In Relationship',
-    progress: 50,
-  },
-  {
-    firstName: 'andy',
-    lastName: 'loren',
-    age: 40,
-    visits: 40,
-    status: 'Single',
-    progress: 80,
-  },
-  {
-    firstName: 'masoud',
-    lastName: 'epsum',
-    age: 45,
-    visits: 20,
-    status: 'Complicated',
-    progress: 10,
-  },
-];
+interface Item {
+  id: string;
+  name: string;
+  ownerId: string;
+  weight: number;
+  quantity: number;
+  unit: string;
+  category: Category;
+}
 
-const columnHelper = createColumnHelper<Person>();
+interface GroupedData {
+  [key: string]: Item[];
+}
+
+interface RootObject {
+  groupedData: GroupedData;
+}
+
+const columnHelper = createColumnHelper<Item>();
 
 const columns = [
-  columnHelper.accessor('firstName', {
+  columnHelper.accessor('name', {
     cell: (info) => info.getValue(),
+    header: () => 'Name',
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor((row) => row.lastName, {
-    id: 'lastName',
-    cell: (info) => info.getValue(),
-    header: () => 'Last Name',
+  columnHelper.accessor('weight', {
+    cell: (info) => `${info.getValue()} ${info.row.original.unit}`,
+    header: () => 'Weight',
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor('age', {
-    header: () => 'Age',
+  columnHelper.accessor('quantity', {
+    header: () => 'Quantity',
     cell: (info) => info.renderValue(),
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor('visits', {
-    header: () => 'Vists',
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    footer: (info) => info.column.id,
-  }),
-  columnHelper.accessor('progress', {
-    header: 'Progress',
+  columnHelper.accessor('category.name', {
+    header: () => 'Category',
+    cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
   }),
 ];
@@ -80,11 +60,16 @@ const columns = [
 const CELL_WIDTH = '$15';
 
 /** ------ EXAMPLE ------ */
-export function BasicTable() {
-  const [data, setData] = React.useState(() => [...defaultData]);
+export function BasicTable({ groupedData }: { groupedData: GroupedData }) {
+  console.log('Grouped Data', groupedData);
+
+  // Flatten the grouped data into a single array of items
+  const data = Object.values(groupedData).flat();
+
+  const [tableData, setTableData] = React.useState<Item[]>(data);
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -95,7 +80,7 @@ export function BasicTable() {
   const tableRows = table.getRowModel().rows;
   const footerGroups = table.getFooterGroups();
 
-  const allRowsLenght =
+  const allRowsLength =
     tableRows.length + headerGroups.length + footerGroups.length;
   const rowCounter = React.useRef(-1);
   rowCounter.current = -1;
@@ -103,37 +88,35 @@ export function BasicTable() {
   if (sm) {
     return (
       <YStack gap="$4" width="100%">
-        {defaultData.map((row, i) => {
-          return (
-            <View
-              key={i}
-              borderRadius="$4"
-              borderWidth="$1"
-              borderColor="$borderColor"
-              flex={1}
-              alignSelf="stretch"
-              gap="$3"
-            >
-              <View gap="$3" mx="$3" my="$3">
-                {Object.entries(row).map(([name, value], i) => {
-                  return (
-                    <View key={i}>
-                      <View fd="row" justifyContent="space-between">
-                        <Text>
-                          {name.charAt(0).toUpperCase() + name.slice(1)}
-                        </Text>
-                        <Text color="$gray10">{value}</Text>
-                      </View>
-                      {i !== Object.entries(row).length - 1 && (
-                        <Separator mt="$3" />
-                      )}
+        {tableData.map((row, i) => (
+          <View
+            key={i}
+            borderRadius="$4"
+            borderWidth="$1"
+            borderColor="$borderColor"
+            flex={1}
+            alignSelf="stretch"
+            gap="$3"
+          >
+            <View gap="$3" mx="$3" my="$3">
+              {Object.entries(row).map(([name, value], i) => {
+                console.log(name === 'category' ? value : null)
+                return (
+                  <>
+                    {name !== 'ownerId' && name!=='unit' && name!=='id' &&(
+                    <View fd="row" justifyContent="space-between">
+                      <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
+                      {
+                        name === 'category' ? <Text color="$gray10">{String(value?.name)}</Text> : <Text color="$gray10">{String(value)}</Text>
+                      }
                     </View>
-                  );
-                })}
-              </View>
+                  )}
+                  </>
+                )
+              })}
             </View>
-          );
-        })}
+          </View>
+        ))}
       </YStack>
     );
   }
@@ -157,7 +140,7 @@ export function BasicTable() {
               rowLocation={
                 rowCounter.current === 0
                   ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
+                  : rowCounter.current === allRowsLength - 1
                     ? 'last'
                     : 'middle'
               }
@@ -166,9 +149,9 @@ export function BasicTable() {
               {headerGroup.headers.map((header) => (
                 <Table.HeaderCell
                   cellLocation={
-                    header.id === 'firstName'
+                    header.id === 'name'
                       ? 'first'
-                      : header.id === 'progress'
+                      : header.id === 'category.name'
                         ? 'last'
                         : 'middle'
                   }
@@ -196,7 +179,7 @@ export function BasicTable() {
               rowLocation={
                 rowCounter.current === 0
                   ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
+                  : rowCounter.current === allRowsLength - 1
                     ? 'last'
                     : 'middle'
               }
@@ -205,9 +188,9 @@ export function BasicTable() {
               {row.getVisibleCells().map((cell) => (
                 <Table.Cell
                   cellLocation={
-                    cell.column.id === 'firstName'
+                    cell.column.id === 'name'
                       ? 'first'
-                      : cell.column.id === 'progress'
+                      : cell.column.id === 'category.name'
                         ? 'last'
                         : 'middle'
                   }
@@ -230,7 +213,7 @@ export function BasicTable() {
               rowLocation={
                 rowCounter.current === 0
                   ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
+                  : rowCounter.current === allRowsLength - 1
                     ? 'last'
                     : 'middle'
               }
