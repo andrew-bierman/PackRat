@@ -7,7 +7,7 @@ import useTheme from 'app/hooks/useTheme';
 import { usePlacesAutoComplete } from './usePlacesAutoComplete';
 
 export const PlacesAutocomplete = forwardRef<any>(function PlacesAutoComplete(
-  { onSelect, placeholder },
+  { onSelect, placeholder, customStyle },
   ref,
 ) {
   const { data, handleSelect, search, setSearch } =
@@ -32,6 +32,7 @@ export const PlacesAutocomplete = forwardRef<any>(function PlacesAutoComplete(
       onChange={setSearch}
       searchString={search}
       ref={inputRef}
+      customStyle={customStyle}
     />
   );
 });

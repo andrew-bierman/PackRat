@@ -22,6 +22,7 @@ interface SearchInputProps {
   searchString?: string;
   placeholder?: string;
   resultItemComponent: ReactNode;
+  customStyle: {};
 }
 
 export const SearchInput = forwardRef<TextInput, SearchInputProps>(
@@ -33,6 +34,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       results,
       onChange,
       searchString,
+      customStyle,
     },
     inputRef,
   ) {
@@ -46,11 +48,14 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     } = useSearchInput({ onSelect, onChange, searchString });
 
     const { isDark, currentTheme } = useTheme();
-    const styles = useCustomStyles(loadStyles);
     if (Platform.OS === 'web') {
       return (
-        <RStack style={styles.container}>
-          <RStack position="relative" height="auto">
+        <RStack
+          style={{
+            maxWidth: customStyle === null ? 400 : null,
+          }}
+        >
+          <RStack position="relative" height="auto" width="100%">
             <RStack
               style={{
                 flexDirection: 'row',
@@ -65,6 +70,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 placeholder={placeholder ?? 'Search'}
                 onChangeText={handleSearchChange}
                 value={searchString}
+                style={customStyle}
               />
               <MaterialIcons
                 name="search"
@@ -236,15 +242,3 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     }
   },
 );
-
-const loadStyles = () => ({
-  container: {
-    marginTop: 20,
-    marginBottom: 15,
-    maxWidth: 400,
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

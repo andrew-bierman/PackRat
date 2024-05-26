@@ -107,10 +107,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
           >
             <RText style={styles.title}>{bannerText}</RText>
             {Platform.OS === 'web' ? (
+              <View style={styles.searchContainer}>
               <PlacesAutocomplete
                 onSelect={handleSearchSelect}
                 placeholder={'Search by park, city, or trail'}
+                customStyle={styles.search}
               />
+              </View>
             ) : (
               <RButton
                 style={{
@@ -160,6 +163,16 @@ const loadStyles = (theme: any) => {
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
+    search:{
+      width: '100%',
+      boxSizing: 'border-box',
+      paddingBottom: 20,
+      paddingTop: 20,
+    },
+    searchContainer:{
+      width: 1040,
+     
+    }
   };
 };
 
