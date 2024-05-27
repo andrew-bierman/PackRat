@@ -83,7 +83,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               : require('app/assets/topographical-pattern.png'),
           alt: 'hero',
         }}
-        style={{width:100}}
       >
         <LargeCard
           customStyle={{
