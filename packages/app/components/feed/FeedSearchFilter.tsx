@@ -32,7 +32,7 @@ const dataValues = [
 
 interface FeedSearchFilterProps {
   feedType?: string | null;
-  isSortHidden: boolean;
+  isSortHidden?: boolean;
   handleSortChange?: (value: string) => void;
   handleTogglePack?: () => void;
   handleToggleTrip?: () => void;

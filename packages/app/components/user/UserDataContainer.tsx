@@ -29,7 +29,7 @@ interface UserDataContainerProps {
   data: any;
   type: 'packs' | 'trips' | 'favorites';
   userId?: string;
-  isLoading: boolean;
+  isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
 }
 

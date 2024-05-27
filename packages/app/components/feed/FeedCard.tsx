@@ -63,6 +63,7 @@ export default function Card({
   duration,
   itemPacks,
 }: CardProps) {
+  console.log('CardProps:', favorited_by);
   const user = useAuthUser();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -243,7 +244,7 @@ export default function Card({
                     >
                       <RLink
                         href={`/profile/${
-                          type === 'pack' ? owner_id : owner?.id
+                          type === 'pack' ? owner_id : owner_id
                         }`}
                         style={{ textDecoration: 'none' }}
                       >

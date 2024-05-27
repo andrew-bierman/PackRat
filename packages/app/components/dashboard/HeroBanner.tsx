@@ -15,7 +15,8 @@ import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAuto
 const RText: any = OriginalRText;
 
 interface HeroSectionProps {
-  onSelect: (selectedResult: SearchResult) => void;
+  onSelect?: (selectedResult: SearchResult) => void;
+  style?: any;
 }
 
 interface SearchResult {

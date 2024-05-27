@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native';
 
 interface SectionProps {
   children: React.ReactNode;
-  onPress: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
 }
 const Section: React.FC<SectionProps> = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);

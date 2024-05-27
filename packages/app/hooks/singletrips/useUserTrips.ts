@@ -14,6 +14,8 @@ export const useUserTrips = (ownerId: string | undefined) => {
     },
   );
 
+  console.log('data', data);
+
   // Extract trips or set an empty array if data is undefined.
   // const trips = data?.trips || [];
 

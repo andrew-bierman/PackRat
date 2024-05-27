@@ -16,7 +16,7 @@ import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 
 interface TableContainerProps {
   currentPack: any;
-  selectedPack: any;
+  selectedPack?: any;
   refetch?: boolean;
   setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
   copy?: boolean;
