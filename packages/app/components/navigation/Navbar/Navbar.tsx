@@ -21,33 +21,38 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    
-      <SafeAreaView style={styles.safeArea}>
-        <Container>
-          <View style={styles.container}>
-            <View style={styles.logoContainer}>
-              <RImage
-                source={{
-                  // TODO: Update this to use the PackRat logo from the assets folder
-                  uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
-                  width: 40,
-                  height: 40,
-                }}
-                width={40}
-                height={40}
-                style={styles.logo}
-                alt="PackRat Logo"
-                onClick={() => {
-                  navigate('/');
-                }}
-              />
-              <Text style={styles.logoText}>PackRat</Text>
-            </View>
-            <Drawer />
+    <SafeAreaView style={styles.safeArea}>
+      <Container>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <RImage
+              source={{
+                // TODO: Update this to use the PackRat logo from the assets folder
+                uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
+                width: 40,
+                height: 40,
+              }}
+              width={40}
+              height={40}
+              style={styles.logo}
+              alt="PackRat Logo"
+              onClick={() => {
+                navigate('/');
+              }}
+            />
+            <Text
+              style={styles.logoText}
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              PackRat
+            </Text>
           </View>
-        </Container>
-      </SafeAreaView>
-    
+          <Drawer />
+        </View>
+      </Container>
+    </SafeAreaView>
   );
 };
 
@@ -118,12 +123,13 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     logo: {
       marginRight: 10,
-      cursor:'pointer',
+      cursor: 'pointer',
     },
     logoText: {
       color: currentTheme.colors.text,
       fontSize: 38,
       fontWeight: '900',
+      cursor: 'pointer',
     },
     menuBar: {
       flexDirection: 'row',

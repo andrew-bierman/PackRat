@@ -83,6 +83,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               : require('app/assets/topographical-pattern.png'),
           alt: 'hero',
         }}
+        style={{width:100}}
       >
         <LargeCard
           customStyle={{
@@ -111,7 +112,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               <PlacesAutocomplete
                 onSelect={handleSearchSelect}
                 placeholder={'Search by park, city, or trail'}
-                customStyle={styles.search}
               />
               </View>
             ) : (
@@ -163,15 +163,13 @@ const loadStyles = (theme: any) => {
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
-    search:{
-      width: '100%',
-      boxSizing: 'border-box',
-      paddingBottom: 20,
-      paddingTop: 20,
-    },
     searchContainer:{
       width: 1040,
-     
+      paddingTop:30,
+      paddingBottom:30,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     }
   };
 };

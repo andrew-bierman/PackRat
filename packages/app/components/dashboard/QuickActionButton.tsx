@@ -24,7 +24,7 @@ const QuickActionButton = ({
         <RCard.Header padded alignItems="center">
           <MaterialIcons
             name={iconName}
-            size={27}
+            size={24}
             color={theme.colors.iconColor}
             style={styles.icon}
           />
@@ -45,17 +45,13 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      paddingRight: 50,
-      paddingLeft: 50,
-      paddingTop: 30,
-      paddingBottom: 30,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {
       marginBottom: 10,
     },
     text: {
-      fontSize: 18,
+      fontSize: 13,
       fontWeight:'bold',
       color: currentTheme.colors.iconColor,
     },
