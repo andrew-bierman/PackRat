@@ -175,11 +175,20 @@ function calculateZoomLevel(bounds, mapDim) {
  * @return {array} The center coordinates of the trail.
  */
 function findTrailCenter(shape) {
+  
   console.log('Finding trail center...', shape);
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
   // Flatten the coordinates array for Polygon geometries
-  const flattenedCoords = trailCoords[0].flat();
+  
+  let flattenedCoords;
+  if(Array.isArray(trailCoords[0][0][0])){
+    flattenedCoords = trailCoords[0].flat();
+  }else {
+    flattenedCoords = trailCoords[0];
+  }
+  
+  // const flattenedCoords = trailCoords[0].flat();
 
   const latitudes = flattenedCoords.map((coord) => coord[1]);
   const longitudes = flattenedCoords.map((coord) => coord[0]);
