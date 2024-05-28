@@ -27,7 +27,7 @@ const TripPlaceCard = ({
   return (
     <TripCardBase icon={icon} title={title}>
       <RStack style={{ width: '80%' }}>
-        <Carousel iconColor={isDark ? '#fff' : '#000'}>
+        <Carousel itemWidth={'5'} iconColor={isDark ? '#fff' : '#000'}>
           {data?.map((item) => {
             return (
               <RCard

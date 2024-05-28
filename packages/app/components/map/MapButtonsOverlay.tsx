@@ -75,7 +75,7 @@ const MapButtonsOverlay = ({
             <Entypo name="resize-full-screen" size={21} color="grey" />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               styles.headerBtnView,
               {
@@ -89,7 +89,7 @@ const MapButtonsOverlay = ({
             onPress={navigateToMaps}
           >
             <FontAwesome5 name="directions" size={21} color="grey" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </>
       ) : (
         // Fullscreen map

@@ -235,7 +235,7 @@ export default function Card({
                   >
                     <RLink
                       href={`/profile/${
-                        type === 'pack' ? owner_id : owner?.id
+                        type === 'pack' ? owner?.id : owner_id
                       }`}
                       style={{ textDecoration: 'none' }}
                     >

@@ -15741,6 +15741,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"concat-stream@npm:~1.4.1":
+  version: 1.4.11
+  resolution: "concat-stream@npm:1.4.11"
+  dependencies:
+    inherits: "npm:~2.0.1"
+    readable-stream: "npm:~1.1.9"
+    typedarray: "npm:~0.0.5"
+  checksum: 10/d65f7d2fc9e980cf9a5ce1bbfad5758e7172ff694f11614b17eccf25b63ca66f690f20146a12818e083a539afeb06c3bda02c9a32cc85fcb5f522b7739d30a08
+  languageName: node
+  linkType: hard
+
 "concurrently@npm:6.5.1":
   version: 6.5.1
   resolution: "concurrently@npm:6.5.1"
@@ -26511,6 +26522,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minimist@npm:1.2.6":
+  version: 1.2.6
+  resolution: "minimist@npm:1.2.6"
+  checksum: 10/b956a7d48669c5007f0afce100a92d3af18e77939a25b5b4f62e9ea07c2777033608327e14c2af85684d5cd504f623f2a04d30a4a43379d21dd3c6dcf12b8ab8
+  languageName: node
+  linkType: hard
+
 "minimist@npm:^1.2.0, minimist@npm:^1.2.6":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
@@ -28583,6 +28601,7 @@ __metadata:
     patch-package: "npm:^8.0.0"
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^3.2.5"
+    simplify-geojson: "npm:^1.0.5"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -30962,7 +30981,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:1.1":
+"readable-stream@npm:1.1, readable-stream@npm:~1.1.9":
   version: 1.1.14
   resolution: "readable-stream@npm:1.1.14"
   dependencies:
@@ -34886,6 +34905,13 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 10/2cc1bcf7d8c1237f6a16c04efc06637b2c5f2d74e58e84665445cf87668b85a21ab18dd751fa49eee6ae024b70326635d7b79ad37b1c370ed2fec6aeeeb52714
+  languageName: node
+  linkType: hard
+
+"typedarray@npm:~0.0.5":
+  version: 0.0.7
+  resolution: "typedarray@npm:0.0.7"
+  checksum: 10/3a0f29df4d5457c1d75a0a4851def49337b8dd12dcb945cd9ed08bd98fcd53daa5a98935d434504fb0eb5a3d2505f09b84ea45405d8b92355f1d01bee6b7ea11
   languageName: node
   linkType: hard
 

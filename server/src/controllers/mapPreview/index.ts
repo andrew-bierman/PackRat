@@ -30,9 +30,8 @@ const getMapPreview = async (ctx: Context, next: Next) => {
       )}?access_token=${MAPBOX_ACCESS_TOKEN}&${queryParams}`;
 
     const response = await fetch(url, { method: 'GET' });
-
     if (!response.ok) {
-      throw new Error('Failed to fetch map preview image');
+      throw new Error('Failed to fetch map preview image', response);
     }
 
     const newResponse = new Response(response.body, {

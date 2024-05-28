@@ -20,7 +20,6 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
-
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
     const newIndex = Math.round(contentOffset.x / itemWidth);

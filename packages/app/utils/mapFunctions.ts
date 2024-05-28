@@ -40,7 +40,7 @@ const defaultShape = {
  * @return {array} The normalized coordinates.
  */
 function normalizeCoordinates(coordinates) {
-  // check if coordinates are nested, flip them if so
+  // Check if coordinates are nested, flip them if so
   if (typeof coordinates[0][0] === 'number') {
     // If first value is greater than 90, it's likely in the format of (longitude, latitude)
     if (coordinates[0][0] > 90) {
@@ -48,8 +48,7 @@ function normalizeCoordinates(coordinates) {
     }
     return coordinates;
   }
-  // if not nested, nest them
-  // If first value is greater than 90, it's likely in the format of (longitude, latitude)
+  // If not nested, nest them
   if (coordinates[0] > 90) {
     return [[coordinates[1], coordinates[0]]];
   }
@@ -112,8 +111,8 @@ function getShapeSourceBounds(shape) {
  * @return {number|null} The calculated zoom level or null if there are no coordinates.
  */
 function handleShapeSourceLoad(width, height) {
-  if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
-    let bounds = getShapeSourceBounds(shape);
+  if (defaultShape?.features[0]?.geometry?.coordinates?.length > 1) {
+    let bounds = getShapeSourceBounds(defaultShape);
     bounds = bounds[0].concat(bounds[1]);
     return calculateZoomLevel(bounds, { width, height });
   }
@@ -129,7 +128,7 @@ function handleShapeSourceLoad(width, height) {
 function latRad(lat) {
   const sin = Math.sin((lat * Math.PI) / 180);
   const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-  return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+  return Math.max(Math.min(radX2, Math.PI), -Math.PI);
 }
 
 /**
@@ -156,6 +155,10 @@ function calculateZoomLevel(bounds, mapDim) {
   const WORLD_DIM = { height: 256, width: 256 };
   const ne = { lat: bounds[2], lng: bounds[3] };
   const sw = { lat: bounds[0], lng: bounds[1] };
+  
+  // Clamp latitude values to avoid invalid calculations
+  ne.lat = Math.max(Math.min(ne.lat, 85.05112878), -85.05112878);
+  sw.lat = Math.max(Math.min(sw.lat, 85.05112878), -85.05112878);
 
   const latFraction = (latRad(ne.lat) - latRad(sw.lat)) / Math.PI;
 
@@ -164,8 +167,7 @@ function calculateZoomLevel(bounds, mapDim) {
 
   const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
   const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
-
-  return latZoom;
+  return Math.min(latZoom, lngZoom);
 }
 
 /**
@@ -185,8 +187,7 @@ function findTrailCenter(shape) {
   const longitudes = flattenedCoords.map((coord) => coord[0]);
 
   const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude =
-    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  const avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
 
   console.log('Average latitude:', avgLatitude);
   console.log('Average longitude:', avgLongitude);
@@ -206,20 +207,13 @@ const processShapeData = (shape) => {
 
   shape.features.forEach((feature) => {
     if (feature.geometry.type === 'LineString') {
-      // Make sure coordinates are in the correct format
-      feature.geometry.coordinates = ensure2DArray(
-        feature.geometry.coordinates,
-      );
+      feature.geometry.coordinates = ensure2DArray(feature.geometry.coordinates);
 
       const points = feature.geometry.coordinates.map((coord, index) => {
         return {
           type: 'Feature',
           properties: {
-            // Add a `meta` property to the first and last points
-            meta:
-              index === 0 || index === feature.geometry.coordinates.length - 1
-                ? 'end'
-                : 'middle',
+            meta: index === 0 || index === feature.geometry.coordinates.length - 1 ? 'end' : 'middle',
           },
           geometry: {
             type: 'Point',
@@ -227,10 +221,7 @@ const processShapeData = (shape) => {
           },
         };
       });
-
       processedShape.features.push(...points);
-
-      // Keep the original LineString feature
       processedShape.features.push(feature);
     }
   });
@@ -245,11 +236,9 @@ const processShapeData = (shape) => {
  * @return {Array} - The 2D array.
  */
 const ensure2DArray = (arr) => {
-  // If the first element of the array is not an array itself, add an additional array layer
   if (!Array.isArray(arr[0])) {
     return [arr];
   }
-  // If the array is already 2D, return it as is
   return arr;
 };
 
@@ -259,10 +248,7 @@ const mapboxStyles = [
   { label: 'Light', style: 'mapbox://styles/mapbox/light-v10' },
   { label: 'Dark', style: 'mapbox://styles/mapbox/dark-v10' },
   { label: 'Satellite', style: 'mapbox://styles/mapbox/satellite-v9' },
-  {
-    label: 'Satellite Street',
-    style: 'mapbox://styles/mapbox/satellite-streets-v11',
-  },
+  { label: 'Satellite Street', style: 'mapbox://styles/mapbox/satellite-streets-v11' },
 ];
 
 /**
@@ -279,7 +265,6 @@ const getLocation = async () => {
   }
 
   const location = await Location.getCurrentPositionAsync({});
-
   return location;
 };
 
@@ -302,6 +287,7 @@ const isShapeDownloadable = (shape) => {
 const isPoint = (shape) => {
   return shape?.features[0]?.geometry?.type === 'Point';
 };
+
 /**
  * Checks if the given shape is a LineString.
  *
@@ -320,7 +306,7 @@ const isLineString = (shape) => {
  */
 const isPolygonOrMultiPolygon = (shape) => {
   return (
-    shape?.features[0]?.geometry?.type === 'MultiPolygon' ||
+    shape?.features[0]?.geometry?.type === 'Polygon' ||
     shape?.features[0]?.geometry?.type === 'MultiPolygon'
   );
 };
