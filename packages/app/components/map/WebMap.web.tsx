@@ -3,7 +3,7 @@ import { useWebMap } from 'app/hooks/map/useWebMap';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import mapboxgl from 'mapbox-gl';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Modal, View } from 'react-native';
 import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
@@ -65,10 +65,19 @@ const WebMap = ({ shape: shapeProp }) => {
   );
 
   // TODO: Fix this. The modal is not working as expected.
-  return element;
+  // return element;
+
+  return (
+    <>
+      <Modal animationType={'fade'} transparent={false} visible={showModal}>
+        {element}
+      </Modal>
+      {!showModal && element}
+    </>
+  );
 
   // return showModal ? (
-  //   <Modal animationType={'fade'} transparent={false} visible={true}>
+  //   <Modal animationType={'fade'} transparent={false} visible={showModal}>
   //     {element}
   //   </Modal>
   // ) : (
