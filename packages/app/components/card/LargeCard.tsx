@@ -129,7 +129,7 @@ const loadStyles = (theme: any) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
+      height: Platform.OS === 'web' ? 650 : '23%',
       overflow: 'hidden',
     },
   };
