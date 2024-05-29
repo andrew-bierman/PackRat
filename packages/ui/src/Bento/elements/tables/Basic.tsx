@@ -6,12 +6,12 @@ import {
 } from '@tanstack/react-table';
 import { useMedia } from 'tamagui';
 import * as React from 'react';
-import { Separator, Text, View, YStack, getTokenValue } from 'tamagui';
+import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
-import { ZDropdown, ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { ZDropdown } from '@packrat/ui';
 import { Platform } from 'react-native';
 
 type Person = {
@@ -178,17 +178,7 @@ export function BasicTable({
             </View>
           ) : (
             <View>
-              <ThreeDotsMenu >
-                <YStack space="$1">
-                  {
-                    dropdownItems.map((item) => {
-                      return(
-                        <RButton onPress={item.onSelect}>{item.label}</RButton>
-                      )
-                    })
-                  }
-                </YStack>
-              </ThreeDotsMenu>
+              <ZDropdown.Web dropdownItems={dropdownItems} />
             </View>
           )
         ) : null}
@@ -220,35 +210,49 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <YStack gap="$4" width="100%">
-        {defaultData.map((row, i) => {
-          return (
-            <View
-              key={i}
-              borderRadius="$4"
-              borderWidth="$1"
-              borderColor="$borderColor"
-              flex={1}
-              alignSelf="stretch"
-              gap="$3"
-            >
-              <View gap="$3" mx="$3" my="$3">
-                {Object.entries(row).map(([name, value], i) => {
-                  return (
-                    <View key={i}>
-                      <View fd="row" justifyContent="space-between">
-                        <Text>
-                          {name.charAt(0).toUpperCase() + name.slice(1)}
-                        </Text>
-                        <Text color="$gray10">{value}</Text>
-                      </View>
-                      {i !== Object.entries(row).length - 1 && (
-                        <Separator mt="$3" />
-                      )}
-                    </View>
-                  );
-                })}
-              </View>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
+        {tableData.map((row, i) => (
+          <View
+            key={i}
+            borderRadius="$4"
+            borderWidth="$1"
+            borderColor="$borderColor"
+            flex={1}
+            alignSelf="stretch"
+            gap="$3"
+          >
+            <View gap="$3" mx="$3" my="$3">
+              {Object.entries(row).map(([name, value], i) => {
+                if (name === 'ownerId' || name === 'id') {
+                  return null;
+                }
+                return (
+                  <View fd="row" justifyContent="space-between">
+                    <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
+                    {name === 'category' ? (
+                      <Text color="$gray10">{String(value?.name)}</Text>
+                    ) : (
+                      <Text color="$gray10">{String(value)}</Text>
+                    )}
+                  </View>
+                );
+              })}
+              {hasPermissions ? (
+                <View
+                  fd="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text>Action</Text>
+                  <ActionButtons item={row} />
+                </View>
+              ) : null}
             </View>
           );
         })}
