@@ -1,5 +1,8 @@
 import { Hono } from 'hono';
-import { getAIResponse, getUserChats } from '../controllers/openAi/index';
+import {
+  getAIResponseRoute as getAIResponse,
+  getUserChatsRoute as getUserChats,
+} from '../controllers/openAi/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
@@ -26,7 +29,7 @@ const router = new Hono();
  *                 type: string
  *                 description: The conversation's ID.
  *               userInput:
- *                 type: string
+ *authTokenMiddleware as any,as any,e: string
  *                 description: The user's input message.
  *             example:
  *               userId: "user1"
@@ -52,15 +55,15 @@ const router = new Hono();
  */
 router.post(
   '/ai-response',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getAIResponse),
 );
 
 router.get(
   '/user-chats/:userId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getUserChats),
 );
 

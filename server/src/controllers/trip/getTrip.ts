@@ -24,6 +24,9 @@ import * as validator from '@packrat/validations';
 export function getTripsRoute() {
   return publicProcedure.input(validator.getTrips).query(async (opts) => {
     const { owner_id } = opts.input;
+    if (!owner_id) {
+      throw new Error('Owner id is required');
+    }
     const trips = await getTripsService(owner_id);
     return trips;
   });

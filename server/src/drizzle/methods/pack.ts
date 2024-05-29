@@ -90,7 +90,14 @@ export class Pack {
     includeRelated?: boolean;
   }) {
     try {
-      const filter = id ? eq(PackTable.id, id) : eq(PackTable.name, name);
+      let filter;
+      if (id) {
+        filter = eq(PackTable.id, id);
+      } else if (name) {
+        filter = eq(PackTable.name, name);
+      } else {
+        throw new Error('Either id or name must be provided');
+      }
       const relations = this.getRelations({
         includeRelated,
         completeItems: true,
@@ -119,10 +126,18 @@ export class Pack {
         const itemOrder = queryBy === 'Most Items' ? 'DESC' : 'ASC';
         const itemCountQuery = sql`(SELECT COUNT(*) FROM ${itemPacks} WHERE ${itemPacks.packId} = ${PackTable.id})`;
         return itemOrder === 'ASC' ? asc(itemCountQuery) : desc(itemCountQuery);
+      } else if (sortOption && Object.keys(sortOption).length > 0) {
+        const entries = Object.entries(sortOption);
+        if (entries.length > 0) {
+          const [sortField, sortOrder] = entries[0] || [];
+          if (!sortField || !sortOrder) {
+            throw new Error('Invalid sort option');
+          }
+          return (pack: any) =>
+            sortOrder === 'ASC' ? asc(pack[sortField]) : desc(pack[sortField]);
+        }
       } else {
-        const [sortField, sortOrder] = Object.entries(sortOption)[0];
-        return (pack: any) =>
-          sortOrder === 'ASC' ? asc(pack[sortField]) : desc(pack[sortField]);
+        throw new Error('Sort option is required for non-item sorting');
       }
     } catch (error) {
       throw new Error(`Failed to order by records: ${error.message}`);
@@ -175,13 +190,17 @@ export class Pack {
           ? eq(PackTable.is_public, is_public)
           : null;
       const orderByFunction: any = this.getOrderBy({ sortItems, queryBy });
-      const sortedPacks = await DbClient.instance
-        .select()
-        .from(PackTable)
-        .where(modifiedFilter)
-        .orderBy(orderByFunction)
-        .all();
-      return sortedPacks;
+      if (modifiedFilter) {
+        const sortedPacks = await DbClient.instance
+          .select()
+          .from(PackTable)
+          .where(modifiedFilter)
+          .orderBy(orderByFunction)
+          .all();
+        return sortedPacks;
+      } else {
+        throw new Error('Filter is required for sorting packs by items');
+      }
     } catch (error) {
       throw new Error(`Failed to sort packs by items: ${error.message}`);
     }

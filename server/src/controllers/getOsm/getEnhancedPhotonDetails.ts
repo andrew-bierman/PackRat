@@ -38,6 +38,11 @@ export const getEnhancedPhotonDetails = async (req, res, next) => {
   }
 
   const overpassUrl = process.env.OSM_URI;
+
+  if (!overpassUrl) {
+    throw new Error('OSM_URI is not defined in the environment variables');
+  }
+
   const overpassQuery = `
     [out:json][timeout:25];
     ${type}(${id});
