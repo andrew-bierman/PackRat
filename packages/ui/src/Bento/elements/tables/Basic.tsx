@@ -12,7 +12,10 @@ import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemMod
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
 import { ZDropdown } from '@packrat/ui';
+<<<<<<< HEAD
 import { Platform } from 'react-native';
+=======
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
 
 type Person = {
   firstName: string;
@@ -50,6 +53,7 @@ const defaultData: Person[] = [
   },
 ];
 
+<<<<<<< HEAD
 const columnHelper = createColumnHelper<Person>();
 
 const columns = [
@@ -83,6 +87,21 @@ const columns = [
 ];
 
 const CELL_WIDTH = '$15';
+=======
+interface GroupedData {
+  [key: string]: Item[];
+}
+
+interface BasicTableProps {
+  groupedData: GroupedData;
+  handleCheckboxChange: (itemId: string) => void;
+  onDelete: (params: { itemId: string; packId: string }) => void;
+  hasPermissions: boolean;
+  currentPack: any;
+  refetch: () => void;
+  setRefetch: () => void;
+}
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
 
 /** ------ EXAMPLE ------ */
 export function BasicTable({
@@ -125,11 +144,15 @@ export function BasicTable({
     }),
   ];
 
+<<<<<<< HEAD
   React.useEffect(() => {
     setActiveModal(null);
   }, [groupedData]);
 
   const CELL_WIDTH = '$18';
+=======
+  const CELL_WIDTH = '$15';
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
 
   const [activeModal, setActiveModal] = React.useState<string | null>(null);
 
@@ -147,6 +170,12 @@ export function BasicTable({
   ];
 
   const ActionButtons = ({ item }) => {
+<<<<<<< HEAD
+=======
+    React.useEffect(() => {
+      setActiveModal(null);
+    }, [item]);
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
     return (
       <>
         <EditPackItemModal
@@ -170,6 +199,7 @@ export function BasicTable({
           }
         />
         {hasPermissions ? (
+<<<<<<< HEAD
           Platform.OS === 'android' ||
           Platform.OS === 'ios' ||
           window.innerWidth < 900 ? (
@@ -181,6 +211,9 @@ export function BasicTable({
               <ZDropdown.Web dropdownItems={dropdownItems} />
             </View>
           )
+=======
+          <ZDropdown.Web dropdownItems={dropdownItems} />
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
         ) : null}
       </>
     );
@@ -243,6 +276,7 @@ export function BasicTable({
                   </View>
                 );
               })}
+<<<<<<< HEAD
               {hasPermissions ? (
                 <View
                   fd="row"
@@ -257,133 +291,152 @@ export function BasicTable({
           );
         })}
       </YStack>
+=======
+              <View fd="row" justifyContent="space-between" alignItems="center">
+                <Text>Action</Text>
+                <ZDropdown.Native dropdownItems={dropdownItems} />
+              </View>
+            </View>
+          </View>
+        ))}
+      </View>
+>>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
     );
   }
 
   return (
-    <Table
-      alignCells={{ x: 'center', y: 'center' }}
-      alignHeaderCells={{ y: 'center', x: 'center' }}
-      cellWidth={CELL_WIDTH}
-      cellHeight="$5"
-      borderWidth={0.5}
-      maxWidth={getTokenValue(CELL_WIDTH) * columns.length}
+    <View
+      style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}
     >
-      <Table.Head>
-        {headerGroups.map((headerGroup) => {
-          rowCounter.current++;
-          return (
-            <Table.Row
-              backgrounded
-              backgroundColor="$color2"
-              rowLocation={
-                rowCounter.current === 0
-                  ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
-                    ? 'last'
-                    : 'middle'
-              }
-              key={headerGroup.id}
-            >
-              {headerGroup.headers.map((header) => (
-                <Table.HeaderCell
-                  cellLocation={
-                    header.id === 'firstName'
+      <Table
+        alignCells={{ x: 'center', y: 'center' }}
+        alignHeaderCells={{ y: 'center', x: 'center' }}
+        cellWidth={CELL_WIDTH}
+        cellHeight="$5"
+        borderWidth={0.5}
+        maxWidth={getTokenValue(CELL_WIDTH) * columns.length}
+      >
+        <Table.Head>
+          {headerGroups.map((headerGroup) => {
+            rowCounter.current++;
+            return (
+              <>
+                <Table.Row
+                  backgrounded
+                  backgroundColor="$color2"
+                  rowLocation={
+                    rowCounter.current === 0
                       ? 'first'
-                      : header.id === 'progress'
+                      : rowCounter.current === allRowsLength - 1
                         ? 'last'
                         : 'middle'
                   }
-                  key={header.id}
+                  key={headerGroup.id}
                 >
-                  <Text>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </Text>
-                </Table.HeaderCell>
-              ))}
-            </Table.Row>
-          );
-        })}
-      </Table.Head>
-      <Table.Body>
-        {tableRows.map((row) => {
-          rowCounter.current++;
-          return (
-            <Table.Row
-              rowLocation={
-                rowCounter.current === 0
-                  ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
-                    ? 'last'
-                    : 'middle'
-              }
-              key={row.id}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <Table.Cell
-                  cellLocation={
-                    cell.column.id === 'firstName'
-                      ? 'first'
-                      : cell.column.id === 'progress'
-                        ? 'last'
-                        : 'middle'
-                  }
-                  key={cell.id}
-                >
-                  <Text color="$gray11">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Text>
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-      <Table.Foot>
-        {footerGroups.map((footerGroup) => {
-          rowCounter.current++;
-          return (
-            <Table.Row
-              rowLocation={
-                rowCounter.current === 0
-                  ? 'first'
-                  : rowCounter.current === allRowsLenght - 1
-                    ? 'last'
-                    : 'middle'
-              }
-              key={footerGroup.id}
-            >
-              {footerGroup.headers.map((header, index) => (
-                <Table.HeaderCell
-                  cellLocation={
-                    index === 0
-                      ? 'first'
-                      : index === footerGroup.headers.length - 1
-                        ? 'last'
-                        : 'middle'
-                  }
-                  key={header.id}
-                >
-                  <Text>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext(),
-                        )}
-                  </Text>
-                </Table.HeaderCell>
-              ))}
-            </Table.Row>
-          );
-        })}
-      </Table.Foot>
-    </Table>
+                  {headerGroup.headers.map((header) => (
+                    <Table.HeaderCell
+                      cellLocation={
+                        header.id === 'name'
+                          ? 'first'
+                          : header.id === 'category.name'
+                            ? 'last'
+                            : 'middle'
+                      }
+                      key={header.id}
+                    >
+                      <Text>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </Text>
+                    </Table.HeaderCell>
+                  ))}
+                </Table.Row>
+              </>
+            );
+          })}
+        </Table.Head>
+        <Table.Body>
+          {tableRows.map((row) => {
+            rowCounter.current++;
+            return (
+              <Table.Row
+                rowLocation={
+                  rowCounter.current === 0
+                    ? 'first'
+                    : rowCounter.current === allRowsLength - 1
+                      ? 'last'
+                      : 'middle'
+                }
+                key={row.id}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell
+                    cellLocation={
+                      cell.column.id === 'name'
+                        ? 'first'
+                        : cell.column.id === 'category.name'
+                          ? 'last'
+                          : 'middle'
+                    }
+                    key={cell.id}
+                  >
+                    <Text color="$gray11">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Text>
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+        <Table.Foot>
+          {footerGroups.map((footerGroup) => {
+            rowCounter.current++;
+            return (
+              <Table.Row
+                rowLocation={
+                  rowCounter.current === 0
+                    ? 'first'
+                    : rowCounter.current === allRowsLength - 1
+                      ? 'last'
+                      : 'middle'
+                }
+                key={footerGroup.id}
+              >
+                {footerGroup.headers.map((header, index) => (
+                  <Table.HeaderCell
+                    cellLocation={
+                      index === 0
+                        ? 'first'
+                        : index === footerGroup.headers.length - 1
+                          ? 'last'
+                          : 'middle'
+                    }
+                    key={header.id}
+                  >
+                    <Text>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.footer,
+                            header.getContext(),
+                          )}
+                    </Text>
+                  </Table.HeaderCell>
+                ))}
+              </Table.Row>
+            );
+          })}
+        </Table.Foot>
+      </Table>
+    </View>
   );
 }
 

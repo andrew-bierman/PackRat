@@ -54,7 +54,7 @@ export const TableContainer = ({
     copy,
   });
   const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
-  let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
   if (
@@ -72,7 +72,16 @@ export const TableContainer = ({
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
+          <BasicTable
+            groupedData={groupedData}
+            onDelete={deletePackItem}
+            handleCheckboxChange={handleCheckboxChange}
+            currentPack={currentPack}
+            hasPermissions={isAuthUserPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          ></BasicTable>
+          {/* <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
