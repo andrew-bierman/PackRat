@@ -19,7 +19,7 @@ const ExtendedDropdownMenuContent =
 
 const CustomContent = styled(ExtendedDropdownMenuContent, {
   css: `
-    background-color: white;
+    background-color: blue;
     min-width: 160px;
     shadow-color: #000;
     border-radius: 8px;
@@ -30,6 +30,7 @@ const CustomContent = styled(ExtendedDropdownMenuContent, {
     shadow-opacity: 0.2;
     shadow-radius: 16px;
     padding: 12px;
+    z-index: 1000;
   `,
 });
 
@@ -42,9 +43,10 @@ const CustomItem = styled(ExtendedDropdownMenuItem, {
     background-color: white;
     flex-direction: row;
     align-items: center;
+    position: relative;
     &:hover {
       background-color: gray;
-    }
+    };
   `,
 });
 
@@ -61,9 +63,9 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
         />
       </DropdownMenu.Trigger>
       <CustomContent>
-        {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <CustomItem key={label} onSelect={onSelect}>
-            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
+        {dropdownItems.map(({ label, onSelect = () => {} }, index) => (
+          <CustomItem key={label} onSelect={onSelect} style={{position : 'realtive',zIndex : 1000, backgroundColor : '#0a84ff'}}>
+            <DropdownMenu.ItemTitle style={{color: 'white', padding:'10px' }}>{label}</DropdownMenu.ItemTitle>
           </CustomItem>
         ))}
       </CustomContent>
@@ -82,9 +84,9 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
         />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect}>
-            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
+        {dropdownItems.map(({ label, onSelect = () => {} }, index) => (
+          <DropdownMenu.Item key={label} onSelect={onSelect} style={{position : 'realtive',zIndex : 1000, backgroundColor : '#0a84ff'}}>
+            <DropdownMenu.ItemTitle style={{color: 'white', padding:'10px' }}>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
       </DropdownMenu.Content>

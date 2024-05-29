@@ -6,12 +6,13 @@ import {
 } from '@tanstack/react-table';
 import { useMedia } from 'tamagui';
 import * as React from 'react';
-import { Separator, Text, View, YStack, getTokenValue } from 'tamagui';
+import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
 import { ZDropdown } from '@packrat/ui';
+import { Platform } from 'react-native';
 
 interface Category {
   id: string;
@@ -83,7 +84,11 @@ export function BasicTable({
     }),
   ];
 
-  const CELL_WIDTH = '$15';
+  React.useEffect(() => {
+    setActiveModal(null);
+  }, [groupedData]);
+
+  const CELL_WIDTH = '$18';
 
   const [activeModal, setActiveModal] = React.useState<string | null>(null);
 
@@ -101,9 +106,6 @@ export function BasicTable({
   ];
 
   const ActionButtons = ({ item }) => {
-    React.useEffect(() => {
-      setActiveModal(null);
-    }, [item]);
     return (
       <>
         <EditPackItemModal
@@ -127,7 +129,17 @@ export function BasicTable({
           }
         />
         {hasPermissions ? (
-          <ZDropdown.Web dropdownItems={dropdownItems} />
+          Platform.OS === 'android' ||
+          Platform.OS === 'ios' ||
+          window.innerWidth < 900 ? (
+            <View>
+              <ZDropdown.Native dropdownItems={dropdownItems} />
+            </View>
+          ) : (
+            <View>
+              <ZDropdown.Web dropdownItems={dropdownItems} />
+            </View>
+          )
         ) : null}
       </>
     );
@@ -190,10 +202,16 @@ export function BasicTable({
                   </View>
                 );
               })}
-              <View fd="row" justifyContent="space-between" alignItems="center">
-                <Text>Action</Text>
-                <ZDropdown.Native dropdownItems={dropdownItems} />
-              </View>
+              {hasPermissions ? (
+                <View
+                  fd="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text>Action</Text>
+                  <ActionButtons item={row} />
+                </View>
+              ) : null}
             </View>
           </View>
         ))}
