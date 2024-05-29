@@ -1,14 +1,10 @@
-import {
-  type PropsWithChildren,
-  createContext,
-  useReducer,
-  useEffect,
-} from 'react';
+import { type PropsWithChildren, createContext, useReducer } from 'react';
 import { getTheme } from '../theme';
 import { ThemeEnum, type ThemeType } from '../theme/types';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
 import { useStorage } from '../hooks/storage/useStorage';
+import { useIsomorphicLayoutEffect } from 'tamagui';
 
 const DEFAULT_THEME = ThemeEnum.LIGHT as ThemeType;
 
@@ -71,7 +67,7 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
    * Initializes the app theme based on the stored theme preference.
    * If no preference is stored, sets the default theme preference in local storage.
    */
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (storedTheme) {
       dispatch({ type: `ENABLE_${storedTheme}_MODE` });
     } else {
