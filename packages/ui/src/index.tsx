@@ -93,6 +93,7 @@ export * from './RScrollview';
 export * from './RStack';
 export * from './RTabs';
 export * from './RText';
+export * from './DateRangePicker';
 export * from './Rparagraph';
 export * from './SizableText';
 export * from './XStack';

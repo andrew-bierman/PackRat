@@ -54,6 +54,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.0",
     "react-native": "0.73.6",
+    "react-native-daterange-picker": "^1.5.1",
     "react-native-svg": "14.1.0",
     "react-native-web": "^0.19.10",
     "swr": "^2.2.5",

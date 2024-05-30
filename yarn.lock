@@ -5496,6 +5496,7 @@ __metadata:
     react-dropzone: "npm:^14.2.3"
     react-hook-form: "npm:^7.51.0"
     react-native: "npm:0.73.6"
+    react-native-daterange-picker: "npm:^1.5.1"
     react-native-svg: "npm:14.1.0"
     react-native-web: "npm:^0.19.10"
     swr: "npm:^2.2.5"
@@ -25364,7 +25365,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:4.17.x, lodash@npm:^4.17.13, lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.6.1":
+"lodash@npm:4.17.21, lodash@npm:4.17.x, lodash@npm:^4.17.13, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.6.1":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532
@@ -26754,6 +26755,13 @@ __metadata:
     fs-extra: "npm:^7.0.1"
     underscore: "npm:1.12.1"
   checksum: 10/c44974bafc113a65909c6a2a6af0e69208782ab5a755b802ccfbc2018d553a49ec7da04a2baab0cd563d953f6fee845476afb693ab599cca041b1ef6a6afd948
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.27.0":
+  version: 2.30.1
+  resolution: "moment@npm:2.30.1"
+  checksum: 10/ae42d876d4ec831ef66110bdc302c0657c664991e45cf2afffc4b0f6cd6d251dde11375c982a5c0564ccc0fa593fc564576ddceb8c8845e87c15f58aa6baca69
   languageName: node
   linkType: hard
 
@@ -30380,6 +30388,19 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10/73b36281e58eeb27c9cc6031301b6ae19ecdc9f18ae2d518bdb39b0ac564e65c5779405d623f1df9abf378a13858b79442480244bd579968afc1faf9a2ce5e05
+  languageName: node
+  linkType: hard
+
+"react-native-daterange-picker@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "react-native-daterange-picker@npm:1.5.1"
+  dependencies:
+    lodash: "npm:^4.17.19"
+    moment: "npm:^2.27.0"
+  peerDependencies:
+    react: ^16.13.1
+    react-native: ^0.63.2
+  checksum: 10/d3ce1dd2d20a396b0eb05086ec2e5f8b33938421b7a9ecb9354d5ce89846a4cd9382fd0f85bb9d3d2599525caf82150b903611f2f03c2675223fbca9f52aaa4e
   languageName: node
   linkType: hard
 
