@@ -11,7 +11,7 @@ import { Table } from './common/tableParts';
 import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
-import { ZDropdown } from '@packrat/ui';
+import { ZDropdown, ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
 import { Platform } from 'react-native';
 
 interface Category {
@@ -137,7 +137,17 @@ export function BasicTable({
             </View>
           ) : (
             <View>
-              <ZDropdown.Web dropdownItems={dropdownItems} />
+              <ThreeDotsMenu >
+                <YStack space="$1">
+                  {
+                    dropdownItems.map((item) => {
+                      return(
+                        <RButton onPress={item.onSelect}>{item.label}</RButton>
+                      )
+                    })
+                  }
+                </YStack>
+              </ThreeDotsMenu>
             </View>
           )
         ) : null}
