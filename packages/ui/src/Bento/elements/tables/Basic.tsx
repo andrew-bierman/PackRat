@@ -8,6 +8,11 @@ import { useMedia } from 'tamagui';
 import * as React from 'react';
 import { Separator, Text, View, YStack, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
+import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
+import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
+import { AddItem } from 'app/components/item/AddItem';
+import { ZDropdown, ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { Platform } from 'react-native';
 
 type Person = {
   firstName: string;
@@ -80,8 +85,121 @@ const columns = [
 const CELL_WIDTH = '$15';
 
 /** ------ EXAMPLE ------ */
-export function BasicTable() {
-  const [data, setData] = React.useState(() => [...defaultData]);
+export function BasicTable({
+  groupedData,
+  onDelete,
+  hasPermissions,
+  currentPack,
+  refetch,
+  setRefetch,
+}: BasicTableProps) {
+  console.log('Grouped Data', groupedData);
+
+  const columnHelper = createColumnHelper<Item>();
+  const columns = [
+    columnHelper.accessor('name', {
+      cell: (info) => info.getValue(),
+      header: () => 'Name',
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('weight', {
+      cell: (info) => `${info.getValue()} ${info.row.original.unit}`,
+      header: () => 'Weight',
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('quantity', {
+      header: () => 'Quantity',
+      cell: (info) => info.renderValue(),
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor(`category.name`, {
+      header: () => 'Category',
+      cell: (info) => info.getValue(),
+      footer: (info) => 'category',
+    }),
+    columnHelper.display({
+      id: 'actions',
+      cell: (props) => <ActionButtons item={props.row.original} />,
+      header: () => 'Actions',
+      footer: (info) => info.column.id,
+    }),
+  ];
+
+  React.useEffect(() => {
+    setActiveModal(null);
+  }, [groupedData]);
+
+  const CELL_WIDTH = '$18';
+
+  const [activeModal, setActiveModal] = React.useState<string | null>(null);
+
+  const openModal = (modalName: string) => {
+    setActiveModal(modalName);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+  };
+
+  const dropdownItems = [
+    { label: 'Edit', onSelect: () => openModal('edit') },
+    { label: 'Delete', onSelect: () => openModal('delete') },
+  ];
+
+  const ActionButtons = ({ item }) => {
+    return (
+      <>
+        <EditPackItemModal
+          isOpen={activeModal === 'edit'}
+          onClose={closeModal}
+          triggerComponent={undefined}
+          showTrigger={false}
+        >
+          <AddItem
+            id={item.id}
+            packId={item.id}
+            isEdit={true}
+            initialData={item}
+          />
+        </EditPackItemModal>
+        <DeletePackItemModal
+          isOpen={activeModal === 'delete'}
+          onClose={closeModal}
+          onConfirm={() =>
+            onDelete({ itemId: item.id, packId: currentPack.id })
+          }
+        />
+        {hasPermissions ? (
+          Platform.OS === 'android' ||
+          Platform.OS === 'ios' ||
+          window.innerWidth < 900 ? (
+            <View>
+              <ZDropdown.Native dropdownItems={dropdownItems} />
+            </View>
+          ) : (
+            <View>
+              <ThreeDotsMenu >
+                <YStack space="$1">
+                  {
+                    dropdownItems.map((item) => {
+                      return(
+                        <RButton onPress={item.onSelect}>{item.label}</RButton>
+                      )
+                    })
+                  }
+                </YStack>
+              </ThreeDotsMenu>
+            </View>
+          )
+        ) : null}
+      </>
+    );
+  };
+
+  // Flatten the grouped data into a single array of items
+  const data = Object.values(groupedData).flat();
+
+  const [tableData, setTableData] = React.useState<Item[]>(data);
 
   const table = useReactTable({
     data,
