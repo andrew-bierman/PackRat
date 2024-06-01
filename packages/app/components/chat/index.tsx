@@ -65,7 +65,11 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
       <RStack style={{ flex: 1 }}>
         {showChatSelector && (
           <>
-            {!messages?.length && <Text>You don't have conversations yet</Text>}
+            {!messages?.length && (
+              <Text style={{ width: '100%', textAlign: 'center', padding: 8 }}>
+                You don't have conversations yet
+              </Text>
+            )}
           </>
         )}
         <ScrollView
