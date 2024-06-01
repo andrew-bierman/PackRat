@@ -2,54 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
-  FlatList,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Animated,
 } from 'react-native';
-import {
-  BaseModal,
-  Form,
-  FormInput,
-  FormSelect,
-  RButton,
-  RImage,
-  RInput,
-  RStack,
-  SubmitButton,
-} from '@packrat/ui';
-import { sendMessage } from '@packrat/validations';
+import { RButton, RImage, RInput, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
-import { Box } from 'native-base';
 import { ChatList } from '@packrat/ui/src/Bento/elements/list';
 import { Button } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
-// import { Select } from "tamagui";
 
 // TODO check if we've fixed the chat screen on another branch
 // link: https://github.com/andrew-bierman/PackRat/issues/ ???
-
-interface Message {
-  role: string;
-  content: string;
-}
-
-interface Chat {
-  id: string;
-}
-
-interface MessageBubbleProps {
-  message: Message;
-}
-
-interface ChatSelectorProps {
-  conversation: Chat;
-  onSelect: (id: string) => void;
-  isActive: boolean;
-}
 
 interface ChatComponentProps {
   showChatSelector?: boolean;
@@ -62,49 +28,6 @@ interface ChatModalTriggerProps {
   trigger: string;
   itemTypeId: string | null;
 }
-
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
-  const styles = useCustomStyles(loadStyles);
-  const isAI = message.role === 'ai';
-  return (
-    <View style={isAI ? styles.aiBubble : styles.userBubble}>
-      <Text style={isAI ? styles.aiText : styles.userText}>
-        {message.content}
-      </Text>
-    </View>
-  );
-};
-
-interface MessageListProps {
-  messages: any[];
-}
-
-const MessageList = ({ messages }: MessageListProps) => {
-  return (
-    <FlatList
-      data={messages}
-      renderItem={({ item }) => <MessageBubble message={item} />}
-      keyExtractor={(item, index) => index.toString()}
-    />
-  );
-};
-
-// const ChatSelector: React.FC<ChatSelectorProps> = ({
-//   conversation,
-//   onSelect,
-//   isActive,
-// }) => {
-//   const styles = useCustomStyles(loadStyles);
-//   return (
-//     <TouchableOpacity
-//       key={conversation._id}
-//       onPress={() => onSelect(conversation._id)}
-//       style={[styles.chator, isActive && styles.activeChator]}
-//     >
-//       <Text style={styles.chatorText}>{conversation._id}</Text>
-//     </TouchableOpacity>
-//   );
-// };
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
@@ -123,7 +46,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     isLoading,
   } = useChat({ itemTypeId });
 
-  console.log('parsedMessages', parsedMessages);
+  const [messages, setMessages] = useState(parsedMessages);
+
+  useEffect(() => {
+    if (parsedMessages.length > messages.length) {
+      setMessages(parsedMessages);
+    }
+  }, [parsedMessages]);
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -136,9 +65,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
       <RStack style={{ flex: 1 }}>
         {showChatSelector && (
           <>
-            {!parsedMessages?.length && (
-              <Text>You don't have conversations yet</Text>
-            )}
+            {!messages?.length && <Text>You don't have conversations yet</Text>}
           </>
         )}
         <ScrollView
@@ -148,7 +75,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
         >
-          <ChatList data={parsedMessages} />
+          <ChatList data={messages} />
         </ScrollView>
         <RStack
           style={{
@@ -162,12 +89,18 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             placeholder="Type a message..."
             value={userInput}
             onChangeText={(text) => setUserInput(text)}
-            style={{ flex: 1 }} // This will make the input field take up the remaining space
+            style={{ flex: 1 }}
           />
           <RButton
             disabled={!userInput}
-            onClick={() => handleSendMessage({ message: userInput })}
-            style={{ width: 80 }} // This will make the button take up a fixed amount of space
+            onClick={() => {
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                { role: 'user', content: userInput },
+              ]);
+              handleSendMessage({ message: userInput });
+            }}
+            style={{ width: 80 }}
           >
             <Text style={styles.sendText}>
               {isLoading ? 'Loading...' : 'Send'}
@@ -256,28 +189,17 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
             opacity: animationValue,
           }}
         >
-          {/* <TouchableOpacity
-            style={{
-              position: 'absolute',
-              top: 10,
-              right: 10,
-              padding: 10,
-              zIndex: 1001,
-            }}
-            onPress={() => setIsChatOpen(false)}
-          > */}
           <Button
             position="absolute"
             backgroundColor="$background"
-            top="$3"
-            right="$3"
+            top="$2"
+            right="$2"
             size="$2"
             circular
             icon={X}
             onPress={() => setIsChatOpen(false)}
             style={{ zIndex: 1001 }}
           />
-          {/* </TouchableOpacity> */}
           <ChatComponent itemTypeId={itemTypeId} />
         </Animated.View>
       )}

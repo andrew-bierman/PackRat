@@ -13,6 +13,7 @@ import {
 } from 'tamagui';
 
 import useTheme from 'app/hooks/useTheme';
+import { useProfileSettings } from 'app/hooks/user';
 
 const List = styled(FlatList<Message>, {
   backgroundColor: '$background',
@@ -20,8 +21,8 @@ const List = styled(FlatList<Message>, {
 });
 
 const avatars = [
-  'https://i.pravatar.cc/150?img=6',
-  'https://raw.githubusercontent.com/andrew-bierman/PackRat/5a03c7f1161baf5e67d67f71de66d5d59cad37e0/packages/app/assets/bot-svgrepo-com%20(1).svg',
+  'https://raw.githubusercontent.com/andrew-bierman/PackRat/405cdb20a5286fd4915b05c8c7842f212094645d/packages/app/assets/user-circle-svgrepo-com.svg',
+  'https://raw.githubusercontent.com/andrew-bierman/PackRat/b0882ccc9fad3b37d6b44ed2a2865cb6ddec93d8/packages/app/assets/bot-svgrepo-com%20(2).svg',
 ];
 
 const getMessages = (data: Message[]) => data;
@@ -77,6 +78,8 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
   const [start, setStart] = useState(false);
   const { isDark } = useTheme();
 
+  const { user } = useProfileSettings();
+
   useEffect(() => {
     // run animations after initial render calms down
     (globalThis.requestIdleCallback || setTimeout)(() => {
@@ -117,9 +120,12 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
             <View flexDirection="row">
               <Avatar circular size="$5">
                 <Avatar.Image
-                  // backgroundColor={itsMe ? 'white' : 'gray'}
+                  // backgroundColor={itsMe ? 'white' : 'white'}
                   resizeMode="center"
-                  source={{ uri: avatar }}
+                  source={{
+                    uri:
+                      itsMe && user?.profileImage ? user.profileImage : avatar,
+                  }}
                 />
                 <Avatar.Fallback backgroundColor="$background" />
               </Avatar>
