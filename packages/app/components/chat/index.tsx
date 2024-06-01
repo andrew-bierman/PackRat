@@ -144,14 +144,24 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
         >
           <RImage
             source={{
-              // TODO: Update this to use the PackRat logo from the assets folder
+              // TODO: Update this to use the intended chat logo
               uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/4ad449702c088e505c4b484219121d365150f971/packages/app/assets/chat-svgrepo-com%20(1).svg',
               width: 50,
               height: 50,
             }}
             width={40}
             height={40}
-            style={styles.logo}
+            style={{
+              ...styles.logo,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.75,
+              shadowRadius: 1.24,
+              elevation: 3,
+            }}
             alt="PackRat Logo"
           />
         </TouchableOpacity>
