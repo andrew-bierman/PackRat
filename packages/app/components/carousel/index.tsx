@@ -39,9 +39,10 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   };
 
   return (
-    <RStack
+      <RStack
       style={{
-        width: Platform.OS === 'web' ? '100%' : width * 0.9,
+        alignSelf:'center',
+        width: Platform.OS === 'web' ? '100%' : width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
@@ -71,7 +72,6 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
             <RStack
               key={index}
               style={{
-                width: itemWidth + 10,
                 marginRight: 10,
                 marginTop: 10,
                 flexDirection: 'row',

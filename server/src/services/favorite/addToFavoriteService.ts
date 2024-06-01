@@ -13,7 +13,10 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 export const addToFavoriteService = async (packId: string, userId: string) => {
   const userClass = new User();
   const userFavoritePacksClass = new UserFavoritePacks();
-  const user = await userClass.findUser({ userId, includeFavorites: true });
+  const user = (await userClass.findUser({
+    userId,
+    includeFavorites: true,
+  })) as { userFavoritePacks?: any };
   const packExists = user.userFavoritePacks?.find(
     (pack: any) => pack.packId === packId,
   );

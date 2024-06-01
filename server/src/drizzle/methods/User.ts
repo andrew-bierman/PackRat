@@ -113,7 +113,10 @@ export class User {
     return `${clientUrl}/password-reset?token=${resetToken}`;
   }
 
-  async update(data: Partial<InsertUser>, filter = eq(UserTable.id, data.id)) {
+  async update(
+    data: Partial<InsertUser>,
+    filter = data.id ? eq(UserTable.id, data.id) : undefined,
+  ) {
     try {
       const updatedUser = DbClient.instance
         .update(UserTable)
@@ -155,7 +158,7 @@ export class User {
     includeFavorites?: boolean;
   }) {
     try {
-      let filter = null;
+      let filter: any = null;
       if (userId) {
         filter = eq(UserTable.id, userId);
       } else if (email && code) {
@@ -252,9 +255,12 @@ export class User {
     }
   }
 
-  async findUnique(query: { where: { email?: string; googleId?: string } }) {
+  async findUnique(query: {
+    where: { email?: string; googleId?: string };
+    with?: { favoriteDocuments?: boolean; id?: boolean; username?: boolean };
+  }) {
     try {
-      const conditions = [];
+      const conditions: any[] = [];
       if (query.where.email) {
         conditions.push(eq(UserTable.email, query.where.email));
       }

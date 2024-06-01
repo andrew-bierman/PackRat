@@ -60,7 +60,7 @@ export const getAIResponseService = async (
     messages,
   });
 
-  const aiResponse = response.choices[0].message.content.trim();
+  const aiResponse = response.choices?.[0]?.message?.content?.trim() || '';
   conversationHistory += `\nUser: ${userInput}\nAI: ${aiResponse}`;
 
   if (conversation) {

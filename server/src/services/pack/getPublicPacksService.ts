@@ -7,7 +7,7 @@ import { SORT_OPTIONS, DEFAULT_SORT, sortFunction } from '../../utils/pack';
  * @param {string} queryBy - Specifies how the public packs should be sorted.
  * @return {Promise<any[]>} An array of public packs.
  */
-export async function getPublicPacksService(queryBy?: string) {
+export async function getPublicPacksService(queryBy: string = 'createdAt') {
   try {
     const packClass = new Pack();
     const sortOption = queryBy ? SORT_OPTIONS[queryBy] : DEFAULT_SORT;
