@@ -12,6 +12,8 @@ import {
   styled,
 } from 'tamagui';
 
+import useTheme from 'app/hooks/useTheme';
+
 const List = styled(FlatList<Message>, {
   backgroundColor: '$background',
   gap: '$3',
@@ -19,20 +21,15 @@ const List = styled(FlatList<Message>, {
 
 const avatars = [
   'https://i.pravatar.cc/150?img=6',
-  'https://i.pravatar.cc/150?img=8',
+  'https://raw.githubusercontent.com/andrew-bierman/PackRat/5a03c7f1161baf5e67d67f71de66d5d59cad37e0/packages/app/assets/bot-svgrepo-com%20(1).svg',
 ];
 
-const getMessages = () =>
-  Array.from({ length: 50 })
-    .fill(0)
-    .map((_, i) => ({
-      message: faker.lorem.sentence({ max: 10, min: 4 }),
-      time: faker.date.recent().toLocaleTimeString(),
-      itsMe: i % 2 === 0,
-      avatar: avatars[i % 2],
-    }));
+const getMessages = (data: Message[]) => data;
 
-type Message = ReturnType<typeof getMessages>[0];
+type Message = {
+  role: 'user' | 'ai';
+  content: string;
+};
 
 const renderItem = ({
   item: message,
@@ -41,14 +38,14 @@ const renderItem = ({
   item: Message;
   index: number;
 }) => {
-  return <ChatItem index={index + 1} key={message.time} item={message} />;
+  return <ChatItem index={index + 1} key={index} item={message} />;
 };
-export function ChatList() {
+export function ChatList({ data }: { data: Message[] }) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    setMessages(getMessages());
-  }, []);
+    setMessages(getMessages(data)); // Reverse the messages array
+  }, [data]);
 
   return (
     <View
@@ -59,9 +56,8 @@ export function ChatList() {
     >
       <List
         $group-window-gtXs={{
-          padding: '$8',
+          padding: '$10',
         }}
-        inverted
         data={messages}
         renderItem={renderItem}
         windowSize={2}
@@ -73,10 +69,13 @@ export function ChatList() {
 ChatList.fileName = 'ChatList';
 
 function ChatItem({ item, index }: { item: Message; index: number }) {
-  const { message, time, avatar, itsMe } = item;
+  const { content, role } = item;
+  const itsMe = role === 'user';
+  const avatar = itsMe ? avatars[0] : avatars[1];
   const [showMessage, setShowMessage] = useState(false);
-  const showDelay = index * 300;
+  const showDelay = index * 50;
   const [start, setStart] = useState(false);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     // run animations after initial render calms down
@@ -103,20 +102,25 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
           alignSelf={itsMe ? 'flex-end' : 'flex-start'}
           maxWidth="100%"
           minWidth="100%"
+          style={{ padding: '5px 5px', background: isDark ? '#333' : 'white' }}
         >
           <Button
             animation="quick"
-            enterStyle={{
-              opacity: 0,
-              scale: 0,
-            }}
+            // enterStyle={{
+            //   opacity: 0,
+            //   scale: 0,
+            // }}
             size="$5"
             circular
             chromeless
           >
             <View flexDirection="row">
               <Avatar circular size="$5">
-                <Avatar.Image resizeMode="cover" source={{ uri: avatar }} />
+                <Avatar.Image
+                  // backgroundColor={itsMe ? 'white' : 'gray'}
+                  resizeMode="center"
+                  source={{ uri: avatar }}
+                />
                 <Avatar.Fallback backgroundColor="$background" />
               </Avatar>
             </View>
@@ -129,7 +133,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
             justifyContent="center"
             flexShrink={1}
           >
-            <Theme name={itsMe ? 'green' : 'gray'}>
+            <Theme name={itsMe ? 'blue' : 'gray'}>
               <View
                 backgroundColor="$color2"
                 padding="$4"
@@ -143,7 +147,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
                   lineHeight="$3"
                   flexShrink={1}
                 >
-                  {message}
+                  {item.content}
                 </Text>
               </View>
             </Theme>
@@ -154,9 +158,9 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
                 fontWeight="$3"
                 lineHeight="$3"
               >
-                {time}
+                {/* {4} */}
               </Text>
-              <Check size={16} color="green" />
+              {/* <Check size={16} color="green" /> */}
             </View>
           </View>
         </View>

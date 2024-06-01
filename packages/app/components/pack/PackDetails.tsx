@@ -119,16 +119,16 @@ export function PackDetails() {
                                   isOwner={isOwner}
                                 />
                               );
-                            case SECTION.CHAT:
-                              return (
-                                <View style={styles.boxStyle}>
-                                  <ChatContainer
-                                    itemTypeId={currentPackId}
-                                    title="Chat"
-                                    trigger="Open Chat"
-                                  />
-                                </View>
-                              );
+                            // case SECTION.CHAT:
+                            //   return (
+                            //     <View style={styles.boxStyle}>
+                            //       <ChatContainer
+                            //         itemTypeId={currentPackId}
+                            //         title="Chat"
+                            //         trigger="Open Chat"
+                            //       />
+                            //     </View>
+                            //   );
                             default:
                               return null;
                           }
@@ -142,25 +142,23 @@ export function PackDetails() {
             />
           )}
         </ScrollView>
-        <TouchableOpacity
+        <View
           style={{
             position: 'absolute',
             right: 50,
             bottom: 30,
-            backgroundColor: '#0A84FF',
-            borderRadius: 50,
             width: 60,
             height: 60,
             justifyContent: 'center',
             alignItems: 'center',
-            // zIndex: 9999,
-          }}
-          onPress={() => {
-            console.log('hello');
           }}
         >
-          <RText style={{ color: 'white', fontSize: 24 }}>+</RText>
-        </TouchableOpacity>
+          <ChatContainer
+            itemTypeId={currentPackId}
+            title="Chat"
+            trigger="Open Chat"
+          />
+        </View>
       </View>
     </Layout>
   );
@@ -168,6 +166,7 @@ export function PackDetails() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  console.log('currentTheme', currentTheme);
   return {
     mainContainer: {
       position: 'relative',
@@ -177,7 +176,7 @@ const loadStyles = (theme) => {
       fontSize: 18,
       width: '100%',
       flex: 1,
-      maxHeight: '91vh',
+      maxHeight: '91.2vh',
     },
     packsContainer: {
       flexDirection: 'column',
