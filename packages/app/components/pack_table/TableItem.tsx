@@ -100,7 +100,13 @@ const TableItem = ({
         isOpen={activeModal === 'edit'}
         onClose={closeModal}
       >
-        <AddItem id={id} packId={id} isEdit={true} initialData={itemData} />
+        <AddItem
+          _id={_id}
+          packId={_id}
+          isEdit={true}
+          initialData={itemData}
+          setRefetch={setRefetch}
+        />
       </EditPackItemModal>
       <DeletePackItemModal
         onConfirm={() => onDelete({ itemId: id, packId: currentPack.id })}

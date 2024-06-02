@@ -32,6 +32,7 @@ interface AddItemProps {
   isItemPage: boolean;
   closeModalHandler: () => void;
   setIsAddItemModalOpen: (isOpen: boolean) => void;
+  setRefetch?: () => void;
 }
 
 export const AddItem = ({
@@ -45,6 +46,7 @@ export const AddItem = ({
   closeModalHandler,
   isItemPage,
   setIsAddItemModalOpen = () => {},
+  setRefetch,
 }: AddItemProps) => {
   const [currPackId] = usePackId();
 
@@ -65,12 +67,15 @@ export const AddItem = ({
   } = useEditPackItem(isItemPage);
 
   const handleSubmit = (data: Item) => {
+    
     if (isEdit) {
       editPackItem(data);
     } else {
       addPackItem(data);
     }
-    if (closeModalHandler) closeModalHandler();
+    setRefetch();
+    if (closeModalHandler)
+      closeModalHandler();
   };
 
   const defaultValues = useMemo(() => {

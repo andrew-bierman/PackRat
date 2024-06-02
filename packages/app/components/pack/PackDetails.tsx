@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PackContainer from './PackContainer';
 import { DetailsHeader } from '../details/header';
@@ -57,6 +57,13 @@ export function PackDetails() {
 
   const isError = error !== null;
 
+  useEffect(() => {
+    if (refetch) {
+      refetchQuery(packId);
+      setRefetch(false);
+    }
+  }, [refetch]);
+
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
@@ -91,6 +98,7 @@ export function PackDetails() {
                               <TableContainer
                                 currentPack={currentPack}
                                 copy={canCopy}
+                                setRefetch={() => setRefetch(true)}
                                 hasPermissions={isAuthUserPack}
                               />
                             );
