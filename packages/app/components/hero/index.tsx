@@ -46,7 +46,6 @@ const loadStyles = () => ({
   heroContainer: {
     backgroundRepeat: 'repeat',
     backgroundSize: 'cover',
-
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GestureResponderEvent, Platform, View } from 'react-native';
+import { Dimensions, GestureResponderEvent, Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';

@@ -25,12 +25,11 @@ const loadStyles = (theme: any) => {
   return {
     section: {
       marginBottom: 20,
-      paddingHorizontal: 20, // Added padding here.
+      // paddingHorizontal: 20, // Added padding here.
     },
     card: {
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 10,
       paddingVertical: 20,
       backgroundColor: currentTheme.colors.secondaryBlue,
       borderRadius: 8,
