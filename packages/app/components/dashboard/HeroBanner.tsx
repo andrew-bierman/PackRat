@@ -93,8 +93,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             width: '100%',
             height: '100%',
             padding: 50,
-            paddingLeft:100,
-            paddingRight:100,
+            paddingLeft: 100,
+            paddingRight: 100,
           }}
           title={''}
           type={'search'}
