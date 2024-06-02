@@ -93,6 +93,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             width: '100%',
             height: '100%',
             padding: 50,
+            paddingLeft:100,
+            paddingRight:100,
           }}
           title={''}
           type={'search'}
@@ -107,12 +109,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
           >
             <RText style={styles.title}>{bannerText}</RText>
             {Platform.OS === 'web' ? (
-              <View style={styles.searchContainer}>
-                <PlacesAutocomplete
-                  onSelect={handleSearchSelect}
-                  placeholder={'Search by park, city, or trail'}
-                />
-              </View>
+              <PlacesAutocomplete
+                onSelect={handleSearchSelect}
+                placeholder={'Search by park, city, or trail'}
+              />
             ) : (
               <RButton
                 style={{
@@ -148,11 +148,13 @@ const loadStyles = (theme: any) => {
       flex: 1,
       backgroundRepeat: 'repeat',
       backgroundSize: 'cover',
+      marginBottom: 20,
+      marginTop: 20,
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
-      position: 'relative',
-      zIndex: 1,
+      position:'relative',
+      zIndex:1,
     },
     title: {
       fontSize: 24,
@@ -160,12 +162,7 @@ const loadStyles = (theme: any) => {
       marginBottom: 20,
       color: currentTheme.colors.text,
     },
-    searchContainer: {
-      width: '100%',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+    
   };
 };
 
