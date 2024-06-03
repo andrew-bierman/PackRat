@@ -18,34 +18,31 @@ const ExtendedDropdownMenuContent =
   DropdownMenu.Content as React.ComponentType<ExtendedDropdownMenuProps>;
 
 const CustomContent = styled(ExtendedDropdownMenuContent, {
-  css: `
-    background-color: white;
-    min-width: 160px;
-    shadow-color: #000;
-    border-radius: 8px;
-    shadow-offset: {
-      width: 0;
-      height: 8px;
-    };
-    shadow-opacity: 0.2;
-    shadow-radius: 16px;
-    padding: 12px;
-  `,
+  
+    backgroundColor: "white",
+    minWidth: "160px",
+    shadowColor: '#000',
+    borderRadius: "8px",
+    shadowOffset: {
+      width: 0,
+      height:" 8px",
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: "16px",
+    padding: "8px",
+  
 });
 
 const ExtendedDropdownMenuItem =
   DropdownMenu.Item as React.ComponentType<ExtendedDropdownMenuItemProps>;
 
 const CustomItem = styled(ExtendedDropdownMenuItem, {
-  css: `
-    padding: 10px;
-    background-color: white;
-    flex-direction: row;
-    align-items: center;
-    &:hover {
-      background-color: gray;
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    hover :{
+      backgroundColor: "gray",
     }
-  `,
 });
 
 const DropdownMenuItem = DropdownMenu.create(CustomItem, 'Item');
