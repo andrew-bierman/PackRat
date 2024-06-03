@@ -33,6 +33,11 @@ export function addItemGlobalRoute() {
     .input(validator.addItemGlobal)
     .mutation(async (opts) => {
       const { name, weight, quantity, unit, type, ownerId } = opts.input;
+
+      if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {
+        throw new Error('Invalid item type');
+      }
+
       const item = await addItemGlobalService(
         name,
         weight,

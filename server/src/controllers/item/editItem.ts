@@ -25,6 +25,11 @@ import * as validator from '@packrat/validations';
 export function editItemRoute() {
   return publicProcedure.input(validator.editItem).mutation(async (opts) => {
     const { id, name, weight, unit, quantity, type } = opts.input;
+
+    if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {
+      throw new Error('Invalid item type');
+    }
+
     const item = await editItemService(id, name, weight, unit, quantity, type);
     return item;
   });

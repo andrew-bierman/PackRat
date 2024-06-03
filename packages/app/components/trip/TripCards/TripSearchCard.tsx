@@ -16,7 +16,6 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
 
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
-    return '';
   };
 
   return (

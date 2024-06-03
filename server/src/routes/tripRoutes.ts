@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import {
-  getPublicTrips,
-  getTrips,
-  getTripById,
-  addTrip,
-  editTrip,
-  deleteTrip,
+  getPublicTripsRoute as getPublicTrips,
+  getTripsRoute as getTrips,
+  getTripByIdRoute as getTripById,
+  addTripRoute as addTrip,
+  editTripRoute as editTrip,
+  deleteTripRoute as deleteTrip,
 } from '../controllers/trip/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -35,8 +35,8 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getPublicTrips),
 );
 
@@ -59,7 +59,7 @@ router.get(
  */
 router.get(
   '/:ownerId',
-  (req, res, next) => zodParser(validator.getTrips, req.params, next),
+  ((req, res, next) => zodParser(validator.getTrips, req.params, next)) as any,
   tryCatchWrapper(getTrips),
 );
 
@@ -82,7 +82,8 @@ router.get(
  */
 router.get(
   '/t/:tripId',
-  (req, res, next) => zodParser(validator.getTripById, req.params, next),
+  ((req, res, next) =>
+    zodParser(validator.getTripById, req.params, next)) as any,
   tryCatchWrapper(getTripById),
 );
 
@@ -130,7 +131,7 @@ router.get(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addTrip, req.body, next),
+  ((req, res, next) => zodParser(validator.addTrip, req.body, next)) as any,
   tryCatchWrapper(addTrip),
 );
 
@@ -180,7 +181,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editTrip, req.body, next),
+  ((req, res, next) => zodParser(validator.editTrip, req.body, next)) as any,
   tryCatchWrapper(editTrip),
 );
 
@@ -206,7 +207,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deleteTrip, req.body, next),
+  ((req, res, next) => zodParser(validator.deleteTrip, req.body, next)) as any,
   tryCatchWrapper(deleteTrip),
 );
 

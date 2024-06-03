@@ -1,32 +1,27 @@
 import { Hono } from 'hono';
 import {
-  getUsers,
-  getUserById,
-  // addUser,
-  editUser,
-  deleteUser,
-  addToFavorite,
-  userSignIn,
-  userSignup,
-  sentEmail,
-  resetPassword,
-  getGoogleAuthURL,
-  googleSignin,
-  getMe,
+  getUsersRoute as getUsers,
+  getUserByIdRoute as getUserById,
+  // addUserRoute as ,
+  editUserRoute as editUser,
+  deleteUserRoute as deleteUser,
+  // addToFavoriteRoute as addToFavorite,
+  userSignInRoute as userSignIn,
+  signUpRoute as userSignup,
+  sentEmailRoute as sentEmail,
+  resetPasswordRoute as resetPassword,
+  getGoogleAuthURLRoute as getGoogleAuthURL,
+  // googleSignin,
+  getMeRoute as getMe,
 } from '../controllers/user/index';
-import auth from '../middleware/auth';
 import * as validator from '@packrat/validations';
 
-import {
-  signInLocal,
-  signUpLocal,
-  signInGoogle,
-} from '../controllers/passport/index';
+import { googleSigninRoute as signInGoogle } from '../controllers/passport/index';
 import { REDIRECT_URL } from '../config';
 import {
-  emailExists,
-  updatePassword,
-  checkCode,
+  emailExistsRoute as emailExists,
+  updatePasswordRoute as updatePassword,
+  checkCodeRoute as checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
@@ -56,8 +51,8 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware,
-  checkRole(['admin']),
+  authTokenMiddleware as any,
+  checkRole(['admin']) as any,
   tryCatchWrapper(getUsers),
 );
 
@@ -84,10 +79,10 @@ router.get(
  */
 router.get(
   '/:userId',
-  (req, res, next) => {
+  ((req, res, next) => {
     zodParser(validator.getUserById, req.params, next);
     next();
-  },
+  }) as any,
   tryCatchWrapper(getUserById),
 );
 
@@ -120,7 +115,7 @@ router.get(
  */
 router.post(
   '/signin',
-  (req, res, next) => zodParser(validator.userSignIn, req.body, next),
+  ((req, res, next) => zodParser(validator.userSignIn, req.body, next)) as any,
   tryCatchWrapper(userSignIn),
 );
 
@@ -154,7 +149,7 @@ router.post(
 
 router.post(
   '/signup',
-  (req, res, next) => zodParser(validator.userSignUp, req.body, next),
+  ((req, res, next) => zodParser(validator.userSignUp, req.body, next)) as any,
   tryCatchWrapper(userSignup),
 );
 
@@ -183,7 +178,7 @@ router.post(
  */
 router.post(
   '/reset-password-email',
-  (req, res, next) => zodParser(validator.sentEmail, req.body, next),
+  ((req, res, next) => zodParser(validator.sentEmail, req.body, next)) as any,
   tryCatchWrapper(sentEmail),
 );
 
@@ -214,7 +209,7 @@ router.post(
  */
 router.post(
   '/reset-password',
-  (req, res, next) => zodParser(validator.checkCode, req.body, next),
+  ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
   tryCatchWrapper(resetPassword),
 );
 
@@ -236,8 +231,8 @@ router.post(
  */
 router.get(
   '/me/info',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getMe),
 );
 
@@ -255,7 +250,7 @@ router.get(
  */
 router.get('/google/url', tryCatchWrapper(getGoogleAuthURL));
 
-router.get(`/${REDIRECT_URL}`, tryCatchWrapper(googleSignin));
+// router.get(`/${REDIRECT_URL}`, tryCatchWrapper(googleSignin));
 
 /**
  * @swagger
@@ -307,7 +302,7 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editUser, req.body, next),
+  ((req, res, next) => zodParser(validator.editUser, req.body, next)) as any,
   tryCatchWrapper(editUser),
 );
 
@@ -336,23 +331,24 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deleteUser, req.body, next),
+  ((req, res, next) => zodParser(validator.deleteUser, req.body, next)) as any,
   tryCatchWrapper(deleteUser),
 );
 
 router.post(
   '/checkcode',
-  (req, res, next) => zodParser(validator.checkCode, req.body, next),
+  ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
   tryCatchWrapper(checkCode),
 );
 router.post(
   '/updatepassword',
-  (req, res, next) => zodParser(validator.updatePassword, req.body, next),
+  ((req, res, next) =>
+    zodParser(validator.updatePassword, req.body, next)) as any,
   tryCatchWrapper(updatePassword),
 );
 router.post(
   '/emailexists',
-  (req, res, next) => zodParser(validator.emailExists, req.body, next),
+  ((req, res, next) => zodParser(validator.emailExists, req.body, next)) as any,
   tryCatchWrapper(emailExists),
 );
 

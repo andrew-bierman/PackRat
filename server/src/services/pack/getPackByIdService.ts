@@ -1,9 +1,28 @@
 import { Pack } from '../../drizzle/methods/pack';
 
+interface ItemPack {
+  item: any;
+}
+
+interface PackWithItemPacks {
+  type: string | null;
+  id: string;
+  name: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  owner_id: string | null;
+  is_public: boolean | null;
+  grades: Object | null;
+  scores: Object | null;
+  itemPacks: ItemPack[];
+}
+
 export const getPackByIdService = async (packId: string) => {
   try {
     const packClass = new Pack();
-    const pack = await packClass.findPack({ id: packId });
+    const pack = (await packClass.findPack({
+      id: packId,
+    })) as PackWithItemPacks;
     const packData = {
       ...pack,
       scores: JSON.parse(pack.scores as string),

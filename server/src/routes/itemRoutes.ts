@@ -1,16 +1,16 @@
 import { Hono } from 'hono';
 import {
-  getItems,
-  getItemById,
-  addItem,
-  addItemGlobal,
-  editItem,
-  deleteItem,
-  searchItemsByName,
-  getItemsGlobally,
-  addGlobalItemToPack,
-  editGlobalItemAsDuplicate,
-  deleteGlobalItem,
+  getItemsRoute as getItems,
+  getItemByIdRoute as getItemById,
+  addItemRoute as addItem,
+  addItemGlobalRoute as addItemGlobal,
+  editItemRoute as editItem,
+  deleteItemRoute as deleteItem,
+  searchItemsByNameRoute as searchItemsByName,
+  getItemsGloballyRoute as getItemsGlobally,
+  addGlobalItemToPackRoute as addGlobalItemToPack,
+  editGlobalItemAsDuplicateRoute as editGlobalItemAsDuplicate,
+  deleteGlobalItemRoute as deleteGlobalItem,
 } from '../controllers/item/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -46,7 +46,7 @@ const router = new Hono();
  */
 router.get(
   '/packItems/:packId',
-  (req, res, next) => zodParser(validator.getItems, req.body, next),
+  ((req, res, next) => zodParser(validator.getItems, req.body, next)) as any,
   tryCatchWrapper(getItems),
 );
 
@@ -69,7 +69,7 @@ router.get(
  */
 router.get(
   '/i/:packId',
-  (req, res, next) => zodParser(validator.getItemById, req.body, next),
+  ((req, res, next) => zodParser(validator.getItemById, req.body, next)) as any,
   tryCatchWrapper(getItemById),
 );
 
@@ -92,8 +92,8 @@ router.get(
  */
 router.get(
   '/search',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(searchItemsByName),
 );
 
@@ -127,7 +127,7 @@ router.get(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addItem, req.body, next),
+  ((req, res, next) => zodParser(validator.addItem, req.body, next)) as any,
   tryCatchWrapper(addItem),
 );
 
@@ -161,7 +161,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editItem, req.body, next),
+  ((req, res, next) => zodParser(validator.editItem, req.body, next)) as any,
   tryCatchWrapper(editItem),
 );
 
@@ -187,7 +187,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deleteItem, req.body, next),
+  ((req, res, next) => zodParser(validator.deleteItem, req.body, next)) as any,
   tryCatchWrapper(deleteItem),
 );
 
@@ -221,7 +221,8 @@ router.delete(
  */
 router.post(
   '/global',
-  (req, res, next) => zodParser(validator.addItemGlobal, req.body, next),
+  ((req, res, next) =>
+    zodParser(validator.addItemGlobal, req.body, next)) as any,
   tryCatchWrapper(addItemGlobal),
 );
 
@@ -240,8 +241,8 @@ router.post(
  */
 router.get(
   '/global',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getItemsGlobally),
 );
 
@@ -260,8 +261,8 @@ router.get(
  */
 router.post(
   '/global/select/:packId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(addGlobalItemToPack),
 );
 /**
@@ -279,8 +280,8 @@ router.post(
  */
 router.put(
   '/global/:itemId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(editGlobalItemAsDuplicate),
 );
 
@@ -306,8 +307,8 @@ router.put(
  */
 router.delete(
   '/global/:itemId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(deleteGlobalItem),
 );
 

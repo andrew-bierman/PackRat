@@ -6,7 +6,6 @@ import WeatherCard from '../../components/weather/WeatherCard';
 import { useState, useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
-import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useCreateTripForm } from 'app/hooks/trips/useCreateTripForm';
@@ -17,6 +16,7 @@ import {
   TripSearchCard,
   TripTrailCard,
   TripActivityCard,
+  TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 
 export default function Trips() {
@@ -76,7 +76,10 @@ export default function Trips() {
             selectedValue={tripStore.type}
             onChange={(activity) => setTripValue('type', activity)}
           />
-          <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
+          <TripDateRangeCard
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+          />
           {!hasPhotonError && photonDetails ? (
             <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
           ) : null}

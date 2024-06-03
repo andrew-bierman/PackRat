@@ -12,8 +12,11 @@ import * as jwt from 'hono/jwt';
  * @returns {string} - The extracted token.
  * @throws {Error} If token is not found.
  */
-const extractToken = (req: Request): string => {
+const extractToken = (req: Request): string | null => {
   const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return null;
+  }
   return token;
 };
 

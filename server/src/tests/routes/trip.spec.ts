@@ -56,7 +56,7 @@ describe('Trip Routes', () => {
 
   describe('Get trips by owner', () => {
     it('Get trips by owner', async () => {
-      const ownerId = trip.owner_id;
+      const ownerId = trip?.owner_id ?? undefined;
       const [ownerTrip] = await caller.getTrips({
         owner_id: ownerId,
       });
@@ -89,6 +89,8 @@ describe('Trip Routes', () => {
           features: [],
         },
         is_public: '1' as const,
+        owner_id: partialTrip.owner_id ?? '',
+        pack_id: partialTrip.pack_id ?? '',
       };
 
       const createdTrip = await caller.addTrip(input);
