@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, ScrollView, Text, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { theme } from '../../theme';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
@@ -198,7 +198,7 @@ export const ItemsTable = ({
                 <Cell
                   key={index}
                   data={
-                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
+                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 17, fontWeight:'bold' }}>
                       {header}
                     </RText>
                   }
