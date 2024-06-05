@@ -2,6 +2,7 @@ import { AuthLoader } from 'app/auth/AuthLoader';
 import { Redirect } from 'app/components/Redirect';
 import { RSpinner, RText } from '@packrat/ui';
 import { Platform, View } from 'react-native';
+import LandingPage from 'app/components/landing_page';
 
 type Props = {
   children?: React.ReactNode;
@@ -21,7 +22,7 @@ export const AuthWrapper = ({ children }: Props) => {
           </View>
         )
       }
-      unauthorizedElement={<Redirect to="/sign-in" />}
+      unauthorizedElement={<LandingPage/>}
     >
       {children}
     </AuthLoader>

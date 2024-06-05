@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   return {
@@ -42,8 +44,8 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: 24,
-      fontWeight: 'bold',
+      fontSize: Platform.OS === "web" ? 24 : 20,
+      fontWeight: Platform.OS === "web" ? 'bold' : 'normal',
       textAlign: 'center',
       color: currentTheme.colors.text,
       marginBottom: 20, // Ensure spacing between text and next elements
@@ -58,6 +60,7 @@ const loadStyles = (theme) => {
     },
     getStartedButton: {
       backgroundColor: '#34a89a',
+      height:50,
       paddingVertical: 12, // Increase padding for better touch area
       paddingHorizontal: 30,
       borderRadius: 8, // Rounded corners for modern look
