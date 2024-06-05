@@ -4,10 +4,10 @@ import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-type TripMapCardProps = {
+interface TripMapCardProps {
   isLoading?: boolean;
   shape: any;
-};
+}
 
 export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
   const { currentTheme } = useTheme();
@@ -43,6 +43,7 @@ const loadStyles = (theme) => {
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
+    width: '100%',
     padding: currentTheme.size.cardPadding,
     paddingHorizontal: currentTheme.padding.paddingInside,
     marginBottom: 20,

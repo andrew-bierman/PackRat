@@ -3,12 +3,12 @@ import { TripCardBase } from './TripCardBase';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 
 import { FontAwesome } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
 
-type TripSearchCardProps = {
+interface TripSearchCardProps {
   searchRef: any;
-};
+}
 
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
   const { currentTheme } = useTheme();
@@ -30,7 +30,9 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
-      <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      <View>
+        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      </View>
     </TripCardBase>
   );
 };
@@ -43,9 +45,9 @@ const loadStyles = (theme) => {
     padding: currentTheme.size.mobilePadding,
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
     gap: 10,
     flex: 1,
-    paddingHorizontal: 60,
     paddingVertical: 70,
     height: Platform.OS === 'web' ? 450 : '100%',
     alignSelf: 'center',
