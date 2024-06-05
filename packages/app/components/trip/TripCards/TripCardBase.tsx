@@ -78,10 +78,9 @@ const loadStylesBase = ({ currentTheme }) => {
     padding: currentTheme.size.mobilePadding,
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 25,
     flex: 1,
-    paddingHorizontal: 100,
-    alignSelf: 'center',
+    paddingHorizontal: 12,
+    width: '100%'
   };
 };
 
