@@ -24,7 +24,7 @@ export const GearList = () => {
         gap: 15,
         marginVertical: 10,
         alignItems: 'center',
-        padding: 30,
+        width: '100%',
       }}
     >
       <RStack>

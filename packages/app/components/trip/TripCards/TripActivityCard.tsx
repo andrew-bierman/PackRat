@@ -14,10 +14,10 @@ const ActivityOptions = getEnumValues(TripActivity).map((activity) => ({
   value: activity,
 }));
 
-type TripActivityCardProps = {
+interface TripActivityCardProps {
   onChange: (activity: string) => void;
   selectedValue: string;
-};
+}
 
 export const TripActivityCard = ({
   onChange,

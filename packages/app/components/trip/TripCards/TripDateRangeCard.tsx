@@ -9,9 +9,8 @@ import {
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from 'app/hooks/useTheme';
-import { RStack, RText, Datepickers } from '@packrat/ui';
+import { RStack, RText, DateRangePicker } from '@packrat/ui';
 import { TripCardBase } from './TripCardBase';
-const { RangePicker } = Datepickers;
 
 export interface DateRange {
   start_date: Date | null;
@@ -59,7 +58,7 @@ export const TripDateRangeCard = ({
       )}
       title="Trip Date Range"
     >
-      <RangePicker
+      <DateRangePicker
         selectedDates={selectedDates}
         onDatesChange={onDatesChange}
         offsetDate={offsetDate}

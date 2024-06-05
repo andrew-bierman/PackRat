@@ -1,15 +1,15 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { RStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 
-type TripCardBaseProps = {
+interface TripCardBaseProps {
   loadStyles?: (theme: any) => any;
   flexDirection?: 'row' | 'column';
   children: ReactNode;
   icon: React.FC;
   title: string;
-};
+}
 export const TripCardBase = ({
   loadStyles = loadStylesBase,
   flexDirection = 'row',
@@ -78,9 +78,8 @@ const loadStylesBase = ({ currentTheme }) => {
     padding: currentTheme.size.mobilePadding,
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 25,
     flex: 1,
-    paddingHorizontal: 100,
+    width: '100%',
     alignSelf: 'center',
   };
 };
