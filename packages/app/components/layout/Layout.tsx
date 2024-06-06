@@ -4,7 +4,6 @@ const Layout = ({ children }) => {
   return (
     <View
       style={{
-        flex: 1,
         backgroundColor: 'transparent',
         width: Platform.OS === 'web' ? '60vw' : '100%',
         alignSelf: 'center',
