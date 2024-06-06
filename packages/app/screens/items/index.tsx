@@ -1,13 +1,5 @@
 import { View, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import {
-  RButton as OriginalRButton,
-  RScrollView,
-  RTooltip as OriginalRTooltip,
-  RStack,
-  BaseModal as OriginalBaseModal,
-} from '@packrat/ui';
-
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
@@ -17,11 +9,12 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
+import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
-const RTooltip: any = OriginalRTooltip;
-const BaseModal: any = OriginalBaseModal;
-const RButton: any = OriginalRButton;
+// const RTooltip: any = OriginalRTooltip;
+// const BaseModal: any = OriginalBaseModal;
+// const RButton: any = OriginalRButton;
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

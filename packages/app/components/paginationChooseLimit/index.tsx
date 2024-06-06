@@ -16,7 +16,7 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
 
   return (
     <View style={styles.selectContainer}>
-      <RLabel style={{ paddingBottom: 8 }}>Choose a value:</RLabel>
+      <RLabel style={{ paddingBottom: 8, fontWeight:'bold' }}>Choose a value:</RLabel>
       <DropdownComponent
         value={limit}
         width="100%"
@@ -32,6 +32,7 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
 };
 const loadStyles = () => ({
   selectContainer: {
+    marginTop:20,
     width: '15rem',
     marginLeft: 20,
     marginBottom: 20,
