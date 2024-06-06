@@ -66,6 +66,7 @@ jobs:
       - name: Run tests
         id: run_tests
         run: |
+          export OSM_URI=${{ secrets.OSM_URI }} && export JWT_SECRET=test123
           yarn test
         continue-on-error: true
 
