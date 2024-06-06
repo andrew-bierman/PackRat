@@ -21,7 +21,7 @@ type OptionalDataType = {
 export const usePublicFeed = (queryString, selectedTypes) => {
   let data: OptionalDataType = [];
   let isLoading = true;
-  let refetch=null;
+  let refetch = null;
   try {
     const queryOptions = {
       refetchOnWindowFocus: false,
@@ -40,7 +40,7 @@ export const usePublicFeed = (queryString, selectedTypes) => {
       },
     );
 
-const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
+    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
       { queryBy: queryString ?? 'Favorite' },
       {
         ...queryOptions,
@@ -63,13 +63,13 @@ const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
         ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
       ];
 
-      refetch = () => {
-        publicPacks.refetch(); 
-        publicTrips.refetch();
-      }
+    refetch = () => {
+      publicPacks.refetch();
+      publicTrips.refetch();
+    };
   } catch (error) {
     console.error(error);
-    return { data: null, error, isLoading, refetch};
+    return { data: null, error, isLoading, refetch };
   }
 
   return { data, error: null, isLoading, refetch };

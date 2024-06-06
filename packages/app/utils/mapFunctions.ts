@@ -176,7 +176,6 @@ function calculateZoomLevel(bounds, mapDim) {
  * @return {array} The center coordinates of the trail.
  */
 function findTrailCenter(shape) {
-  
   console.log('Finding trail center...', shape);
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
@@ -185,30 +184,25 @@ function findTrailCenter(shape) {
   let avgLatitude;
   let avgLongitude;
   let flattenedCoords;
-   if(trailCoords[0][0] === undefined){
+  if (trailCoords[0][0] === undefined) {
     avgLongitude = trailCoords[0];
-    avgLatitude= trailCoords[1];
-   }
-   else if(Array.isArray(trailCoords[0][0][0]) ){
+    avgLatitude = trailCoords[1];
+  } else if (Array.isArray(trailCoords[0][0][0])) {
     flattenedCoords = trailCoords[0].flat();
 
-  const latitudes = flattenedCoords.map((coord) => coord[1]);
-  const longitudes = flattenedCoords.map((coord) => coord[0]);
+    const latitudes = flattenedCoords.map((coord) => coord[1]);
+    const longitudes = flattenedCoords.map((coord) => coord[0]);
 
-   avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  avgLongitude =
-    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-
-  }else {
+    avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
+    avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  } else {
     flattenedCoords = trailCoords[0];
 
-  const latitudes = flattenedCoords.map((coord) => coord[1]);
-  const longitudes = flattenedCoords.map((coord) => coord[0]);
+    const latitudes = flattenedCoords.map((coord) => coord[1]);
+    const longitudes = flattenedCoords.map((coord) => coord[0]);
 
-   avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  avgLongitude =
-    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
-
+    avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
+    avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
   }
 
   console.log('Average latitude:', avgLatitude);

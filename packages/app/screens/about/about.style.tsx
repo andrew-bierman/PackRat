@@ -38,7 +38,6 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       width: '100%',
       marginBottom: 70,
-      
     },
 
     githubButton: {
