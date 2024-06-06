@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import React, { useState } from 'react';
 import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
@@ -32,10 +32,10 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
 };
 const loadStyles = () => ({
   selectContainer: {
-    marginTop:20,
+    marginTop:Platform.OS === 'web' ? 10 : 20,
     width: '15rem',
     marginLeft: 20,
-    marginBottom: 20,
+    marginBottom: Platform.OS === 'web' ? 10 : 70,
     alignSelf: 'left',
   },
 });

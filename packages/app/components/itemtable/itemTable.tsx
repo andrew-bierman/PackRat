@@ -220,6 +220,44 @@ export const ItemsTable = ({
             </ScrollView>
           </Table>
         </ScrollView>
+        <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginTop: 20,
+            }}
+          >
+            <RButton
+              style={{
+                width: 50,
+                backgroundColor: page < 2 ? 'gray' : '#0284c7',
+                borderRadius: 5,
+                borderColor: page < 2 ? 'gray' : '#0284c7',
+                borderWidth: 1,
+                borderStyle: 'solid',
+              }}
+              disabled={page < 2}
+              onPress={handlePreviousPage}
+            >
+              <AntDesign name="left" size={16} color="white" />
+            </RButton>
+            <RButton
+              style={{
+                marginLeft: 10,
+                width: 50,
+                backgroundColor: page === totalPages ? 'gray' : '#0284c7',
+                borderRadius: 5,
+                borderColor: page === totalPages ? 'gray' : '#0284c7',
+                borderWidth: 1,
+                borderStyle: 'solid',
+              }}
+              disabled={page === totalPages}
+              onPress={handleNextPage}
+            >
+              <AntDesign name="right" size={16} color="white" />
+            </RButton>
+          </View>
         <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
       </ScrollView>
