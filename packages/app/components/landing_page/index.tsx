@@ -1,11 +1,13 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, View } from 'react-native';
+import { Platform, ScrollView, View, Text } from 'react-native';
 import {
   RButton as OriginalRButton,
   RText,
   RStack as OriginalRStack,
-  RH1,
+  RH1, 
+  RCard, 
+  RH3
 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -14,6 +16,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { FAQ_ITEMS } from './constants';
 import { LandingPageAccordion } from './LandingPageAccordion';
 import loadStyles from './landingpage.style';
+import { Redirect } from 'app/components/Redirect';
+
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -22,8 +26,14 @@ const LandingPage = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
+  const handleGetStarted = () => {
+   return  <Redirect to="/sign-in"/>;
+  }
+
+
   return (
-    <RStack style={styles.container}>
+    <ScrollView>
+      <RStack style={styles.container}>
       <View
         style={
           {
@@ -48,14 +58,15 @@ const LandingPage = () => {
           <RText
             style={{
               color: 'white',
-              fontSize: 20,
-              fontWeight: 600,
+              fontSize: 25,
+              fontWeight:'bold',
+              marginBottom:10,
             }}
           >
             PackRat
           </RText>
         )}
-        <RText style={{ color: 'white', fontSize: 24 }}>
+        <RText style={{ color: 'white', fontSize: 20}}>
           The Ultimate Travel App
         </RText>
       </View>
@@ -64,7 +75,7 @@ const LandingPage = () => {
             source={require("../../assets/background-image.png")}
             style={styles.backgroundImage}
           > */}
-        <View style={styles.overlay} />
+        {/* <View style={styles.overlay} /> */}
         <View style={styles.contentContainer}>
           <RText style={styles.introText}>
             PackRat is the ultimate adventure planner designed for those who
@@ -151,20 +162,17 @@ const LandingPage = () => {
         </View>
         <View style={styles.buttonContainer}>
           <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
-            <RButton
-              style={styles.getStartedButton}
-              onPress={() => {
-                /* Add navigation to the sign in screen */
-              }}
-            >
-              <RText style={styles.footerText}>Get Started</RText>
-            </RButton>
+            <View style={styles.getStartedButton}>
+              <Text style={styles.footerText}> Get Started</Text>
+            </View>
+            
           </RLink>
         </View>
         <StatusBar style="auto" />
         {/* </ImageBackground> */}
       </View>
     </RStack>
+    </ScrollView>
   );
 };
 
