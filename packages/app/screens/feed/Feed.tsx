@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
-import { usefetchTrips } from 'app/hooks/trips';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -38,6 +37,13 @@ interface FeedProps {
   feedType?: string;
 }
 
+interface UseFeedResult {
+  data: any[] | null;
+  error: any | null;
+  isLoading: boolean;
+  refetch: () => void;
+}
+
 const Feed = ({ feedType = 'public' }: FeedProps) => {
   const router = useRouter();
 
@@ -60,7 +66,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     ownerId,
     feedType,
     selectedTypes,
-  );
+  ) as UseFeedResult;
 
   const onRefresh = () => {
     setRefreshing(true);

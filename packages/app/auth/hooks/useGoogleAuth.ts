@@ -40,7 +40,7 @@ export const useGoogleAuth = () => {
   useEffect(() => {
     if (response?.type === 'success') {
       const { id_token } = response.params;
-      setToken(id_token);
+      setToken(id_token || '');
     }
   }, [response]);
 

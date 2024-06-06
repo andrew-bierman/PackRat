@@ -1,8 +1,6 @@
 import React from 'react';
-import { GestureResponderEvent, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
-import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';
 import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';

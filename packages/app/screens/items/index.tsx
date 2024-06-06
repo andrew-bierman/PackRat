@@ -1,8 +1,14 @@
 import { View, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { RButton, RScrollView, RTooltip, RStack, BaseModal } from '@packrat/ui';
+import React from 'react';
+import {
+  RButton as OriginalRButton,
+  RScrollView,
+  RTooltip as OriginalRTooltip,
+  RStack,
+  BaseModal as OriginalBaseModal,
+} from '@packrat/ui';
+
 import { MaterialIcons } from '@expo/vector-icons';
-import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
@@ -11,6 +17,10 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
+
+const RTooltip: any = OriginalRTooltip;
+const BaseModal: any = OriginalBaseModal;
+const RButton: any = OriginalRButton;
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -41,7 +51,7 @@ export default function Items() {
             setLimit={handleLimitChange}
             page={page}
             setPage={handlePageChange}
-            data={data.items}
+            data={data.items as any}
             isLoading={isFetching}
             totalPages={data?.totalPages}
           />
@@ -57,13 +67,15 @@ const ModalTriggerButton = ({ setIsModalOpen }) => {
 
   return (
     <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: '2rem',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+      style={
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          marginTop: '2rem',
+          justifyContent: 'center',
+          alignItems: 'center',
+        } as any
+      }
     >
       <RButton
         style={styles.button}

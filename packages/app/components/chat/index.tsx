@@ -1,27 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import {
-  BaseModal,
-  Form,
-  FormInput,
-  FormSelect,
-  RButton,
-  RInput,
-  RStack,
-  SubmitButton,
-} from '@packrat/ui';
-import { sendMessage } from '@packrat/validations';
+import React from 'react';
+import { View, Text, FlatList } from 'react-native';
+import { BaseModal, RButton, RInput, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
-import { Box } from 'native-base';
 // import { Select } from "tamagui";
 
 // TODO check if we've fixed the chat screen on another branch
@@ -119,8 +101,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   } = useChat({ itemTypeId });
 
   return (
-    <View style={{maxHeight:280 }}>
-      <RStack style={{ alignItems: 'center'}}>
+    <View style={{ maxHeight: 280 }}>
+      <RStack style={{ alignItems: 'center' }}>
         {showChatSelector && (
           <>
             {!parsedMessages?.length && (
@@ -128,7 +110,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             )}
           </>
         )}
-          <MessageList messages={parsedMessages} />
+        <MessageList messages={parsedMessages} />
         <RStack style={{ marginTop: 16, gap: 8 }}>
           <RInput
             placeholder="Type a message..."
@@ -155,7 +137,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   return (
     <View style={styles.container}>
       <BaseModal title="Chat" trigger="Open Chat" footerComponent={undefined}>
-        <ChatComponent  itemTypeId={itemTypeId} />
+        <ChatComponent itemTypeId={itemTypeId} />
       </BaseModal>
     </View>
   );

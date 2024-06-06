@@ -10,7 +10,7 @@ mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 const useGpxUpload = (setShape) => {
   const handleGpxUpload = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
+      const result: any = await DocumentPicker.getDocumentAsync({
         type: 'application/gpx+xml',
       });
 

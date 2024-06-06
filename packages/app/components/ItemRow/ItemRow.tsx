@@ -1,5 +1,5 @@
 import { Container } from 'native-base';
-import { RText } from '@packrat/ui';
+import { RText, RStack } from '@packrat/ui';
 import Checkbox from 'expo-checkbox';
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';

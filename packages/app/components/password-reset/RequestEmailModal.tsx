@@ -1,14 +1,15 @@
 import React from 'react';
 import {
   BaseModal,
-  Form,
+  Form as OriginalForm,
   FormInput,
-  RInput,
   useFormSubmitTrigger,
 } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useRequestEmailModal } from 'app/hooks/password-reset';
 import { emailExists } from '@packrat/validations';
+
+const Form: any = OriginalForm;
 
 export const RequestPasswordResetEmailModal = () => {
   const styles = useCustomStyles(loadStyles);
@@ -24,7 +25,11 @@ export const RequestPasswordResetEmailModal = () => {
         {
           label: 'Send Email',
           color: '#818cf8',
-          onClick: (_, closeModal) => triggerSubmit(closeModal),
+          onClick: (_, closeModal) => {
+            if (typeof triggerSubmit === 'function') {
+              triggerSubmit(closeModal);
+            }
+          },
         },
         {
           label: 'Cancel',

@@ -1,7 +1,9 @@
 // useParks.js
 import { queryTrpc } from '../../trpc';
-import { store } from '../../store/store';
-import { setParks, setParkNames } from '../../store/parksStore';
+
+interface Park {
+  properties: Record<string | number, any>;
+}
 
 function useParks({ latLng, radius = 5000 }) {
   // const { data, error, isLoading } = await trpc.getParksOSM.query({
@@ -24,13 +26,14 @@ function useParks({ latLng, radius = 5000 }) {
   );
 
   if (data) {
-    const parks = data.features;
+    const parks = data.features as Park[];
     const filteredParks = parks
       .filter(
-        (park) => park.properties.name,
+        (park) => park.properties && park.properties?.name,
         // && park.properties.name !== selectedSearch,
       )
-      .map((park) => park.properties.name)
+      .map((park) => park.properties && park.properties?.name)
+      .filter(Boolean)
       .slice(0, 25);
 
     // store.dispatch(setParks(parks));

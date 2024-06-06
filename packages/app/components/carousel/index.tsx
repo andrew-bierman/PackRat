@@ -11,12 +11,17 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface CarouselProps {
   children?: ReactNode[];
-  itemWidth: number;
+  itemWidth?: number;
+  iconColor?: string;
 }
 
 const { height, width } = Dimensions.get('window');
 
-const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
+const Carousel: React.FC<CarouselProps> = ({
+  children = [],
+  itemWidth,
+  iconColor,
+}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
