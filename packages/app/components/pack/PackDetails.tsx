@@ -66,103 +66,109 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <Layout>
-      <View
-        style={[
-          styles.mainContainer,
-          // Platform.OS == 'web'
-          //   ? { minHeight: '100vh' }
-          //   : { minHeight: Dimensions.get('screen').height },
-        ]}
-      >
-        {!isError && (
-          <>
-            <DetailsComponent
-              type="pack"
-              data={currentPack}
-              isLoading={isLoading}
-              error={error as any}
-              additionalComps={
-                <>
-                  <View>
-                    <FlatList
-                      data={Object.entries(SECTION)}
-                      contentContainerStyle={{ paddingBottom: 50 }}
-                      keyExtractor={([key, val]) => val}
-                      renderItem={({ item }) => {
-                        {
-                          switch (item[1]) {
-                            case SECTION.TABLE:
-                              return (
-                                <TableContainer
-                                  currentPack={currentPack}
-                                  copy={canCopy}
-                                  hasPermissions={isAuthUserPack}
-                                />
-                              );
-                            case SECTION.CTA:
-                              return isAuthUserPack ? (
-                                <AddItemModal
-                                  currentPackId={
-                                    currentPackId ? currentPackId : ''
-                                  }
-                                  currentPack={currentPack}
-                                  isAddItemModalOpen={isAddItemModalOpen}
-                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                  // refetch={refetch}
-                                  setRefetch={() => setRefetch((prev) => !prev)}
-                                />
-                              ) : null;
-                            case SECTION.SCORECARD:
-                              return (
-                                <ScoreContainer
-                                  type="pack"
-                                  data={currentPack}
-                                  isOwner={isOwner}
-                                />
-                              );
-                            // case SECTION.CHAT:
-                            //   return (
-                            //     <View style={styles.boxStyle}>
-                            //       <ChatContainer
-                            //         itemTypeId={currentPackId}
-                            //         title="Chat"
-                            //         trigger="Open Chat"
-                            //       />
-                            //     </View>
-                            //   );
-                            default:
-                              return null;
-                          }
-                        }
-                      }}
-                    />
-                  </View>
-                </>
-              }
-              link={link}
-            />
-          </>
-        )}
+    <>
+      <Layout>
         <View
-          style={{
-            position: 'absolute',
-            right: 50,
-            bottom: 30,
-            width: 60,
-            height: 60,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+          style={[
+            styles.mainContainer,
+            // Platform.OS == 'web'
+            //   ? { minHeight: '100vh' }
+            //   : { minHeight: Dimensions.get('screen').height },
+          ]}
         >
-          <ChatContainer
-            itemTypeId={currentPackId}
-            title="Chat"
-            trigger="Open Chat"
-          />
+          {!isError && (
+            <>
+              <DetailsComponent
+                type="pack"
+                data={currentPack}
+                isLoading={isLoading}
+                error={error as any}
+                additionalComps={
+                  <>
+                    <View>
+                      <FlatList
+                        data={Object.entries(SECTION)}
+                        contentContainerStyle={{ paddingBottom: 50 }}
+                        keyExtractor={([key, val]) => val}
+                        renderItem={({ item }) => {
+                          {
+                            switch (item[1]) {
+                              case SECTION.TABLE:
+                                return (
+                                  <TableContainer
+                                    currentPack={currentPack}
+                                    copy={canCopy}
+                                    hasPermissions={isAuthUserPack}
+                                  />
+                                );
+                              case SECTION.CTA:
+                                return isAuthUserPack ? (
+                                  <AddItemModal
+                                    currentPackId={
+                                      currentPackId ? currentPackId : ''
+                                    }
+                                    currentPack={currentPack}
+                                    isAddItemModalOpen={isAddItemModalOpen}
+                                    setIsAddItemModalOpen={
+                                      setIsAddItemModalOpen
+                                    }
+                                    // refetch={refetch}
+                                    setRefetch={() =>
+                                      setRefetch((prev) => !prev)
+                                    }
+                                  />
+                                ) : null;
+                              case SECTION.SCORECARD:
+                                return (
+                                  <ScoreContainer
+                                    type="pack"
+                                    data={currentPack}
+                                    isOwner={isOwner}
+                                  />
+                                );
+                              // case SECTION.CHAT:
+                              //   return (
+                              //     <View style={styles.boxStyle}>
+                              //       <ChatContainer
+                              //         itemTypeId={currentPackId}
+                              //         title="Chat"
+                              //         trigger="Open Chat"
+                              //       />
+                              //     </View>
+                              //   );
+                              default:
+                                return null;
+                            }
+                          }
+                        }}
+                      />
+                    </View>
+                  </>
+                }
+                link={link}
+              />
+            </>
+          )}
         </View>
+      </Layout>
+      <View
+        style={{
+          position: 'absolute',
+          right: 50,
+          bottom: 30,
+          width: 60,
+          height: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ChatContainer
+          itemTypeId={currentPackId}
+          title="Chat"
+          trigger="Open Chat"
+        />
       </View>
-    </Layout>
+    </>
   );
 }
 
