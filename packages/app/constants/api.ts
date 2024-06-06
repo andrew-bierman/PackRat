@@ -1,6 +1,4 @@
-// import { API_URL } from '@packrat/config';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from '@packrat/config';
 
 /**
  * The api url.

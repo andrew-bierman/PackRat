@@ -11,6 +11,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { theme } from '../../theme';
 import { CLIENT_URL } from '@packrat/config';
