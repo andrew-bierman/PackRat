@@ -1,9 +1,12 @@
 import React from 'react';
-import { RStack, RText } from '@packrat/ui';
+import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from '../pack/AddPack';
 import useTheme from '../../hooks/useTheme';
 import PackContainer from '../pack/PackContainer';
+
+const RStack: any = OriginalRStack;
+const RText: any = OriginalRText;
 
 export const GearList = () => {
   const { currentTheme } = useTheme();

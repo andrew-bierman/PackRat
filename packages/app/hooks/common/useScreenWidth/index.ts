@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dimensions } from 'react-native';
-import { useEffect } from 'react';
 
 export const useScreenWidth = () => {
   const [screenWidth, setScreenWidth] = useState(
@@ -11,8 +10,8 @@ export const useScreenWidth = () => {
     const onResize = (event) => {
       setScreenWidth(event.window.width);
     };
-    Dimensions.addEventListener('change', onResize);
-    return () => Dimensions.removeEventListener('change', onResize);
+    const subscription = Dimensions.addEventListener('change', onResize);
+    return () => subscription.remove();
   }, []);
 
   const isLessThanScreenWidth = (size: number) => {

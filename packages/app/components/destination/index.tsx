@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { RButton, RStack, RText } from '@packrat/ui';
+import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import MapContainer from 'app/components/map/MapContainer';
 import { defaultShape } from '../../utils/mapFunctions';
@@ -16,7 +16,8 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
-import { zIndex } from '@tamagui/themes/types/tokens';
+
+const RText: any = OriginalRText;
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -61,7 +62,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
           if (index < 3 && typeof value === 'string') {
             return (
               <RText key={key} style={styles.languageText}>
-                {`${key.split(':')[1].toUpperCase()}: ${value}`}
+                {`${(key.split(':')[1] || '').toUpperCase()}: ${value}`}
               </RText>
             );
           }
@@ -148,34 +149,33 @@ export const DestinationPage = () => {
               ...styles.headerContainer,
             }}
           >
-            
-              {Platform.OS === 'web' ? (
-                <PlacesAutocomplete
-                  onSelect={handleSearchSelect}
-                  placeholder={'Search by park, city, or trail'}
+            {Platform.OS === 'web' ? (
+              <PlacesAutocomplete
+                onSelect={handleSearchSelect}
+                placeholder={'Search by park, city, or trail'}
+              />
+            ) : (
+              <RButton
+                style={{
+                  backgroundColor: currentTheme.colors.text,
+                  minWidth: '100%',
+                  height: 25,
+                  flexDirection: 'row',
+                }}
+                onPress={() => {
+                  router.push('/search');
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={24}
+                  color={currentTheme.colors.background}
                 />
-              ) : (
-                <RButton
-                  style={{
-                    backgroundColor: currentTheme.colors.text,
-                    minWidth: '100%',
-                    height:25,
-                    flexDirection: 'row',
-                  }}
-                  onPress={() => {
-                    router.push('/search');
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="magnify"
-                    size={24}
-                    color={ currentTheme.colors.background}
-                  />
-                  <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
-                    Search by park, city, or trail
-                  </RText>
-                </RButton>
-              )}
+                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
+                  Search by park, city, or trail
+                </RText>
+              </RButton>
+            )}
           </View>
 
           <DestinationHeader

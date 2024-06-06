@@ -5,7 +5,7 @@
  * @return {string} The string representation of the day.
  */
 export const dayNumToString = (day: number): string => {
-  let stringDay: string;
+  let stringDay = 'Invalid day'; // Default value
   switch (day) {
     case 0:
       stringDay = 'Sunday';
@@ -27,6 +27,9 @@ export const dayNumToString = (day: number): string => {
       break;
     case 6:
       stringDay = 'Saturday';
+      break;
+    default:
+      stringDay = 'Invalid day';
   }
 
   return stringDay;

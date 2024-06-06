@@ -23,6 +23,7 @@ import { CopyPackModal } from '../../pack/CopyPackModal';
 interface PackCardHeaderProps {
   data: any;
   title: string;
+  link?: string;
 }
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {

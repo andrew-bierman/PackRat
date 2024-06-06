@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import {
-  AlertDialog,
+  AlertDialog as OriginalAlertDialog,
   AlertDialogContentProps,
   AlertDialogDescriptionProps,
   AlertDialogProps,
   AlertDialogTitleProps,
-  XStack,
+  XStack as OriginalXStack,
   XStackProps,
   YStack,
 } from 'tamagui';
@@ -22,6 +22,9 @@ export type LmAlertDialogProps = AlertDialogProps & {
   description: string;
   descriptionProps?: AlertDialogDescriptionProps;
 };
+
+const AlertDialog: any = OriginalAlertDialog;
+const XStack: any = OriginalXStack;
 
 export function LmAlertDialog({
   trigger,

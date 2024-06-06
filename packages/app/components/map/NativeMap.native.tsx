@@ -3,15 +3,17 @@ import {
   Platform,
   View,
   SafeAreaView,
-  Dimensions,
   Modal,
   Alert,
   Linking,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Mapbox, { ShapeSource, offlineManager, Camera } from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import { AlertDialog } from 'native-base';
-import { RButton, RInput } from '@packrat/ui';
+import {
+  RButton as OriginalRButton,
+  RInput as OriginalRInput,
+} from '@packrat/ui';
 
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
@@ -31,6 +33,9 @@ import { DOMParser } from 'xmldom';
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useNativeMap } from 'app/hooks/map/useNativeMap';
+
+const RButton: any = OriginalRButton;
+const RInput: any = OriginalRInput;
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -92,14 +97,17 @@ function NativeMap({ shape: shapeProp }) {
     const latLng = latLong.join(',');
     // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
     const label = shape?.features[0]?.properties?.name;
-    const url = Platform.select({
-      ios: `${scheme}${label}@${latLng}`,
-      android: `${scheme}${latLng}(${label})`,
-    });
-    Linking.openURL(url);
+    const url =
+      Platform.select({
+        ios: `${scheme}${label}@${latLng}`,
+        android: `${scheme}${latLng}(${label})`,
+      }) || '';
+    if (url) {
+      Linking.openURL(url);
+    }
   };
   const element = (
-    <View style={mapFullscreen ? fullMapDimension : previewMapStyle}>
+    <View style={mapFullscreen ? (fullMapDimension as any) : previewMapStyle}>
       <Mapbox.MapView
         ref={mapViewRef}
         style={{ flex: 1 }}
@@ -169,7 +177,7 @@ function NativeMap({ shape: shapeProp }) {
               cluster
               clusterRadius={80}
               clusterMaxZoomLevel={14}
-              style={{ zIndex: 1 }}
+              // style={{ zIndex: 1 }}
             >
               <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
@@ -236,7 +244,7 @@ function NativeMap({ shape: shapeProp }) {
         }}
         handleGpxUpload={async () => {
           try {
-            const result = await DocumentPicker.getDocumentAsync({
+            const result: any = await DocumentPicker.getDocumentAsync({
               type: '*/*',
             });
             if (result.type === 'success') {
@@ -305,10 +313,14 @@ function NativeMap({ shape: shapeProp }) {
                     colorScheme="success"
                     onPress={async () => {
                       setShowMapNameInputDialog(false);
+                      const bounds = mapViewRef.current
+                        ? await mapViewRef.current.getVisibleBounds()
+                        : null;
                       const downloadOptions = {
                         name: mapName,
                         styleURL: 'mapbox://styles/mapbox/outdoors-v11',
-                        bounds: await mapViewRef.current.getVisibleBounds(),
+                        // bounds: await mapViewRef.current.getVisibleBounds(),
+                        bounds,
                         minZoom: 0,
                         maxZoom: 8,
                         metadata: {

@@ -3,7 +3,7 @@ import {
   AvatarProps,
   FontSizeTokens,
   ImageProps,
-  Paragraph,
+  Paragraph as OriginalParagraph,
   ParagraphProps,
 } from 'tamagui';
 
@@ -14,6 +14,7 @@ export type LmAvatarProps = AvatarProps & {
   letterProps?: ParagraphProps;
   imageProps?: ImageProps;
 };
+const Paragraph: any = OriginalParagraph;
 
 export function LmAvatar({
   color,

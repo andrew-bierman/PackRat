@@ -8,7 +8,11 @@ export const useItemWeightUnit = (): [
   React.Dispatch<React.SetStateAction<WeightUnit>>,
 ] => {
   const authUser = useAuthUser();
-  const userPreferWeight = authUser.preferredWeight as WeightUnit | null;
+
+  const userPreferWeight = authUser
+    ? (authUser.preferredWeight as WeightUnit | null)
+    : null;
+
   const [weightUnit, setWeightUnit] = useState<WeightUnit>(
     userPreferWeight || 'kg',
   );
