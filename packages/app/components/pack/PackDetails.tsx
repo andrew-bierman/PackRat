@@ -75,8 +75,8 @@ export function PackDetails() {
           //   : { minHeight: Dimensions.get('screen').height },
         ]}
       >
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {!isError && (
+        {!isError && (
+          <>
             <DetailsComponent
               type="pack"
               data={currentPack}
@@ -142,8 +142,8 @@ export function PackDetails() {
               }
               link={link}
             />
-          )}
-        </ScrollView>
+          </>
+        )}
         <View
           style={{
             position: 'absolute',
