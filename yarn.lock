@@ -12722,6 +12722,7 @@ __metadata:
     react-dom: "npm:18.2.0"
     react-hook-form: "npm:^7.51.0"
     react-native: "npm:0.73.6"
+    react-native-action-button: "npm:^2.8.5"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
     react-native-flash-message: "npm:^0.4.2"
@@ -28584,7 +28585,6 @@ __metadata:
   resolution: "packrat-world@workspace:."
   dependencies:
     "@babel/runtime": "npm:^7.21.0"
-    "@instructor-ai/instructor": "npm:^1.3.0"
     "@manypkg/cli": "npm:^0.21.0"
     "@prisma/extension-accelerate": "npm:^0.6.2"
     check-dependency-version-consistency: "npm:^4.1.0"
@@ -28597,9 +28597,7 @@ __metadata:
     patch-package: "npm:^8.0.0"
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^3.2.5"
-    react-native-action-button: "npm:^2.8.5"
     typescript: "npm:^5.3.3"
-    zod: "npm:^3.23.8"
   languageName: unknown
   linkType: soft
 
@@ -32259,6 +32257,7 @@ __metadata:
     "@faker-js/faker": "npm:^8.4.1"
     "@hono/node-server": "npm:^1.11.0"
     "@hono/trpc-server": "npm:^0.1.1"
+    "@instructor-ai/instructor": "npm:^1.3.0"
     "@libsql/client": "npm:^0.4.0-pre.5"
     "@openapitools/openapi-generator-cli": "npm:^2.7.0"
     "@packrat/validations": "npm:*"
@@ -37049,7 +37048,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.20.2, zod@npm:^3.20.6, zod@npm:^3.22.3, zod@npm:^3.22.4, zod@npm:^3.23.8":
+"zod@npm:^3.20.2, zod@npm:^3.20.6, zod@npm:^3.22.3, zod@npm:^3.22.4":
   version: 3.23.8
   resolution: "zod@npm:3.23.8"
   checksum: 10/846fd73e1af0def79c19d510ea9e4a795544a67d5b34b7e1c4d0425bf6bfd1c719446d94cdfa1721c1987d891321d61f779e8236fde517dc0e524aa851a6eff1
