@@ -64,7 +64,7 @@ export default function WeatherCard({
       $sm={{
         borderRadius: 6,
         flexDirection: 'column',
-        width: '100%',
+        width: '90%',
       }}
       $gtSm={{
         borderRadius: 12,

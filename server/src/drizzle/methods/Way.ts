@@ -3,12 +3,7 @@ import { DbClient } from '../../db/client';
 import { way } from '../../db/schema';
 
 export class Way {
-  async update(
-    data: any,
-    id: string,
-    filter = eq(way.id, id),
-    returning = null,
-  ) {
+  async update(data: any, id: string, filter = eq(way.id, id), returning = {}) {
     return DbClient.instance
       .update(way)
       .set(data)
@@ -26,7 +21,11 @@ export class Way {
   }
 
   async findMany(filter = null) {
-    return DbClient.instance.select().from(way).where(filter).get();
+    let query: any = DbClient.instance.select().from(way);
+    if (filter !== null) {
+      query = query.where(filter);
+    }
+    return query.get();
   }
 
   async findUniqueWay(query) {

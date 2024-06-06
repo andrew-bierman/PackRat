@@ -149,14 +149,7 @@ export const DestinationPage = () => {
               ...styles.headerContainer,
             }}
           >
-            <RStack
-              style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            
               {Platform.OS === 'web' ? (
                 <PlacesAutocomplete
                   onSelect={handleSearchSelect}
@@ -167,6 +160,7 @@ export const DestinationPage = () => {
                   style={{
                     backgroundColor: currentTheme.colors.text,
                     minWidth: '100%',
+                    height:25,
                     flexDirection: 'row',
                   }}
                   onPress={() => {
@@ -176,14 +170,13 @@ export const DestinationPage = () => {
                   <MaterialCommunityIcons
                     name="magnify"
                     size={24}
-                    // color={ currentTheme.colors.background}
+                    color={ currentTheme.colors.background}
                   />
                   <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
                     Search by park, city, or trail
                   </RText>
                 </RButton>
               )}
-            </RStack>
           </View>
 
           <DestinationHeader

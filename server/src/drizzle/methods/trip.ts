@@ -5,6 +5,9 @@ import { type InsertTrip, trip as TripTable } from '../../db/schema';
 export class Trip {
   async update(trip: Partial<InsertTrip>) {
     try {
+      if (!trip.id) {
+        throw new Error('Trip id is required for update operation');
+      }
       const updatedTrip = await DbClient.instance
         .update(TripTable)
         .set(trip)
