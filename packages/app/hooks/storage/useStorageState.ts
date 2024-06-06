@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
 function useAsyncState<T>(
-  initialValue: [boolean, T | null] = [true, undefined],
+  initialValue: [boolean, T | null] = [true, null],
 ): UseStateHook<T> {
   return React.useReducer(
     (state: [boolean, T | null], action: T | null = null) => [false, action],

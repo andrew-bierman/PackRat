@@ -34,7 +34,9 @@ const useMapState = (shapeProp) => {
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
+  const [mapStyle, setMapStyle] = useState(
+    mapboxStyles[0] ? mapboxStyles[0].style : '',
+  );
   const [showUserLocation, setShowUserLocation] = useState(false);
   const [userLng, setUserLng] = useState(null);
   const [userLat, setUserLat] = useState(null);
@@ -114,7 +116,9 @@ const useMapEffects = ({
   useEffect(() => {
     if (shape?.features[0]?.geometry?.coordinates?.length >= 1) {
       let bounds = getShapeSourceBounds(shape);
-      bounds = bounds[0].concat(bounds[1]);
+      if (bounds[0] && bounds[1]) {
+        bounds = [bounds[0], bounds[1]];
+      }
       const mapDim = fullMapDiemention;
       const latZoom = calculateZoomLevel(bounds, mapDim);
       const trailCenter = findTrailCenter(shape);

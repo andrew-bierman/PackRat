@@ -1,7 +1,12 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, View } from 'react-native';
-import { RButton, RCard, RText, RStack, RH1, RH3 } from '@packrat/ui';
+import {
+  RButton as OriginalRButton,
+  RText,
+  RStack as OriginalRStack,
+  RH1,
+} from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
@@ -10,6 +15,9 @@ import { FAQ_ITEMS } from './constants';
 import { LandingPageAccordion } from './LandingPageAccordion';
 import loadStyles from './landingpage.style';
 
+const RButton: any = OriginalRButton;
+const RStack: any = OriginalRStack;
+
 const LandingPage = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
@@ -17,13 +25,15 @@ const LandingPage = () => {
   return (
     <RStack style={styles.container}>
       <View
-        style={{
-          alignItems: 'center',
-          textAlign: 'center',
-          paddingVertical: 18,
-          marginTop: Platform.OS !== 'web' ? 25 : 1,
-          flex: 1,
-        }}
+        style={
+          {
+            alignItems: 'center',
+            textAlign: 'center',
+            paddingVertical: 18,
+            marginTop: Platform.OS !== 'web' ? 25 : 1,
+            flex: 1,
+          } as any
+        }
       >
         {Platform.OS === 'web' ? (
           <RH1

@@ -1,7 +1,8 @@
 import { Card, CardProps, H2, Paragraph, ThemeName } from 'tamagui';
 import { PropsWithChildren, ReactNode } from 'react';
-import { LmImage } from './LmImage';
+import { LmImage as OriginalLmImage } from './LmImage';
 
+const LmImage: any = OriginalLmImage;
 export type LmCardProps = PropsWithChildren<
   CardProps & {
     bouncy?: boolean;

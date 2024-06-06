@@ -1,7 +1,13 @@
-import { Feather } from '@expo/vector-icons';
-import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
-import { FlatList, Platform, View } from 'react-native';
-import { Cell, Row, Table } from 'react-native-table-component';
+import { Feather as OriginalFeather } from '@expo/vector-icons';
+import {
+  RButton,
+  RCheckbox,
+  RSkeleton,
+  RStack,
+  RText as OriginalRText,
+} from '@packrat/ui';
+import { View } from 'react-native';
+import { Row } from 'react-native-table-component';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import DropdownComponent from '../Dropdown';
@@ -9,6 +15,9 @@ import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
 import React from 'react';
+
+const RText: any = OriginalRText;
+const Feather: any = OriginalFeather;
 
 interface WeightUnitDropdownProps {
   value: string;

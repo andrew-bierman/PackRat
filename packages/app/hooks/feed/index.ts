@@ -4,7 +4,7 @@ import { useUserTrips } from '../singletrips';
 
 export const useFeed = (
   queryString = 'Most Recent',
-  ownerId = null,
+  ownerId: string | undefined = undefined,
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
 ) => {
@@ -12,9 +12,9 @@ export const useFeed = (
     case 'public':
       return usePublicFeed(queryString, selectedTypes);
     case 'userPacks':
-      return useUserPacks(ownerId, queryString);
+      return useUserPacks(ownerId || undefined, queryString);
     case 'userTrips':
-      return useUserTrips(ownerId);
+      return useUserTrips(ownerId || undefined);
     default:
       return { data: null, error: null, isLoading: true };
   }

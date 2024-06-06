@@ -6,14 +6,19 @@ import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 import {
-  RStack,
-  RInput,
-  RButton,
-  RText,
-  RScrollView,
+  RStack as OriginalRStack,
+  RInput as OriginalRInput,
+  RButton as OriginalRButton,
+  RScrollView as OriginalRScrollView,
   RIconButton,
 } from '@packrat/ui';
-import { View, Pressable } from 'react-native';
+import { View, Pressable as OriginalPressable } from 'react-native';
+
+const RStack: any = OriginalRStack;
+const RInput: any = OriginalRInput;
+const RScrollView: any = OriginalRScrollView;
+const RButton: any = OriginalRButton;
+const Pressable: any = OriginalPressable;
 
 interface SearchInputProps {
   onSelect: (result: any, index: number) => void;
@@ -21,7 +26,7 @@ interface SearchInputProps {
   onChange: (text: string) => void;
   searchString?: string;
   placeholder?: string;
-  resultItemComponent: ReactNode;
+  resultItemComponent: React.ReactElement;
 }
 
 export const SearchInput = forwardRef<TextInput, SearchInputProps>(
@@ -200,7 +205,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 flex: 1,
               }}
             />
-            {searchString.trim().length > 0 && (
+            {searchString && searchString.trim().length > 0 && (
               <RIconButton
                 onPress={handleClearSearch}
                 style={{ backgroundColor: 'transparent' }}

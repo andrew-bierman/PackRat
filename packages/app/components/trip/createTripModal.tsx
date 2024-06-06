@@ -1,25 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BaseModal,
-  Form,
+  Form as OriginalForm,
   FormInput,
-  FormSelect,
-  RInput,
+  FormSelect as OrignalFormSelect,
   RStack,
   RText,
 } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
-import { format, intervalToDuration } from 'date-fns';
-// import { addTrip } from '../../store/tripsStore';
 import { useAddTrip } from 'app/hooks/trips';
-import { useGetPhotonDetails } from 'app/hooks/destination';
-
-// import { Picker } from '@react-native-picker/picker';
-import { DropdownComponent } from '../Dropdown';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
 import { useUserPackById } from 'app/hooks/packs';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
+
+const Form: any = OriginalForm;
+const FormSelect: any = OrignalFormSelect;
 
 interface SaveTripContainerProps {
   tripStore: any;
@@ -57,7 +53,16 @@ export const SaveTripContainer = ({ tripStore }: SaveTripContainerProps) => {
         {
           label: 'Save',
           color: '#6F9CDE',
-          onClick: (_, closeModal) => submitTrigger(closeModal),
+          onClick: (_, closeModal) => {
+            if (typeof submitTrigger === 'function') {
+              submitTrigger(closeModal);
+            } else if (
+              submitTrigger &&
+              typeof submitTrigger.current?.submit === 'function'
+            ) {
+              submitTrigger.current.submit(closeModal);
+            }
+          },
         },
       ]}
     >

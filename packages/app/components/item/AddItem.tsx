@@ -12,8 +12,9 @@ import { useMemo } from 'react';
 import { useAuthUser } from 'app/auth/hooks';
 
 interface AddItemProps {
-  isEdit: boolean;
-  initialData: {
+  id?: string;
+  isEdit?: boolean;
+  initialData?: {
     global: string;
     id: string;
     name?: string;
@@ -25,14 +26,17 @@ interface AddItemProps {
     unit?: string;
   };
   packId: string;
-  currentPack: any;
-  editAsDuplicate: any;
-  setPage: (page: number) => void;
-  page: number;
-  isItemPage: boolean;
-  closeModalHandler: () => void;
-  setIsAddItemModalOpen: (isOpen: boolean) => void;
+  currentPack?: any;
+  editAsDuplicate?: any;
+  setPage?: (page: number) => void;
+  page?: number;
+  isItemPage?: boolean;
+  closeModalHandler?: () => void;
+  setIsAddItemModalOpen?: (isOpen: boolean) => void;
+  setRefetch?: () => void;
 }
+
+type AddItem = Omit<Item, 'id'> & { id: string };
 
 export const AddItem = ({
   isEdit,
@@ -66,7 +70,8 @@ export const AddItem = ({
 
   const handleSubmit = (data: Item) => {
     if (isEdit) {
-      editPackItem(data);
+      // editPackItem(data as AddItem);
+      editPackItem(data as any);
     } else {
       addPackItem(data);
     }

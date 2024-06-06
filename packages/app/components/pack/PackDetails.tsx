@@ -25,7 +25,6 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import Layout from 'app/components/layout/Layout';
-import { ScrollView } from 'native-base';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -81,7 +80,7 @@ export function PackDetails() {
               type="pack"
               data={currentPack}
               isLoading={isLoading}
-              error={error}
+              error={error as any}
               additionalComps={
                 <>
                   <View>
@@ -103,7 +102,9 @@ export function PackDetails() {
                             case SECTION.CTA:
                               return isAuthUserPack ? (
                                 <AddItemModal
-                                  currentPackId={currentPackId}
+                                  currentPackId={
+                                    currentPackId ? currentPackId : ''
+                                  }
                                   currentPack={currentPack}
                                   isAddItemModalOpen={isAddItemModalOpen}
                                   setIsAddItemModalOpen={setIsAddItemModalOpen}
