@@ -55,7 +55,9 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     if (Platform.OS === 'web') {
       return (
         <RStack style={styles.container}>
-          <RStack style={{position:"relative", height:"auto", width:"100%"}} >
+          <RStack
+            style={{ position: 'relative', height: 'auto', width: '100%' }}
+          >
             <RStack
               style={{
                 flexDirection: 'row',
@@ -65,7 +67,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               }}
             >
               <RInput
-              style={{flex:1}}
+                style={{ flex: 1 }}
                 paddingLeft={35}
                 paddingRight={55}
                 placeholder={placeholder ?? 'Search'}

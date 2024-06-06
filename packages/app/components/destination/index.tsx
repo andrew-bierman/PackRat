@@ -149,34 +149,33 @@ export const DestinationPage = () => {
               ...styles.headerContainer,
             }}
           >
-            
-              {Platform.OS === 'web' ? (
-                <PlacesAutocomplete
-                  onSelect={handleSearchSelect}
-                  placeholder={'Search by park, city, or trail'}
+            {Platform.OS === 'web' ? (
+              <PlacesAutocomplete
+                onSelect={handleSearchSelect}
+                placeholder={'Search by park, city, or trail'}
+              />
+            ) : (
+              <RButton
+                style={{
+                  backgroundColor: currentTheme.colors.text,
+                  minWidth: '100%',
+                  height: 25,
+                  flexDirection: 'row',
+                }}
+                onPress={() => {
+                  router.push('/search');
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={24}
+                  color={currentTheme.colors.background}
                 />
-              ) : (
-                <RButton
-                  style={{
-                    backgroundColor: currentTheme.colors.text,
-                    minWidth: '100%',
-                    height:25,
-                    flexDirection: 'row',
-                  }}
-                  onPress={() => {
-                    router.push('/search');
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="magnify"
-                    size={24}
-                    color={ currentTheme.colors.background}
-                  />
-                  <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
-                    Search by park, city, or trail
-                  </RText>
-                </RButton>
-              )}
+                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
+                  Search by park, city, or trail
+                </RText>
+              </RButton>
+            )}
           </View>
 
           <DestinationHeader
