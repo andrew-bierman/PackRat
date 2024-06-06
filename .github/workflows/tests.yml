@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ['**']
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
@@ -55,6 +55,11 @@ jobs:
 
       - name: Setup API
         run: cp -n server/wrangler.toml.example server/wrangler.toml
+
+      - name: Set environment variables
+        run: echo "OSM_URI=${{ secrets.OSM_URI }}" >> $GITHUB_ENV
+      - name: Set jwtSecret environment variable
+        run: echo "JWT_SECRET=test123" >> $GITHUB_ENV
 
       - name: Run tests
         id: run_tests
