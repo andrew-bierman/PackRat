@@ -60,6 +60,8 @@ jobs:
         run: echo "OSM_URI=${{ secrets.OSM_URI }}" >> $GITHUB_ENV
       - name: Set jwtSecret environment variable
         run: echo "JWT_SECRET=test123" >> $GITHUB_ENV
+      - name: Export environment variable
+        run: export OSM_URI=${{ secrets.OSM_URI }} && export JWT_SECRET=test123
 
       - name: Run tests
         id: run_tests
