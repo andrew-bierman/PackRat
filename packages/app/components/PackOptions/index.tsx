@@ -1,7 +1,9 @@
-import { useState } from 'react';
 import { Text } from 'react-native';
-import { useRouter } from 'app/hooks/router';
-import { RStack, RIconButton, BaseModal } from '@packrat/ui';
+import {
+  RStack,
+  RIconButton,
+  BaseModal as OriginalBaseModal,
+} from '@packrat/ui';
 import { Entypo } from '@expo/vector-icons';
 import { useModalState } from './useModalState';
 import { View } from 'react-native';
@@ -11,7 +13,7 @@ interface PackOptionsProps {
   Delete: React.ReactNode;
   Ignore: React.ReactNode;
 }
-
+const BaseModal: any = OriginalBaseModal;
 export const PackOptions: React.FC<PackOptionsProps> = ({
   Edit,
   Delete,

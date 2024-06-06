@@ -20,7 +20,6 @@ import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import Layout from 'app/components/layout/Layout';
 
-
 const SECTION = {
   TABLE: 'TABLE',
   CTA: 'CTA',
@@ -62,81 +61,85 @@ export function PackDetails() {
   return (
     <Layout>
       <View
-      style={[
-        styles.mainContainer,
-        Platform.OS == 'web'
-          ? { minHeight: '100vh' }
-          : { minHeight: Dimensions.get('screen').height },
-      ]}
-    >
-      {!isError && (
-        <>
-          <DetailsComponent
-            type="pack"
-            data={currentPack}
-            isLoading={isLoading}
-            error={error}
-            additionalComps={
-              <>
-                <View>
-                  <FlatList
-                    data={Object.entries(SECTION)}
-                    contentContainerStyle={{ paddingBottom: 50 }}
-                    keyExtractor={([key, val]) => val}
-                    renderItem={({ item }) => {
-                      {
-                        switch (item[1]) {
-                          case SECTION.TABLE:
-                            return (
-                              <TableContainer
-                                currentPack={currentPack}
-                                copy={canCopy}
-                                hasPermissions={isAuthUserPack}
-                              />
-                            );
-                          case SECTION.CTA:
-                            return isAuthUserPack ? (
-                              <AddItemModal
-                                currentPackId={currentPackId}
-                                currentPack={currentPack}
-                                isAddItemModalOpen={isAddItemModalOpen}
-                                setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                // refetch={refetch}
-                                setRefetch={() => setRefetch((prev) => !prev)}
-                              />
-                            ) : null;
-                          case SECTION.SCORECARD:
-                            return (
-                              <ScoreContainer
-                                type="pack"
-                                data={currentPack}
-                                isOwner={isOwner}
-                              />
-                            );
-                          case SECTION.CHAT:
-                            return (
-                              <View style={styles.boxStyle}>
-                                <ChatContainer
-                                  itemTypeId={currentPackId}
-                                  title="Chat"
-                                  trigger="Open Chat"
+        style={[
+          styles.mainContainer,
+          Platform.OS == 'web'
+            ? { minHeight: '100vh' }
+            : { minHeight: Dimensions.get('screen').height },
+        ]}
+      >
+        {!isError && (
+          <>
+            <DetailsComponent
+              type="pack"
+              data={currentPack}
+              isLoading={isLoading}
+              error={error as any}
+              additionalComps={
+                <>
+                  <View>
+                    <FlatList
+                      data={Object.entries(SECTION)}
+                      contentContainerStyle={{ paddingBottom: 50 }}
+                      keyExtractor={([key, val]) => val}
+                      renderItem={({ item }) => {
+                        {
+                          switch (item[1]) {
+                            case SECTION.TABLE:
+                              return (
+                                <TableContainer
+                                  currentPack={currentPack}
+                                  copy={canCopy}
+                                  hasPermissions={isAuthUserPack}
                                 />
-                              </View>
-                            );
-                          default:
-                            return null;
+                              );
+                            case SECTION.CTA:
+                              return isAuthUserPack ? (
+                                <AddItemModal
+                                  currentPackId={
+                                    currentPackId ? currentPackId : ''
+                                  }
+                                  currentPack={currentPack}
+                                  isAddItemModalOpen={isAddItemModalOpen}
+                                  setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                  // refetch={refetch}
+                                  setRefetch={() => setRefetch((prev) => !prev)}
+                                />
+                              ) : null;
+                            case SECTION.SCORECARD:
+                              return (
+                                <ScoreContainer
+                                  type="pack"
+                                  data={currentPack}
+                                  isOwner={isOwner ?? false}
+                                />
+                              );
+                            case SECTION.CHAT:
+                              return (
+                                <View style={styles.boxStyle}>
+                                  <ChatContainer
+                                    itemTypeId={
+                                      currentPackId ? currentPackId : null
+                                    }
+                                    title="Chat"
+                                    trigger="Open Chat"
+                                  />
+                                </View>
+                              );
+                            default:
+                              return null;
+                          }
                         }
-                      }
-                    }}
-                  />
-                </View>
-              </>
-            }
-            link={link}
-          />
-        </>
-      )}
-    </View>
+                      }}
+                    />
+                  </View>
+                </>
+              }
+              link={link}
+            />
+          </>
+        )}
+      </View>
     </Layout>
   );
 }

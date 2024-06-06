@@ -10,8 +10,8 @@ export function LmDialogContent({
   ...rest
 }: LmDialogContentProps) {
   return (
-    <ScrollView padding={contentPadding}>
-      <YStack space {...rest}>
+    <ScrollView>
+      <YStack style={{ padding: contentPadding }} space {...rest}>
         {children}
       </YStack>
     </ScrollView>

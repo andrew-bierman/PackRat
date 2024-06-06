@@ -6,6 +6,11 @@ export const useAddPackItem = () => {
   // Use mutation for adding an item
   const mutation = queryTrpc.addItem.useMutation({
     onMutate: async (newItem) => {
+      // Check if newItem is not void
+      if (!newItem) {
+        throw new Error('Item data is not available.');
+      }
+
       // Snapshot the previous value before the mutation
 
       const previousPack = utils.getPackById.getData({
@@ -26,16 +31,21 @@ export const useAddPackItem = () => {
               ? {
                   name: newItem.type,
                 }
-              : undefined,
+              : null,
           },
         ],
       };
 
-      utils.getPackById.setData({ packId: newItem.packId }, newQueryData);
+      utils.getPackById.setData(
+        { packId: newItem.packId },
+        newQueryData as any,
+      );
+
       return {
         previousPack,
       };
     },
+
     onError: (err, newItem, context) => {
       // if (context.previousPack) {
       //   utils.getPackById.setData(

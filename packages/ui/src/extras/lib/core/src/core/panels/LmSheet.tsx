@@ -1,6 +1,8 @@
-import { Sheet } from 'tamagui';
+import { Sheet as OriginalSheet } from 'tamagui';
 import { PropsWithChildren, useState } from 'react';
 import { SheetProps } from '@tamagui/sheet/src/types';
+
+const Sheet: any = OriginalSheet;
 
 export type LmSheetProps = PropsWithChildren<
   SheetProps & {

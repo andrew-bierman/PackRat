@@ -17,9 +17,9 @@ interface NavigationItemProps {
     // | typeof Entypo.glyphMap
     // | typeof Fontisto.glyphMap;
   };
-  itemStyle: string;
+  itemStyle?: string;
   isMobileView: boolean;
-  onSelect: () => void;
+  onSelect?: (item: any) => void;
 }
 
 export const NavigationItem = ({
