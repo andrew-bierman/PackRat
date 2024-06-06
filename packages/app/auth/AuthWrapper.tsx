@@ -22,7 +22,7 @@ export const AuthWrapper = ({ children }: Props) => {
           </View>
         )
       }
-      unauthorizedElement={<LandingPage/>}
+      unauthorizedElement={<LandingPage />}
     >
       {children}
     </AuthLoader>

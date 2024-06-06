@@ -291,8 +291,14 @@ interface RangePickerProps {
   setOpen: (open: boolean) => void;
 }
 
-export function RangePicker({selectedDates, onDatesChange, offsetDate, onOffsetChange, open, setOpen}: RangePickerProps) {
-
+export function RangePicker({
+  selectedDates,
+  onDatesChange,
+  offsetDate,
+  onOffsetChange,
+  open,
+  setOpen,
+}: RangePickerProps) {
   useEffect(() => {
     if (selectedDates.length === 2) {
       setOpen(false);

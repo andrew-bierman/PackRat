@@ -44,9 +44,9 @@ const Carousel: React.FC<CarouselProps> = ({
   };
 
   return (
-      <RStack
+    <RStack
       style={{
-        alignSelf:'center',
+        alignSelf: 'center',
         width: Platform.OS === 'web' ? '100%' : width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',

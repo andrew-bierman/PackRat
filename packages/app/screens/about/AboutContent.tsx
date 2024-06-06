@@ -22,36 +22,36 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
   const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
 
   return (
-   <Layout>
-     <ScrollView>
-      <View style={styles.textContainer}>
-        <View style={styles.headerContainer}>
-          <Text style={[isDark ? styles.headerDark : styles.header]}>
-            About PackRat
-          </Text>
-        </View>
+    <Layout>
+      <ScrollView>
+        <View style={styles.textContainer}>
+          <View style={styles.headerContainer}>
+            <Text style={[isDark ? styles.headerDark : styles.header]}>
+              About PackRat
+            </Text>
+          </View>
 
-        {aboutSections.map((section, index) => (
-          <Text key={index} style={[isDark ? styles.textDark : styles.text]}>
-            {section}
-          </Text>
-        ))}
-      </View>
-          <View style={styles.buttonContainer}>
-            <RButton style={styles.githubButton} onPress={handleGithubLink}>
-              <RStack style={{ flexDirection: 'row' }}>
-                <FontAwesome
-                  name="github"
-                  style={[isDark ? styles.githubIconDark : styles.githubIcon]}
-                />
-                <Text
-                  style={[isDark ? styles.githubTextDark : styles.githubText]}
-                >
-                  View on GitHub
-                </Text>
-              </RStack>
-            </RButton>
-            {/* <Button
+          {aboutSections.map((section, index) => (
+            <Text key={index} style={[isDark ? styles.textDark : styles.text]}>
+              {section}
+            </Text>
+          ))}
+        </View>
+        <View style={styles.buttonContainer}>
+          <RButton style={styles.githubButton} onPress={handleGithubLink}>
+            <RStack style={{ flexDirection: 'row' }}>
+              <FontAwesome
+                name="github"
+                style={[isDark ? styles.githubIconDark : styles.githubIcon]}
+              />
+              <Text
+                style={[isDark ? styles.githubTextDark : styles.githubText]}
+              >
+                View on GitHub
+              </Text>
+            </RStack>
+          </RButton>
+          {/* <Button
               style={styles.discordButton}
               // onPress={handleDiscordLink}
             >
@@ -63,9 +63,9 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
                 <Text style={styles.githubText}>Join Us on Discord</Text>
               </HStack>
             </Button> */}
-          </View>
-    </ScrollView>
-   </Layout>
+        </View>
+      </ScrollView>
+    </Layout>
   );
 };
 

@@ -37,15 +37,16 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
         </RLink>
       </View>
       {user?.id !== data.owner_id && (
-      <RButton
-        onPress={() => {
-          setIsCopyPackModalOpen(true);
-        }}
-        style={{ backgroundColor: 'transparent' }}
-      >
-        <RText style={{ color: 'black' }}>Copy Pack</RText>
-      </RButton>
-      )}{actionsComponent}
+        <RButton
+          onPress={() => {
+            setIsCopyPackModalOpen(true);
+          }}
+          style={{ backgroundColor: 'transparent' }}
+        >
+          <RText style={{ color: 'black' }}>Copy Pack</RText>
+        </RButton>
+      )}
+      {actionsComponent}
       <CopyPackModal
         currentPack={data}
         isOpen={isCopyPackModalOpen}
