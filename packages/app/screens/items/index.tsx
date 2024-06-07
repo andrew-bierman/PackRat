@@ -16,6 +16,10 @@ import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
 // const BaseModal: any = OriginalBaseModal;
 // const RButton: any = OriginalRButton;
 
+
+
+
+
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -24,10 +28,12 @@ export default function Items() {
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
   const [value, setValue] = useState('Food');
-  const [sortedItems, setSortedItems] = useState([]);
   const optionValues = ['Food', 'Water', 'Essentials'];
 
   const sortItemsByCategory = (items, selectedCategory) => {
+    if(!items){
+      return []
+    }
     const selectedCategoryItems = items.filter(
       (item) => item.category.name === selectedCategory,
     );
@@ -41,6 +47,9 @@ export default function Items() {
     return [...selectedCategoryItems, ...otherItems];
   };
 
+
+  const [sortedItems, setSortedItems] = useState(sortItemsByCategory(data.items, value));
+
   const handleSort = (category) => {
     setValue(category);
     const sorted = sortItemsByCategory(data.items, category);
@@ -50,7 +59,7 @@ export default function Items() {
   useEffect(() => {
     const sorted = sortItemsByCategory(data.items, value);
     setSortedItems(sorted);
-  }, [data.items, value]);
+  }, [data.items]);
 
   return (
     <RScrollView>
