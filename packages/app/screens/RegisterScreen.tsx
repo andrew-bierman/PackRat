@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
+import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 
 export default function Register() {
   const { currentTheme } = useTheme();

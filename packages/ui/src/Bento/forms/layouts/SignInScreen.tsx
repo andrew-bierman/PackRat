@@ -79,14 +79,10 @@ export function SignInScreen({ mode }: mode) {
           width: 400,
         }}
       >
-        <H1
-          alignSelf="center"
-          size="$8"
-          $group-window-xs={{
-            size: '$7',
-          }}
-        >
-          Sign in to your account
+        <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
+          {mode === 'signup'
+            ? 'Sign up to your account'
+            : 'Sign in to your account'}
         </H1>
         <Form validationSchema={mode === 'signup' ? userSignUp : userSignIn}>
           <View flexDirection="column" gap="$3">
@@ -197,7 +193,7 @@ const Link = ({
 
 const SignUpLink = () => {
   return (
-    <Link href={`#`}>
+    <RLink href={`/register`}>
       <Paragraph textDecorationStyle="unset" ta="center">
         Don&apos;t have an account?{' '}
         <SizableText
@@ -209,13 +205,31 @@ const SignUpLink = () => {
           Sign up
         </SizableText>
       </Paragraph>
-    </Link>
+    </RLink>
+  );
+};
+
+const SignInLink = () => {
+  return (
+    <RLink href={`/sign-in`}>
+      <Paragraph textDecorationStyle="unset" ta="center">
+        Already have an account?{' '}
+        <SizableText
+          hoverStyle={{
+            color: '$colorHover',
+          }}
+          textDecorationLine="underline"
+        >
+          Sign in
+        </SizableText>
+      </Paragraph>
+    </RLink>
   );
 };
 
 const ForgotPasswordLink = () => {
   return (
-    <Link href={`#`}>
+    <RLink href={`/password-reset`}>
       <Paragraph
         color="$gray11"
         hoverStyle={{
@@ -226,6 +240,6 @@ const ForgotPasswordLink = () => {
       >
         Forgot your password?
       </Paragraph>
-    </Link>
+    </RLink>
   );
 };
