@@ -13,10 +13,19 @@ import {
 } from 'tamagui';
 import { Input } from '../inputs/components/inputsParts';
 import { FormCard } from './components/layoutParts';
+import { RLink } from '@packrat/ui';
+import { Form, FormInput, SubmitButton } from '@packrat/ui';
+import { userSignUp } from '@packrat/validations';
+import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
+import { FontAwesome } from '@expo/vector-icons';
+
+type mode = 'signup' | 'signin';
 
 /** simulate signin */
 function useSignIn() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [loginStatus, setStatus] = useState<'idle' | 'loading' | 'success'>(
+    'idle',
+  );
   return {
     status: status,
     signIn: () => {
@@ -28,9 +37,24 @@ function useSignIn() {
   };
 }
 
+function useSignup() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const { registerUser } = useRegisterUser();
+  return {
+    signupStatus: status,
+    signup: () => {
+      setStatus('loading')
+      registerUser();
+      setStatus('success')
+    }
+  };
+}
+
 /** ------ EXAMPLE ------ */
-export function SignInScreen() {
-  const { signIn, status } = useSignIn();
+export function SignInScreen({ mode }: mode) {
+  const { signIn, loginStatus } = useSignIn();
+  const { signup, signupStatus } = useSignup();
+
   return (
     <FormCard>
       <View
@@ -46,114 +70,75 @@ export function SignInScreen() {
           width: 400,
         }}
       >
-        <H1
-          alignSelf="center"
-          size="$8"
-          $group-window-xs={{
-            size: '$7',
-          }}
-        >
-          Sign in to your account
+        <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
+          {mode === 'signup'
+            ? 'Sign up to your account'
+            : 'Sign in to your account'}
         </H1>
-        <View flexDirection="column" gap="$3">
-          <View flexDirection="column" gap="$1">
-            <Input size="$4">
-              <Input.Label htmlFor="email">Email</Input.Label>
-              <Input.Box>
-                <Input.Area id="email" placeholder="email@example.com" />
-              </Input.Box>
-            </Input>
-          </View>
-          <View flexDirection="column" gap="$1">
-            <Input size="$4">
-              <View
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="space-between"
+        <Form validationSchema={userSignUp}>
+          <View flexDirection="column" gap="$3">
+            {mode === 'signup' && <FormInput label="Name" name="name" />}
+            <FormInput
+              label="Email ID"
+              keyboardType="email-address"
+              name="email"
+            />
+            {mode === 'signup' && (
+              <FormInput label="Username" name="username" />
+            )}
+            <FormInput label="Password" secureTextEntry name="password" />
+            <Theme inverse>
+              <Button
+                disabled={mode === 'signup' ? (signupStatus === 'loading') : (loginStatus === 'loading')}
+                onSubmit={ mode === 'signup' ? signup : signIn}
+                width="100%"
+                iconAfter={
+                  <AnimatePresence>
+                    {loginStatus === 'loading' || signupStatus === 'loading' && (
+                      <Spinner
+                        color="$color"
+                        key="loading-spinner"
+                        opacity={1}
+                        scale={1}
+                        animation="quick"
+                        position="absolute"
+                        left="60%"
+                        enterStyle={{
+                          opacity: 0,
+                          scale: 0.5,
+                        }}
+                        exitStyle={{
+                          opacity: 0,
+                          scale: 0.5,
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+                }
               >
-                <Input.Label htmlFor="password">Password</Input.Label>
-                <ForgotPasswordLink />
-              </View>
-              <Input.Box>
-                <Input.Area
-                  textContentType="password"
-                  secureTextEntry
-                  id="password"
-                  placeholder="email@example.com"
-                />
-              </Input.Box>
-            </Input>
+                <Button.Text>{mode === 'signup' ? 'Sign up' : 'Sign In'}</Button.Text>
+              </Button>
+            </Theme>
           </View>
-        </View>
-        <Theme inverse>
-          <Button
-            disabled={status === 'loading'}
-            onPress={signIn}
-            width="100%"
-            iconAfter={
-              <AnimatePresence>
-                {status === 'loading' && (
-                  <Spinner
-                    color="$color"
-                    key="loading-spinner"
-                    opacity={1}
-                    scale={1}
-                    animation="quick"
-                    position="absolute"
-                    left="60%"
-                    enterStyle={{
-                      opacity: 0,
-                      scale: 0.5,
-                    }}
-                    exitStyle={{
-                      opacity: 0,
-                      scale: 0.5,
-                    }}
-                  />
-                )}
-              </AnimatePresence>
-            }
-          >
-            <Button.Text>Sign In</Button.Text>
-          </Button>
-        </Theme>
+        </Form>
         <View flexDirection="column" gap="$3" width="100%" alignItems="center">
           <Theme>
-            <View
-              flexDirection="column"
-              gap="$3"
-              width="100%"
-              alignSelf="center"
-              alignItems="center"
-            >
-              <View
-                flexDirection="row"
-                width="100%"
-                alignItems="center"
-                gap="$4"
-              >
-                <Separator />
-                <Paragraph>Or</Paragraph>
-                <Separator />
-              </View>
-              <View flexDirection="row" flexWrap="wrap" gap="$3">
-                <Button flex={1} minWidth="100%">
-                  <Button.Icon>
-                    <Github color="$gray10" size="$1" />
-                  </Button.Icon>
-                  <Button.Text>Continue with Github</Button.Text>
-                </Button>
-                <Button flex={1}>
-                  <Button.Icon>
-                    <Facebook color="$blue10" size="$1" />
-                  </Button.Icon>
-                  <Button.Text>Continue with Facebook</Button.Text>
-                </Button>
-              </View>
+            <View flexDirection="row" width="100%" alignItems="center" gap="$4">
+              <Separator />
+              <Paragraph>Or</Paragraph>
+              <Separator />
+            </View>
+            <View flexDirection="row" flexWrap="wrap" gap="$3">
+              <Button flex={1} onPress={async () => await promptAsync()}>
+                <Button.Icon>
+                  <FontAwesome name="google" size={16} />
+                </Button.Icon>
+                <Button.Text>Continue with Google</Button.Text>
+              </Button>
             </View>
           </Theme>
         </View>
-        <SignUpLink />
+        {mode === 'signin' ? <SignUpLink /> : <SignInLink />}
       </View>
     </FormCard>
   );
@@ -178,7 +163,7 @@ const Link = ({
 
 const SignUpLink = () => {
   return (
-    <Link href={`#`}>
+    <RLink href={`/register`}>
       <Paragraph textDecorationStyle="unset" ta="center">
         Don&apos;t have an account?{' '}
         <SizableText
@@ -190,13 +175,31 @@ const SignUpLink = () => {
           Sign up
         </SizableText>
       </Paragraph>
-    </Link>
+    </RLink>
+  );
+};
+
+const SignInLink = () => {
+  return (
+    <RLink href={`/sign-in`}>
+      <Paragraph textDecorationStyle="unset" ta="center">
+        Already have an account?{' '}
+        <SizableText
+          hoverStyle={{
+            color: '$colorHover',
+          }}
+          textDecorationLine="underline"
+        >
+          Sign in
+        </SizableText>
+      </Paragraph>
+    </RLink>
   );
 };
 
 const ForgotPasswordLink = () => {
   return (
-    <Link href={`#`}>
+    <RLink href={`/password-reset`}>
       <Paragraph
         color="$gray11"
         hoverStyle={{
@@ -207,6 +210,6 @@ const ForgotPasswordLink = () => {
       >
         Forgot your password?
       </Paragraph>
-    </Link>
+    </RLink>
   );
 };

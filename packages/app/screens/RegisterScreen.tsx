@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
+import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 
 export default function Register() {
   const { currentTheme } = useTheme();
@@ -48,6 +49,7 @@ export default function Register() {
             maxWidth: 290,
           }}
         >
+          <SignInScreen mode="signup"/> 
           <RHeading
             fontSize={32}
             color={
@@ -149,6 +151,7 @@ export default function Register() {
               {/* Google register */}
             </RStack>
           </Form>
+
         </View>
       </View>
     </RScrollView>
