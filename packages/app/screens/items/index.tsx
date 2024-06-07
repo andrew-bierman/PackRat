@@ -48,7 +48,7 @@ export default function Items() {
   };
 
 
-  const [sortedItems, setSortedItems] = useState(sortItemsByCategory(data.items, value));
+  const [sortedItems, setSortedItems] = useState(sortItemsByCategory(data?.items, value));
 
   const handleSort = (category) => {
     setValue(category);
