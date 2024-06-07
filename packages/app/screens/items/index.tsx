@@ -52,14 +52,14 @@ export default function Items() {
 
   const handleSort = (category) => {
     setValue(category);
-    const sorted = sortItemsByCategory(data.items, category);
+    const sorted = sortItemsByCategory(data?.items, category);
     setSortedItems(sorted);
   };
 
   useEffect(() => {
-    const sorted = sortItemsByCategory(data.items, value);
+    const sorted = sortItemsByCategory(data?.items, value);
     setSortedItems(sorted);
-  }, [data.items]);
+  }, [data]);
 
   return (
     <RScrollView>
