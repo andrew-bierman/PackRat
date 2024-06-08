@@ -88,49 +88,6 @@ export const ItemsTable = ({
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {category?.name || type}
       </RText>,
-      authUser && authUser.id === ownerId ? (
-        <EditPackItemModal
-          key="edit-pack-item"
-          triggerComponent={
-            <MaterialIcons
-              name="edit"
-              size={20}
-              color={currentTheme.colors.primary}
-            />
-          }
-        >
-          <AddItem
-            packId={id}
-            isEdit={true}
-            isItemPage
-            initialData={itemData}
-            editAsDuplicate={false}
-            setPage={setPage}
-            page={page}
-          />
-        </EditPackItemModal>
-      ) : (
-        ''
-      ),
-      authUser && authUser.id === ownerId ? (
-        <DeletePackItemModal
-          key="delete-pack-item"
-          onConfirm={(closeModal) => {
-            handleDeleteItem(id, closeModal);
-          }}
-          triggerComponent={
-            (
-              <MaterialIcons
-                name="delete"
-                size={20}
-                color={currentTheme.colors.error}
-              />
-            ) as any
-          }
-        />
-      ) : (
-        ''
-      ),
     ];
     return (
       <Row
@@ -194,8 +151,6 @@ export const ItemsTable = ({
                   'Weight',
                   'Quantity',
                   'Category',
-                  'Edit',
-                  'Delete',
                 ].map((header, index) => (
                   <Cell
                     key={index}
