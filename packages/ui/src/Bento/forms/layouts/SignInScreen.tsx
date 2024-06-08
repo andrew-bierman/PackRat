@@ -1,4 +1,4 @@
-import { Facebook, Github } from '@tamagui/lucide-icons';
+// import { Facebook, Github } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import {
   AnimatePresence,
@@ -11,49 +11,58 @@ import {
   Theme,
   View,
 } from 'tamagui';
-import { Input } from '../inputs/components/inputsParts';
 import { FormCard } from './components/layoutParts';
 import { RLink } from '@packrat/ui';
 import { Form, FormInput, SubmitButton } from '@packrat/ui';
 import { userSignUp } from '@packrat/validations';
-import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
+import { userSignIn } from '@packrat/validations';
+import { useRegisterUser, useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { FontAwesome } from '@expo/vector-icons';
+import {RIconButton} from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
+
 
 type mode = 'signup' | 'signin';
 
 /** simulate signin */
-function useSignIn() {
-  const [loginStatus, setStatus] = useState<'idle' | 'loading' | 'success'>(
-    'idle',
-  );
-  return {
-    status: status,
-    signIn: () => {
-      setStatus('loading');
-      setTimeout(() => {
-        setStatus('success');
-      }, 2000);
-    },
-  };
-}
-
-function useSignup() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-  const { registerUser } = useRegisterUser();
-  return {
-    signupStatus: status,
-    signup: () => {
-      setStatus('loading')
-      registerUser();
-      setStatus('success')
-    }
-  };
-}
 
 /** ------ EXAMPLE ------ */
 export function SignInScreen({ mode }: mode) {
-  const { signIn, loginStatus } = useSignIn();
-  const { signup, signupStatus } = useSignup();
+  function useSignIn() {
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
+      'idle',
+    );
+    const { handleLogin } = useLogin();
+    return {
+      signInStatus: status,
+      signIn: async (data) => {
+        await setStatus('loading');
+        console.log(status);
+        await handleLogin(data);
+        setStatus('idle');
+      },
+    };
+  }
+
+  function useSignup() {
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
+      'idle',
+    );
+    const { registerUser } = useRegisterUser();
+    return {
+      signUpStatus: status,
+      signup: async (data) => {
+        setStatus('loading');
+        await registerUser(data);
+        setStatus('idle');
+      },
+    };
+  }
+  const { signIn, signInStatus } = useSignIn();
+  const { signup, signUpStatus } = useSignup();
+  const { promptAsync } = useGoogleAuth();
+  const { currentTheme } = useTheme();
+
 
   return (
     <FormCard>
@@ -75,7 +84,7 @@ export function SignInScreen({ mode }: mode) {
             ? 'Sign up to your account'
             : 'Sign in to your account'}
         </H1>
-        <Form validationSchema={userSignUp}>
+        <Form validationSchema={mode === 'signup' ? userSignUp : userSignIn}>
           <View flexDirection="column" gap="$3">
             {mode === 'signup' && <FormInput label="Name" name="name" />}
             <FormInput
@@ -88,40 +97,51 @@ export function SignInScreen({ mode }: mode) {
             )}
             <FormInput label="Password" secureTextEntry name="password" />
             <Theme inverse>
-              <Button
-                disabled={mode === 'signup' ? (signupStatus === 'loading') : (loginStatus === 'loading')}
-                onSubmit={ mode === 'signup' ? signup : signIn}
+              <SubmitButton
+                disabled={
+                  mode === 'signup'
+                    ? signInStatus === 'loading'
+                    : signUpStatus === 'loading'
+                }
+                onSubmit={(data) =>
+                  mode === 'signup' ? signup(data) : signIn(data)
+                }
+                style={{
+                  marginTop: 16,
+                  backgroundColor: '#232323',
+                  color: 'white',
+                }}
                 width="100%"
                 iconAfter={
                   <AnimatePresence>
-                    {loginStatus === 'loading' || signupStatus === 'loading' && (
-                      <Spinner
-                        color="$color"
-                        key="loading-spinner"
-                        opacity={1}
-                        scale={1}
-                        animation="quick"
-                        position="absolute"
-                        left="60%"
-                        enterStyle={{
-                          opacity: 0,
-                          scale: 0.5,
-                        }}
-                        exitStyle={{
-                          opacity: 0,
-                          scale: 0.5,
-                        }}
-                      />
-                    )}
+                    {signUpStatus === 'loading' ||
+                      (signInStatus === 'loading' && (
+                        <Spinner
+                          color="$color"
+                          key="loading-spinner"
+                          opacity={1}
+                          scale={1}
+                          animation="quick"
+                          position="absolute"
+                          left="60%"
+                          enterStyle={{
+                            opacity: 0,
+                            scale: 0.5,
+                          }}
+                          exitStyle={{
+                            opacity: 0,
+                            scale: 0.5,
+                          }}
+                        />
+                      ))}
                   </AnimatePresence>
                 }
               >
-                <Button.Text>{mode === 'signup' ? 'Sign up' : 'Sign In'}</Button.Text>
-              </Button>
+                {mode === 'signup' ? 'Sign Up' : 'Sign In'}
+              </SubmitButton>
             </Theme>
           </View>
-        </Form>
-        <View flexDirection="column" gap="$3" width="100%" alignItems="center">
+          <View flexDirection="column" gap="$3" width="100%" alignItems="center">
           <Theme>
             <View flexDirection="row" width="100%" alignItems="center" gap="$4">
               <Separator />
@@ -129,15 +149,23 @@ export function SignInScreen({ mode }: mode) {
               <Separator />
             </View>
             <View flexDirection="row" flexWrap="wrap" gap="$3">
-              <Button flex={1} onPress={async () => await promptAsync()}>
-                <Button.Icon>
-                  <FontAwesome name="google" size={16} />
-                </Button.Icon>
-                <Button.Text>Continue with Google</Button.Text>
-              </Button>
+            <RIconButton
+                flex={1}
+                onPress={async () => await promptAsync()}
+                icon={
+                  <FontAwesome
+                    name="google"
+                    size={16}
+                  />
+                }
+              >
+                Continue with Google
+              </RIconButton>
             </View>
           </Theme>
         </View>
+        </Form>
+        
         {mode === 'signin' ? <SignUpLink /> : <SignInLink />}
       </View>
     </FormCard>
