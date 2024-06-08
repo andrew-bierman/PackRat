@@ -9,7 +9,15 @@ import {
 } from 'react-native-paper-dates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from '../../hooks/useTheme';
-import { RStack, RText, RButton } from '@packrat/ui';
+import {
+  RStack as OriginalRStack,
+  RText as OriginalRText,
+  RButton as OriginalRButton,
+} from '@packrat/ui';
+
+const RStack: any = OriginalRStack;
+const RText: any = OriginalRText;
+const RButton: any = OriginalRButton;
 
 export interface DateRange {
   start_date: Date | null;
@@ -120,8 +128,8 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
                 startDate: new Date(),
               }}
               onDismiss={onDismiss}
-              startDate={dateRange?.start_date}
-              endDate={dateRange?.end_date}
+              startDate={dateRange?.start_date as any}
+              endDate={dateRange?.end_date as any}
               onConfirm={onConfirm}
             />
           </RStack>

@@ -1,6 +1,26 @@
 import { Pack } from '../../drizzle/methods/pack';
 import { calculatePackScore } from '../../utils/scorePack';
 
+interface PackProperties {
+  id: string;
+  name: string;
+  owner_id: string;
+  is_public: boolean;
+  grades: Object;
+  scores: Object;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ItemPack {
+  item: any;
+}
+
+interface PackWithItemPacks extends PackProperties {
+  itemPacks: ItemPack[];
+}
+
 /**
  * Scores a pack service based on the given packId.
  * @param {PrismaClient} prisma - Prisma client.
@@ -11,10 +31,10 @@ import { calculatePackScore } from '../../utils/scorePack';
 export async function scorePackService(packId: string) {
   try {
     const packClass = new Pack();
-    const pack = await packClass.findPack({
+    const pack = (await packClass.findPack({
       id: packId,
       includeRelated: true,
-    });
+    })) as unknown as PackWithItemPacks;
 
     if (!pack) {
       throw new Error('Pack not found');

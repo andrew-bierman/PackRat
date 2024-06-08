@@ -1,5 +1,5 @@
 import {
-  Popover,
+  Popover as OriginalPopover,
   PopoverContentProps,
   PopoverProps,
   useControllableState,
@@ -14,6 +14,8 @@ export type LmPopoverProps = PopoverProps & {
   isBouncy?: boolean;
   sheetProps?: LmSheetProps;
 };
+
+const Popover: any = OriginalPopover;
 
 export function LmPopover({
   trigger,
@@ -30,6 +32,11 @@ export function LmPopover({
     defaultProp: defaultOpen,
     prop: open,
   });
+
+  // Check if contentProps is defined and if padding is a property of contentProps
+  const padding =
+    contentProps && 'padding' in contentProps ? contentProps.padding : 0;
+
   return (
     <Popover size="$5" {...rest} open={currentOpen} onOpenChange={setOpen}>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
@@ -57,7 +64,7 @@ export function LmPopover({
           ],
         })}
         elevate
-        padding={contentProps?.padding || 0}
+        padding={padding}
         {...contentProps}
       >
         {!hideArrow && (

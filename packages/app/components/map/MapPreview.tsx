@@ -2,7 +2,7 @@ import { RImage } from '@packrat/ui';
 import { useProcessedShape, useMapPreviewData } from './useMapPreview';
 export default function MapPreview({ shape }) {
   const processedShape = useProcessedShape(shape);
-  const mapPreviewData = useMapPreviewData(shape, processedShape);
+  const mapPreviewData: any = useMapPreviewData(shape, processedShape);
 
   if (!mapPreviewData) return null;
 

@@ -1,4 +1,6 @@
-import { Spinner, Stack } from 'tamagui';
+import { Spinner, Stack as OriginalStack } from 'tamagui';
+
+const Stack: any = OriginalStack;
 
 export function LmSkeleton() {
   return (

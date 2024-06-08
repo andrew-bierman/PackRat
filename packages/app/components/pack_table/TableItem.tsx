@@ -18,12 +18,12 @@ interface TableItemProps {
   itemData: any;
   handleCheckboxChange: (itemId: string) => void;
   onDelete: (params: { itemId: string; packId: string }) => void;
-  index: number;
+  index?: number;
   hasPermissions: boolean;
   flexArr: number[];
   currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TableItem = ({

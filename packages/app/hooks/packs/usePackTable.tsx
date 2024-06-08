@@ -19,15 +19,17 @@ export const usePackTable = ({
     ids = copy ? currentPack.map((item) => item.id) : [];
   }
 
-  const [checkedItems, setCheckedItems] = useState([...ids]);
+  const [checkedItems, setCheckedItems] = useState<string[]>([...ids]);
   const [weightUnit, setWeightUnit] = useItemWeightUnit();
 
   const handleDuplicate = () => {
-    const data = {
-      packId: currentPack.id,
-      ownerId: user.id,
-      items: checkedItems,
-    };
+    if (user) {
+      const data = {
+        packId: currentPack.id,
+        ownerId: user.id,
+        items: checkedItems,
+      };
+    }
 
     duplicatePackItem(data);
   };
@@ -40,56 +42,79 @@ export const usePackTable = ({
   const error = false;
 
   let waterItem;
-  const foodItems = [];
+  // const foodItems = [];
+  const foodItems: {
+    id: string;
+    category?: { name: string };
+    weight?: number;
+    quantity?: number;
+    unit?: string;
+  }[] = [];
   // for calculating the total.
   /*
       Todo better to move this all inside a utility function and pass them variables
       */
   data
-    ?.filter((item) => !checkedItems.includes(item.id))
-    .forEach((item) => {
-      const categoryName = item.category ? item.category.name : 'Undefined';
-      const itemWeight = Number(item.weight) || 0; // ensure it's a number
-      const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
-      const itemUnit = item.unit || null;
-      if (!copy) {
-        switch (categoryName) {
-          case ItemCategoryEnum.ESSENTIALS: {
-            totalBaseWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            break;
-          }
-          case ItemCategoryEnum.FOOD: {
-            totalFoodWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            foodItems.push(item);
-            break;
-          }
-          case ItemCategoryEnum.WATER: {
-            totalWaterWeight += convertWeight(
-              itemWeight * itemQuantity,
-              itemUnit,
-              weightUnit,
-            );
-            waterItem = item;
-            break;
+    ?.filter(
+      (item: {
+        id: string;
+        category?: { name: string };
+        weight?: number;
+        quantity?: number;
+        unit?: string;
+      }) => !checkedItems.includes(item.id),
+    )
+    .forEach(
+      (item: {
+        id: string;
+        category?: { name: string };
+        weight?: number;
+        quantity?: number;
+        unit?: string;
+      }) => {
+        const categoryName = item.category ? item.category.name : 'Undefined';
+        const itemWeight = Number(item.weight) || 0; // ensure it's a number
+        const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
+        const itemUnit = item.unit || null;
+        if (!copy) {
+          switch (categoryName) {
+            case ItemCategoryEnum.ESSENTIALS: {
+              totalBaseWeight += convertWeight(
+                itemWeight * itemQuantity,
+                itemUnit as any,
+                weightUnit,
+              );
+              break;
+            }
+            case ItemCategoryEnum.FOOD: {
+              totalFoodWeight += convertWeight(
+                itemWeight * itemQuantity,
+                itemUnit as any,
+                weightUnit,
+              );
+              foodItems.push(item);
+              break;
+            }
+            case ItemCategoryEnum.WATER: {
+              totalWaterWeight += convertWeight(
+                itemWeight * itemQuantity,
+                itemUnit as any,
+                weightUnit,
+              );
+              waterItem = item;
+              break;
+            }
           }
         }
-      }
-    });
+      },
+    );
 
   const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
-  const handleCheckboxChange = (itemId) => {
-    setCheckedItems((prev) =>
+  const handleCheckboxChange = (itemId: string) => {
+    setCheckedItems((prev: string[]) =>
       prev.includes(itemId)
-        ? prev.filter((id) => id !== itemId)
+        ? prev.filter((id: string) => id !== itemId)
         : [...prev, itemId],
     );
   };

@@ -3,6 +3,10 @@ import { useCallback } from 'react';
 import { useOfflineQueue } from 'app/hooks/offline';
 import { useItemsUpdater } from './useItemsUpdater';
 
+interface State {
+  items?: Array<{ id: string }>;
+}
+
 export const useDeleteItem = () => {
   const { mutate } = queryTrpc.deleteGlobalItem.useMutation();
   const utils = queryTrpc.useContext();
@@ -25,7 +29,7 @@ export const useDeleteItem = () => {
 
       addOfflineRequest('deleteGlobalItem', { itemId });
 
-      updateItems((prevState = {}) => {
+      updateItems((prevState: State = {}) => {
         onSuccess();
         const prevItems = Array.isArray(prevState.items) ? prevState.items : [];
 

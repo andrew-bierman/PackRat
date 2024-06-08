@@ -2,10 +2,16 @@ import useTheme from 'app/hooks/useTheme';
 import { theme } from 'app/theme';
 import { TripCardBase } from './TripCardBase';
 
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
-import { Platform } from 'react-native';
-import { RCard, RParagraph, RStack } from '@packrat/ui';
+import { FontAwesome5 } from '@expo/vector-icons';
+import {
+  RCard as OrirginalRCard,
+  RParagraph as OriginalRParagraph,
+  RStack,
+} from '@packrat/ui';
 import Carousel from 'app/components/carousel';
+
+const RCard: any = OrirginalRCard;
+const RParagraph: any = OriginalRParagraph;
 
 type TripPlaceCardProps = {
   data: string[];

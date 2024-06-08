@@ -2,19 +2,34 @@ import { queryTrpc } from '../../trpc';
 import { useItemsUpdater } from 'app/hooks/items';
 import { useOfflineQueue } from 'app/hooks/offline';
 
+interface EditedItem {
+  name: string;
+  type: string;
+  id: string;
+  weight: number;
+  quantity: number;
+  unit: string;
+  packId?: string;
+}
+
 // TODO refactor pack / items, separate logic
 export const useEditPackItem = (isItemPage) => {
   const utils = queryTrpc.useContext();
   const updateItems = useItemsUpdater();
 
   const mutation = queryTrpc.editItem.useMutation({
-    onMutate: async (editedItem) => {
+    onMutate: async (editedItem: EditedItem) => {
       if (!editedItem.packId) {
         return;
       }
       const previousPack = utils.getPackById.getData({
         packId: editedItem.packId,
       });
+
+      if (!previousPack) {
+        throw new Error('Pack not found.');
+      }
+
       const itemIndex = previousPack.items.findIndex(
         (item) => item.id === editedItem.id,
       );
@@ -72,7 +87,7 @@ export const useEditPackItem = (isItemPage) => {
 
     addOfflineRequest('editItem', newItem);
 
-    updateItems((prevState = {}) => {
+    updateItems((prevState: { items?: EditedItem[] } = {}) => {
       const prevItems = Array.isArray(prevState.items) ? prevState.items : [];
 
       return {

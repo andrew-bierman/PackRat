@@ -1,23 +1,28 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
-  RButton,
-  RText,
+  RButton as OriginalRButton,
+  RText as OriginalRText,
   RIconButton,
   RScrollView,
-  Form,
+  Form as OriginalForm,
   FormInput,
   SubmitButton,
+  RLink,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
 import { NODE_ENV } from '@packrat/config';
-import { RLink } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
+
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
+const Form: any = OriginalForm;
+const RButton: any = OriginalRButton;
 
 const demoUser = {
   email: 'zoot3@email.com',
