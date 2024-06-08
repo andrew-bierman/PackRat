@@ -1,4 +1,4 @@
-import { Facebook, Github } from '@tamagui/lucide-icons';
+// import { Facebook, Github } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import {
   AnimatePresence,
@@ -11,26 +11,59 @@ import {
   Theme,
   View,
 } from 'tamagui';
-import { Input } from '../inputs/components/inputsParts';
 import { FormCard } from './components/layoutParts';
+import { RLink } from '@packrat/ui';
+import { Form, FormInput, SubmitButton } from '@packrat/ui';
+import { userSignUp } from '@packrat/validations';
+import { userSignIn } from '@packrat/validations';
+import { useRegisterUser, useGoogleAuth, useLogin } from 'app/auth/hooks';
+import { FontAwesome } from '@expo/vector-icons';
+import {RIconButton} from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
+
+
+type mode = 'signup' | 'signin';
 
 /** simulate signin */
-function useSignIn() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-  return {
-    status: status,
-    signIn: () => {
-      setStatus('loading');
-      setTimeout(() => {
-        setStatus('success');
-      }, 2000);
-    },
-  };
-}
 
 /** ------ EXAMPLE ------ */
-export function SignInScreen() {
-  const { signIn, status } = useSignIn();
+export function SignInScreen({ mode }: mode) {
+  function useSignIn() {
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
+      'idle',
+    );
+    const { handleLogin } = useLogin();
+    return {
+      signInStatus: status,
+      signIn: async (data) => {
+        await setStatus('loading');
+        console.log(status);
+        await handleLogin(data);
+        setStatus('idle');
+      },
+    };
+  }
+
+  function useSignup() {
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
+      'idle',
+    );
+    const { registerUser } = useRegisterUser();
+    return {
+      signUpStatus: status,
+      signup: async (data) => {
+        setStatus('loading');
+        await registerUser(data);
+        setStatus('idle');
+      },
+    };
+  }
+  const { signIn, signInStatus } = useSignIn();
+  const { signup, signUpStatus } = useSignup();
+  const { promptAsync } = useGoogleAuth();
+  const { currentTheme } = useTheme();
+
+
   return (
     <FormCard>
       <View
@@ -55,105 +88,89 @@ export function SignInScreen() {
         >
           Sign in to your account
         </H1>
-        <View flexDirection="column" gap="$3">
-          <View flexDirection="column" gap="$1">
-            <Input size="$4">
-              <Input.Label htmlFor="email">Email</Input.Label>
-              <Input.Box>
-                <Input.Area id="email" placeholder="email@example.com" />
-              </Input.Box>
-            </Input>
-          </View>
-          <View flexDirection="column" gap="$1">
-            <Input size="$4">
-              <View
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Input.Label htmlFor="password">Password</Input.Label>
-                <ForgotPasswordLink />
-              </View>
-              <Input.Box>
-                <Input.Area
-                  textContentType="password"
-                  secureTextEntry
-                  id="password"
-                  placeholder="email@example.com"
-                />
-              </Input.Box>
-            </Input>
-          </View>
-        </View>
-        <Theme inverse>
-          <Button
-            disabled={status === 'loading'}
-            onPress={signIn}
-            width="100%"
-            iconAfter={
-              <AnimatePresence>
-                {status === 'loading' && (
-                  <Spinner
-                    color="$color"
-                    key="loading-spinner"
-                    opacity={1}
-                    scale={1}
-                    animation="quick"
-                    position="absolute"
-                    left="60%"
-                    enterStyle={{
-                      opacity: 0,
-                      scale: 0.5,
-                    }}
-                    exitStyle={{
-                      opacity: 0,
-                      scale: 0.5,
-                    }}
-                  />
-                )}
-              </AnimatePresence>
-            }
-          >
-            <Button.Text>Sign In</Button.Text>
-          </Button>
-        </Theme>
-        <View flexDirection="column" gap="$3" width="100%" alignItems="center">
-          <Theme>
-            <View
-              flexDirection="column"
-              gap="$3"
-              width="100%"
-              alignSelf="center"
-              alignItems="center"
-            >
-              <View
-                flexDirection="row"
+        <Form validationSchema={mode === 'signup' ? userSignUp : userSignIn}>
+          <View flexDirection="column" gap="$3">
+            {mode === 'signup' && <FormInput label="Name" name="name" />}
+            <FormInput
+              label="Email ID"
+              keyboardType="email-address"
+              name="email"
+            />
+            {mode === 'signup' && (
+              <FormInput label="Username" name="username" />
+            )}
+            <FormInput label="Password" secureTextEntry name="password" />
+            <Theme inverse>
+              <SubmitButton
+                disabled={
+                  mode === 'signup'
+                    ? signInStatus === 'loading'
+                    : signUpStatus === 'loading'
+                }
+                onSubmit={(data) =>
+                  mode === 'signup' ? signup(data) : signIn(data)
+                }
+                style={{
+                  marginTop: 16,
+                  backgroundColor: '#232323',
+                  color: 'white',
+                }}
                 width="100%"
-                alignItems="center"
-                gap="$4"
+                iconAfter={
+                  <AnimatePresence>
+                    {signUpStatus === 'loading' ||
+                      (signInStatus === 'loading' && (
+                        <Spinner
+                          color="$color"
+                          key="loading-spinner"
+                          opacity={1}
+                          scale={1}
+                          animation="quick"
+                          position="absolute"
+                          left="60%"
+                          enterStyle={{
+                            opacity: 0,
+                            scale: 0.5,
+                          }}
+                          exitStyle={{
+                            opacity: 0,
+                            scale: 0.5,
+                          }}
+                        />
+                      ))}
+                  </AnimatePresence>
+                }
               >
-                <Separator />
-                <Paragraph>Or</Paragraph>
-                <Separator />
-              </View>
-              <View flexDirection="row" flexWrap="wrap" gap="$3">
-                <Button flex={1} minWidth="100%">
-                  <Button.Icon>
-                    <Github color="$gray10" size="$1" />
-                  </Button.Icon>
-                  <Button.Text>Continue with Github</Button.Text>
-                </Button>
-                <Button flex={1}>
-                  <Button.Icon>
-                    <Facebook color="$blue10" size="$1" />
-                  </Button.Icon>
-                  <Button.Text>Continue with Facebook</Button.Text>
-                </Button>
-              </View>
+                {mode === 'signup' ? 'Sign Up' : 'Sign In'}
+              </SubmitButton>
+            </Theme>
+          </View>
+          <View flexDirection="column" gap="$3" width="100%" alignItems="center">
+          <Theme>
+            <View flexDirection="row" width="100%" alignItems="center" gap="$4">
+              <Separator />
+              <Paragraph>Or</Paragraph>
+              <Separator />
+            </View>
+            <View flexDirection="row" flexWrap="wrap" gap="$3">
+            <RIconButton
+                flex={1}
+                onPress={async () => await promptAsync()}
+                icon={
+                  <FontAwesome
+                    name="google"
+                    size={16}
+                  />
+                }
+              >
+                Continue with Google
+              </RIconButton>
             </View>
           </Theme>
         </View>
-        <SignUpLink />
+        </Form>
+        
+        {mode === 'signin' ? <SignUpLink /> : <SignInLink />}
       </View>
     </FormCard>
   );
