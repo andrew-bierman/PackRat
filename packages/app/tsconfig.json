@@ -1,7 +1,6 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "jsx": "react",
     "target": "ES2020",
     "module": "ESNext",
     "lib": [
