@@ -1,9 +1,8 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { RButton, RStack, RText } from '@packrat/ui';
 import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
@@ -16,6 +15,7 @@ import { useScreenWidth } from 'app/hooks/common';
 import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
+import { RButton, RStack, RText } from '@packrat/ui';
 
 interface ItemsTableProps {
   limit: number;
@@ -165,62 +165,62 @@ export const ItemsTable = ({
   return (
     <Layout>
       <ScrollView>
-        <View
-          style={{
-            paddingVertical: 16,
-            flex: 1,
-            paddingTop: 30,
-            marginTop: 20,
-            backgroundColor: isDark ? '#1A1A1D' : 'white',
+      <View
+        style={{
+          paddingVertical: 16,
+          flex: 1,
+          paddingTop: 30,
+          marginTop: 20,
+          backgroundColor: isDark ? '#1A1A1D' : 'white',
+        }}
+      >
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+            maxWidth: '100%',
           }}
         >
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'center',
-              maxWidth: '100%',
-            }}
+          <Table
+            style={styles.tableStyle}
+            borderStyle={{ borderColor: 'transparent' }}
           >
-            <Table
-              style={styles.tableStyle}
-              borderStyle={{ borderColor: 'transparent' }}
-            >
-              <TitleRow title="Global Items List" />
-              <Row
-                flexArr={flexArr}
-                data={[
-                  'Item Name',
-                  'Weight',
-                  'Quantity',
-                  'Category',
-                  'Edit',
-                  'Delete',
-                ].map((header, index) => (
-                  <Cell
-                    key={index}
-                    data={
-                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
-                        {header}
-                      </RText>
-                    }
-                    textStyle={styles.headerText}
-                  />
-                ))}
-                style={styles.head}
-              />
-              <ScrollView style={{ height: 400 }}>
-                {isLoading ? (
-                  <Loader />
-                ) : (
-                  data.map((item, index) => {
-                    return <TableItem key={index} itemData={item} />;
-                  })
-                )}
-              </ScrollView>
-            </Table>
-          </ScrollView>
-          <View
+            <TitleRow title="Global Items List" />
+            <Row
+              flexArr={flexArr}
+              data={[
+                'Item Name',
+                'Weight',
+                'Quantity',
+                'Category',
+                'Edit',
+                'Delete',
+              ].map((header, index) => (
+                <Cell
+                  key={index}
+                  data={
+                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 17, fontWeight:'bold' }}>
+                      {header}
+                    </RText>
+                  }
+                  textStyle={styles.headerText}
+                />
+              ))}
+              style={styles.head}
+            />
+            <ScrollView style={{ height: 400 }}>
+              {isLoading ? (
+                <Loader />
+              ) : (
+                data.map((item, index) => {
+                  return <TableItem key={index} itemData={item} />;
+                })
+              )}
+            </ScrollView>
+          </Table>
+        </ScrollView>
+        <View
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -258,8 +258,8 @@ export const ItemsTable = ({
               <AntDesign name="right" size={16} color="white" />
             </RButton>
           </View>
-        </View>
         <PaginationLimit limit={limit} setLimit={setLimit} />
+        </View>
       </ScrollView>
     </Layout>
   );
