@@ -16,6 +16,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
+import { useScreenWidth } from 'app/hooks/common';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -60,6 +61,7 @@ const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState('');
 
   const onSearch = (search) => setSearchQuery(search);
+  const {screenWidth} = useScreenWidth();
 
   return (
     <Layout>
@@ -71,6 +73,7 @@ const FeedSearchFilter = ({
               style={{ flexDirection: 'row', justifyContent: 'center' }}
             >
               <FormInput
+              width= {screenWidth <= 425 ? '30vw' : '12vw'}
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -160,7 +163,7 @@ const FeedSearchFilter = ({
                 onValueChange={handleSortChange}
                 placeholder="Sort By"
                 style={styles.dropdown}
-                width={Platform.OS === 'web' ? 150 : 120}
+                width={Platform.OS === 'web' ? screenWidth <= 425 ?'30vw':'8vw' : 120}
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -182,7 +185,9 @@ const FeedSearchFilter = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
+
   return {
+    
     mainContainer: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,
@@ -193,7 +198,7 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.card,
       padding: 15,
       fontSize: 18,
-      width: '100%',
+      width: '60vw',
       borderRadius: 10,
       marginTop: Platform.OS !== 'web' ? 20 : 0,
     },
