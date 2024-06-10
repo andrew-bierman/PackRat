@@ -12,7 +12,6 @@ const loadStyles = (theme: any, appTheme: any) => {
       backgroundColor: appTheme.colors.primary,
       borderRadius: 5,
       padding: 20,
-      marginLeft: 10,
     },
     feedItem: {
       width: 250,

@@ -58,21 +58,6 @@ const columns = [
 ];
 
 const CELL_WIDTH = '$15';
-=======
-interface GroupedData {
-  [key: string]: Item[];
-}
-
-interface BasicTableProps {
-  groupedData: GroupedData;
-  handleCheckboxChange: (itemId: string) => void;
-  onDelete: (params: { itemId: string; packId: string }) => void;
-  hasPermissions: boolean;
-  currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
-}
->>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
 
 /** ------ EXAMPLE ------ */
 export function BasicTable({ groupedData }: { groupedData: GroupedData }) {
@@ -133,16 +118,6 @@ export function BasicTable({ groupedData }: { groupedData: GroupedData }) {
           </View>
         ))}
       </YStack>
-=======
-              <View fd="row" justifyContent="space-between" alignItems="center">
-                <Text>Action</Text>
-                <ZDropdown.Native dropdownItems={dropdownItems} />
-              </View>
-            </View>
-          </View>
-        ))}
-      </View>
->>>>>>> 718bfde6 (Table Swapping with Bento UI Table)
     );
   }
 

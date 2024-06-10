@@ -131,6 +131,7 @@ export default function Card({
               alignItems: 'center',
               padding: 16,
               flex: 1,
+              width:'60vw'
             }}
           >
             <View

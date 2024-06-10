@@ -8,6 +8,8 @@ import {
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 interface CarouselProps {
   children?: ReactNode[];
@@ -25,6 +27,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
+  const {screenWidth} = useScreenWidth();
 
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -47,7 +50,7 @@ const Carousel: React.FC<CarouselProps> = ({
     <RStack
       style={{
         alignSelf: 'center',
-        width: Platform.OS === 'web' ? '100%' : width * 0.7,
+        width: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ? '80vw':'57vw': width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
