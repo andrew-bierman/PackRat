@@ -1,11 +1,11 @@
 import {
   Button,
-  Dialog,
+  Dialog as OriginalDialog,
   DialogContentProps,
   DialogProps,
   SizeTokens,
   VisuallyHidden,
-  XStack,
+  XStack as OriginalXStack,
 } from 'tamagui';
 import { ReactNode } from 'react';
 import { XRegular } from '../content/icons';
@@ -25,6 +25,9 @@ export type LmDialogProps = DialogProps & {
   dialogContentProps?: DialogContentProps;
   preventClickOutside?: boolean;
 };
+
+const Dialog: any = OriginalDialog;
+const XStack: any = OriginalXStack;
 
 export function LmDialog({
   children,

@@ -7,7 +7,10 @@ export const useNetworkStatusProvider = () => {
 
   useEffect(() => {
     NetInfo.addEventListener((state) => {
-      setIsConnected(state.isConnected);
+      // Check if state.isConnected is not null before using it
+      if (state.isConnected !== null) {
+        setIsConnected(state.isConnected);
+      }
     });
   }, []);
 };

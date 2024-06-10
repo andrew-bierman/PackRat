@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import {
-  requestPasswordResetEmailAndToken,
-  handlePasswordReset,
+  requestPasswordResetEmailAndTokenRoute as requestPasswordResetEmailAndToken,
+  handlePasswordResetRoute as handlePasswordReset,
 } from '../controllers/passwordReset/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 

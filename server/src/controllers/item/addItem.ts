@@ -32,6 +32,11 @@ import * as validator from '@packrat/validations';
 export function addItemRoute() {
   return publicProcedure.input(validator.addItem).mutation(async (opts) => {
     const { name, weight, quantity, unit, packId, type, ownerId } = opts.input;
+
+    if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {
+      throw new Error('Invalid item type');
+    }
+
     const result = await addItemService(
       name,
       weight,

@@ -15,6 +15,10 @@ export const AddItemGlobal = () => {
   const { isLoading } = useItems({ limit, page });
   const authUser = useAuthUser();
 
+  if (!authUser) {
+    return null; // or some fallback
+  }
+
   const { setIsModalOpen } = useModal();
 
   const { handleAddNewItem } = useAddItem();

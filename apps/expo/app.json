@@ -8,9 +8,9 @@
     "userInterfaceStyle": "automatic",
     "scheme": "packrat",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/packrat.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#0284c7",
       "scheme": "myapp"
     },
     "assetBundlePatterns": ["**/*"],

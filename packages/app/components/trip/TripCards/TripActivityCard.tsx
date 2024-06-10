@@ -2,15 +2,27 @@ import React from 'react';
 import useTheme from 'app/hooks/useTheme';
 
 import { FontAwesome5 } from '@expo/vector-icons';
-import { FormSelect, RCard, RParagraph, RStack, Select } from '@packrat/ui';
-import { TripActivity } from '@packrat/validations';
+import { Select as OriginalSelect } from '@packrat/ui';
 
+enum TripActivity {
+  TRIP = 'trip',
+  RUNNING = 'running',
+  BIKING = 'biking',
+  CAMPING = 'camping',
+  FISHING = 'fishing',
+  TREKKING = 'trekking',
+  ROCK_CLIMBING = 'rock-climbing',
+  HIKING = 'hiking',
+  SWIMMING = 'swimming',
+}
+
+const Select: any = OriginalSelect;
 import { TripCardBase } from './TripCardBase';
 import { getEnumValues } from 'app/utils/getEnumValues';
 import { formatTripActivityLabel } from 'app/utils/tripUtils';
 
 const ActivityOptions = getEnumValues(TripActivity).map((activity) => ({
-  label: formatTripActivityLabel(activity),
+  label: formatTripActivityLabel(activity.toString()),
   value: activity,
 }));
 

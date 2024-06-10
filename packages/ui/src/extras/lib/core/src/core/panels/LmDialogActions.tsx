@@ -11,11 +11,11 @@ export function LmDialogActions({
 }: LmDialogActionsProps) {
   return (
     <XStack
-      justifyContent={'flex-end'}
-      alignItems={'center'}
-      paddingLeft={contentPadding}
-      paddingRight={contentPadding}
-      paddingBottom={contentPadding}
+      style={{
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        padding: `0 ${contentPadding as string} ${contentPadding as string} ${contentPadding as string}`,
+      }}
       {...rest}
     >
       {children}
@@ -30,11 +30,11 @@ export function LmDialogHeader({
 }: LmDialogActionsProps) {
   return (
     <XStack
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      paddingLeft={contentPadding}
-      paddingRight={contentPadding}
-      paddingTop={contentPadding}
+      style={{
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: `0 ${contentPadding as string} ${contentPadding as string} ${contentPadding as string}`,
+      }}
       {...rest}
     >
       {children}

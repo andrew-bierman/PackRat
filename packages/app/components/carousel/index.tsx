@@ -11,12 +11,17 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface CarouselProps {
   children?: ReactNode[];
-  itemWidth: number;
+  itemWidth?: number;
+  iconColor?: string;
 }
 
 const { height, width } = Dimensions.get('window');
 
-const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
+const Carousel: React.FC<CarouselProps> = ({
+  children = [],
+  itemWidth,
+  iconColor,
+}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
@@ -40,7 +45,8 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
   return (
     <RStack
       style={{
-        width: Platform.OS === 'web' ? '100%' : width * 0.9,
+        alignSelf: 'center',
+        width: Platform.OS === 'web' ? '100%' : width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
@@ -70,7 +76,6 @@ const Carousel: React.FC<CarouselProps> = ({ children = [], itemWidth }) => {
             <RStack
               key={index}
               style={{
-                width: itemWidth + 10,
                 marginRight: 10,
                 marginTop: 10,
                 flexDirection: 'row',

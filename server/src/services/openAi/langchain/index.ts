@@ -47,7 +47,7 @@ export const getAIResponseService = async (
     await conversation.save();
   }
 
-  let conversationHistory = conversation.history;
+  let conversationHistory = conversation.history || '';
 
   // format the last conversation history
   const messages = getConversationHistory(conversationHistory, prompt);

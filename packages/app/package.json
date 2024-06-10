@@ -109,6 +109,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.0",
     "react-native": "0.73.6",
+    "react-native-action-button": "^2.8.5",
     "react-native-dotenv": "^3.4.8",
     "react-native-elements": "^3.4.3",
     "react-native-flash-message": "^0.4.2",

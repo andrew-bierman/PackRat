@@ -18,7 +18,7 @@ export const checkRole =
       roles.forEach((role) => RoleSchema.parse(role));
 
       // Check if user's role is in the allowed roles list.
-      if (!roles.includes(user.role)) {
+      if (user.role === null || !roles.includes(user.role)) {
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'Insufficient permissions',

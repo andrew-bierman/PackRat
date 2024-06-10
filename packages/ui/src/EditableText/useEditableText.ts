@@ -24,6 +24,10 @@ export const useEditableText = ({ value, onChange, defaultValue, onSave }) => {
     }
   }, [value]);
 
+  useEffect(() => {
+    setInternalValue(defaultValue);
+  }, [defaultValue]);
+
   return {
     currentValue,
     handleChange,

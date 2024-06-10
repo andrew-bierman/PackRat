@@ -13,11 +13,19 @@ export const useAddNewPack = () => {
     { value: '0', label: 'No' },
   ];
 
+  const isPublicOption = packSelectOptions[0];
+  if (!isPublicOption) {
+    throw new Error('No select options available.');
+  }
+
+  if (!user || !user.id) {
+    throw new Error('User not authenticated.');
+  }
   // Use mutation for adding a pack
   const addNewPack = (data) => {
     mutation.mutate({
       name: data.name,
-      is_public: data.isPublic === packSelectOptions[0].value,
+      is_public: data.isPublic === isPublicOption.value,
       owner_id: user?.id,
     });
   };
@@ -26,13 +34,18 @@ export const useAddNewPack = () => {
   const addNewPackAsync = (data) => {
     return mutation.mutateAsync({
       name: data.name,
-      is_public: data.isPublic === packSelectOptions[0].value,
+      is_public: data.isPublic === isPublicOption.value,
       owner_id: user?.id,
     });
   };
 
   const mutation = queryTrpc.addPack.useMutation({
     onMutate: async (packData) => {
+      // Check if packData is not void
+      if (!packData) {
+        throw new Error('Pack data is not available.');
+      }
+
       utils.getPacks.cancel({
         ownerId: packData?.owner_id,
         queryBy: '',
@@ -69,6 +82,16 @@ export const useAddNewPack = () => {
       };
     },
     onError: (_error, _pack, context) => {
+      // Check if context is not undefined
+      if (!context) {
+        throw new Error('Context is not available.');
+      }
+
+      // Check if packData is not void
+      if (!_pack) {
+        throw new Error('Pack data is not available.');
+      }
+
       utils.getPacks.setData(
         {
           ownerId: _pack.owner_id,

@@ -15,7 +15,7 @@ export const LmButton = forwardRef(function LmButtonFunc(
   return (
     <Button
       {...props}
-      ref={ref as TamaguiComponent}
+      ref={ref as any}
       theme={colorVariant ? colormap[colorVariant] : theme}
       {...(loading && {
         icon: <Spinner />,

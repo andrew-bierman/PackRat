@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useUpdateUser } from './useUpdateUser';
-import * as ImagePicker from 'expo-image-picker';
 import { useAuthUser } from '../../auth/hooks';
 import { useUpdateUserPassword } from './useUpdateUserPassword';
 
@@ -28,6 +27,7 @@ export const useProfileSettings = () => {
   };
 
   const handleEditUser = (data) => {
+    if (!user) return;
     const { id } = user;
 
     updateUser({
@@ -37,10 +37,11 @@ export const useProfileSettings = () => {
   };
 
   const handleUpdatePassword = (data) => {
+    if (!user) return;
     const { email } = user;
     const { oldPassword, newPassword, confirmPassword } = data;
     if (newPassword !== confirmPassword) return;
-    updateUserPassword({ email, oldPassword, password: newPassword });
+    updateUserPassword({ email, oldPassword, password: newPassword } as any);
   };
 
   return {

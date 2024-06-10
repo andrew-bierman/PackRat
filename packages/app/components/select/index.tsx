@@ -5,15 +5,18 @@ import { useMemo, useState } from 'react';
 import {
   Adapt,
   Label,
-  Select,
-  SelectProps,
-  Sheet,
+  Select as OriginalSelect,
+  Sheet as OriginalSheet,
   XStack,
-  YStack,
+  YStack as OriginalYStack,
   getFontSize,
 } from 'tamagui';
 
 // import { LinearGradient } from 'tamagui/linear-gradient'
+
+const Select: any = OriginalSelect;
+const Sheet: any = OriginalSheet;
+const YStack: any = OriginalYStack;
 
 export function SelectDemo() {
   return (
@@ -30,13 +33,14 @@ export function SelectDemo() {
           Native
         </Label>
 
-        <SelectDemoItem native />
+        {/* <SelectDemoItem native /> */}
+        <SelectDemoItem />
       </XStack>
     </YStack>
   );
 }
 // @ts-nocheck - may need to be at the start of file
-// @ts-expect-error
+
 export function SelectDemoItem(SelectProps = {}, props) {
   const [val, setVal] = useState('apple');
   return (

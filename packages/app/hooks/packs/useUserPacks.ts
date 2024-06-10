@@ -2,14 +2,14 @@ import { getQueryKey } from '@trpc/react-query';
 import { queryClient } from 'app/constants/queryClient';
 import { queryTrpc } from '../../trpc';
 
-export const useUserPacks = (ownerId, queryString = '') => {
+export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
   const utils = queryTrpc.useContext();
   // If ownerId is not provided, don’t run the query.
   const enabled = !!ownerId;
   // Leverage the query hook provided by tRPC
   // ...
   const { data, error, isLoading, refetch } = queryTrpc.getPacks.useQuery(
-    { ownerId, queryBy: queryString },
+    { ownerId: ownerId || '', queryBy: queryString },
     {
       enabled, // This query will run only if 'enabled' is true.
       refetchOnWindowFocus: true,
@@ -17,7 +17,7 @@ export const useUserPacks = (ownerId, queryString = '') => {
     },
   );
   utils.getPacks.setData({
-    ownerId,
+    ownerId: ownerId || '',
     queryBy: queryString,
   });
 
