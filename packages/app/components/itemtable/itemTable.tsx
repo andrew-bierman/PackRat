@@ -88,49 +88,6 @@ export const ItemsTable = ({
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {category?.name || type}
       </RText>,
-      authUser && authUser.id === ownerId ? (
-        <EditPackItemModal
-          key="edit-pack-item"
-          triggerComponent={
-            <MaterialIcons
-              name="edit"
-              size={20}
-              color={currentTheme.colors.primary}
-            />
-          }
-        >
-          <AddItem
-            packId={id}
-            isEdit={true}
-            isItemPage
-            initialData={itemData}
-            editAsDuplicate={false}
-            setPage={setPage}
-            page={page}
-          />
-        </EditPackItemModal>
-      ) : (
-        ''
-      ),
-      authUser && authUser.id === ownerId ? (
-        <DeletePackItemModal
-          key="delete-pack-item"
-          onConfirm={(closeModal) => {
-            handleDeleteItem(id, closeModal);
-          }}
-          triggerComponent={
-            (
-              <MaterialIcons
-                name="delete"
-                size={20}
-                color={currentTheme.colors.error}
-              />
-            ) as any
-          }
-        />
-      ) : (
-        ''
-      ),
     ];
     return (
       <Row
@@ -186,41 +143,43 @@ export const ItemsTable = ({
             style={styles.tableStyle}
             borderStyle={{ borderColor: 'transparent' }}
           >
-            <TitleRow title="Global Items List" />
-            <Row
-              flexArr={flexArr}
-              data={[
-                'Item Name',
-                'Weight',
-                'Quantity',
-                'Category',
-                'Edit',
-                'Delete',
-              ].map((header, index) => (
-                <Cell
-                  key={index}
-                  data={
-                    <RText style={{ fontSize: screenWidth <= 425 ? 11 : 17, fontWeight:'bold' }}>
-                      {header}
-                    </RText>
-                  }
-                  textStyle={styles.headerText}
-                />
-              ))}
-              style={styles.head}
-            />
-            <ScrollView style={{ height: 400 }}>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                data.map((item, index) => {
-                  return <TableItem key={index} itemData={item} />;
-                })
-              )}
-            </ScrollView>
-          </Table>
-        </ScrollView>
-        <View
+            <Table
+              style={styles.tableStyle}
+              borderStyle={{ borderColor: 'transparent' }}
+            >
+              <TitleRow title="Global Items List" />
+              <Row
+                flexArr={flexArr}
+                data={[
+                  'Item Name',
+                  'Weight',
+                  'Quantity',
+                  'Category',
+                ].map((header, index) => (
+                  <Cell
+                    key={index}
+                    data={
+                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 , fontWeight:'bold'}}>
+                        {header}
+                      </RText>
+                    }
+                    textStyle={styles.headerText}
+                  />
+                ))}
+                style={styles.head}
+              />
+              <ScrollView style={{ height: 400 }}>
+                {isLoading ? (
+                  <Loader />
+                ) : (
+                  data.map((item, index) => {
+                    return <TableItem key={index} itemData={item} />;
+                  })
+                )}
+              </ScrollView>
+            </Table>
+          </ScrollView>
+          <View
             style={{
               display: 'flex',
               flexDirection: 'row',
