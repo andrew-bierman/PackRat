@@ -7,6 +7,7 @@ import {
 } from '../../utils/mapFunctions';
 import { api } from '../../constants/api';
 import { useState, useEffect } from 'react';
+import simplify from 'simplify-geojson';
 
 interface Feature {
   [key: string]: any;
@@ -76,10 +77,12 @@ const useMapPreviewData = (shape, processedShape) => {
         imageShape.features.push(feature);
       }
     });
-
+    
+    
     const urlEncodedImageShapeGeoJSON = encodeURIComponent(
       JSON.stringify(imageShape, null, 0),
     );
+
 
     let bounds = getShapeSourceBounds(shape);
     if (Array.isArray(bounds[0]) && Array.isArray(bounds[1])) {
@@ -97,8 +100,8 @@ const useMapPreviewData = (shape, processedShape) => {
       uri: isPoint(shape)
         ? `${mapPreviewEndpoint}/pin-s+db4848(${lng},${lat})/${lng},${lat},8.63,0/900x400`
         : `${mapPreviewEndpoint}/geojson(${urlEncodedImageShapeGeoJSON})/[${bounds.join(
-            ',',
-          )}]/900x400?padding=50,30,30,30`,
+          ',',
+        )}]/900x400?padding=50,30,30,30`,
     };
 
     setMapPreviewData(data);

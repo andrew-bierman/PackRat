@@ -34,6 +34,7 @@ export const EditPackItemModal: React.FC<EditPackItemModalProps> = ({
     : null;
 
   return (
+    
     <BaseModal
       title={'Edit Item'}
       isOpen={isOpen}
@@ -41,7 +42,7 @@ export const EditPackItemModal: React.FC<EditPackItemModalProps> = ({
       footerComponent={undefined}
       footerButtons={footerButtons}
       triggerComponent={triggerComponent}
-      showTrigger={showTrigger !== undefined ? showTrigger : true}
+      showTrigger={!!triggerComponent}
     >
       {ModalContent && <ModalContent />}
     </BaseModal>
