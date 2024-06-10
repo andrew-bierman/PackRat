@@ -34,6 +34,7 @@ export const TableContainer = ({
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
   const {
     isLoading,
     error,
@@ -55,7 +56,7 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
+  const headerRow = ['Item Name', 'Weight', 'Quantity', ''];
   let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
@@ -74,7 +75,15 @@ export const TableContainer = ({
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
-          <BasicTable groupedData={groupedData}></BasicTable>
+          <BasicTable
+            groupedData={groupedData}
+            onDelete={deletePackItem}
+            handleCheckboxChange={handleCheckboxChange}
+            currentPack={currentPack}
+            hasPermissions={isAuthUserPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          ></BasicTable>
           {/* <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
@@ -100,7 +109,7 @@ export const TableContainer = ({
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
                         currentPack={currentPack}
-                        hasPermissions={hasPermissions}
+                        hasPermissions={isAuthUserPack}
                         refetch={refetch}
                         setRefetch={setRefetch}
                       />

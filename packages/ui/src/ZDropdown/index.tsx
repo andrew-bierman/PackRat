@@ -56,9 +56,9 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
         />
       </DropdownMenu.Trigger>
       <CustomContent>
-        {dropdownItems.map(({ label, onSelect = () => {} }, index) => (
-          <CustomItem key={label} onSelect={onSelect} style={{position : 'realtive',zIndex : 1000, backgroundColor : '#0a84ff'}}>
-            <DropdownMenu.ItemTitle style={{color: 'white', padding:'10px' }}>{label}</DropdownMenu.ItemTitle>
+        {dropdownItems.map(({ label, onSelect = () => {} }) => (
+          <CustomItem key={label} onSelect={onSelect}>
+            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </CustomItem>
         ))}
       </CustomContent>
@@ -77,9 +77,9 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
         />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        {dropdownItems.map(({ label, onSelect = () => {} }, index) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect} style={{position : 'realtive',zIndex : 1000, backgroundColor : '#0a84ff'}}>
-            <DropdownMenu.ItemTitle style={{color: 'white', padding:'10px' }}>{label}</DropdownMenu.ItemTitle>
+        {dropdownItems.map(({ label, onSelect = () => {} }) => (
+          <DropdownMenu.Item key={label} onSelect={onSelect}>
+            <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
       </DropdownMenu.Content>
@@ -90,4 +90,4 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
 export default {
   Web: ZDropdownWeb,
   Native: ZDropdownNative,
-};
+}
