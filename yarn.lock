@@ -32695,6 +32695,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"simplify-geojson@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "simplify-geojson@npm:1.0.5"
+  dependencies:
+    concat-stream: "npm:~1.4.1"
+    minimist: "npm:1.2.6"
+    simplify-geometry: "npm:0.0.2"
+  bin:
+    simplify-geojson: cli.js
+  checksum: 10/dae6da702485f47eb7c2c9355003acbb541cb127efda25a3beb6a832f473efe2d7171467dcb419e015f3c08e48546889e3aa43c89ab6dcaa103b0f18ad4a4202
+  languageName: node
+  linkType: hard
+
+"simplify-geometry@npm:0.0.2":
+  version: 0.0.2
+  resolution: "simplify-geometry@npm:0.0.2"
+  checksum: 10/3b6aab797f7847bb4958a40863a722bcb6d55acc4fdc016c5053ab28a4ccd48d0fc22e80f8c9d944c99c65930cb1c6b38fbda247c0aa0a634e25adc6e323123a
+  languageName: node
+  linkType: hard
+
 "sirv@npm:^2.0.4":
   version: 2.0.4
   resolution: "sirv@npm:2.0.4"
