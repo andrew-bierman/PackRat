@@ -167,7 +167,7 @@ export const ItemsTable = ({
                 ))}
                 style={styles.head}
               />
-              <ScrollView style={{ height: 400 }}>
+              <ScrollView style={{ height: Platform.OS === 'web' ? 400 : 'auto'}}>
                 {isLoading ? (
                   <Loader />
                 ) : (
