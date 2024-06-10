@@ -16,6 +16,7 @@ import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { RButton, RStack, RText } from '@packrat/ui';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 interface ItemsTableProps {
   limit: number;
@@ -80,12 +81,12 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      <RText style={{ color: isDark ? 'white' : 'black' }}>{name}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black'  , fontSize: screenWidth <= SCREEN_WIDTH ?'12px':'15px'}}>{name}</RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {formatNumber(weight)} {unit}
       </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
-      <RText style={{ color: isDark ? 'white' : 'black' }}>
+      <RText style={{ color: isDark ? 'white' : 'black', fontSize: screenWidth <= SCREEN_WIDTH ?'12px':'17px' }}>
         {category?.name || type}
       </RText>,
     ];
@@ -129,6 +130,7 @@ export const ItemsTable = ({
           paddingTop: 30,
           marginTop: 20,
           backgroundColor: isDark ? '#1A1A1D' : 'white',
+          width:screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
         }}
       >
         <ScrollView
@@ -143,10 +145,7 @@ export const ItemsTable = ({
             style={styles.tableStyle}
             borderStyle={{ borderColor: 'transparent' }}
           >
-            <Table
-              style={styles.tableStyle}
-              borderStyle={{ borderColor: 'transparent' }}
-            >
+            
               <TitleRow title="Global Items List" />
               <Row
                 flexArr={flexArr}
@@ -159,7 +158,7 @@ export const ItemsTable = ({
                   <Cell
                     key={index}
                     data={
-                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
+                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15, fontWeight:'bold' }}>
                         {header}
                       </RText>
                     }

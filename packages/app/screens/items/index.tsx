@@ -7,9 +7,10 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 // import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
-import { usePagination } from 'app/hooks/common';
+import { usePagination, useScreenWidth } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
 import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 // const RTooltip: any = OriginalRTooltip;
@@ -61,6 +62,9 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
+  const {screenWidth} = useScreenWidth();
+
+
   return (
     <RScrollView>
       {/* <Stack.Screen
@@ -69,15 +73,15 @@ export default function Items() {
         }}
       /> */}
       <RStack style={styles.mainContainer}>
-        <RStack style={styles.container}>
-          <RStack style={styles.sortContainer}>
+        <RStack style={{width:screenWidth <= SCREEN_WIDTH ? '80vw' :'60vw', ...styles.container}}>
+          <RStack style={{width:screenWidth <= SCREEN_WIDTH ? '45vw' :'40vw', ...styles.sortContainer}}>
             <RText style={{ fontWeight: 'bold' }}>Sort By:</RText>
             <DropdownComponent
               value={value}
               data={optionValues}
               onValueChange={handleSort}
               placeholder="Sort By"
-              width={Platform.OS === 'web' ? 150 : 120}
+              width={Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ? '25vw' :'15vw' : 120}
             />
           </RStack>
           <BaseModal
@@ -167,7 +171,6 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.card,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '60%',
       padding: 30,
       borderRadius: 10,
     },
