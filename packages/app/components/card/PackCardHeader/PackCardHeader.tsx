@@ -34,6 +34,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     usePackTitleInput(data);
 
   const { isDark, currentTheme } = useTheme();
+
   const router = useRouter();
   const { editPack } = useEditPack();
 
@@ -48,6 +49,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   return (
     <>
       <CustomCardHeader
+      link={""}
         data={data}
         title={
           <RStack
@@ -86,7 +88,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
+            <ThreeDotsMenu  onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>

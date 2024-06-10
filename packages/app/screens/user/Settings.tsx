@@ -50,6 +50,7 @@ export default function Settings() {
         paddingVertical={20}
         paddingHorizontal={8}
         marginHorizontal="auto"
+        marginVertical={40}
       >
         <RStack
           style={{
