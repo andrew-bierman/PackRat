@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { MoreHorizontal } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover as OriginalPopover } from 'tamagui';
+import { Platform } from 'react-native';
 
 // Bypass TypeScript's type checking on opacity and borderWidth, since component is directly from the library
 const Popover: any = OriginalPopover;
@@ -19,7 +20,7 @@ export function ThreeDotsMenu({ children, onOpenChange,open }: ThreeDotsMenuProp
       allowFlip
       placement="bottom"
       onOpenChange={onOpenChange}
-      open={open}
+      open={Platform.OS != 'web'? open:undefined}
       disableFocus
       
     >
