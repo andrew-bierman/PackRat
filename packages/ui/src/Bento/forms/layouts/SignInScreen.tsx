@@ -166,7 +166,9 @@ export function SignInScreen({ mode }: mode) {
         </View>
         </Form>
         
+        <View style={{alignItems : 'center', width : '100%'}}>
         {mode === 'signin' ? <SignUpLink /> : <SignInLink />}
+        </View>
       </View>
     </FormCard>
   );
