@@ -19,6 +19,9 @@ import { useRouter } from 'app/hooks/router';
 import { useEditPack } from 'app/hooks/packs/useEditPack';
 import { Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
+import { View } from 'react-native';
+import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 interface PackCardHeaderProps {
   data: any;
@@ -36,6 +39,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
+  const {screenWidth} = useScreenWidth();
 
   const handleSavePack = () => {
     const packDetails = {
@@ -76,12 +80,14 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 }}
               />
             )}
+            <View style={{ width: screenWidth <= SCREEN_WIDTH ? '30vw' : '50vw'}}>
             <EditableText
               isLoading={isLoading}
               defaultValue={title}
               isFocused={isEditMode}
               onSave={handleSaveTitle}
             />
+            </View>
           </RStack>
         }
         actionsComponent={
