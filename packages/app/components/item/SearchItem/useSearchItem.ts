@@ -39,6 +39,10 @@ export const useSearchItem = () => {
   }, [data]);
 
   const handleSearchResultClick = (item) => {
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
     const ownerId = user.id;
     const itemId = item?.id;
 

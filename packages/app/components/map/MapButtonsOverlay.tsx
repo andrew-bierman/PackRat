@@ -28,7 +28,9 @@ interface MapButtonsOverlayProps {
   onDownload: () => void;
   handleGpxUpload?: () => void;
   progress?: number;
-  navigateToMaps: () => void;
+  navigateToMaps?: () => void;
+  styles?: any;
+  shape?: any;
 }
 
 const MapButtonsOverlay = ({

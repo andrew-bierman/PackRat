@@ -65,7 +65,8 @@ const verifyToken = (token: string): JwtPayload => {
  * @returns {Promise<User>} - The user associated with the token.
  * @throws {Error} If user is not found.
  */
-const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
+// const findUser = async (decoded: JwtPayload, token: string): Promise<User> => {
+const findUser = async (decoded: JwtPayload, token: string): Promise<any> => {
   // const user: any = await prisma.user.findUnique({
   //   where: {
   //     id: decoded.id,

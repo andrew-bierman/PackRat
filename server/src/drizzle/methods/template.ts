@@ -60,9 +60,14 @@ export class Template {
 
   async update(
     data: Partial<InsertTemplate>,
-    filter = eq(TemplateTable.id, data.templateId),
+    filter = data.templateId
+      ? eq(TemplateTable.id, data.templateId)
+      : undefined,
   ) {
     try {
+      if (!filter) {
+        throw new Error('Template id is required for update operation');
+      }
       const updatedTemplate = await DbClient.instance
         .update(TemplateTable)
         .set({

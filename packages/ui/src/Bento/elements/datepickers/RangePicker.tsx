@@ -282,13 +282,23 @@ function DatePickerBody() {
   );
 }
 
-/** ------ EXAMPLE ------ */
-export function RangePicker() {
-  const now = new Date();
-  const [selectedDates, onDatesChange] = useState<Date[]>([]);
-  const [offsetDate, onOffsetChange] = useState<Date>(now);
-  const [open, setOpen] = useState(false);
+interface RangePickerProps {
+  selectedDates: Date[];
+  onDatesChange: (dates: Date[]) => void;
+  offsetDate?: Date;
+  onOffsetChange?: (date: Date) => void;
+  open?: boolean;
+  setOpen: (open: boolean) => void;
+}
 
+export function RangePicker({
+  selectedDates,
+  onDatesChange,
+  offsetDate,
+  onOffsetChange,
+  open,
+  setOpen,
+}: RangePickerProps) {
   useEffect(() => {
     if (selectedDates.length === 2) {
       setOpen(false);

@@ -1,7 +1,10 @@
 import React, { ReactNode } from 'react';
-import { RStack, RText } from '@packrat/ui';
+import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
+
+const RStack: any = OriginalRStack;
+const RText: any = OriginalRText;
 
 type TripCardBaseProps = {
   loadStyles?: (theme: any) => any;

@@ -1,9 +1,9 @@
 import { Hono } from 'hono';
 import * as validator from '@packrat/validations';
 import {
-  addToFavorite,
-  getFavoritePacksByUser,
-  getUserFavorites,
+  addToFavoriteRoute as addToFavorite,
+  getFavoritePacksByUserRoute as getFavoritePacksByUser,
+  getUserFavoritesRoute as getUserFavorites,
 } from '../controllers/favorite/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
@@ -39,7 +39,8 @@ const router = new Hono();
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addToFavorite, req.body, next),
+  ((req, res, next) =>
+    zodParser(validator.addToFavorite, req.body, next)) as any,
   tryCatchWrapper(addToFavorite),
 );
 
@@ -66,8 +67,8 @@ router.post(
  */
 router.get(
   '/user/:userId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getUserFavorites),
 );
 
@@ -94,8 +95,8 @@ router.get(
  */
 router.get(
   '/user/:userId/packs',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getFavoritePacksByUser),
 );
 

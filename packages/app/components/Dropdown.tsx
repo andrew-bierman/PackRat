@@ -120,7 +120,14 @@ import React from 'react';
 import { View, Platform } from 'react-native';
 import { RSelect } from '@packrat/ui';
 
-export const DropdownComponent = ({
+interface DropdownComponentProps {
+  width?: string | number;
+  style?: any;
+  placeholder?: string;
+  [x: string]: any; // for the rest of the props
+}
+
+export const DropdownComponent: React.FC<DropdownComponentProps> = ({
   width,
   style = {},
   placeholder,

@@ -10,7 +10,7 @@ import { getEnumValues } from 'app/utils/getEnumValues';
 import { formatTripActivityLabel } from 'app/utils/tripUtils';
 
 const ActivityOptions = getEnumValues(TripActivity).map((activity) => ({
-  label: formatTripActivityLabel(activity),
+  label: formatTripActivityLabel(activity.toString()),
   value: activity,
 }));
 

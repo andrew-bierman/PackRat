@@ -1,10 +1,12 @@
-import { TouchableOpacity, Text, View } from 'react-native';
-import { RCard } from '@packrat/ui';
+import { TouchableOpacity, Text } from 'react-native';
+import { RCard as OriginalRCard } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useScreenWidth } from 'app/hooks/common';
+
+const RCard: any = OriginalRCard;
 
 interface QuickActionButtonProps {
   onPress: () => void;
@@ -37,14 +39,19 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
+  const {screenWidth} = useScreenWidth();
   return {
     container: {
       margin: 10,
+      width: screenWidth <= 425 ? '15vw':'10vw',
+      height:'10vh',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      width: screenWidth <= 425 ? '15vw':'10vw',
+      height:'10vh',
       // paddingHorizontal: 40,
       // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,

@@ -8,6 +8,7 @@ import { compress } from 'hono/compress';
 import router from './routes';
 
 interface Bindings {
+  [key: string]: any;
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;

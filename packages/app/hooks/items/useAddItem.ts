@@ -1,7 +1,11 @@
 import { queryTrpc } from 'app/trpc';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useOfflineQueue } from 'app/hooks/offline';
 import { useItemsUpdater } from './useItemsUpdater';
+
+interface State {
+  items?: Array<{ id: string }>;
+}
 
 export const useAddItem = () => {
   const utils = queryTrpc.useContext();
@@ -22,7 +26,7 @@ export const useAddItem = () => {
 
       addOfflineRequest('addItemGlobal', newItem);
 
-      updateItems((prevState = {}) => {
+      updateItems((prevState: State = {}) => {
         onSuccess();
         const prevItems = Array.isArray(prevState.items) ? prevState.items : [];
 

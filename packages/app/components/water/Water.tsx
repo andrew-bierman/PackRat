@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { RButton, RInput, RText, RStack } from '@packrat/ui';
+import { RButton, RInput as OriginalRInput, RText, RStack } from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useWater } from 'app/hooks/water';
@@ -8,6 +8,8 @@ interface WaterProps {
   currentPack: any;
   setWaterItem: any;
 }
+
+const RInput: any = OriginalRInput;
 
 export default function Water({ currentPack, setWaterItem }: WaterProps) {
   const { handleWaterChange, addWater, waterWeight } = useWater(currentPack);

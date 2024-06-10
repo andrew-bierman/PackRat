@@ -231,6 +231,10 @@ export function googleSigninRoute() {
             alreadyGoogleSignin.id,
           );
 
+          if (!alreadyGoogleSignin.googleId) {
+            throw new Error('Google ID is missing');
+          }
+
           const updatedUser = await userClass.update(
             {
               googleId,

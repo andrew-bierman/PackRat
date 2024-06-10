@@ -62,12 +62,14 @@ describe('Template Routes', () => {
   describe('editTemplate', () => {
     it('should edit template type', async () => {
       const typeToBeUpdated = 'item';
+      const { isGlobalTemplate, ...rest } = createdTemplate;
       const [updatedTemplate] = await caller.editTemplate({
-        ...createdTemplate,
+        ...rest,
         templateId: createdTemplate.id,
         type: typeToBeUpdated,
+        isGlobalTemplate: isGlobalTemplate === null ? false : isGlobalTemplate,
       });
-      expect(updatedTemplate.type).toEqual(typeToBeUpdated);
+      expect(updatedTemplate?.type).toEqual(typeToBeUpdated);
     });
   });
 

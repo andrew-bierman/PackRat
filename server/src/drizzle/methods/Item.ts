@@ -141,6 +141,11 @@ export class Item {
         .from(ItemTable)
         .where(eq(ItemTable.global, true))
         .get();
+      if (!totalCount) {
+        throw new Error(
+          'Failed to find count of items: totalCount is undefined',
+        );
+      }
       return totalCount.value;
     } catch (error) {
       throw new Error(`Failed to find count of items: ${error.message}`);

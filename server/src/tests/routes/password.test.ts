@@ -27,9 +27,10 @@ describe('Reset password routes', () => {
   describe('Request password reset', () => {
     it('Request password reset', async () => {
       if (user) {
-        const response = await caller.requestPasswordResetEmailAndToken({
+        const response = (await caller.requestPasswordResetEmailAndToken({
           email: user.email,
-        });
+        })) as { message: string; resetToken: string };
+
         expect(response.message).toEqual(
           'Password reset email sent successfully',
         );
