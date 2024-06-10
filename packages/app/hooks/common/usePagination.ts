@@ -1,28 +1,24 @@
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from 'app/constants/pagination';
-import { createParam, useRouter } from '@packrat/crosspath';
+import { createParam } from '@packrat/crosspath';
 
-const { useParam } = createParam<{ limit: number; page: number }>();
+
+type ParamsType =  { limit: string; page: string }
+const { useParams } = createParam<ParamsType>();
 
 export const usePagination = () => {
-  const { push } = useRouter();
-  const [limit] = useParam('limit', {
-    initial: String(DEFAULT_LIMIT),
-    parse: parseParam,
-  });
-  const [page, setPage] = useParam('page', {
-    initial: String(DEFAULT_PAGE),
-    parse: parseParam,
-  });
+  const {params,setParams} = useParams();
+  const {limit, page} = params;
 
   return {
     handleLimitChange: (newLimit) => {
-      push({ query: { limit: Number(newLimit), page: 1 } });
+      setParams({limit: Number(newLimit), page: 1 });
+      
     },
     handlePageChange: (newPage) => {
-      setPage(Number(newPage));
+      setParams({page:Number(newPage)});
     },
-    limit: Number(limit),
-    page: Number(page),
+    limit: limit ? Number(limit) : DEFAULT_LIMIT,
+    page:  page ? Number(page) : DEFAULT_PAGE,
   };
 };
 
