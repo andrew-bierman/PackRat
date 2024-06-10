@@ -48,7 +48,7 @@ export default function Login() {
               paddingTop: 32,
               paddingBottom: 32,
               width: '90%',
-              maxWidth: 290,
+              maxWidth: 400,
             }}
           >
             <SignInScreen mode="signin"/>
