@@ -81,12 +81,12 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      <RText style={{ color: isDark ? 'white' : 'black'  , fontSize: screenWidth <= SCREEN_WIDTH ?'12px':'15px'}}>{name}</RText>,
+      <RText style={{ color: isDark ? 'white' : 'black'  , fontSize: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ?'12px':'15px':15}}>{name}</RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {formatNumber(weight)} {unit}
       </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
-      <RText style={{ color: isDark ? 'white' : 'black', fontSize: screenWidth <= SCREEN_WIDTH ?'12px':'17px' }}>
+      <RText style={{ color: isDark ? 'white' : 'black', fontSize: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ?'12px':'17px' : 15 }}>
         {category?.name || type}
       </RText>,
     ];
@@ -158,7 +158,7 @@ export const ItemsTable = ({
                   <Cell
                     key={index}
                     data={
-                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15, fontWeight:'bold' }}>
+                      <RText style={{ fontSize: Platform.OS === 'web' ? screenWidth <= 425 ? 11 : 15 : 15, fontWeight:'bold' }}>
                         {header}
                       </RText>
                     }
