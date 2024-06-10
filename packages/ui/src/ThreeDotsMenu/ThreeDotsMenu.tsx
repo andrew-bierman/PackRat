@@ -8,16 +8,20 @@ const Popover: any = OriginalPopover;
 interface ThreeDotsMenuProps {
   children: ReactNode;
   onOpenChange: (open: boolean) => void;
+  open: boolean;
 }
 
-export function ThreeDotsMenu({ children, onOpenChange }: ThreeDotsMenuProps) {
+export function ThreeDotsMenu({ children, onOpenChange,open }: ThreeDotsMenuProps) {
+  console.log("ksksksks",open)
   return (
     <Popover
       size="$5"
       allowFlip
       placement="bottom"
       onOpenChange={onOpenChange}
+      open={open}
       disableFocus
+      
     >
       <Popover.Trigger asChild backgroundColor="transparent">
         <Button icon={MoreHorizontal} />

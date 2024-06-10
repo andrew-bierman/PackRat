@@ -19,6 +19,7 @@ import { useRouter } from 'app/hooks/router';
 import { useEditPack } from 'app/hooks/packs/useEditPack';
 import { Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
+import { set } from 'lodash';
 
 interface PackCardHeaderProps {
   data: any;
@@ -29,21 +30,25 @@ interface PackCardHeaderProps {
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
-  const handleDeletePack = useDeletePack(data.id);
-  const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode } =
+  const {handleDeletePack} = useDeletePack(data.id);
+  const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode,isOpen,setIsOpen } =
     usePackTitleInput(data);
 
   const { isDark, currentTheme } = useTheme();
 
   const router = useRouter();
   const { editPack } = useEditPack();
-
+const handleDelete = () => { 
+  handleDeletePack();
+  setIsOpen(false);
+ }
   const handleSavePack = () => {
     const packDetails = {
       id: data.id,
       name: data.name,
       is_public: data.is_public,
     };
+    setIsOpen(false);
     editPack(packDetails);
   };
   return (
@@ -88,11 +93,11 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            <ThreeDotsMenu  onOpenChange={handleActionsOpenChange}>
+            <ThreeDotsMenu open={isOpen}   onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>
-                <RButton onPress={handleDeletePack}>Delete</RButton>
+                <RButton onPress={handleDelete}>Delete</RButton>
               </YStack>
             </ThreeDotsMenu>
           )
