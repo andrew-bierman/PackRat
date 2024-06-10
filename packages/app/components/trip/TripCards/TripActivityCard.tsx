@@ -3,7 +3,7 @@ import useTheme from 'app/hooks/useTheme';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FormSelect, RCard, RParagraph, RStack, Select } from '@packrat/ui';
-import { TripActivity } from '@packrat/validations';
+import { TripActivity } from '@packrat/validations/src/validations/tripRoutesValidator';
 
 import { TripCardBase } from './TripCardBase';
 import { getEnumValues } from 'app/utils/getEnumValues';
