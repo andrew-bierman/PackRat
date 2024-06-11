@@ -149,32 +149,19 @@ export function PackDetails() {
               />
             </>
           )}
+          <ChatContainer
+            itemTypeId={currentPackId}
+            title="Chat"
+            trigger="Open Chat"
+          />
         </View>
       </Layout>
-      <View
-        style={{
-          position: 'absolute',
-          right: 50,
-          bottom: 30,
-          width: 60,
-          height: 60,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ChatContainer
-          itemTypeId={currentPackId}
-          title="Chat"
-          trigger="Open Chat"
-        />
-      </View>
     </>
   );
 }
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  console.log('currentTheme', currentTheme);
   return {
     mainContainer: {
       position: 'relative',
@@ -183,7 +170,7 @@ const loadStyles = (theme) => {
       gap: 15,
       fontSize: 18,
       width: '100%',
-      flex: 1,
+      // flex: 1,
       maxHeight: '91.2vh',
     },
     packsContainer: {

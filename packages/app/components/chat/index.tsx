@@ -11,8 +11,9 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
 import { ChatList } from '@packrat/ui/src/Bento/elements/list';
-import { Button } from 'tamagui';
 import { X } from '@tamagui/lucide-icons';
+import { MessageCircle, Camera, Settings, Home } from 'lucide-react-native';
+import { ActionItem } from './ActionItem';
 
 // TODO check if we've fixed the chat screen on another branch
 // link: https://github.com/andrew-bierman/PackRat/issues/ ???
@@ -28,6 +29,23 @@ interface ChatModalTriggerProps {
   trigger: string;
   itemTypeId: string | null;
 }
+
+const actionItems = [
+  {
+    icon: MessageCircle,
+    color: 'orange',
+    title: 'Message',
+    description: 'Interact with our AI-powered chatbot.',
+    type: 'chat',
+  },
+  {
+    icon: Settings,
+    color: 'teal',
+    title: 'Suggestions',
+    description: 'See how you can improve your pack.',
+    type: 'suggestion',
+  },
+];
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
@@ -119,6 +137,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
 const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   const styles = useCustomStyles(loadStyles);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isItemOpen, setIsItemOpen] = useState(false);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const animationValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -130,51 +150,69 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
   }, [isChatOpen]);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => setIsChatOpen(!isChatOpen)}>
-        <TouchableOpacity
-          style={{
+    <View
+      style={
+        (styles.container,
+        {
+          position: 'absolute',
+          right: 50,
+          bottom: 30,
+          width: 60,
+          height: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+        })
+      }
+    >
+      <TouchableOpacity
+        style={{
+          width: 50,
+          height: 50,
+          borderRadius: 25,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={() => {
+          if (isChatOpen || isSuggestionsOpen) {
+            setIsItemOpen(false);
+            setIsChatOpen(false);
+            setIsSuggestionsOpen(false);
+          } else {
+            setIsItemOpen(!isItemOpen);
+          }
+        }}
+      >
+        <RImage
+          source={{
+            // TODO: Update this to use the intended chat logo
+            uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/4ad449702c088e505c4b484219121d365150f971/packages/app/assets/chat-svgrepo-com%20(1).svg',
             width: 50,
             height: 50,
-            borderRadius: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
           }}
-          onPress={() => setIsChatOpen(!isChatOpen)}
-        >
-          <RImage
-            source={{
-              // TODO: Update this to use the intended chat logo
-              uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/4ad449702c088e505c4b484219121d365150f971/packages/app/assets/chat-svgrepo-com%20(1).svg',
-              width: 50,
-              height: 50,
-            }}
-            width={40}
-            height={40}
-            style={{
-              ...styles.logo,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.75,
-              shadowRadius: 1.24,
-              elevation: 3,
-            }}
-            alt="PackRat Logo"
-          />
-        </TouchableOpacity>
+          width={40}
+          height={40}
+          style={{
+            ...styles.logo,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.75,
+            shadowRadius: 1.24,
+            elevation: 3,
+          }}
+          alt="PackRat Logo"
+        />
       </TouchableOpacity>
-      {isChatOpen && (
+      {isItemOpen && (
         <Animated.View
           style={{
             position: 'absolute',
-            bottom: 50,
-            right: 20,
-            width: 450,
-            // height: 700,
-            backgroundColor: '#fff',
+            bottom: 60,
+            right: 5,
+            width: 308,
+            backgroundColor: '#000',
             borderRadius: 10,
             padding: 4,
             zIndex: 1000,
@@ -183,27 +221,47 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
-            transform: [
-              {
-                translateX: animationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [225, 0], // half of your view width
-                }),
-              },
-              {
-                translateY: animationValue.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [350, 0], // half of your view height
-                }),
-              },
-              {
-                scale: animationValue,
-              },
-            ],
-            opacity: animationValue,
           }}
         >
-          <Button
+          <View style={{ width: 300 }}>
+            {actionItems.map((item, index) => {
+              const { icon, color, title, description, type } = item;
+              return (
+                <ActionItem
+                  key={index}
+                  icon={icon}
+                  color={color}
+                  title={title}
+                  type={type}
+                  description={description}
+                  setIsChatOpen={setIsChatOpen}
+                  setIsItemOpen={setIsItemOpen}
+                  setIsSuggestionOpen={setIsSuggestionsOpen}
+                />
+              );
+            })}
+          </View>
+        </Animated.View>
+      )}
+      {isChatOpen && (
+        <Animated.View
+          style={{
+            position: 'absolute',
+            bottom: 60,
+            right: 5,
+            width: 450,
+            backgroundColor: '#000',
+            borderRadius: 10,
+            padding: 4,
+            zIndex: 1000,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}
+        >
+          <RButton
             position="absolute"
             backgroundColor="$background"
             top="$2"
