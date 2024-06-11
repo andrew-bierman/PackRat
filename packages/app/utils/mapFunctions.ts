@@ -1,6 +1,4 @@
 import * as Location from 'expo-location';
-import * as FileSystem from 'expo-file-system';
-import { Platform } from 'react-native';
 
 const defaultShape = {
   type: 'FeatureCollection',
@@ -107,15 +105,18 @@ function getShapeSourceBounds(shape) {
 /**
  * Handles the shape source load and calculates the zoom level based on the width and height.
  *
+ * @param {object} shape - The shape object containing the coordinates.
  * @param {number} width - The width of the shape.
  * @param {number} height - The height of the shape.
  * @return {number|null} The calculated zoom level or null if there are no coordinates.
  */
-function handleShapeSourceLoad(width, height) {
+function handleShapeSourceLoad(shape, width, height) {
   if (shape?.features[0]?.geometry?.coordinates?.length > 1) {
     let bounds = getShapeSourceBounds(shape);
-    bounds = bounds[0].concat(bounds[1]);
-    return calculateZoomLevel(bounds, { width, height });
+    if (bounds && bounds[0] && bounds[1]) {
+      bounds = [bounds[0].concat(bounds[1])];
+      return calculateZoomLevel(bounds[0], { width, height });
+    }
   }
   return null;
 }
@@ -175,40 +176,39 @@ function calculateZoomLevel(bounds, mapDim) {
  * @return {array} The center coordinates of the trail.
  */
 function findTrailCenter(shape) {
+  console.log('Finding trail center...', shape);
   const trailCoords = shape?.features[0]?.geometry?.coordinates;
 
-  console.log('trailCoords', trailCoords);
-  console.log('trailCoords.length', trailCoords.length);
+  // Flatten the coordinates array for Polygon geometries
 
-  let latitudes;
-  let longitudes;
+  let avgLatitude;
+  let avgLongitude;
+  let flattenedCoords;
+  if (trailCoords[0][0] === undefined) {
+    avgLongitude = trailCoords[0];
+    avgLatitude = trailCoords[1];
+  } else if (Array.isArray(trailCoords[0][0][0])) {
+    flattenedCoords = trailCoords[0].flat();
 
-  // Handle the case where there's only one pair of coordinates
-  if (trailCoords.length === 1) {
-    console.log(
-      'Single coordinate found, using as trail center.',
-      trailCoords[0],
-    );
-    return trailCoords[0];
-  }
+    const latitudes = flattenedCoords.map((coord) => coord[1]);
+    const longitudes = flattenedCoords.map((coord) => coord[0]);
 
-  if (Array.isArray(trailCoords[0][0])) {
-    // If the coordinates are in the format: [[[lat, lng]], [[lat, lng]], ...]
-    latitudes = trailCoords.map((coord) => coord[0][0]);
-    longitudes = trailCoords.map((coord) => coord[0][1]);
+    avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
+    avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
   } else {
-    // If the coordinates are in the format: [[lat, lng], [lat, lng], ...]
-    latitudes = trailCoords.map((coord) => coord[0]);
-    longitudes = trailCoords.map((coord) => coord[1]);
+    flattenedCoords = trailCoords[0];
+
+    const latitudes = flattenedCoords.map((coord) => coord[1]);
+    const longitudes = flattenedCoords.map((coord) => coord[0]);
+
+    avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
+    avgLongitude = longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
   }
 
-  const avgLatitude = latitudes.reduce((a, b) => a + b, 0) / latitudes.length;
-  const avgLongitude =
-    longitudes.reduce((a, b) => a + b, 0) / longitudes.length;
+  console.log('Average latitude:', avgLatitude);
+  console.log('Average longitude:', avgLongitude);
 
-  console.log('trailCords return', [avgLatitude, avgLongitude]);
-
-  return [avgLatitude, avgLongitude];
+  return [avgLongitude, avgLatitude];
 }
 
 /**
@@ -367,7 +367,7 @@ const multiPolygonBounds = (multipolygonData) => {
 
   const centerLng = (minX + maxX) / 2;
   const centerLat = (minY + maxY) / 2;
-  console.log(centerLat, centerLng, 'center lng lat');
+
   return [centerLng, centerLat];
 };
 

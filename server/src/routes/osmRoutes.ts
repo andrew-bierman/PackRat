@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import {
-  getDestination,
-  getOsm,
-  getParksOSM,
-  getPhotonResults,
-  getTrailsOSM,
-  postSingleGeoJSON,
-  getPhotonDetails,
-  getEnhancedPhotonDetails,
+  getDestinationRoute as getDestination,
+  getOsmRoute as getOsm,
+  getParksOSMRoute as getParksOSM,
+  getPhotonResultsRoute as getPhotonResults,
+  getTrailsOSMRoute as getTrailsOSM,
+  postSingleGeoJSONRoute as postSingleGeoJSON,
+  getPhotonDetailsRoute as getPhotonDetails,
+  // getEnhancedPhotonDetails,
 } from '../controllers/getOsm/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
@@ -45,8 +45,8 @@ const router = new Hono();
  */
 router.get(
   '/photon/search',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getPhotonResults),
 );
 
@@ -82,8 +82,8 @@ router.get(
  */
 router.get(
   '/trails',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getTrailsOSM),
 );
 
@@ -119,8 +119,8 @@ router.get(
  */
 router.get(
   '/parks',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getParksOSM),
 );
 
@@ -163,8 +163,8 @@ router.get(
  */
 router.post(
   '/osm',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getOsm),
 );
 
@@ -193,8 +193,8 @@ router.post(
  */
 router.post(
   '/process/geojson',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(postSingleGeoJSON),
 );
 
@@ -221,8 +221,8 @@ router.post(
  */
 router.get(
   '/destination/:id',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getDestination),
 );
 
@@ -255,8 +255,8 @@ router.get(
  */
 router.get(
   '/photonDetails/:type/:id',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getPhotonDetails),
 );
 // router.get("/photonDetails/:type/:id", getEnhancedPhotonDetails)

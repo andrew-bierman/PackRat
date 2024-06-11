@@ -4,7 +4,7 @@ import { TripCard } from 'app/components/trip/TripCard';
 import WeatherCard from 'app/components/weather/WeatherCard';
 import { GearList } from 'app/components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
-import TripDateRange  from 'app/components/trip/TripDateRange';
+import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';

@@ -1,15 +1,9 @@
 import { eq, sql, asc, desc } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
 import { convertWeight } from '../../utils/convertWeight';
-import { getDB } from '../../trpc/context';
 
 export class Pack {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   getRelations({ includeRelated, ownerId = true, completeItems = false }) {
     if (!includeRelated) {
       return { with: {} };
@@ -48,7 +42,7 @@ export class Pack {
 
   async create(data: InsertPack) {
     try {
-      const pack = (await this.createInstance())
+      const pack = await DbClient.instance
         .insert(PackTable)
         .values(data)
         .returning()
@@ -61,7 +55,7 @@ export class Pack {
 
   async update(data: any, filter = eq(PackTable.id, data.id)) {
     try {
-      const updatedPack = (await this.createInstance())
+      const updatedPack = await DbClient.instance
         .update(PackTable)
         .set(data)
         .where(filter)
@@ -75,7 +69,7 @@ export class Pack {
 
   async delete(id: string, filter = eq(PackTable.id, id)) {
     try {
-      const deletedPack = (await this.createInstance())
+      const deletedPack = await DbClient.instance
         .delete(PackTable)
         .where(filter)
         .returning()
@@ -96,12 +90,19 @@ export class Pack {
     includeRelated?: boolean;
   }) {
     try {
-      const filter = id ? eq(PackTable.id, id) : eq(PackTable.name, name);
+      let filter;
+      if (id) {
+        filter = eq(PackTable.id, id);
+      } else if (name) {
+        filter = eq(PackTable.name, name);
+      } else {
+        throw new Error('Either id or name must be provided');
+      }
       const relations = this.getRelations({
         includeRelated,
         completeItems: true,
       });
-      const pack = (await this.createInstance()).query.pack.findFirst({
+      const pack = await DbClient.instance.query.pack.findFirst({
         where: filter,
         ...relations,
       });
@@ -125,10 +126,18 @@ export class Pack {
         const itemOrder = queryBy === 'Most Items' ? 'DESC' : 'ASC';
         const itemCountQuery = sql`(SELECT COUNT(*) FROM ${itemPacks} WHERE ${itemPacks.packId} = ${PackTable.id})`;
         return itemOrder === 'ASC' ? asc(itemCountQuery) : desc(itemCountQuery);
+      } else if (sortOption && Object.keys(sortOption).length > 0) {
+        const entries = Object.entries(sortOption);
+        if (entries.length > 0) {
+          const [sortField, sortOrder] = entries[0] || [];
+          if (!sortField || !sortOrder) {
+            throw new Error('Invalid sort option');
+          }
+          return (pack: any) =>
+            sortOrder === 'ASC' ? asc(pack[sortField]) : desc(pack[sortField]);
+        }
       } else {
-        const [sortField, sortOrder] = Object.entries(sortOption)[0];
-        return (pack: any) =>
-          sortOrder === 'ASC' ? asc(pack[sortField]) : desc(pack[sortField]);
+        throw new Error('Sort option is required for non-item sorting');
       }
     } catch (error) {
       throw new Error(`Failed to order by records: ${error.message}`);
@@ -153,7 +162,7 @@ export class Pack {
         includeRelated,
         completeItems: true,
       });
-      const packs = (await this.createInstance()).query.pack.findMany({
+      const packs = await DbClient.instance.query.pack.findMany({
         ...(modifiedFilter && { where: modifiedFilter }),
         orderBy: orderByFunction,
         ...(includeRelated ? relations : {}),
@@ -181,13 +190,17 @@ export class Pack {
           ? eq(PackTable.is_public, is_public)
           : null;
       const orderByFunction: any = this.getOrderBy({ sortItems, queryBy });
-      const sortedPacks = (await this.createInstance())
-        .select()
-        .from(PackTable)
-        .where(modifiedFilter)
-        .orderBy(orderByFunction)
-        .all();
-      return sortedPacks;
+      if (modifiedFilter) {
+        const sortedPacks = await DbClient.instance
+          .select()
+          .from(PackTable)
+          .where(modifiedFilter)
+          .orderBy(orderByFunction)
+          .all();
+        return sortedPacks;
+      } else {
+        throw new Error('Filter is required for sorting packs by items');
+      }
     } catch (error) {
       throw new Error(`Failed to sort packs by items: ${error.message}`);
     }

@@ -24,7 +24,7 @@ export const editGlobalItemAsDuplicateService = async (
   quantity: number,
   unit: string,
   type: string,
-): Promise<object> => {
+) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
@@ -32,9 +32,11 @@ export const editGlobalItemAsDuplicateService = async (
   const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
   const ItemPacksClass = new ItemPacks();
-  category = await itemCategoryClass.findItemCategory({ name: type });
+  category = (await itemCategoryClass.findItemCategory({ name: type })) || null;
   if (!category) {
-    category = await itemCategoryClass.create({ name: type });
+    category = await itemCategoryClass.create({
+      name: type as 'Food' | 'Water' | 'Essentials',
+    });
   }
   const newItem = await itemClass.create({
     name,

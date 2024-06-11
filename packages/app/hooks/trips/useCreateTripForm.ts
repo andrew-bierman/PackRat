@@ -21,8 +21,8 @@ export const useCreateTripForm = (
     formatCreateTripValuesForAPI,
   );
 
-  const togglePlace = (value: any) => {
-    setTripValue('destination', value);
+  const togglePlace = (name: 'trail' | 'park', value: any) => {
+    setTripValue(name, store[name] !== value ? value : '');
   };
 
   const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(
@@ -45,6 +45,7 @@ export const useCreateTripForm = (
     tripStore: createTripFormValues,
     isValid,
     togglePlace,
+    setTripValue,
     setDateRange,
   };
 };

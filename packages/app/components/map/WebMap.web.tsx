@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
+import { useWebMap } from 'app/hooks/map/useWebMap';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import mapboxgl from 'mapbox-gl';
-import { MAPBOX_ACCESS_TOKEN } from '@env';
-
-import { View, Modal, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Modal, View } from 'react-native';
 import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useWebMap } from 'app/hooks/map/useWebMap';
 import useGpxUpload from './useGpxUpload';
-// import 'mapbox-gl/dist/mapbox-gl.css'
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiYW5kcmV3Ymllcm1hbiIsImEiOiJjbDhwYTVtc3kwMGprM3Buejg3d2doa2pvIn0.F_D3I0KRlQkQK70DkK7MlQ';
+mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';
@@ -67,13 +64,25 @@ const WebMap = ({ shape: shapeProp }) => {
     </View>
   );
 
-  return showModal ? (
-    <Modal animationType={'fade'} transparent={false} visible={true}>
-      {element}
-    </Modal>
-  ) : (
-    element
+  // TODO: Fix this. The modal is not working as expected.
+  // return element;
+
+  return (
+    <>
+      <Modal animationType={'fade'} transparent={false} visible={showModal}>
+        {element}
+      </Modal>
+      {!showModal && element}
+    </>
   );
+
+  // return showModal ? (
+  //   <Modal animationType={'fade'} transparent={false} visible={showModal}>
+  //     {element}
+  //   </Modal>
+  // ) : (
+  //   element
+  // );
 };
 
 const loadStyles = () => ({

@@ -24,10 +24,6 @@ export const useCreateTripStore = () => {
   );
 
   const setDateRange = (dateRange) => {
-    if (!dateRange?.start_date || !dateRange?.end_date) {
-      return;
-    }
-
     dispatch(setDateRangeAction(dateRange));
   };
 

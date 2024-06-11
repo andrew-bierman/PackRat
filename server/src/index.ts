@@ -8,6 +8,7 @@ import { compress } from 'hono/compress';
 import router from './routes';
 
 interface Bindings {
+  [key: string]: any;
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
@@ -59,4 +60,4 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
 // SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
 
-export default app; 
+export default app;

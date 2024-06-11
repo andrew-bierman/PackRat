@@ -1,52 +1,58 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import {
-  RButton,
   RText,
-  RLabel,
   Form,
-  FormSelect,
+  FormSelect as OriginalFormSelect,
   FormInput,
   SubmitButton,
+  useModal,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack } from 'app/hooks/packs';
+import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 
-export const AddPack = ({ isCreatingTrip = false }) => {
+const FormSelect: any = OriginalFormSelect;
+
+export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [_, setPackIdParam] = usePackId();
 
   const {
-    addNewPack,
-    isSuccess,
+    addNewPackAsync,
     isError,
-    response,
-    error,
     isLoading,
-    name,
     setIsPublic,
-    isPublic,
-    setName,
     packSelectOptions,
   } = useAddNewPack();
 
-  // routing
-  if (isSuccess && !isCreatingTrip && response) {
-    router.push(`/pack/${response.id}`);
-  }
   /**
    * Handles the addition of a pack.
    * @return {void}
    */
-  const handleAddPack = (data) => {
-    addNewPack(data);
+  const handleAddPack = async (data) => {
+    try {
+      const response = await addNewPackAsync(data);
+
+      onSuccess?.();
+
+      if (!response?.id) {
+        return;
+      }
+      if (!isCreatingTrip) {
+        router.push(`/pack/${response.id}`);
+        return;
+      }
+
+      setPackIdParam(response.id);
+    } catch {}
   };
 
   const handleonValueChange = (itemValue) => {
@@ -64,22 +70,17 @@ export const AddPack = ({ isCreatingTrip = false }) => {
             placeholder="Name"
             name="name"
             label="Name"
-            style={{ width: '100%', textAlign: 'left' }}
+            style={{ textAlign: 'left', width: 200 }}
           />
-          <RLabel>Is Public:</RLabel>
           <FormSelect
             onValueChange={handleonValueChange}
             options={packSelectOptions}
             name="isPublic"
-            style={{ width: '300px' }}
-            width="300px"
+            label="Is Public"
             accessibilityLabel="Choose Service"
             placeholder={'Is Public'}
           />
-          <SubmitButton
-            style={{ width: '100%', marginTop: 40 }}
-            onSubmit={handleAddPack}
-          >
+          <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
@@ -95,8 +96,18 @@ export const AddPack = ({ isCreatingTrip = false }) => {
 export const AddPackContainer = ({ isCreatingTrip }) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
-      <AddPack isCreatingTrip={isCreatingTrip} />
+      <PackModalContent isCreatingTrip={isCreatingTrip} />
     </BaseModal>
+  );
+};
+
+const PackModalContent = ({ isCreatingTrip }: { isCreatingTrip?: boolean }) => {
+  const { setIsModalOpen } = useModal();
+  return (
+    <AddPack
+      isCreatingTrip={isCreatingTrip}
+      onSuccess={() => setIsModalOpen(false)}
+    />
   );
 };
 
@@ -104,6 +115,7 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
+      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -117,12 +129,12 @@ const loadStyles = (theme, appTheme) => {
         : currentTheme.colors.white,
     },
     desktopStyle: {
+      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       paddingVertical: 25,
       gap: 5,
-      flex: 1,
     },
 
     mobileStyle: {
@@ -145,13 +157,9 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      backgroundColor: currentTheme.colors.cardIconColor,
-      paddingHorizontal: 25,
-      paddingVertical: 15,
-      textAlign: 'center',
-      alignItems: 'center',
-      color: appTheme.colors.text,
-      width: '50%',
+      width: Platform.OS === 'web' ? '200px' : '65%',
+      marginTop: 40,
+      marginBottom: 20,
     },
   };
 };

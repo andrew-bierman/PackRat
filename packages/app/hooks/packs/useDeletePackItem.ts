@@ -26,8 +26,6 @@ export const useDeletePackItem = () => {
       // };
     },
     onError: (err, deleteItem, context) => {
-      console.log('Error');
-      console.log(err);
       // if (context.previousPack) {
       //   utils.getPackById.setData(
       //     { packId: deleteItem.packId },

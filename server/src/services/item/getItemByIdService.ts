@@ -8,7 +8,7 @@ import { Item } from '../../drizzle/methods/Item';
  * @param {string} id - The ID of the item to retrieve.
  * @return {Promise<Object>} The retrieved item.
  */
-export const getItemByIdService = async (id: string): Promise<object> => {
+export const getItemByIdService = async (id: string) => {
   const itemClass = new Item();
   const item = await itemClass.findItem({ id });
   return item;

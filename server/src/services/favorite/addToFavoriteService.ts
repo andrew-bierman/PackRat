@@ -10,13 +10,13 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
  * @param {string} userId - The ID of the user.
  * @return {Promise<void>} A promise that resolves when the operation is complete.
  */
-export const addToFavoriteService = async (
-  packId: string,
-  userId: string,
-): Promise<object> => {
+export const addToFavoriteService = async (packId: string, userId: string) => {
   const userClass = new User();
   const userFavoritePacksClass = new UserFavoritePacks();
-  const user = await userClass.findUser({ userId, includeFavorites: true });
+  const user = (await userClass.findUser({
+    userId,
+    includeFavorites: true,
+  })) as { userFavoritePacks?: any };
   const packExists = user.userFavoritePacks?.find(
     (pack: any) => pack.packId === packId,
   );

@@ -7,12 +7,18 @@ import { Pack } from '../../drizzle/methods/pack';
  * @param {string} userId - The ID of the user.
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
-export const getUserFavoritesService = async (
-  userId: string,
-): Promise<object[]> => {
+export const getUserFavoritesService = async (userId: string) => {
   const userClass = new User();
   const packClass = new Pack();
-  const user = await userClass.findUser({ userId, includeFavorites: true });
+  const user = (await userClass.findUser({
+    userId,
+    includeFavorites: true,
+  })) as { userFavoritePacks?: any };
+
+  if (!user) {
+    throw new Error(`User with id ${userId} not found`);
+  }
+
   const userFavorites = user.userFavoritePacks?.map((item) => ({
     ...item.pack,
     scores: JSON.parse(item.pack.scores as string),

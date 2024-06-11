@@ -19,12 +19,13 @@ export const useNativeMap = ({ shape: shapeProp }) => {
     longitude: 0.0,
     latitude: 0.0,
   });
-  const [getLocationLoading, setGetLocationLoading] = useState(false);
-  const [correctLocation, setCorrectLocation] = useState(false);
+  // const [getLocationLoading, setGetLocationLoading] = useState(false);
+  // const [correctLocation, setCorrectLocation] = useState(false);
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
-  const [mapStyle, setMapStyle] = useState(mapboxStyles[0].style);
+  const [mapStyle, setMapStyle] = useState(mapboxStyles[0]?.style ?? '');
+
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
   const [shape, setShape] = useState(shapeProp);
   const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
@@ -45,10 +46,13 @@ export const useNativeMap = ({ shape: shapeProp }) => {
   // consts
   let bounds = getShapeSourceBounds(shape);
   // console.log("🚀 ~ file: NativeMap.native.js:99 ~ NativeMap ~ bounds:", bounds)
-  bounds = bounds[0].concat(bounds[1]);
+  if (bounds[0] && bounds[1]) {
+    bounds = [bounds[0], bounds[1]];
+  }
+
   const zoomLevel = calculateZoomLevel(bounds, { width: dw, height: 360 });
-  // console.log("trailCenterPoint", trailCenterPoint);
-  // console.log("zoomLevel", zoomLevel);
+  //
+  //
 
   // effects
   useEffect(() => {
@@ -76,11 +80,11 @@ export const useNativeMap = ({ shape: shapeProp }) => {
           longitude: Number(data.coords.longitude),
           latitude: Number(data.coords.latitude),
         });
-        setCorrectLocation(true);
+        // setCorrectLocation(true);
         onSucccess?.(location);
       },
       (error) => {
-        setCorrectLocation(false);
+        // setCorrectLocation(false);
         Alert.alert('Something went wrong with location', error.message);
       },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 },
@@ -93,7 +97,6 @@ export const useNativeMap = ({ shape: shapeProp }) => {
    * @param {Event} event - The press event object.
    */
   function onMapPress(event) {
-    console.log(event, 'eventtt');
     // if (trailCenterPoint) {
     //   mapViewFullScreenRef?.current.setCamera({
     //     centerCoordinate: trailCenterPoint,
@@ -109,7 +112,6 @@ export const useNativeMap = ({ shape: shapeProp }) => {
    * @returns {void}
    */
   function onDownloadProgress(offlineRegion, offlineRegionStatus) {
-    console.log('control there', offlineRegionStatus?.percentage);
     setProgress(offlineRegionStatus.percentage);
     setDownloading(true);
     if (offlineRegionStatus.percentage == 100) {

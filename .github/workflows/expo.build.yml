@@ -6,49 +6,73 @@ on:
   pull_request:
     branches: [ "**" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env: # Define a shared environment variable for android and ios build.
+  MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+  EXPO_PUBLIC_CLIENT_URL: ${{ secrets.EXPO_PUBLIC_CLIENT_URL }}
+  EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+  EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN: ${{ secrets.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN }}
+
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20' # Use the version you prefer
+      - name: Setup Standard Environment
+        uses: ./.github/actions/setup-standard-environment
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v8
-      with:
-        eas-version: latest
-        token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
 
-    - name: Install dependencies
-      uses: ./.github/actions/install-deps
+      - name: Run Local Build for Android
+        working-directory: ./apps/expo
+        run: |
+          eas build --profile preview --platform android --local --non-interactive
+        env:
+          EXPO_PUBLIC_ANDROID_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_ANDROID_CLIENT_ID }}
 
-    # - name: 🚀 Build app
-    #   working-directory: ./client
-    #   run: eas build --non-interactive --platform all --local
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
 
-#    - name: Install dependencies
-#      working-directory: ./client
-#      run: yarn install
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#    - name: Install EAS CLI
-#      run: yarn global add eas-cli
+      - name: Setup Standard Environment
+        uses: ./.github/actions/setup-standard-environment
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
 
-#    - name: Configure build
-#      working-directory: ./client
-#      run: npx eas build:configure
+      # - name: Setup Xcode
+      #   uses: maxim-lobanov/setup-xcode@v1
+      #   with:
+      #     xcode-version: latest-stable
 
-    # If you need additional setup or configurations, add them here
+      - name: Run Local Build for iOS
+        working-directory: ./apps/expo
+        run: |
+          export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+          eas build --profile preview --platform ios --local --non-interactive
+        env:
+          EXPO_PUBLIC_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_IOS_CLIENT_ID }}
 
-    - name: Run Local Build for Android
-      working-directory: ./apps/expo
-      run: eas build --non-interactive --platform android --local
-
-    - name: Run Local Build for iOS
-      working-directory: ./apps/expo
-      run: eas build --non-interactive --platform ios --local
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-ipa
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.ipa

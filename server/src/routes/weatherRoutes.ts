@@ -1,5 +1,8 @@
 import { Hono } from 'hono';
-import { getWeatherWeek, getWeather } from '../controllers/weather/index';
+import {
+  getWeatherWeekRoute as getWeatherWeek,
+  getWeatherRoute as getWeather,
+} from '../controllers/weather/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = new Hono();

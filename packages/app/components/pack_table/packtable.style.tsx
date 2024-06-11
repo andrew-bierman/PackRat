@@ -1,9 +1,8 @@
-import { color } from '@tamagui/themes/types/tokens';
-import { FlatList, Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  console.log('currentTheme', currentTheme);
+
   return {
     container: {
       flex: 1,
@@ -50,7 +49,7 @@ const loadStyles = (theme) => {
         currentTheme.colors.background === '#1A1A1D'
           ? currentTheme.colors.text
           : 'black',
-      fontSize: Platform.OS === 'web' ? 12 : 8,
+      fontSize: Platform.OS === 'web' ? 14 : 12,
     },
     row: {
       flexDirection: 'row',

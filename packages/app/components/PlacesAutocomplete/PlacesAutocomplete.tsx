@@ -1,13 +1,21 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { TextInput } from 'react-native';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { type TextInput } from 'react-native';
 import { SearchInput } from '../SearchInput';
-import { RStack, RText } from '@packrat/ui';
+import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 
 import { usePlacesAutoComplete } from './usePlacesAutoComplete';
 
-export const PlacesAutocomplete = forwardRef<any>(
-  ({ onSelect, placeholder }, ref) => {
+const RStack: any = OriginalRStack;
+const RText: any = OriginalRText;
+
+interface PlacesAutocompleteProps {
+  onSelect?: (geoJSON: any) => void;
+  placeholder?: string;
+}
+
+export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
+  function PlacesAutoComplete({ onSelect, placeholder }, ref) {
     const { data, handleSelect, search, setSearch } =
       usePlacesAutoComplete(onSelect);
     const inputRef = useRef<TextInput>();
@@ -35,7 +43,7 @@ export const PlacesAutocomplete = forwardRef<any>(
   },
 );
 
-const PlaceItem = ({ item }) => {
+const PlaceItem = ({ item }: any) => {
   const { currentTheme } = useTheme();
   return (
     <RStack style={{ flexDirection: 'row' }}>

@@ -1,9 +1,14 @@
 name: android-preview-build-local
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 
 jobs:
   update:
@@ -14,8 +19,6 @@ jobs:
       pull-requests: write
     steps:
       - name: Check for EXPO_TOKEN
-        env:
-          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
         run: |
           if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
             echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
@@ -43,9 +46,11 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup environment variables
+      - name: Export secrets as environment variables
+        env:
+          JSON_SECRETS: '${{ toJSON(secrets) }}'
         run: |
-          echo "MAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN" >> $GITHUB_ENV
+          eval "$(jq -r 'to_entries | map("export \(.key)=\(.value|tostring)") | .[]' <<< "$JSON_SECRETS")"
 
       - name: Install dependencies
         uses: ./.github/actions/install-deps
@@ -63,23 +68,71 @@ jobs:
           export MAPBOX_DOWNLOADS_TOKEN=${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
           eas build --platform android --profile preview --local
           apk_path=$(find . -name '*.apk')
+          echo "APK Path: ${apk_path}"
           echo "apk_path=${apk_path}" >> $GITHUB_ENV
-          echo "::set-output name=apk_path::${apk_path}"
         working-directory: apps/expo
         env:
-          DEBUG: "true"
-        # continue-on-error: true
+          DEBUG: 'true'
+        continue-on-error: true
 
-      # - name: Upload APK
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: android-apk
-      #     path: ${{ steps.build.outputs.apk_path }}
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
 
-      # - name: Create Commit Comment
-      #   if: github.event_name == 'push'
-      #   uses: peter-evans/commit-comment@v2
-      #   with:
-      #     body: |
-      #       Android APK build ${{ steps.build.outcome == 'success' && 'completed' || 'failed' }}!
-      #       ${{ steps.build.outcome == 'success' && format('You can download the APK file from the following link:\nhttps://github.com/{0}/actions/runs/{1}#artifacts', github.repository, github.run_id) || 'Please check the workflow logs for more details on the build failure.' }}
+      - name: Find or create comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        id: find_or_create_comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const existingComment = comments.data.find(comment => comment.body.startsWith(commentIdentifier));
+
+            if (existingComment) {
+              core.setOutput('comment_id', existingComment.id);
+            } else {
+              const commentBody = `${commentIdentifier}\n🚀 Android APK build started... Please wait for the results! 🕐`;
+              const { data: { id: commentId } } = await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+              core.setOutput('comment_id', commentId);
+            }
+
+      - name: Update PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const commentIdentifier = '<!-- build_results -->';
+            const commentId = '${{ steps.find_or_create_comment.outputs.comment_id }}';
+            const buildOutcome = '${{ steps.build.outcome }}';
+            const buildStatus = buildOutcome == 'success' ? 'completed' : 'failed';
+            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            let commentBody = `${commentIdentifier}\nAndroid APK build ${buildStatus}!`;
+
+            if (buildOutcome == 'success') {
+              commentBody += `\nYou can download the APK file from the following link:\n${workflowUrl}#artifacts`;
+            } else {
+              commentBody += '\nPlease check the workflow logs for more details on the build failure.';
+            }
+
+            await github.rest.issues.updateComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              body: commentBody
+            });

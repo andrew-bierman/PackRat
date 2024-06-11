@@ -19,7 +19,7 @@ const enableMillionJS = true;
 const plugins = [
   withTamagui({
     config: '../../packages/ui/src/tamagui.config.ts',
-    components: ['tamagui', '@tamagui-extras/form'],
+    components: ['tamagui'],
     importsWhitelist: ['constants.js', 'colors.js'],
     outputCSS:
       process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
@@ -71,6 +71,7 @@ const nextConfig = function () {
       'expo-font',
       'expo-asset',
       'expo-constants',
+      'expo-clipboard',
       'expo-file-system',
       'expo-linking',
       'expo-permissions',

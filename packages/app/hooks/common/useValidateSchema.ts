@@ -17,11 +17,10 @@ export const useValidateSchema = (
             typeof formatBeforeValidate === 'function'
               ? formatBeforeValidate(values)
               : values;
-          console.log({ finalValues });
+
           await ValidationSchema.parseAsync(finalValues);
           setIsValid(true);
         } catch (e) {
-          console.log({ e });
           setIsValid(false);
         } finally {
           setIsValidating(false);

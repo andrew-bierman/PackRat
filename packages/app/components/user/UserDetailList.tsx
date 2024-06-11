@@ -1,11 +1,12 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { ScrollView, View, FlatList, Platform } from 'react-native';
-import Fuse from 'fuse.js';
+import { View, FlatList, Platform } from 'react-native';
 import Card from '../../components/feed/FeedCard';
 import SearchFilter from '../../components/feed/FeedSearchFilter';
 import { fuseSearch } from '../../utils/fuseSearch';
-import { BaseDialog, BaseModal } from '@packrat/ui';
+import { BaseDialog as OriginalBaseDialog, BaseModal } from '@packrat/ui';
 // import BottomSheet from '@gorhom/bottom-sheet';
+
+const BaseDialog: any = OriginalBaseDialog;
 
 interface DataItem {
   _id: string;
@@ -53,7 +54,7 @@ const DataList = ({ data }: DataListProps) => {
           ]}
           footerComponent={undefined}
         >
-          <View style={{ width: 'auto%', paddingBottom: 10 }}>
+          <View style={{ width: 'auto%', paddingBottom: 10 } as any}>
             <SearchFilter
               isSortHidden={true}
               value={searchQuery}
@@ -74,37 +75,39 @@ const DataList = ({ data }: DataListProps) => {
           </View>
         </BaseModal>
       ) : (
-        <BaseDialog
-          title="See all"
-          trigger="See all"
-          footerButtons={[
-            {
-              label: 'Cancel',
-              color: '#B22222',
-              onClick: (_, closeModal) => closeModal(),
-            },
-          ]}
-          footerComponent={undefined}
-        >
-          <SearchFilter
-            isSortHidden={true}
-            value={searchQuery}
-            onChange={() => {
-              setSearchQuery;
-            }}
-          />
+        <View style={{ marginLeft: 20 }}>
+          <BaseDialog
+            title="See all"
+            trigger="See all"
+            footerButtons={[
+              {
+                label: 'Cancel',
+                color: '#B22222',
+                onClick: (_, closeModal) => closeModal(),
+              },
+            ]}
+            footerComponent={undefined}
+          >
+            <SearchFilter
+              isSortHidden={true}
+              value={searchQuery}
+              onChange={() => {
+                setSearchQuery;
+              }}
+            />
 
-          <FlatList
-            data={filteredData}
-            horizontal={false}
-            keyExtractor={(item) => item?._id + item?.type}
-            renderItem={({ item }) => (
-              <Card key={item?._id} type={item?.type} {...item} />
-            )}
-            showsVerticalScrollIndicator={false}
-            maxToRenderPerBatch={2}
-          />
-        </BaseDialog>
+            <FlatList
+              data={filteredData}
+              horizontal={false}
+              keyExtractor={(item) => item?._id + item?.type}
+              renderItem={({ item }) => (
+                <Card key={item?._id} type={item?.type} {...item} />
+              )}
+              showsVerticalScrollIndicator={false}
+              maxToRenderPerBatch={2}
+            />
+          </BaseDialog>
+        </View>
       )}
     </>
   );

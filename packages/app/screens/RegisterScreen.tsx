@@ -1,27 +1,22 @@
-import { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
-  RButton,
-  RText,
+  RText as OriginalRText,
   RIconButton,
-  InputText,
-  InputTextRules,
   RScrollView,
   Form,
   FormInput,
   SubmitButton,
+  RLink,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'app/hooks/router';
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { Link } from '@packrat/crosspath';
 import useTheme from '../hooks/useTheme';
-import { useForm } from 'react-hook-form';
-import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
+
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
 
 export default function Register() {
   const { currentTheme } = useTheme();
@@ -29,7 +24,7 @@ export default function Register() {
   const { promptAsync } = useGoogleAuth();
 
   return (
-    <RScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+    <RScrollView contentContainerStyle={{ paddingBottom: 20 } as any}>
       <View
         style={{
           width: '100%',
@@ -98,7 +93,7 @@ export default function Register() {
                 <RText fontSize={14} color="grey">
                   Already a User?
                 </RText>
-                <Link href="/sign-in">
+                <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
                   <RText
                     style={{
                       color: '#818cf8',
@@ -108,7 +103,7 @@ export default function Register() {
                   >
                     Login Here
                   </RText>
-                </Link>
+                </RLink>
               </RStack>
               {/* Google register */}
               <RStack

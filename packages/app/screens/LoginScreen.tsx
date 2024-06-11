@@ -1,22 +1,27 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
-  RButton,
-  RText,
+  RButton as OriginalRButton,
+  RText as OriginalRText,
   RIconButton,
   RScrollView,
-  Form,
+  Form as OriginalForm,
   FormInput,
   SubmitButton,
+  RLink,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { NODE_ENV } from '@env';
-import { Link } from '@packrat/crosspath';
+import { NODE_ENV } from '@packrat/config';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
+
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
+const Form: any = OriginalForm;
+const RButton: any = OriginalRButton;
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -99,7 +104,7 @@ export default function Login() {
               <RText fontSize={14} color="grey">
                 I'm a new user.
               </RText>
-              <Link href="/register">
+              <RLink href="/register">
                 <RText
                   style={{
                     color: '#818cf8',
@@ -109,11 +114,11 @@ export default function Login() {
                 >
                   Sign Up
                 </RText>
-              </Link>
+              </RLink>
             </RStack>
 
             <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <Link href="/password-reset">
+              <RLink href="/password-reset">
                 <RText
                   style={{
                     color: '#818cf8',
@@ -123,7 +128,7 @@ export default function Login() {
                 >
                   Reset Password?
                 </RText>
-              </Link>
+              </RLink>
             </RStack>
             {/* Google Login starts */}
             <RStack

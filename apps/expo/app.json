@@ -8,9 +8,9 @@
     "userInterfaceStyle": "automatic",
     "scheme": "packrat",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/packrat.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#0284c7",
       "scheme": "myapp"
     },
     "assetBundlePatterns": ["**/*"],
@@ -47,12 +47,12 @@
         "expo-build-properties",
         {
           "android": {
-            "compileSdkVersion": 31,
-            "targetSdkVersion": 31,
-            "buildToolsVersion": "31.0.0"
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "13.0"
+            "deploymentTarget": "13.4"
           }
         }
       ]

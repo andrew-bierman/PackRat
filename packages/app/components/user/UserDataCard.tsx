@@ -1,12 +1,18 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
-import { RH2, RText, RStack, RSwitch } from '@packrat/ui';
-import { Link } from '@packrat/crosspath';
+import {
+  RH2,
+  RText as OriginalRText,
+  RStack,
+  RSwitch,
+  RLink,
+} from '@packrat/ui';
 import { truncateString } from '../../utils/truncateString';
-import { useEffect } from 'react';
 import { useEditPack } from 'app/hooks/packs';
 import { Platform } from 'react-native';
+
+const RText: any = OriginalRText;
 
 interface UserDataCardProps {
   type: 'pack' | 'trip';
@@ -23,6 +29,7 @@ interface UserDataCardProps {
   index: number;
   differentUser: boolean;
 }
+
 const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
@@ -83,29 +90,33 @@ const UserDataCard = ({
       }}
     >
       <View
-        style={{
-          minHeight: 150,
-          minWidth: Platform.OS === 'web' ? 250 : 225,
-          border: '1px solid gray',
-          borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
-          borderRadius: 8,
-          overflow: 'hidden',
-          backgroundColor: '#EBEBEB',
-        }}
+        style={
+          {
+            minHeight: 150,
+            minWidth: Platform.OS === 'web' ? 250 : 225,
+            border: '1px solid gray',
+            borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
+            borderRadius: 8,
+            overflow: 'hidden',
+            backgroundColor: '#EBEBEB',
+          } as any
+        }
       >
         <RStack style={{ padding: 16, gap: 16 }}>
           <RStack style={{ gap: 8 }}>
             <RH2>
               <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  gap: 10,
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                }}
+                style={
+                  {
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    gap: 10,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  } as any
+                }
               >
                 <RText style={{ fontSize: 16, color: 'black' }}>
                   {truncatedName}
@@ -196,11 +207,11 @@ const UserDataCard = ({
           </RStack>
         </RStack>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Link href={`/${type}/${id}`}>
+          <RLink href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
             <RText color="gray" fontWeight="bold">
               View Details
             </RText>
-          </Link>
+          </RLink>
         </View>
       </View>
     </View>

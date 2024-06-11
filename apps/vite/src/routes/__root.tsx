@@ -3,6 +3,7 @@ import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Navbar } from 'app/components/navigation';
 import { Provider } from 'app/provider';
+import { NODE_ENV } from '@packrat/config';
 
 export const Route = createRootRoute({
   component: () => (
@@ -11,7 +12,7 @@ export const Route = createRootRoute({
       <MainContentWeb>
         <Outlet />
       </MainContentWeb>
-      <TanStackRouterDevtools />
+      {NODE_ENV === 'development' && <TanStackRouterDevtools />}
     </Provider>
   ),
 });

@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
 import {
-  getTemplates,
-  getTemplateById,
-  addTemplate,
-  editTemplate,
-  deleteTemplate,
+  getTemplatesRoute as getTemplates,
+  getTemplateByIdRoute as getTemplateById,
+  addTemplateRoute as addTemplate,
+  editTemplateRoute as editTemplate,
+  deleteTemplateRoute as deleteTemplate,
 } from '../controllers/template/index';
 import { isAdmin } from '../middleware/isAdmin'; // Assuming this is your middleware file
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -45,8 +45,8 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getTemplates),
 );
 
@@ -73,8 +73,8 @@ router.get(
  */
 router.get(
   '/:templateId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getTemplateById),
 );
 
@@ -109,9 +109,9 @@ router.get(
  */
 router.post(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  isAdmin,
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
+  isAdmin as any,
   tryCatchWrapper(addTemplate),
 );
 
@@ -149,9 +149,9 @@ router.post(
  */
 router.put(
   '/:templateId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  isAdmin,
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
+  isAdmin as any,
   tryCatchWrapper(editTemplate),
 );
 
@@ -178,9 +178,9 @@ router.put(
  */
 router.delete(
   '/:templateId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  isAdmin,
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
+  isAdmin as any,
   tryCatchWrapper(deleteTemplate),
 );
 

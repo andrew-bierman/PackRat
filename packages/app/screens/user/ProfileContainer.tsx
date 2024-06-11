@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Platform, View } from 'react-native';
-import { RIconButton, RStack, RText, RSkeleton } from '@packrat/ui';
+import {
+  RIconButton,
+  RStack,
+  RText as OriginalRText,
+  RSkeleton,
+} from '@packrat/ui';
 import { ScrollView } from 'react-native-gesture-handler';
 import UserDataContainer from '../../components/user/UserDataContainer';
 import useTheme from '../../hooks/useTheme';
@@ -10,6 +15,9 @@ import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Avatar from '../../components/Avatar/Avatar';
 import { useProfile } from 'app/hooks/user';
+import Layout from 'app/components/layout/Layout';
+
+const RText: any = OriginalRText;
 
 const SettingsButton = () => {
   const router = useRouter();
@@ -56,89 +64,93 @@ const Header = ({
     : `@${userEmailSplitFirstHalf}`;
 
   return (
-    <View style={{ width: '90%', ...styles.infoSection }}>
-      <RStack
-        style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
-      >
-        {isCurrentUser && !isLoading && (
-          <View style={{ alignSelf: 'flex-start', marginLeft: 'auto' }}>
-            <SettingsButton />
-          </View>
-        )}
-        <RStack style={{ alignItems: 'center', flex: 1 }}>
-          <View style={styles.userInfo}>
-            {isLoading ? (
-              <>
-                <RSkeleton
-                  style={{
-                    borderRadius: 100,
-                    height: 100,
-                    width: 100,
-                  }}
-                />
-                <RSkeleton
-                  style={{
-                    height: 100,
-                    width: '100%',
-                    marginTop: 8,
-                    alignItems: 'center',
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <Avatar src={user?.profileImage} />
-                <RText style={{ marginTop: 16, ...styles.userName }}>
-                  {userRealName}
-                </RText>
-                <RText style={styles.userEmail}>{username}</RText>
-              </>
-            )}
-          </View>
+    <Layout>
+      <View style={{ width: '90%', ...styles.infoSection }}>
+        <RStack
+          style={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
+        >
+          {isCurrentUser && !isLoading && (
+            <View style={{ alignSelf: 'flex-start', marginLeft: 'auto' }}>
+              <SettingsButton />
+            </View>
+          )}
+          <RStack style={{ alignItems: 'center', flex: 1 }}>
+            <View style={styles.userInfo}>
+              {isLoading ? (
+                <>
+                  <RSkeleton
+                    style={{
+                      borderRadius: 100,
+                      height: 100,
+                      width: 100,
+                    }}
+                  />
+                  <RSkeleton
+                    style={{
+                      height: 100,
+                      width: '100%',
+                      marginTop: 8,
+                      alignItems: 'center',
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Avatar src={user?.profileImage} />
+                  <RText style={{ marginTop: 16, ...styles.userName }}>
+                    {userRealName}
+                  </RText>
+                  <RText style={styles.userEmail}>{username}</RText>
+                </>
+              )}
+            </View>
+          </RStack>
+          {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}
         </RStack>
-        {isCurrentUser && !isLoading && <View style={{ width: 45 }} />}
-      </RStack>
-      <RStack style={{ flexDirection: 'row', ...styles.card }}>
-        {isLoading ? (
-          <>
-            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
-            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
-            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
-            <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
-          </>
-        ) : (
-          <>
-            <View style={styles.cardInfo}>
-              <RText>Trips</RText>
-              <RText>{tripsCount}</RText>
-            </View>
-            <View style={styles.cardInfo}>
-              <RText color={currentTheme.colors.textColor}>Packs</RText>
-              <RText color={currentTheme.colors.textColor}>{packsCount}</RText>
-            </View>
-            <View style={styles.cardInfo}>
-              <RText color={currentTheme.colors.textColor}>Favorites</RText>
-              <RText color={currentTheme.colors.textColor}>
-                {favoritesCount}
-              </RText>
-            </View>
-            <View style={styles.cardInfo}>
-              <RText color={currentTheme.colors.textColor}>Certified</RText>
-              <MaterialCommunityIcons
-                name="certificate-outline"
-                size={24}
-                color={
-                  user?.is_certified_guide
-                    ? currentTheme.colors.cardIconColor
-                    : currentTheme.colors.textColor
-                }
-              />
-            </View>
-          </>
-        )}
-      </RStack>
-      {error ? <RText>{error}</RText> : null}
-    </View>
+        <RStack style={{ flexDirection: 'row', ...styles.card }}>
+          {isLoading ? (
+            <>
+              <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+              <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+              <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+              <RSkeleton style={{ borderRadius: 100, width: 50, height: 50 }} />
+            </>
+          ) : (
+            <>
+              <View style={styles.cardInfo}>
+                <RText>Trips</RText>
+                <RText>{tripsCount}</RText>
+              </View>
+              <View style={styles.cardInfo}>
+                <RText color={currentTheme.colors.textColor}>Packs</RText>
+                <RText color={currentTheme.colors.textColor}>
+                  {packsCount}
+                </RText>
+              </View>
+              <View style={styles.cardInfo}>
+                <RText color={currentTheme.colors.textColor}>Favorites</RText>
+                <RText color={currentTheme.colors.textColor}>
+                  {favoritesCount}
+                </RText>
+              </View>
+              <View style={styles.cardInfo}>
+                <RText color={currentTheme.colors.textColor}>Certified</RText>
+                <MaterialCommunityIcons
+                  name="certificate-outline"
+                  size={24}
+                  color={
+                    user?.is_certified_guide
+                      ? currentTheme.colors.cardIconColor
+                      : currentTheme.colors.textColor
+                  }
+                />
+              </View>
+            </>
+          )}
+        </RStack>
+        {error ? <RText>{error}</RText> : null}
+      </View>
+    </Layout>
   );
 };
 
@@ -152,7 +164,15 @@ const SkeletonUserDataCard = () => {
         padding: 10,
         margin: 5,
         width: '90%',
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+        // boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 1,
       }}
     >
       <RSkeleton style={{ marginBottom: 8, height: 50, width: '70%' }} />
@@ -206,7 +226,7 @@ export default function ProfileContainer({ id = null }) {
                   type="packs"
                   userId={user?.id}
                   isLoading={isLoading}
-                  SkeletonComponent={SkeletonUserDataCard}
+                  SkeletonComponent={<SkeletonUserDataCard />}
                 />
               )}
             </View>
@@ -266,6 +286,7 @@ const loadStyles = (theme) => {
     },
     infoSection: {
       flexDirection: 'column',
+      alignSelf: 'center',
       backgroundColor: currentTheme.colors.white,
       alignItems: 'center',
       borderRadius: 12,

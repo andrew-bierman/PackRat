@@ -20,35 +20,33 @@ export const Navbar = () => {
   }, [isScrolled, currentTheme, screenWidth]);
 
   return (
-    <>
-      <SafeAreaView style={styles.safeArea}>
-        <Container>
-          <View style={styles.container}>
-            <View style={styles.logoContainer}>
-              <RImage
-                source={{
-                  // TODO: Update this to use the PackRat logo from the assets folder
-                  uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
-                  width: 40,
-                  height: 40,
-                }}
-                width={40}
-                height={40}
-                style={styles.logo}
-                alt="PackRat Logo"
-              />
-              <Text style={styles.logoText}>PackRat</Text>
-            </View>
-            <Drawer />
+    <SafeAreaView style={styles.safeArea}>
+      <Container>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <RImage
+              source={{
+                // TODO: Update this to use the PackRat logo from the assets folder
+                uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
+                width: 40,
+                height: 40,
+              }}
+              width={40}
+              height={40}
+              style={styles.logo}
+              alt="PackRat Logo"
+            />
+            <Text style={styles.logoText}>PackRat</Text>
           </View>
-        </Container>
-      </SafeAreaView>
-    </>
+          <Drawer />
+        </View>
+      </Container>
+    </SafeAreaView>
   );
 };
 
 const NavbarStyles = {
-  floatingBg: 'rgba(52,168,154, 0.7)',
+  floatingBg: '#0284c7',
   floatingRadius: 25,
   floatingBlur: 'blur(2px)',
   transition: 'all 0.2s ease-in-out',
@@ -69,7 +67,6 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     safeArea: {
       backgroundColor,
       width: '100%',
-      maxWidth: 1140,
       margin: 'auto',
       transition: NavbarStyles.transition,
       ...(isFloating
@@ -84,14 +81,13 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
         ? {
             position: 'fixed',
             top: 0,
-            left: screenWidth <= 1140 ? 0 : 'calc(50% - 570px)',
             zIndex: 100,
             width: '100vw',
           }
         : {}),
     },
     container: {
-      width: '100%',
+      width: '100vw',
       maxWidth: '100%', // Ensure container does not exceed the viewport width
       flex: 1, // Ensure container can grow to fit content
       backgroundColor,

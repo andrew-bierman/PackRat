@@ -1,5 +1,5 @@
 import React from 'react';
-import { RStack, RText, RButton } from '@packrat/ui';
+import { RStack, RText as OriginalRText, RButton } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import LargeCard from '../card/LargeCard';
@@ -12,10 +12,13 @@ import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+const RText: any = OriginalRText;
 
 interface HeroSectionProps {
-  onSelect: (selectedResult: SearchResult) => void;
+  onSelect?: (selectedResult: SearchResult) => void;
+  style?: any;
 }
 
 interface SearchResult {
@@ -71,6 +74,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
+  const { screenWidth } = useScreenWidth();
+
   return (
     <View style={styles.banner}>
       <Hero
@@ -90,8 +95,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            height: '100%',
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '30vw',
+            height: '30vh',
             padding: 50,
           }}
           title={''}
@@ -99,8 +104,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         >
           <RStack
             style={{
-              width: '100%',
-              height: '100%',
+              width: screenWidth <= SCREEN_WIDTH ? '55vw' : '25vw',
+              height: '20vh',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -148,9 +153,11 @@ const loadStyles = (theme: any) => {
       backgroundSize: 'cover',
       marginBottom: 20,
       marginTop: 20,
+      display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '100%',
+      position: 'relative',
+      zIndex: 1,
     },
     title: {
       fontSize: 24,

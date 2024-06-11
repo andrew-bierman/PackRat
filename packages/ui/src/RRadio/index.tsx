@@ -1,4 +1,6 @@
-import { RadioGroup, Label, XStack } from 'tamagui';
+import { RadioGroup as OriginalRadioGroup, Label, XStack } from 'tamagui';
+
+const RadioGroup: any = OriginalRadioGroup;
 
 const RRadio = ({ value, data, onValueChange, ...props }) => {
   if (!data) return null;

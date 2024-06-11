@@ -6,7 +6,6 @@ import WeatherCard from '../../components/weather/WeatherCard';
 import { useState, useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
-import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useCreateTripForm } from 'app/hooks/trips/useCreateTripForm';
@@ -16,6 +15,8 @@ import {
   TripParkCard,
   TripSearchCard,
   TripTrailCard,
+  TripActivityCard,
+  TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 
 export default function Trips() {
@@ -37,11 +38,8 @@ export default function Trips() {
     filteredTrails,
   } = useTripsData();
 
-  const { isValid, setDateRange, togglePlace, tripStore } = useCreateTripForm(
-    weatherData,
-    currentDestination,
-    photonDetails,
-  );
+  const { isValid, setDateRange, togglePlace, tripStore, setTripValue } =
+    useCreateTripForm(weatherData, currentDestination, photonDetails);
 
   const dateRange = {
     start_date: tripStore.start_date,
@@ -65,16 +63,23 @@ export default function Trips() {
             )}
           <TripTrailCard
             data={filteredTrails || []}
-            onToggle={togglePlace}
-            selectedValue=""
+            onToggle={(trail) => togglePlace('trail', trail)}
+            selectedValue={tripStore.trail}
           />
           <TripParkCard
             data={parksData || []}
-            onToggle={togglePlace}
-            selectedValue=""
+            onToggle={(park) => togglePlace('park', park)}
+            selectedValue={tripStore.park}
           />
           <GearList />
-          <TripDateRange dateRange={dateRange} setDateRange={setDateRange} />
+          <TripActivityCard
+            selectedValue={tripStore.type}
+            onChange={(activity) => setTripValue('type', activity)}
+          />
+          <TripDateRangeCard
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+          />
           {!hasPhotonError && photonDetails ? (
             <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
           ) : null}

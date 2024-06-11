@@ -43,7 +43,7 @@ export function addTemplateRoute() {
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const userClass = new User();
-      const user = await userClass.findById(createdBy);
+      const user = await userClass.findUser({ userId: createdBy });
       if (!user) {
         throw new Error(UserNotFoundError.message);
       }

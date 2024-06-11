@@ -1,3 +1,4 @@
+import React from 'react';
 import { Provider } from 'jotai';
 
 export function JotaiProvider({ children }: { children: React.ReactNode }) {
