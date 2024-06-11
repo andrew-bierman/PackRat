@@ -5,6 +5,7 @@ import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 const RCard: any = OriginalRCard;
 
@@ -43,14 +44,16 @@ const loadStyles = (theme: any) => {
   return {
     container: {
       margin: 10,
-      width: screenWidth <= 425 ? '15vw':'10vw',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw':'10vw',
       height:'10vh',
+      display:'flex',
+      alignItems:'center',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= 425 ? '15vw':'10vw',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw':'10vw',
       height:'10vh',
       // paddingHorizontal: 40,
       // paddingVertical: 60,

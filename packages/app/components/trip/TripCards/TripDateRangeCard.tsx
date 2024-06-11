@@ -11,6 +11,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from 'app/hooks/useTheme';
 import { RStack, RText, Datepickers } from '@packrat/ui';
 import { TripCardBase } from './TripCardBase';
+import { View } from 'react-native';
 const { RangePicker } = Datepickers;
 
 export interface DateRange {
@@ -59,6 +60,7 @@ export const TripDateRangeCard = ({
       )}
       title="Trip Date Range"
     >
+      <View style={{ width: '50vw' }}>
       <RangePicker
         selectedDates={selectedDates}
         onDatesChange={onDatesChange}
@@ -67,6 +69,7 @@ export const TripDateRangeCard = ({
         open={open}
         setOpen={setOpen}
       />
+      </View>
     </TripCardBase>
   );
 };
