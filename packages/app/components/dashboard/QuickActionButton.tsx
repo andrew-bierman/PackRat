@@ -45,16 +45,15 @@ const loadStyles = (theme: any) => {
     container: {
       margin: 10,
       width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
-      height: '10vh',
       display: 'flex',
       alignItems: 'center',
+      padding: '20',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
-      height: '10vh',
       // paddingHorizontal: 40,
       // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
@@ -63,7 +62,8 @@ const loadStyles = (theme: any) => {
       marginBottom: 10,
     },
     text: {
-      fontSize: 12,
+      fontSize: 13,
+      fontWeight:'bold',
       color: currentTheme.colors.iconColor,
     },
   };

@@ -25,7 +25,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     feedItemTitle: {
       fontWeight: 'bold',
-      fontSize: 16,
+      fontSize: 17,
       color: currentTheme.colors.text,
       marginBottom: 5,
     },
