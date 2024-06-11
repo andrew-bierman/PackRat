@@ -187,28 +187,28 @@ const loadStyles = (theme) => {
       padding: 15,
       ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
     },
-    filterContainer: {
-      backgroundColor: currentTheme.colors.card,
-      padding: 15,
-      fontSize: 18,
-      width: '100%',
-      borderRadius: 10,
-      marginTop: 20,
-    },
-    searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 10,
-      padding: 10,
-      borderRadius: 5,
-    },
-    cardContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    },
+    // filterContainer: {
+    //   backgroundColor: currentTheme.colors.card,
+    //   padding: 15,
+    //   fontSize: 18,
+    //   width: '100%',
+    //   borderRadius: 10,
+    //   marginTop: 20,
+    // },
+    // searchContainer: {
+    //   flexDirection: 'row',
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+    //   marginBottom: 10,
+    //   padding: 10,
+    //   borderRadius: 5,
+    // },
+    // cardContainer: {
+    //   flexDirection: 'row',
+    //   flexWrap: 'wrap',
+    //   justifyContent: 'space-around',
+    //   alignItems: 'center',
+    // },
   };
 };
 

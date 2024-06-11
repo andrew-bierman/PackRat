@@ -3,8 +3,10 @@ import { TripCardBase } from './TripCardBase';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 
 import { FontAwesome } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
+import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 type TripSearchCardProps = {
   searchRef: any;
@@ -13,6 +15,7 @@ type TripSearchCardProps = {
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
   const { currentTheme } = useTheme();
   const [, setGEOLocation] = useGEOLocationSearch();
+  const {screenWidth} = useScreenWidth();
 
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
@@ -30,7 +33,9 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
+      <View style={{width:  screenWidth <= SCREEN_WIDTH ? '50vw' :'30vw'}}>
       <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      </View>
     </TripCardBase>
   );
 };
