@@ -55,8 +55,12 @@ export function BasicTable({
   setRefetch,
 }: BasicTableProps) {
   const ActionButtons = ({ item }) => {
-    const [activeModal, setActiveModal] = React.useState<ModalName | null>(null);
-    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
+    const [activeModal, setActiveModal] = React.useState<ModalName | null>(
+      null,
+    );
+    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(
+      null,
+    );
 
     const openModal = (modalName: ModalName, itemId: string) => {
       setActiveModal(modalName);
@@ -85,13 +89,20 @@ export function BasicTable({
           showTrigger={false}
         >
           {selectedItemId === item.id && (
-            <AddItem id={item.id} packId={item.id} isEdit={true} initialData={item} />
+            <AddItem
+              id={item.id}
+              packId={item.id}
+              isEdit={true}
+              initialData={item}
+            />
           )}
         </EditPackItemModal>
         <DeletePackItemModal
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
-          onConfirm={() => onDelete({ itemId: item.id, packId: currentPack.id })}
+          onConfirm={() =>
+            onDelete({ itemId: item.id, packId: currentPack.id })
+          }
         />
         {hasPermissions ? (
           Platform.OS === 'android' ||
@@ -119,7 +130,6 @@ export function BasicTable({
       </>
     );
   };
-
 
   const columnHelper = createColumnHelper<Item>();
   const columns = [
@@ -154,7 +164,7 @@ export function BasicTable({
   const CELL_WIDTH = '$18';
 
   const [activeModal, setActiveModal] = React.useState<string | null>(null);
-  
+
   // Flatten the grouped data into a single array of items
   const data = Object.values(groupedData).flat();
 
@@ -182,7 +192,13 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
         {tableData.map((row, i) => (
           <View
             key={i}
@@ -210,7 +226,11 @@ export function BasicTable({
                 );
               })}
               {hasPermissions && (
-                <View fd="row" justifyContent="space-between" alignItems="center">
+                <View
+                  fd="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
                   <Text>Action</Text>
                   <ActionButtons item={row} />
                 </View>
@@ -244,7 +264,12 @@ export function BasicTable({
               {headerGroup.headers.map((header) => (
                 <Table.HeaderCell key={header.id}>
                   <Text>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
@@ -264,7 +289,6 @@ export function BasicTable({
             </Table.Row>
           ))}
         </Table.Body>
-        
       </Table>
     </View>
   );

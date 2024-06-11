@@ -20,7 +20,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
 
@@ -83,14 +83,16 @@ export default function PackContainer({ isCreatingTrip = false }) {
             isAddItemModalOpen={isAddItemModalOpen}
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
-          <View style={{ width:screenWidth <= SCREEN_WIDTH ? '70vw' : '60vw'}}>
-          <TableContainer
-            key={`table - ${currentPackId}`}
-            currentPack={currentPack}
-            selectedPack={currentPackId}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
+          <View
+            style={{ width: screenWidth <= SCREEN_WIDTH ? '70vw' : '60vw' }}
+          >
+            <TableContainer
+              key={`table - ${currentPackId}`}
+              currentPack={currentPack}
+              selectedPack={currentPackId}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
           </View>
         </>
       )}

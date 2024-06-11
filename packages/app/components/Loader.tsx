@@ -23,7 +23,6 @@ const loaderStyles = {
   },
   heading: {
     color: '#0a84ff',
-    fontSize:20,
+    fontSize: 20,
   },
-
 };

@@ -39,7 +39,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   const handleSavePack = () => {
     const packDetails = {
@@ -80,13 +80,15 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 }}
               />
             )}
-            <View style={{ width: screenWidth <= SCREEN_WIDTH ? '30vw' : '50vw'}}>
-            <EditableText
-              isLoading={isLoading}
-              defaultValue={title}
-              isFocused={isEditMode}
-              onSave={handleSaveTitle}
-            />
+            <View
+              style={{ width: screenWidth <= SCREEN_WIDTH ? '30vw' : '50vw' }}
+            >
+              <EditableText
+                isLoading={isLoading}
+                defaultValue={title}
+                isFocused={isEditMode}
+                onSave={handleSaveTitle}
+              />
             </View>
           </RStack>
         }

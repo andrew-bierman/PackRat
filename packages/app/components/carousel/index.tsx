@@ -27,7 +27,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -50,7 +50,12 @@ const Carousel: React.FC<CarouselProps> = ({
     <RStack
       style={{
         alignSelf: 'center',
-        width: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ? '80vw':'57vw': width * 0.7,
+        width:
+          Platform.OS === 'web'
+            ? screenWidth <= SCREEN_WIDTH
+              ? '80vw'
+              : '57vw'
+            : width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
