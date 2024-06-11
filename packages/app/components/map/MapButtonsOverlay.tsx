@@ -28,7 +28,9 @@ interface MapButtonsOverlayProps {
   onDownload: () => void;
   handleGpxUpload?: () => void;
   progress?: number;
-  navigateToMaps: () => void;
+  navigateToMaps?: () => void;
+  styles?: any;
+  shape?: any;
 }
 
 const MapButtonsOverlay = ({
@@ -44,7 +46,6 @@ const MapButtonsOverlay = ({
   progress,
   navigateToMaps,
 }: MapButtonsOverlayProps) => {
-  console.log('newwwww');
   const [showStyleOptions, setShowStyleOptions] = useState(false);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

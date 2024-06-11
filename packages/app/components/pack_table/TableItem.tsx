@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
-
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useState } from 'react';
 import { Row } from 'react-native-table-component';
@@ -12,18 +11,19 @@ import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 
+
 type ModalName = 'edit' | 'delete';
 
 interface TableItemProps {
   itemData: any;
   handleCheckboxChange: (itemId: string) => void;
   onDelete: (params: { itemId: string; packId: string }) => void;
-  index: number;
+  index?: number;
   hasPermissions: boolean;
   flexArr: number[];
   currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TableItem = ({
@@ -40,7 +40,11 @@ const TableItem = ({
   const styles = useCustomStyles(loadStyles);
   const authUser = useAuthUser();
 
-  const openModal = (modalName: ModalName) => () => {
+  useEffect(() => {
+    setActiveModal(null);
+  }, [itemData]);
+
+  const openModal = (modalName: ModalName) => {
     setActiveModal(modalName);
   };
 
@@ -48,25 +52,27 @@ const TableItem = ({
     setActiveModal(null);
   };
 
-  const rowActionItems = [
+  let rowActionItems = [
     { label: 'Delete', onSelect: () => openModal('delete') },
     // TODO Implement Ignore Pack Item functional
     // { label: 'Ignore', onSelect: () => {} },
   ];
 
   if (authUser.id === itemData.ownerId) {
-    rowActionItems.unshift({
-      label: 'Edit',
-      onSelect: () => openModal('edit'),
-    });
+    rowActionItems = [
+      {
+        label: 'Edit',
+        onSelect: () => openModal('edit'),
+      },
+      ...rowActionItems,
+    ];
   }
 
   let rowData = [
     <RText px={8}>{name}</RText>,
-    <RText px={8}>{`${formatNumber(weight)} ${unit}`}</RText>,
-    <RText px={8}>{quantity}</RText>,
+    <RText px={0}>{${formatNumber(weight)} ${unit}}</RText>,
+    <RText px={0}>{quantity}</RText>,
   ];
-
   if (hasPermissions) {
     if (
       Platform.OS === 'android' ||
@@ -78,7 +84,7 @@ const TableItem = ({
       rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
-
+  
   /*
   * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
@@ -88,6 +94,7 @@ const TableItem = ({
   return (
     <>
       <EditPackItemModal
+        triggerComponent={undefined}
         showTrigger={false}
         isOpen={activeModal === 'edit'}
         onClose={closeModal}

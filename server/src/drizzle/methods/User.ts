@@ -113,7 +113,10 @@ export class User {
     return `${clientUrl}/password-reset?token=${resetToken}`;
   }
 
-  async update(data: Partial<InsertUser>, filter = eq(UserTable.id, data.id)) {
+  async update(
+    data: Partial<InsertUser>,
+    filter = data.id ? eq(UserTable.id, data.id) : undefined,
+  ) {
     try {
       const updatedUser = DbClient.instance
         .update(UserTable)
@@ -155,7 +158,7 @@ export class User {
     includeFavorites?: boolean;
   }) {
     try {
-      let filter = null;
+      let filter: any = null;
       if (userId) {
         filter = eq(UserTable.id, userId);
       } else if (email && code) {
@@ -249,6 +252,30 @@ export class User {
       return user;
     } catch (error) {
       throw new Error(`Failed to validate reset token: ${error.message}`);
+    }
+  }
+
+  async findUnique(query: {
+    where: { email?: string; googleId?: string };
+    with?: { favoriteDocuments?: boolean; id?: boolean; username?: boolean };
+  }) {
+    try {
+      const conditions: any[] = [];
+      if (query.where.email) {
+        conditions.push(eq(UserTable.email, query.where.email));
+      }
+      if (query.where.googleId) {
+        conditions.push(eq(UserTable.googleId, query.where.googleId));
+      }
+      const user = await DbClient.instance
+        .select()
+        .from(UserTable)
+        .where(and(...conditions))
+        .limit(1)
+        .get();
+      return user || null;
+    } catch (error) {
+      throw new Error(`Failed to find user: ${error.message}`);
     }
   }
 }

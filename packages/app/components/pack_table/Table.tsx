@@ -13,14 +13,16 @@ import {
 } from './TableHelperComponents';
 import TableItem from './TableItem';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
 interface TableContainerProps {
   currentPack: any;
-  selectedPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
-  copy: boolean;
-  hasPermissions: boolean;
+  selectedPack?: any;
+  refetch?: boolean;
+  setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
+  copy?: boolean;
+  hasPermissions?: boolean;
 }
 
 export const TableContainer = ({
@@ -32,6 +34,7 @@ export const TableContainer = ({
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
+  const isAuthUserPack = useIsAuthUserPack(currentPack);
   const {
     isLoading,
     error,
@@ -53,8 +56,8 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
-  let flexArr = [2, 1, 1, 1, 0.65, 0.65, 0.65];
+  const headerRow = ['Item Name', 'Weight', 'Quantity', ''];
+  let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
   if (
@@ -65,14 +68,23 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
   }
   if (isLoading) return <RSkeleton style={{}} />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage message={String(error)} />;
   const isWeb = Platform.OS === 'web';
 
   return (
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
+          <BasicTable
+            groupedData={groupedData}
+            onDelete={deletePackItem}
+            handleCheckboxChange={handleCheckboxChange}
+            currentPack={currentPack}
+            hasPermissions={isAuthUserPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          ></BasicTable>
+          {/* <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -88,7 +100,7 @@ export const TableContainer = ({
                 <>
                   <CategoryRow category={category} />
                   <FlatList
-                    data={items}
+                    data={Array.isArray(items) ? items : []} // Ensure items is an array
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                       <TableItem
@@ -97,7 +109,7 @@ export const TableContainer = ({
                         handleCheckboxChange={handleCheckboxChange}
                         flexArr={flexArr}
                         currentPack={currentPack}
-                        hasPermissions={hasPermissions}
+                        hasPermissions={isAuthUserPack}
                         refetch={refetch}
                         setRefetch={setRefetch}
                       />
@@ -106,7 +118,7 @@ export const TableContainer = ({
                 </>
               )}
             />
-          </Table>
+          </Table> */}
           {copy ? (
             <RButton
               style={{
@@ -138,7 +150,10 @@ export const TableContainer = ({
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
-      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <WeightUnitDropdown
+        value={weightUnit}
+        onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+      />
     </View>
   );
 };

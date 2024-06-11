@@ -22,6 +22,7 @@ import { useProfileSettings } from 'app/hooks/user';
 import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
+import { Platform } from 'react-native';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -57,19 +58,25 @@ export default function Settings() {
             flexDirection: 'row',
           }}
         >
-          <RIconButton
-            backgroundColor="transparent"
-            icon={
-              <AntDesign
-                name="arrowleft"
-                size={24}
-                color={isDark ? 'white' : 'black'}
-              />
-            }
-            onPress={() => {
-              router.back();
-            }}
-          />
+          {Platform.OS === 'web' && (
+            <RIconButton
+              backgroundColor="transparent"
+              icon={
+                <AntDesign
+                  name="arrowleft"
+                  size={24}
+                  color={isDark ? 'white' : 'black'}
+                />
+              }
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  window?.history?.back();
+                } else {
+                  router.back();
+                }
+              }}
+            />
+          )}
           <RH2>Profile</RH2>
         </RStack>
         <Form

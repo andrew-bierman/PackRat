@@ -21,14 +21,14 @@ export const addItemGlobalService = async (
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
-): Promise<object> => {
+) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
   }
   const itemClass = new Item();
   const itemCategoryClass = new ItemCategory();
-  category = await itemCategoryClass.findItemCategory({ name: type });
+  category = (await itemCategoryClass.findItemCategory({ name: type })) || null;
   if (!category) {
     category = await itemCategoryClass.create({ name: type });
   }

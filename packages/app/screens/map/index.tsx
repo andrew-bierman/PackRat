@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
-// get mapbox access token from .env file
-import { MAPBOX_ACCESS_TOKEN } from '@env';
+import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';

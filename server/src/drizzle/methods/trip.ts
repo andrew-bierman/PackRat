@@ -1,17 +1,14 @@
 import { eq } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { type InsertTrip, trip as TripTable } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class Trip {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async update(trip: Partial<InsertTrip>) {
     try {
-      const updatedTrip = (await this.createInstance())
+      if (!trip.id) {
+        throw new Error('Trip id is required for update operation');
+      }
+      const updatedTrip = await DbClient.instance
         .update(TripTable)
         .set(trip)
         .where(eq(TripTable.id, trip.id))
@@ -25,7 +22,7 @@ export class Trip {
 
   async create(trip: InsertTrip) {
     try {
-      const createdTrip = (await this.createInstance())
+      const createdTrip = await DbClient.instance
         .insert(TripTable)
         .values(trip)
         .returning()
@@ -38,7 +35,7 @@ export class Trip {
 
   async delete(id: string, filter = eq(TripTable.id, id)) {
     try {
-      const deletedTrip = (await this.createInstance())
+      const deletedTrip = await DbClient.instance
         .delete(TripTable)
         .where(filter)
         .returning()
@@ -51,7 +48,7 @@ export class Trip {
 
   async findById(id: string) {
     try {
-      const trip = (await this.createInstance()).query.trip.findFirst({
+      const trip = await DbClient.instance.query.trip.findFirst({
         where: eq(TripTable.id, id),
         with: {
           owner: {
@@ -100,7 +97,7 @@ export class Trip {
 
   async findPublicTrips(queryBy: string) {
     try {
-      const publicTrips = (await this.createInstance()).query.trip.findMany({
+      const publicTrips = await DbClient.instance.query.trip.findMany({
         where: eq(TripTable.is_public, true),
         with: {
           owner: {
@@ -128,7 +125,7 @@ export class Trip {
 
   async findMany(ownerId?: string) {
     try {
-      const trips = (await this.createInstance()).query.trip.findMany({
+      const trips = await DbClient.instance.query.trip.findMany({
         ...(ownerId && { where: eq(TripTable.owner_id, ownerId) }),
         with: {
           packs: {

@@ -44,7 +44,7 @@ describe('User Routes', () => {
   describe('getUserById', () => {
     it('should get user by Id', async () => {
       const fetchedUser = await caller.getUserById({ userId: testUser.id });
-      expect(fetchedUser.id).toBe(testUser.id);
+      expect(fetchedUser?.id).toBe(testUser.id);
     });
   });
 
@@ -68,7 +68,7 @@ describe('User Routes', () => {
         '',
         testUser.id,
       );
-      const resetToken = resetUrl.split('token=').pop();
+      const resetToken = resetUrl.split('token=').pop() || '';
 
       const response = await caller.resetPassword({
         resetToken,
@@ -91,9 +91,9 @@ describe('User Routes', () => {
         email: updatedFields.email,
       });
 
-      expect(editedUser.id).toBe(testUser.id);
-      expect(editedUser.name).toBe(updatedFields.name);
-      expect(editedUser.email).toBe(updatedFields.email);
+      expect(editedUser?.id).toBe(testUser.id);
+      expect(editedUser?.name).toBe(updatedFields.name);
+      expect(editedUser?.email).toBe(updatedFields.email);
     });
   });
 

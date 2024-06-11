@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { useItems } from 'app/hooks/items';
 import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/auth/hooks';
-import { useFetchSinglePack } from 'app/hooks/packs';
+import { useFetchSinglePack, usePackId } from 'app/hooks/packs';
 
 export const useSearchItem = () => {
-  const packId = window.location.pathname.substring('/pack/'.length);
+  const [packId] = usePackId();
   const currentPack = useFetchSinglePack(packId);
   const { mutateAsync: addItemToPack } =
     queryTrpc.addGlobalItemToPack.useMutation();
@@ -39,8 +39,11 @@ export const useSearchItem = () => {
   }, [data]);
 
   const handleSearchResultClick = (item) => {
+    if (!user) {
+      throw new Error('User is not authenticated');
+    }
+
     const ownerId = user.id;
-    const packId = window.location.pathname.substring('/pack/'.length);
     const itemId = item?.id;
 
     (async () => {

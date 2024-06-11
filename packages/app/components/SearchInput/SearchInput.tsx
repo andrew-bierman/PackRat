@@ -1,19 +1,24 @@
-import React, { cloneElement, ReactNode, forwardRef } from 'react';
-import { Platform, TextInput } from 'react-native';
+import React, { cloneElement, type ReactNode, forwardRef } from 'react';
+import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 import {
-  RStack,
-  RInput,
-  RButton,
-  RText,
-  RScrollView,
+  RStack as OriginalRStack,
+  RInput as OriginalRInput,
+  RButton as OriginalRButton,
+  RScrollView as OriginalRScrollView,
   RIconButton,
 } from '@packrat/ui';
-import { View, Pressable } from 'react-native';
+import { View, Pressable as OriginalPressable } from 'react-native';
+
+const RStack: any = OriginalRStack;
+const RInput: any = OriginalRInput;
+const RScrollView: any = OriginalRScrollView;
+const RButton: any = OriginalRButton;
+const Pressable: any = OriginalPressable;
 
 interface SearchInputProps {
   onSelect: (result: any, index: number) => void;
@@ -21,11 +26,11 @@ interface SearchInputProps {
   onChange: (text: string) => void;
   searchString?: string;
   placeholder?: string;
-  resultItemComponent: ReactNode;
+  resultItemComponent: React.ReactElement;
 }
 
 export const SearchInput = forwardRef<TextInput, SearchInputProps>(
-  (
+  function SearchInput(
     {
       onSelect,
       placeholder,
@@ -35,7 +40,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       searchString,
     },
     inputRef,
-  ) => {
+  ) {
     const {
       handleClearSearch,
       handleSearchResultClick,
@@ -50,7 +55,9 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     if (Platform.OS === 'web') {
       return (
         <RStack style={styles.container}>
-          <RStack position="relative" height="auto">
+          <RStack
+            style={{ position: 'relative', height: 'auto', width: '100%' }}
+          >
             <RStack
               style={{
                 flexDirection: 'row',
@@ -60,6 +67,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               }}
             >
               <RInput
+                style={{ flex: 1 }}
                 paddingLeft={35}
                 paddingRight={55}
                 placeholder={placeholder ?? 'Search'}
@@ -199,7 +207,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 flex: 1,
               }}
             />
-            {searchString.trim().length > 0 && (
+            {searchString && searchString.trim().length > 0 && (
               <RIconButton
                 onPress={handleClearSearch}
                 style={{ backgroundColor: 'transparent' }}
@@ -241,7 +249,10 @@ const loadStyles = () => ({
   container: {
     marginTop: 20,
     marginBottom: 15,
-    maxWidth: 400,
+    // maxWidth: 800,
     width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

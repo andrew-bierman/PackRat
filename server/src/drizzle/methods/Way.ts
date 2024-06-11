@@ -1,21 +1,10 @@
 import { eq } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { way } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class Way {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
-  async update(
-    data: any,
-    id: string,
-    filter = eq(way.id, id),
-    returning = null,
-  ) {
-    return (await this.createInstance())
+  async update(data: any, id: string, filter = eq(way.id, id), returning = {}) {
+    return DbClient.instance
       .update(way)
       .set(data)
       .where(filter)
@@ -24,35 +13,26 @@ export class Way {
   }
 
   async delete(id: string, filter = eq(way.id, id)) {
-    return (await this.createInstance())
-      .delete(way)
-      .where(filter)
-      .returning()
-      .get();
+    return DbClient.instance.delete(way).where(filter).returning().get();
   }
 
   async findById(id: string, filter = eq(way.id, id)) {
-    return (await this.createInstance())
-      .select()
-      .from(way)
-      .where(filter)
-      .limit(1)
-      .get();
+    return DbClient.instance.select().from(way).where(filter).limit(1).get();
   }
 
   async findMany(filter = null) {
-    return (await this.createInstance()).select().from(way).where(filter).get();
+    let query: any = DbClient.instance.select().from(way);
+    if (filter !== null) {
+      query = query.where(filter);
+    }
+    return query.get();
   }
 
   async findUniqueWay(query) {
-    return (await this.createInstance()).query.way.findFirst(query);
+    return DbClient.instance.query.way.findFirst(query);
   }
 
   async create(data: any) {
-    return (await this.createInstance())
-      .insert(way)
-      .values(data)
-      .returning()
-      .get();
+    return DbClient.instance.insert(way).values(data).returning().get();
   }
 }

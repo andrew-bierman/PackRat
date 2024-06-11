@@ -1,4 +1,3 @@
-import { X_RAPIDAPI_KEY } from '@env';
 import axios from 'app/config/axios';
 import { api } from 'constants/api';
 import osmtogeojson from 'osmtogeojson';
@@ -46,7 +45,6 @@ export const getTrailsRapid = async (
 
     return trailsArray;
   } catch (error) {
-    console.log('message====>' + error.message);
     console.error('error:' + error);
     return [];
   }

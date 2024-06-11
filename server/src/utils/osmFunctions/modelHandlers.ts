@@ -1,4 +1,6 @@
 import { Node } from '../../drizzle/methods/Node';
+import { Way } from '../../drizzle/methods/Way';
+
 import {
   createInstanceFromCoordinates,
   coordinatesToInstances,
@@ -17,15 +19,15 @@ export const modelMappingFunc = (type: string) => {
     case 'node':
     case 'n': // In case 'n' is sent
     case 'N': // In case 'N' is sent
-      return 'Node';
+      return new Node();
     case 'way':
     case 'w': // Map 'W' to Way
     case 'W': // Map 'W' to Way
-      return 'Way';
-    case 'relation':
-    case 'r': // In case 'r' is sent
-    case 'R': // In case 'R' is sent
-      return 'Relation';
+      return new Way();
+    // case 'relation':
+    // case 'r': // In case 'r' is sent
+    // case 'R': // In case 'R' is sent
+    //   return 'Relation';
     default:
       return null;
   }
@@ -50,10 +52,13 @@ export async function fromOSM(Model: any, data: any) {
   const nodeClass = new Node();
   // Find or create nodes
   const ids = data.nodes.map((node: any) => node.id);
-  const instances = await nodeClass.create(data.nodes);
+
+  const instances = await Promise.all(
+    data.nodes.map(async (node: any) => await nodeClass.create(node)),
+  );
 
   // Add nodes to instance
-  instanceData.nodes = instances.map((instance: any) => instance._id);
+  instanceData.nodes = instances.map((instance: any) => instance.id);
 
   // Create instance
   const newInstance = await Model.create({ data: instanceData });
@@ -162,8 +167,8 @@ export async function toGeoJSON(Model: any, instance: any) {
  * @param {string} type - The type of the item to search for.
  * @return {Promise<any>} A promise that resolves to the found item, or null if not found.
  */
-export function findExisting(Model: any, id: any, type: string) {
-  return Model.findFirst({ where: { osm_id: id, osm_type: type } });
+export function findExisting(Model: any, id: any) {
+  return Model.findById(id);
 }
 
 /**
@@ -276,7 +281,7 @@ export async function processElement(element: any) {
     return;
   }
 
-  let instance = await findExisting(ModelForElement, id, type);
+  let instance = await findExisting(ModelForElement, id);
   if (instance) {
     if (isGeoJSONFormat(element)) {
       instance = await updateInstanceFromGeoJSON(instance, element);

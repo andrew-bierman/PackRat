@@ -22,26 +22,34 @@ export const setTripFormValue = (
   payload: { name, value },
 });
 
-export const setDateRange = ({
-  start_date,
-  end_date,
-}: {
-  start_date: Date;
-  end_date: Date;
-}): SetDateRangeAction => ({
+export const setDateRange = (
+  dateRange: {
+    start_date: Date;
+    end_date: Date;
+  } | null,
+): SetDateRangeAction => ({
   type: 'setDateRange',
-  payload: { start_date, end_date },
+  payload: dateRange,
 });
 
-export const createTripInitialState: Partial<Record<addTripKey, any>> = {};
+export const createTripInitialState: Partial<Record<addTripKey, any>> = {
+  type: 'trip',
+};
 
 export const createTripReducer = (
   state,
   action: SetDateRangeAction | CreateTripReducerAction,
 ) => {
   if (action.type === 'setDateRange') {
+    if (!action.payload) {
+      return {
+        ...state,
+        start_date: undefined,
+        end_date: undefined,
+        duration: undefined,
+      };
+    }
     try {
-      console.log({ action });
       const { start_date: startDate, end_date: endDate } = action.payload;
       const numberOfNights =
         startDate && endDate
@@ -63,7 +71,6 @@ export const createTripReducer = (
         duration,
       };
     } catch (e) {
-      console.log(e);
       return state;
     }
   }
@@ -71,8 +78,6 @@ export const createTripReducer = (
   const {
     payload: { name, value },
   } = action;
-
-  console.log({ name, value });
 
   return {
     ...state,

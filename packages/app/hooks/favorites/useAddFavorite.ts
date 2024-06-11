@@ -7,7 +7,6 @@ export function useAddFavorite() {
 
   // A wrapper function to abstract away the .mutate call
   const addFavorite = (newFavorite) => {
-    console.log('newFavorite', newFavorite);
     mutation.mutate(newFavorite, {
       onSuccess: () => {
         // Invalidate and refetch. Update to be more specific

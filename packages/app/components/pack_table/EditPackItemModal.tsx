@@ -1,7 +1,15 @@
-import React, { cloneElement, isValidElement } from 'react';
+import React, { cloneElement, isValidElement, ReactNode } from 'react';
 import { BaseModal, useModal } from '@packrat/ui';
 
-export const EditPackItemModal = ({
+interface EditPackItemModalProps {
+  children: ReactNode;
+  isOpen?: boolean;
+  onClose?: () => void;
+  showTrigger?: boolean;
+  triggerComponent: any;
+}
+
+export const EditPackItemModal: React.FC<EditPackItemModalProps> = ({
   children,
   isOpen,
   onClose,
@@ -30,11 +38,12 @@ export const EditPackItemModal = ({
       title={'Edit Item'}
       isOpen={isOpen}
       onClose={onClose}
+      footerComponent={undefined}
       footerButtons={footerButtons}
       triggerComponent={triggerComponent}
       showTrigger={showTrigger !== undefined ? showTrigger : true}
     >
-      <ModalContent />
+      {ModalContent && <ModalContent />}
     </BaseModal>
   );
 };

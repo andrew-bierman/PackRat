@@ -1,20 +1,19 @@
 import React from 'react';
-import { GestureResponderEvent, Platform, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
-import { theme } from '../../theme';
-import useTheme from '../../hooks/useTheme';
 import HeroBanner from '../../components/dashboard/HeroBanner';
 import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import Layout from 'app/components/layout/Layout';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <>
+    <Layout>
       <RScrollView contentContainerStyle={styles.content} horizontal={false}>
         <RStack
           style={[
@@ -39,7 +38,7 @@ const Dashboard = () => {
           </View>
         </RStack>
       </RScrollView>
-    </>
+    </Layout>
   );
 };
 

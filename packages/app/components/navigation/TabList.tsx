@@ -1,7 +1,9 @@
 import { useTabList } from 'app/hooks/navigation';
 import { TabItem } from './TabItem';
-import { XStack } from '@packrat/ui';
+import { XStack as OriginalXStack } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
+
+const XStack: any = OriginalXStack;
 
 export const TabList = ({ onItemSelect = () => {} }) => {
   const { tabItems } = useTabList();

@@ -37,10 +37,7 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',
-      marginBottom: 20,
-      marginTop: 20,
-      marginLeft: 0,
-      marginRight: 0,
+      marginBottom: 70,
     },
 
     githubButton: {

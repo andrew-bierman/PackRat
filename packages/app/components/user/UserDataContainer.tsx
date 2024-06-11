@@ -1,22 +1,15 @@
-import { Link } from '@packrat/crosspath';
-import {
-  RStack,
-  RText,
-  RButton,
-  RSkeleton,
-  VirtualList,
-  BaseModal,
-} from '@packrat/ui';
+import { RLink } from '@packrat/ui';
+import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import UserDataCard from './UserDataCard';
 import React, { useEffect, useState } from 'react';
 import LargeCard from '../card/LargeCard';
-import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
-import { View, FlatList } from 'react-native';
+import { View } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
+import Layout from 'app/components/layout/Layout';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -36,7 +29,7 @@ interface UserDataContainerProps {
   data: any;
   type: 'packs' | 'trips' | 'favorites';
   userId?: string;
-  isLoading: boolean;
+  isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
 }
 
@@ -63,8 +56,7 @@ export default function UserDataContainer({
 
   const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
-  const differentUser = userId && userId !== currentUser.id;
-
+  const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
     return (
       <UserDataCard
@@ -100,78 +92,80 @@ export default function UserDataContainer({
   }
 
   return (
-    <LargeCard
-      customStyle={{
-        backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
-      }}
-    >
-      <RStack
-        style={{
-          gap: 16,
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          padding: 24,
+    <Layout>
+      <LargeCard
+        customStyle={{
+          backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
         }}
       >
-        <RText
-          // color={currentTheme.colors.black}
-          style={{
-            textTransform: 'capitalize',
-            fontSize: 24,
-            fontWeight: 'bold',
-            color: currentTheme.colors.textColor,
-          }}
-        >
-          {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
-        </RText>
         <RStack
           style={{
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            justifyContent: 'center',
+            gap: 16,
             alignItems: 'center',
+            justifyContent: 'center',
             width: '100%',
-            padding: 4,
+            padding: 24,
           }}
         >
-          {isLoading ? (
-            skeletonCards
-          ) : data && data.length > 0 ? (
-            <>
-              <VirtualizedList
-                showsHorizontalScrollIndicator={false}
-                showsVerticalScrollIndicator={false}
-                getItemCount={() => data.length}
-                getItem={(data, index) => data[index]}
-                data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={Card}
-                scrollEnabled={true}
-                maxToRenderPerBatch={2}
-                horizontal={true}
-                nestedScrollEnabled={true}
-                contentContainerStyle={{
-                  paddingHorizontal: 3,
-                  paddingVertical: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
+          <RText
+            // color={currentTheme.colors.black}
+            style={{
+              textTransform: 'capitalize',
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: currentTheme.colors.textColor,
+            }}
+          >
+            {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
+          </RText>
+          <RStack
+            style={{
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              padding: 4,
+            }}
+          >
+            {isLoading ? (
+              skeletonCards
+            ) : data && data.length > 0 ? (
+              <>
+                <VirtualizedList
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  getItemCount={() => data.length}
+                  getItem={(data, index) => data[index]}
+                  data={data}
+                  keyExtractor={(item) => item.id}
+                  renderItem={Card}
+                  scrollEnabled={true}
+                  maxToRenderPerBatch={2}
+                  horizontal={true}
+                  nestedScrollEnabled={true}
+                  contentContainerStyle={{
+                    paddingHorizontal: 3,
+                    paddingVertical: 3,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                />
 
-              <DataList data={data} />
-            </>
-          ) : currentUser?.id === userId ? (
-            <Link href="/">
-              <RButton style={{ color: currentTheme.colors.white }}>
-                {`Create your first ${typeUppercaseSingular}`}
-              </RButton>
-            </Link>
-          ) : (
-            <></>
-          )}
+                <DataList data={data} />
+              </>
+            ) : currentUser?.id === userId ? (
+              <RLink href="/" style={{ textDecoration: 'none' }}>
+                <RButton style={{ color: currentTheme.colors.white }}>
+                  {`Create your first ${typeUppercaseSingular}`}
+                </RButton>
+              </RLink>
+            ) : (
+              <></>
+            )}
+          </RStack>
         </RStack>
-      </RStack>
-    </LargeCard>
+      </LargeCard>
+    </Layout>
   );
 }

@@ -1,62 +1,46 @@
 import { eq } from 'drizzle-orm';
-import { createDb } from '../../db/client';
+import { DbClient } from '../../db/client';
 import { node } from '../../db/schema';
-import { getDB } from '../../trpc/context';
 
 export class Node {
-  async createInstance() {
-    const dbInstance = await createDb(getDB());
-    return dbInstance;
-  }
-
   async update(
     data: any,
     id: string,
     filter = eq(node.id, id),
     returning = null,
   ) {
-    return (await this.createInstance())
-      .update(node)
-      .set(data)
-      .where(filter)
-      .returning(returning)
-      .get();
+    let query: any = DbClient.instance.update(node).set(data).where(filter);
+
+    if (returning) {
+      query = query.returning(returning);
+    }
+
+    return query.get();
   }
 
   async delete(id: string, filter = eq(node.id, id)) {
-    return (await this.createInstance())
-      .delete(node)
-      .where(filter)
-      .returning()
-      .get();
+    return DbClient.instance.delete(node).where(filter).returning().get();
   }
 
   async findById(id: string, filter = eq(node.id, id)) {
-    return (await this.createInstance())
-      .select()
-      .from(node)
-      .where(filter)
-      .limit(1)
-      .get();
+    return DbClient.instance.select().from(node).where(filter).limit(1).get();
   }
 
   async findMany(filter = null) {
-    return (await this.createInstance())
-      .select()
-      .from(node)
-      .where(filter)
-      .get();
+    let query: any = DbClient.instance.select().from(node);
+
+    if (filter) {
+      query = query.where(filter);
+    }
+
+    return query.get();
   }
 
   async findUniqueNode(query) {
-    return (await this.createInstance()).query.node.findFirst(query);
+    return DbClient.instance.query.node.findFirst(query);
   }
 
   async create(data: any) {
-    return (await this.createInstance())
-      .insert(node)
-      .values(data)
-      .returning()
-      .get();
+    return DbClient.instance.insert(node).values(data).returning().get();
   }
 }

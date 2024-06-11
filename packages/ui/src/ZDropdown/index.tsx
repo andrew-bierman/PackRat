@@ -1,32 +1,44 @@
-import { Platform } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
 import { styled } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
+import { ViewProps } from 'react-native';
 
-import { RIconButton } from '@packrat/ui';
+import RIconButton from '../RIconButton';
 
-const CustomContent = styled(DropdownMenu.Content, {
+interface ExtendedDropdownMenuProps extends ViewProps {
+  css?: string;
+}
+
+interface ExtendedDropdownMenuItemProps extends ViewProps {
+  css?: string;
+  onSelect?: () => void;
+}
+
+const ExtendedDropdownMenuContent =
+  DropdownMenu.Content as React.ComponentType<ExtendedDropdownMenuProps>;
+
+const CustomContent = styled(ExtendedDropdownMenuContent, {
   backgroundColor: 'white',
-  minWidth: 160,
+  minWidth: '160px',
   shadowColor: '#000',
-  borderRadius: 8,
+  borderRadius: '8px',
   shadowOffset: {
     width: 0,
-    height: 8,
+    height: ' 8px',
   },
   shadowOpacity: 0.2,
-  shadowRadius: 16,
-  padding: 12,
+  shadowRadius: '16px',
+  padding: '8px',
 });
 
-const DropdownMenuContent = DropdownMenu.create(CustomContent, 'Content');
+const ExtendedDropdownMenuItem =
+  DropdownMenu.Item as React.ComponentType<ExtendedDropdownMenuItemProps>;
 
-const CustomItem = styled(DropdownMenu.Item, {
+const CustomItem = styled(ExtendedDropdownMenuItem, {
   padding: 10,
-  backgroundColor: 'white',
   flexDirection: 'row',
   alignItems: 'center',
-  hoverStyle: {
+  hover: {
     backgroundColor: 'gray',
   },
 });
@@ -45,7 +57,7 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
       </DropdownMenu.Trigger>
       <CustomContent>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <CustomItem key={label} onSelect={onSelect()}>
+          <CustomItem key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </CustomItem>
         ))}
@@ -64,13 +76,13 @@ export const ZDropdownNative = ({ dropdownItems = [] }) => {
           style={{ padding: 0 }}
         />
       </DropdownMenu.Trigger>
-      <CustomContent>
+      <DropdownMenu.Content>
         {dropdownItems.map(({ label, onSelect = () => {} }) => (
-          <DropdownMenu.Item key={label} onSelect={onSelect()}>
+          <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         ))}
-      </CustomContent>
+      </DropdownMenu.Content>
     </DropdownMenu.Root>
   );
 };

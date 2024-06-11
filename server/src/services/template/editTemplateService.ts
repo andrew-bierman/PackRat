@@ -15,7 +15,7 @@ export const editTemplateService = async (
 ) => {
   try {
     const templateClass = new Template();
-    const template = await templateClass.findUnique(templateId);
+    const template = await templateClass.findTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
     }

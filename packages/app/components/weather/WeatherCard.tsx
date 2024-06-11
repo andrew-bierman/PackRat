@@ -8,12 +8,13 @@ import {
   FontAwesome5,
   Octicons,
 } from '@expo/vector-icons';
-import { RImage, RStack, RText } from '@packrat/ui';
+import { RImage, RStack as OriginalRStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
 import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
 import { defaultWeekObj } from '../../constants/defaultWeekObj';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+
+const RStack: any = OriginalRStack;
 
 interface WeatherObject {
   name: string;
@@ -63,7 +64,7 @@ export default function WeatherCard({
       $sm={{
         borderRadius: 6,
         flexDirection: 'column',
-        width: '100%',
+        width: '90%',
       }}
       $gtSm={{
         borderRadius: 12,
@@ -279,7 +280,6 @@ export default function WeatherCard({
         style={styles.card}
       >
         {restOfWeek.map((day, index) => {
-          console.log('dayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', day);
           return (
             <RStack key={index} style={styles.weatherInfo}>
               <RText style={{ color: styles.tempColor.color }}>{day}</RText>

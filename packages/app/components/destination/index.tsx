@@ -1,26 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { RText } from '@packrat/ui';
-import { useRouter } from 'app/hooks/router';
-import { createParam } from 'app/hooks/params';
+import React from 'react';
+import { Platform, ScrollView, View } from 'react-native';
+import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import { theme } from '../../theme';
 import MapContainer from 'app/components/map/MapContainer';
-import {
-  defaultShape,
-  convertPhotonGeoJsonToShape,
-} from '../../utils/mapFunctions';
-import TripCard from '../trip/TripCard';
+import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   useCurrentDestination,
   useGetPhotonDetails,
 } from 'app/hooks/destination';
-import { WeatherData } from '../weather/WeatherData';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
+import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
+import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
+import { useRouter } from 'app/hooks/router';
+
+const RText: any = OriginalRText;
 
 const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
   const styles = useCustomStyles(loadStyles);
@@ -65,7 +62,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
           if (index < 3 && typeof value === 'string') {
             return (
               <RText key={key} style={styles.languageText}>
-                {`${key.split(':')[1].toUpperCase()}: ${value}`}
+                {`${(key.split(':')[1] || '').toUpperCase()}: ${value}`}
               </RText>
             );
           }
@@ -77,11 +74,15 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 
 // TODO refactor component
 export const DestinationPage = () => {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
+  const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
-  const { currentDestination } = useCurrentDestination();
+  const { currentDestination, latLng } = useCurrentDestination();
+
+  const { data: weatherData } = useFetchWeather(latLng);
+
+  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
+
   const [osm] = useGEOLocationSearch();
   const {
     data: geoJSON,
@@ -91,17 +92,92 @@ export const DestinationPage = () => {
     properties: {
       osm_id: osm?.osmId,
       osm_type: osm?.osmType,
-    },
+    } as any,
   });
 
   const shape = geoJSON ?? defaultShape;
+
+  interface SearchResult {
+    properties: {
+      osm_id: number;
+      osm_type: string;
+      name: string;
+    };
+    geometry: {
+      coordinates: [number, number];
+    };
+  }
+
+  const router = useRouter();
+
+  const handleSearchSelect = async (selectedResult: SearchResult) => {
+    try {
+      const { osm_id, osm_type, name } = selectedResult.properties;
+
+      if (!osm_id || !osm_type) {
+        console.error(
+          'No OSM ID or OSM type found in the selected search result',
+        );
+      } else {
+        router.replace({
+          pathname: '/destination/query',
+          query: {
+            osmType: osm_type,
+            osmId: osm_id,
+            name,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('errorrrrrr', error);
+    }
+  };
 
   const map = () => <MapContainer shape={shape} />;
 
   return (
     <ScrollView>
+      {isLoading && (
+        <RText style={{ width: '90%', alignSelf: 'center' }}>Loading...</RText>
+      )}
       {!isLoading && !isError && (
         <View style={styles.container}>
+          <View
+            style={{
+              zIndex: 1,
+              width: '100%',
+              ...styles.headerContainer,
+            }}
+          >
+            {Platform.OS === 'web' ? (
+              <PlacesAutocomplete
+                onSelect={handleSearchSelect}
+                placeholder={'Search by park, city, or trail'}
+              />
+            ) : (
+              <RButton
+                style={{
+                  backgroundColor: currentTheme.colors.text,
+                  minWidth: '100%',
+                  height: 25,
+                  flexDirection: 'row',
+                }}
+                onPress={() => {
+                  router.push('/search');
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="magnify"
+                  size={24}
+                  color={currentTheme.colors.background}
+                />
+                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
+                  Search by park, city, or trail
+                </RText>
+              </RButton>
+            )}
+          </View>
+
           <DestinationHeader
             geoJSON={geoJSON}
             selectedSearchResult={currentDestination}
@@ -119,7 +195,10 @@ export const DestinationPage = () => {
             contentProps={{ shape }}
             type="map"
           />
-          <WeatherData geoJSON={currentDestination} />
+          <WeatherCard
+            weatherObject={weatherData}
+            weatherWeek={weatherWeekData}
+          />
         </View>
       )}
     </ScrollView>
@@ -127,7 +206,7 @@ export const DestinationPage = () => {
 };
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { isDark, currentTheme } = theme;
   return {
     container: {
       flex: 1,
@@ -139,8 +218,9 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
     },
     headerContainer: {
-      width: '100%',
-      backgroundColor: currentTheme.colors.white,
+      alignSelf: 'center',
+      width: '90%',
+      backgroundColor: isDark ? '#2D2D2D' : currentTheme.colors.white,
       padding: 25,
       borderRadius: 10,
       marginBottom: 20,
@@ -153,7 +233,7 @@ const loadStyles = (theme) => {
       fontWeight: 'bold',
     },
     headerSubText: {
-      color: currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
       fontSize: 16,
       marginTop: 5,
     },
@@ -162,10 +242,16 @@ const loadStyles = (theme) => {
       marginTop: 10,
     },
     languageText: {
-      color: currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
       fontSize: 14,
       marginRight: 10,
       marginBottom: 5, // Add margin to provide spacing between the language texts
+    },
+    cardContainer: {
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      marginBottom: 20,
+      width: '100%',
     },
   };
 };
