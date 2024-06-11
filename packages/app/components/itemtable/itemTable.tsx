@@ -81,12 +81,34 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      <RText style={{ color: isDark ? 'white' : 'black'  , fontSize: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ?'12px':'15px':15}}>{name}</RText>,
+      <RText
+        style={{
+          color: isDark ? 'white' : 'black',
+          fontSize:
+            Platform.OS === 'web'
+              ? screenWidth <= SCREEN_WIDTH
+                ? '12px'
+                : '15px'
+              : 15,
+        }}
+      >
+        {name}
+      </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {formatNumber(weight)} {unit}
       </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
-      <RText style={{ color: isDark ? 'white' : 'black', fontSize: Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ?'12px':'17px' : 15 }}>
+      <RText
+        style={{
+          color: isDark ? 'white' : 'black',
+          fontSize:
+            Platform.OS === 'web'
+              ? screenWidth <= SCREEN_WIDTH
+                ? '12px'
+                : '17px'
+              : 15,
+        }}
+      >
         {category?.name || type}
       </RText>,
     ];
@@ -123,51 +145,59 @@ export const ItemsTable = ({
   return (
     <Layout>
       <ScrollView>
-      <View
-        style={{
-          paddingVertical: 16,
-          flex: 1,
-          paddingTop: 30,
-          marginTop: 20,
-          backgroundColor: isDark ? '#1A1A1D' : 'white',
-          width:screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
-        }}
-      >
-        <ScrollView
-          horizontal={true}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            maxWidth: '100%',
+        <View
+          style={{
+            paddingVertical: 16,
+            flex: 1,
+            paddingTop: 30,
+            marginTop: 20,
+            backgroundColor: isDark ? '#1A1A1D' : 'white',
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
           }}
         >
-          <Table
-            style={styles.tableStyle}
-            borderStyle={{ borderColor: 'transparent' }}
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'center',
+              maxWidth: '100%',
+            }}
           >
-            
+            <Table
+              style={styles.tableStyle}
+              borderStyle={{ borderColor: 'transparent' }}
+            >
               <TitleRow title="Global Items List" />
               <Row
                 flexArr={flexArr}
-                data={[
-                  'Item Name',
-                  'Weight',
-                  'Quantity',
-                  'Category',
-                ].map((header, index) => (
-                  <Cell
-                    key={index}
-                    data={
-                      <RText style={{ fontSize: Platform.OS === 'web' ? screenWidth <= 425 ? 11 : 15 : 15, fontWeight:'bold' }}>
-                        {header}
-                      </RText>
-                    }
-                    textStyle={styles.headerText}
-                  />
-                ))}
+                data={['Item Name', 'Weight', 'Quantity', 'Category'].map(
+                  (header, index) => (
+                    <Cell
+                      key={index}
+                      data={
+                        <RText
+                          style={{
+                            fontSize:
+                              Platform.OS === 'web'
+                                ? screenWidth <= 425
+                                  ? 11
+                                  : 15
+                                : 15,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {header}
+                        </RText>
+                      }
+                      textStyle={styles.headerText}
+                    />
+                  ),
+                )}
                 style={styles.head}
               />
-              <ScrollView style={{ height: Platform.OS === 'web' ? 400 : 'auto'}}>
+              <ScrollView
+                style={{ height: Platform.OS === 'web' ? 400 : 'auto' }}
+              >
                 {isLoading ? (
                   <Loader />
                 ) : (
@@ -216,7 +246,7 @@ export const ItemsTable = ({
               <AntDesign name="right" size={16} color="white" />
             </RButton>
           </View>
-        <PaginationLimit limit={limit} setLimit={setLimit} />
+          <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
       </ScrollView>
     </Layout>

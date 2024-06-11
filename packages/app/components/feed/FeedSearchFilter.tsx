@@ -61,7 +61,7 @@ const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState('');
 
   const onSearch = (search) => setSearchQuery(search);
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   return (
     <Layout>
@@ -73,7 +73,7 @@ const FeedSearchFilter = ({
               style={{ flexDirection: 'row', justifyContent: 'center' }}
             >
               <FormInput
-              width= {screenWidth <= 425 ? '30vw' : '12vw'}
+                width={screenWidth <= 425 ? '30vw' : '12vw'}
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -163,7 +163,13 @@ const FeedSearchFilter = ({
                 onValueChange={handleSortChange}
                 placeholder="Sort By"
                 style={styles.dropdown}
-                width={Platform.OS === 'web' ? screenWidth <= 425 ?'30vw':'8vw' : 120}
+                width={
+                  Platform.OS === 'web'
+                    ? screenWidth <= 425
+                      ? '30vw'
+                      : '8vw'
+                    : 120
+                }
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -187,7 +193,6 @@ const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
-    
     mainContainer: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,

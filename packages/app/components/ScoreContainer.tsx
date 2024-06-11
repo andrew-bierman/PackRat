@@ -215,7 +215,7 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           )}
         </YStack>
         {isAlreadyScored && (
-          <View style={{ width:'20vw'}}>
+          <View style={{ width: '20vw' }}>
             <ScoreProgressChart score={totalScore} />
             <GradingPieChart scores={scores} />
           </View>

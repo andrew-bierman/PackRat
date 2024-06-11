@@ -61,14 +61,14 @@ export const TripDateRangeCard = ({
       title="Trip Date Range"
     >
       <View style={{ width: '50vw' }}>
-      <RangePicker
-        selectedDates={selectedDates}
-        onDatesChange={onDatesChange}
-        offsetDate={offsetDate}
-        onOffsetChange={onOffsetChange}
-        open={open}
-        setOpen={setOpen}
-      />
+        <RangePicker
+          selectedDates={selectedDates}
+          onDatesChange={onDatesChange}
+          offsetDate={offsetDate}
+          onOffsetChange={onOffsetChange}
+          open={open}
+          setOpen={setOpen}
+        />
       </View>
     </TripCardBase>
   );

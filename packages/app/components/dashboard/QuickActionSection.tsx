@@ -27,15 +27,14 @@ const QuickActionsSection = () => {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
   return {
     section: {
       marginBottom: 20,
       paddingHorizontal: 20, // Added padding here.
-      width : screenWidth  <= SCREEN_WIDTH ? '80vw' : '22vw',
-      display:'flex',
-      justifyContent:'center',
-
+      width: screenWidth <= SCREEN_WIDTH ? '80vw' : '22vw',
+      display: 'flex',
+      justifyContent: 'center',
     },
     card: {
       justifyContent: 'center',

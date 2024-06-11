@@ -15,7 +15,7 @@ type TripSearchCardProps = {
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
   const { currentTheme } = useTheme();
   const [, setGEOLocation] = useGEOLocationSearch();
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
@@ -33,8 +33,8 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
-      <View style={{width:  screenWidth <= SCREEN_WIDTH ? '50vw' :'30vw'}}>
-      <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      <View style={{ width: screenWidth <= SCREEN_WIDTH ? '50vw' : '30vw' }}>
+        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       </View>
     </TripCardBase>
   );

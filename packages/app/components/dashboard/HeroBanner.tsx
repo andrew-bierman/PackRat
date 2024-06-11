@@ -74,7 +74,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
-      const { screenWidth } = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   return (
     <View style={styles.banner}>
@@ -95,8 +95,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
-            width: screenWidth <= SCREEN_WIDTH ? '80vw'  :'30vw',
-            height:'30vh',
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '30vw',
+            height: '30vh',
             padding: 50,
           }}
           title={''}
@@ -104,7 +104,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         >
           <RStack
             style={{
-              width: screenWidth <= SCREEN_WIDTH ? '55vw'  :'25vw',
+              width: screenWidth <= SCREEN_WIDTH ? '55vw' : '25vw',
               height: '20vh',
               alignItems: 'center',
               justifyContent: 'center',
@@ -153,7 +153,7 @@ const loadStyles = (theme: any) => {
       backgroundSize: 'cover',
       marginBottom: 20,
       marginTop: 20,
-      display:'flex',
+      display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',

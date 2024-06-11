@@ -40,21 +40,21 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
   return {
     container: {
       margin: 10,
-      width: screenWidth <= SCREEN_WIDTH ? '35vw':'10vw',
-      height:'10vh',
-      display:'flex',
-      alignItems:'center',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
+      height: '10vh',
+      display: 'flex',
+      alignItems: 'center',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= SCREEN_WIDTH ? '35vw':'10vw',
-      height:'10vh',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
+      height: '10vh',
       // paddingHorizontal: 40,
       // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,

@@ -17,10 +17,6 @@ import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 // const BaseModal: any = OriginalBaseModal;
 // const RButton: any = OriginalRButton;
 
-
-
-
-
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -32,8 +28,8 @@ export default function Items() {
   const optionValues = ['Food', 'Water', 'Essentials'];
 
   const sortItemsByCategory = (items, selectedCategory) => {
-    if(!items){
-      return []
+    if (!items) {
+      return [];
     }
     const selectedCategoryItems = items.filter(
       (item) => item.category.name === selectedCategory,
@@ -48,8 +44,9 @@ export default function Items() {
     return [...selectedCategoryItems, ...otherItems];
   };
 
-
-  const [sortedItems, setSortedItems] = useState(sortItemsByCategory(data?.items, value));
+  const [sortedItems, setSortedItems] = useState(
+    sortItemsByCategory(data?.items, value),
+  );
 
   const handleSort = (category) => {
     setValue(category);
@@ -62,8 +59,7 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
-  const {screenWidth} = useScreenWidth();
-
+  const { screenWidth } = useScreenWidth();
 
   return (
     <RScrollView>
@@ -73,15 +69,31 @@ export default function Items() {
         }}
       /> */}
       <RStack style={styles.mainContainer}>
-        <RStack style={{width:screenWidth <= SCREEN_WIDTH ? '80vw' :'60vw', ...styles.container}}>
-          <RStack style={{width:screenWidth <= SCREEN_WIDTH ? '45vw' :'40vw', ...styles.sortContainer}}>
+        <RStack
+          style={{
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
+            ...styles.container,
+          }}
+        >
+          <RStack
+            style={{
+              width: screenWidth <= SCREEN_WIDTH ? '45vw' : '40vw',
+              ...styles.sortContainer,
+            }}
+          >
             <RText style={{ fontWeight: 'bold' }}>Sort By:</RText>
             <DropdownComponent
               value={value}
               data={optionValues}
               onValueChange={handleSort}
               placeholder="Sort By"
-              width={Platform.OS === 'web' ? screenWidth <= SCREEN_WIDTH ? '25vw' :'15vw' : 120}
+              width={
+                Platform.OS === 'web'
+                  ? screenWidth <= SCREEN_WIDTH
+                    ? '25vw'
+                    : '15vw'
+                  : 120
+              }
             />
           </RStack>
           <BaseModal
