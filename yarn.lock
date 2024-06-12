@@ -1833,6 +1833,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloudflare/ai@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@cloudflare/ai@npm:1.2.2"
+  checksum: 10/8d0790c2e9485ffa090a4d93ff114f3c04c906d91f8b43a3d8462d77817e1c3fad1fa26842fa7e41aad5c6ce135d6392c38ec688b9d009eb813173fe1566be12
+  languageName: node
+  linkType: hard
+
 "@cloudflare/kv-asset-handler@npm:0.3.1":
   version: 0.3.1
   resolution: "@cloudflare/kv-asset-handler@npm:0.3.1"
@@ -32251,6 +32258,7 @@ __metadata:
   resolution: "server@workspace:server"
   dependencies:
     "@anatine/zod-mock": "npm:^3.13.4"
+    "@cloudflare/ai": "npm:^1.2.2"
     "@cloudflare/vitest-pool-workers": "npm:0.2.2"
     "@cloudflare/workers-types": "npm:4.20240419.0"
     "@elysiajs/trpc": "npm:^0.7.0"

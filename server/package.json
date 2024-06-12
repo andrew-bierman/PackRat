@@ -36,6 +36,7 @@
   "author": "Andrew Bierman",
   "license": "ISC",
   "dependencies": {
+    "@cloudflare/ai": "^1.2.2",
     "@elysiajs/trpc": "^0.7.0",
     "@hono/node-server": "^1.11.0",
     "@hono/trpc-server": "^0.1.1",
