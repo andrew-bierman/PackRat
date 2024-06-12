@@ -105,7 +105,7 @@ function Meeting({ item }: { item: (typeof data)[0] }) {
         justifyContent="space-between"
         alignItems="center"
       >
-        <SizableText color="$color11" size="$1">
+        <SizableText col="$color11" size="$1">
           {item.label}
         </SizableText>
         {item.participants ? (

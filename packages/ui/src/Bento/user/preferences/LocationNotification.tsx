@@ -54,14 +54,14 @@ const countries = [
 ];
 
 const languagesArray = Array.from({ length: 10 }, (_, i) => ({
-  name: languages[i].name,
-  shortcut: languages[i].shortcut,
-  flag: `https://flagsapi.com/${languages[i].flag}/flat/64.png`,
+  name: languages[i] ? languages[i].name : undefined,
+  shortcut: languages[i] ? languages[i].shortcut : undefined,
+  flag: languages[i] ? `https://flagsapi.com/${languages[i].flag}/flat/64.png` : undefined,
 }));
 
 const locationsArray = Array.from({ length: 10 }, (_, i) => ({
-  name: countries[i].name,
-  flag: `https://flagsapi.com/${countries[i].flag}/flat/64.png`,
+  name: countries[i] ? countries[i].name : undefined,
+  flag: countries[i] ? `https://flagsapi.com/${countries[i].flag}/flat/64.png` : '',
 }));
 
 type DataItem = {
@@ -90,9 +90,9 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
           justifyContent="center"
           alignItems="center"
         >
-          <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
-          <SizableText marginRight="auto">{`${selectedItem.name} ${
-            selectedItem.shortcut ? `(${selectedItem.shortcut})` : ''
+          <Image source={{ uri: selectedItem ? selectedItem.flag : undefined }} width={20} height={20} />
+          <SizableText marginRight="auto">{`${selectedItem ? selectedItem.name : undefined} ${
+            selectedItem ? (selectedItem.shortcut ? `(${selectedItem.shortcut})` : '') : undefined
           }`}</SizableText>
         </View>
       </Select.Trigger>
