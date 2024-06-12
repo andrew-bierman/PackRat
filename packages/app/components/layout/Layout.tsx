@@ -8,7 +8,9 @@ const Layout = ({ children }) => {
     <View
       style={{
         display: 'flex',
-        alignItems: 'stretch',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '0 auto',
         backgroundColor: 'transparent',
         width:
           Platform.OS === 'web'
