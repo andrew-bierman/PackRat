@@ -1,3 +1,5 @@
+import { AiClient } from '../integrations/ai/client';
+
 class VectorClient {
   private static _instance: any = null;
   private constructor() {}
@@ -22,10 +24,20 @@ class VectorClient {
   public static async search(queryEmbedding: number[]) {
     return await VectorClient.instance.query(queryEmbedding, { topK: 5 });
   }
+
+  public static async syncRecord(
+    env: any,
+    table: string,
+    id: string,
+    content: string,
+  ) {
+    const values = await AiClient.getEmbedding(content);
+    await VectorClient.insert(id, values);
+  }
 }
 
 export { VectorClient };
 
 export interface Env {
-    VECTORIZE_INDEX: any;
-    }
+  VECTORIZE_INDEX: any;
+}
