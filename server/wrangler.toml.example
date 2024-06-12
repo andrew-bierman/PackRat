@@ -1,13 +1,20 @@
 name = "packrat_api"
 main = "src/index.ts"
 compatibility_date = "2024-03-14"
-compatibility_flags = ["nodejs_compat"]
-# node_compat = true # Sometimes this is needed for tests 
+compatibility_flags = ["nodejs_compat"] # Sometimes this is needed for tests
+# node_compat = true
 
 [[ d1_databases ]]
 binding = "DB"
 database_name = "production"
 database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
+
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VECTOR_INDEX"
+index_name = "vector-index"
 
 # Add vars below
 # [vars]

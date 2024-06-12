@@ -1,4 +1,5 @@
 import { Pack } from '../../drizzle/methods/pack';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Adds a new pack service.
@@ -23,5 +24,12 @@ export const addPackService = async (
   }
   // Create the new pack
   const createdPack = await packClass.create({ name, owner_id, is_public });
+
+  // Trigger vector sync
+  await VectorClient.syncRecord({
+    id: createdPack.id,
+    content: name,
+  });
+
   return createdPack;
 };

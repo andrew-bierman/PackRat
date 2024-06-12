@@ -25,12 +25,13 @@ class VectorClient {
     return await VectorClient.instance.query(queryEmbedding, { topK: 5 });
   }
 
-  public static async syncRecord(
-    env: any,
-    table: string,
-    id: string,
-    content: string,
-  ) {
+  public static async syncRecord({
+    id,
+    content,
+  }: {
+    id: string;
+    content: string;
+  }) {
     const values = await AiClient.getEmbedding(content);
     await VectorClient.insert(id, values);
   }
