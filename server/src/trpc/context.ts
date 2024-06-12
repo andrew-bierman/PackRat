@@ -1,6 +1,8 @@
 import { type Context } from 'hono';
 import { extractTokenAndGetUser } from './utils/auth';
 import { DbClient } from '../db/client';
+import { VectorClient } from '../vector/client';
+import { AiClient } from '../integrations/ai/client';
 
 let DB: D1Database;
 
@@ -13,7 +15,11 @@ export const createContext = (honoContext: Context) => async () => {
   const { env, req } = honoContext;
   const { DB: db, ...restEnv } = env;
   DB = db;
+
   await DbClient.init(honoContext.env.DB);
+  await VectorClient.init(honoContext.env.VECTOR_INDEX);
+  await AiClient.init(honoContext.env.AI);
+
   const user = await extractTokenAndGetUser(req.raw, env.JWT_SECRET);
 
   return {

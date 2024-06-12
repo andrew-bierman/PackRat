@@ -11,9 +11,9 @@ class VectorClient {
     return VectorClient._instance;
   }
 
-  public static async init(env: any): Promise<void> {
+  public static async init(vectorize): Promise<void> {
     if (!VectorClient._instance) {
-      VectorClient._instance = env.VECTORIZE_INDEX;
+      VectorClient._instance = vectorize;
     }
   }
 

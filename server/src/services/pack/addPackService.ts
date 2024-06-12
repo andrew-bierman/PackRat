@@ -26,7 +26,7 @@ export const addPackService = async (
   const createdPack = await packClass.create({ name, owner_id, is_public });
 
   // Trigger vector sync
-  await VectorClient.syncRecord({
+  await VectorClient.instance.syncRecord({
     id: createdPack.id,
     content: name,
   });

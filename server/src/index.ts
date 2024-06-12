@@ -10,6 +10,8 @@ import router from './routes';
 interface Bindings {
   [key: string]: any;
   DB: IDBDatabase;
+  VECTOR_INDEX: string;
+  AI: any;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;

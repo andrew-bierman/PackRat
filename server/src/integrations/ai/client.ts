@@ -11,9 +11,9 @@ class AiClient {
     return AiClient._instance;
   }
 
-  public static async init(env: any): Promise<void> {
+  public static async init(cfAi): Promise<void> {
     if (!AiClient._instance) {
-      AiClient._instance = new Ai(env.AI);
+      AiClient._instance = new Ai(cfAi);
     }
   }
 
