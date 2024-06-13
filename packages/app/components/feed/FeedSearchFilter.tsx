@@ -70,11 +70,10 @@ const FeedSearchFilter = ({
         <View style={styles.searchContainer}>
           <Form>
             <RStack
-              space={3}
-              style={{ flexDirection: 'row', justifyContent: 'center' }}
+              style={{ flexDirection: 'row',marginLeft:30, }}
             >
               <FormInput
-                width={screenWidth <= SCREEN_WIDTH ? '30vw' : '12vw'}
+                width={Platform.OS === "web" ? screenWidth <= 425 ? '30vw' : '12vw': '100%'}
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -162,14 +161,14 @@ const FeedSearchFilter = ({
                 value={queryString}
                 data={dataValues}
                 onValueChange={handleSortChange}
-                placeholder="Sort By"
+                placeholder={queryString}
                 style={styles.dropdown}
                 width={
                   Platform.OS === 'web'
                     ? screenWidth <= SCREEN_WIDTH
                       ? '30vw'
                       : '8vw'
-                    : 120
+                    : '50%'
                 }
               />
             </RStack>
