@@ -6,12 +6,13 @@ import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 import router from './routes';
+import { Ai } from '@cloudflare/ai';
 
 interface Bindings {
   [key: string]: any;
   DB: IDBDatabase;
-  VECTOR_INDEX: string;
-  AI: any;
+  VECTOR_INDEX: VectorizeIndex;
+  AI: Ai;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
