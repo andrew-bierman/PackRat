@@ -72,7 +72,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' && authUser?.id === data.owner_id.id ? (
+        {type === 'pack' && authUser?.id === data.owner_id? (
           <>
             <View
               style={
