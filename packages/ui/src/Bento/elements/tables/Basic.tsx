@@ -152,14 +152,18 @@ export function BasicTable({
       header: () => 'Category',
       cell: (info) => info.getValue(),
       // footer: (info) => 'category',
-    }),
-    columnHelper.display({
-      id: 'actions',
-      cell: (props) => <ActionButtons item={props.row.original} />,
-      header: () => 'Actions',
-      // footer: (info) => info.column.id,
-    }),
+    })
   ];
+
+  if (hasPermissions) {
+    columns.push(
+      columnHelper.display({
+        id: 'actions',
+        cell: (props) => <ActionButtons item={props.row.original} />,
+        header: () => 'Actions',
+      })
+    );
+  }
 
   const CELL_WIDTH = '$18';
 
