@@ -1,14 +1,14 @@
 import { Pack } from '../../drizzle/methods/pack';
+import { Queue } from '../../queue/client';
 import { VectorClient } from '../../vector/client';
 
 /**
  * Adds a new pack service.
- * @param {PrismaClient} prisma - Prisma client.
  * @param {string} name - The name of the pack.
  * @param {string} owner_id - The ID of the pack owner.
+ * @param {boolean} is_public - Whether the pack is public or not.
  * @return {Object} An object containing the created pack.
  */
-
 export const addPackService = async (
   name: string,
   owner_id: string,
@@ -25,10 +25,15 @@ export const addPackService = async (
   // Create the new pack
   const createdPack = await packClass.create({ name, owner_id, is_public });
 
-  // Trigger vector sync
-  await VectorClient.instance.syncRecord({
-    id: createdPack.id,
-    content: name,
+  // Get the queue instance
+  const queue = Queue.getInstance();
+
+  // Add the vector sync task to the queue
+  await queue.addTask(async () => {
+    await VectorClient.instance.syncRecord({
+      id: createdPack.id,
+      content: name,
+    });
   });
 
   return createdPack;
