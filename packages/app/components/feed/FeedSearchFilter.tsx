@@ -17,6 +17,7 @@ import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
 import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -73,7 +74,7 @@ const FeedSearchFilter = ({
               style={{ flexDirection: 'row', justifyContent: 'center' }}
             >
               <FormInput
-                width={screenWidth <= 425 ? '30vw' : '12vw'}
+                width={screenWidth <= SCREEN_WIDTH ? '30vw' : '12vw'}
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -119,7 +120,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="single-switch"
                   size="$1.5"
-                  width="$4"
+                  width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
                   checked={selectedTypes.pack}
                   onCheckedChange={handleTogglePack}
                 >
@@ -135,7 +136,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
-                  width="$4"
+                  width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
                   checked={selectedTypes.trip}
                   onCheckedChange={handleToggleTrip}
                 >
@@ -165,7 +166,7 @@ const FeedSearchFilter = ({
                 style={styles.dropdown}
                 width={
                   Platform.OS === 'web'
-                    ? screenWidth <= 425
+                    ? screenWidth <= SCREEN_WIDTH
                       ? '30vw'
                       : '8vw'
                     : 120
