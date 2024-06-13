@@ -153,6 +153,7 @@ export function PackDetails() {
             itemTypeId={currentPackId}
             title="Chat"
             trigger="Open Chat"
+            type="pack"
           />
         </View>
       </Layout>

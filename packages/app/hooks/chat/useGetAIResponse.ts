@@ -42,11 +42,12 @@ export function useGetAIResponse() {
     },
   });
 
-  const getAIResponse = async ({ userId, userInput, itemTypeId }) => {
+  const getAIResponse = async ({ userId, userInput, itemTypeId, type }) => {
     return mutation.mutate({
       userId,
       userInput: userInput.message,
       itemTypeId,
+      type,
     });
   };
 

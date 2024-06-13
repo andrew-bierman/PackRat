@@ -22,12 +22,14 @@ interface ChatComponentProps {
   showChatSelector?: boolean;
   defaultChatId?: string | null;
   itemTypeId?: string | null;
+  type?: string | null;
 }
 
 interface ChatModalTriggerProps {
   title: string;
   trigger: string;
   itemTypeId: string | null;
+  type: string;
 }
 
 const actionItems = [
@@ -51,6 +53,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
   defaultChatId = null,
   itemTypeId = null,
+  type = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {
@@ -62,7 +65,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setUserInput,
     setTypeId,
     isLoading,
-  } = useChat({ itemTypeId });
+  } = useChat({ itemTypeId, type });
 
   const [messages, setMessages] = useState(parsedMessages);
 
@@ -134,7 +137,10 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
   );
 };
 
-const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
+const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
+  itemTypeId,
+  type,
+}) => {
   const styles = useCustomStyles(loadStyles);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isItemOpen, setIsItemOpen] = useState(false);
@@ -272,7 +278,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
             onPress={() => setIsChatOpen(false)}
             style={{ zIndex: 1001 }}
           />
-          <ChatComponent itemTypeId={itemTypeId} />
+          <ChatComponent itemTypeId={itemTypeId} type={type} />
         </Animated.View>
       )}
     </View>

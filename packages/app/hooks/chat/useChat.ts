@@ -6,6 +6,7 @@ import { useAuthUser } from 'app/auth/hooks';
 export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
   const [typeId, setTypeId] = useState(itemTypeId);
+  const [itemType, setItemType] = useState(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
 
   const [userInput, setUserInput] = useState('');
@@ -74,6 +75,7 @@ export const useChat = (itemTypeId = null) => {
       userId: user.id,
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
+      type: typeId.type,
     });
     await refetch();
     setIsLoading(false);

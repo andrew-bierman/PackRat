@@ -32,15 +32,17 @@ export function getAIResponseRoute() {
         userId: z.string(),
         userInput: z.string(),
         itemTypeId: z.string(),
+        type: z.string(),
       }),
     )
     .mutation(async (opts) => {
       const { env } = opts.ctx;
-      const { userId, userInput, itemTypeId } = opts.input;
+      const { userId, userInput, itemTypeId, type } = opts.input;
       return getAIResponseService(
         userId,
         itemTypeId,
         userInput,
+        type,
         env.OPENAI_API_KEY,
       );
     });
