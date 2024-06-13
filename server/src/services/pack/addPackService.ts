@@ -29,7 +29,7 @@ export const addPackService = async (
   const queue = Queue.getInstance();
 
   // Add the vector sync task to the queue
-  await queue.addTask(async () => {
+  queue.addTask(async () => {
     await VectorClient.instance.syncRecord({
       id: createdPack.id,
       content: name,
