@@ -17,7 +17,12 @@ export const createContext = (honoContext: Context) => async () => {
   DB = db;
 
   await DbClient.init(honoContext.env.DB);
-  await VectorClient.init(honoContext.env.VECTOR_INDEX);
+  await VectorClient.init({
+    apiKey: honoContext.env.VECTORIZE_API_KEY,
+    // indexName: honoContext.env.VECTOR_INDEX,
+    indexName: 'vector-index', // TODO: Change to 'VECTOR_INDEX
+    accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
+  });
   await AiClient.init(honoContext.env.AI);
 
   const user = await extractTokenAndGetUser(req.raw, env.JWT_SECRET);

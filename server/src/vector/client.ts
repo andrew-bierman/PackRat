@@ -1,44 +1,107 @@
 import { AiClient } from '../integrations/ai/client';
 
 class VectorClient {
-  private static _instance: any = null;
-  private constructor() {}
+  private static _instance: VectorClient | null = null;
+  private apiKey: string;
+  private indexName: string;
+  private accountId: string;
 
-  public static get instance(): any {
+  private constructor(apiKey: string, indexName: string, accountId: string) {
+    this.apiKey = apiKey;
+    this.indexName = indexName;
+    this.accountId = accountId;
+  }
+
+  public static get instance(): VectorClient {
     if (!VectorClient._instance) {
       throw new Error('VectorClient instance not initialized.');
     }
     return VectorClient._instance;
   }
 
-  public static async init(vectorize): Promise<void> {
+  public static async init({
+    apiKey,
+    indexName,
+    accountId,
+  }: {
+    apiKey: string;
+    indexName: string;
+    accountId: string;
+  }): Promise<void> {
     if (!VectorClient._instance) {
-      VectorClient._instance = vectorize;
+      VectorClient._instance = new VectorClient(apiKey, indexName, accountId);
     }
   }
 
-  public static async insert(id: string, values: number[]) {
-    return await VectorClient.instance.upsert([{ id, values }]);
+  // Commented out the original logic
+  // public async insert(id: string, values: number[]) {
+  //   return await this.instance.upsert([{ id, values }]);
+  // }
+
+  // New API-based insert method
+  public async insert(id: string, values: number[]) {
+    const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/insert`;
+    const ndjsonBody = `${JSON.stringify({ id, values })}\n`;
+
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/x-ndjson',
+        'Authorization': `Bearer ${this.apiKey}`,
+      },
+      body: ndjsonBody,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to insert vector: ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    return await response.json();
   }
 
-  public static async search(queryEmbedding: number[]) {
-    return await VectorClient.instance.query(queryEmbedding, { topK: 5 });
+
+  // Commented out the original logic
+  // public async search(queryEmbedding: number[]) {
+  //   return await this.instance.query(queryEmbedding, { topK: 5 });
+  // }
+
+  // New API-based search method
+  public async search(queryEmbedding: number[]) {
+    const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/vectors/query`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify({
+        queries: [{ values: queryEmbedding, topK: 5 }],
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to search vectors: ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    return await response.json();
   }
 
-  public static async syncRecord({
-    id,
-    content,
-  }: {
-    id: string;
-    content: string;
-  }) {
+  public async syncRecord({ id, content }: { id: string; content: string }) {
     const values = await AiClient.getEmbedding(content);
-    await VectorClient.insert(id, values);
+    await this.insert(id, values);
   }
 }
 
 export { VectorClient };
 
 export interface Env {
-  VECTORIZE_INDEX: any;
+  VECTORIZE_API_KEY: string;
+  VECTORIZE_INDEX_NAME: string;
+  ACCOUNT_ID: string;
 }
