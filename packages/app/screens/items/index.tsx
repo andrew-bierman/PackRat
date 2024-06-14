@@ -7,10 +7,10 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 // import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
-import { usePagination, useScreenWidth } from 'app/hooks/common';
+import { usePagination } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
 import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useMedia } from 'tamagui';
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 // const RTooltip: any = OriginalRTooltip;
@@ -59,7 +59,7 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
-  const { screenWidth } = useScreenWidth();
+  const { xs, xxxs, xxs } = useMedia();
 
   return (
     <RScrollView>
@@ -71,13 +71,13 @@ export default function Items() {
       <RStack style={styles.mainContainer}>
         <RStack
           style={{
-            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
+            width: xs ? '80vw' : '60vw',
             ...styles.container,
           }}
         >
           <RStack
             style={{
-              width: screenWidth <= SCREEN_WIDTH ? '45vw' : '40vw',
+              width: xs ? '45vw' : '40vw',
               ...styles.sortContainer,
             }}
           >
@@ -86,14 +86,8 @@ export default function Items() {
               value={value}
               data={optionValues}
               onValueChange={handleSort}
-              placeholder="Sort By"
-              width={
-                Platform.OS === 'web'
-                  ? screenWidth <= SCREEN_WIDTH
-                    ? '25vw'
-                    : '15vw'
-                  : 120
-              }
+              placeholder={value}
+              width={xxxs ?'25vw': xxs ? 120 : xs ? '25vw' : '15vw'}
             />
           </RStack>
           <BaseModal
@@ -163,6 +157,7 @@ export default function Items() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const {xxs,xxxs} = useMedia();
 
   return {
     mainContainer: {
@@ -174,7 +169,7 @@ const loadStyles = (theme) => {
     },
     button: {
       color: currentTheme.colors.white,
-      width: Platform.OS === 'web' ? '20rem' : '20%',
+      width: xxs ? '20%' : '20rem',
       display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
@@ -188,7 +183,7 @@ const loadStyles = (theme) => {
     },
     sortContainer: {
       flexDirection: 'row',
-      gap: Platform.OS === 'web' ? 10 : 60,
+      gap: xxxs ? 10 : xxs ? 60: 10,
       alignItems: 'center',
     },
   };

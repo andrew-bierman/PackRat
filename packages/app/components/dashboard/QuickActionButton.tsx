@@ -4,8 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useMedia } from 'tamagui';
 
 const RCard: any = OriginalRCard;
 
@@ -40,11 +39,11 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const { screenWidth } = useScreenWidth();
+  const {xs} = useMedia();
   return {
     container: {
       margin: 10,
-      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
+      width: xs ? '35vw' : '10vw',
       height: '10vh',
       display: 'flex',
       alignItems: 'center',
@@ -53,7 +52,7 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
+      width: xs ? '35vw' : '10vw',
       height: '10vh',
       // paddingHorizontal: 40,
       // paddingVertical: 60,

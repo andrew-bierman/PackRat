@@ -2,8 +2,7 @@ import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/hooks/dashboard';
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useMedia } from 'tamagui';
 
 const QuickActionsSection = () => {
   const styles = useCustomStyles(loadStyles);
@@ -27,12 +26,12 @@ const QuickActionsSection = () => {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const { screenWidth } = useScreenWidth();
+  const {xs } = useMedia();
   return {
     section: {
       marginBottom: 20,
       paddingHorizontal: 20, // Added padding here.
-      width: screenWidth <= SCREEN_WIDTH ? '80vw' : '22vw',
+      width: xs ? '80vw' : '22vw',
       display: 'flex',
       justifyContent: 'center',
     },

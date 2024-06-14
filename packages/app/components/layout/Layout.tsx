@@ -1,21 +1,15 @@
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
+import { useMedia } from 'tamagui';
 
 const Layout = ({ children }) => {
-  const { screenWidth } = useScreenWidth();
+  const { xs,xxs } = useMedia();
   return (
     <View
       style={{
         display: 'flex',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        width:
-          Platform.OS === 'web'
-            ? screenWidth <= SCREEN_WIDTH
-              ? '100vw'
-              : '60vw'
-            : '100%',
+        width:xxs ? '100%' : xs ? '100vw' : '60vw',
         alignSelf: 'center',
       }}
     >

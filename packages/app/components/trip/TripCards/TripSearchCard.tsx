@@ -3,10 +3,9 @@ import { TripCardBase } from './TripCardBase';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 
 import { FontAwesome } from '@expo/vector-icons';
-import { Platform, View } from 'react-native';
+import {  View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useMedia } from 'tamagui';
 
 type TripSearchCardProps = {
   searchRef: any;
@@ -15,11 +14,11 @@ type TripSearchCardProps = {
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
   const { currentTheme } = useTheme();
   const [, setGEOLocation] = useGEOLocationSearch();
-  const { screenWidth } = useScreenWidth();
 
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
   };
+  const {xs} = useMedia();
 
   return (
     <TripCardBase
@@ -33,7 +32,7 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
-      <View style={{ width: screenWidth <= SCREEN_WIDTH ? '50vw' : '30vw' }}>
+      <View style={{ width: xs ? '50vw' : '30vw' }}>
         <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       </View>
     </TripCardBase>
@@ -41,6 +40,8 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
 };
 
 const loadStyles = (theme) => {
+  const {xxs} = useMedia();
+
   const { currentTheme } = theme;
 
   return {
@@ -52,7 +53,7 @@ const loadStyles = (theme) => {
     flex: 1,
     paddingHorizontal: 60,
     paddingVertical: 70,
-    height: Platform.OS === 'web' ? 450 : '100%',
+    height: xxs ? '100%' : 450,
     alignSelf: 'center',
   };
 };

@@ -11,12 +11,11 @@ import Loader from '../Loader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './itemsTable.style';
 import { AddItem } from '../item/AddItem';
-import { useScreenWidth } from 'app/hooks/common';
 import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { RButton, RStack, RText } from '@packrat/ui';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useMedia } from 'tamagui';
 
 interface ItemsTableProps {
   limit: number;
@@ -58,7 +57,7 @@ export const ItemsTable = ({
   totalPages,
 }: ItemsTableProps) => {
   const flexArr = [1.5, 1, 1, 1, 0.65, 0.65, 0.65];
-  const { screenWidth } = useScreenWidth();
+  const { xs, xxs, xxxs } = useMedia();
   const { handleDeleteItem } = useDeleteItem();
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -84,12 +83,7 @@ export const ItemsTable = ({
       <RText
         style={{
           color: isDark ? 'white' : 'black',
-          fontSize:
-            Platform.OS === 'web'
-              ? screenWidth <= SCREEN_WIDTH
-                ? '12px'
-                : '15px'
-              : 15,
+          fontSize:xxs ? 15 : xs ? '12px' : '15px',
         }}
       >
         {name}
@@ -101,12 +95,7 @@ export const ItemsTable = ({
       <RText
         style={{
           color: isDark ? 'white' : 'black',
-          fontSize:
-            Platform.OS === 'web'
-              ? screenWidth <= SCREEN_WIDTH
-                ? '12px'
-                : '17px'
-              : 15,
+          fontSize:xxs ? 15 : xs ? '12px' : '15px',
         }}
       >
         {category?.name || type}
@@ -152,7 +141,7 @@ export const ItemsTable = ({
             paddingTop: 30,
             marginTop: 20,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
+            width: xxxs? '100vw' : xs ? '80vw' : '60vw',
           }}
         >
           <ScrollView
@@ -177,12 +166,8 @@ export const ItemsTable = ({
                       data={
                         <RText
                           style={{
-                            fontSize:
-                              Platform.OS === 'web'
-                                ? screenWidth <= 425
-                                  ? 11
-                                  : 15
-                                : 15,
+                            fontSize: 15,
+                                 
                             fontWeight: 'bold',
                           }}
                         >
@@ -196,7 +181,7 @@ export const ItemsTable = ({
                 style={styles.head}
               />
               <ScrollView
-                style={{ height: Platform.OS === 'web' ? 400 : 'auto' }}
+                style={{ height: xxs ? 'auto' : 400 }}
               >
                 {isLoading ? (
                   <Loader />
