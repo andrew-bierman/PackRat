@@ -9,6 +9,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
+import { useMedia } from 'tamagui';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);

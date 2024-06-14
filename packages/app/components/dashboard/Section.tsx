@@ -24,7 +24,7 @@ const Section: React.FC<SectionProps> = ({ children, onPress }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const { xs } = useMedia();
+  const { xs, xxxs, xxs, } = useMedia();
   return {
     section: {
       marginBottom: 20,
@@ -32,7 +32,7 @@ const loadStyles = (theme: any) => {
     card: {
       justifyContent: 'center',
       alignItems: 'center',
-      width: xs ? '90vw' : '58vw',
+      width: xxxs ? '90vw' : xxs ? '90vw' : xs ? '92vw': '88vw',
       backgroundColor: currentTheme.colors.secondaryBlue,
       borderRadius: 8,
     },

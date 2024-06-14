@@ -71,7 +71,7 @@ export default function Items() {
       <RStack style={styles.mainContainer}>
         <RStack
           style={{
-            width: xs ? '80vw' : '60vw',
+            width:xxxs?'100vw': xxs? '80vw' : xs ? '80vw' : '60vw',
             ...styles.container,
           }}
         >
