@@ -50,7 +50,11 @@ import {
   scorePackRoute,
 } from '../controllers/pack';
 
-import { getAIResponseRoute, getUserChatsRoute } from '../controllers/openAi';
+import {
+  getAIResponseRoute,
+  getUserChatsRoute,
+  getAISuggestionsRoute,
+} from '../controllers/openAi';
 import {
   addGlobalItemToPackRoute,
   addItemGlobalRoute,
@@ -167,6 +171,7 @@ export const appRouter = trpcRouter({
   getPhotonDetails: getPhotonDetailsRoute(),
   // open ai routes
   getAIResponse: getAIResponseRoute(),
+  getAISuggestions: getAISuggestionsRoute(),
   getUserChats: getUserChatsRoute(),
   // item routes
   getItems: getItemsRoute(),

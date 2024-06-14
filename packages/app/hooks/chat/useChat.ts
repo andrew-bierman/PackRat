@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
-import { useGetAIResponse } from './useGetAIResponse';
+import { useGetAIResponse, useGetAISuggestions } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';
 
 export const useChat = (itemTypeId = null) => {
@@ -18,6 +18,7 @@ export const useChat = (itemTypeId = null) => {
   );
 
   const { getAIResponse } = useGetAIResponse();
+  const { getAISuggestions } = useGetAISuggestions();
 
   const conversations = chatsData?.conversations?.history || '';
 
@@ -81,6 +82,15 @@ export const useChat = (itemTypeId = null) => {
     setIsLoading(false);
   };
 
+  const handleSubmitAnalysis = async () => {
+    await getAISuggestions({
+      userId: user.id,
+      itemTypeId: typeId.itemTypeId,
+      type: typeId.type,
+    });
+    await refetch();
+  };
+
   return {
     conversations,
     typeId,
@@ -88,6 +98,7 @@ export const useChat = (itemTypeId = null) => {
     userInput,
     isLoading,
     handleSendMessage,
+    handleSubmitAnalysis,
     setUserInput,
     setTypeId,
   };

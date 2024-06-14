@@ -126,16 +126,6 @@ export function PackDetails() {
                                     isOwner={isOwner}
                                   />
                                 );
-                              // case SECTION.CHAT:
-                              //   return (
-                              //     <View style={styles.boxStyle}>
-                              //       <ChatContainer
-                              //         itemTypeId={currentPackId}
-                              //         title="Chat"
-                              //         trigger="Open Chat"
-                              //       />
-                              //     </View>
-                              //   );
                               default:
                                 return null;
                             }

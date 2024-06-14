@@ -88,6 +88,7 @@
   "packageManager": "yarn@4.1.1",
   "dependencies": {
     "@babel/runtime": "^7.21.0",
+    "@instructor-ai/instructor": "^1.4.0",
     "@manypkg/cli": "^0.21.0",
     "@prisma/extension-accelerate": "^0.6.2",
     "check-dependency-version-consistency": "^4.1.0",

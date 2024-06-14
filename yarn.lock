@@ -4535,6 +4535,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@instructor-ai/instructor@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@instructor-ai/instructor@npm:1.4.0"
+  dependencies:
+    zod-stream: "npm:1.0.3"
+    zod-validation-error: "npm:^2.1.0"
+  peerDependencies:
+    openai: ">=4.28.0"
+    zod: ">=3.22.4"
+  checksum: 10/c982e5564e35d55eb43f4ce40b793626256359a062cad1f153bc8aba8e33d7c57c696ddcbf0cbb2c45a3f20740f64b21c052f585f28782e0987ff1e5f553c8ab
+  languageName: node
+  linkType: hard
+
 "@internationalized/date@npm:^3.5.3":
   version: 3.5.3
   resolution: "@internationalized/date@npm:3.5.3"
@@ -28805,6 +28818,7 @@ __metadata:
   resolution: "packrat-world@workspace:."
   dependencies:
     "@babel/runtime": "npm:^7.21.0"
+    "@instructor-ai/instructor": "npm:^1.4.0"
     "@manypkg/cli": "npm:^0.21.0"
     "@prisma/extension-accelerate": "npm:^0.6.2"
     check-dependency-version-consistency: "npm:^4.1.0"
