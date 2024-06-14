@@ -1,9 +1,11 @@
 import { View } from 'react-native';
-import { RButton, RCard, RText, RStack } from '@packrat/ui';
+import { RButton as OriginalRButton, RCard, RText } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAccordionState from './useAccordionState';
 import loadStyles from './landingpage.style';
+
+const RButton: any = OriginalRButton;
 
 export const LandingPageAccordion = ({ title, content, iconName }) => {
   const styles = useCustomStyles(loadStyles);

@@ -1,13 +1,13 @@
 import { Hono } from 'hono';
 import {
-  getPacks,
-  getPackById,
-  addPack,
-  editPack,
-  deletePack,
-  getPublicPacks,
-  scorePack,
-  duplicatePublicPack,
+  getPacksRoute as getPacks,
+  getPackByIdRoute as getPackById,
+  addPackRoute as addPack,
+  editPackRoute as editPack,
+  deletePackRoute as deletePack,
+  getPublicPacksRoute as getPublicPacks,
+  scorePackRoute as scorePack,
+  duplicatePublicPackRoute as duplicatePublicPack,
 } from '../controllers/pack/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -38,8 +38,8 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getPublicPacks),
 );
 
@@ -66,9 +66,9 @@ router.get(
  */
 router.get(
   '/:ownerId',
-  authTokenMiddleware,
-  checkRole(['user', 'admin']),
-  (req, res, next) => zodParser(validator.getPacks, req.params, next),
+  authTokenMiddleware as any,
+  checkRole(['user', 'admin']) as any,
+  ((req, res, next) => zodParser(validator.getPacks, req.params, next)) as any,
   tryCatchWrapper(getPacks),
 );
 
@@ -95,7 +95,8 @@ router.get(
  */
 router.get(
   '/p/:packId',
-  (req, res, next) => zodParser(validator.getPackById, req.params, next),
+  ((req, res, next) =>
+    zodParser(validator.getPackById, req.params, next)) as any,
   tryCatchWrapper(getPackById),
 );
 
@@ -122,7 +123,8 @@ router.get(
  */
 router.put(
   '/score/:packId',
-  (req, res, next) => zodParser(validator.getPackById, req.params, next),
+  ((req, res, next) =>
+    zodParser(validator.getPackById, req.params, next)) as any,
   tryCatchWrapper(scorePack),
 );
 
@@ -155,7 +157,7 @@ router.put(
  */
 router.post(
   '/',
-  (req, res, next) => zodParser(validator.addPack, req.body, next),
+  ((req, res, next) => zodParser(validator.addPack, req.body, next)) as any,
   tryCatchWrapper(addPack),
 );
 
@@ -188,7 +190,7 @@ router.post(
  */
 router.put(
   '/',
-  (req, res, next) => zodParser(validator.editPack, req.body, next),
+  ((req, res, next) => zodParser(validator.editPack, req.body, next)) as any,
   tryCatchWrapper(editPack),
 );
 
@@ -217,7 +219,7 @@ router.put(
  */
 router.delete(
   '/',
-  (req, res, next) => zodParser(validator.deletePack, req.body, next),
+  ((req, res, next) => zodParser(validator.deletePack, req.body, next)) as any,
   tryCatchWrapper(deletePack),
 );
 
@@ -246,7 +248,8 @@ router.delete(
  */
 router.post(
   '/duplicate',
-  (req, res, next) => zodParser(validator.duplicatePublicPack, req.body, next),
+  ((req, res, next) =>
+    zodParser(validator.duplicatePublicPack, req.body, next)) as any,
   tryCatchWrapper(duplicatePublicPack),
 );
 

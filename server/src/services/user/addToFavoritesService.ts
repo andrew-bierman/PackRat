@@ -11,12 +11,12 @@ import { UserFavoritePacks } from '../../drizzle/methods/UserFavoritePacks';
 export const addToFavoriteService = async (
   packId: string,
   userId: string,
-): Promise<object> => {
+): Promise<object | null> => {
   const userFavoritePacksClass = new UserFavoritePacks();
   try {
     const userClass = new User();
     const user = await userClass.findUnique({
-      where: { id: userId },
+      where: { email: userId },
       with: { id: true, favoriteDocuments: true },
     });
 
@@ -67,7 +67,7 @@ export const addToFavoriteService = async (
     }
 
     const updatedUser = await userClass.findUnique({
-      where: { id: userId },
+      where: { email: userId },
       with: {
         id: true,
         username: true,

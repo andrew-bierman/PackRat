@@ -1,13 +1,17 @@
-import { RCard, RParagraph, RStack, RText } from '@packrat/ui';
+import {
+  RCard as OriginalRCard,
+  RParagraph as OriginalRParagraph,
+  RStack as OriginalRStack,
+  RText as OriginalRText,
+} from '@packrat/ui';
 import { Platform } from 'react-native';
 import { Text } from 'tamagui';
-import { useCardTrip } from 'app/hooks/trips/useTripCard';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useTheme from '../hooks/useTheme';
-import { theme } from '../theme/index';
-import Carousel from './carousel';
-import MapContainer from './map/MapContainer';
-import { PlacesAutocomplete } from './PlacesAutocomplete';
+import useTheme from '../../hooks/useTheme';
+import { theme } from '../../theme/index';
+import Carousel from '../carousel';
+import MapContainer from '../map/MapContainer';
+import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 
 interface TripCardProps {
   title: string;
@@ -22,6 +26,11 @@ interface TripCardProps {
   form?: any;
   searchRef?: any;
 }
+
+const RStack: any = OriginalRStack;
+const RText: any = OriginalRText;
+const RParagraph: any = OriginalRParagraph;
+const RCard: any = OriginalRCard;
 
 export default function TripCard({
   title,
@@ -95,7 +104,8 @@ export default function TripCard({
           <MapContainer shape={shape} />
         )
       ) : isSearch ? (
-        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+        // <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+        <PlacesAutocomplete ref={searchRef} /> //because handle select is not defined here
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>

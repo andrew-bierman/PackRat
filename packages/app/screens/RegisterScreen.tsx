@@ -1,28 +1,23 @@
-import { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  RHeading,
+  RHeading as OriginalRHeading,
   RStack,
-  RButton,
-  RText,
+  RText as OriginalRText,
   RIconButton,
-  InputText,
-  InputTextRules,
   RScrollView,
   Form,
   FormInput,
   SubmitButton,
+  RLink,
 } from '@packrat/ui';
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'app/hooks/router';
-// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { RLink } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
-import { useForm } from 'react-hook-form';
-import { useSession } from '../context/Auth/SessionProvider';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
+
+const RText: any = OriginalRText;
+const RHeading: any = OriginalRHeading;
 
 export default function Register() {
   const { currentTheme } = useTheme();
@@ -30,7 +25,7 @@ export default function Register() {
   const { promptAsync } = useGoogleAuth();
 
   return (
-    <RScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+    <RScrollView contentContainerStyle={{ paddingBottom: 20 } as any}>
       <View
         style={{
           width: '100%',

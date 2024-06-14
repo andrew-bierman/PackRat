@@ -1,7 +1,9 @@
 import { queryTrpc } from '../../trpc';
-// import { trpc } from '../../context/tRPC';
-import { setTrails, setFilteredTrails } from '../../store/trailsStore_copy'; // Importing the actions
-import { store } from '../../store/store';
+
+interface Trail {
+  properties: Record<string | number, any>;
+  // other properties if needed
+}
 
 function useTrails({ latLng, selectedSearch, radius = 1000 }) {
   // const { data, error, isLoading } = await trpc.getTrailsOSM.query({
@@ -18,7 +20,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
       lat,
       lon,
       radius,
-      selectedSearch,
+      // selectedSearch,
     },
     {
       enabled: isEnabled,
@@ -26,15 +28,15 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
   );
 
   // React.useEffect(() => {
-  let filteredTrails = [];
+  let filteredTrails: string[] = [];
   if (data) {
-    const trails = data.features;
+    const trails = data.features as Trail[];
     filteredTrails = trails
       .filter(
         (trail) =>
-          trail.properties.name && trail.properties.name !== selectedSearch,
+          trail.properties?.name && trail.properties.name !== selectedSearch,
       )
-      .map((trail) => trail.properties.name)
+      .map((trail) => trail.properties?.name)
       .slice(0, 25);
 
     // Dispatching directly using the imported store

@@ -3,8 +3,10 @@ import { Menu } from '@tamagui/lucide-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../../hooks/useTheme';
 
-import { Adapt, Button, Popover, Text } from 'tamagui';
+import { Adapt, Button, Popover as OriginalPopover } from 'tamagui';
 import { NavigationList } from './NavigationList';
+
+const Popover: any = OriginalPopover;
 
 export function Drawer() {
   const { currentTheme } = useTheme();
@@ -33,7 +35,7 @@ export function Drawer() {
       </Popover.Trigger>
       <Adapt when="sm" platform="touch">
         <Popover.Sheet modal dismissOnSnapToBottom>
-          <Popover.Sheet.Frame padding="$4">
+          <Popover.Sheet.Frame padding="$1">
             <Adapt.Contents />
           </Popover.Sheet.Frame>
 

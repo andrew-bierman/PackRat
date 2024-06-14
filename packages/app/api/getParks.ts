@@ -10,7 +10,7 @@ import osmtogeojson from 'osmtogeojson';
  * @return {Array<string>} An array of park names.
  */
 export const getParksRapid = async (state: string): Promise<string[]> => {
-  let parksArray = [];
+  let parksArray: any[] = [];
   const abbrState = abbrRegion(state, 'abbr') ?? '';
   if (abbrState) {
     await fetch(`${api}/getparks?abbrState=${abbrState}`)

@@ -13,16 +13,16 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
  */
 
 interface LargeCardProps {
-  title: string;
+  title?: string;
   Icon?: React.ComponentType<any>;
   ContentComponent?: React.ComponentType<any>;
   contentProps?: object;
-  type: 'search' | 'map' | 'mobile';
+  type?: 'search' | 'map' | 'mobile';
   customStyle?: object;
   children?: React.ReactNode;
 }
 
-const getContainerStyle = (type: 'search' | 'map' | 'mobile') => {
+const getContainerStyle = (type?: 'search' | 'map' | 'mobile') => {
   const styles = useCustomStyles(loadStyles);
   switch (type) {
     case 'search':
@@ -129,7 +129,7 @@ const loadStyles = (theme: any) => {
       padding: currentTheme.size.cardPadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '100%',
+      height: Platform.OS === 'web' ? 650 : '23%',
       overflow: 'hidden',
     },
   };

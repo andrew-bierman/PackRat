@@ -1,12 +1,12 @@
 import {
-  Card,
+  Card as OriginalCard,
   CardProps,
   ColorProp,
   ColorTokens,
-  Paragraph,
+  Paragraph as OriginalParagraph,
   ParagraphProps,
   useThemeName,
-  XStack,
+  XStack as OriginalXStack,
   XStackProps,
 } from 'tamagui';
 import {
@@ -16,6 +16,10 @@ import {
   WarningCircleRegular,
   WarningRegular,
 } from './icons';
+
+const Card: any = OriginalCard;
+const Paragraph: any = OriginalParagraph;
+const XStack: any = OriginalXStack;
 
 type Severity = 'default' | 'error' | 'info' | 'warning' | 'success';
 export type LmAlertProps = CardProps & {
@@ -87,7 +91,7 @@ export function LmAlert({
             backgroundColor: severityColor[severity],
           })}
       {...rest}
-      padding={rest.padding || '$4'}
+      // padding={rest.padding || '$4'}
     >
       <XStack space alignItems={'center'} {...xStackProps}>
         <AlertIcon

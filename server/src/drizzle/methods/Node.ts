@@ -9,12 +9,13 @@ export class Node {
     filter = eq(node.id, id),
     returning = null,
   ) {
-    return DbClient.instance
-      .update(node)
-      .set(data)
-      .where(filter)
-      .returning(returning)
-      .get();
+    let query: any = DbClient.instance.update(node).set(data).where(filter);
+
+    if (returning) {
+      query = query.returning(returning);
+    }
+
+    return query.get();
   }
 
   async delete(id: string, filter = eq(node.id, id)) {
@@ -26,7 +27,13 @@ export class Node {
   }
 
   async findMany(filter = null) {
-    return DbClient.instance.select().from(node).where(filter).get();
+    let query: any = DbClient.instance.select().from(node);
+
+    if (filter) {
+      query = query.where(filter);
+    }
+
+    return query.get();
   }
 
   async findUniqueNode(query) {

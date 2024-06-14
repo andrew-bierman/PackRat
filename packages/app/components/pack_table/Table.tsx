@@ -18,11 +18,11 @@ import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
 interface TableContainerProps {
   currentPack: any;
-  selectedPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
-  copy: boolean;
-  hasPermissions: boolean;
+  selectedPack?: any;
+  refetch?: boolean;
+  setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
+  copy?: boolean;
+  hasPermissions?: boolean;
 }
 
 export const TableContainer = ({
@@ -56,7 +56,8 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
+
+  const headerRow = ['Item Name', 'Weight', 'Quantity', ''];
   let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
@@ -68,7 +69,7 @@ export const TableContainer = ({
     flexArr = [1, 1, 1, 1];
   }
   if (isLoading) return <RSkeleton style={{}} />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage message={String(error)} />;
   const isWeb = Platform.OS === 'web';
 
   return (
@@ -100,7 +101,7 @@ export const TableContainer = ({
                 <>
                   <CategoryRow category={category} />
                   <FlatList
-                    data={items}
+                    data={Array.isArray(items) ? items : []} // Ensure items is an array
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                       <TableItem
@@ -150,7 +151,10 @@ export const TableContainer = ({
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
-      <WeightUnitDropdown value={weightUnit} onChange={setWeightUnit} />
+      <WeightUnitDropdown
+        value={weightUnit}
+        onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+      />
     </View>
   );
 };

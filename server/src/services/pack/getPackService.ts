@@ -1,7 +1,10 @@
 import { Pack } from '../../drizzle/methods/pack';
 import { SORT_OPTIONS, DEFAULT_SORT, sortFunction } from '../../utils/pack';
 
-export const getPacksService = async (ownerId: string, queryBy?: string) => {
+export const getPacksService = async (
+  ownerId: string,
+  queryBy: string = 'createdAt',
+) => {
   try {
     const packClass = new Pack();
     const sortOption = queryBy ? SORT_OPTIONS[queryBy] : DEFAULT_SORT;

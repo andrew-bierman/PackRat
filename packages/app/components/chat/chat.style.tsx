@@ -68,5 +68,16 @@ export const loadStyles = (theme: any) => {
     newChatButtonText: {
       color: currentTheme.colors.white,
     },
+    floatingChatContainer: {
+      position: 'absolute',
+      bottom: 50,
+      right: 50,
+      width: 300,
+      height: 500,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      padding: 10,
+      zIndex: 1000,
+    },
   };
 };

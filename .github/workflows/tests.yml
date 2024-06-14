@@ -6,13 +6,17 @@ on:
   pull_request:
     branches: ['**']
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    env:
+      OSM_URI: ${{ secrets.OSM_URI }}
+      JWT_SECRET: test123
 
     steps:
       - uses: actions/checkout@v3
@@ -29,15 +33,12 @@ jobs:
           script: |
             const commentIdentifier = '<!-- test_results -->';
             const commentBody = `${commentIdentifier}\n🚀 Running tests... Please wait for the results! 🕐`;
-
             const comments = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-
             const existingComment = comments.data.find(comment => comment.body.startsWith(commentIdentifier));
-
             if (existingComment) {
               core.setOutput('comment_id', existingComment.id);
             } else {
@@ -58,8 +59,7 @@ jobs:
 
       - name: Run tests
         id: run_tests
-        run: |
-          yarn test
+        run: yarn test
         continue-on-error: true
 
       - name: Update comment with test results
@@ -73,9 +73,7 @@ jobs:
             const testLogs = `${{ steps.run_tests.outputs.stdout }}\n${{ steps.run_tests.outputs.stderr }}`;
             const testStatus = `${{ steps.run_tests.outcome }}`;
             const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-
             const includeTestLogs = false; // Set this to true when you want to include the test logs
-
             let commentBody = `${commentIdentifier}\n`;
             let emoji = '';
             if (testStatus === 'success') {
@@ -85,20 +83,16 @@ jobs:
               commentBody += '❌ Tests failed for this pull request. 😞\n\n';
               emoji = '❤️';
             }
-
             commentBody += `[View Test Workflow](${workflowUrl})\n\n`;
-
             if (includeTestLogs) {
               commentBody += `<details><summary>Test Logs</summary>\n\n\`\`\`\n${testLogs}\n\`\`\`\n</details>`;
             }
-
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               comment_id: commentId,
               body: commentBody
             });
-
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,

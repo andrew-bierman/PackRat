@@ -44,7 +44,7 @@ export const Showcase = YStack.styleable<{
     section: false,
     part: false,
   };
-  
+
   const codePath =
     query.section &&
     query.part &&

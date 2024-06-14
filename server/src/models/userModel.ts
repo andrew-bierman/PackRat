@@ -1,6 +1,6 @@
 import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import myDB from './dbConnection';
-import bycrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import * as jwt from 'hono/jwt';
 import { JWT_SECRET, CLIENT_URL } from '../config';
 import validator from 'validator';

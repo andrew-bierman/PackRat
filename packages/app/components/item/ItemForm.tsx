@@ -2,17 +2,21 @@ import React from 'react';
 import {
   RText,
   RStack,
-  Form,
+  Form as OriginalForm,
   FormInput,
   SubmitButton,
-  FormSelect,
-  FormRadioGroup,
+  FormSelect as OriginalFormSelect,
+  FormRadioGroup as OriginalFormRadioGroup,
 } from '@packrat/ui';
 import { View } from 'react-native';
 
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
 import { type Item } from '@packrat/validations';
+
+const Form: any = OriginalForm;
+const FormSelect: any = OriginalFormSelect;
+const FormRadioGroup: any = OriginalFormRadioGroup;
 
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 

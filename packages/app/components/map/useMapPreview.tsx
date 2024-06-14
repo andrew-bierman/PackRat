@@ -9,6 +9,20 @@ import { api } from '../../constants/api';
 import { useState, useEffect } from 'react';
 import simplify from 'simplify-geojson';
 
+interface Feature {
+  [key: string]: any;
+}
+
+interface MapPreviewData {
+  isPoint: boolean;
+  uri: string;
+}
+
+interface ImageShape {
+  type: string;
+  features: Feature[];
+}
+
 const useProcessedShape = (shape) => {
   const [processedShape, setProcessedShape] = useState(null);
 
@@ -21,7 +35,9 @@ const useProcessedShape = (shape) => {
 };
 
 const useMapPreviewData = (shape, processedShape) => {
-  const [mapPreviewData, setMapPreviewData] = useState(null);
+  const [mapPreviewData, setMapPreviewData] = useState<MapPreviewData | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!processedShape) return;
@@ -39,7 +55,7 @@ const useMapPreviewData = (shape, processedShape) => {
       shape.features[0].properties = lineProperties;
     }
 
-    const imageShape = { type: 'FeatureCollection', features: [] };
+    const imageShape: ImageShape = { type: 'FeatureCollection', features: [] };
 
     const polygonObj = {
       ...shape.features[0],
@@ -69,7 +85,9 @@ const useMapPreviewData = (shape, processedShape) => {
 
 
     let bounds = getShapeSourceBounds(shape);
-    bounds = bounds[0].concat(bounds[1]);
+    if (Array.isArray(bounds[0]) && Array.isArray(bounds[1])) {
+      bounds = [bounds[0].concat(bounds[1])];
+    }
 
     const {
       coordinates: [lng, lat],

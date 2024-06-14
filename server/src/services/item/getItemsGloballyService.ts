@@ -21,7 +21,7 @@ export const getItemsGloballyService = async (
   const page = Number(reqpage) || 1;
   const offset = (page - 1) * limit;
 
-  const items = await itemClass.findGlobal(limit, offset, searchString);
+  const items = await itemClass.findGlobal(limit, offset, searchString || '');
 
   return {
     items,

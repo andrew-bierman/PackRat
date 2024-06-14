@@ -55,8 +55,13 @@ export function BasicTable({
   setRefetch,
 }: BasicTableProps) {
   const ActionButtons = ({ item }) => {
-    const [activeModal, setActiveModal] = React.useState<ModalName | null>(null);
-    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
+
+    const [activeModal, setActiveModal] = React.useState<ModalName | null>(
+      null,
+    );
+    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(
+      null,
+    );
 
     const openModal = (modalName: ModalName, itemId: string) => {
       setActiveModal(modalName);
@@ -86,12 +91,14 @@ export function BasicTable({
         >
           {selectedItemId === item.id && (
             <AddItem id={item.id} packId={item.id} isEdit={true} initialData={item} />
+
           )}
         </EditPackItemModal>
         <DeletePackItemModal
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
           onConfirm={() => onDelete({ itemId: item.id, packId: currentPack.id })}
+
         />
         {hasPermissions ? (
           Platform.OS === 'android' ||
@@ -120,7 +127,6 @@ export function BasicTable({
     );
   };
 
-
   const columnHelper = createColumnHelper<Item>();
   const columns = [
     columnHelper.accessor('name', {
@@ -129,7 +135,7 @@ export function BasicTable({
       // footer: (info) => info.column.id,
     }),
     columnHelper.accessor('weight', {
-      cell: (info) => `${info.getValue()} ${info.row.original.unit}`,
+      cell: (info) => info.getValue(),
       header: () => 'Weight',
       // footer: (info) => info.column.id,
     }),
@@ -138,23 +144,27 @@ export function BasicTable({
       cell: (info) => info.renderValue(),
       // footer: (info) => info.column.id,
     }),
-    columnHelper.accessor(`category.name`, {
+    columnHelper.accessor('category.name', {
       header: () => 'Category',
       cell: (info) => info.getValue(),
       // footer: (info) => 'category',
-    }),
-    columnHelper.display({
-      id: 'actions',
-      cell: (props) => <ActionButtons item={props.row.original} />,
-      header: () => 'Actions',
-      // footer: (info) => info.column.id,
-    }),
+    })
   ];
+
+  if (hasPermissions) {
+    columns.push(
+      columnHelper.display({
+        id: 'actions',
+        cell: (props) => <ActionButtons item={props.row.original} />,
+        header: () => 'Actions',
+      })
+    );
+  }
 
   const CELL_WIDTH = '$18';
 
   const [activeModal, setActiveModal] = React.useState<string | null>(null);
-  
+
   // Flatten the grouped data into a single array of items
   const data = Object.values(groupedData).flat();
 
@@ -183,6 +193,7 @@ export function BasicTable({
   if (sm) {
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+
         {tableData.map((row, i) => (
           <View
             key={i}
@@ -211,6 +222,7 @@ export function BasicTable({
               })}
               {hasPermissions && (
                 <View fd="row" justifyContent="space-between" alignItems="center">
+
                   <Text>Action</Text>
                   <ActionButtons item={row} />
                 </View>
@@ -264,45 +276,6 @@ export function BasicTable({
             </Table.Row>
           ))}
         </Table.Body>
-        {/* <Table.Foot>
-          {footerGroups.map((footerGroup) => {
-            rowCounter.current++;
-            return (
-              <Table.Row
-                rowLocation={
-                  rowCounter.current === 0
-                    ? 'first'
-                    : rowCounter.current === allRowsLength - 1
-                      ? 'last'
-                      : 'middle'
-                }
-                key={footerGroup.id}
-              >
-                {footerGroup.headers.map((header, index) => (
-                  <Table.HeaderCell
-                    cellLocation={
-                      index === 0
-                        ? 'first'
-                        : index === footerGroup.headers.length - 1
-                          ? 'last'
-                          : 'middle'
-                    }
-                    key={header.id}
-                  >
-                    <Text>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext(),
-                          )}
-                    </Text>
-                  </Table.HeaderCell>
-                ))}
-              </Table.Row>
-            );
-          })}
-        </Table.Foot> */}
       </Table>
     </View>
   );

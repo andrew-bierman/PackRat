@@ -1,7 +1,7 @@
-import { Image, ImageProps, Stack } from 'tamagui';
+import { Image, ImageProps, Stack as OriginalStack } from 'tamagui';
 
 export type LmImageProps = ImageProps;
-
+const Stack: any = OriginalStack;
 export function LmImage({ aspectRatio, ...props }: LmImageProps) {
   if (aspectRatio) {
     return (

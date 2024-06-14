@@ -28,7 +28,9 @@ interface MapButtonsOverlayProps {
   onDownload: () => void;
   handleGpxUpload?: () => void;
   progress?: number;
-  navigateToMaps: () => void;
+  navigateToMaps?: () => void;
+  styles?: any;
+  shape?: any;
 }
 
 const MapButtonsOverlay = ({
@@ -330,9 +332,9 @@ const loadStyles = (theme) => {
       height: 21,
     },
     downloadText: {
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: '500',
-      marginLeft: 8,
+      marginRight:8
     },
     modal: {
       alignItems: 'center',
