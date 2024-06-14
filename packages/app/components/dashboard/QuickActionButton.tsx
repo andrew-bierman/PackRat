@@ -4,7 +4,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 const RCard: any = OriginalRCard;
 
@@ -39,7 +40,7 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {xs} = useMedia();
+  const {xs} =  useResponsive();
   return {
     container: {
       margin: 10,

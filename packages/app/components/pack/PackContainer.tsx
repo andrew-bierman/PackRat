@@ -9,7 +9,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const { xs } = useMedia();
+  const { xs } =  useResponsive();
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
 

@@ -20,7 +20,8 @@ import { useEditPack } from 'app/hooks/packs/useEditPack';
 import { Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
 import { View } from 'react-native';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 interface PackCardHeaderProps {
   data: any;
@@ -38,7 +39,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
-  const { xs } = useMedia();
+  const { xs } =  useResponsive();
 
   const handleSavePack = () => {
     const packDetails = {

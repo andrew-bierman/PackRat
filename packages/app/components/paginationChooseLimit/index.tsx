@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import DropdownComponent from '../Dropdown';
 import { RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 interface PaginationLimitProps {
   limit: string | number;
@@ -34,7 +35,7 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
   );
 };
 const loadStyles = () => {
-  const {xxs} = useMedia();
+  const {xxs} =  useResponsive();
   return {
   selectContainer: {
     marginTop: xxs ? 20 : 10,

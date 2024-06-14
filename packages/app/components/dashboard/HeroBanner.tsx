@@ -12,7 +12,8 @@ import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 const RText: any = OriginalRText;
 
 interface HeroSectionProps {
@@ -73,7 +74,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
-  const {xs} = useMedia();
+  const {xs} =  useResponsive();
 
   return (
     <View style={styles.banner}>

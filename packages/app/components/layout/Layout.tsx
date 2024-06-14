@@ -1,8 +1,9 @@
 import { View } from 'react-native';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 const Layout = ({ children }) => {
-  const { xs,xxs, xxxs } = useMedia();
+  const { xs,xxs, xxxs } =  useResponsive();
   return (
     <View
       style={{

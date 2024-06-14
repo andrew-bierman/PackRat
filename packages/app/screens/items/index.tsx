@@ -10,7 +10,8 @@ import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
 import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 // const RTooltip: any = OriginalRTooltip;
@@ -59,7 +60,7 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
-  const { xs, xxxs, xxs } = useMedia();
+  const { xs, xxxs, xxs } =  useResponsive();
 
   return (
     <RScrollView>
@@ -157,7 +158,7 @@ export default function Items() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const {xxs,xxxs} = useMedia();
+  const {xxs,xxxs} =  useResponsive();
 
   return {
     mainContainer: {

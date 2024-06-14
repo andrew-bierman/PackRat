@@ -8,7 +8,7 @@ import {
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface CarouselProps {
   children?: ReactNode[];
@@ -43,7 +43,7 @@ const Carousel: React.FC<CarouselProps> = ({
       setCurrentIndex(index);
     }
   };
-  const { xs, xxs } = useMedia();
+  const { xs, xxs } =  useResponsive();
 
   return (
     <RStack
@@ -100,7 +100,7 @@ const Carousel: React.FC<CarouselProps> = ({
 };
 
 const loadStyles = () => {
-  const { xs, xxs } = useMedia();
+  const { xs, xxs } =  useResponsive();
   return {
     carousel: {
       flexDirection: 'row',

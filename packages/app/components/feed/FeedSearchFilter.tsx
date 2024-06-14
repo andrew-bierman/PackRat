@@ -60,7 +60,7 @@ const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState('');
 
   const onSearch = (search) => setSearchQuery(search);
-  const {xs, xxs, xxxs} = useMedia();
+  const {xs, xxs, xxxs} =  useResponsive();
 
   return (
     <Layout>
@@ -183,7 +183,7 @@ const FeedSearchFilter = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {xxs, xs} = useMedia();
+  const {xxs, xs} =  useResponsive();
 
   return {
     mainContainer: {

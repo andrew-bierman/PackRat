@@ -3,7 +3,8 @@ import { RCard } from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity } from 'react-native';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 interface SectionProps {
   children: React.ReactNode;
@@ -24,7 +25,7 @@ const Section: React.FC<SectionProps> = ({ children, onPress }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const { xs, xxxs, xxs, } = useMedia();
+  const { xs, xxxs, xxs, } =  useResponsive();
   return {
     section: {
       marginBottom: 20,

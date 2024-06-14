@@ -2,7 +2,8 @@ import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/hooks/dashboard';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 const QuickActionsSection = () => {
   const styles = useCustomStyles(loadStyles);
@@ -26,7 +27,7 @@ const QuickActionsSection = () => {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const {xs } = useMedia();
+  const {xs } =  useResponsive();
   return {
     section: {
       marginBottom: 20,

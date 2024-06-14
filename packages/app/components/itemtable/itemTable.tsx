@@ -15,7 +15,8 @@ import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { RButton, RStack, RText } from '@packrat/ui';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 interface ItemsTableProps {
   limit: number;
@@ -57,7 +58,7 @@ export const ItemsTable = ({
   totalPages,
 }: ItemsTableProps) => {
   const flexArr = [1.5, 1, 1, 1, 0.65, 0.65, 0.65];
-  const { xs, xxs, xxxs } = useMedia();
+  const { xs, xxs, xxxs } =  useResponsive();
   const { handleDeleteItem } = useDeleteItem();
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

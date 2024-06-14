@@ -5,7 +5,8 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { FontAwesome } from '@expo/vector-icons';
 import {  View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
-import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
+
 
 type TripSearchCardProps = {
   searchRef: any;
@@ -18,7 +19,7 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
   };
-  const {xs} = useMedia();
+  const {xs} =  useResponsive();
 
   return (
     <TripCardBase
@@ -40,7 +41,7 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
 };
 
 const loadStyles = (theme) => {
-  const {xxs} = useMedia();
+  const {xxs} =  useResponsive();
 
   const { currentTheme } = theme;
 
