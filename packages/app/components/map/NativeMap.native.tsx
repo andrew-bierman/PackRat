@@ -13,6 +13,7 @@ import { AlertDialog } from 'native-base';
 import {
   RButton as OriginalRButton,
   RInput as OriginalRInput,
+  RStack,
 } from '@packrat/ui';
 
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
@@ -298,7 +299,7 @@ function NativeMap({ shape: shapeProp }) {
                 />
               </AlertDialog.Body>
               <AlertDialog.Footer>
-                <RButton.Group space={2}>
+                <RStack style={{width:'60%', justifyContent:'space-between', flexDirection:'row'}}>
                   <RButton
                     variant="unstyled"
                     colorScheme="coolGray"
@@ -334,7 +335,7 @@ function NativeMap({ shape: shapeProp }) {
                   >
                     OK
                   </RButton>
-                </RButton.Group>
+                </RStack>
               </AlertDialog.Footer>
             </AlertDialog.Content>
           </AlertDialog>
