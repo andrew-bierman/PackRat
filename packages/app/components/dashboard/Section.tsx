@@ -33,7 +33,7 @@ const loadStyles = (theme: any) => {
     card: {
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= SCREEN_WIDTH ? '90vw' : '58vw',
+      width: screenWidth <= SCREEN_WIDTH ? '90vw' : '100%',
       backgroundColor: currentTheme.colors.secondaryBlue,
       borderRadius: 8,
     },

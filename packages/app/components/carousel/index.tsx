@@ -54,7 +54,7 @@ const Carousel: React.FC<CarouselProps> = ({
           Platform.OS === 'web'
             ? screenWidth <= SCREEN_WIDTH
               ? '80vw'
-              : '57vw'
+              : '90%'
             : width * 0.7,
         justifyContent: 'center',
         alignItems: 'center',
