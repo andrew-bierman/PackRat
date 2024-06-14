@@ -47,6 +47,7 @@ const loadStyles = (theme: any) => {
       height: '10vh',
       display: 'flex',
       alignItems: 'center',
+      padding: '20',
     },
     card: {
       flexDirection: 'column',
@@ -62,7 +63,8 @@ const loadStyles = (theme: any) => {
       marginBottom: 10,
     },
     text: {
-      fontSize: 12,
+      fontSize: 13,
+      fontWeight:'bold',
       color: currentTheme.colors.iconColor,
     },
   };

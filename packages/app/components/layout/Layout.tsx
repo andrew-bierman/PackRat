@@ -7,7 +7,9 @@ const Layout = ({ children }) => {
     <View
       style={{
         display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
+        margin: '0 auto',
         backgroundColor: 'transparent',
         width:xxs ? '100%' : xs ? '100vw' : '60vw',
         alignSelf: 'center',
