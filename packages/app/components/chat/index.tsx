@@ -10,13 +10,20 @@ import { RButton, RImage, RInput, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
-import { ChatList, SuggestionList } from '@packrat/ui/src/Bento/elements/list';
+import {
+  ChatList,
+  SuggestionDescription,
+  SuggestionList,
+} from '@packrat/ui/src/Bento/elements/list';
 import { X } from '@tamagui/lucide-icons';
 import { MessageCircle, Camera, Settings, Home } from 'lucide-react-native';
 import { ActionItem } from './ActionItem';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
-const chatteer = `Based on the details of your pack titled qwerty, there are some optimizations and essential items that can be added to improve safety, comfort, and efficiency while reducing excessive weight:
+const chatteer = [
+  {
+    role: 'ai',
+    content: `Based on the details of your pack titled qwerty, there are some optimizations and essential items that can be added to improve safety, comfort, and efficiency while reducing excessive weight:
 
 1. Water (12oz, 12 pcs, category: Water):
     - While it's essential to stay hydrated, carrying 12 bottles at 12oz each might be excessive weight-wise. Consider replacing some bottles with a hydration reservoir or collapsible water bottles to save weight.
@@ -52,7 +59,9 @@ Suggested and Improved Pack for qwerty:
 
 Total Estimated Weight: Reduced from 838810.8785g to a more manageable and efficient weight.
 
-ALWAYS be mindful of weight optimization to ensure a comfortable and safe hiking experience.`;
+ALWAYS be mindful of weight optimization to ensure a comfortable and safe hiking experience.`,
+  },
+];
 
 const suggestion = {
   Items: [
@@ -298,16 +307,17 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
   return (
     <View>
       <RStack style={{ flex: 1 }}>
-        <Text style={{ width: '100%', textAlign: 'center', padding: 8 }}>
+        {/* <Text style={{ width: '100%', textAlign: 'center', padding: 8 }}>
           Allow me to suggest some improvements to your pack!
-        </Text>
+        </Text> */}
         <ScrollView
-          ref={scrollViewRef}
+          // ref={scrollViewRef}
           onContentSizeChange={handleLayout}
           style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
         >
+          <SuggestionDescription data={chatteer} />
           <SuggestionList suggestion={suggestion} />
         </ScrollView>
         <RStack
@@ -466,6 +476,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
           <RButton
             position="absolute"
             backgroundColor="$background"
+            color="$color"
             top="$2"
             right="$2"
             size="$2"
@@ -498,6 +509,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
           <RButton
             position="absolute"
             backgroundColor="$background"
+            color="$color"
             top="$2"
             right="$2"
             size="$2"

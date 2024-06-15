@@ -3,17 +3,28 @@ import { Phone } from '@tamagui/lucide-icons';
 import type { ColorTokens } from 'tamagui';
 import { Avatar, Button, Circle, Separator, Text, View, YGroup } from 'tamagui';
 import { RButton } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
 
 // type SuggestionList = typeof suggestion.Items;
 
 export function SuggestionList({ suggestion }) {
   const [itemsList, setItemsList] = useState([]);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     setItemsList(suggestion.Items);
   }, []);
   return (
-    <YGroup width="100%" justifyContent="center" alignItems="center">
+    <YGroup
+      style={{
+        background: isDark ? '#333' : 'white',
+        padding: 10,
+        borderRadius: 0,
+      }}
+      width="100%"
+      justifyContent="center"
+      alignItems="center"
+    >
       <View
         $group-window-gtXs={{
           padding: '$3',
@@ -40,7 +51,8 @@ function Item({ item }) {
     <YGroup.Item>
       <View
         flexDirection="row"
-        paddingVertical="$2"
+        paddingVertical="$1"
+        paddingHorizontal="$1.5"
         gap="$2"
         $group-window-gtXs={{
           padding: '$4',
@@ -48,6 +60,7 @@ function Item({ item }) {
         }}
         backgroundColor="$color1"
         alignItems="center"
+        style={{ borderRadius: 5 }}
       >
         <View flexDirection="column" flexShrink={1} justifyContent="center">
           <Text selectable>{item.name}</Text>
@@ -56,13 +69,15 @@ function Item({ item }) {
             fontSize="$2"
             lineHeight="$2"
             fontWeight="$2"
-            theme="alt1"
+            // theme="alt1"
           >
             {item.category} {item.weight}
             {item.unit}, {item.quantity}pcs
           </Text>
         </View>
-        <RButton marginLeft="auto">Add</RButton>
+        <RButton style={{ borderRadius: 5 }} marginLeft="auto">
+          Add
+        </RButton>
       </View>
     </YGroup.Item>
   );
