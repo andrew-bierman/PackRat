@@ -8,13 +8,15 @@ const Layout = ({ children }) => {
     <View
       style={{
         display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
+        margin: '0 auto',
         backgroundColor: 'transparent',
         width:
           Platform.OS === 'web'
             ? screenWidth <= SCREEN_WIDTH
               ? '100vw'
-              : '60vw'
+              : '90vw'
             : '100%',
         alignSelf: 'center',
       }}
