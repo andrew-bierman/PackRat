@@ -91,13 +91,15 @@ export default function Items() {
               width={xxxs ?'25vw': xxs ? 120 : xs ? '25vw' : '15vw'}
             />
           </RStack>
-          <BaseModal
+         <View style={{marginBottom:10}}>
+         <BaseModal
             title="Add a global Item"
             trigger="Add Item"
             // triggerComponent={<ModalTriggerButton />}
           >
             <AddItemGlobal />
           </BaseModal>
+         </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (
           <ItemsTable

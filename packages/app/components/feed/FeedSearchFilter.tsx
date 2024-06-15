@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Switch, useMedia } from 'tamagui';
+import { Switch} from 'tamagui';
 import { View } from 'react-native';
 import {
   RIconButton,
@@ -16,6 +16,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
