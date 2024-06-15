@@ -70,7 +70,7 @@ const TableItem = ({
 
   let rowData = [
     <RText px={8}>{name}</RText>,
-    <RText px={0}>{${formatNumber(weight)} ${unit}}</RText>,
+    <RText px={0}>${formatNumber(weight)} ${unit}</RText>,
     <RText px={0}>{quantity}</RText>,
   ];
   if (hasPermissions) {

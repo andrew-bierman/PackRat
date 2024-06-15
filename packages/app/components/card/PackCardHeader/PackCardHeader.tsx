@@ -92,6 +92,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
             </View>
           </RStack>
         }
+        link = {null}
         actionsComponent={
           user?.id === data.owner_id && (
             <ThreeDotsMenu onOpenChange={handleActionsOpenChange}>
