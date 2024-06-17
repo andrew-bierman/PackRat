@@ -299,7 +299,13 @@ function NativeMap({ shape: shapeProp }) {
                 />
               </AlertDialog.Body>
               <AlertDialog.Footer>
-                <RStack style={{width:'60%', justifyContent:'space-between', flexDirection:'row'}}>
+                <RStack
+                  style={{
+                    width: '60%',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                  }}
+                >
                   <RButton
                     variant="unstyled"
                     colorScheme="coolGray"

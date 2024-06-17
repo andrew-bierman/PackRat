@@ -69,11 +69,15 @@ const FeedSearchFilter = ({
       <View style={styles.filterContainer}>
         <View style={styles.searchContainer}>
           <Form>
-            <RStack
-              style={{ flexDirection: 'row',marginLeft:30, }}
-            >
+            <RStack style={{ flexDirection: 'row', marginLeft: 30 }}>
               <FormInput
-                width={Platform.OS === "web" ? screenWidth <= 425 ? '30vw' : '12vw': '100%'}
+                width={
+                  Platform.OS === 'web'
+                    ? screenWidth <= 425
+                      ? '30vw'
+                      : '12vw'
+                    : '100%'
+                }
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -119,7 +123,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="single-switch"
                   size="$1.5"
-                  width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
+                  width={screenWidth <= SCREEN_WIDTH ? '10vw' : '3vw'}
                   checked={selectedTypes.pack}
                   onCheckedChange={handleTogglePack}
                 >
@@ -135,7 +139,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
-                  width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
+                  width={screenWidth <= SCREEN_WIDTH ? '10vw' : '3vw'}
                   checked={selectedTypes.trip}
                   onCheckedChange={handleToggleTrip}
                 >
