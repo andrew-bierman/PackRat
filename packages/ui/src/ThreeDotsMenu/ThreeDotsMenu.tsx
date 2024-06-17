@@ -12,17 +12,20 @@ interface ThreeDotsMenuProps {
   open: boolean;
 }
 
-export function ThreeDotsMenu({ children, onOpenChange,open }: ThreeDotsMenuProps) {
-  console.log("ksksksks",open)
+export function ThreeDotsMenu({
+  children,
+  onOpenChange,
+  open,
+}: ThreeDotsMenuProps) {
+  console.log('ksksksks', open);
   return (
     <Popover
       size="$5"
       allowFlip
       placement="bottom"
       onOpenChange={onOpenChange}
-      open={Platform.OS != 'web'? open:undefined}
+      open={Platform.OS != 'web' ? open : undefined}
       disableFocus
-      
     >
       <Popover.Trigger asChild backgroundColor="transparent">
         <Button icon={MoreHorizontal} />

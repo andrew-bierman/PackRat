@@ -18,7 +18,7 @@ export const usePackTitleInput = (data) => {
 
   const handleEdit = () => {
     isEditModeRef.current = true;
-    setIsOpen(false)
+    setIsOpen(false);
   };
 
   const handleSaveTitle = (title) => {
@@ -27,10 +27,17 @@ export const usePackTitleInput = (data) => {
       name: title,
       is_public: data.is_public,
     };
-     setIsOpen(false);
+    setIsOpen(false);
     editPack(packDetails);
     setIsEditMode(false);
   };
 
-  return { handleActionsOpenChange, isEditMode, handleEdit, handleSaveTitle,isOpen,setIsOpen };
+  return {
+    handleActionsOpenChange,
+    isEditMode,
+    handleEdit,
+    handleSaveTitle,
+    isOpen,
+    setIsOpen,
+  };
 };

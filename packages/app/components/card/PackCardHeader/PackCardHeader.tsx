@@ -32,9 +32,15 @@ interface PackCardHeaderProps {
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
-  const {handleDeletePack} = useDeletePack(data.id);
-  const { handleActionsOpenChange, handleEdit, handleSaveTitle, isEditMode,isOpen,setIsOpen } =
-    usePackTitleInput(data);
+  const { handleDeletePack } = useDeletePack(data.id);
+  const {
+    handleActionsOpenChange,
+    handleEdit,
+    handleSaveTitle,
+    isEditMode,
+    isOpen,
+    setIsOpen,
+  } = usePackTitleInput(data);
 
   const { isDark, currentTheme } = useTheme();
 
@@ -42,11 +48,11 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { editPack } = useEditPack();
   const { screenWidth } = useScreenWidth();
 
-const handleDelete = () => { 
-  handleDeletePack();
-  setIsOpen(false);
-  console.log("Pack Deleted");
- }
+  const handleDelete = () => {
+    handleDeletePack();
+    setIsOpen(false);
+    console.log('Pack Deleted');
+  };
   const handleSavePack = () => {
     const packDetails = {
       id: data.id,
@@ -55,14 +61,13 @@ const handleDelete = () => {
     };
     setIsOpen(false);
     editPack(packDetails);
-    console.log('Pack Saved'); 
-     
+    console.log('Pack Saved');
   };
   console.log('data', isOpen);
   return (
     <>
       <CustomCardHeader
-      link={""}
+        link={''}
         data={data}
         title={
           <RStack
@@ -105,7 +110,7 @@ const handleDelete = () => {
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            <ThreeDotsMenu open={isOpen}   onOpenChange={handleActionsOpenChange}>
+            <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>

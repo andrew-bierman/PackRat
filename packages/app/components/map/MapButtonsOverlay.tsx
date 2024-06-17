@@ -334,7 +334,7 @@ const loadStyles = (theme) => {
     downloadText: {
       fontSize: 15,
       fontWeight: '500',
-      marginRight:8
+      marginRight: 8,
     },
     modal: {
       alignItems: 'center',
