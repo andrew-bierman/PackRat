@@ -1,9 +1,8 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Dimensions, Platform, ScrollView, Text, View } from 'react-native';
 import { Table, Row, Cell } from 'react-native-table-component';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { RButton, RStack, RText } from '@packrat/ui';
 import { formatNumber } from '../../utils/formatNumber';
 import { EditPackItemModal } from '../pack_table/EditPackItemModal';
 import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
@@ -16,6 +15,8 @@ import { useScreenWidth } from 'app/hooks/common';
 import { useDeleteItem } from 'app/hooks/items';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
+import { RButton, RStack, RText } from '@packrat/ui';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 interface ItemsTableProps {
   limit: number;
@@ -80,12 +81,34 @@ export const ItemsTable = ({
     const authUser = useAuthUser();
 
     const rowData = [
-      <RText style={{ color: isDark ? 'white' : 'black' }}>{name}</RText>,
+      <RText
+        style={{
+          color: isDark ? 'white' : 'black',
+          fontSize:
+            Platform.OS === 'web'
+              ? screenWidth <= SCREEN_WIDTH
+                ? '12px'
+                : '15px'
+              : 15,
+        }}
+      >
+        {name}
+      </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>
         {formatNumber(weight)} {unit}
       </RText>,
       <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
-      <RText style={{ color: isDark ? 'white' : 'black' }}>
+      <RText
+        style={{
+          color: isDark ? 'white' : 'black',
+          fontSize:
+            Platform.OS === 'web'
+              ? screenWidth <= SCREEN_WIDTH
+                ? '12px'
+                : '17px'
+              : 15,
+        }}
+      >
         {category?.name || type}
       </RText>,
     ];
@@ -129,6 +152,7 @@ export const ItemsTable = ({
             paddingTop: 30,
             marginTop: 20,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
           }}
         >
           <ScrollView
@@ -146,25 +170,34 @@ export const ItemsTable = ({
               <TitleRow title="Global Items List" />
               <Row
                 flexArr={flexArr}
-                data={[
-                  'Item Name',
-                  'Weight',
-                  'Quantity',
-                  'Category',
-                ].map((header, index) => (
-                  <Cell
-                    key={index}
-                    data={
-                      <RText style={{ fontSize: screenWidth <= 425 ? 11 : 15 }}>
-                        {header}
-                      </RText>
-                    }
-                    textStyle={styles.headerText}
-                  />
-                ))}
+                data={['Item Name', 'Weight', 'Quantity', 'Category'].map(
+                  (header, index) => (
+                    <Cell
+                      key={index}
+                      data={
+                        <RText
+                          style={{
+                            fontSize:
+                              Platform.OS === 'web'
+                                ? screenWidth <= 425
+                                  ? 11
+                                  : 15
+                                : 15,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {header}
+                        </RText>
+                      }
+                      textStyle={styles.headerText}
+                    />
+                  ),
+                )}
                 style={styles.head}
               />
-              <ScrollView style={{ height: 400 }}>
+              <ScrollView
+                style={{ height: Platform.OS === 'web' ? 400 : 'auto' }}
+              >
                 {isLoading ? (
                   <Loader />
                 ) : (
@@ -213,8 +246,8 @@ export const ItemsTable = ({
               <AntDesign name="right" size={16} color="white" />
             </RButton>
           </View>
+          <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
-        <PaginationLimit limit={limit} setLimit={setLimit} />
       </ScrollView>
     </Layout>
   );

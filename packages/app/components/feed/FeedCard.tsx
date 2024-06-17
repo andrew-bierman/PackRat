@@ -131,6 +131,7 @@ export default function Card({
               alignItems: 'center',
               padding: 16,
               flex: 1,
+              width: '60vw',
             }}
           >
             <View
@@ -296,7 +297,7 @@ export default function Card({
                               gap: 8,
                             }}
                           >
-                            {user?.id === owner_id ? null : (
+                            {user?.id === owner_id.id ? null : (
                               <TouchableOpacity onPress={handleAddToFavorite}>
                                 <AntDesign
                                   name="heart"

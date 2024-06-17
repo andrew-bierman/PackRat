@@ -13,6 +13,7 @@ import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
 import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 const RText: any = OriginalRText;
 
 interface HeroSectionProps {
@@ -73,7 +74,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
-      const { screenWidth } = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
 
   return (
     <View style={styles.banner}>
@@ -94,8 +95,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
-            width: screenWidth <= 425 ? '80vw'  :'30vw',
-            height:'30vh',
+            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '30vw',
+            height: '30vh',
             padding: 50,
           }}
           title={''}
@@ -103,8 +104,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         >
           <RStack
             style={{
-              width: screenWidth <= 425 ? '40vw'  :'25vw',
-              height: '15vh',
+              width: screenWidth <= SCREEN_WIDTH ? '55vw' : '25vw',
+              height: '20vh',
               alignItems: 'center',
               justifyContent: 'center',
             }}
@@ -152,9 +153,9 @@ const loadStyles = (theme: any) => {
       backgroundSize: 'cover',
       marginBottom: 20,
       marginTop: 20,
+      display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '60vw',
       position: 'relative',
       zIndex: 1,
     },

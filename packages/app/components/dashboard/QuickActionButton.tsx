@@ -5,6 +5,7 @@ import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useScreenWidth } from 'app/hooks/common';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 const RCard: any = OriginalRCard;
 
@@ -39,19 +40,20 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {screenWidth} = useScreenWidth();
+  const { screenWidth } = useScreenWidth();
   return {
     container: {
       margin: 10,
-      width: screenWidth <= 425 ? '15vw':'10vw',
-      height:'10vh',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '20',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= 425 ? '15vw':'10vw',
-      height:'10vh',
+      width: screenWidth <= SCREEN_WIDTH ? '35vw' : '10vw',
       // paddingHorizontal: 40,
       // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
@@ -60,7 +62,8 @@ const loadStyles = (theme: any) => {
       marginBottom: 10,
     },
     text: {
-      fontSize: 12,
+      fontSize: 13,
+      fontWeight:'bold',
       color: currentTheme.colors.iconColor,
     },
   };
