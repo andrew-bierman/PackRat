@@ -16,7 +16,6 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
-import useResponsive from 'app/hooks/useResponsive';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -61,7 +60,6 @@ const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState('');
 
   const onSearch = (search) => setSearchQuery(search);
-  const {xs, xxs, xxxs} =  useResponsive();
 
   return (
     <Layout>
@@ -72,7 +70,7 @@ const FeedSearchFilter = ({
               style={{ flexDirection: 'row',marginLeft:40, }}
             >
               <FormInput
-                width={xxxs? '30vw' : xxs ?'100%' : xs? '30vw' : '12vw'}
+                width='100%'
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -143,12 +141,12 @@ const FeedSearchFilter = ({
             <RStack
               style={{
                 flexDirection: 'row',
-                gap: xxxs ? 10 : xxs ?  60: 10,
                 alignItems: 'center',
+                justifyContent:'space-between'
               }}
             >
               <RText
-                fontSize={xxs ? 15: 17}
+                fontSize={17}
                 fontWeight="bold"
                 color={currentTheme.colors.textColor}
               >
@@ -160,9 +158,7 @@ const FeedSearchFilter = ({
                 onValueChange={handleSortChange}
                 placeholder={queryString}
                 style={styles.dropdown}
-                width={
-                 xxxs ? '30vw' : xxs ? '50%' : xs ? '30vw' : '8vw'
-                }
+                width='55%'
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -184,7 +180,6 @@ const FeedSearchFilter = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {xxs, xs} =  useResponsive();
 
   return {
     mainContainer: {
@@ -197,9 +192,9 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.card,
       padding: 15,
       fontSize: 18,
-      width: '60vw',
+      width: '100%',
       borderRadius: 10,
-      marginTop: xxs ? 20 : 0,
+      marginTop:  20,
     },
     searchContainer: {
       flexDirection: 'row',

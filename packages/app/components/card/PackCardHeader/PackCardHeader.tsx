@@ -20,7 +20,6 @@ import { useEditPack } from 'app/hooks/packs/useEditPack';
 import { Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
 import { View } from 'react-native';
-import useResponsive from 'app/hooks/useResponsive';
 
 
 interface PackCardHeaderProps {
@@ -39,7 +38,6 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const { editPack } = useEditPack();
-  const { xs } =  useResponsive();
 
   const handleSavePack = () => {
     const packDetails = {
@@ -80,16 +78,13 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 }}
               />
             )}
-            <View
-              style={{ width: xs ? '30vw' : '50vw' }}
-            >
+            
               <EditableText
                 isLoading={isLoading}
                 defaultValue={title}
                 isFocused={isEditMode}
                 onSave={handleSaveTitle}
               />
-            </View>
           </RStack>
         }
         actionsComponent={

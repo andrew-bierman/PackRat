@@ -10,7 +10,6 @@ import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
 import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
-import useResponsive from 'app/hooks/useResponsive';
 
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
@@ -60,7 +59,6 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
-  const { xs, xxxs, xxs } =  useResponsive();
 
   return (
     <RScrollView>
@@ -71,16 +69,14 @@ export default function Items() {
       /> */}
       <RStack style={styles.mainContainer}>
         <RStack
-          style={{
-            width:xxxs?'100vw': xxs? '80vw' : xs ? '80vw' : '60vw',
-            ...styles.container,
-          }}
+          style={
+            styles.container
+          }
         >
           <RStack
-            style={{
-              width: xs ? '45vw' : '40vw',
-              ...styles.sortContainer,
-            }}
+            style={
+              styles.sortContainer
+            }
           >
             <RText style={{ fontWeight: 'bold' }}>Sort By:</RText>
             <DropdownComponent
@@ -88,7 +84,7 @@ export default function Items() {
               data={optionValues}
               onValueChange={handleSort}
               placeholder={value}
-              width={xxxs ?'25vw': xxs ? 120 : xs ? '25vw' : '15vw'}
+              width='60%'
             />
           </RStack>
          <View style={{marginBottom:10}}>
@@ -160,7 +156,6 @@ export default function Items() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const {xxs,xxxs} =  useResponsive();
 
   return {
     mainContainer: {
@@ -172,7 +167,6 @@ const loadStyles = (theme) => {
     },
     button: {
       color: currentTheme.colors.white,
-      width: xxs ? '20%' : '20rem',
       display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
@@ -181,12 +175,13 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.card,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      width:'100%',
       padding: 30,
       borderRadius: 10,
     },
     sortContainer: {
       flexDirection: 'row',
-      gap: xxxs ? 10 : xxs ? 60: 10,
+      justifyContent:'space-between',
       alignItems: 'center',
     },
   };

@@ -8,7 +8,6 @@ import {
 import { RStack } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useResponsive from 'app/hooks/useResponsive';
 
 interface CarouselProps {
   children?: ReactNode[];
@@ -43,13 +42,12 @@ const Carousel: React.FC<CarouselProps> = ({
       setCurrentIndex(index);
     }
   };
-  const { xs, xxs } =  useResponsive();
 
   return (
     <RStack
       style={{
         alignSelf: 'center',
-        width: xxs ? width * 0.7 : xs ? '80vw' : '57vw',
+        width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
@@ -100,11 +98,10 @@ const Carousel: React.FC<CarouselProps> = ({
 };
 
 const loadStyles = () => {
-  const { xs, xxs } =  useResponsive();
   return {
     carousel: {
       flexDirection: 'row',
-      width: xxs ? width * 0.8 : '100%',
+      width: '100%',
     },
   };
 };

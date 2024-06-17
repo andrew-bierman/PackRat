@@ -3,7 +3,6 @@ import { RCard } from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity } from 'react-native';
-import useResponsive from 'app/hooks/useResponsive';
 
 
 interface SectionProps {
@@ -25,7 +24,6 @@ const Section: React.FC<SectionProps> = ({ children, onPress }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const { xs, xxxs, xxs, } =  useResponsive();
   return {
     section: {
       marginBottom: 20,
@@ -33,7 +31,7 @@ const loadStyles = (theme: any) => {
     card: {
       justifyContent: 'center',
       alignItems: 'center',
-      width: xxxs ? '90vw' : xxs ? '90vw' : xs ? '92vw': '88vw',
+      width: '100%',
       backgroundColor: currentTheme.colors.secondaryBlue,
       borderRadius: 8,
     },

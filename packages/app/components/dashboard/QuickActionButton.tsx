@@ -4,7 +4,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useResponsive from 'app/hooks/useResponsive';
 
 
 const RCard: any = OriginalRCard;
@@ -40,12 +39,9 @@ const QuickActionButton = ({
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const {xs} =  useResponsive();
   return {
     container: {
       margin: 10,
-      width: xs ? '35vw' : '10vw',
-      height: '10vh',
       display: 'flex',
       alignItems: 'center',
       padding: '20',
@@ -54,10 +50,6 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      width: xs ? '35vw' : '10vw',
-      height: '10vh',
-      // paddingHorizontal: 40,
-      // paddingVertical: 60,
       backgroundColor: currentTheme.colors.primary,
     },
     icon: {

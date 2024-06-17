@@ -12,7 +12,6 @@ import { first } from 'lodash';
 import { hexToRGBA } from '../../utils/colorFunctions';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
-import useResponsive from 'app/hooks/useResponsive';
 
 const RText: any = OriginalRText;
 
@@ -74,7 +73,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
-  const {xs} =  useResponsive();
 
   return (
     <View style={styles.banner}>
@@ -95,7 +93,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               cardBackgroundColor || currentTheme.colors.secondaryBlue,
             alignItems: 'center',
             justifyContent: 'center',
-            width: xs ? '80vw' : '30vw',
+            width: '100%',
             height: '30vh',
             padding: 50,
           }}
@@ -104,10 +102,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         >
           <RStack
             style={{
-              width: xs ? '55vw' : '25vw',
-              height: '20vh',
               alignItems: 'center',
-              justifyContent: 'center',
             }}
           >
             <RText style={styles.title}>{bannerText}</RText>

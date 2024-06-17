@@ -2,7 +2,6 @@ import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/hooks/dashboard';
-import useResponsive from 'app/hooks/useResponsive';
 
 
 const QuickActionsSection = () => {
@@ -27,12 +26,10 @@ const QuickActionsSection = () => {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const {xs } =  useResponsive();
   return {
     section: {
       marginBottom: 20,
       paddingHorizontal: 20, // Added padding here.
-      width: xs ? '80vw' : '22vw',
       display: 'flex',
       justifyContent: 'center',
     },

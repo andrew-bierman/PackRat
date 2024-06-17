@@ -84,7 +84,7 @@ export const ItemsTable = ({
       <RText
         style={{
           color: isDark ? 'white' : 'black',
-          fontSize:xxs ? 15 : xs ? '12px' : '15px',
+          fontSize:15,
         }}
       >
         {name}
@@ -96,7 +96,7 @@ export const ItemsTable = ({
       <RText
         style={{
           color: isDark ? 'white' : 'black',
-          fontSize:xxs ? 15 : xs ? '12px' : '15px',
+          fontSize:15,
         }}
       >
         {category?.name || type}
@@ -182,7 +182,7 @@ export const ItemsTable = ({
                 style={styles.head}
               />
               <ScrollView
-                style={{ height: xxs ? 'auto' : 400 }}
+                style={{ height:  'auto' }}
               >
                 {isLoading ? (
                   <Loader />
