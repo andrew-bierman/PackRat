@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '0 auto',
+        marginTop:40,
         backgroundColor: 'transparent',
         width:
           Platform.OS === 'web'
