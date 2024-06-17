@@ -66,7 +66,7 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <ScrollView>
+    <>
       <Layout>
         
           {!isError && (
@@ -160,7 +160,7 @@ export function PackDetails() {
           trigger="Open Chat"
         />
       </View>
-    </ScrollView>
+    </>
   );
 }
 
