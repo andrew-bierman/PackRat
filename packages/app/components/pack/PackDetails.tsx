@@ -66,7 +66,7 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <>
+    <ScrollView>
       <Layout>
         <View
           style={[
@@ -158,6 +158,8 @@ export function PackDetails() {
           bottom: 30,
           width: 60,
           height: 60,
+          marginBottom: 20,
+
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -168,7 +170,7 @@ export function PackDetails() {
           trigger="Open Chat"
         />
       </View>
-    </>
+    </ScrollView>
   );
 }
 

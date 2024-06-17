@@ -57,7 +57,7 @@ const loadStyles = (theme: any) => {
     },
     text: {
       fontSize: 13,
-      fontWeight:'bold',
+      fontWeight: 'bold',
       color: currentTheme.colors.iconColor,
     },
   };
