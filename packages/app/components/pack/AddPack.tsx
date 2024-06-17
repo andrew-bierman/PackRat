@@ -23,7 +23,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [_, setPackIdParam] = usePackId();
+  // const [_, setPackIdParam] = usePackId();
 
   const {
     addNewPackAsync,
@@ -51,7 +51,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
         return;
       }
 
-      setPackIdParam(response.id);
+      // setPackIdParam(response.id);
     } catch {}
   };
 
