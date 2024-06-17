@@ -51,7 +51,6 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const handleDelete = () => {
     handleDeletePack();
     setIsOpen(false);
-    console.log('Pack Deleted');
   };
   const handleSavePack = () => {
     const packDetails = {
@@ -61,9 +60,8 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     };
     setIsOpen(false);
     editPack(packDetails);
-    console.log('Pack Saved');
   };
-  console.log('data', isOpen);
+  
   return (
     <>
       <CustomCardHeader
