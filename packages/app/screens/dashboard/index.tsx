@@ -59,11 +59,11 @@ const loadStyles = (theme) => {
       alignItems: 'stretch',
       paddingHorizontal: 20,
       width:
-      Platform.OS === 'web'
-        ? screenWidth <= SCREEN_WIDTH
-          ? '100vw'
-          : '90vw'
-        : '100%',
+        Platform.OS === 'web'
+          ? screenWidth <= SCREEN_WIDTH
+            ? '100vw'
+            : '90vw'
+          : '100%',
     },
     cardContainer: {
       flexDirection: 'column',
