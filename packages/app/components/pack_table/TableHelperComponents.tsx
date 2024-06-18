@@ -1,12 +1,14 @@
-import { Feather as OriginalFeather } from '@expo/vector-icons';
+import { MaterialIcons, Feather as OriginalFeather } from '@expo/vector-icons';
 import {
   RButton,
   RCheckbox,
   RSkeleton,
   RStack,
   RText as OriginalRText,
+  RContextMenu,
+  RIconButton,
 } from '@packrat/ui';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Row } from 'react-native-table-component';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
@@ -110,13 +112,28 @@ const IgnoreItemCheckbox = ({
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
   return (
-    <DropdownComponent
+    Platform.OS === 'web' ? (
+      <DropdownComponent
       value={value}
       accessibilityLabel="Select weight unit"
       placeholder="Select weight unit"
       onValueChange={(itemValue) => onChange(itemValue)}
       data={['kg', 'g', 'lb', 'oz']}
     />
+    ) : (
+      <RContextMenu
+              menuItems={[
+                { label: 'kg', onSelect:() => onChange('kg') },
+                { label: 'g', onSelect: () => onChange('g') },
+                {label:'lb', onSelect:() => onChange('lb')},
+                {label:'oz', onSelect:() => onChange('oz')}
+              ]}
+              menuName={
+                <RButton>Select weight unit</RButton>
+              }
+            />
+    )
+    
   );
 };
 

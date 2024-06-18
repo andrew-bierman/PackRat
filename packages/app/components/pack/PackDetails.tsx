@@ -66,16 +66,9 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <ScrollView>
+    <>
       <Layout>
-        <View
-          style={[
-            styles.mainContainer,
-            // Platform.OS == 'web'
-            //   ? { minHeight: '100vh' }
-            //   : { minHeight: Dimensions.get('screen').height },
-          ]}
-        >
+        
           {!isError && (
             <>
               <DetailsComponent
@@ -85,7 +78,6 @@ export function PackDetails() {
                 error={error as any}
                 additionalComps={
                   <>
-                    <View>
                       <FlatList
                         data={Object.entries(SECTION)}
                         contentContainerStyle={{ paddingBottom: 50 }}
@@ -142,14 +134,12 @@ export function PackDetails() {
                           }
                         }}
                       />
-                    </View>
                   </>
                 }
                 link={link}
               />
             </>
           )}
-        </View>
       </Layout>
       <View
         style={{
@@ -170,7 +160,7 @@ export function PackDetails() {
           trigger="Open Chat"
         />
       </View>
-    </ScrollView>
+    </>
   );
 }
 
@@ -178,16 +168,6 @@ const loadStyles = (theme) => {
   const { currentTheme } = theme;
   console.log('currentTheme', currentTheme);
   return {
-    mainContainer: {
-      position: 'relative',
-      backgroundColor: currentTheme.colors.background,
-      flexDirection: 'column',
-      gap: 15,
-      fontSize: 18,
-      width: '100%',
-      flex: 1,
-      maxHeight: '91.2vh',
-    },
     packsContainer: {
       flexDirection: 'column',
       minHeight: '100vh',

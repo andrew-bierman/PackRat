@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/auth/hooks';
 import {
   ThreeDotsMenu,
@@ -12,6 +12,7 @@ import {
   RStack,
   RInput,
   RText,
+  RContextMenu,
 } from '@packrat/ui';
 import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
@@ -103,13 +104,30 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
+            Platform.OS === "web" ? (
+              <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>
                 <RButton onPress={handleDelete}>Delete</RButton>
               </YStack>
             </ThreeDotsMenu>
+            ) : (
+              <RContextMenu
+              menuItems={[
+                { label: 'Edit', onSelect:handleEdit },
+                { label: 'Save', onSelect: handleSavePack },
+                {label:'Delete', onSelect:handleDeletePack}
+              ]}
+              menuName={
+                <RIconButton
+          backgroundColor="transparent"
+          icon={<MaterialIcons name="more-horiz" size={18} />}
+          style={{ padding: 0 }}
+        />
+              }
+            />
+            )
           )
         }
       />
