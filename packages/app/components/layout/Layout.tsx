@@ -7,11 +7,9 @@ const Layout = ({ children }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
         marginTop: 40,
         backgroundColor: 'transparent',
         width:'100%',
-        alignSelf: 'center',
       }}
     >
       {children}
