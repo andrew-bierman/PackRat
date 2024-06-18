@@ -75,7 +75,7 @@ const DataList = ({ data }: DataListProps) => {
           </View>
         </BaseModal>
       ) : (
-        <View style={{ marginLeft: 20 }}>
+        <View style={{ width:'30%' ,alignSelf:'center'}}>
           <BaseDialog
             title="See all"
             trigger="See all"
