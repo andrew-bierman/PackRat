@@ -126,20 +126,11 @@ export default function Card({
     <Layout>
       <ContextMenu.Root>
         <ContextMenu.Trigger>
-          <View
-            style={{
-              alignItems: 'center',
-              padding: 16,
-              flex: 1,
-              width: '60vw',
-            }}
-          >
+            
             <View
               style={{
                 width: '100%',
-                marginVertical: 'auto',
                 borderRadius: 15,
-                overflow: 'hidden',
                 borderColor: 'lightgray',
                 borderWidth: 1,
                 backgroundColor: `${currentTheme.colors.card}`,
@@ -345,7 +336,6 @@ export default function Card({
                 </RStack>
               </RStack>
             </View>
-          </View>
         </ContextMenu.Trigger>
         <ContextMenu.Content>
           <ContextMenu.Item
