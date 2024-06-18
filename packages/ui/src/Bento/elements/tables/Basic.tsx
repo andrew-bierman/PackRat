@@ -109,12 +109,12 @@ export function BasicTable({
           Platform.OS === 'ios' ||
           window.innerWidth < 900 ? (
             <View>
-              <ZDropdown.Native
+              {/* <ZDropdown.Native
                 dropdownItems={[
                   { label: 'Edit', onSelect: handleEditClick },
                   { label: 'Delete', onSelect: handleDeleteClick },
                 ]}
-              />
+              /> */}
             </View>
           ) : (
             <View>

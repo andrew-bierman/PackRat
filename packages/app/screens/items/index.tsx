@@ -84,7 +84,7 @@ export default function Items() {
               data={optionValues}
               onValueChange={handleSort}
               placeholder={value}
-              width='60%'
+              width='50%'
             />
           </RStack>
          <View style={{marginBottom:10}}>
@@ -181,7 +181,7 @@ const loadStyles = (theme) => {
     },
     sortContainer: {
       flexDirection: 'row',
-      justifyContent:'space-between',
+      // justifyContent:'space-between',
       alignItems: 'center',
     },
   };
