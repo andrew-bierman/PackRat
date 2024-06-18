@@ -152,7 +152,7 @@ export function BasicTable({
       header: () => 'Category',
       cell: (info) => info.getValue(),
       // footer: (info) => 'category',
-    })
+    }),
   ];
 
   if (hasPermissions) {
@@ -161,7 +161,7 @@ export function BasicTable({
         id: 'actions',
         cell: (props) => <ActionButtons item={props.row.original} />,
         header: () => 'Actions',
-      })
+      }),
     );
   }
 

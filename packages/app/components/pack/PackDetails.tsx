@@ -68,14 +68,7 @@ export function PackDetails() {
   return (
     <>
       <Layout>
-        <View
-          style={[
-            styles.mainContainer,
-            // Platform.OS == 'web'
-            //   ? { minHeight: '100vh' }
-            //   : { minHeight: Dimensions.get('screen').height },
-          ]}
-        >
+        
           {!isError && (
             <>
               <DetailsComponent
@@ -85,7 +78,6 @@ export function PackDetails() {
                 error={error as any}
                 additionalComps={
                   <>
-                    <View>
                       <FlatList
                         data={Object.entries(SECTION)}
                         contentContainerStyle={{ paddingBottom: 50 }}
@@ -132,7 +124,6 @@ export function PackDetails() {
                           }
                         }}
                       />
-                    </View>
                   </>
                 }
                 link={link}

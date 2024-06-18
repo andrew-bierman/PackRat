@@ -11,8 +11,6 @@ import {
   useScoreProgress,
 } from 'app/hooks/score';
 import { View } from 'react-native';
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 
 interface ScoreProgressChartProps {
   score: number;

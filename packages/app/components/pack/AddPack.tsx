@@ -14,6 +14,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
+import { RContextMenu } from '@packrat/ui/src/RContextMenu';
 
 const FormSelect: any = OriginalFormSelect;
 
@@ -72,14 +73,25 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          <FormSelect
-            onValueChange={handleonValueChange}
-            options={packSelectOptions}
-            name="isPublic"
-            label="Is Public"
-            accessibilityLabel="Choose Service"
-            placeholder={'Is Public'}
-          />
+          {Platform.OS === 'web' ? (
+            <FormSelect
+              onValueChange={handleonValueChange}
+              options={packSelectOptions}
+              name="isPublic"
+              label="Is Public"
+              accessibilityLabel="Choose Service"
+              placeholder={'Is Public'}
+            />
+          ) : (
+            <RContextMenu
+              menuItems={[
+                { label: 'Yes', onSelect: () => setIsPublic(true) },
+                { label: 'No', onSelect: () => setIsPublic(false) },
+              ]}
+              menuName="Is Public"
+            />
+          )}
+
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}

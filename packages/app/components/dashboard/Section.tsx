@@ -3,8 +3,7 @@ import { RCard } from '@packrat/ui';
 import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity } from 'react-native';
-import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+
 
 interface SectionProps {
   children: React.ReactNode;
@@ -25,7 +24,6 @@ const Section: React.FC<SectionProps> = ({ children, onPress }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
-  const { screenWidth } = useScreenWidth();
   return {
     section: {
       marginBottom: 20,
@@ -33,7 +31,7 @@ const loadStyles = (theme: any) => {
     card: {
       justifyContent: 'center',
       alignItems: 'center',
-      width: screenWidth <= SCREEN_WIDTH ? '90vw' : '100%',
+      width: '100%',
       backgroundColor: currentTheme.colors.secondaryBlue,
       borderRadius: 8,
     },
