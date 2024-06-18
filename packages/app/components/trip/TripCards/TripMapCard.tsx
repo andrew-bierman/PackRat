@@ -1,5 +1,5 @@
 import { RStack, RText } from '@packrat/ui';
-import MapContainer from 'app/components/map/MapContainer';
+import MapContainer from 'app/components/map/MapContainer.web';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';

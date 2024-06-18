@@ -70,10 +70,12 @@ const TableItem = ({
 
   let rowData = [
     <RText px={8}>{name}</RText>,
+
     <RText px={0}>{${formatNumber(weight)} ${unit}}</RText>,
     <RText px={0}>{quantity}</RText>,
   ];
   if (hasPermissions) {
+    
     if (
       Platform.OS === 'android' ||
       Platform.OS === 'ios' ||
@@ -106,6 +108,7 @@ const TableItem = ({
         isOpen={activeModal === 'delete'}
         onClose={closeModal}
       />
+      ,
       <Row data={rowData} style={styles.row} flexArr={flexArr} />
     </>
   );

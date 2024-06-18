@@ -17,6 +17,7 @@ import { NODE_ENV } from '@packrat/config';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { userSignIn as userSignInSchema } from '@packrat/validations';
+import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 
 const RText: any = OriginalRText;
 const RHeading: any = OriginalRHeading;
@@ -52,145 +53,10 @@ export default function Login() {
               paddingTop: 32,
               paddingBottom: 32,
               width: '90%',
-              maxWidth: 290,
+              maxWidth: 400,
             }}
           >
-            <RHeading
-              fontSize={32}
-              color={
-                currentTheme.colors.background === '#0284c7'
-                  ? currentTheme.colors.black
-                  : 'white'
-              }
-              fontWeight="semibold"
-            >
-              Welcome
-            </RHeading>
-            <RHeading
-              color="grey"
-              fontWeight="medium"
-              fontSize={14}
-              style={{ marginTop: 8 }}
-            >
-              Sign in to continue!
-            </RHeading>
-
-            <Form
-              validationSchema={userSignInSchema}
-              style={{ marginTop: 16, gap: 8 }}
-            >
-              <FormInput
-                label="Email ID"
-                keyboardType="email-address"
-                name="email"
-              />
-              <FormInput label="Password" secureTextEntry name="password" />
-
-              <SubmitButton
-                style={{ marginTop: 16, backgroundColor: 'mediumpurple' }}
-                onSubmit={handleLogin}
-              >
-                Sign in
-              </SubmitButton>
-            </Form>
-            <RStack
-              style={{
-                marginTop: 16,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: 4,
-              }}
-            >
-              <RText fontSize={14} color="grey">
-                I'm a new user.
-              </RText>
-              <RLink href="/register">
-                <RText
-                  style={{
-                    color: '#818cf8',
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Sign Up
-                </RText>
-              </RLink>
-            </RStack>
-
-            <RStack style={{ flexDirection: 'row', justifyContent: 'center' }}>
-              <RLink href="/password-reset">
-                <RText
-                  style={{
-                    color: '#818cf8',
-                    fontWeight: 400,
-                    fontSize: 12,
-                  }}
-                >
-                  Reset Password?
-                </RText>
-              </RLink>
-            </RStack>
-            {/* Google Login starts */}
-            <RStack
-              style={{
-                marginTop: 8,
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <RText color="grey" fontWeight="medium" fontSize={14}>
-                Or
-              </RText>
-            </RStack>
-
-            {/* Google Login */}
-            {enableGoogleLogin && (
-              <RStack
-                style={{
-                  marginTop: 8,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <RIconButton
-                  disabled={!isGoogleSignInReady}
-                  onPress={async () => await promptAsync()}
-                  backgroundColor="red"
-                  style={{ width: '100%', color: 'white' }}
-                  icon={
-                    <FontAwesome
-                      name="google"
-                      size={16}
-                      color={currentTheme.colors.white}
-                    />
-                  }
-                >
-                  Sign in with Google
-                </RIconButton>
-              </RStack>
-            )}
-
-            {/* Demo Login for Development start */}
-            {NODE_ENV !== 'production' && (
-              <RStack
-                style={{
-                  marginTop: 8,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <RButton
-                  style={{ width: '100%' }}
-                  disabled={!isGoogleSignInReady}
-                  onPress={() => handleLogin(demoUser)}
-                  backgroundColor="purple"
-                >
-                  Demo User
-                </RButton>
-              </RStack>
-            )}
-            {/* Demo Login for Development end */}
+            <SignInScreen mode="signin"/>
           </View>
         </RStack>
       </RStack>

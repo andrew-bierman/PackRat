@@ -14,6 +14,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import useTheme from '../hooks/useTheme';
 import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
 import { userSignUp } from '@packrat/validations';
+import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 
 const RText: any = OriginalRText;
 const RHeading: any = OriginalRHeading;
@@ -40,10 +41,11 @@ export default function Register() {
             paddingTop: 32,
             paddingBottom: 32,
             width: '90%',
-            maxWidth: 290,
+            maxWidth: 400,
           }}
         >
-          <RHeading
+          <SignInScreen mode="signup"/> 
+          {/* <RHeading
             fontSize={32}
             color={
               currentTheme.colors.background === '#0284c7'
@@ -53,36 +55,36 @@ export default function Register() {
             fontWeight="semibold"
           >
             Welcome
-          </RHeading>
-          <RHeading
+          </RHeading> */}
+          {/* <RHeading
             color="grey"
             fontWeight="medium"
             fontSize={14}
             style={{ marginTop: 8 }}
           >
             Sign up to continue!
-          </RHeading>
-          <Form validationSchema={userSignUp}>
-            <RStack style={{ marginTop: 16, gap: 8 }}>
-              <FormInput label="Name" name="name" />
+          </RHeading> */}
+          {/* <Form validationSchema={userSignUp}> */}
+            {/* <RStack style={{ marginTop: 16, gap: 8 }}> */}
+              {/* <FormInput label="Name" name="name" /> */}
 
-              <FormInput
+              {/* <FormInput
                 label="Email ID"
                 keyboardType="email-address"
                 name="email"
-              />
+              /> */}
 
-              <FormInput label="Username" name="username" />
+              {/* <FormInput label="Username" name="username" /> */}
 
-              <FormInput label="Password" secureTextEntry name="password" />
+              {/* <FormInput label="Password" secureTextEntry name="password" /> */}
 
-              <SubmitButton
+              {/* <SubmitButton
                 onSubmit={registerUser}
                 style={{ marginTop: 16, backgroundColor: 'mediumpurple' }}
               >
                 {'Sign up'}
-              </SubmitButton>
-              <RStack
+              </SubmitButton> */}
+              {/* <RStack
                 style={{
                   marginTop: 16,
                   flexDirection: 'row',
@@ -104,9 +106,9 @@ export default function Register() {
                     Login Here
                   </RText>
                 </RLink>
-              </RStack>
+              </RStack> */}
               {/* Google register */}
-              <RStack
+              {/* <RStack
                 style={{
                   marginTop: 8,
                   flexDirection: 'row',
@@ -116,9 +118,9 @@ export default function Register() {
                 <RText color="grey" fontWeight="medium" fontSize={14}>
                   Or
                 </RText>
-              </RStack>
+              </RStack> */}
               {/* Google register */}
-              <RStack
+              {/* <RStack
                 style={{
                   marginTop: 8,
                   flexDirection: 'row',
@@ -140,10 +142,11 @@ export default function Register() {
                 >
                   Sign up with Google
                 </RIconButton>
-              </RStack>
+              </RStack> */}
               {/* Google register */}
-            </RStack>
-          </Form>
+            {/* </RStack> */}
+          {/* </Form> */}
+
         </View>
       </View>
     </RScrollView>

@@ -24,8 +24,7 @@ export const fuseSearch = (data, searchTerm, keys, options = {}) => {
     ...defaultOptions,
     ...options,
   });
-
-  const results = fuse.search(searchTerm) ?? [];
+  const results = fuse?.search(searchTerm) ?? [];
 
   // return full search results, not just items
   return searchTerm ? results : data;

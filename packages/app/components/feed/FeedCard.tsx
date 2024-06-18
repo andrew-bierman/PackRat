@@ -244,16 +244,15 @@ export default function Card({
                       }}
                     >
                       <RLink
-                        href={`/profile/${
-                          type === 'pack' ? owner_id : owner_id
-                        }`}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <RText color={currentTheme.colors.textColor}>
-                          View{' '}
-                          {owner?.username ? '@' + owner?.username : 'Owner'}
-                        </RText>
-                      </RLink>
+                      href={`/profile/${
+                        type === 'pack' ? owner?.id : owner_id
+                      }`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <RText color={currentTheme.colors.textColor}>
+                        View {owner?.username ? '@' + owner?.username : 'Owner'}
+                      </RText>
+                    </RLink>
                       <View
                         style={{
                           flexDirection: 'row',

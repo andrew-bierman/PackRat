@@ -21,7 +21,7 @@ export const useTripsData = () => {
       osm_type: osm?.osmType,
     },
   });
-
+  
   const {
     data: weatherData,
     isLoading: weatherLoading,
@@ -41,7 +41,7 @@ export const useTripsData = () => {
   } = useParks({
     latLng,
   });
-
+  
   const { data, filteredTrails, error, isLoading } = useTrails({
     latLng,
     selectedSearch: osm.name,
