@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import {
@@ -7,7 +6,6 @@ import {
   enGB,
   registerTranslation,
 } from 'react-native-paper-dates';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from 'app/hooks/useTheme';
 import { RStack, RText, DateRangePicker } from '@packrat/ui';
 import { TripCardBase } from './TripCardBase';
@@ -42,11 +40,12 @@ export const TripDateRangeCard = ({
           end_date: dates[1],
         }
       : null;
-    console.log({ dateRange });
+    console.info({ dateRange });
     setDateRange(dateRange);
     setSelectedDates(dates);
   };
 
+  console.info({dateRange, selectedDates, offsetDate})
   return (
     <TripCardBase
       icon={() => (
