@@ -1,10 +1,10 @@
+import React from 'react';
 import { ComponentProps } from 'react';
 import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
 import RButton from '../RButton';
-import RText from '../RText';
 
-type ContentProps = ComponentProps<(typeof ZeegoDropdownMenu)['Content']>;
-type ItemProps = ComponentProps<(typeof ZeegoDropdownMenu)['Item']>;
+type ContentProps = ComponentProps<typeof ZeegoDropdownMenu.Content>;
+type ItemProps = ComponentProps<typeof ZeegoDropdownMenu.Item>;
 
 const DropdownMenu = {
   ...ZeegoDropdownMenu,
@@ -21,7 +21,7 @@ const DropdownMenu = {
         }}
       />
     ),
-    'Content',
+    'Content'
   ),
   Item: ZeegoDropdownMenu.create(
     (props: ItemProps) => (
@@ -38,7 +38,7 @@ const DropdownMenu = {
         }}
       />
     ),
-    'Item',
+    'Item'
   ),
 };
 

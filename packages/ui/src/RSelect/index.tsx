@@ -3,28 +3,29 @@ import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
   Select as OriginalSelect,
-  Text,
-  YStack,
+  Sheet,
+  YStack as OriginalYStack,
   getFontSize,
+  Text,
 } from 'tamagui';
 import { RDropdownMenu } from '../ZDropdown';
-import { Platform } from 'react-native';
 
+const YStack: any = OriginalYStack;
 const Select: any = OriginalSelect;
 
-// Entry point for the Select component
 export default function RSelect(props) {
-  const { textKey = 'label', valueKey = 'value', ...otherProps } = props;
+  const { textKey = 'label', valueKey = 'value', zeego = false, native = false, ...otherProps } = props;
+
   return (
-    <SelectItem native textKey={textKey} valueKey={valueKey} {...otherProps} />
+    <SelectItem zeego={zeego} native={native} textKey={textKey} valueKey={valueKey} {...otherProps} />
   );
 }
 
-// Function to extract option attributes from data items
 const extractOptionAttributes = (item, index, textKey, valueKey) => {
   if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') {
     return { text: item.toString(), value: item.toString(), index };
   }
+
   if (typeof item === 'object' && item !== null) {
     return {
       text: item[textKey] ?? item.toString(),
@@ -32,10 +33,10 @@ const extractOptionAttributes = (item, index, textKey, valueKey) => {
       index,
     };
   }
+
   return { text: 'Invalid Item', value: 'invalid', index };
 };
 
-// Component to render the Select dropdown
 export function SelectItem(props) {
   const {
     value = '',
@@ -44,7 +45,8 @@ export function SelectItem(props) {
     placeholder = 'Select an option',
     textKey = 'label',
     valueKey = 'value',
-    native,
+    native = false,
+    zeego = false,
     ...forwardedProps
   } = props;
 
@@ -54,16 +56,37 @@ export function SelectItem(props) {
     }
   };
 
-  const menuItems = useMemo(() => {
+  const options = useMemo(() => {
     if (!Array.isArray(data)) return [];
-    return data.map((item, index) => {
-      const { text, value, index: itemIndex } = extractOptionAttributes(item, index, textKey, valueKey);
-      return {
-        label: text.charAt(0).toUpperCase() + text.slice(1),
-        onSelect: () => handleChange(value),
-      };
-    });
+    return data
+      .map((item, index) => extractOptionAttributes(item, index, textKey, valueKey))
+      .map(({ text, value, index }) => (
+        <Select.Item key={`${text} + ${value}`} index={index} value={value}>
+          <Select.ItemText>
+            {text.charAt(0).toUpperCase() + text.slice(1)}
+          </Select.ItemText>
+          <Select.ItemIndicator marginLeft="auto">
+            <Check size={16} />
+          </Select.ItemIndicator>
+        </Select.Item>
+      ));
   }, [data, textKey, valueKey]);
+
+  if (options.length === 0) {
+    return <Text>No options available</Text>;
+  }
+
+  if (zeego) {
+    return (
+      <RDropdownMenu
+        menuItems={data.map((item) => ({
+          label: item[textKey],
+          onSelect: () => handleChange(item[valueKey]),
+        }))}
+        menuName={placeholder}
+      />
+    );
+  }
 
   return (
     <Select
@@ -72,44 +95,54 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      {Platform.OS === 'web' && (
-        <>
-        <Select.Trigger width={220} iconAfter={ChevronDown}>
-          <Select.Value>{value || placeholder}</Select.Value>
-        </Select.Trigger>
-        <Select.Content zIndex={200000}>
+      <Select.Trigger width={220} iconAfter={ChevronDown}>
+        <Select.Value>{placeholder}</Select.Value>
+      </Select.Trigger>
+      <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>
-          <Select.Group>
-            {menuItems.map(({ label, onSelect }, index) => (
-              <Select.Item key={`${label}-${index}`} value={label}>
-                <Select.ItemText>{label}</Select.ItemText>
-                <Select.ItemIndicator marginLeft="auto">
-                  <Check size={16} />
-                </Select.ItemIndicator>
-              </Select.Item>
-            ))}
-          </Select.Group>
+          <Select.Group>{options}</Select.Group>
+          {native && (
+            <YStack
+              position="absolute"
+              right={0}
+              top={0}
+              bottom={0}
+              alignItems="center"
+              justifyContent="center"
+              width={'$4'}
+              pointerEvents="none"
+            >
+              <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
+            </YStack>
+          )}
         </Select.Viewport>
-        <YStack
-          position="absolute"
-          right={0}
-          top={0}
-          bottom={0}
-          alignItems="center"
-          justifyContent="center"
-          width={'$4'}
-          pointerEvents="none"
-        >
-          <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
-        </YStack>
       </Select.Content>
-      </>
-      )}
       {native && (
         <Adapt when="sm" platform="touch">
-          <RDropdownMenu menuItems={menuItems} menuName={placeholder} />
+          <Sheet
+            native
+            modal
+            dismissOnSnapToBottom
+            animationConfig={{
+              type: 'spring',
+              damping: 20,
+              mass: 1.2,
+              stiffness: 250,
+            }}
+          >
+            <Sheet.Frame>
+              <Sheet.ScrollView>
+                <Adapt.Contents />
+              </Sheet.ScrollView>
+            </Sheet.Frame>
+            <Sheet.Overlay
+              animation="lazy"
+              enterStyle={{ opacity: 0 } as any}
+              exitStyle={{ opacity: 0 } as any}
+            />
+          </Sheet>
         </Adapt>
-      ) }
+      )}
     </Select>
   );
 }
