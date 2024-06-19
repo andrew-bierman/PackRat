@@ -124,240 +124,236 @@ export default function Card({
 
   return (
     <Layout>
-      <ContextMenu.Root>
-        <ContextMenu.Trigger>
-            
-            <View
-              style={{
-                width: '100%',
-                borderRadius: 15,
-                borderColor: 'lightgray',
-                borderWidth: 1,
-                backgroundColor: `${currentTheme.colors.card}`,
-              }}
-            >
-              <RStack style={{ padding: 16, gap: 50 }}>
-                <RStack style={{ gap: 10 }}>
-                  <RHeading>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: '100%',
-                      }}
-                    >
-                      <RLink
-                        href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <RText
-                          fontSize={18}
-                          color={currentTheme.colors.textColor}
-                        >
-                          {truncatedName}
-                        </RText>
-                      </RLink>
-                      <RStack
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 10,
-                        }}
-                      >
-                        {type === 'pack' && (
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              gap: 8,
-                              // border: '1px solid #ccc',
-                            }}
-                          >
-                            <MaterialIcons
-                              name="backpack"
-                              size={24}
-                              color={currentTheme.colors.cardIconColor}
-                            />
-                            <DuplicateIcon link={`/pack/${id}?copy=true`} />
-                          </View>
-                        )}
-                        {type === 'trip' && (
-                          <Entypo
-                            name="location-pin"
-                            size={24}
-                            color={currentTheme.colors.cardIconColor}
-                          />
-                        )}
-                      </RStack>
-                    </View>
-                  </RHeading>
-
-                  {type === 'pack' && (
-                    <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
-                      Total Weight: {formatNumber(formattedWeight)} {weightUnit}
-                    </RText>
-                  )}
-                  {type === 'pack' && (
-                    <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
-                      Total Quantity: {quantity}
-                    </RText>
-                  )}
-
-                  {type === 'trip' && (
-                    <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
-                      {truncatedDestination}
-                    </RText>
-                  )}
-                </RStack>
-
-                <RStack
-                  style={{
-                    // alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <RStack
+      <View
+        style={{
+          width: '80%',
+          borderRadius: 15,
+          borderColor: 'lightgray',
+          borderWidth: 1,
+          backgroundColor: `${currentTheme.colors.card}`,
+        }}
+      >
+        <ContextMenu.Root>
+          <ContextMenu.Trigger>
+            <RStack style={{ padding: 16, gap: 50 }}>
+              <RStack style={{ gap: 10 }}>
+                <RHeading>
+                  <View
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      // width: '100%',
+                      width: '100%',
                     }}
                   >
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: 8,
-                      }}
+                    <RLink
+                      href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
+                      style={{ textDecoration: 'none' }}
                     >
-                      <RLink
-                        href={`/profile/${
-                          type === 'pack' ? owner_id : owner_id
-                        }`}
-                        style={{ textDecoration: 'none' }}
+                      <RText
+                        fontSize={18}
+                        color={currentTheme.colors.textColor}
                       >
-                        <RText color={currentTheme.colors.textColor}>
-                          View{' '}
-                          {owner?.username ? '@' + owner?.username : 'Owner'}
-                        </RText>
-                      </RLink>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          gap: 100,
-                        }}
-                      >
-                        <RText fontSize="$1" color="gray" flex={1}>
-                          {formatDistanceToNow(
-                            new Date(
-                              !Number.isNaN(new Date(createdAt).getTime())
-                                ? createdAt
-                                : new Date(),
-                            ).getTime(),
-                            {
-                              addSuffix: true,
-                            },
-                          ) ?? 0}
-                        </RText>
-                      </View>
-                    </View>
-
-                    <View
+                        {truncatedName}
+                      </RText>
+                    </RLink>
+                    <RStack
                       style={{
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 10,
                       }}
                     >
                       {type === 'pack' && (
-                        <View>
-                          <RText
-                            fontSize="$2"
-                            color={currentTheme.colors.textColor}
-                          >
-                            Favorites
-                          </RText>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              gap: 8,
-                            }}
-                          >
-                            {user?.id === owner_id.id ? null : (
-                              <TouchableOpacity onPress={handleAddToFavorite}>
-                                <AntDesign
-                                  name="heart"
-                                  size={16}
-                                  color={
-                                    isFavorite
-                                      ? 'red'
-                                      : `${currentTheme.colors.cardIconColor}`
-                                  }
-                                />
-                              </TouchableOpacity>
-                            )}
-
-                            <RText
-                              color={currentTheme.colors.textColor}
-                              fontSize="$2"
-                              fontWeight="400"
-                            >
-                              {favorites_count > 0 ? favorites_count : 0}
-                            </RText>
-                          </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: 8,
+                            // border: '1px solid #ccc',
+                          }}
+                        >
+                          <MaterialIcons
+                            name="backpack"
+                            size={24}
+                            color={currentTheme.colors.cardIconColor}
+                          />
+                          <DuplicateIcon link={`/pack/${id}?copy=true`} />
                         </View>
                       )}
                       {type === 'trip' && (
-                        <View>
+                        <Entypo
+                          name="location-pin"
+                          size={24}
+                          color={currentTheme.colors.cardIconColor}
+                        />
+                      )}
+                    </RStack>
+                  </View>
+                </RHeading>
+
+                {type === 'pack' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    Total Weight: {formatNumber(formattedWeight)} {weightUnit}
+                  </RText>
+                )}
+                {type === 'pack' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    Total Quantity: {quantity}
+                  </RText>
+                )}
+
+                {type === 'trip' && (
+                  <RText fontSize="$1" color="mediumpurple" ml={-0.5} mt={-1}>
+                    {truncatedDestination}
+                  </RText>
+                )}
+              </RStack>
+
+              <RStack
+                style={{
+                  // alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    // width: '100%',
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: 8,
+                    }}
+                  >
+                    <RLink
+                      href={`/profile/${type === 'pack' ? owner_id : owner_id}`}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <RText color={currentTheme.colors.textColor}>
+                        View {owner?.username ? '@' + owner?.username : 'Owner'}
+                      </RText>
+                    </RLink>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 100,
+                      }}
+                    >
+                      <RText fontSize="$1" color="gray" flex={1}>
+                        {formatDistanceToNow(
+                          new Date(
+                            !Number.isNaN(new Date(createdAt).getTime())
+                              ? createdAt
+                              : new Date(),
+                          ).getTime(),
+                          {
+                            addSuffix: true,
+                          },
+                        ) ?? 0}
+                      </RText>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {type === 'pack' && (
+                      <View>
+                        <RText
+                          fontSize="$2"
+                          color={currentTheme.colors.textColor}
+                        >
+                          Favorites
+                        </RText>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: 8,
+                          }}
+                        >
+                          {user?.id === owner_id.id ? null : (
+                            <TouchableOpacity onPress={handleAddToFavorite}>
+                              <AntDesign
+                                name="heart"
+                                size={16}
+                                color={
+                                  isFavorite
+                                    ? 'red'
+                                    : `${currentTheme.colors.cardIconColor}`
+                                }
+                              />
+                            </TouchableOpacity>
+                          )}
+
                           <RText
-                            fontSize="$2"
                             color={currentTheme.colors.textColor}
-                          >
-                            Nights
-                          </RText>
-                          <RText
                             fontSize="$2"
-                            color={currentTheme.colors.textColor}
-                            style={{
-                              justifyContent: 'flex-end',
-                            }}
+                            fontWeight="400"
                           >
-                            {numberOfNights}
+                            {favorites_count > 0 ? favorites_count : 0}
                           </RText>
                         </View>
-                      )}
-                    </View>
-                  </RStack>
+                      </View>
+                    )}
+                    {type === 'trip' && (
+                      <View>
+                        <RText
+                          fontSize="$2"
+                          color={currentTheme.colors.textColor}
+                        >
+                          Nights
+                        </RText>
+                        <RText
+                          fontSize="$2"
+                          color={currentTheme.colors.textColor}
+                          style={{
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          {numberOfNights}
+                        </RText>
+                      </View>
+                    )}
+                  </View>
                 </RStack>
               </RStack>
-            </View>
-        </ContextMenu.Trigger>
-        <ContextMenu.Content>
-          <ContextMenu.Item
-            textValue={`View ${type}`}
-            key="view"
-            onSelect={() => {
-              router.push(type === 'pack' ? '/pack/' + id : '/trip/' + id);
-            }}
-          >
-            <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>
-          </ContextMenu.Item>
-          <ContextMenu.Item
-            textValue={`View owner`}
-            key="owner"
-            onSelect={() => {
-              router.push(`/profile/${owner_id}`);
-            }}
-          >
-            <ContextMenu.ItemTitle>View Owner</ContextMenu.ItemTitle>
-          </ContextMenu.Item>
-        </ContextMenu.Content>
-      </ContextMenu.Root>
+            </RStack>
+          </ContextMenu.Trigger>
+          <ContextMenu.Content>
+            <ContextMenu.Item
+              textValue={`View ${type}`}
+              key="view"
+              onSelect={() => {
+                router.push(type === 'pack' ? '/pack/' + id : '/trip/' + id);
+              }}
+            >
+              <ContextMenu.ItemTitle>View {type}</ContextMenu.ItemTitle>
+            </ContextMenu.Item>
+            <ContextMenu.Item
+              textValue={`View owner`}
+              key="owner"
+              onSelect={() => {
+                router.push(`/profile/${owner_id}`);
+              }}
+            >
+              <ContextMenu.ItemTitle>View Owner</ContextMenu.ItemTitle>
+            </ContextMenu.Item>
+          </ContextMenu.Content>
+        </ContextMenu.Root>
+      </View>
     </Layout>
   );
 }
