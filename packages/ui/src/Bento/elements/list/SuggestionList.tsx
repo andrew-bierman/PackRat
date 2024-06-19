@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Phone } from '@tamagui/lucide-icons';
-import type { ColorTokens } from 'tamagui';
-import { Avatar, Button, Circle, Separator, Text, View, YGroup } from 'tamagui';
+import { Separator, Text, View, YGroup } from 'tamagui';
 import { RButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
+import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
+import { useAuthUser } from 'app/auth/hooks';
+import { user } from 'server/src/db/schema';
 
 // type SuggestionList = typeof suggestion.Items;
 
-export function SuggestionList({ suggestion }) {
+export function SuggestionList({ suggestion, onAddItem }) {
   const [itemsList, setItemsList] = useState([]);
   const { isDark } = useTheme();
 
   useEffect(() => {
-    setItemsList(suggestion.Items);
-  }, []);
+    setItemsList(suggestion?.Items || []);
+  }, [suggestion]);
+
   return (
     <YGroup
       style={{
@@ -34,8 +36,8 @@ export function SuggestionList({ suggestion }) {
         minWidth="100%"
       >
         {itemsList.map((item, i) => (
-          <React.Fragment key={item.name}>
-            <Item item={item} />
+          <React.Fragment key={item.id}>
+            <Item item={item} onAddItem={onAddItem} />
             {i < itemsList.length - 1 && <Separator />}
           </React.Fragment>
         ))}
@@ -46,7 +48,14 @@ export function SuggestionList({ suggestion }) {
 
 SuggestionList.fileName = 'List';
 
-function Item({ item }) {
+function Item({ item, onAddItem }) {
+  const { addPackItem, isLoading } = useAddPackItem();
+
+  const handleAddItem = (item) => {
+    addPackItem(item);
+    onAddItem(item.id);
+  };
+
   return (
     <YGroup.Item>
       <View
@@ -75,7 +84,14 @@ function Item({ item }) {
             {item.unit}, {item.quantity}pcs
           </Text>
         </View>
-        <RButton style={{ borderRadius: 5 }} marginLeft="auto">
+        <RButton
+          onPress={() => {
+            handleAddItem(item);
+          }}
+          style={{ borderRadius: 5 }}
+          marginLeft="auto"
+          disabled={isLoading}
+        >
           Add
         </RButton>
       </View>

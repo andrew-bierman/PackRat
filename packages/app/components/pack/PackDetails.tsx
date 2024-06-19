@@ -68,75 +68,69 @@ export function PackDetails() {
   return (
     <>
       <Layout>
-        
-          {!isError && (
-            <>
-              <DetailsComponent
-                type="pack"
-                data={currentPack}
-                isLoading={isLoading}
-                error={error as any}
-                additionalComps={
-                  <>
-                      <FlatList
-                        data={Object.entries(SECTION)}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        keyExtractor={([key, val]) => val}
-                        renderItem={({ item }) => {
-                          {
-                            switch (item[1]) {
-                              case SECTION.TABLE:
-                                return (
-                                  <TableContainer
-                                    currentPack={currentPack}
-                                    copy={canCopy}
-                                    hasPermissions={isAuthUserPack}
-                                  />
-                                );
-                              case SECTION.CTA:
-                                return isAuthUserPack ? (
-                                  <AddItemModal
-                                    currentPackId={
-                                      currentPackId ? currentPackId : ''
-                                    }
-                                    currentPack={currentPack}
-                                    isAddItemModalOpen={isAddItemModalOpen}
-                                    setIsAddItemModalOpen={
-                                      setIsAddItemModalOpen
-                                    }
-                                    // refetch={refetch}
-                                    setRefetch={() =>
-                                      setRefetch((prev) => !prev)
-                                    }
-                                  />
-                                ) : null;
-                              case SECTION.SCORECARD:
-                                return (
-                                  <ScoreContainer
-                                    type="pack"
-                                    data={currentPack}
-                                    isOwner={isOwner}
-                                  />
-                                );
-                              default:
-                                return null;
-                            }
-                          }
-                        }}
-                      />
-                  </>
-                }
-                link={link}
-              />
-            </>
-          )}
-          <ChatContainer
-            itemTypeId={currentPackId}
-            title="Chat"
-            trigger="Open Chat"
-            type="pack"
-          />
-        </View>
+        {!isError && (
+          <>
+            <DetailsComponent
+              type="pack"
+              data={currentPack}
+              isLoading={isLoading}
+              error={error as any}
+              additionalComps={
+                <>
+                  <FlatList
+                    data={Object.entries(SECTION)}
+                    contentContainerStyle={{ paddingBottom: 50 }}
+                    keyExtractor={([key, val]) => val}
+                    renderItem={({ item }) => {
+                      {
+                        switch (item[1]) {
+                          case SECTION.TABLE:
+                            return (
+                              <TableContainer
+                                currentPack={currentPack}
+                                copy={canCopy}
+                                hasPermissions={isAuthUserPack}
+                              />
+                            );
+                          case SECTION.CTA:
+                            return isAuthUserPack ? (
+                              <AddItemModal
+                                currentPackId={
+                                  currentPackId ? currentPackId : ''
+                                }
+                                currentPack={currentPack}
+                                isAddItemModalOpen={isAddItemModalOpen}
+                                setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                // refetch={refetch}
+                                setRefetch={() => setRefetch((prev) => !prev)}
+                              />
+                            ) : null;
+                          case SECTION.SCORECARD:
+                            return (
+                              <ScoreContainer
+                                type="pack"
+                                data={currentPack}
+                                isOwner={isOwner}
+                              />
+                            );
+                          default:
+                            return null;
+                        }
+                      }
+                    }}
+                  />
+                </>
+              }
+              link={link}
+            />
+          </>
+        )}
+        <ChatContainer
+          itemTypeId={currentPackId}
+          title="Chat"
+          trigger="Open Chat"
+          type="pack"
+        />
       </Layout>
     </>
   );

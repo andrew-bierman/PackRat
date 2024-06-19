@@ -25,17 +25,26 @@ export function useGetAIResponse() {
 
 export function useGetAISuggestions() {
   const utils = queryTrpc.useContext();
-  const mutation = queryTrpc.getAISuggestions.useMutation({
-    onSuccess: () => {
-      utils.invalidate();
-    },
-  });
+  const mutation = queryTrpc.getAISuggestions.useMutation();
 
-  const getAISuggestions = async ({ userId, itemTypeId, type }) => {
-    return mutation.mutate({
-      userId,
-      itemTypeId,
-      type,
+  const getAISuggestions = ({ userId, itemTypeId, type }) => {
+    return new Promise((resolve, reject) => {
+      mutation.mutate(
+        {
+          userId,
+          itemTypeId,
+          type,
+        },
+        {
+          onSuccess: (data) => {
+            utils.invalidate();
+            resolve(data);
+          },
+          onError: (error) => {
+            reject(error);
+          },
+        },
+      );
     });
   };
 

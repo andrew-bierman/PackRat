@@ -120,7 +120,33 @@ export const getAISuggestionService = async (
                 Purification Straw: Lightweight and effective.
                 Portable Water Filter: Perfect for streams and lakes.
 
-            
+            What to Pack and What's Too Heavy:
+
+                Lightweight Food Options:
+
+                  Snacks:
+
+                    Instead of whole nuts, consider packing trail mix or nut butter packets. 🥜
+                    Switch granola bars with lighter energy gels or fruit leathers. 🍇
+                  Meals:
+
+                    Replace cans of food with dehydrated meals or instant soup mixes. 🥫 ➡️🍲
+                    Use whole grain wraps instead of sandwiches with heavy bread to reduce weight. 🌯
+                  Fruits:
+
+                    Sub out whole fruits for dried fruits like apricots, raisins, or banana chips. 🍎 ➡️🍏
+                    Consider fruit strips or fruit leather instead of heavier fresh fruit. 🍑
+                  Hydration:
+
+                    Instead of carrying multiple bottles of water, use a lightweight water filter to refill from natural sources. 🚰
+                    Carry electrolyte powders instead of pre-made drinks. 💧➡️⚡
+                  Tips for Packing Light:
+
+                  Portion Control: Pack smaller portions of high-calorie, nutrient-dense foods.
+                  Resealable Bags: Use ziplock bags for organizing and reducing the weight of packaging.
+                  Multipurpose Items: Bring items that can serve multiple purposes (e.g., a pack towel that doubles as a napkin).
+              
+            * Packing lightly yet efficiently can make hike more pleasant. Make sure to suggest these lightweight food options to pack.
             * Give a good reasoning and then Finally 'ALWAYS' Give the suggested and improved pack in the users original request format,
               remember the items in the pack array of of strings "name (weight and unit of measurement(lb, oz, kg, g), quantity pcs, category: category name)"
               just like the user prompt. and category is of three Either Food, Water or Essentials.`,
@@ -142,8 +168,6 @@ export const getAISuggestionService = async (
     response_model: { schema: PackSchema, name: 'Pack' },
     max_retries: 2,
   });
-
-  console.log(aiResponse, refined);
 
   return {
     aiResponse,

@@ -18,161 +18,6 @@ import {
 import { X } from '@tamagui/lucide-icons';
 import { MessageCircle, Camera, Settings, Home } from 'lucide-react-native';
 import { ActionItem } from './ActionItem';
-import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
-
-const chatteer = [
-  {
-    role: 'ai',
-    content: `Based on the details of your pack titled qwerty, there are some optimizations and essential items that can be added to improve safety, comfort, and efficiency while reducing excessive weight:
-
-1. Water (12oz, 12 pcs, category: Water):
-    - While it's essential to stay hydrated, carrying 12 bottles at 12oz each might be excessive weight-wise. Consider replacing some bottles with a hydration reservoir or collapsible water bottles to save weight.
-    - Add a lightweight water purification method like a purification straw or portable water filter to ensure access to clean water along the way.
-
-2. Chocolate (123oz, 213 pcs, category: Food):
-    - While chocolate can be a tasty treat, consider opting for trail-friendly snacks that are more lightweight and provide sustained energy such as energy bars, dried fruits, or nuts.
-    - Include trail mix or energy bars in your pack for quick and easy snacks while hiking.
-
-3. Jacket (4kg, 23 pcs, category: Essentials):
-    - Carrying a 4kg jacket is quite heavy and may not be suitable for hiking. Consider replacing it with a lightweight and packable waterproof jacket for weather protection. 
-    - Essential clothing items like quick-dry layers, extra socks, and a hat can provide more versatility and comfort without the excessive weight.
-
-New Item Suggestions:
-- Lightweight backpacking stove and dehydrated meals for quick and easy hot meals on the trail.
-- Compact first aid kit with essential supplies for emergencies.
-- Multi-tool with knife for various tasks while hiking.
-
-Suggested and Improved Pack for qwerty:
-1. Water (12oz, 6 pcs, category: Water)
-2. Trail Mix (8oz, 1 pcs, category: Food)
-3. Energy Bars (6oz, 2 pcs, category: Food)
-4. Lightweight Backpacking Stove (8oz, 1 pcs, category: Essentials)
-5. Dehydrated Meals (6oz, 2 pcs, category: Food)
-6. Lightweight Waterproof Jacket (1kg, 1 pcs, category: Essentials)
-7. Quick-Dry Layers (500g, 2 pcs, category: Essentials)
-8. Extra Socks (100g, 3 pairs, category: Essentials)
-9. Hat (100g, 1 pcs, category: Essentials)
-10. First Aid Kit (200g, 1 pcs, category: Essentials)
-11. Multi-Tool with Knife (150g, 1 pcs, category: Essentials)
-12. Hydration Reservoir (empty) or Lightweight Collapsible Water Bottles (category: Water)
-13. Purification Straw (category: Water)
-
-Total Estimated Weight: Reduced from 838810.8785g to a more manageable and efficient weight.
-
-ALWAYS be mindful of weight optimization to ensure a comfortable and safe hiking experience.`,
-  },
-];
-
-const suggestion = {
-  Items: [
-    {
-      name: 'Water',
-      weight: 340.19449,
-      unit: 'g',
-      quantity: 6,
-      category: 'Water',
-    },
-    {
-      name: 'Trail Mix',
-      weight: 226.796185,
-      unit: 'g',
-      quantity: 1,
-      category: 'Food',
-    },
-    {
-      name: 'Energy Bars',
-      weight: 170.097139,
-      unit: 'g',
-      quantity: 2,
-      category: 'Food',
-    },
-    {
-      name: 'Lightweight Backpacking Stove',
-      weight: 226.796185,
-      unit: 'g',
-      quantity: 1,
-      category: 'Essentials',
-    },
-    {
-      name: 'Dehydrated Meals',
-      weight: 170.097139,
-      unit: 'g',
-      quantity: 2,
-      category: 'Food',
-    },
-    {
-      name: 'Lightweight Waterproof Jacket',
-      weight: 1000,
-      unit: 'g',
-      quantity: 1,
-      category: 'Essentials',
-    },
-    {
-      name: 'Quick-Dry Layers',
-      weight: 500,
-      unit: 'g',
-      quantity: 2,
-      category: 'Essentials',
-    },
-    {
-      name: 'Extra Socks',
-      weight: 100,
-      unit: 'g',
-      quantity: 3,
-      category: 'Essentials',
-    },
-    {
-      name: 'Hat',
-      weight: 100,
-      unit: 'g',
-      quantity: 1,
-      category: 'Essentials',
-    },
-    {
-      name: 'First Aid Kit',
-      weight: 200,
-      unit: 'g',
-      quantity: 1,
-      category: 'Essentials',
-    },
-    {
-      name: 'Multi-Tool with Knife',
-      weight: 150,
-      unit: 'g',
-      quantity: 1,
-      category: 'Essentials',
-    },
-    {
-      name: 'Hydration Reservoir',
-      weight: 0,
-      unit: 'g',
-      quantity: 1,
-      category: 'Water',
-    },
-    {
-      name: 'Purification Straw',
-      weight: 0,
-      unit: 'g',
-      quantity: 1,
-      category: 'Water',
-    },
-  ],
-};
-
-function groupItemsByCategory(suggestion) {
-  return suggestion.Items.reduce((acc, item, index) => {
-    const itemWithId = {
-      ...item,
-      id: `item${index}`,
-      category: { name: item.category },
-    };
-    (acc[item.category] = acc[item.category] || []).push(itemWithId);
-    return acc;
-  }, {});
-}
-
-// TODO check if we've fixed the chat screen on another branch
-// link: https://github.com/andrew-bierman/PackRat/issues/ ???
 
 interface ChatComponentProps {
   showChatSelector?: boolean;
@@ -213,14 +58,10 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {
-    conversations,
-    typeId,
     parsedMessages,
     userInput,
     handleSendMessage,
-    handleSubmitAnalysis,
     setUserInput,
-    setTypeId,
     isLoading,
   } = useChat({ itemTypeId, type });
 
@@ -295,7 +136,30 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
 };
 
 const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
-  const { handleSubmitAnalysis } = useChat({ itemTypeId, type });
+  const [dots, setDots] = useState('.');
+  const {
+    handleSubmitAnalysis,
+    suggestions,
+    isAnalysisLoading,
+    setSuggestions,
+  } = useChat({
+    itemTypeId,
+    type,
+  });
+
+  useEffect(() => {
+    console.log(suggestions);
+  }, [suggestions]);
+
+  useEffect(() => {
+    if (isAnalysisLoading) {
+      const interval = setInterval(() => {
+        setDots((dots) => (dots.length < 3 ? dots + '.' : '.'));
+      }, 500); // Change dots every 500ms
+      return () => clearInterval(interval); // Clean up on component unmount
+    }
+  }, [isAnalysisLoading]);
+
   const styles = useCustomStyles(loadStyles);
 
   const scrollViewRef = useRef<ScrollView>(null);
@@ -304,21 +168,42 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
     scrollViewRef.current?.scrollToEnd({ animated: false });
   };
 
+  const removeItem = (id) => {
+    console.log('remove item', id);
+    setSuggestions((prevSuggestion) => {
+      if (
+        prevSuggestion &&
+        prevSuggestion.suggestion &&
+        prevSuggestion.suggestion.Items
+      ) {
+        return {
+          ...prevSuggestion,
+          suggestion: {
+            Items: prevSuggestion.suggestion.Items.filter(
+              (item) => String(item.id) !== String(id),
+            ),
+          },
+        };
+      } else {
+        return prevSuggestion;
+      }
+    });
+  };
+
   return (
     <View>
       <RStack style={{ flex: 1 }}>
-        {/* <Text style={{ width: '100%', textAlign: 'center', padding: 8 }}>
-          Allow me to suggest some improvements to your pack!
-        </Text> */}
         <ScrollView
-          // ref={scrollViewRef}
           onContentSizeChange={handleLayout}
           style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
         >
-          <SuggestionDescription data={chatteer} />
-          <SuggestionList suggestion={suggestion} />
+          <SuggestionDescription data={suggestions.reasoning} />
+          <SuggestionList
+            suggestion={suggestions.suggestion}
+            onAddItem={removeItem}
+          />
         </ScrollView>
         <RStack
           style={{
@@ -330,12 +215,15 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
         >
           <RButton
             onClick={() => {
-              console.log(groupItemsByCategory(suggestion));
-              // handleSubmitAnalysis();
+              // console.log(groupItemsByCategory(suggestion));
+              handleSubmitAnalysis();
             }}
+            disabled={isAnalysisLoading}
             style={{ width: '100%' }}
           >
-            <Text style={styles.sendText}>Analyze</Text>
+            <Text style={styles.sendText}>
+              {isAnalysisLoading ? 'Loading' + dots : 'Analyze'}
+            </Text>
           </RButton>
         </RStack>
       </RStack>
@@ -366,8 +254,8 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
       style={
         (styles.container,
         {
-          position: 'absolute',
-          right: 50,
+          position: 'fixed',
+          right: 250,
           bottom: 30,
           width: 60,
           height: 60,
