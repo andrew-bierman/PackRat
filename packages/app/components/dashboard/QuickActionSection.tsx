@@ -29,7 +29,7 @@ const loadStyles = (theme) => {
   return {
     section: {
       marginBottom: 20,
-      paddingHorizontal: 20, // Added padding here.
+      paddingHorizontal: 20,
       display: 'flex',
       justifyContent: 'center',
     },
