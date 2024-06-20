@@ -19,7 +19,7 @@ export function Drawer() {
           icon={<Menu strokeWidth={3} />}
           bg="transparent"
           outlineColor="transparent"
-          color="white"
+          color={currentTheme.colors.text}
           fontWeight="bold"
           focusStyle={{
             bg: 'transparent',

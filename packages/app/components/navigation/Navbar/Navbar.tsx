@@ -9,6 +9,7 @@ import { useScrollTop } from 'app/hooks/common/useScrollTop';
 import { useScreenWidth } from 'app/hooks/common';
 import useTheme from 'app/hooks/useTheme';
 import { RImage } from '@packrat/ui';
+import { hexToRGBA } from 'app/utils/colorFunctions';
 
 export const Navbar = () => {
   const { currentTheme } = useTheme();
@@ -42,7 +43,7 @@ export const Navbar = () => {
             />
             <Text
               style={styles.logoText}
-              onClick={() => {
+              onPress={() => {
                 navigate('/');
               }}
             >
@@ -68,7 +69,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
   const isWeb = Platform.OS === 'web';
   const isFloating = isWeb && isScrolled;
   const backgroundColor = isFloating
-    ? NavbarStyles.floatingBg
+    ? hexToRGBA(NavbarStyles.floatingBg, 1)
     : currentTheme.colors.background;
 
   return {
