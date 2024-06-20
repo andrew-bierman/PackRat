@@ -43,9 +43,9 @@ interface CardProps {
   itemPacks?: any[];
 }
 
-// interface User {
-//   id: string;
-// }
+interface User {
+  id: string;
+}
 
 export default function Card({
   type,

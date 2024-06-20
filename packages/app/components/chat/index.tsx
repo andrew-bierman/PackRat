@@ -32,7 +32,7 @@ interface ChatModalTriggerProps {
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
   defaultChatId = null,
-  itemTypeId = null,
+  itemTypeId = null, 
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {

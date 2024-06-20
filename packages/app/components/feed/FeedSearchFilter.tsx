@@ -61,7 +61,7 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = (search) => setSearchQuery(search);
+  const onSearch = (search) => setSearchQuery(search || undefined);
   const { screenWidth } = useScreenWidth();
 
   return (
@@ -120,7 +120,7 @@ const FeedSearchFilter = ({
                   id="single-switch"
                   size="$1.5"
                   width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
-                  checked={selectedTypes.pack}
+                  checked={selectedTypes?.pack}
                   onCheckedChange={handleTogglePack}
                 >
                   <Switch.Thumb />
@@ -136,7 +136,7 @@ const FeedSearchFilter = ({
                   id="two-switch"
                   size="$1.5"
                   width={ screenWidth <= SCREEN_WIDTH ?"10vw" : '3vw'}
-                  checked={selectedTypes.trip}
+                  checked={selectedTypes?.trip}
                   onCheckedChange={handleToggleTrip}
                 >
                   <Switch.Thumb />

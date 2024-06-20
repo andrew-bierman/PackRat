@@ -21,7 +21,7 @@ const { height, width } = Dimensions.get('window');
 
 const Carousel: React.FC<CarouselProps> = ({
   children = [],
-  itemWidth,
+  itemWidth ,
   iconColor,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -31,7 +31,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
-    const newIndex = Math.round(contentOffset.x / itemWidth);
+    const newIndex = Math.round(contentOffset.x / itemWidth || undefined);
     setCurrentIndex(newIndex);
   };
 

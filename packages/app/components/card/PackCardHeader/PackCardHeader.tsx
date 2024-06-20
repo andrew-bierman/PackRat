@@ -17,7 +17,7 @@ import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { useEditPack } from 'app/hooks/packs/useEditPack';
-import { Platform } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
 import { View } from 'react-native';
 import { useScreenWidth } from 'app/hooks/common';
@@ -49,6 +49,12 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     };
     editPack(packDetails);
   };
+
+  const getCalculatedWidth = () => {
+    const windowWidth = Dimensions.get('window').width;
+    return windowWidth <= SCREEN_WIDTH ? windowWidth * 0.3 : windowWidth * 0.5;
+  };
+
   return (
     <>
       <CustomCardHeader
@@ -81,7 +87,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
               />
             )}
             <View
-              style={{ width: screenWidth <= SCREEN_WIDTH ? '30vw' : '50vw' }}
+              style={{ width: getCalculatedWidth() }}
             >
               <EditableText
                 isLoading={isLoading}
