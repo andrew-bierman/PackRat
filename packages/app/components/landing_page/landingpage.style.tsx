@@ -74,7 +74,7 @@ const loadStyles = (theme) => {
     card: {
       marginBottom: 10,
       width: '100%',
-      backgroundColor: currentTheme.colors.secondaryBlue,
+      backgroundColor: currentTheme.colors.secondary,
     },
     cardHeader: {
       flexDirection: 'row',

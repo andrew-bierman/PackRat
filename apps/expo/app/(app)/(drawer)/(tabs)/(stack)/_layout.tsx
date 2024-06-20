@@ -28,7 +28,7 @@ export default function StackLayout() {
           fontSize: 24,
         },
         headerStyle: {
-          backgroundColor: currentTheme.colors.secondaryBlue,
+          backgroundColor: currentTheme.colors.secondary,
         },
         headerTintColor: currentTheme.colors.text,
       }}

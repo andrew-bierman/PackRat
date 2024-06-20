@@ -38,7 +38,7 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       paddingHorizontal: 10,
       paddingVertical: 20,
-      backgroundColor: currentTheme.colors.secondaryBlue,
+      backgroundColor: currentTheme.colors.secondary,
     },
   };
 };
