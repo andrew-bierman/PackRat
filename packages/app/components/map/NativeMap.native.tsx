@@ -19,32 +19,29 @@ import {
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
 import { theme } from '../../theme';
-import MapButtonsOverlay from './MapButtonsOverlay';
 import {
-  isShapeDownloadable,
-  isPoint,
   isLineString,
+  isPoint,
   isPolygonOrMultiPolygon,
+  isShapeDownloadable,
   multiPolygonBounds,
+  validateCoordinates,
+  validateShape,
 } from '../../utils/mapFunctions';
+import MapButtonsOverlay from './MapButtonsOverlay';
 
+import { gpx as toGeoJSON } from '@tmcw/togeojson';
+import { useNativeMap } from 'app/hooks/map/useNativeMap';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
-import { gpx as toGeoJSON } from '@tmcw/togeojson';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useNativeMap } from 'app/hooks/map/useNativeMap';
 
 const RButton: any = OriginalRButton;
 const RInput: any = OriginalRInput;
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
-
-// console.log("MAPBOX_ACCESS_TOKEN", MAPBOX_ACCESS_TOKEN, typeof MAPBOX_ACCESS_TOKEN)
-// consts
-
-// MapView.setConnected(true);
 
 function NativeMap({ shape: shapeProp }) {
   const styles = useCustomStyles(loadStyles);
@@ -74,6 +71,23 @@ function NativeMap({ shape: shapeProp }) {
     previewMapStyle,
   } = useNativeMap({ shape: shapeProp });
 
+  const handleShapeUpload = async () => {
+    try {
+      const result: any = await DocumentPicker.getDocumentAsync({
+        type: '*/*',
+      });
+      if (result.type === 'success') {
+        const gpxString = await FileSystem.readAsStringAsync(result.uri);
+        const parsedGpx = new DOMParser().parseFromString(gpxString);
+        const geojson = toGeoJSON(parsedGpx);
+        validateShape(geojson);
+        setShape(geojson);
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
   function CircleCapComp() {
     return (
       <View
@@ -96,7 +110,6 @@ function NativeMap({ shape: shapeProp }) {
       android: 'geo:0,0?q=',
     });
     const latLng = latLong.join(',');
-    // console.log('shape?.features[0]?.properties?.name',shape?.features[0]?.properties?.name)
     const label = shape?.features[0]?.properties?.name;
     const url =
       Platform.select({
@@ -107,13 +120,35 @@ function NativeMap({ shape: shapeProp }) {
       Linking.openURL(url);
     }
   };
+
+  let validCenterCoordinate = [0, 0];
+  try {
+    if (isPoint(shape)) {
+      validateCoordinates(pointLatLong);
+      validCenterCoordinate = pointLatLong;
+    } else if (isPolygonOrMultiPolygon(shape)) {
+      const bounds = multiPolygonBounds(shape.features[0]);
+      bounds.forEach(validateCoordinates);
+      validCenterCoordinate = bounds;
+    } else if (isLineString(shape)) {
+      const firstCoord = shape.features[0].geometry.coordinates[0];
+      validateCoordinates(firstCoord);
+      validCenterCoordinate = firstCoord;
+    } else {
+      validateCoordinates(trailCenterPoint);
+      validCenterCoordinate = trailCenterPoint;
+    }
+  } catch (error) {
+    Alert.alert('Invalid Shape Coordinates', error.message);
+    validCenterCoordinate = [0, 0];
+  }
+
   const element = (
     <View style={mapFullscreen ? (fullMapDimension as any) : previewMapStyle}>
       <Mapbox.MapView
         ref={mapViewRef}
         style={{ flex: 1 }}
         styleURL={mapStyle}
-        // onDidFinishRenderingMapFully={onMapLoaded}
         compassEnabled={false}
         logoEnabled={false}
         scrollEnabled={mapFullscreen}
@@ -122,17 +157,10 @@ function NativeMap({ shape: shapeProp }) {
         <Mapbox.Camera
           ref={camera}
           zoomLevel={zoomLevel ? zoomLevel - 0.8 : 10}
-          centerCoordinate={
-            isPoint(shape)
-              ? pointLatLong
-              : isPolygonOrMultiPolygon(shape)
-                ? multiPolygonBounds(shape.features[0])
-                : trailCenterPoint
-          }
+          centerCoordinate={validCenterCoordinate}
           animationMode={'flyTo'}
           animationDuration={2000}
         />
-        {/* // user location */}
         <Mapbox.PointAnnotation
           id={'1212'}
           coordinate={[location.longitude, location.latitude]}
@@ -160,7 +188,6 @@ function NativeMap({ shape: shapeProp }) {
               openMaps(pointLatLong);
             }}
           >
-            {/* <CircleCapComp /> */}
             <View>
               <MaterialCommunityIcons
                 name="map-marker"
@@ -178,11 +205,10 @@ function NativeMap({ shape: shapeProp }) {
               cluster
               clusterRadius={80}
               clusterMaxZoomLevel={14}
-              // style={{ zIndex: 1 }}
             >
               <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
-            {/* // top location */}
+            {/* top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
               <Mapbox.PointAnnotation
                 id={'1212'}
@@ -243,21 +269,7 @@ function NativeMap({ shape: shapeProp }) {
         onDownload={() => {
           setShowMapNameInputDialog(true);
         }}
-        handleGpxUpload={async () => {
-          try {
-            const result: any = await DocumentPicker.getDocumentAsync({
-              type: '*/*',
-            });
-            if (result.type === 'success') {
-              const gpxString = await FileSystem.readAsStringAsync(result.uri);
-              const parsedGpx = new DOMParser().parseFromString(gpxString);
-              const geojson = toGeoJSON(parsedGpx);
-              setShape(geojson);
-            }
-          } catch (err) {
-            Alert.alert('An error occured');
-          }
-        }}
+        handleGpxUpload={handleShapeUpload}
         progress={progress}
       />
     </View>
@@ -269,12 +281,7 @@ function NativeMap({ shape: shapeProp }) {
         element
       ) : (
         <>
-          <Modal
-            visible={true}
-            // style={{ backgroundColor: "#000", height: "100%" }}
-          >
-            {element}
-          </Modal>
+          <Modal visible={true}>{element}</Modal>
           <AlertDialog
             isOpen={showMapNameInputDialog}
             onClose={() => {
@@ -326,7 +333,6 @@ function NativeMap({ shape: shapeProp }) {
                       const downloadOptions = {
                         name: mapName,
                         styleURL: 'mapbox://styles/mapbox/outdoors-v11',
-                        // bounds: await mapViewRef.current.getVisibleBounds(),
                         bounds,
                         minZoom: 0,
                         maxZoom: 8,
@@ -360,7 +366,6 @@ const loadStyles = () => ({
     backgroundColor: '#F5FCFF',
   },
   container: {
-    // height: 500,
     width: '100%',
     backgroundColor: 'white',
     marginBottom: 20,
