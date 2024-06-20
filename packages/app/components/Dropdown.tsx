@@ -123,7 +123,7 @@ import { View, Platform } from 'react-native';
 interface DropdownComponentProps {
   width?: string | number;
   style?: any;
-  placeholder?: string;
+  placeholder?:any;
   native?: boolean;
   zeego?: boolean;
   [x: string]: any; // for the rest of the props
