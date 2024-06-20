@@ -193,18 +193,24 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
   return (
     <View>
       <RStack style={{ flex: 1 }}>
-        <ScrollView
-          onContentSizeChange={handleLayout}
-          style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
-        >
-          <SuggestionDescription data={suggestions.reasoning} />
-          <SuggestionList
-            suggestion={suggestions.suggestion}
-            onAddItem={removeItem}
-          />
-        </ScrollView>
+        {!suggestions.suggestion.Items ? (
+          <Text style={{ width: '100%', textAlign: 'center' }}>
+            Allow me to analyze your pack and help!
+          </Text>
+        ) : (
+          <ScrollView
+            onContentSizeChange={handleLayout}
+            style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
+          >
+            <SuggestionDescription data={suggestions.reasoning} />
+            <SuggestionList
+              suggestion={suggestions.suggestion}
+              onAddItem={removeItem}
+            />
+          </ScrollView>
+        )}
         <RStack
           style={{
             marginTop: 10,
@@ -215,7 +221,6 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
         >
           <RButton
             onClick={() => {
-              // console.log(groupItemsByCategory(suggestion));
               handleSubmitAnalysis();
             }}
             disabled={isAnalysisLoading}
@@ -250,20 +255,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
   }, [isChatOpen]);
 
   return (
-    <View
-      style={
-        (styles.container,
-        {
-          position: 'fixed',
-          right: 250,
-          bottom: 30,
-          width: 60,
-          height: 60,
-          justifyContent: 'center',
-          alignItems: 'center',
-        })
-      }
-    >
+    <View style={styles.container}>
       <TouchableOpacity
         style={{
           width: 50,
@@ -291,38 +283,12 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
           }}
           width={40}
           height={40}
-          style={{
-            ...styles.logo,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.75,
-            shadowRadius: 1.24,
-            elevation: 3,
-          }}
+          style={styles.logo}
           alt="PackRat Logo"
         />
       </TouchableOpacity>
       {isItemOpen && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 5,
-            width: 308,
-            backgroundColor: '#000',
-            borderRadius: 10,
-            padding: 4,
-            zIndex: 1000,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}
-        >
+        <Animated.View style={{ ...styles.animatedView, width: 308 }}>
           <View style={{ width: 300 }}>
             {actionItems.map((item, index) => {
               const { icon, color, title, description, type } = item;
@@ -344,23 +310,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
         </Animated.View>
       )}
       {isChatOpen && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 5,
-            width: 450,
-            backgroundColor: '#fff',
-            borderRadius: 10,
-            padding: 4,
-            zIndex: 1000,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}
-        >
+        <Animated.View style={{ ...styles.animatedView, width: 450 }}>
           <RButton
             position="absolute"
             backgroundColor="$background"
@@ -377,23 +327,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
         </Animated.View>
       )}
       {isSuggestionsOpen && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 5,
-            width: 450,
-            backgroundColor: '#fff',
-            borderRadius: 10,
-            padding: 4,
-            zIndex: 1000,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}
-        >
+        <Animated.View style={styles.animatedView}>
           <RButton
             position="absolute"
             backgroundColor="$background"

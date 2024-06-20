@@ -9,7 +9,17 @@ export const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
-    container: { flex: 1, padding: 16 },
+    container: {
+      flex: 1,
+      padding: 16,
+      position: 'fixed',
+      right: 250,
+      bottom: 30,
+      width: 60,
+      height: 60,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     headerText: { fontSize: 24, fontWeight: 'bold' },
     flatList: { flexGrow: 1, justifyContent: 'flex-end' },
     inputContainer: {
@@ -119,6 +129,31 @@ export const loadStyles = (theme: any) => {
       fontWeight: '500',
       lineHeight: 18,
       color: 'rgba(224, 224, 224, 0.9)',
+    },
+    logo: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.75,
+      shadowRadius: 1.24,
+      elevation: 3,
+    },
+    animatedView: {
+      position: 'absolute',
+      bottom: 60,
+      right: 5,
+      width: 450,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      padding: 4,
+      zIndex: 1000,
+      shadowColor: '#000',
+      shadowOffset: { width: 2, height: 4 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
     },
   };
 };
