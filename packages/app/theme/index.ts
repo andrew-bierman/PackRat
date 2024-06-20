@@ -1,7 +1,50 @@
 import { extendTheme } from 'native-base';
 import { DefaultTheme } from 'react-native-paper';
 
-export const theme = {
+export const lightTheme = {
+  colors: {
+    primary: '#4A90E2',
+    background: '#F5F5F5',
+    secondary: '#7B8794',
+    accent: '#2A9D8F',
+    card: '#FFFFFF',
+    text: '#333333',
+    textColor: '#666666',
+    border: '#E0E0E0',
+    notification: '#4A90E2',
+    error: '#E74C3C',
+    textPrimary: '#0C66A1',
+    textSecondary: '#B0B0B0',
+    textDarkGrey: '#555555',
+    cardIconColor: '#2A9D8F',
+    iconColor: '#666666',
+    weatherIcon: '#4A90E2',
+    drawerIconColor: '#555555',
+    white: '#FFFFFF',
+    black: '#000000',
+  },
+  font: {
+    headerFont: 56,
+    size: 18,
+    desktop: 36,
+  },
+  padding: {
+    paddingDesktop: 24,
+    paddingInside: 105,
+    paddingTablet: 80,
+  },
+  size: {
+    cardPadding: 45,
+    mobilePadding: 30,
+  },
+  width: {
+    widthDesktop: '85%',
+  },
+};
+
+export const theme = lightTheme;
+
+export const blueTheme = {
   colors: {
     primary: '#0A84FF',
     background: '#0284c7',
@@ -41,6 +84,7 @@ export const theme = {
     widthDesktop: '85%',
   },
 };
+
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
@@ -84,17 +128,17 @@ export const darkTheme = {
 export const nativeBaseLightTheme = extendTheme({
   colors: {
     primary: {
-      500: theme.colors.background,
+      500: lightTheme.colors.primary,
     },
     amber: {
-      100: theme.colors.text,
+      100: lightTheme.colors.text,
     },
   },
 });
 export const nativeBaseDarkTheme = extendTheme({
   colors: {
     primary: {
-      500: darkTheme.colors.background,
+      500: darkTheme.colors.primary,
     },
     amber: {
       100: darkTheme.colors.text,
@@ -106,11 +150,11 @@ export const lightThemePaper = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: theme.colors.primary,
-    onSurface: theme.colors.text,
+    primary: lightTheme.colors.primary,
+    onSurface: lightTheme.colors.text,
     elevation: {
       ...DefaultTheme.colors.elevation,
-      level1: theme.colors.background,
+      level1: lightTheme.colors.background,
     },
   },
 };

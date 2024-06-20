@@ -30,7 +30,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({
               color: currentTheme.colors.white,
             }}
             hoverStyle={{
-              bg: currentTheme.colors.secondaryBlue as any,
+              bg: currentTheme.colors.secondary as any,
             }}
             key={item.href}
           >

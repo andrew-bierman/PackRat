@@ -66,7 +66,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
 
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
 
-  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondaryBlue, 0.5);
+  const cardBackgroundColor = hexToRGBA(currentTheme.colors.secondary, 0.5);
 
   const bannerText =
     firstNameOrUser !== 'User'
@@ -90,7 +90,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
         <LargeCard
           customStyle={{
             backgroundColor:
-              cardBackgroundColor || currentTheme.colors.secondaryBlue,
+              cardBackgroundColor || currentTheme.colors.secondary,
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
