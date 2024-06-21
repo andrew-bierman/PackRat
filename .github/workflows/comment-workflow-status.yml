@@ -1,0 +1,104 @@
+name: Workflow Status Commenter
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  workflow_run:
+    workflows:
+      [
+        'android-preview-build-local',
+        'Run Tests',
+        'Node.js CI',
+        'Node.js CI for Development Environment',
+        'EAS Local Build',
+      ]
+    types: [completed]
+
+jobs:
+  comment-workflow-status:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Determine branch name
+        id: get-branch
+        run: echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Fetch workflow runs
+        id: fetch-workflows
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = process.env.BRANCH_NAME;
+            const workflows = [
+              'android-preview-build-local',
+              'Run Tests',
+              'Node.js CI',
+              'Node.js CI for Development Environment',
+              'EAS Local Build',
+            ];
+            const response = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: branch,
+              status: 'completed',
+              per_page: 100 // Adjust this as needed
+            });
+            const filteredRuns = response.data.workflow_runs.filter(run => workflows.includes(run.name));
+            return filteredRuns;
+      - name: Create Comment Body
+        id: create-table
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const workflows = JSON.parse('${{ steps.fetch-workflows.outputs.result }}');
+            let commentBody = "## Workflow Status\n| Workflow | Status | Details |\n|----------|--------|---------|\n";
+            workflows.forEach(workflow => {
+              let emoji;
+              switch (workflow.conclusion) {
+                case 'success':
+                  emoji = '✅';
+                  break;
+                case 'failure':
+                  emoji = '❌';
+                  break;
+                case 'cancelled':
+                  emoji = '🚫';
+                  break;
+                case null:
+                  emoji = '🔄';
+                  break;
+                default:
+                  emoji = '⏺️';
+              }
+              commentBody += `| ${workflow.name} | ${emoji} ${workflow.conclusion || 'Loading...'} | [Logs](${workflow.html_url}) |\n`;
+            });
+            core.setOutput('body', commentBody);
+            console.log(`Comment Body: ${commentBody}`);
+            return { body: commentBody };
+      - name: Debugging Outputs
+        run: |
+            echo "Comment Body: ${{ steps.create-table.outputs.body }}"
+      - name: Find or Create Comment
+        id: find-or-create-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number || github.run_id }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Workflow Status'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create or Update Comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-or-create-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number || github.run_id }}
+          body: ${{ steps.create-table.outputs.body }}
+          token: ${{ secrets.GITHUB_TOKEN }}
