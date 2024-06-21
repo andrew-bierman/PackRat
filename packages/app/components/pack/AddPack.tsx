@@ -11,7 +11,7 @@ import {
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack, usePackId } from 'app/hooks/packs';
+import { useAddNewPack,} from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
