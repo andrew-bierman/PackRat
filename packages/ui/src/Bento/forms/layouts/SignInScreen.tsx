@@ -1,8 +1,6 @@
 // import { Facebook, Github } from '@tamagui/lucide-icons';
-import { useState } from 'react';
 import {
   AnimatePresence,
-  Button,
   H1,
   Paragraph,
   Separator,
@@ -14,56 +12,16 @@ import {
 import { FormCard } from './components/layoutParts';
 import { RLink } from '@packrat/ui';
 import { Form, FormInput, SubmitButton } from '@packrat/ui';
-import { userSignUp } from '@packrat/validations';
 import { userSignIn } from '@packrat/validations';
-import { useRegisterUser, useGoogleAuth, useLogin } from 'app/auth/hooks';
 import { FontAwesome } from '@expo/vector-icons';
-import {RIconButton} from '@packrat/ui';
-import useTheme from 'app/hooks/useTheme';
+import { RIconButton } from '@packrat/ui';
 
-
-type mode = 'signup' | 'signin';
-
-/** simulate signin */
-
-/** ------ EXAMPLE ------ */
-export function SignInScreen({ mode }: mode) {
-  function useSignIn() {
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
-      'idle',
-    );
-    const { handleLogin } = useLogin();
-    return {
-      signInStatus: status,
-      signIn: async (data) => {
-        await setStatus('loading');
-        console.log(status);
-        await handleLogin(data);
-        setStatus('idle');
-      },
-    };
-  }
-
-  function useSignup() {
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
-      'idle',
-    );
-    const { registerUser } = useRegisterUser();
-    return {
-      signUpStatus: status,
-      signup: async (data) => {
-        setStatus('loading');
-        await registerUser(data);
-        setStatus('idle');
-      },
-    };
-  }
-  const { signIn, signInStatus } = useSignIn();
-  const { signup, signUpStatus } = useSignup();
-  const { promptAsync } = useGoogleAuth();
-  const { currentTheme } = useTheme();
-
-
+export function SignInScreen({
+  promptAsync,
+  signIn,
+  signInStatus,
+  isGoogleSignInReady,
+}) {
   return (
     <FormCard>
       <View
@@ -80,32 +38,20 @@ export function SignInScreen({ mode }: mode) {
         }}
       >
         <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
-          {mode === 'signup'
-            ? 'Sign up to your account'
-            : 'Sign in to your account'}
+          Sign in to your account
         </H1>
-        <Form validationSchema={mode === 'signup' ? userSignUp : userSignIn}>
+        <Form validationSchema={userSignIn}>
           <View flexDirection="column" gap="$3">
-            {mode === 'signup' && <FormInput label="Name" name="name" />}
             <FormInput
               label="Email ID"
               keyboardType="email-address"
               name="email"
             />
-            {mode === 'signup' && (
-              <FormInput label="Username" name="username" />
-            )}
             <FormInput label="Password" secureTextEntry name="password" />
             <Theme inverse>
               <SubmitButton
-                disabled={
-                  mode === 'signup'
-                    ? signInStatus === 'loading'
-                    : signUpStatus === 'loading'
-                }
-                onSubmit={(data) =>
-                  mode === 'signup' ? signup(data) : signIn(data)
-                }
+                disabled={signInStatus === 'loading'}
+                onSubmit={(data) => signIn(data)}
                 style={{
                   marginTop: 16,
                   backgroundColor: '#232323',
@@ -114,60 +60,69 @@ export function SignInScreen({ mode }: mode) {
                 width="100%"
                 iconAfter={
                   <AnimatePresence>
-                    {signUpStatus === 'loading' ||
-                      (signInStatus === 'loading' && (
-                        <Spinner
-                          color="$color"
-                          key="loading-spinner"
-                          opacity={1}
-                          scale={1}
-                          animation="quick"
-                          position="absolute"
-                          left="60%"
-                          enterStyle={{
-                            opacity: 0,
-                            scale: 0.5,
-                          }}
-                          exitStyle={{
-                            opacity: 0,
-                            scale: 0.5,
-                          }}
-                        />
-                      ))}
+                    {signInStatus === 'loading' && (
+                      <Spinner
+                        color="$color"
+                        key="loading-spinner"
+                        opacity={1}
+                        scale={1}
+                        animation="quick"
+                        position="absolute"
+                        left="60%"
+                        enterStyle={{
+                          opacity: 0,
+                          scale: 0.5,
+                        }}
+                        exitStyle={{
+                          opacity: 0,
+                          scale: 0.5,
+                        }}
+                      />
+                    )}
                   </AnimatePresence>
                 }
               >
-                {mode === 'signup' ? 'Sign Up' : 'Sign In'}
+                Sign In
               </SubmitButton>
             </Theme>
           </View>
-          <View flexDirection="column" gap="$3" width="100%" alignItems="center">
-          <Theme>
-            <View flexDirection="row" width="100%" alignItems="center" gap="$4">
-              <Separator />
-              <Paragraph>Or</Paragraph>
-              <Separator />
-            </View>
-            <View flexDirection="row" flexWrap="wrap" gap="$3">
-            <RIconButton
-                flex={1}
-                onPress={async () => await promptAsync()}
-                icon={
-                  <FontAwesome
-                    name="google"
-                    size={16}
-                  />
-                }
+          <View
+            flexDirection="column"
+            gap="$3"
+            width="100%"
+            alignItems="center"
+          >
+            <Theme>
+              <View
+                flexDirection="row"
+                width="100%"
+                alignItems="center"
+                gap="$4"
               >
-                Continue with Google
-              </RIconButton>
-            </View>
-          </Theme>
-        </View>
+                <Separator />
+                <Paragraph>Or</Paragraph>
+                <Separator />
+              </View>
+              <View flexDirection="row" flexWrap="wrap" gap="$3">
+                <RIconButton
+                  disabled={!isGoogleSignInReady}
+                  flex={1}
+                  onPress={async (event) => {
+                    event.preventDefault();
+                    await promptAsync();
+                  }}
+                  icon={<FontAwesome name="google" size={16} />}
+                >
+                  Continue with Google
+                </RIconButton>
+              </View>
+              <ForgotPasswordLink />
+            </Theme>
+          </View>
         </Form>
-        
-        <View style={{alignItems : 'center', width : '100%'}}>
-        {mode === 'signin' ? <SignUpLink /> : <SignInLink />}
+
+        <View style={{ alignItems: 'center', width: '100%' }}>
+          <SignUpLink />
         </View>
       </View>
     </FormCard>
@@ -175,21 +130,6 @@ export function SignInScreen({ mode }: mode) {
 }
 
 SignInScreen.fileName = 'SignInScreen';
-
-// Swap for your own Link
-const Link = ({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <View href={href} tag="a">
-      {children}
-    </View>
-  );
-};
 
 const SignUpLink = () => {
   return (
@@ -203,24 +143,6 @@ const SignUpLink = () => {
           textDecorationLine="underline"
         >
           Sign up
-        </SizableText>
-      </Paragraph>
-    </RLink>
-  );
-};
-
-const SignInLink = () => {
-  return (
-    <RLink href={`/sign-in`}>
-      <Paragraph textDecorationStyle="unset" ta="center">
-        Already have an account?{' '}
-        <SizableText
-          hoverStyle={{
-            color: '$colorHover',
-          }}
-          textDecorationLine="underline"
-        >
-          Sign in
         </SizableText>
       </Paragraph>
     </RLink>

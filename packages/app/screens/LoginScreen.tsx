@@ -1,28 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import {
-  RHeading as OriginalRHeading,
-  RStack,
-  RButton as OriginalRButton,
-  RText as OriginalRText,
-  RIconButton,
-  RScrollView,
-  Form as OriginalForm,
-  FormInput,
-  SubmitButton,
-  RLink,
-} from '@packrat/ui';
-import { FontAwesome } from '@expo/vector-icons';
-import { NODE_ENV } from '@packrat/config';
+import { RStack, RScrollView } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/auth/hooks';
-import { userSignIn as userSignInSchema } from '@packrat/validations';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
-
-const RText: any = OriginalRText;
-const RHeading: any = OriginalRHeading;
-const Form: any = OriginalForm;
-const RButton: any = OriginalRButton;
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -30,9 +11,25 @@ const demoUser = {
 };
 
 export default function Login() {
-  const { handleLogin } = useLogin();
   const { enableGoogleLogin, isGoogleSignInReady, promptAsync } =
     useGoogleAuth();
+
+  function useSignIn() {
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
+      'idle',
+    );
+    const { handleLogin } = useLogin();
+    return {
+      signInStatus: status,
+      signIn: async (data) => {
+        await setStatus('loading');
+        await handleLogin(data);
+        setStatus('idle');
+      },
+    };
+  }
+
+  const { signIn, signInStatus } = useSignIn();
   const { currentTheme } = useTheme();
 
   return (
@@ -56,7 +53,12 @@ export default function Login() {
               maxWidth: 400,
             }}
           >
-            <SignInScreen mode="signin"/>
+            <SignInScreen
+              promptAsync={promptAsync}
+              signIn={signIn}
+              signInStatus={signInStatus}
+              isGoogleSignInReady={isGoogleSignInReady}
+            />
           </View>
         </RStack>
       </RStack>
