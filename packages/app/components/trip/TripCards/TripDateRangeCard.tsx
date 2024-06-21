@@ -40,12 +40,10 @@ export const TripDateRangeCard = ({
           end_date: dates[1],
         }
       : null;
-    console.info({ dateRange });
     setDateRange(dateRange);
     setSelectedDates(dates);
   };
 
-  console.info({dateRange, selectedDates, offsetDate})
   return (
     <TripCardBase
       icon={() => (
@@ -57,6 +55,7 @@ export const TripDateRangeCard = ({
       )}
       title="Trip Date Range"
     >
+<<<<<<< HEAD
       <DateRangePicker
         selectedDates={selectedDates}
         onDatesChange={onDatesChange}
@@ -65,6 +64,18 @@ export const TripDateRangeCard = ({
         open={open}
         setOpen={setOpen}
       />
+=======
+      <View style={{ maxWidth: '300px', width: '100%' }}>
+        <RangePicker
+          selectedDates={selectedDates}
+          onDatesChange={onDatesChange}
+          offsetDate={offsetDate}
+          onOffsetChange={onOffsetChange}
+          open={open}
+          setOpen={setOpen}
+        />
+      </View>
+>>>>>>> f6e67066 (Fix trip ui)
     </TripCardBase>
   );
 };

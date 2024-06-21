@@ -73,7 +73,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          {Platform.OS === 'web' ? (
+          {Platform.OS !== 'web' ? (
             <FormSelect
               onValueChange={handleonValueChange}
               options={packSelectOptions}
@@ -127,7 +127,6 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
-      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -169,7 +168,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width: Platform.OS === 'web' ? '200px' : '65%',
+      width: '200px',
       marginTop: 40,
       marginBottom: 20,
     },

@@ -7,7 +7,7 @@ const loadStyles = (theme) => {
     container: {
       flex: isWeb? 1: 0,
       padding: 10,
-      width: isWeb ? '100%' : 310,
+      width: '100%',
     },
     tableStyle: {
       width: '100%',
