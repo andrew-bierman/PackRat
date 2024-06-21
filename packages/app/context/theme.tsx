@@ -1,11 +1,13 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
-  isDark: false,
-  isLight: true,
+  isDark: null,
+  isLight: null,
   currentTheme: theme,
 };
 const handlers = {
@@ -58,6 +60,28 @@ const ThemeContext = createContext({
  */
 export const ThemeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      let storedIsEnabled;
+      if (Platform.OS === 'web') {
+        storedIsEnabled = await localStorage.getItem('isEnabled');
+      } else {
+        storedIsEnabled = await AsyncStorage.getItem('isEnabled');
+      }
+
+      if (storedIsEnabled !== null) {
+        const isEnabled = JSON.parse(storedIsEnabled);
+        dispatch({
+          type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
+        });
+      } else {
+        dispatch({ type: 'ENABLE_LIGHT_MODE' });
+      }
+    };
+
+    fetchTheme();
+  }, []);
 
   /**
    * Enable dark mode.
