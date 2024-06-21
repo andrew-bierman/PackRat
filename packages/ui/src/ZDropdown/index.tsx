@@ -46,7 +46,7 @@ const RDropdownMenu = ({ menuItems = [], menuName }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <RButton>{menuName}</RButton>
+        <RButton style={{backgroundColor:'transparent'}}>{menuName}</RButton>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {menuItems.map(({ label, onSelect = () => {} }) => (
