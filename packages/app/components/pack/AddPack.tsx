@@ -17,7 +17,12 @@ import { addPackSchema } from '@packrat/validations';
 
 const FormSelect: any = OriginalFormSelect;
 
-export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
+type AddPackProps = {
+  isCreatingTrip?: boolean;
+  onSuccess?: () => void;
+};
+
+export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();

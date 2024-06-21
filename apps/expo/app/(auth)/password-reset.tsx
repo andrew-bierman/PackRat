@@ -13,10 +13,10 @@ export default function ResetPasswordRoute() {
         </Head>
       )}
       <Stack.Screen
+        name="Reset Password"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Reset Password',
-          name: 'Reset Password',
+          title: 'Reset Password'
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

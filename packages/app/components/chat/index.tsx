@@ -32,7 +32,7 @@ interface ChatModalTriggerProps {
 const ChatComponent: React.FC<ChatComponentProps> = ({
   showChatSelector = true,
   defaultChatId = null,
-  itemTypeId = null, 
+  itemTypeId = null,
 }) => {
   const styles = useCustomStyles(loadStyles);
   const {
@@ -204,7 +204,6 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
           }}
         >
           <Button
-            position="absolute"
             backgroundColor="$background"
             top="$2"
             right="$2"
@@ -212,7 +211,10 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
             circular
             icon={X}
             onPress={() => setIsChatOpen(false)}
-            style={{ zIndex: 1001 }}
+            style={{
+              zIndex: 1001,
+              position: 'absolute',
+            }}
           />
           <ChatComponent itemTypeId={itemTypeId} />
         </Animated.View>

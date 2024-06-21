@@ -6,7 +6,7 @@ import Head from 'expo-router/head';
 import { useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
-  const { id } = useProfileId();
+  const [id] = useProfileId();
 
   return (
     <>
@@ -17,9 +17,9 @@ const Profile = () => {
         </Head>
       )}
       <Stack.Screen
+        name={`${id}'s Profile`}
         options={{
           title: `${id}'s Profile`,
-          name: `${id}'s Profile`,
         }}
       />
       <ProfileContainer id={id} />

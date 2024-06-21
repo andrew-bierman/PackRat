@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import {
@@ -35,7 +35,7 @@ interface CardProps {
     id: string;
   }>;
   favorites_count: number;
-  owner_id: string;
+  owner_id: string | {id : String};
   destination: string;
   createdAt: string;
   owners: Array<{ any: any }>;
@@ -131,7 +131,7 @@ export default function Card({
               alignItems: 'center',
               padding: 16,
               flex: 1,
-              width: '60vw',
+              width: Platform.OS === 'web' ?  '60vw' : "60%",
             }}
           >
             <View
@@ -297,7 +297,7 @@ export default function Card({
                               gap: 8,
                             }}
                           >
-                            {user?.id === owner_id.id ? null : (
+                            {user?.id === owner_id?.id ? null : (
                               <TouchableOpacity onPress={handleAddToFavorite}>
                                 <AntDesign
                                   name="heart"

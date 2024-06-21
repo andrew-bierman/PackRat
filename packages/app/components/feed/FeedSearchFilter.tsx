@@ -61,7 +61,11 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = (search) => setSearchQuery(search || undefined);
+  const onSearch : (search : string) => void = (search) => {
+    if(setSearchQuery){
+      setSearchQuery(search)
+    }
+  };
   const { screenWidth } = useScreenWidth();
 
   return (

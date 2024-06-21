@@ -31,7 +31,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
-    const newIndex = Math.round(contentOffset.x / itemWidth || undefined);
+    const newIndex = itemWidth ?  Math.round(contentOffset.x / itemWidth) : 0;
     setCurrentIndex(newIndex);
   };
 

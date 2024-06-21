@@ -16,18 +16,20 @@ export default function Modal() {
           <title>Modal</title>
         </Head>
       )}
-      <Stack.Screen
-        options={{
-          // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Modal',
-          // http://reactnavigation.org/docs/headers#adjusting-header-styles
+        <Stack.Screen
+          name="Modal"
+          options={{
+            // https://reactnavigation.org/docs/headers#setting-the-header-title
+            title: 'Modal',
+            // http://reactnavigation.org/docs/headers#adjusting-header-styles
 
-          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
+            // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
 
-          presentation: 'modal',
-        }}
-        screenOptions={{ headerShown: false, headerTitle: 'modal' }}
-      />
+            presentation: 'modal',
+          }}
+          screenOptions={{ headerShown: false, headerTitle: 'modal' }}
+        />
+
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
         {!isPresented && <Link href="../">Dismiss</Link>}

@@ -42,7 +42,7 @@ export const Navbar = () => {
             />
             <Text
               style={styles.logoText}
-              onClick={() => {
+              onPress={() => {
                 navigate('/');
               }}
             >

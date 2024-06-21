@@ -123,7 +123,7 @@ export function PackDetails() {
                                   <ScoreContainer
                                     type="pack"
                                     data={currentPack}
-                                    isOwner={isOwner}
+                                    isOwner={!!isOwner}
                                   />
                                 );
                               // case SECTION.CHAT:
@@ -163,7 +163,7 @@ export function PackDetails() {
         }}
       >
         <ChatContainer
-          itemTypeId={currentPackId}
+          itemTypeId={currentPackId ? currentPackId : null}
           title="Chat"
           trigger="Open Chat"
         />

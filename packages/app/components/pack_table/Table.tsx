@@ -81,7 +81,7 @@ export const TableContainer = ({
             handleCheckboxChange={handleCheckboxChange}
             currentPack={currentPack}
             hasPermissions={isAuthUserPack}
-            refetch={refetch}
+            refetch={refetch ?? (() => {})}
             setRefetch={setRefetch}
           ></BasicTable>
           {/* <Table style={styles.tableStyle} flexArr={flexArr}>

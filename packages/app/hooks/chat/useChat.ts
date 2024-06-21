@@ -3,7 +3,7 @@ import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';
 
-export const useChat = (itemTypeId = null) => {
+export const useChat = (itemTypeId?: string | null) => {
   const user = useAuthUser();
   const [typeId, setTypeId] = useState(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
@@ -12,7 +12,7 @@ export const useChat = (itemTypeId = null) => {
   // const [parsedMessages, setParsedMessages] = useState([]);
 
   const { data: chatsData, refetch } = useGetUserChats(
-    user.id,
+    user?.id,
     typeId.itemTypeId,
   );
 
@@ -71,7 +71,7 @@ export const useChat = (itemTypeId = null) => {
     setIsLoading(true);
     setUserInput('');
     await getAIResponse({
-      userId: user.id,
+      userId: user?.id,
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
     });
