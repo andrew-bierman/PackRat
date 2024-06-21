@@ -11,7 +11,6 @@ import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 
-
 type ModalName = 'edit' | 'delete';
 
 interface TableItemProps {
@@ -74,7 +73,6 @@ const TableItem = ({
     <RText px={0}>{quantity}</RText>,
   ];
   if (hasPermissions) {
-    
     if (
       Platform.OS === 'android' ||
       Platform.OS === 'ios' ||
@@ -86,7 +84,6 @@ const TableItem = ({
     }
   }
 
-  
   /*
   * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it

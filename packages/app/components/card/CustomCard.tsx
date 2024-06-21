@@ -72,7 +72,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' && authUser?.id === data.owner_id.id ? (
+        {type === 'pack' && authUser?.id === data.owner_id ? (
           <>
             <View
               style={
@@ -82,7 +82,7 @@ export const CustomCard = ({
                   paddingRight: 16,
                   paddingLeft: 16,
                   position: 'relative',
-                  zIndex: '1',
+                  zIndex: 1,
                 } as any
               }
             >

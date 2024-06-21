@@ -10,6 +10,7 @@ import {
   useScoreData,
   useScoreProgress,
 } from 'app/hooks/score';
+import { View } from 'react-native';
 
 interface ScoreProgressChartProps {
   score: number;
@@ -101,7 +102,7 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
   return (
     <RStack style={styles.container}>
       <RStack style={styles.graphWrapper}>
-        <Svg height="160" width="160" viewBox="0 0 180 180">
+        <Svg height="150" width="150" viewBox="0 0 180 180">
           <G rotation={-90} originX="90" originY="90">
             {total === 0 ? (
               <Circle
@@ -212,10 +213,10 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           )}
         </YStack>
         {isAlreadyScored && (
-          <>
+          <View style={{ width: '20vw' }}>
             <ScoreProgressChart score={totalScore} />
             <GradingPieChart scores={scores} />
-          </>
+          </View>
         )}
       </XStack>
     </RStack>

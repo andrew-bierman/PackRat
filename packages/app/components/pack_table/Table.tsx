@@ -14,6 +14,7 @@ import {
 import TableItem from './TableItem';
 import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
 interface TableContainerProps {
   currentPack: any;
@@ -56,7 +57,7 @@ export const TableContainer = ({
     copy,
   });
   const headerRow = ['Item Name', `Weight`, 'Quantity', ''];
-  let flexArr = [2, 1, 1, 1,];
+  let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
   if (
@@ -74,7 +75,16 @@ export const TableContainer = ({
     <View style={[styles.container, !isWeb && { width: '100%' }]}>
       {data?.length ? (
         <>
-          <Table style={styles.tableStyle} flexArr={flexArr}>
+          <BasicTable
+            groupedData={groupedData}
+            onDelete={deletePackItem}
+            handleCheckboxChange={handleCheckboxChange}
+            currentPack={currentPack}
+            hasPermissions={isAuthUserPack}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          ></BasicTable>
+          {/* <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row
               flexArr={flexArr}
@@ -108,7 +118,7 @@ export const TableContainer = ({
                 </>
               )}
             />
-          </Table>
+          </Table> */}
           {copy ? (
             <RButton
               style={{

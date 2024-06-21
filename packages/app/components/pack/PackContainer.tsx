@@ -10,6 +10,7 @@ import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
 
+
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [packIdParam, setPackIdParam] = usePackId();
@@ -70,7 +71,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
         value={currentPackId}
         onValueChange={handlePack}
         placeholder={'Select a Pack'}
-        width={300}
+        width={200}
       />
       {currentPackId && (
         <>
@@ -80,13 +81,14 @@ export default function PackContainer({ isCreatingTrip = false }) {
             isAddItemModalOpen={isAddItemModalOpen}
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
-          <TableContainer
-            key={`table - ${currentPackId}`}
-            currentPack={currentPack}
-            selectedPack={currentPackId}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
+          
+            <TableContainer
+              key={`table - ${currentPackId}`}
+              currentPack={currentPack}
+              selectedPack={currentPackId}
+              refetch={refetch}
+              setRefetch={setRefetch}
+            />
         </>
       )}
     </View>

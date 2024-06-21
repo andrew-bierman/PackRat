@@ -1,12 +1,16 @@
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
+
 
 const Layout = ({ children }) => {
   return (
     <View
       style={{
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: 20,
+        alignItems:'center',
         backgroundColor: 'transparent',
-        width: Platform.OS === 'web' ? '60vw' : '100%',
-        alignSelf: 'center',
+        width:'100%',
       }}
     >
       {children}

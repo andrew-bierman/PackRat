@@ -46,7 +46,7 @@ const Carousel: React.FC<CarouselProps> = ({
     <RStack
       style={{
         alignSelf: 'center',
-        width: Platform.OS === 'web' ? '100%' : width * 0.7,
+        width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
@@ -96,11 +96,13 @@ const Carousel: React.FC<CarouselProps> = ({
   );
 };
 
-const loadStyles = () => ({
-  carousel: {
-    flexDirection: 'row',
-    width: Platform.OS === 'web' ? '100%' : width * 0.8,
-  },
-});
+const loadStyles = () => {
+  return {
+    carousel: {
+      flexDirection: 'row',
+      width: '100%',
+    },
+  };
+};
 
 export default Carousel;

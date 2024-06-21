@@ -1,8 +1,9 @@
-import { RStack, RText } from '@packrat/ui';
-import MapContainer from 'app/components/map/MapContainer.web';
+import { ErrorBoundary, RStack, RText } from '@packrat/ui';
+import MapContainer from 'app/components/map/MapContainer';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
+import React from 'react';
 
 type TripMapCardProps = {
   isLoading?: boolean;
@@ -29,7 +30,9 @@ export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
           <RText>Loading....</RText>
         </RStack>
       ) : (
-        <MapContainer shape={shape} />
+        <ErrorBoundary>
+          <MapContainer shape={shape} />
+        </ErrorBoundary>
       )}
     </TripCardBase>
   );
