@@ -6,14 +6,19 @@ import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 import router from './routes';
+import { Ai } from '@cloudflare/ai';
 
 interface Bindings {
   [key: string]: any;
   DB: IDBDatabase;
+  VECTOR_INDEX: VectorizeIndex;
+  AI: Ai;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
   MAPBOX_ACCESS_TOKEN: string;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  VECTORIZE_API_KEY: string;
 }
 
 const TRPC_API_ENDPOINT = '/api/trpc';

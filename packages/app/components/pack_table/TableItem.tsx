@@ -70,7 +70,7 @@ const TableItem = ({
 
   let rowData = [
     <RText px={8}>{name}</RText>,
-    <RText px={0}>{${formatNumber(weight)} ${unit}}</RText>,
+    <RText px={0}>{`${formatNumber(weight)} ${unit}`}</RText>,
     <RText px={0}>{quantity}</RText>,
   ];
   if (hasPermissions) {
@@ -84,7 +84,7 @@ const TableItem = ({
       rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
-  
+
   /*
   * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it
