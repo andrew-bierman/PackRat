@@ -1,14 +1,16 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useEffect, useReducer, useState } from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStorageState } from 'app/hooks/storage/useStorageState';
 
 const initialState = {
   isDark: null,
   isLight: null,
   currentTheme: theme,
+  loading: true,
 };
 const handlers = {
   /**
@@ -60,16 +62,12 @@ const ThemeContext = createContext({
  */
 export const ThemeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [[, storedIsEnabled], setStoredIsEnabled] =
+    useStorageState('isEnabled');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTheme = async () => {
-      let storedIsEnabled;
-      if (Platform.OS === 'web') {
-        storedIsEnabled = await localStorage.getItem('isEnabled');
-      } else {
-        storedIsEnabled = await AsyncStorage.getItem('isEnabled');
-      }
-
       if (storedIsEnabled !== null) {
         const isEnabled = JSON.parse(storedIsEnabled);
         dispatch({
@@ -78,10 +76,15 @@ export const ThemeProvider = ({ children }) => {
       } else {
         dispatch({ type: 'ENABLE_LIGHT_MODE' });
       }
+      setLoading(false);
     };
 
     fetchTheme();
-  }, []);
+  }, [storedIsEnabled]);
+
+  if (loading) {
+    return null; // Return null while determining the theme to avoid flash
+  }
 
   /**
    * Enable dark mode.
@@ -90,6 +93,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableDarkMode = () => {
     dispatch({ type: 'ENABLE_DARK_MODE' });
+    setStoredIsEnabled(JSON.stringify(true));
   };
   /**
    * Enables light mode.
@@ -99,6 +103,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableLightMode = () => {
     dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    setStoredIsEnabled(JSON.stringify(false));
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
