@@ -73,7 +73,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          {Platform.OS !== 'web' ? (
+          {Platform.OS === 'web' ? (
             <FormSelect
               onValueChange={handleonValueChange}
               options={packSelectOptions}
