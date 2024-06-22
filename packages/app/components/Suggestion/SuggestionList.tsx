@@ -3,10 +3,6 @@ import { Separator, Text, View, YGroup } from 'tamagui';
 import { RButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
-import { useAuthUser } from 'app/auth/hooks';
-import { user } from 'server/src/db/schema';
-
-// type SuggestionList = typeof suggestion.Items;
 
 export function SuggestionList({ suggestion, onAddItem }) {
   const [itemsList, setItemsList] = useState([]);

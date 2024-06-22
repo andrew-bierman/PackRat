@@ -4531,29 +4531,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@instructor-ai/instructor@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@instructor-ai/instructor@npm:1.3.0"
+"@instructor-ai/instructor@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@instructor-ai/instructor@npm:1.5.0"
   dependencies:
     zod-stream: "npm:1.0.3"
     zod-validation-error: "npm:^2.1.0"
   peerDependencies:
     openai: ">=4.28.0"
     zod: ">=3.22.4"
-  checksum: 10/29174fc7edfb6febbdddd68798160380ea4fe9e16c2e39853057c3b6f827ecda1e0334bffca8ec96cf477b51ee6e4088977ffffeb4c5034da91dd5cdc5f230f9
-  languageName: node
-  linkType: hard
-
-"@instructor-ai/instructor@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@instructor-ai/instructor@npm:1.4.0"
-  dependencies:
-    zod-stream: "npm:1.0.3"
-    zod-validation-error: "npm:^2.1.0"
-  peerDependencies:
-    openai: ">=4.28.0"
-    zod: ">=3.22.4"
-  checksum: 10/c982e5564e35d55eb43f4ce40b793626256359a062cad1f153bc8aba8e33d7c57c696ddcbf0cbb2c45a3f20740f64b21c052f585f28782e0987ff1e5f553c8ab
+  checksum: 10/c547afffe3dcabaecfa179dc471413dfbe55d597c8ab74f5fa03b91497b3d2bc13ca0dad038d6744c77a0efac04dbd51017e83e66949e54bcb3dd3d70deabfee
   languageName: node
   linkType: hard
 
@@ -25827,14 +25814,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react-native@npm:^0.394.0":
-  version: 0.394.0
-  resolution: "lucide-react-native@npm:0.394.0"
+"lucide-react-native@npm:^0.396.0":
+  version: 0.396.0
+  resolution: "lucide-react-native@npm:0.396.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
     react-native: "*"
     react-native-svg: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
-  checksum: 10/13265594af4d450c77eca99c537ac01d2d4e08b397fa7c013611982b701fdc61794ad70fa6d9558ab87f804f0a327f365cb88d84c245e544d39d9a5719d0db1f
+  checksum: 10/b79bacfc258ad3e24832c9434e52527eba5c60c337e806e7d2ad98677bacb49a0ccfcefdef779ab3317dc71a6bf81ab815effa0bb22770e05d871c7635d7f5c2
   languageName: node
   linkType: hard
 
@@ -28897,7 +28884,6 @@ __metadata:
   resolution: "packrat-world@workspace:."
   dependencies:
     "@babel/runtime": "npm:^7.21.0"
-    "@instructor-ai/instructor": "npm:^1.4.0"
     "@manypkg/cli": "npm:^0.21.0"
     "@prisma/extension-accelerate": "npm:^0.6.2"
     check-dependency-version-consistency: "npm:^4.1.0"
@@ -28906,7 +28892,7 @@ __metadata:
     eslint: "npm:^8.56.0"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^14.0.1"
-    lucide-react-native: "npm:^0.394.0"
+    lucide-react-native: "npm:^0.396.0"
     npm-run-all: "npm:^4.1.5"
     patch-package: "npm:^8.0.0"
     postinstall-postinstall: "npm:^2.1.0"
@@ -32678,7 +32664,7 @@ __metadata:
     "@faker-js/faker": "npm:^8.4.1"
     "@hono/node-server": "npm:^1.11.0"
     "@hono/trpc-server": "npm:^0.1.1"
-    "@instructor-ai/instructor": "npm:^1.3.0"
+    "@instructor-ai/instructor": "npm:^1.5.0"
     "@libsql/client": "npm:^0.4.0-pre.5"
     "@openapitools/openapi-generator-cli": "npm:^2.7.0"
     "@packrat/validations": "npm:*"

@@ -10,14 +10,14 @@ import { RButton, RImage, RInput, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
-import {
-  ChatList,
-  SuggestionDescription,
-  SuggestionList,
-} from '@packrat/ui/src/Bento/elements/list';
+import { ChatList } from '@packrat/ui/src/Bento/elements/list';
 import { X } from '@tamagui/lucide-icons';
 import { MessageCircle, Camera, Settings, Home } from 'lucide-react-native';
 import { ActionItem } from './ActionItem';
+import {
+  SuggestionDescription,
+  SuggestionList,
+} from '../../components/Suggestion';
 
 interface ChatComponentProps {
   showChatSelector?: boolean;
