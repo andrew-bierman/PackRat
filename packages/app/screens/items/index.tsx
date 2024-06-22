@@ -7,10 +7,10 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 // import { Stack } from 'expo-router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
-import { usePagination, useScreenWidth } from 'app/hooks/common';
+import { usePagination } from 'app/hooks/common';
 import DropdownComponent from 'app/components/Dropdown';
 import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+
 // import { checkNetworkConnected } from 'app/utils/netInfo';
 
 // const RTooltip: any = OriginalRTooltip;
@@ -59,7 +59,6 @@ export default function Items() {
     setSortedItems(sorted);
   }, [data]);
 
-  const { screenWidth } = useScreenWidth();
 
   return (
     <RScrollView>
@@ -70,39 +69,33 @@ export default function Items() {
       /> */}
       <RStack style={styles.mainContainer}>
         <RStack
-          style={{
-            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
-            ...styles.container,
-          }}
+          style={
+            styles.container
+          }
         >
           <RStack
-            style={{
-              width: screenWidth <= SCREEN_WIDTH ? '45vw' : '40vw',
-              ...styles.sortContainer,
-            }}
+            style={
+              styles.sortContainer
+            }
           >
             <RText style={{ fontWeight: 'bold' }}>Sort By:</RText>
             <DropdownComponent
               value={value}
               data={optionValues}
               onValueChange={handleSort}
-              placeholder="Sort By"
-              width={
-                Platform.OS === 'web'
-                  ? screenWidth <= SCREEN_WIDTH
-                    ? '25vw'
-                    : '15vw'
-                  : 120
-              }
+              placeholder={value}
+              width='60%'
             />
           </RStack>
-          <BaseModal
+         <View style={{marginBottom:10}}>
+         <BaseModal
             title="Add a global Item"
             trigger="Add Item"
             // triggerComponent={<ModalTriggerButton />}
           >
             <AddItemGlobal />
           </BaseModal>
+         </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (
           <ItemsTable
@@ -174,7 +167,6 @@ const loadStyles = (theme) => {
     },
     button: {
       color: currentTheme.colors.white,
-      width: Platform.OS === 'web' ? '20rem' : '20%',
       display: 'flex',
       alignItems: 'center',
       textAlign: 'center',
@@ -183,12 +175,13 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.card,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      width:'100%',
       padding: 30,
       borderRadius: 10,
     },
     sortContainer: {
       flexDirection: 'row',
-      gap: Platform.OS === 'web' ? 10 : 60,
+      justifyContent:'space-between',
       alignItems: 'center',
     },
   };

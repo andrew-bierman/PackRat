@@ -9,8 +9,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
-import { useScreenWidth } from 'app/hooks/common';
+
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -20,7 +19,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
-  const { screenWidth } = useScreenWidth();
 
   // TODO - improve refetch logic. Should be handled entirely by the hook
 
@@ -83,9 +81,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
             isAddItemModalOpen={isAddItemModalOpen}
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
-          <View
-            style={{ width: screenWidth <= SCREEN_WIDTH ? '70vw' : '60vw' }}
-          >
+          
             <TableContainer
               key={`table - ${currentPackId}`}
               currentPack={currentPack}
@@ -93,7 +89,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
               refetch={refetch}
               setRefetch={setRefetch}
             />
-          </View>
         </>
       )}
     </View>
