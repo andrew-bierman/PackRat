@@ -21,6 +21,6 @@ export const useCurrentDestination = () => {
 
     return parseCoordinates(currentDestination);
   }, [currentDestination]);
-
+  
   return { currentDestination, latLng, isError, isLoading };
 };
