@@ -68,17 +68,21 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchTheme = async () => {
-      if (storedIsEnabled !== null) {
-        const isEnabled = JSON.parse(storedIsEnabled);
-        dispatch({
-          type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
-        });
-      } else {
-        dispatch({ type: 'ENABLE_LIGHT_MODE' });
+      try {
+        if (storedIsEnabled !== null) {
+          const isEnabled = JSON.parse(storedIsEnabled);
+          dispatch({
+            type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
+          });
+        } else {
+          dispatch({ type: 'ENABLE_LIGHT_MODE' });
+        }
+      } catch (e) {
+        console.error('Local storage is unavailable:', e);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
-
     fetchTheme();
   }, [storedIsEnabled]);
 
