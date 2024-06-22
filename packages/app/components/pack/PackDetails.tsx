@@ -112,11 +112,13 @@ export function PackDetails() {
                                 ) : null;
                               case SECTION.SCORECARD:
                                 return (
+                                  <View style={{minHeight:700}}>
                                   <ScoreContainer
                                     type="pack"
                                     data={currentPack}
                                     isOwner={isOwner}
                                   />
+                                  </View>
                                 );
                               // case SECTION.CHAT:
                               //   return (
