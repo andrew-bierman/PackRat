@@ -126,7 +126,7 @@ export default function Card({
     <Layout>
       <View
         style={{
-          width: '80%',
+          width: '100%',
           borderRadius: 15,
           borderColor: 'lightgray',
           borderWidth: 1,
