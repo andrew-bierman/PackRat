@@ -82,10 +82,6 @@ export const ThemeProvider = ({ children }) => {
     fetchTheme();
   }, [storedIsEnabled]);
 
-  if (loading) {
-    return null; // Return null while determining the theme to avoid flash
-  }
-
   /**
    * Enable dark mode.
    *
@@ -108,7 +104,7 @@ export const ThemeProvider = ({ children }) => {
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
 
-  return (
+  return loading ? null : (
     <ThemeContext.Provider
       key={key}
       value={{
