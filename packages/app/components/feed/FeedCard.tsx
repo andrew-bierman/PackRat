@@ -297,7 +297,7 @@ export default function Card({
                               gap: 8,
                             }}
                           >
-                            {user?.id === owner_id?.id ? null : (
+                            {user?.id === owner_id ? (
                               <TouchableOpacity onPress={handleAddToFavorite}>
                                 <AntDesign
                                   name="heart"
@@ -309,7 +309,7 @@ export default function Card({
                                   }
                                 />
                               </TouchableOpacity>
-                            )}
+                            ) : null}
 
                             <RText
                               color={currentTheme.colors.textColor}

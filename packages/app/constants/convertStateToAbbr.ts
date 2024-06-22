@@ -5,7 +5,7 @@
  * @param {string} to - The conversion direction. Possible values are "abbr" for abbreviation to name conversion and "name" for name to abbreviation conversion.
  * @return {string} The converted region name or abbreviation.
  */
-export default function abbrRegion(input, to) {
+export default function abbrRegion(input : string, to : 'abbr' | 'name') : string | undefined {
   const states = [
     ['Alabama', 'AL'],
     ['Alaska', 'AK'],
@@ -94,14 +94,14 @@ export default function abbrRegion(input, to) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
     for (i = 0; i < regions.length; i++) {
-      if (regions[i][0] == input) {
+      if (regions[i] && regions[i][0] == input) {
         return regions[i][1];
       }
     }
   } else if (to == 'name') {
     input = input.toUpperCase();
     for (i = 0; i < regions.length; i++) {
-      if (regions[i][1] == input) {
+      if (regions[i] && regions[i][1] == input) {
         return regions[i][0];
       }
     }

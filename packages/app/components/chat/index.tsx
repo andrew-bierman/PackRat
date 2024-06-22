@@ -26,7 +26,7 @@ interface ChatComponentProps {
 interface ChatModalTriggerProps {
   title: string;
   trigger: string;
-  itemTypeId: string | null;
+  itemTypeId?: string | null;
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({
@@ -44,7 +44,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setUserInput,
     setTypeId,
     isLoading,
-  } = useChat({ itemTypeId });
+  } = useChat({ itemTypeId  });
 
   const [messages, setMessages] = useState(parsedMessages);
 

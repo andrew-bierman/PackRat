@@ -152,7 +152,7 @@ export const ItemsTable = ({
             paddingTop: 30,
             marginTop: 20,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw',
+            width: Platform.OS === 'web' ? (screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw') : (screenWidth <= SCREEN_WIDTH ? '80vw' : '60vw'),
           }}
         >
           <ScrollView
