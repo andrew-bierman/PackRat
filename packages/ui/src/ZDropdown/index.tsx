@@ -5,6 +5,15 @@ import { ViewProps } from 'react-native';
 
 import RIconButton from '../RIconButton';
 
+type DropDownItems = {
+  label: string;
+  onSelect: () => void;
+};
+
+interface ZDropDownItems{
+  dropdownItems : DropDownItems[]
+}
+
 interface ExtendedDropdownMenuProps extends ViewProps {
   css?: string;
 }
@@ -45,7 +54,7 @@ const CustomItem = styled(ExtendedDropdownMenuItem, {
 
 const DropdownMenuItem = DropdownMenu.create(CustomItem, 'Item');
 
-export const ZDropdownWeb = ({ dropdownItems = [] }) => {
+export const ZDropdownWeb = ({ dropdownItems = [] } : ZDropDownItems) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -66,7 +75,7 @@ export const ZDropdownWeb = ({ dropdownItems = [] }) => {
   );
 };
 
-export const ZDropdownNative = ({ dropdownItems = [] }) => {
+export const ZDropdownNative = ({ dropdownItems = [] } : ZDropDownItems) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>

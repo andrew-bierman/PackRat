@@ -45,7 +45,9 @@ export default function Settings() {
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
       <RStack
         gap={8}
-        width="fit-content"
+        style={{
+          width: 'fit-content'
+        }}
         maw="100%"
         paddingVertical={20}
         paddingHorizontal={8}
@@ -142,10 +144,10 @@ export default function Settings() {
         <RStack marginTop={20} marginBottom={10}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
-          <RStack space="$3" width="100%" marginHorizontal="auto">
+          <RStack space="$3" style={{width:"100%", marginHorizontal:"auto"}}>
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput

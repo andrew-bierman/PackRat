@@ -1,4 +1,4 @@
-import { Storage } from 'app/utils/storage';
+import Storage from 'app/utils/storage';
 import { useUserSetter } from './useUserSetter';
 
 export const useLogout = () => {

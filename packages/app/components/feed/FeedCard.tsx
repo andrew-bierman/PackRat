@@ -35,7 +35,7 @@ interface CardProps {
     id: string;
   }>;
   favorites_count: number;
-  owner_id: string | {id : String};
+  owner_id: string | { id: String };
   destination: string;
   createdAt: string;
   owners: Array<{ any: any }>;
@@ -121,7 +121,7 @@ export default function Card({
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
-
+  const calculatedWidth = Platform.OS === 'web' ? '60vw' : '60%';
   return (
     <Layout>
       <ContextMenu.Root>
@@ -131,7 +131,7 @@ export default function Card({
               alignItems: 'center',
               padding: 16,
               flex: 1,
-              width: Platform.OS === 'web' ?  '60vw' : "60%",
+              width: calculatedWidth,
             }}
           >
             <View

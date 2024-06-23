@@ -40,7 +40,7 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
           unit: item.unit,
           packId: response.id,
           type: item.category.name,
-          ownerId: user?.id,
+          ownerId: user?.id!,
         });
       }
       onClose();

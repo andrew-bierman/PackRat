@@ -26,8 +26,10 @@ export default function Modal() {
             // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
 
             presentation: 'modal',
+            headerShown: false,
+            headerTitle: 'model'
           }}
-          screenOptions={{ headerShown: false, headerTitle: 'modal' }}
+          // screenOptions={{ headerShown: false, headerTitle: 'modal' }}
         />
 
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

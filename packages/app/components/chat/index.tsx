@@ -204,9 +204,6 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
           }}
         >
           <Button
-            backgroundColor="$background"
-            top="$2"
-            right="$2"
             size="$2"
             circular
             icon={X}
@@ -214,6 +211,9 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
             style={{
               zIndex: 1001,
               position: 'absolute',
+              backgroundColor: `$background`,
+              top: `$2`,
+              right: `$2`,
             }}
           />
           <ChatComponent itemTypeId={itemTypeId} />
