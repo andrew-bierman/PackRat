@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react';
 import * as ZeegoContextMenu from 'zeego/context-menu';
 import RButton from '../RButton';
+import RText from '../RText';
 
 type ContentProps = ComponentProps<(typeof ZeegoContextMenu)['Content']>;
 type ItemProps = ComponentProps<(typeof ZeegoContextMenu)['Item']>;
@@ -45,19 +46,22 @@ const ContextMenu = {
   ),
 };
 
-const ExampleContextMenu = () => {
+const RContextMenu = ({menuItems = [], menuName}) => {
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger>
-        <RButton>Open Menu</RButton>
+        <RButton>{menuName}</RButton>
       </ContextMenu.Trigger>
       <ContextMenu.Content>
-        {Array.from({ length: 3 }).map((_, i) => (
-          <ContextMenu.Item key={`${i}key`}>{`Item ${i}`}</ContextMenu.Item>
+        {menuItems.map(({label, onSelect=()=> {}}) => (
+          <ContextMenu.Item key={label} onSelect={onSelect} >
+        <ContextMenu.ItemTitle>{label}</ContextMenu.ItemTitle>
+
+          </ContextMenu.Item>
         ))}
       </ContextMenu.Content>
     </ContextMenu.Root>
   );
 };
 
-export { ContextMenu, ExampleContextMenu };
+export { ContextMenu, RContextMenu };

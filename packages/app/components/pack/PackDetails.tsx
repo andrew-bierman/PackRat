@@ -68,88 +68,75 @@ export function PackDetails() {
   return (
     <>
       <Layout>
-        <View
-          style={[
-            styles.mainContainer,
-            // Platform.OS == 'web'
-            //   ? { minHeight: '100vh' }
-            //   : { minHeight: Dimensions.get('screen').height },
-          ]}
-        >
-          {!isError && (
-            <>
-              <DetailsComponent
-                type="pack"
-                data={currentPack}
-                isLoading={isLoading}
-                error={error as any}
-                additionalComps={
-                  <>
-                    <View>
-                      <FlatList
-                        data={Object.entries(SECTION)}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        keyExtractor={([key, val]) => val}
-                        renderItem={({ item }) => {
-                          {
-                            switch (item[1]) {
-                              case SECTION.TABLE:
-                                return (
-                                  <TableContainer
-                                    currentPack={currentPack}
-                                    copy={canCopy}
-                                    hasPermissions={isAuthUserPack}
-                                  />
-                                );
-                              case SECTION.CTA:
-                                return isAuthUserPack ? (
-                                  <AddItemModal
-                                    currentPackId={
-                                      currentPackId ? currentPackId : ''
-                                    }
-                                    currentPack={currentPack}
-                                    isAddItemModalOpen={isAddItemModalOpen}
-                                    setIsAddItemModalOpen={
-                                      setIsAddItemModalOpen
-                                    }
-                                    // refetch={refetch}
-                                    setRefetch={() =>
-                                      setRefetch((prev) => !prev)
-                                    }
-                                  />
-                                ) : null;
-                              case SECTION.SCORECARD:
-                                return (
-                                  <ScoreContainer
-                                    type="pack"
-                                    data={currentPack}
-                                    isOwner={!!isOwner}
-                                  />
-                                );
-                              // case SECTION.CHAT:
-                              //   return (
-                              //     <View style={styles.boxStyle}>
-                              //       <ChatContainer
-                              //         itemTypeId={currentPackId}
-                              //         title="Chat"
-                              //         trigger="Open Chat"
-                              //       />
-                              //     </View>
-                              //   );
-                              default:
-                                return null;
-                            }
-                          }
-                        }}
-                      />
-                    </View>
-                  </>
-                }
-                link={link}
-              />
-            </>
-          )}
-        </View>
+        {!isError && (
+          <View
+            style={[
+              styles.mainContainer,
+              Platform.OS == 'web'
+                ? { minHeight: '100vh', width: '100%' }
+                : { minHeight: Dimensions.get('screen').height },
+            ]}
+          >
+
+            <DetailsComponent
+              type="pack"
+              data={currentPack}
+              isLoading={isLoading}
+              error={error as any}
+              additionalComps={
+                <View>
+                  <FlatList
+                    data={Object.entries(SECTION)}
+                    contentContainerStyle={{ paddingBottom: 50 }}
+                    keyExtractor={([key, val]) => val}
+                    renderItem={({ item }) => {
+                      {
+                        switch (item[1]) {
+                          case SECTION.TABLE:
+                            return (
+                              <TableContainer
+                                currentPack={currentPack}
+                                copy={canCopy}
+                                hasPermissions={isAuthUserPack}
+                              />
+                            );
+                          case SECTION.CTA:
+                            return isAuthUserPack ? (
+                              <AddItemModal
+                                currentPackId={
+                                  currentPackId ? currentPackId : ''
+                                }
+                                currentPack={currentPack}
+                                isAddItemModalOpen={isAddItemModalOpen}
+                                setIsAddItemModalOpen={
+                                  setIsAddItemModalOpen
+                                }
+                                // refetch={refetch}
+                                setRefetch={() =>
+                                  setRefetch((prev) => !prev)
+                                }
+                              />
+                            ) : null;
+                          case SECTION.SCORECARD:
+                            return (
+                              <ScoreContainer
+                                type="pack"
+                                data={currentPack}
+                                isOwner={isOwner}
+                              />
+                            );
+                          default:
+                            return null;
+                        }
+                      }
+                    }}
+                  />
+                </View>
+              }
+              link={link}
+            />
+          </View>
+        )}
       </Layout>
       <View
         style={{
@@ -158,6 +145,8 @@ export function PackDetails() {
           bottom: 30,
           width: 60,
           height: 60,
+          marginBottom: 20,
+
           justifyContent: 'center',
           alignItems: 'center',
         }}
@@ -176,16 +165,6 @@ const loadStyles = (theme) => {
   const { currentTheme } = theme;
   console.log('currentTheme', currentTheme);
   return {
-    mainContainer: {
-      position: 'relative',
-      backgroundColor: currentTheme.colors.background,
-      flexDirection: 'column',
-      gap: 15,
-      fontSize: 18,
-      width: '100%',
-      flex: 1,
-      maxHeight: '91.2vh',
-    },
     packsContainer: {
       flexDirection: 'column',
       minHeight: '100vh',

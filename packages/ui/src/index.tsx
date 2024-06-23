@@ -31,7 +31,7 @@ import YStack from './YStack';
 import ZDropdown from './ZDropdown';
 export { Container } from './Container';
 export { MainContentWeb } from './MainContentWeb';
-export { ContextMenu, ExampleContextMenu } from './RContextMenu';
+export { ContextMenu, RContextMenu } from './RContextMenu';
 export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 export { RSkeleton } from './RSkeleton';
 
@@ -81,6 +81,7 @@ export { config } from './tamagui.config';
 // export * from 'tamagui';
 export * from '@tamagui/toast';
 export * from './Bento';
+export * from './DateRangePicker';
 export * from './dialog';
 export * from './list';
 export * from './modal';

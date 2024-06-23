@@ -14,6 +14,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
+import { RContextMenu } from '@packrat/ui/src/RContextMenu';
 
 const FormSelect: any = OriginalFormSelect;
 
@@ -28,7 +29,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [_, setPackIdParam] = usePackId();
+  // const [_, setPackIdParam] = usePackId();
 
   const {
     addNewPackAsync,
@@ -56,7 +57,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
         return;
       }
 
-      setPackIdParam(response.id);
+      // setPackIdParam(response.id);
     } catch {}
   };
 
@@ -77,14 +78,25 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          <FormSelect
-            onValueChange={handleonValueChange}
-            options={packSelectOptions}
-            name="isPublic"
-            label="Is Public"
-            accessibilityLabel="Choose Service"
-            placeholder={'Is Public'}
-          />
+          {Platform.OS === 'web' ? (
+            <FormSelect
+              onValueChange={handleonValueChange}
+              options={packSelectOptions}
+              name="isPublic"
+              label="Is Public"
+              accessibilityLabel="Choose Service"
+              placeholder={'Is Public'}
+            />
+          ) : (
+            <RContextMenu
+              menuItems={[
+                { label: 'Yes', onSelect: () => setIsPublic(true) },
+                { label: 'No', onSelect: () => setIsPublic(false) },
+              ]}
+              menuName="Is Public"
+            />
+          )}
+
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
@@ -120,7 +132,6 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
-      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -162,7 +173,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width: Platform.OS === 'web' ? '200px' : '65%',
+      width: '200px',
       marginTop: 40,
       marginBottom: 20,
     },

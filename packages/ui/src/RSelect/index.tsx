@@ -6,6 +6,7 @@ import {
   Sheet,
   YStack as OriginalYStack,
   getFontSize,
+  Text,
 } from 'tamagui';
 
 const YStack: any = OriginalYStack;
@@ -83,7 +84,7 @@ export function SelectItem(props) {
 
   // Conditional rendering based on options
   if (options.length === 0) {
-    return <div>No options available</div>;
+    return <Text>No options available</Text>;
   }
 
   return (

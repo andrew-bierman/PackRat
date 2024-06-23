@@ -23,6 +23,8 @@ import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
 import { Platform } from 'react-native';
+import { useNavigate } from 'app/hooks/navigation';
+
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -34,12 +36,16 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
   value: key,
 }));
 
+
+
 export default function Settings() {
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
     useProfileSettings();
 
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
+  const navigate = useNavigate();
+
 
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
@@ -52,6 +58,7 @@ export default function Settings() {
         paddingVertical={20}
         paddingHorizontal={8}
         marginHorizontal="auto"
+        marginVertical={40}
       >
         <RStack
           style={{
@@ -60,7 +67,7 @@ export default function Settings() {
             flexDirection: 'row',
           }}
         >
-          {Platform.OS === 'web' && (
+       
             <RIconButton
               backgroundColor="transparent"
               icon={
@@ -74,11 +81,11 @@ export default function Settings() {
                 if (Platform.OS === 'web') {
                   window?.history?.back();
                 } else {
-                  router.back();
+                  navigate('/profile');
                 }
               }}
             />
-          )}
+        
           <RH2>Profile</RH2>
         </RStack>
         <Form

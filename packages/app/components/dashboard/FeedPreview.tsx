@@ -69,6 +69,6 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
 };
 
 const FeedPreview: React.FC = () => {
-  return <FeedPreviewScroll itemWidth={250} />;
+  return <FeedPreviewScroll itemWidth={200} />;
 };
 export default FeedPreview;
