@@ -5,9 +5,9 @@ const loadStyles = (theme) => {
 
   return {
     container: {
-      flex: 1,
+      flex: isWeb? 1: 0,
       padding: 10,
-      width: Platform.OS === 'web' ? '100%' : 310,
+      width: '100%',
     },
     tableStyle: {
       width: '100%',
@@ -78,10 +78,9 @@ const loadStyles = (theme) => {
     totalWeightBox: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: Platform.OS === 'web' ? '100%' : 300,
+      width: isWeb ? '100%' : 300,
       paddingHorizontal: 25,
       marginVertical: 30,
-      flex: 1,
     },
   };
 };
