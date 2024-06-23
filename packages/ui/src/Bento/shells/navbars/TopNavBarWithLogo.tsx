@@ -1,6 +1,6 @@
 import { Bell, Menu } from '@tamagui/lucide-icons';
 import type { StackProps, TabLayout, TabsTabProps } from 'tamagui';
-
+import { Drawer as MenuDrawer } from 'app/components/navigation/Drawer';
 import { useEffect, useState } from 'react';
 import {
   Anchor,
@@ -22,7 +22,8 @@ import { useMedia } from 'tamagui';
 
 import { useWindowDimensions } from 'tamagui';
 import { Drawer } from '../common/Drawer';
-
+import useTheme from 'app/hooks/useTheme';
+import { useNavigate } from 'app/hooks/navigation';
 // how to use with URL params:
 // import { createParam } from 'solito'
 // const { useParam, useParams } = createParam()
@@ -122,20 +123,16 @@ const useTabs = () => {
 
 /** ------ EXAMPLE ------ */
 export function TopNavBarWithLogo() {
-  const { currentTab, setCurrentTab, activeAt, intentAt, handleOnInteraction } =
-    useTabs();
   const [triggerOpen, setTriggerOpen] = useState(false);
   const closeTrigger = useEvent(() => {
     setTriggerOpen(false);
   });
   const { sm } = useMedia();
+  const { currentTheme } = useTheme();
+  const navigate = useNavigate();
+
   return (
-    <View
-      flexDirection="column"
-      width="100%"
-      height={610}
-      $group-window-gtXs={{ height: 800 }}
-    >
+    <View position="fixed" top="0" zIndex="100" minWidth="100%">
       <View
         flexDirection="row"
         themeInverse
@@ -144,91 +141,49 @@ export function TopNavBarWithLogo() {
         tag="nav"
         alignItems="center"
         justifyContent="space-between"
-        backgroundColor="$background"
+        backgroundColor={currentTheme.colors.white}
       >
-        {sm ? (
-          <SideBar />
-        ) : (
-          <View
-            flexDirection="row"
-            padding="$2"
-            alignItems="center"
-            backgroundColor="#fff"
-            borderRadius={1000_000}
-          >
-            <Image
-              resizeMode="contain"
-              width={25}
-              height={25}
-              $group-window-sm={{ width: 15, height: 15 }}
-              source={{ uri: '/bento/tamagui-icon.png' }}
-              alt="Bento logo"
-            />
-          </View>
-        )}
-        {!sm && (
-          <Tabs
-            value={currentTab}
-            onValueChange={setCurrentTab}
-            orientation="horizontal"
-          >
-            <View flexDirection="column">
-              <AnimatePresence>
-                {intentAt && (
-                  <TabsRovingIndicator
-                    borderRadius="$4"
-                    width={intentAt.width}
-                    height={intentAt.height}
-                    x={intentAt.x}
-                    y={intentAt.y}
-                  />
-                )}
-              </AnimatePresence>
-              <AnimatePresence>
-                {activeAt && (
-                  <TabsRovingIndicator
-                    borderRadius="$4"
-                    theme="active"
-                    width={activeAt.width}
-                    height={activeAt.height}
-                    x={activeAt.x}
-                    y={activeAt.y}
-                  />
-                )}
-              </AnimatePresence>
-              <Tabs.List
-                disablePassBorderRadius
-                loop={false}
-                aria-label="Manage your account"
-                gap="$3"
-                backgroundColor="transparent"
-              >
-                {links.map((link, index) => (
-                  <Tabs.Tab
-                    unstyled
-                    value={link.slug}
-                    onInteraction={handleOnInteraction}
-                    paddingHorizontal="$4"
-                  >
-                    <NavLink
-                      key={index}
-                      // Note: replace href with /bento/shells/navbars/${link.slug}
-                      href={`/bento/shells/navbars/#`}
-                    >
-                      {link.title}
-                    </NavLink>
-                  </Tabs.Tab>
-                ))}
-              </Tabs.List>
-            </View>
-          </Tabs>
-        )}
+        <View
+          flexDirection="row"
+          padding="$2"
+          alignItems="center"
+          backgroundColor="#fff"
+          borderRadius={1000_000}
+        >
+          <Image
+            resizeMode="contain"
+            width={35}
+            height={35}
+            tintColor={currentTheme.colors.secondaryBlue}
+            marginStart={10}
+            marginEnd={15}
+            cursor = 'pointer'
+            source={{
+              uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
+            }}
+            onClick={() => {
+              navigate('/');
+            }}
+            alt="PackRat"
+          />
+          {!sm && (
+            <Text
+              style={{
+                color: currentTheme.colors.secondaryBlue,
+                fontSize: 28,
+                fontWeight: '900',
+                cursor :'pointer'
+              }}
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              PackRat
+            </Text>
+          )}
+        </View>
+
         <View flexDirection="row" alignItems="center" gap="$3">
-          <Button theme="alt1" circular chromeless padding={0} size="$3">
-            <Button.Icon>
-              <Bell size="$1" />
-            </Button.Icon>
-          </Button>
           <ProfileDropdown
             triggerOpen={triggerOpen}
             setTriggerOpen={setTriggerOpen}
@@ -254,57 +209,7 @@ function ProfileDropdown({
   setTriggerOpen: (open: boolean) => void;
   closeTrigger: () => void;
 }) {
-  return (
-    <Popover
-      offset={{
-        mainAxis: 5,
-      }}
-      placement="bottom-end"
-      open={triggerOpen}
-      onOpenChange={setTriggerOpen}
-    >
-      <PopoverTrigger asChild>
-        <Button circular chromeless>
-          <Avatar circular size="$3">
-            <Avatar.Image
-              pointerEvents="none"
-              aria-label="user photo"
-              src="https://i.pravatar.cc/123"
-            />
-            <Avatar.Fallback backgroundColor="$gray10" />
-          </Avatar>
-        </Button>
-      </PopoverTrigger>
-      <Popover.Content
-        borderWidth={1}
-        borderColor="$borderColor"
-        backgroundColor="$color1"
-        padding={0}
-        enterStyle={{ y: -10, opacity: 0 }}
-        exitStyle={{ y: -10, opacity: 0 }}
-        animation={[
-          'quick',
-          {
-            opacity: {
-              overshootClamping: true,
-            },
-          },
-        ]}
-        elevation={5}
-        overflow="hidden"
-      >
-        <DropDownItem onPress={closeTrigger}>
-          <DropDownText>Accounts</DropDownText>
-        </DropDownItem>
-        <DropDownItem onPress={closeTrigger}>
-          <DropDownText>Settings</DropDownText>
-        </DropDownItem>
-        <DropDownItem onPress={closeTrigger}>
-          <DropDownText>Sign Out</DropDownText>
-        </DropDownItem>
-      </Popover.Content>
-    </Popover>
-  );
+  return <MenuDrawer />;
 }
 
 const DropDownItem = styled(View, {
