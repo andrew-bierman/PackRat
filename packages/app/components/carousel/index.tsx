@@ -51,6 +51,7 @@ const Carousel: React.FC<CarouselProps> = ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        flex: 1
       }}
     >
       <ScrollButton
