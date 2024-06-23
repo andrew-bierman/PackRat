@@ -43,7 +43,7 @@ const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
       //   data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
       // }
     />
-  );
+  ) || <RText></RText>;
 
 const ScoreContainerComponent = ({ data, isOwner }) => (
   <View style={{ marginTop: '5%' }}>
