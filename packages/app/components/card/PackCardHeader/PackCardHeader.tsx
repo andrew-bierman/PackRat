@@ -22,7 +22,6 @@ import { Dimensions, Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
 import { View } from 'react-native';
 
-
 interface PackCardHeaderProps {
   data: any;
   title: string;
@@ -60,7 +59,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     setIsOpen(false);
     editPack(packDetails);
   };
-  
+
   return (
     <>
       <CustomCardHeader
@@ -93,43 +92,41 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 }}
               />
             )}
-            
-              <EditableText
-                isLoading={isLoading}
-                defaultValue={title}
-                isFocused={isEditMode}
-                onSave={handleSaveTitle}
-              />
+
+            <EditableText
+              isLoading={isLoading}
+              defaultValue={title}
+              isFocused={isEditMode}
+              onSave={handleSaveTitle}
+            />
           </RStack>
         }
-        link = {null}
         actionsComponent={
-          user?.id === data.owner_id && (
-            Platform.OS === "web" ? (
-              <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
+          user?.id === data.owner_id &&
+          (Platform.OS === 'web' ? (
+            <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
               <YStack space="$1">
                 <RButton onPress={handleEdit}>Edit</RButton>
                 <RButton onPress={handleSavePack}>Save</RButton>
                 <RButton onPress={handleDelete}>Delete</RButton>
               </YStack>
             </ThreeDotsMenu>
-            ) : (
-              <RContextMenu
+          ) : (
+            <RContextMenu
               menuItems={[
-                { label: 'Edit', onSelect:handleEdit },
+                { label: 'Edit', onSelect: handleEdit },
                 { label: 'Save', onSelect: handleSavePack },
-                {label:'Delete', onSelect:handleDeletePack}
+                { label: 'Delete', onSelect: handleDeletePack },
               ]}
               menuName={
                 <RIconButton
-          backgroundColor="transparent"
-          icon={<MaterialIcons name="more-horiz" size={18} />}
-          style={{ padding: 0 }}
-        />
+                  backgroundColor="transparent"
+                  icon={<MaterialIcons name="more-horiz" size={18} />}
+                  style={{ padding: 0 }}
+                />
               }
             />
-            )
-          )
+          ))
         }
       />
     </>

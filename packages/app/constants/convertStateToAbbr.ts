@@ -94,14 +94,14 @@ export default function abbrRegion(input : string, to : 'abbr' | 'name') : strin
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
     for (i = 0; i < regions.length; i++) {
-      if (regions[i] !== undefined && regions[i][0] == input) {
+      if ((regions[i] ?? [])[0] == input) {
         return regions[i][1];
       }
     }
   } else if (to == 'name') {
     input = input.toUpperCase();
     for (i = 0; i < regions.length; i++) {
-      if (regions[i] !== undefined && regions[i][1] == input) {
+      if ((regions[i] ?? [])[1] == input) {
         return regions[i][0];
       }
     }

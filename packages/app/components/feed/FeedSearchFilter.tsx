@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = (search) => setSearchQuery(search);
+  const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
 
   return (
     <Layout>
@@ -116,7 +116,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="single-switch"
                   size="$1.5"
-                  checked={selectedTypes.pack}
+                  checked={selectedTypes?.pack ?? false}
                   onCheckedChange={handleTogglePack}
                 >
                   <Switch.Thumb />
@@ -131,7 +131,7 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
-                  checked={selectedTypes.trip}
+                  checked={selectedTypes?.trip ?? false}
                   onCheckedChange={handleToggleTrip}
                 >
                   <Switch.Thumb />

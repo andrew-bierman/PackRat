@@ -23,6 +23,11 @@ type AddPackProps = {
   onSuccess?: () => void;
 };
 
+interface MenuItem {
+  label: string,
+  onSelect: () => void
+}
+
 export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -30,6 +35,11 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
   // const [_, setPackIdParam] = usePackId();
+
+  const menuItems: MenuItem[] = [
+    { label: 'Yes', onSelect: () => setIsPublic(true) },
+    { label: 'No', onSelect: () => setIsPublic(false) },
+  ];
 
   const {
     addNewPackAsync,
@@ -65,6 +75,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
     setIsPublic(itemValue == 'true');
   };
 
+
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
@@ -89,10 +100,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
             />
           ) : (
             <RContextMenu
-              menuItems={[
-                { label: 'Yes', onSelect: () => setIsPublic(true) },
-                { label: 'No', onSelect: () => setIsPublic(false) },
-              ]}
+              menuItems={menuItems}
               menuName="Is Public"
             />
           )}

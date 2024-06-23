@@ -50,6 +50,11 @@ interface TitleRowProps {
   title: string;
 }
 
+interface MenuItems{
+  label: string,
+  onSelect: () => void,
+}
+
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
@@ -110,6 +115,13 @@ const IgnoreItemCheckbox = ({
   </View>
 );
 
+const menuItem : MenuItems[] = [
+  { label: 'kg', onSelect:() => onChange('kg') },
+  { label: 'g', onSelect: () => onChange('g') },
+  {label:'lb', onSelect:() => onChange('lb')},
+  {label:'oz', onSelect:() => onChange('oz')}
+]
+
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
   return (
     Platform.OS === 'web' ? (
@@ -122,12 +134,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
     />
     ) : (
       <RContextMenu
-              menuItems={[
-                { label: 'kg', onSelect:() => onChange('kg') },
-                { label: 'g', onSelect: () => onChange('g') },
-                {label:'lb', onSelect:() => onChange('lb')},
-                {label:'oz', onSelect:() => onChange('oz')}
-              ]}
+              menuItems={menuItem}
               menuName={
                 <RButton>Select weight unit</RButton>
               }

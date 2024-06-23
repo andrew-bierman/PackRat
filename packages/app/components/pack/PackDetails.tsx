@@ -122,7 +122,7 @@ export function PackDetails() {
                               <ScoreContainer
                                 type="pack"
                                 data={currentPack}
-                                isOwner={isOwner}
+                                isOwner={isOwner ?? false}
                               />
                             );
                           default:

@@ -16,6 +16,7 @@ import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { RButton, RStack, RText } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
+import { useScreenWidth } from 'hooks/common';
 
 
 interface ItemsTableProps {
@@ -132,6 +133,8 @@ export const ItemsTable = ({
     setPage(page - 1);
   };
 
+  const { screenWidth } = useScreenWidth()
+
   return (
     <Layout>
       <ScrollView>
@@ -142,7 +145,7 @@ export const ItemsTable = ({
             paddingTop: 30,
             marginTop: 20,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: xxxs? '100vw' : xs ? '80vw' : '60vw',
+            width: xxxs? screenWidth * 1 : xs ? screenWidth * 0.8 : screenWidth * 0.6,
           }}
         >
           <ScrollView
