@@ -163,7 +163,7 @@ function calculateZoomLevel(bounds, mapDim) {
   const lngDiff = ne.lng - sw.lng;
   const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
 
-  const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+  const latZoom = zoom(mapDim.height, WORLD_DIM.height, Math.abs(latFraction));
   const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
   return latZoom;
