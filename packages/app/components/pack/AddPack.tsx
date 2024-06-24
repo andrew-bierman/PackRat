@@ -11,10 +11,11 @@ import {
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack, usePackId } from 'app/hooks/packs';
+import { useAddNewPack,} from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
+import DropdownComponent from 'app/components/Dropdown';
 
 const FormSelect: any = OriginalFormSelect;
 
@@ -57,9 +58,15 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'true');
+    if(itemValue==='Yes'){
+      setIsPublic(true)
+    }else{
+      setIsPublic(false)
+    }
+    
   };
 
+ 
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
@@ -73,24 +80,15 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          {Platform.OS === 'web' ? (
-            <FormSelect
+          <DropdownComponent
+              value={null}
+              data={packSelectOptions}
               onValueChange={handleonValueChange}
-              options={packSelectOptions}
-              name="isPublic"
-              label="Is Public"
-              accessibilityLabel="Choose Service"
-              placeholder={'Is Public'}
+              placeholder='Is Public:'
+              width="50%"
+              native={true}
+              zeego={true}
             />
-          ) : (
-            <RContextMenu
-              menuItems={[
-                { label: 'Yes', onSelect: () => setIsPublic(true) },
-                { label: 'No', onSelect: () => setIsPublic(false) },
-              ]}
-              menuName="Is Public"
-            />
-          )}
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   RText,
   RStack,
@@ -8,17 +8,19 @@ import {
   FormSelect as OriginalFormSelect,
   FormRadioGroup as OriginalFormRadioGroup,
 } from '@packrat/ui';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
 import { type Item } from '@packrat/validations';
+import DropdownComponent from 'app/components/Dropdown';
 
 const Form: any = OriginalForm;
 const FormSelect: any = OriginalFormSelect;
 const FormRadioGroup: any = OriginalFormRadioGroup;
 
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
+
 
 interface ItemFormProps {
   handleSubmit: (data: Item) => void;
@@ -57,10 +59,18 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+    const [selectedUnit, setSelectedUnit] = useState('lb')
+
 
   const radioOptions = Object.values(ItemCategoryEnum)
     .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
     .map((radioOption) => ({ label: radioOption, value: radioOption }));
+
+  const  handleUnitChange = (i) => {
+    console.log(i)
+    setSelectedUnit(i)
+  }
+
 
   return (
     <View>
@@ -87,12 +97,23 @@ export const ItemForm = ({
               <FormInput name="weight" placeholder="Weight" isDecimal={true} />
             </View>
             {data && (
-              <FormSelect
+              Platform.OS === 'web' ? (
+                <FormSelect
                 options={data}
                 name="unit"
                 placeholder={'Unit'}
                 width="100"
               />
+              ) : (
+             <DropdownComponent
+             value={selectedUnit}
+             data={data}
+             onValueChange={handleUnitChange}
+             placeholder={selectedUnit}
+             width="50%"
+             native={true}
+             zeego={true}
+           />)
             )}
           </View>
           <FormInput

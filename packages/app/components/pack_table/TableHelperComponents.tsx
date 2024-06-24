@@ -49,6 +49,12 @@ interface CategoryRowProps {
 interface TitleRowProps {
   title: string;
 }
+const optionValues=[
+  { label: 'kg', value: 'kg' },
+  { label: 'g', value: 'g' },
+  { label: 'lb', value: 'lb' },
+  {label:'oz', value:'oz'}
+];
 
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
@@ -112,27 +118,17 @@ const IgnoreItemCheckbox = ({
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
   return (
-    Platform.OS === 'web' ? (
+    <View style={{alignSelf:'center', width:'50%'}}>
       <DropdownComponent
-      value={value}
-      accessibilityLabel="Select weight unit"
-      placeholder="Select weight unit"
-      onValueChange={(itemValue) => onChange(itemValue)}
-      data={['kg', 'g', 'lb', 'oz']}
-    />
-    ) : (
-      <RContextMenu
-              menuItems={[
-                { label: 'kg', onSelect:() => onChange('kg') },
-                { label: 'g', onSelect: () => onChange('g') },
-                {label:'lb', onSelect:() => onChange('lb')},
-                {label:'oz', onSelect:() => onChange('oz')}
-              ]}
-              menuName={
-                <RButton>Select weight unit</RButton>
-              }
-            />
-    )
+    value={value}
+    data={optionValues}
+    onValueChange={(itemValue) => onChange(itemValue)}
+    placeholder='Select weight unit'
+    width="100%"
+    native={true}
+    zeego={true}
+  />
+    </View>
     
   );
 };
