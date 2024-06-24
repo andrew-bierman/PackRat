@@ -1,7 +1,6 @@
 import {  View } from 'react-native';
 import React, { useState } from 'react';
-import DropdownComponent from '../Dropdown';
-import { RLabel } from '@packrat/ui';
+import { DropdownComponent, RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 

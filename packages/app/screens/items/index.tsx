@@ -7,8 +7,7 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
-import DropdownComponent from 'app/components/Dropdown';
-import { BaseModal, RScrollView, RStack, RText } from '@packrat/ui';
+import { BaseModal, DropdownComponent, RScrollView, RStack, RText } from '@packrat/ui';
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();

@@ -7,12 +7,12 @@ import {
   RText as OriginalRText,
   RContextMenu,
   RIconButton,
+  DropdownComponent,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import { Row } from 'react-native-table-component';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import DropdownComponent from '../Dropdown';
 import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
