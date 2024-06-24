@@ -128,7 +128,7 @@ export function TopNavBarWithLogo() {
     setTriggerOpen(false);
   });
   const { sm } = useMedia();
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark } = useTheme();
   const navigate = useNavigate();
 
   return (
@@ -141,13 +141,12 @@ export function TopNavBarWithLogo() {
         tag="nav"
         alignItems="center"
         justifyContent="space-between"
-        backgroundColor={currentTheme.colors.white}
+        backgroundColor={isDark ? currentTheme.colors.background :currentTheme.colors.white}
       >
         <View
           flexDirection="row"
           padding="$2"
           alignItems="center"
-          backgroundColor="#fff"
           borderRadius={1000_000}
         >
           <Image
