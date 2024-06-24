@@ -16,7 +16,7 @@ import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { RButton, RStack, RText } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
-import { useScreenWidth } from 'hooks/common';
+import { useScreenWidth } from 'app/hooks/common/useScreenWidth';
 
 
 interface ItemsTableProps {

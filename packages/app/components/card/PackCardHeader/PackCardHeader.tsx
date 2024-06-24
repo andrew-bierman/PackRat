@@ -28,6 +28,12 @@ interface PackCardHeaderProps {
   link?: string;
 }
 
+interface MenuItems{
+  label: string,
+  onSelect: () => void,
+}
+
+
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);
   const user = useAuthUser();
@@ -59,6 +65,12 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     setIsOpen(false);
     editPack(packDetails);
   };
+
+  const menuItems: MenuItems[] = [
+    { label: 'Edit', onSelect: handleEdit },
+    { label: 'Save', onSelect: handleSavePack },
+    { label: 'Delete', onSelect: handleDelete },
+  ];
 
   return (
     <>
@@ -113,11 +125,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
             </ThreeDotsMenu>
           ) : (
             <RContextMenu
-              menuItems={[
-                { label: 'Edit', onSelect: handleEdit },
-                { label: 'Save', onSelect: handleSavePack },
-                { label: 'Delete', onSelect: handleDeletePack },
-              ]}
+              menuItems={menuItems}
               menuName={
                 <RIconButton
                   backgroundColor="transparent"

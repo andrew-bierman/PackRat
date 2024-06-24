@@ -115,19 +115,16 @@ export const useNativeMap = ({ shape: shapeProp }: UseNativeMapProps) => {
     findTrailCenter(shape),
   );
 
-  let bounds;
+  let bounds: [number[], number[]] = [
+    [0, 0],
+    [0, 0],
+  ];
+
   try {
     validateShape(shape);
-    bounds = getShapeSourceBounds(shape);
-    if (bounds[0] && bounds[1]) {
-      bounds = [bounds[0], bounds[1]];
-    }
+    bounds = getShapeSourceBounds(shape) as [number[], number[]];
   } catch (error) {
     Alert.alert('Invalid Shape', error.message);
-    bounds = [
-      [0, 0],
-      [0, 0],
-    ]; // Fallback bounds
   }
 
   const zoomLevel = calculateZoomLevel(bounds, {

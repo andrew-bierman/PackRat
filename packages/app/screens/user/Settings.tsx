@@ -52,13 +52,13 @@ export default function Settings() {
       <RStack
         gap={8}
         style={{
-          width: 'fit-content'
+          width: 'fit-content',
+          paddingVertical: 20,
+          paddingHorizontal : 8,
+          marginHorizontal: 'auto'.
+          marginVertical: 40,
         }}
         maw="100%"
-        paddingVertical={20}
-        paddingHorizontal={8}
-        marginHorizontal="auto"
-        marginVertical={40}
       >
         <RStack
           style={{
@@ -95,8 +95,7 @@ export default function Settings() {
           <RStack
             space="$3"
             maw="100%"
-            width="fit-content"
-            marginHorizontal="auto"
+            style={{width: 'fit-content', marginHorizontal: 'auto'}}
           >
             <ImageUpload
               label="Profile Picture"
@@ -124,7 +123,7 @@ export default function Settings() {
                   <RLabel>Weather: </RLabel>
                   <FormSelect
                     options={weatherOptions}
-                    name="preferredWeather"
+                    name="value.preferredWeather"
                     style={{ width: '100%' }}
                   />
                 </RStack>
@@ -132,7 +131,7 @@ export default function Settings() {
                   <RLabel>Weight: </RLabel>
                   <FormSelect
                     options={weightOptions}
-                    name="preferredWeight"
+                    name="value.preferredWeight"
                     style={{ width: '100%' }}
                   />
                 </RStack>
@@ -148,9 +147,9 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack marginTop={20} marginBottom={10}>
+        <RStack style={{marginTop: 20, marginBottom: 10}}>
           <RH2>Change Password</RH2>
-          <RSeparator marginVertical={8} />
+          <RSeparator style={{ marginVertical: 8 }} />
           <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>

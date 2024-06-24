@@ -6,7 +6,11 @@ export const storageEvents = new StorageEventEmitter();
 export const Storage = {
   getItem: async (key) => {
     try {
-      return JSON.parse(window.localStorage.getItem(key));
+      const item = window.localStorage.getItem(key);
+      if (item === null) {
+        return null; // Handle case where item is null
+      }
+      return JSON.parse(item);
     } catch {
       console.error('Failed to load data from storage');
     }

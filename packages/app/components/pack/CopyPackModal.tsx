@@ -73,8 +73,8 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
     >
       <RInput
         placeholder="Pack Name"
-        name="name"
-        label="Name"
+        // name="name"
+        // label="Name"
         value={packName}
         onChangeText={(t) => setPackName(t)}
         style={{ width: 200 }}

@@ -18,7 +18,7 @@ import { RContextMenu } from '@packrat/ui/src/RContextMenu';
 
 const FormSelect: any = OriginalFormSelect;
 
-type AddPackProps = {
+interface AddPackProps {
   isCreatingTrip?: boolean;
   onSuccess?: () => void;
 };
