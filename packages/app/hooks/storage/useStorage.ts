@@ -3,12 +3,19 @@ import { Storage, storageEvents } from 'app/utils/storage';
 
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
-const useAsyncState = (initialValue) => {
-  return useReducer((state = null, action) => [false, action], initialValue);
+const useAsyncState = <T>(
+  initialValue: T | null,
+): [[boolean, T | null], (value?: T | null) => void] => {
+  return useReducer(
+    (state: [boolean, T | null], action: T | null): [boolean, T | null] => {
+      return [false, action];
+    },
+    [true, initialValue],
+  );
 };
 
 export function useStorage(key: string): UseStateHook<string> {
-  const [state, setState] = useAsyncState(key);
+  const [state, setState] = useAsyncState<string>(null);
 
   useEffect(() => {
     (async () => {
@@ -20,12 +27,12 @@ export function useStorage(key: string): UseStateHook<string> {
       }
     })();
 
-    const handleChange = (evt) => {
+    const handleChange = (evt: { key: string; value: string | null }) => {
       if (evt.key !== key) return;
       setState(evt.value);
     };
 
-    const handleRemove = (evt) => {
+    const handleRemove = (evt: { key: string }) => {
       if (evt.key !== key) return;
       setState(null);
     };
@@ -39,7 +46,7 @@ export function useStorage(key: string): UseStateHook<string> {
     };
   }, [key]);
 
-  // Set
+  // Set value in storage
   const setValue = useCallback(
     (value: string | null) => {
       Storage.setItem(key, value);

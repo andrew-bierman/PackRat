@@ -16,17 +16,12 @@ import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
 
-const FormSelect: any = OriginalFormSelect;
-
-interface AddPackProps {
-  isCreatingTrip?: boolean;
-  onSuccess?: () => void;
-};
-
-interface MenuItem {
-  label: string,
-  onSelect: () => void
+interface MenuItems {
+  label: string;
+  onSelect: () => void;
 }
+
+const FormSelect: any = OriginalFormSelect;
 
 export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuccess }) => {
   // Hooks
@@ -35,11 +30,6 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
   // const [_, setPackIdParam] = usePackId();
-
-  const menuItems: MenuItem[] = [
-    { label: 'Yes', onSelect: () => setIsPublic(true) },
-    { label: 'No', onSelect: () => setIsPublic(false) },
-  ];
 
   const {
     addNewPackAsync,
@@ -75,6 +65,10 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
     setIsPublic(itemValue == 'true');
   };
 
+  const menuItems: MenuItems[] = [
+    { label: 'Yes', onSelect: () => setIsPublic(true) },
+    { label: 'No', onSelect: () => setIsPublic(false) },
+  ];
 
   return (
     <View style={styles.container}>
@@ -99,10 +93,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
               placeholder={'Is Public'}
             />
           ) : (
-            <RContextMenu
-              menuItems={menuItems}
-              menuName="Is Public"
-            />
+            <RContextMenu menuItems={menuItems} menuName="Is Public" />
           )}
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>

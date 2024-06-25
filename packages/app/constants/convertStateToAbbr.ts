@@ -5,8 +5,14 @@
  * @param {string} to - The conversion direction. Possible values are "abbr" for abbreviation to name conversion and "name" for name to abbreviation conversion.
  * @return {string} The converted region name or abbreviation.
  */
-export default function abbrRegion(input: string, to: 'abbr' | 'name'): string | undefined {
-  const states = [
+
+type Region = [string, string];
+
+export default function abbrRegion(
+  input: string,
+  to: 'abbr' | 'name',
+): string | undefined {
+  const states: Region[] = [
     ['Alabama', 'AL'],
     ['Alaska', 'AK'],
     ['American Samoa', 'AS'],
@@ -70,7 +76,7 @@ export default function abbrRegion(input: string, to: 'abbr' | 'name'): string |
   ];
 
   // So happy that Canada and the US have distinct abbreviations
-  const provinces = [
+  const provinces: Region[] = [
     ['Alberta', 'AB'],
     ['British Columbia', 'BC'],
     ['Manitoba', 'MB'],
@@ -86,25 +92,34 @@ export default function abbrRegion(input: string, to: 'abbr' | 'name'): string |
     ['Yukon', 'YT'],
   ];
 
-  const regions = states.concat(provinces);
+  const regions: Region[] = states.concat(provinces);
 
   let i; // Reusable loop variable
   if (to == 'abbr') {
     input = input?.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
-    for (i = 0; i < regions.length; i++) {
-      if (regions[i][0] == input) {
-        return regions[i][1];
-      }
+    const found = regions.find(([name]) => name === input);
+    if (found) {
+      return found[1];
     }
+    // for (i = 0; i < regions.length; i++) {
+    //   if (regions[i][0] == input) {
+    //     return regions[i][1];
+    //   }
+    // }
   } else if (to == 'name') {
     input = input.toUpperCase();
-    for (i = 0; i < regions.length; i++) {
-      if ((regions[i] ?? [])[1] == input) {
-        return regions[i][0];
-      }
+
+    const found = regions.find(([name]) => name === input);
+    if (found) {
+      return found[0];
     }
+    // for (i = 0; i < regions.length; i++) {
+    //   if (regions[i][1] == input) {
+    //     return regions[i][0];
+    //   }
+    // }
   }
   return undefined;
 }

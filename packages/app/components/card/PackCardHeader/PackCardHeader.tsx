@@ -22,17 +22,16 @@ import { Dimensions, Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
 import { View } from 'react-native';
 
+interface MenuItems {
+  label: string;
+  onSelect: () => void;
+}
+
 interface PackCardHeaderProps {
   data: any;
   title: string;
   link?: string;
 }
-
-interface MenuItems{
-  label: string,
-  onSelect: () => void,
-}
-
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);

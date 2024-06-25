@@ -10,7 +10,7 @@ export const useGetPhotonDetails = ({
 
   const { isLoading, isError, data, error } =
     queryTrpc.getPhotonDetails.useQuery(
-      { id: osm_id, type: osm_type },
+      { id: osm_id as string, type: osm_type as string },
       {
         enabled,
       },

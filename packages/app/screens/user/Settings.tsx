@@ -51,14 +51,12 @@ export default function Settings() {
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
       <RStack
         gap={8}
-        style={{
-          width: 'fit-content',
-          paddingVertical: 20,
-          paddingHorizontal : 8,
-          marginHorizontal: 'auto'.
-          marginVertical: 40,
-        }}
+        width="fit-content"
         maw="100%"
+        paddingVertical={20}
+        paddingHorizontal={8}
+        marginHorizontal="auto"
+        marginVertical={40}
       >
         <RStack
           style={{
@@ -95,7 +93,8 @@ export default function Settings() {
           <RStack
             space="$3"
             maw="100%"
-            style={{width: 'fit-content', marginHorizontal: 'auto'}}
+            width="fit-content"
+            marginHorizontal="auto"
           >
             <ImageUpload
               label="Profile Picture"
@@ -147,13 +146,13 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack style={{marginTop: 20, marginBottom: 10}}>
+        <RStack style={{ marginTop: 20, marginBottom: 10 }}>
           <RH2>Change Password</RH2>
-          <RSeparator style={{ marginVertical: 8 }} />
+          <RSeparator marginVertical={8}/>
           <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
-          <RStack space="$3" style={{width:"100%", marginHorizontal:"auto"}}>
+          <RStack space="$3" width="100%" marginHorizontal="auto">
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput

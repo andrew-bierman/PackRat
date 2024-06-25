@@ -116,7 +116,7 @@ const IgnoreItemCheckbox = ({
 );
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
-  const menuItem: MenuItems[] = [
+  const menuItems: MenuItems[] = [
     { label: 'kg', onSelect: () => onChange('kg') },
     { label: 'g', onSelect: () => onChange('g') },
     { label: 'lb', onSelect: () => onChange('lb') },
@@ -132,7 +132,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
     />
   ) : (
     <RContextMenu
-      menuItems={menuItem}
+      menuItems={menuItems}
       menuName={<RButton>Select weight unit</RButton>}
     />
   );

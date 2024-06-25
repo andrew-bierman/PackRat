@@ -42,7 +42,7 @@ export const Navbar = () => {
             />
             <Text
               style={styles.logoText}
-              onPress={() => {
+              onClick={() => {
                 navigate('/');
               }}
             >
@@ -78,7 +78,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     safeArea: {
       backgroundColor,
       width: '100%',
-      margin: 'auto',
+      margin: 0,
       transition: NavbarStyles.transition,
       ...(isFloating
         ? {
@@ -90,10 +90,10 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
         : {}),
       ...(isWeb
         ? {
-            position: 'fixed',
+            position: "fixed",
             top: 0,
             zIndex: 100,
-            width: '100vw',
+            width: Platform.OS === 'web' ? '100vw' : '100%',
           }
         : {}),
     },

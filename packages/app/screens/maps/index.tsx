@@ -13,6 +13,11 @@ import {
 import { api } from 'app/constants/api';
 import { RStack } from '@packrat/ui';
 
+interface Pack {
+  bounds: number[][];
+  metadata: string;
+}
+
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -34,27 +39,40 @@ function CircleCapComp() {
 export default function DownloadedMaps() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState(null);
+  const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState(null);
+  const [pack, setPack] = useState<Pack | null>(null);
+  const [zoomLevel, setZoomLevel] = useState<number | null>(null);
 
   let shape, zoomLevel;
-  if (pack != null) {
-    shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
-    const dw = Dimensions.get('screen').width;
-    const bounds = getShapeSourceBounds(shape);
-
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
-      width: dw,
-      height: 360,
-    });
-  }
-
   useEffect(() => {
     offlineManager.getPacks().then((packs) => {
       setOfflinePacks(packs);
     });
   }, []);
+
+  useEffect(() => {
+    if (pack) {
+      const shape = JSON.parse(JSON.parse(pack.metadata).shape);
+      const dw = Dimensions.get('screen').width;
+      const bounds = getShapeSourceBounds(shape);
+      if (bounds) {
+        const calculatedZoomLevel = calculateZoomLevel(
+          bounds[0].concat(bounds[1]),
+          {
+            width: dw,
+            height: 360,
+          },
+        );
+        setZoomLevel(calculatedZoomLevel);
+      }
+    }
+  }, [pack]);
+
+  const handleMapPress = (selectedPack: any) => {
+    setPack(selectedPack.pack);
+    setShowMap(true);
+  };
 
   return (
     <View style={{ backgroundColor: currentTheme.colors.background }}>
@@ -69,19 +87,17 @@ export default function DownloadedMaps() {
       >
         Downloaded Maps
       </Text>
-      {offlinePacks ? (
+      {offlinePacks.length > 0 ? (
         <View style={{ gap: 4 }}>
           {offlinePacks.map(({ pack }) => {
             const metadata = JSON.parse(pack.metadata);
             return (
               <TouchableOpacity
+                key={pack.id}
                 style={{
                   padding: 20,
                 }}
-                onPress={() => {
-                  setPack(pack);
-                  setShowMap(true);
-                }}
+                onPress={() => handleMapPress({ pack })}
               >
                 {pack && (
                   <Image
@@ -91,9 +107,7 @@ export default function DownloadedMaps() {
                       borderRadius: 10,
                     }}
                     source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
+                      uri: `${api}/mapPreview/${pack.bounds[0]},${pack.bounds[1]},10,60,60/600x600`,
                     }}
                   />
                 )}
@@ -116,7 +130,7 @@ export default function DownloadedMaps() {
           <Text>loading...</Text>
         </RStack>
       )}
-      {showMap ? (
+      {showMap && pack && zoomLevel !== null && (
         <Modal visible={true}>
           <Mapbox.MapView
             style={{ flex: 1 }}
@@ -129,8 +143,8 @@ export default function DownloadedMaps() {
             <Mapbox.Camera
               zoomLevel={zoomLevel}
               centerCoordinate={[
-                (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
+                (pack.bounds[0]?.[0] + pack.bounds[1]?.[0]) / 2,
+                (pack.bounds[0]?.[1] + pack.bounds[1]?.[1]) / 2,
               ]}
               animationMode={'flyTo'}
               animationDuration={2000}
@@ -156,10 +170,10 @@ export default function DownloadedMaps() {
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
               <Mapbox.PointAnnotation
-                id={'cicleCap'}
+                id={'circleCap'}
                 coordinate={
-                  shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
+                  shape.features[0].geometry.coordinates[
+                    shape.features[0].geometry.coordinates.length - 1
                   ]
                 }
               >
@@ -178,7 +192,7 @@ export default function DownloadedMaps() {
             downloadable={false}
           />
         </Modal>
-      ) : null}
+      )}
     </View>
   );
 }
