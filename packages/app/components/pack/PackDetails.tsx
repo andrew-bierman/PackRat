@@ -26,6 +26,7 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -64,6 +65,7 @@ export function PackDetails() {
   const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;
+  const {xxs,xxl} = useResponsive();
 
   return (
     <>
@@ -111,7 +113,7 @@ export function PackDetails() {
                             ) : null;
                           case SECTION.SCORECARD:
                             return (
-                              <View style={{ minHeight: 800 }}>
+                              <View style={{ minHeight: xxs ? 800 : xxl ? 100 : 800 }}>
                                 <ScoreContainer
                                   type="pack"
                                   data={currentPack}
