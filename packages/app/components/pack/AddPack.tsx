@@ -7,6 +7,7 @@ import {
   FormInput,
   SubmitButton,
   useModal,
+  DropdownComponent,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
@@ -15,7 +16,6 @@ import { useAddNewPack,} from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
-import DropdownComponent from 'app/components/Dropdown';
 
 const FormSelect: any = OriginalFormSelect;
 

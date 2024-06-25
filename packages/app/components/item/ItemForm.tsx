@@ -7,13 +7,13 @@ import {
   SubmitButton,
   FormSelect as OriginalFormSelect,
   FormRadioGroup as OriginalFormRadioGroup,
+  DropdownComponent,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
 import { type Item } from '@packrat/validations';
-import DropdownComponent from 'app/components/Dropdown';
 
 const Form: any = OriginalForm;
 const FormSelect: any = OriginalFormSelect;
