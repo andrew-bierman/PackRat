@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Switch} from 'tamagui';
+import { Switch } from 'tamagui';
 import { View } from 'react-native';
+import { SearchContext } from './SearchProvider';
 import {
   RIconButton,
   RSwitch,
@@ -11,9 +12,9 @@ import {
   RSeparator as OriginalRSeparator,
   RButton,
   Form,
-  FormInput,
+  InputWithIcon
 } from '@packrat/ui';
-import { AntDesign } from '@expo/vector-icons';
+import { Search, X } from '@tamagui/lucide-icons';
 import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
@@ -57,9 +58,26 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [searchValue, setSearchValue] = useState('');
+  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const debounceTimerRef = useRef(null);
 
-  const onSearch = (search) => setSearchQuery(search);
+  const handleSetSearchValue = (v: string) => {
+    setSearchValue(v);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      setSearchQuery(v);
+    }, 600);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Layout>
@@ -67,9 +85,11 @@ const FeedSearchFilter = ({
         <View style={styles.searchContainer}>
           <Form>
             <RStack
-              style={{ flexDirection: 'row',marginLeft:40, }}
+              style={{ flexDirection: 'row', margin: 0, padding: 0 }}
             >
-              <FormInput
+              <InputWithIcon LeftIcon={<Search />} RightIcon={<X />} onChange={handleSetSearchValue} placeholder={`Search ${feedType || 'Feed'}`}
+                value={searchValue} />
+              {/* <FormInput
                 width='100%'
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
@@ -86,7 +106,7 @@ const FeedSearchFilter = ({
                     color={currentTheme.colors.cardIconColor}
                   />
                 }
-              />
+              /> */}
             </RStack>
           </Form>
         </View>
@@ -142,7 +162,10 @@ const FeedSearchFilter = ({
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent:'space-between'
+                display: 'flex',
+                width: '100%',
+                marginTop: 15,
+                justifyContent: 'space-between'
               }}
             >
               <RText
@@ -158,7 +181,7 @@ const FeedSearchFilter = ({
                 onValueChange={handleSortChange}
                 placeholder={queryString}
                 style={styles.dropdown}
-                width='55%'
+                width='75%'
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -194,7 +217,7 @@ const loadStyles = (theme: any) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
-      marginTop:  20,
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',
@@ -203,6 +226,9 @@ const loadStyles = (theme: any) => {
       marginBottom: 10,
       padding: 10,
       borderRadius: 5,
+    },
+    dropdown: {
+      height: 50
     },
     cardContainer: {
       flexDirection: 'row',
