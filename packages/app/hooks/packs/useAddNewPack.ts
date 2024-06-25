@@ -57,9 +57,10 @@ export const useAddNewPack = (): UseAddNewPackResult  => {
   const utils = queryTrpc.useContext();
 
   const packSelectOptions = [
-    { value: '1', label: 'Yes' },
-    { value: '0', label: 'No' },
+    { value: 'Yes', label: 'Yes' },
+    { value: 'No', label: 'No' },
   ];
+
 
   const isPublicOption = packSelectOptions[0];
   if (!isPublicOption) {

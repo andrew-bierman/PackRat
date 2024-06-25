@@ -4,29 +4,24 @@ import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/auth/hooks';
 import {
-  ThreeDotsMenu,
-  YStack,
-  RButton,
-  EditableText,
-  RIconButton,
   RStack,
-  RInput,
-  RText,
-  RContextMenu,
+  RIconButton,
+  EditableText,
+  DropdownComponent,
+  
 } from '@packrat/ui';
-import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
+import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { useEditPack } from 'app/hooks/packs/useEditPack';
 import { Dimensions, Platform } from 'react-native';
 import { CopyPackModal } from '../../pack/CopyPackModal';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 interface MenuItems {
   label: string;
   onSelect: () => void;
 }
-
 interface PackCardHeaderProps {
   data: any;
   title: string;
@@ -46,10 +41,8 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     setIsOpen,
   } = usePackTitleInput(data);
 
-  const { isDark, currentTheme } = useTheme();
-
+  const { isDark } = useTheme();
   const router = useRouter();
-  const { editPack } = useEditPack();
 
   const handleDelete = () => {
     handleDeletePack();
@@ -132,6 +125,9 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                   style={{ padding: 0 }}
                 />
               }
+              width="100%"
+              native={true}
+              zeego={true}
             />
           ))
         }

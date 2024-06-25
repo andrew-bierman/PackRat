@@ -12,9 +12,9 @@ import {
   RButton,
   Form,
   FormInput,
+  DropdownComponent,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
