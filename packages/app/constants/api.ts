@@ -6,4 +6,4 @@ import { API_URL } from '@packrat/config';
  * format: "{scheme}://{serverhost}:{port}/api"
  * e.g: "http://localhost:4200/api"
  */
-export const api = API_URL;
+export const api = 'https://811d-78-109-68-224.ngrok-free.app/api';

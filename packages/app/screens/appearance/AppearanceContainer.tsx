@@ -2,16 +2,14 @@ import React, { useMemo } from 'react';
 import { ScrollView, View } from 'tamagui';
 import { AppearanceLayout } from './AppearanceLayout';
 import { NavigationList } from './components/NavigationList';
-import { UiKitRoutes } from './ui-kit';
-import find from 'lodash/find';
-import some from 'lodash/some';
+import { KitchenSinkRoutes } from './kitchen-sink';
 
 export default function AppearanceContainer() {
   const [activeRoute, setActiveRoute] = React.useState('button');
-  console.log({ UiKitRoutes });
+  console.log({ KitchenSinkRoutes });
   const ActiveComponent = useMemo(() => {
     const currentRoute = findItemInObject(
-      UiKitRoutes,
+      KitchenSinkRoutes,
       ({ route }) => route === activeRoute,
     );
     console.log('currentRoute', currentRoute);
@@ -19,7 +17,7 @@ export default function AppearanceContainer() {
   }, [activeRoute]);
 
   return (
-    <ScrollView>
+    <ScrollView style={{ height: '100%' }}>
       <AppearanceLayout
         navigationList={<NavigationList onRouteChange={setActiveRoute} />}
         currentRoute={<ActiveComponent />}
