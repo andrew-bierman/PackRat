@@ -68,80 +68,79 @@ export function PackDetails() {
   return (
     <>
       <Layout>
-        
-          {!isError && (
-            <>
-              <DetailsComponent
-                type="pack"
-                data={currentPack}
-                isLoading={isLoading}
-                error={error as any}
-                additionalComps={
-                  <>
-                      <FlatList
-                        data={Object.entries(SECTION)}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        keyExtractor={([key, val]) => val}
-                        renderItem={({ item }) => {
-                          {
-                            switch (item[1]) {
-                              case SECTION.TABLE:
-                                return (
-                                  <TableContainer
-                                    currentPack={currentPack}
-                                    copy={canCopy}
-                                    hasPermissions={isAuthUserPack}
-                                  />
-                                );
-                              case SECTION.CTA:
-                                return isAuthUserPack ? (
-                                  <AddItemModal
-                                    currentPackId={
-                                      currentPackId ? currentPackId : ''
-                                    }
-                                    currentPack={currentPack}
-                                    isAddItemModalOpen={isAddItemModalOpen}
-                                    setIsAddItemModalOpen={
-                                      setIsAddItemModalOpen
-                                    }
-                                    // refetch={refetch}
-                                    setRefetch={() =>
-                                      setRefetch((prev) => !prev)
-                                    }
-                                  />
-                                ) : null;
-                              case SECTION.SCORECARD:
-                                return (
-                                  <View style={{minHeight:700}}>
-                                  <ScoreContainer
-                                    type="pack"
-                                    data={currentPack}
-                                    isOwner={isOwner}
-                                  />
-                                  </View>
-                                );
-                              // case SECTION.CHAT:
-                              //   return (
-                              //     <View style={styles.boxStyle}>
-                              //       <ChatContainer
-                              //         itemTypeId={currentPackId}
-                              //         title="Chat"
-                              //         trigger="Open Chat"
-                              //       />
-                              //     </View>
-                              //   );
-                              default:
-                                return null;
-                            }
-                          }
-                        }}
-                      />
-                  </>
-                }
-                link={link}
-              />
-            </>
-          )}
+        {!isError && (
+          <View
+            style={{
+              minHeight: '100%',
+            }}
+          >
+            <DetailsComponent
+              type="pack"
+              data={currentPack}
+              isLoading={isLoading}
+              error={error as any}
+              additionalComps={
+                <>
+                  <FlatList
+                    data={Object.entries(SECTION)}
+                    contentContainerStyle={{ paddingBottom: 50 }}
+                    keyExtractor={([key, val]) => val}
+                    renderItem={({ item }) => {
+                      {
+                        switch (item[1]) {
+                          case SECTION.TABLE:
+                            return (
+                              <TableContainer
+                                currentPack={currentPack}
+                                copy={canCopy}
+                                hasPermissions={isAuthUserPack}
+                              />
+                            );
+                          case SECTION.CTA:
+                            return isAuthUserPack ? (
+                              <AddItemModal
+                                currentPackId={
+                                  currentPackId ? currentPackId : ''
+                                }
+                                currentPack={currentPack}
+                                isAddItemModalOpen={isAddItemModalOpen}
+                                setIsAddItemModalOpen={setIsAddItemModalOpen}
+                                // refetch={refetch}
+                                setRefetch={() => setRefetch((prev) => !prev)}
+                              />
+                            ) : null;
+                          case SECTION.SCORECARD:
+                            return (
+                              <View style={{ minHeight: 800 }}>
+                                <ScoreContainer
+                                  type="pack"
+                                  data={currentPack}
+                                  isOwner={isOwner}
+                                />
+                              </View>
+                            );
+                          // case SECTION.CHAT:
+                          //   return (
+                          //     <View style={styles.boxStyle}>
+                          //       <ChatContainer
+                          //         itemTypeId={currentPackId}
+                          //         title="Chat"
+                          //         trigger="Open Chat"
+                          //       />
+                          //     </View>
+                          //   );
+                          default:
+                            return null;
+                        }
+                      }
+                    }}
+                  />
+                </>
+              }
+              link={link}
+            />
+          </View>
+        )}
       </Layout>
       <View
         style={{

@@ -12,10 +12,11 @@ import {
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack,} from 'app/hooks/packs';
+import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
+import useResponsive from 'app/hooks/useResponsive';
 
 const FormSelect: any = OriginalFormSelect;
 
@@ -58,15 +59,14 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    if(itemValue==='Yes'){
-      setIsPublic(true)
-    }else{
-      setIsPublic(false)
+    if (itemValue === 'Yes') {
+      setIsPublic(true);
+    } else {
+      setIsPublic(false);
     }
-    
   };
+  const { xxs, xxl } = useResponsive();
 
- 
   return (
     <View style={styles.container}>
       <View style={styles.mobileStyle}>
@@ -81,14 +81,14 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             style={{ textAlign: 'left', width: 200 }}
           />
           <DropdownComponent
-              value={null}
-              data={packSelectOptions}
-              onValueChange={handleonValueChange}
-              placeholder='Is Public:'
-              width="50%"
-              native={true}
-              zeego={true}
-            />
+            value={null}
+            data={packSelectOptions}
+            onValueChange={handleonValueChange}
+            placeholder="Is Public:"
+            width={xxs ? '50%' : xxl ? '11%' : '50%'}
+            native={true}
+            zeego={true}
+          />
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>

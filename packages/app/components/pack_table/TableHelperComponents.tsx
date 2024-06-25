@@ -17,6 +17,7 @@ import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
 import React from 'react';
+import useResponsive from 'app/hooks/useResponsive';
 
 const RText: any = OriginalRText;
 const Feather: any = OriginalFeather;
@@ -49,11 +50,11 @@ interface CategoryRowProps {
 interface TitleRowProps {
   title: string;
 }
-const optionValues=[
+const optionValues = [
   { label: 'kg', value: 'kg' },
   { label: 'g', value: 'g' },
   { label: 'lb', value: 'lb' },
-  {label:'oz', value:'oz'}
+  { label: 'oz', value: 'oz' },
 ];
 
 const TitleRow = ({ title }: TitleRowProps) => {
@@ -117,19 +118,21 @@ const IgnoreItemCheckbox = ({
 );
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
+  const { xxs, xxl } = useResponsive();
   return (
-    <View style={{alignSelf:'center', width:'50%'}}>
+    <View
+      style={{ alignSelf: 'center', width: xxs ? '50%' : xxl ? '15%' : '50%' }}
+    >
       <DropdownComponent
-    value={value}
-    data={optionValues}
-    onValueChange={(itemValue) => onChange(itemValue)}
-    placeholder='Select weight unit'
-    width="100%"
-    native={true}
-    zeego={true}
-  />
+        value={value}
+        data={optionValues}
+        onValueChange={(itemValue) => onChange(itemValue)}
+        placeholder="Select weight unit"
+        width="100%"
+        native={true}
+        zeego={true}
+      />
     </View>
-    
   );
 };
 
