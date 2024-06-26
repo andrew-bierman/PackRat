@@ -11,7 +11,7 @@ import {
   getShapeSourceBounds,
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
-import { RStack } from '@packrat/ui';
+import { RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 function CircleCapComp() {
@@ -58,65 +58,69 @@ export default function DownloadedMaps() {
   }, []);
 
   return (
-    <View style={{ backgroundColor: currentTheme.colors.background }}>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginBottom: 20,
-          color: currentTheme.colors.text,
-        }}
-      >
-        Downloaded Maps
-      </Text>
-      {offlinePacks ? (
-        <View style={{ gap: 4 }}>
-          {offlinePacks.map(({ pack }) => {
-            const metadata = JSON.parse(pack.metadata);
-            return (
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
-                onPress={() => {
-                  setPack(pack);
-                  setShowMap(true);
-                }}
-              >
-                {pack && (
-                  <Image
+    <>
+      <RScrollView nestedScrollEnabled={true} mb={50}>
+        <View style={{ backgroundColor: currentTheme.colors.background }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginBottom: 20,
+              color: currentTheme.colors.text,
+            }}
+          >
+            Downloaded Maps
+          </Text>
+          {offlinePacks ? (
+            <View style={{ gap: 4 }}>
+              {offlinePacks.map(({ pack }) => {
+                const metadata = JSON.parse(pack.metadata);
+                return (
+                  <TouchableOpacity
                     style={{
-                      width: '100%',
-                      height: 200,
-                      borderRadius: 10,
+                      padding: 20,
                     }}
-                    source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
+                    onPress={() => {
+                      setPack(pack);
+                      setShowMap(true);
                     }}
-                  />
-                )}
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    marginTop: 5,
-                    color: currentTheme.colors.text,
-                  }}
-                >
-                  {metadata.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+                  >
+                    {pack && (
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 10,
+                        }}
+                        source={{
+                          uri: `${api}/mapPreview/${
+                            pack?.bounds[0] + ',' + pack?.bounds[1]
+                          },10,60,60/600x600`,
+                        }}
+                      />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        marginTop: 5,
+                        color: currentTheme.colors.text,
+                      }}
+                    >
+                      {metadata.name}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <RStack>
+              <Text>loading...</Text>
+            </RStack>
+          )}
         </View>
-      ) : (
-        <RStack>
-          <Text>loading...</Text>
-        </RStack>
-      )}
+      </RScrollView>
       {showMap ? (
         <Modal visible={true}>
           <Mapbox.MapView
@@ -174,7 +178,7 @@ export default function DownloadedMaps() {
           />
         </Modal>
       ) : null}
-    </View>
+    </>
   );
 }
 
