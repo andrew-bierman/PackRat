@@ -34,7 +34,7 @@ export function PackDetails() {
   const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
-  const { xxs, xxl } = useResponsive();
+  const { xxs, xxl, xs } = useResponsive();
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
     useUserPacks(userId);
@@ -101,7 +101,13 @@ export function PackDetails() {
                           return (
                             <View
                               style={{
-                                minHeight: xxs ? 800 : xxl ? 100 : 800,
+                                minHeight: xxs
+                                  ? 800
+                                  : xs
+                                    ? 800
+                                    : xxl
+                                      ? 100
+                                      : 800,
                               }}
                             >
                               <ScoreContainer
