@@ -26,6 +26,7 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -64,12 +65,17 @@ export function PackDetails() {
   const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;
+  const {xxs,xxl} = useResponsive();
 
   return (
     <>
       <Layout>
         {!isError && (
-          <>
+          <View
+            style={{
+              minHeight: '100%',
+            }}
+          >
             <DetailsComponent
               type="pack"
               data={currentPack}
@@ -107,12 +113,24 @@ export function PackDetails() {
                             ) : null;
                           case SECTION.SCORECARD:
                             return (
-                              <ScoreContainer
-                                type="pack"
-                                data={currentPack}
-                                isOwner={isOwner}
-                              />
+                              <View style={{ minHeight: xxs ? 800 : xxl ? 100 : 800 }}>
+                                <ScoreContainer
+                                  type="pack"
+                                  data={currentPack}
+                                  isOwner={isOwner}
+                                />
+                              </View>
                             );
+                          // case SECTION.CHAT:
+                          //   return (
+                          //     <View style={styles.boxStyle}>
+                          //       <ChatContainer
+                          //         itemTypeId={currentPackId}
+                          //         title="Chat"
+                          //         trigger="Open Chat"
+                          //       />
+                          //     </View>
+                          //   );
                           default:
                             return null;
                         }
@@ -123,8 +141,22 @@ export function PackDetails() {
               }
               link={link}
             />
-          </>
+          </View>
         )}
+      </Layout>
+      <View
+        style={{
+          position: 'absolute',
+          right: 50,
+          bottom: 30,
+          width: 60,
+          height: 60,
+          marginBottom: 20,
+
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <ChatContainer
           itemTypeId={currentPackId}
           title="Chat"

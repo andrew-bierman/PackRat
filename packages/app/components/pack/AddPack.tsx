@@ -7,14 +7,16 @@ import {
   FormInput,
   SubmitButton,
   useModal,
+  DropdownComponent,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack, usePackId } from 'app/hooks/packs';
+import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
+import useResponsive from 'app/hooks/useResponsive';
 
 const FormSelect: any = OriginalFormSelect;
 
@@ -57,8 +59,13 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   };
 
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'true');
+    if (itemValue === 'Yes') {
+      setIsPublic(true);
+    } else {
+      setIsPublic(false);
+    }
   };
+  const { xxs, xxl } = useResponsive();
 
   return (
     <View style={styles.container}>
@@ -73,24 +80,15 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          {Platform.OS === 'web' ? (
-            <FormSelect
-              onValueChange={handleonValueChange}
-              options={packSelectOptions}
-              name="isPublic"
-              label="Is Public"
-              accessibilityLabel="Choose Service"
-              placeholder={'Is Public'}
-            />
-          ) : (
-            <RContextMenu
-              menuItems={[
-                { label: 'Yes', onSelect: () => setIsPublic(true) },
-                { label: 'No', onSelect: () => setIsPublic(false) },
-              ]}
-              menuName="Is Public"
-            />
-          )}
+          <DropdownComponent
+            value={null}
+            data={packSelectOptions}
+            onValueChange={handleonValueChange}
+            placeholder="Is Public:"
+            width={xxs ? '50%' : xxl ? '11%' : '50%'}
+            native={true}
+            zeego={true}
+          />
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
@@ -127,7 +125,6 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
-      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -169,7 +166,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width: Platform.OS === 'web' ? '200px' : '65%',
+      width: '200px',
       marginTop: 40,
       marginBottom: 20,
     },

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import DropdownComponent from '../Dropdown';
 import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
@@ -9,7 +8,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
-
+import { DropdownComponent } from '@packrat/ui';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -81,14 +80,14 @@ export default function PackContainer({ isCreatingTrip = false }) {
             isAddItemModalOpen={isAddItemModalOpen}
             setIsAddItemModalOpen={setIsAddItemModalOpen}
           />
-          
-            <TableContainer
-              key={`table - ${currentPackId}`}
-              currentPack={currentPack}
-              selectedPack={currentPackId}
-              refetch={refetch}
-              setRefetch={setRefetch}
-            />
+
+          <TableContainer
+            key={`table - ${currentPackId}`}
+            currentPack={currentPack}
+            selectedPack={currentPackId}
+            refetch={refetch}
+            setRefetch={setRefetch}
+          />
         </>
       )}
     </View>
