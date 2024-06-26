@@ -65,7 +65,7 @@ export function PackDetails() {
   const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;
-  const {xxs,xxl} = useResponsive();
+  const { xxs, xxl } = useResponsive();
 
   return (
     <>
@@ -113,7 +113,11 @@ export function PackDetails() {
                             ) : null;
                           case SECTION.SCORECARD:
                             return (
-                              <View style={{ minHeight: xxs ? 800 : xxl ? 100 : 800 }}>
+                              <View
+                                style={{
+                                  minHeight: xxs ? 800 : xxl ? 100 : 800,
+                                }}
+                              >
                                 <ScoreContainer
                                   type="pack"
                                   data={currentPack}
@@ -163,7 +167,7 @@ export function PackDetails() {
           trigger="Open Chat"
           type="pack"
         />
-      </Layout>
+      </View>
     </>
   );
 }

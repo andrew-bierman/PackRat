@@ -12962,6 +12962,7 @@ __metadata:
     immer: "npm:^10.0.3"
     jotai: "npm:^2.6.4"
     lodash: "npm:^4.17.21"
+    lucide-react-native: "npm:^0.396.0"
     mapbox-gl: "npm:1.13.3"
     moti: "npm:^0.27.2"
     native-base: "npm:^3.4.28"
@@ -25811,6 +25812,17 @@ __metadata:
   dependencies:
     es5-ext: "npm:~0.10.2"
   checksum: 10/55b08ee3a7dbefb7d8ee2d14e0a97c69a887f78bddd9e28a687a1944b57e09513d4b401db515279e8829d52331df12a767f3ed27ca67c3322c723cc25c06403f
+  languageName: node
+  linkType: hard
+
+"lucide-react-native@npm:^0.396.0":
+  version: 0.396.0
+  resolution: "lucide-react-native@npm:0.396.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    react-native: "*"
+    react-native-svg: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+  checksum: 10/b79bacfc258ad3e24832c9434e52527eba5c60c337e806e7d2ad98677bacb49a0ccfcefdef779ab3317dc71a6bf81ab815effa0bb22770e05d871c7635d7f5c2
   languageName: node
   linkType: hard
 
