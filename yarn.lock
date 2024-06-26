@@ -12981,8 +12981,8 @@ __metadata:
     react-native-google-places-autocomplete: "npm:^2.5.1"
     react-native-paper: "npm:^5.10.6"
     react-native-paper-dates: "npm:^0.18.12"
-    react-native-reanimated: "npm:~3.6.2"
-    react-native-safe-area-context: "npm:4.8.2"
+    react-native-reanimated: "npm:^3.12.1"
+    react-native-safe-area-context: "npm:^4.10.5"
     react-native-screens: "npm:~3.29.0"
     react-native-select-dropdown: "npm:^3.3.4"
     react-native-svg: "npm:14.1.0"
@@ -25814,17 +25814,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react-native@npm:^0.396.0":
-  version: 0.396.0
-  resolution: "lucide-react-native@npm:0.396.0"
-  peerDependencies:
-    react: ^16.5.1 || ^17.0.0 || ^18.0.0
-    react-native: "*"
-    react-native-svg: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
-  checksum: 10/b79bacfc258ad3e24832c9434e52527eba5c60c337e806e7d2ad98677bacb49a0ccfcefdef779ab3317dc71a6bf81ab815effa0bb22770e05d871c7635d7f5c2
-  languageName: node
-  linkType: hard
-
 "luxon@npm:^3.2.1":
   version: 3.4.4
   resolution: "luxon@npm:3.4.4"
@@ -28892,13 +28881,10 @@ __metadata:
     eslint: "npm:^8.56.0"
     husky: "npm:^8.0.0"
     lint-staged: "npm:^14.0.1"
-    lucide-react-native: "npm:^0.396.0"
     npm-run-all: "npm:^4.1.5"
     patch-package: "npm:^8.0.0"
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^3.2.5"
-    react-native-reanimated: "npm:^3.12.0"
-    react-native-safe-area-context: "npm:^4.10.4"
     typescript: "npm:^5.3.3"
   languageName: unknown
   linkType: soft
@@ -30945,9 +30931,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "react-native-reanimated@npm:3.12.0"
+"react-native-reanimated@npm:^3.12.1":
+  version: 3.12.1
+  resolution: "react-native-reanimated@npm:3.12.1"
   dependencies:
     "@babel/plugin-transform-arrow-functions": "npm:^7.0.0-0"
     "@babel/plugin-transform-nullish-coalescing-operator": "npm:^7.0.0-0"
@@ -30961,7 +30947,7 @@ __metadata:
     "@babel/core": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 10/415fb2bfa3ef2134760358c017ae4919727e648a3615cf85d87a95604f17a5ab15fdb25601e266349a3532b0b8b47d73de43b31b2a5dce7d4301997da3c8c739
+  checksum: 10/5cdf5012dfc495405870df0af22a11b454bed3bd53d3e94f5b08755f1e9367526cc7bc5b93ac19000bb74cce3d409325202c4be855241362e2e14913fba64257
   languageName: node
   linkType: hard
 
@@ -30996,13 +30982,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-safe-area-context@npm:^4.10.4":
-  version: 4.10.4
-  resolution: "react-native-safe-area-context@npm:4.10.4"
+"react-native-safe-area-context@npm:^4.10.5":
+  version: 4.10.5
+  resolution: "react-native-safe-area-context@npm:4.10.5"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/314700a17ade765a5843ea78736d1b90e5f8de87abf2e3d46044f805a03e522f58d656d8fd9d61cb3d405d04d5ef64c64a6d5c8b4b0accaa2efeac089d4f93b7
+  checksum: 10/0bc7b4cd442e7a5deb0470f3b915ec2cf6b54337ea527fc7f5bde4f4dd062d420cb2b40fb886df96853f01951cfcb69a35fb4f6f47561cef5e195d9d68c54c3c
   languageName: node
   linkType: hard
 
