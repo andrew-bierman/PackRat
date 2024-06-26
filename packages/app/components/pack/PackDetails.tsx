@@ -26,6 +26,7 @@ import { useFetchSinglePack } from '../../hooks/packs';
 import { useAuthUser } from 'app/auth/hooks';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -64,27 +65,24 @@ export function PackDetails() {
   const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;
+  const {xxs,xxl} = useResponsive();
 
   return (
     <>
       <Layout>
         {!isError && (
           <View
-            style={[
-              styles.mainContainer,
-              Platform.OS == 'web'
-                ? { minHeight: '100vh', width: '100%' }
-                : { minHeight: Dimensions.get('screen').height },
-            ]}
+            style={{
+              minHeight: '100%',
+            }}
           >
-
             <DetailsComponent
               type="pack"
               data={currentPack}
               isLoading={isLoading}
               error={error as any}
               additionalComps={
-                <View>
+                <>
                   <FlatList
                     data={Object.entries(SECTION)}
                     contentContainerStyle={{ paddingBottom: 50 }}
@@ -108,30 +106,38 @@ export function PackDetails() {
                                 }
                                 currentPack={currentPack}
                                 isAddItemModalOpen={isAddItemModalOpen}
-                                setIsAddItemModalOpen={
-                                  setIsAddItemModalOpen
-                                }
+                                setIsAddItemModalOpen={setIsAddItemModalOpen}
                                 // refetch={refetch}
-                                setRefetch={() =>
-                                  setRefetch((prev) => !prev)
-                                }
+                                setRefetch={() => setRefetch((prev) => !prev)}
                               />
                             ) : null;
                           case SECTION.SCORECARD:
                             return (
-                              <ScoreContainer
-                                type="pack"
-                                data={currentPack}
-                                isOwner={isOwner}
-                              />
+                              <View style={{ minHeight: xxs ? 800 : xxl ? 100 : 800 }}>
+                                <ScoreContainer
+                                  type="pack"
+                                  data={currentPack}
+                                  isOwner={isOwner}
+                                />
+                              </View>
                             );
+                          // case SECTION.CHAT:
+                          //   return (
+                          //     <View style={styles.boxStyle}>
+                          //       <ChatContainer
+                          //         itemTypeId={currentPackId}
+                          //         title="Chat"
+                          //         trigger="Open Chat"
+                          //       />
+                          //     </View>
+                          //   );
                           default:
                             return null;
                         }
                       }
                     }}
                   />
-                </View>
+                </>
               }
               link={link}
             />

@@ -7,16 +7,17 @@ import {
   RText as OriginalRText,
   RContextMenu,
   RIconButton,
+  DropdownComponent,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import { Row } from 'react-native-table-component';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import DropdownComponent from '../Dropdown';
 import { categoryIcons } from 'app/constants/pack/icons';
 import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
 import React from 'react';
+import useResponsive from 'app/hooks/useResponsive';
 
 const RText: any = OriginalRText;
 const Feather: any = OriginalFeather;
@@ -49,6 +50,12 @@ interface CategoryRowProps {
 interface TitleRowProps {
   title: string;
 }
+const optionValues = [
+  { label: 'kg', value: 'kg' },
+  { label: 'g', value: 'g' },
+  { label: 'lb', value: 'lb' },
+  { label: 'oz', value: 'oz' },
+];
 
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
@@ -111,29 +118,21 @@ const IgnoreItemCheckbox = ({
 );
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
+  const { xxs, xxl } = useResponsive();
   return (
-    Platform.OS === 'web' ? (
+    <View
+      style={{ alignSelf: 'center', width: xxs ? '50%' : xxl ? '15%' : '50%' }}
+    >
       <DropdownComponent
-      value={value}
-      accessibilityLabel="Select weight unit"
-      placeholder="Select weight unit"
-      onValueChange={(itemValue) => onChange(itemValue)}
-      data={['kg', 'g', 'lb', 'oz']}
-    />
-    ) : (
-      <RContextMenu
-              menuItems={[
-                { label: 'kg', onSelect:() => onChange('kg') },
-                { label: 'g', onSelect: () => onChange('g') },
-                {label:'lb', onSelect:() => onChange('lb')},
-                {label:'oz', onSelect:() => onChange('oz')}
-              ]}
-              menuName={
-                <RButton>Select weight unit</RButton>
-              }
-            />
-    )
-    
+        value={value}
+        data={optionValues}
+        onValueChange={(itemValue) => onChange(itemValue)}
+        placeholder="Select weight unit"
+        width="100%"
+        native={true}
+        zeego={true}
+      />
+    </View>
   );
 };
 

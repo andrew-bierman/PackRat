@@ -12,6 +12,7 @@ import {
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
 import { RStack } from '@packrat/ui';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -32,6 +33,8 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
+  const styles = useCustomStyles(loadStyles);
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [offlinePacks, setOfflinePacks] = useState(null);
@@ -42,9 +45,7 @@ export default function DownloadedMaps() {
   if (pack != null) {
     shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
     const dw = Dimensions.get('screen').width;
-    const bounds = getShapeSourceBounds(shape);
-
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
+    zoomLevel = calculateZoomLevel(pack.bounds, {
       width: dw,
       height: 360,
     });
@@ -129,8 +130,8 @@ export default function DownloadedMaps() {
             <Mapbox.Camera
               zoomLevel={zoomLevel}
               centerCoordinate={[
-                (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
+                (pack.bounds[0] + pack.bounds[2]) / 2,
+                (pack.bounds[1] + pack.bounds[3]) / 2,
               ]}
               animationMode={'flyTo'}
               animationDuration={2000}
@@ -145,13 +146,7 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer
-                id="layer1"
-                style={[
-                  styles.lineLayer,
-                  { lineColor: currentTheme.colors.cardIconColor },
-                ]}
-              />
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -160,7 +155,7 @@ export default function DownloadedMaps() {
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
                     shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ]
+                  ][0]
                 }
               >
                 <View>
@@ -183,9 +178,12 @@ export default function DownloadedMaps() {
   );
 }
 
-const styles = StyleSheet.create({
-  lineLayer: {
-    lineWidth: 4,
-    lineOpacity: 1,
-  },
-});
+const loadStyles = ({ currentTheme }) => {
+  return {
+    lineLayer: {
+      lineWidth: 4,
+      lineOpacity: 1,
+      lineColor: currentTheme.colors.cardIconColor,
+    },
+  };
+};

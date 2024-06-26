@@ -251,20 +251,20 @@ export default function ProfileContainer({ id = null }) {
             </View>
             {packsList.length > 0 && (
               // <View style={styles.userDataContainer}>
-                <UserDataContainer
-                  data={packsList}
-                  type="packs"
-                  userId={user?.id}
-                />
+              <UserDataContainer
+                data={packsList}
+                type="packs"
+                userId={user?.id}
+              />
               // </View>
             )}
             {tripsList.length > 0 && (
               // <View style={styles.userDataContainer}>
-                <UserDataContainer
-                  data={tripsList}
-                  type="trips"
-                  userId={user?.id}
-                />
+              <UserDataContainer
+                data={tripsList}
+                type="trips"
+                userId={user?.id}
+              />
               // </View>
             )}
           </View>
@@ -334,7 +334,7 @@ const loadStyles = (theme) => {
       width: '100%',
       flex: 1,
     },
-    
+
     userDataCard: {
       borderRadius: 15,
       backgroundColor: currentTheme.colors.card,
