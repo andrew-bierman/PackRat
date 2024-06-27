@@ -7,12 +7,11 @@ import {
   FormInput,
   SubmitButton,
   useModal,
-  DropdownComponent,
 } from '@packrat/ui';
 import { BaseModal } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack,} from 'app/hooks/packs';
+import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
 import { RContextMenu } from '@packrat/ui/src/RContextMenu';
@@ -63,12 +62,7 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
   };
 
   const handleonValueChange = (itemValue) => {
-    if(itemValue==='Yes'){
-      setIsPublic(true)
-    }else{
-      setIsPublic(false)
-    }
-    
+    setIsPublic(itemValue == 'true');
   };
 
   const menuItems: MenuItems[] = [
@@ -89,14 +83,14 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          <DropdownComponent
-              value={null}
-              data={packSelectOptions}
+          {Platform.OS === 'web' ? (
+            <FormSelect
               onValueChange={handleonValueChange}
-              placeholder='Is Public:'
-              width="50%"
-              native={true}
-              zeego={true}
+              options={packSelectOptions}
+              name="isPublic"
+              label="Is Public"
+              accessibilityLabel="Choose Service"
+              placeholder={'Is Public'}
             />
           ) : (
             <RContextMenu menuItems={menuItems} menuName="Is Public" />
