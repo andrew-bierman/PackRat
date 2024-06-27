@@ -3,7 +3,7 @@ import type { SizeTokens } from 'tamagui';
 import { View } from 'tamagui';
 import { Input } from './inputsParts';
 import { TextInput } from 'react-native';
-import { useForwardFocus } from './useForwardFocus';
+import { useForwardFocus } from 'app/hooks/useForwardFocus';
 
 /**
  * note: make sure to use the same width for the input and the container

@@ -10,6 +10,7 @@ import { View } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
 import Layout from 'app/components/layout/Layout';
+import { SearchProvider } from 'app/components/feed/SearchProvider';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -147,7 +148,7 @@ export default function UserDataContainer({
                   }}
                 />
 
-                <DataList data={data} />
+                <SearchProvider><DataList data={data} /></SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
               <RLink href="/" style={{ textDecoration: 'none' }}>

@@ -9,6 +9,7 @@ import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
+import { SearchProvider } from 'app/components/feed/SearchProvider';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -174,7 +175,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     router.push(createUrlPath);
   };
 
-  return <View style={styles.mainContainer}>{renderData()}</View>;
+  return <View style={styles.mainContainer}><SearchProvider>{renderData()}</SearchProvider></View>;
 };
 
 const loadStyles = (theme) => {

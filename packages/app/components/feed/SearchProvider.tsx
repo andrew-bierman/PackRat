@@ -1,9 +1,19 @@
-import React, { createContext, useState } from 'react';
+import React, { ReactNode, createContext, useState } from 'react';
+
+// Define the context type
+interface SearchContextType {
+  searchValue: string;
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+}
 
 // Create a context with default value
-const SearchContext = createContext();
+const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
-const SearchProvider = ({ children }) => {
+interface SearchProviderProps {
+  children: ReactNode;
+}
+
+const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [searchValue, setSearchValue] = useState('');
 
   return (
