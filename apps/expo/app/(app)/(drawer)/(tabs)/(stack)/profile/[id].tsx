@@ -21,7 +21,7 @@ const Profile = () => {
       <Stack.Screen
         name={`${userRealName}'s Profile`}
         options={{
-          title: `${id}'s Profile`,
+          title: `${userRealName}'s Profile`,
         }}
       />
       <ProfileContainer id={id} />
