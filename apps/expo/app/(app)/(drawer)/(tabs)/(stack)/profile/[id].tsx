@@ -4,22 +4,25 @@ import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import Head from 'expo-router/head';
 import { useProfileId } from 'app/hooks/user';
+import { useProfile } from 'app/hooks/user';
 
 const Profile = () => {
-  const { id } = useProfileId();
+  const [id] = useProfileId();
+  const { user } = useProfile(id);
+  const userRealName = user?.name ?? null;
 
   return (
     <>
       {Platform.OS === 'web' && (
         <Head>
-          <title>{`${id}'s Profile`}</title>
-          <meta name="description" content={`${id}'s Profile`} />
+          <title>{`${userRealName}'s Profile`}</title>
+          <meta name="description" content={`${userRealName}'s Profile`} />
         </Head>
       )}
       <Stack.Screen
         options={{
-          title: `${id}'s Profile`,
-          name: `${id}'s Profile`,
+          title: `${userRealName}'s Profile`,
+          name: `${userRealName}'s Profile`,
         }}
       />
       <ProfileContainer id={id} />
