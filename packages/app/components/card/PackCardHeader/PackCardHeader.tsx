@@ -74,7 +74,6 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   return (
     <>
       <CustomCardHeader
-        link={''}
         data={data}
         title={
           <RStack
