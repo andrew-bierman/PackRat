@@ -39,6 +39,8 @@ export const CustomCard = ({
 
   const isWeb = Platform.OS === 'web';
 
+  console.log('owner_idowner_idowner_id', owner_id)
+
   return (
     <View
       style={[

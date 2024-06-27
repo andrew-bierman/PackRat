@@ -26,7 +26,7 @@ interface ChatComponentProps {
 interface ChatModalTriggerProps {
   title: string;
   trigger: string;
-  itemTypeId?: string | null;
+  itemTypeId: string | null;
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({

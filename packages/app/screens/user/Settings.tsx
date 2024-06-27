@@ -122,7 +122,7 @@ export default function Settings() {
                   <RLabel>Weather: </RLabel>
                   <FormSelect
                     options={weatherOptions}
-                    name="value.preferredWeather"
+                    name="preferredWeather"
                     style={{ width: '100%' }}
                   />
                 </RStack>
@@ -130,7 +130,7 @@ export default function Settings() {
                   <RLabel>Weight: </RLabel>
                   <FormSelect
                     options={weightOptions}
-                    name="value.preferredWeight"
+                    name="preferredWeight"
                     style={{ width: '100%' }}
                   />
                 </RStack>

@@ -14,7 +14,7 @@ import { AddItem } from 'app/components/item/AddItem';
 import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
 
 import { Platform } from 'react-native';
-import  { RDropdownMenu }  from '../../../ZDropdown';
+import { RDropdownMenu } from '../../../ZDropdown';
 import RIconButton from '../../../RIconButton';
 import { ChevronDown } from '@tamagui/lucide-icons';
 
@@ -45,7 +45,7 @@ interface BasicTableProps {
   onDelete: (params: { itemId: string; packId: string }) => void;
   hasPermissions: boolean;
   currentPack: any;
-  refetch: boolean;
+  refetch: () => void;
   setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -114,17 +114,18 @@ export function BasicTable({
           window.innerWidth < 900 ? (
             <View>
               <RDropdownMenu
-                menuItems={[{label:'Edit', onSelect:handleEditClick},
-                  {label:'Delete', onSelect:handleDeleteClick}]}
-                 menuName={ <RIconButton
-                  backgroundColor="transparent"
-                  icon={ChevronDown}
-                  style={{ padding: 0 }}
-                />
-              }
-             />
-              
-            
+                menuItems={[
+                  { label: 'Edit', onSelect: handleEditClick },
+                  { label: 'Delete', onSelect: handleDeleteClick },
+                ]}
+                menuName={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={ChevronDown}
+                    style={{ padding: 0 }}
+                  />
+                }
+              />
             </View>
           ) : (
             <View>

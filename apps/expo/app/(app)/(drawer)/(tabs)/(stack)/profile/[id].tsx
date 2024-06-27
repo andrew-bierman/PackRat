@@ -7,12 +7,14 @@ import { useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
   const [id] = useProfileId();
+  const { user } = useProfile(id);
+  const userRealName = user?.name ?? null;
 
   return (
     <>
       {Platform.OS === 'web' && (
         <Head>
-          <title>{`${id}'s Profile`}</title>
+          <title>{`${userRealName}'s Profile`}</title>
           <meta name="description" content={`${id}'s Profile`} />
         </Head>
       )}
