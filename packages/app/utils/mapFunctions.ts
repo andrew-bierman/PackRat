@@ -400,19 +400,23 @@ const validateGeoJSON = (geojson: any) => {
   }
 
   geojson.features.forEach((feature) => {
-    if (feature.geometry && feature.geometry.coordinates) {
-      if (feature.geometry.type === 'Point') {
-        validateCoordinates(feature.geometry.coordinates);
-      } else if (
-        feature.geometry.type === 'LineString' ||
-        feature.geometry.type === 'Polygon'
-      ) {
-        feature.geometry.coordinates.forEach(validateCoordinates);
-      } else if (feature.geometry.type === 'MultiPolygon') {
-        feature.geometry.coordinates.forEach((polygon) => {
-          polygon.forEach(validateCoordinates);
-        });
+    try {
+      if (feature.geometry && feature.geometry.coordinates) {
+        if (feature.geometry.type === 'Point') {
+          validateCoordinates(feature.geometry.coordinates);
+        } else if (
+          feature.geometry.type === 'LineString' ||
+          feature.geometry.type === 'Polygon'
+        ) {
+          feature.geometry.coordinates.forEach(validateCoordinates);
+        } else if (feature.geometry.type === 'MultiPolygon') {
+          feature.geometry.coordinates.forEach((polygon) => {
+            polygon.forEach(validateCoordinates);
+          });
+        }
       }
+    } catch (e) {
+      throw new Error(e);
     }
   });
 };
