@@ -116,14 +116,16 @@
 
 // export default DropdownComponent;
 
+import { RSelect } from '@packrat/ui';
 import React from 'react';
 import { View, Platform } from 'react-native';
-import { RSelect } from '@packrat/ui';
 
 interface DropdownComponentProps {
   width?: string | number;
   style?: any;
-  placeholder?: string;
+  placeholder?: any;
+  native?: boolean;
+  zeego?: boolean;
   [x: string]: any; // for the rest of the props
 }
 
@@ -131,9 +133,11 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
   width,
   style = {},
   placeholder,
+  zeego = false,
   ...props
 }) => {
   const isWeb = Platform.OS === 'web';
+
   return (
     <View
       style={[
@@ -141,7 +145,12 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
         !isWeb && { flexDirection: 'row', justifyContent: 'center' },
       ]}
     >
-      <RSelect placeholder={placeholder || 'Select'} {...props} />
+      <RSelect
+        placeholder={placeholder || 'Select'}
+        native={!isWeb}
+        zeego={zeego}
+        {...props}
+      />
     </View>
   );
 };

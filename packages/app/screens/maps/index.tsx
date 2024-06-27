@@ -12,6 +12,7 @@ import {
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
 import { RStack } from '@packrat/ui';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface Pack {
   bounds: number[][];
@@ -37,6 +38,8 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
+  const styles = useCustomStyles(loadStyles);
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
@@ -49,9 +52,7 @@ export default function DownloadedMaps() {
   if (pack != null) {
     shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
     const dw = Dimensions.get('screen').width;
-    const bounds = getShapeSourceBounds(shape);
-
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
+    zoomLevel = calculateZoomLevel(pack.bounds, {
       width: dw,
       height: 360,
     });
@@ -152,13 +153,7 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer
-                id="layer1"
-                style={[
-                  styles.lineLayer,
-                  { lineColor: currentTheme.colors.cardIconColor },
-                ]}
-              />
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -167,7 +162,7 @@ export default function DownloadedMaps() {
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
                     shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ]
+                  ][0]
                 }
               >
                 <View>
@@ -190,9 +185,12 @@ export default function DownloadedMaps() {
   );
 }
 
-const styles = StyleSheet.create({
-  lineLayer: {
-    lineWidth: 4,
-    lineOpacity: 1,
-  },
-});
+const loadStyles = ({ currentTheme }) => {
+  return {
+    lineLayer: {
+      lineWidth: 4,
+      lineOpacity: 1,
+      lineColor: currentTheme.colors.cardIconColor,
+    },
+  };
+};

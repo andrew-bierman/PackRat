@@ -56,7 +56,7 @@ const loadStyles = (theme) => {
     gap: 10,
     flex: 1,
     paddingHorizontal: 60,
-    paddingVertical: 70,
+    paddingVertical: 20,
     height: xxs ? '100%' : 450,
     alignSelf: 'center',
   };

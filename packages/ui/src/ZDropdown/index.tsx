@@ -79,14 +79,10 @@ export const ZDropdownNative = ({ dropdownItems = [] } : ZDropDownItems) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <RIconButton
-          backgroundColor="transparent"
-          icon={<MaterialIcons name="more-horiz" size={25} />}
-          style={{ padding: 0 }}
-        />
+        <RButton>{menuName}</RButton>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        {dropdownItems.map(({ label, onSelect = () => {} }) => (
+        {menuItems.map(({ label, onSelect = () => {} }) => (
           <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
@@ -96,7 +92,4 @@ export const ZDropdownNative = ({ dropdownItems = [] } : ZDropDownItems) => {
   );
 };
 
-export default {
-  Web: ZDropdownWeb,
-  Native: ZDropdownNative,
-};
+export { DropdownMenu, RDropdownMenu };
