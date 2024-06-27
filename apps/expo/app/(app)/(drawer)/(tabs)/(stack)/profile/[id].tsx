@@ -15,7 +15,7 @@ const Profile = () => {
       {Platform.OS === 'web' && (
         <Head>
           <title>{`${userRealName}'s Profile`}</title>
-          <meta name="description" content={`${id}'s Profile`} />
+          <meta name="description" content={`${userRealName}'s Profile`} />
         </Head>
       )}
       <Stack.Screen
