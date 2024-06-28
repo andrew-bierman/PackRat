@@ -1,23 +1,19 @@
-import { MaterialIcons, Feather as OriginalFeather } from '@expo/vector-icons';
+import { Feather as OriginalFeather } from '@expo/vector-icons';
 import {
-  RButton,
-  RCheckbox,
-  RSkeleton,
-  RStack,
-  RText as OriginalRText,
-  RContextMenu,
-  RIconButton,
   DropdownComponent,
+  RText as OriginalRText,
+  RCheckbox,
+  RStack,
 } from '@packrat/ui';
-import { Platform, View } from 'react-native';
-import { Row } from 'react-native-table-component';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import useTheme from 'app/hooks/useTheme';
 import { categoryIcons } from 'app/constants/pack/icons';
-import { formatNumber } from 'app/utils/formatNumber';
-import loadStyles from './packtable.style';
-import React from 'react';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
+import useTheme from 'app/hooks/useTheme';
+import { formatNumber } from 'app/utils/formatNumber';
+import React from 'react';
+import { View } from 'react-native';
+import { Row } from 'react-native-table-component';
+import loadStyles from './packtable.style';
 
 const RText: any = OriginalRText;
 const Feather: any = OriginalFeather;
@@ -60,7 +56,7 @@ const optionValues = [
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
+    <RStack style={{ flexDirection: 'row', ...styles.mainTitle }} key="2">
       <RText fontSize="$2" style={styles.titleText}>
         {title}
       </RText>
@@ -78,7 +74,10 @@ const CategoryRow = ({ category }: CategoryRowProps) => {
   const styles = useCustomStyles(loadStyles);
 
   const rowData = [
-    <RStack style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}>
+    <RStack
+      style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}
+      key="1"
+    >
       <Feather
         name={categoryIcons[category]}
         size={16}
@@ -118,10 +117,13 @@ const IgnoreItemCheckbox = ({
 );
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
-  const { xxs, xxl } = useResponsive();
+  const { xxs, xxl, xs } = useResponsive();
   return (
     <View
-      style={{ alignSelf: 'center', width: xxs ? '50%' : xxl ? '15%' : '50%' }}
+      style={{
+        alignSelf: 'center',
+        width: xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '50%',
+      }}
     >
       <DropdownComponent
         value={value}
@@ -153,10 +155,10 @@ const ErrorMessage = ({ message }: ErrorMessageProps) => (
 );
 
 export {
-  WeightUnitDropdown,
-  TotalWeightBox,
-  IgnoreItemCheckbox,
-  ErrorMessage,
   CategoryRow,
+  ErrorMessage,
+  IgnoreItemCheckbox,
   TitleRow,
+  TotalWeightBox,
+  WeightUnitDropdown,
 };
