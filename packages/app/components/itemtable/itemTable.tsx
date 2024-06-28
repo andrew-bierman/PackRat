@@ -5,7 +5,7 @@ import Loader from '../Loader';
 import useTheme from '../../hooks/useTheme';
 import Layout from 'app/components/layout/Layout';
 import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
-
+import { PaginationLimit } from '../paginationChooseLimit';
 interface ItemType {
   global: string;
   name: string;
@@ -95,6 +95,7 @@ export const ItemsTable = ({
               setRefetch={setRefetch}
             />
           )}
+          <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
       </ScrollView>
     </Layout>

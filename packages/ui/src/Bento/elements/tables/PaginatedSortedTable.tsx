@@ -208,6 +208,7 @@ export function PaginatedSortedTable({
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
+          width: '25%',
           marginTop: 10,
         }}
       >

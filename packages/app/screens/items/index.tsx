@@ -7,10 +7,18 @@ import { ItemsTable } from 'app/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
 import { usePagination } from 'app/hooks/common';
-import { BaseModal, DropdownComponent, RScrollView, RStack, RText } from '@packrat/ui';
+import {
+  BaseModal,
+  DropdownComponent,
+  RScrollView,
+  RStack,
+  RText,
+} from '@packrat/ui';
+import useResponsive from 'app/hooks/useResponsive';
 
 export default function Items() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } = useTheme();
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
@@ -18,9 +26,9 @@ export default function Items() {
 
   // for zeego = {false} options will be:
   // const optionValues = ['Food', 'Water', 'Essentials'];
-  
+
   // for zeego ={true} options will be:
-  const optionValues=[
+  const optionValues = [
     { label: 'Food', value: 'Food' },
     { label: 'Water', value: 'Water' },
     { label: 'Essentials', value: 'Essentials' },
@@ -43,7 +51,9 @@ export default function Items() {
     return [...selectedCategoryItems, ...otherItems];
   };
 
-  const [sortedItems, setSortedItems] = useState(sortItemsByCategory(data?.items, value));
+  const [sortedItems, setSortedItems] = useState(
+    sortItemsByCategory(data?.items, value),
+  );
 
   const handleSort = (category) => {
     setValue(category);
@@ -67,16 +77,13 @@ export default function Items() {
               data={optionValues}
               onValueChange={handleSort}
               placeholder={value}
-              width="50%"
+              width="80%"
               native={true}
               zeego={true}
             />
           </RStack>
           <View style={{ marginBottom: 10 }}>
-            <BaseModal
-              title="Add a global Item"
-              trigger="Add Item"
-            >
+            <BaseModal title="Add a global Item" trigger="Add Item">
               <AddItemGlobal />
             </BaseModal>
           </View>
@@ -99,6 +106,7 @@ export default function Items() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const { xxs, xs } = useResponsive();
 
   return {
     mainContainer: {
@@ -123,8 +131,8 @@ const loadStyles = (theme) => {
       borderRadius: 10,
     },
     sortContainer: {
-      width:150,
-      justifyContent:'space-between',
+      width: xxs ? '50%' : xs ? '50%' : '20%',
+      justifyContent: 'space-between',
       flexDirection: 'row',
       alignItems: 'center',
     },
