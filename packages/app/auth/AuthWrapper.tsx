@@ -7,9 +7,13 @@ import LandingPage from 'app/components/landing_page';
 
 interface AuthWrapperProps {
   children?: React.ReactNode;
+  unauthorizedElement: React.ReactNode;
 }
 
-export const AuthWrapper = ({ children }: AuthWrapperProps) => {
+export const AuthWrapper = ({
+  children,
+  unauthorizedElement,
+}: AuthWrapperProps) => {
   return (
     <AuthLoader
       loadingElement={
@@ -23,7 +27,7 @@ export const AuthWrapper = ({ children }: AuthWrapperProps) => {
           </View>
         )
       }
-      unauthorizedElement={<LandingPage />}
+      unauthorizedElement={unauthorizedElement || <LandingPage />}
     >
       {children}
     </AuthLoader>
