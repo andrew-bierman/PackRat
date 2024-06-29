@@ -39,14 +39,22 @@ const extractToken = (req: Request): string | null => {
 const findUser = async (token: string, jwtSecret: string) => {
   const userClass = new User();
   // const user: any = await userClass.validateResetToken(token, jwtSecret);
-  const decoded = await jwt.verify(token, jwtSecret);
-  const user = await userClass.findUser({ userId: decoded.id });
-  if (!user)
+  try {
+    const decoded = await jwt.verify(token, jwtSecret);
+    const user = await userClass.findUser({ userId: decoded.id });
+    if (!user)
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'User associated with this token not found.',
+      });
+
+    return user;
+  } catch {
     throw new TRPCError({
-      code: 'NOT_FOUND',
+      code: 'UNAUTHORIZED',
       message: 'User associated with this token not found.',
     });
-  return user;
+  }
 };
 
 const extractTokenAndGetUser = async (req: Request, jwtSecret: string) => {

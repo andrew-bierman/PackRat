@@ -1,6 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
+import { Storage } from 'app/utils/storage';
 import { InformUser } from 'app/utils/ToastUtils';
 import { getErrorMessageFromError } from 'app/utils/apiUtils';
+import { getQueryKey } from '@trpc/react-query';
+import { queryClient, queryTrpc } from 'app/trpc';
 
 const REQUESTS_TO_SKIP_SUCCESS_MESSAGE = [
   'getMe',
@@ -35,6 +38,15 @@ const responseInterceptor = (response: AxiosResponse) => {
 };
 
 const responseErrorInterceptor = (response: AxiosResponse) => {
+  if (response?.response?.data?.error?.data?.httpStatus === 401) {
+    Storage.removeItem('token');
+    queryClient.setQueriesData(
+      getQueryKey(queryTrpc.getMe, undefined, 'query'),
+      null,
+    );
+    queryClient.invalidateQueries();
+  }
+
   if (
     response.config.method === 'get' ||
     REQUESTS_TO_SKIP_ERROR_MESSAGE.some((url) =>
