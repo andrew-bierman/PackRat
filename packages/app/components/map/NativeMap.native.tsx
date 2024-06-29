@@ -128,7 +128,7 @@ function NativeMap({ shape: shapeProp }) {
       validCenterCoordinate = pointLatLong;
     } else if (isPolygonOrMultiPolygon(shape)) {
       const bounds = multiPolygonBounds(shape.features[0]);
-      bounds.forEach(validateCoordinates);
+      validateCoordinates(bounds);
       validCenterCoordinate = bounds;
     } else if (isLineString(shape)) {
       const firstCoord = shape.features[0].geometry.coordinates[0];
@@ -141,6 +141,7 @@ function NativeMap({ shape: shapeProp }) {
   } catch (error) {
     Alert.alert('Invalid Shape Coordinates', error.message);
     validCenterCoordinate = [0, 0];
+    throw new Error(error);
   }
 
   const element = (

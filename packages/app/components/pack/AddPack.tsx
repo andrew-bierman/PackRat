@@ -1,26 +1,31 @@
-import React from 'react';
-import { Platform, View } from 'react-native';
 import {
-  RText,
+  BaseModal,
+  DropdownComponent,
   Form,
-  FormSelect as OriginalFormSelect,
   FormInput,
+  FormSelect as OriginalFormSelect,
+  RText,
   SubmitButton,
   useModal,
-  DropdownComponent,
 } from '@packrat/ui';
-import { BaseModal } from '@packrat/ui';
-import useTheme from '../../hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import { addPackSchema } from '@packrat/validations';
 import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
-import { addPackSchema } from '@packrat/validations';
-import { RContextMenu } from '@packrat/ui/src/RContextMenu';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
+import React from 'react';
+import { View } from 'react-native';
+import useTheme from '../../hooks/useTheme';
 
 const FormSelect: any = OriginalFormSelect;
 
-export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
+export const AddPack = ({
+  isCreatingTrip = false,
+  onSuccess,
+}: {
+  isCreatingTrip: boolean;
+  onSuccess: any;
+}) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -51,7 +56,6 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
       }
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
-        return;
       }
 
       // setPackIdParam(response.id);
@@ -65,7 +69,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
       setIsPublic(false);
     }
   };
-  const { xxs, xxl } = useResponsive();
+  const { xxs, xxl, xs } = useResponsive();
 
   return (
     <View style={styles.container}>
@@ -85,7 +89,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             data={packSelectOptions}
             onValueChange={handleonValueChange}
             placeholder="Is Public:"
-            width={xxs ? '50%' : xxl ? '11%' : '50%'}
+            width={xxs ? '50%' : xs ? '50%' : xxl ? '10%' : '50%'}
             native={true}
             zeego={true}
           />
@@ -103,7 +107,11 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   );
 };
 
-export const AddPackContainer = ({ isCreatingTrip }) => {
+export const AddPackContainer = ({
+  isCreatingTrip,
+}: {
+  isCreatingTrip: boolean;
+}) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
       <PackModalContent isCreatingTrip={isCreatingTrip} />

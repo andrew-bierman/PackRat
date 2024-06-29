@@ -1,32 +1,21 @@
 import React, { useState } from 'react';
 
-import PackContainer from './PackContainer';
-import { DetailsHeader } from '../details/header';
-import { TableContainer } from '../pack_table/Table';
-import { RButton, RText } from '@packrat/ui';
-import { DetailsComponent } from '../details';
-import {
-  Dimensions,
-  Platform,
-  View,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { theme } from '../../theme';
 import { CLIENT_URL } from '@packrat/config';
+import { RText } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
+import Layout from 'app/components/layout/Layout';
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import { usePackId } from 'app/hooks/packs/usePackId';
+import { useUserPacks } from 'app/hooks/packs/useUserPacks';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
+import { FlatList, View } from 'react-native';
+import { useFetchSinglePack } from '../../hooks/packs';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
-import { AddItem } from '../item/AddItem';
+import { DetailsComponent } from '../details';
+import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useUserPacks } from 'app/hooks/packs/useUserPacks';
-import { usePackId } from 'app/hooks/packs/usePackId';
-import { useFetchSinglePack } from '../../hooks/packs';
-import { useAuthUser } from 'app/auth/hooks';
-import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
-import Layout from 'app/components/layout/Layout';
-import useResponsive from 'app/hooks/useResponsive';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -45,6 +34,7 @@ export function PackDetails() {
   const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
+  const { xxs, xxl, xs } = useResponsive();
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
     useUserPacks(userId);
@@ -65,7 +55,6 @@ export function PackDetails() {
   const isError = error !== null;
 
   if (isLoading) return <RText>Loading...</RText>;
-  const { xxs, xxl } = useResponsive();
 
   return (
     <>
@@ -88,56 +77,58 @@ export function PackDetails() {
                     contentContainerStyle={{ paddingBottom: 50 }}
                     keyExtractor={([key, val]) => val}
                     renderItem={({ item }) => {
-                      {
-                        switch (item[1]) {
-                          case SECTION.TABLE:
-                            return (
-                              <TableContainer
-                                currentPack={currentPack}
-                                copy={canCopy}
-                                hasPermissions={isAuthUserPack}
+                      switch (item[1]) {
+                        case SECTION.TABLE:
+                          return (
+                            <TableContainer
+                              currentPack={currentPack}
+                              copy={canCopy}
+                              hasPermissions={isAuthUserPack}
+                            />
+                          );
+                        case SECTION.CTA:
+                          return isAuthUserPack ? (
+                            <AddItemModal
+                              currentPackId={currentPackId || ''}
+                              currentPack={currentPack}
+                              isAddItemModalOpen={isAddItemModalOpen}
+                              setIsAddItemModalOpen={setIsAddItemModalOpen}
+                              // refetch={refetch}
+                              setRefetch={() => setRefetch((prev) => !prev)}
+                            />
+                          ) : null;
+                        case SECTION.SCORECARD:
+                          return (
+                            <View
+                              style={{
+                                minHeight: xxs
+                                  ? 800
+                                  : xs
+                                    ? 800
+                                    : xxl
+                                      ? 100
+                                      : 800,
+                              }}
+                            >
+                              <ScoreContainer
+                                type="pack"
+                                data={currentPack}
+                                isOwner={isOwner}
                               />
-                            );
-                          case SECTION.CTA:
-                            return isAuthUserPack ? (
-                              <AddItemModal
-                                currentPackId={
-                                  currentPackId ? currentPackId : ''
-                                }
-                                currentPack={currentPack}
-                                isAddItemModalOpen={isAddItemModalOpen}
-                                setIsAddItemModalOpen={setIsAddItemModalOpen}
-                                // refetch={refetch}
-                                setRefetch={() => setRefetch((prev) => !prev)}
-                              />
-                            ) : null;
-                          case SECTION.SCORECARD:
-                            return (
-                              <View
-                                style={{
-                                  minHeight: xxs ? 800 : xxl ? 100 : 800,
-                                }}
-                              >
-                                <ScoreContainer
-                                  type="pack"
-                                  data={currentPack}
-                                  isOwner={isOwner}
-                                />
-                              </View>
-                            );
-                          // case SECTION.CHAT:
-                          //   return (
-                          //     <View style={styles.boxStyle}>
-                          //       <ChatContainer
-                          //         itemTypeId={currentPackId}
-                          //         title="Chat"
-                          //         trigger="Open Chat"
-                          //       />
-                          //     </View>
-                          //   );
-                          default:
-                            return null;
-                        }
+                            </View>
+                          );
+                        // case SECTION.CHAT:
+                        //   return (
+                        //     <View style={styles.boxStyle}>
+                        //       <ChatContainer
+                        //         itemTypeId={currentPackId}
+                        //         title="Chat"
+                        //         trigger="Open Chat"
+                        //       />
+                        //     </View>
+                        //   );
+                        default:
+                          return null;
                       }
                     }}
                   />

@@ -11,7 +11,7 @@ import {
   getShapeSourceBounds,
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
-import { RStack } from '@packrat/ui';
+import { RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 function CircleCapComp() {
@@ -58,64 +58,75 @@ export default function DownloadedMaps() {
   }, []);
 
   return (
-    <View style={{ backgroundColor: currentTheme.colors.background }}>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginBottom: 20,
-          color: currentTheme.colors.text,
-        }}
-      >
-        Downloaded Maps
-      </Text>
-      {offlinePacks ? (
-        <View style={{ gap: 4 }}>
-          {offlinePacks.map(({ pack }) => {
-            const metadata = JSON.parse(pack.metadata);
-            return (
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
-                onPress={() => {
-                  setPack(pack);
-                  setShowMap(true);
-                }}
-              >
-                {pack && (
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 200,
-                      borderRadius: 10,
-                    }}
-                    source={{
-                      uri: `${api}/mapPreview/${pack?.bounds[0] + ',' + pack?.bounds[1]
-                        },10,60,60/600x600`,
-                    }}
-                  />
-                )}
-                <Text
+    <View
+      style={{
+        backgroundColor: currentTheme.colors.background,
+        height: '100%',
+      }}
+    >
+      <RScrollView nestedScrollEnabled={true} mb={50}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginVertical: 20,
+            color: currentTheme.colors.text,
+          }}
+        >
+          Downloaded Maps
+        </Text>
+        {offlinePacks ? (
+          <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
+            {offlinePacks.map(({ pack }) => {
+              const metadata = JSON.parse(pack.metadata);
+              return (
+                <TouchableOpacity
                   style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    marginTop: 5,
-                    color: currentTheme.colors.text,
+                    padding: 8,
+                    backgroundColor: `${currentTheme.colors.secondaryBlue}`,
+                    borderRadius: 15,
+                  }}
+                  onPress={() => {
+                    setPack(pack);
+                    setShowMap(true);
                   }}
                 >
-                  {metadata.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      ) : (
-        <RStack>
-          <Text>loading...</Text>
-        </RStack>
-      )}
+                  {pack && (
+                    <Image
+                      style={{
+                        width: '100%',
+                        height: 200,
+                        borderRadius: 15,
+                      }}
+                      source={{
+                        uri: `${api}/mapPreview/${
+                          pack?.bounds[0] + ',' + pack?.bounds[1]
+                        },10,60,60/600x600`,
+                      }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      marginTop: 5,
+                      textAlign: 'center',
+                      color: currentTheme.colors.text,
+                    }}
+                  >
+                    {metadata.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ) : (
+          <RStack>
+            <Text>loading...</Text>
+          </RStack>
+        )}
+      </RScrollView>
       {showMap ? (
         <Modal visible={true}>
           <Mapbox.MapView
@@ -145,10 +156,7 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer
-                id="layer1"
-                style={styles.lineLayer}
-              />
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -156,7 +164,7 @@ export default function DownloadedMaps() {
                 id={'cicleCap'}
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
-                  shape?.features[0]?.geometry?.coordinates?.length - 1
+                    shape?.features[0]?.geometry?.coordinates?.length - 1
                   ][0]
                 }
               >
@@ -181,11 +189,11 @@ export default function DownloadedMaps() {
 }
 
 const loadStyles = ({ currentTheme }) => {
-  return ({
+  return {
     lineLayer: {
       lineWidth: 4,
       lineOpacity: 1,
-      lineColor: currentTheme.colors.cardIconColor
+      lineColor: currentTheme.colors.cardIconColor,
     },
-  });
+  };
 };
