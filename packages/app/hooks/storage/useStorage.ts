@@ -7,8 +7,8 @@ const useAsyncState = (initialValue) => {
   return useReducer((state = null, action) => [false, action], initialValue);
 };
 
-export function useStorage(key: string): UseStateHook<string> {
-  const [state, setState] = useAsyncState(key);
+export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
+  const [state, setState] = useAsyncState(initialValue || '');
 
   useEffect(() => {
     (async () => {
