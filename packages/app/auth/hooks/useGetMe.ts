@@ -1,10 +1,12 @@
 import { queryTrpc } from '../../trpc';
-import { useStorage } from 'app/hooks/storage/useStorage';
+import { useAuthUserToken } from './useUser';
 
 export const useGetMe = () => {
-  const [[_, token]] = useStorage('token'); // TODO add enabled based on token to avoid unneeded requests
+  const { token, isLoading: isTokenLoading } = useAuthUserToken();
 
-  const { data, isLoading } = queryTrpc.getMe.useQuery();
+  const { data, isLoading } = queryTrpc.getMe.useQuery(null, {
+    enabled: !!token && !isTokenLoading,
+  });
 
   return { data, isLoading };
 };

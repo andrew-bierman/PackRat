@@ -8,7 +8,7 @@ export const useUserQuery = () => {
 };
 
 export const useAuthUserToken = () => {
-  const [[isLoading, token]] = useStorage('token');
+  const [[isLoading, token]] = useStorage<string>('token');
 
   return { token, isLoading };
 };
