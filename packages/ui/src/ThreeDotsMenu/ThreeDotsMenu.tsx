@@ -17,6 +17,7 @@ export function ThreeDotsMenu({
   onOpenChange,
   open,
 }: ThreeDotsMenuProps) {
+  console.log('ksksksks', open);
   return (
     <Popover
       size="$5"
