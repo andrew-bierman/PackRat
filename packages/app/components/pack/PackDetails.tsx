@@ -156,6 +156,7 @@ export function PackDetails() {
           itemTypeId={currentPackId}
           title="Chat"
           trigger="Open Chat"
+          type="pack"
         />
       </View>
     </>
@@ -164,8 +165,17 @@ export function PackDetails() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  console.log('currentTheme', currentTheme);
   return {
+    mainContainer: {
+      position: 'relative',
+      backgroundColor: currentTheme.colors.background,
+      flexDirection: 'column',
+      gap: 15,
+      fontSize: 18,
+      width: '100%',
+      // flex: 1,
+      maxHeight: '91.2vh',
+    },
     packsContainer: {
       flexDirection: 'column',
       minHeight: '100vh',

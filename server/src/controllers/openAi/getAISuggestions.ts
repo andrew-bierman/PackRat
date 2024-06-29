@@ -1,4 +1,4 @@
-import { getAIResponseService } from '../../services/openAi/openAi.service';
+import { getAISuggestionService } from '../../services/openAi/openAi.service';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 
@@ -9,23 +9,21 @@ import { z } from 'zod';
  * @return {Object} The AI response and updated conversation object.
  */
 
-export function getAIResponseRoute() {
+export function getAISuggestionsRoute() {
   return publicProcedure
     .input(
       z.object({
         userId: z.string(),
-        userInput: z.string(),
         itemTypeId: z.string(),
         type: z.string(),
       }),
     )
     .mutation(async (opts) => {
       const { env } = opts.ctx;
-      const { userId, userInput, itemTypeId, type } = opts.input;
-      return getAIResponseService(
+      const { userId, itemTypeId, type } = opts.input;
+      return getAISuggestionService(
         userId,
         itemTypeId,
-        userInput,
         type,
         env.OPENAI_API_KEY,
       );
