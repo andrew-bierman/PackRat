@@ -3,53 +3,55 @@ import { queryTrpc } from '../../trpc';
 export function useGetAIResponse() {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.getAIResponse.useMutation({
+    // onMutate: async ({ userId, conversationId, userInput }) => {
+    //   const previousConversation = queryTrpc.getConversationById.getData({
+    //     conversationId,
+    //   });
+    //   const newQueryData = {
+    //     ...previousConversation,
+    //     messages: [
+    //       ...previousConversation.messages,
+    //       {
+    //         message: userInput,
+    //         sender: userId,
+    //         id: Date.now().toString(),
+    //       },
+    //     ],
+    //   };
+    //   queryTrpc.getConversationById.setData(
+    //     { conversationId },
+    //     newQueryData,
+    //   );
+    //   return {
+    //     previousConversation,
+    //   };
+    // },
+    // onError: (err, { userId, conversationId, userInput }, context) => {
+    //
+    //
+    //   if (context.previousConversation) {
+    //     queryTrpc.getConversationById.setData(
+    //       { conversationId },
+    //       context.previousConversation,
+    //     );
+    //   }
+    // },
     onSuccess: () => {
+      //   queryTrpc.getUserChats.invalidate();
       utils.invalidate();
     },
   });
 
-  const getAIResponse = async ({ userId, userInput, itemTypeId, type }) => {
+  const getAIResponse = async ({ userId, userInput, itemTypeId }) => {
     return mutation.mutate({
       userId,
       userInput: userInput.message,
       itemTypeId,
-      type,
     });
   };
 
   return {
     getAIResponse,
-    ...mutation,
-  };
-}
-
-export function useGetAISuggestions() {
-  const utils = queryTrpc.useContext();
-  const mutation = queryTrpc.getAISuggestions.useMutation();
-
-  const getAISuggestions = ({ userId, itemTypeId, type }) => {
-    return new Promise((resolve, reject) => {
-      mutation.mutate(
-        {
-          userId,
-          itemTypeId,
-          type,
-        },
-        {
-          onSuccess: (data) => {
-            utils.invalidate();
-            resolve(data);
-          },
-          onError: (error) => {
-            reject(error);
-          },
-        },
-      );
-    });
-  };
-
-  return {
-    getAISuggestions,
     ...mutation,
   };
 }
