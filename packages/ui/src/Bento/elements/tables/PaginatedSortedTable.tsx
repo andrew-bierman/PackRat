@@ -40,6 +40,9 @@ interface PaginatedSortedTableProps {
   currentPack: any;
   refetch: () => void;
   setRefetch: () => void;
+  totalPages: any;
+  page: any;
+  setPage: any;
 }
 
 export function PaginatedSortedTable({
@@ -49,6 +52,9 @@ export function PaginatedSortedTable({
   currentPack,
   refetch,
   setRefetch,
+  totalPages,
+  page,
+  setPage,
 }: PaginatedSortedTableProps) {
   const columnHelper = createColumnHelper<Item>();
 
@@ -83,7 +89,11 @@ export function PaginatedSortedTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: { pagination: { pageSize: ITEMS_PER_PAGE } },
+    state: {
+      pagination: { pageSize: ITEMS_PER_PAGE, pageIndex: page || 0 },
+    },
+    manualPagination: true,
+    pageCount: totalPages || 1,
   });
 
   const { sm } = useMedia();
@@ -132,7 +142,7 @@ export function PaginatedSortedTable({
           }}
         >
           <Button
-            onPress={() => table.previousPage()}
+            onPress={() => setPage(page - 1)}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
@@ -144,11 +154,11 @@ export function PaginatedSortedTable({
               fontSize: 15,
             }}
           >
-            Page {table.getState().pagination.pageIndex + 1} of{' '}
+            Page {table.getState().pagination.pageIndex} of{' '}
             {table.getPageCount()}
           </Text>
           <Button
-            onPress={() => table.nextPage()}
+            onPress={() => setPage(page + 1)}
             disabled={!table.getCanNextPage()}
           >
             Next
@@ -213,7 +223,7 @@ export function PaginatedSortedTable({
         }}
       >
         <Button
-          onPress={() => table.previousPage()}
+          onPress={() => setPage(page - 1)}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
@@ -225,11 +235,10 @@ export function PaginatedSortedTable({
             fontSize: 15,
           }}
         >
-          Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount()}
+          Page {table.getState().pagination.pageIndex} of {table.getPageCount()}
         </Text>
         <Button
-          onPress={() => table.nextPage()}
+          onPress={() => setPage(page + 1)}
           disabled={!table.getCanNextPage()}
         >
           Next

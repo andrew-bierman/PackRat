@@ -75,11 +75,9 @@ export const ItemsTable = ({
           style={{
             paddingVertical: 16,
             flex: 1,
-            paddingTop: 30,
-            marginTop: 20,
-            marginBottom: 20,
+            padding: 30,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: xxxs ? '100vw' : xs ? '80vw' : '60vw',
+            width: '100%',
           }}
         >
           {isLoading ? (
@@ -93,6 +91,9 @@ export const ItemsTable = ({
               currentPack={currentPack}
               refetch={refetch}
               setRefetch={setRefetch}
+              totalPages={totalPages}
+              page={page}
+              setPage={setPage}
             />
           )}
           <PaginationLimit limit={limit} setLimit={setLimit} />
