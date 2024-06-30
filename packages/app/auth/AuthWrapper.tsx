@@ -1,14 +1,19 @@
+import React from 'react';
 import { AuthLoader } from 'app/auth/AuthLoader';
 import { Redirect } from 'app/components/Redirect';
 import { RSpinner, RText } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import LandingPage from 'app/components/landing_page';
 
-type Props = {
+interface AuthWrapperProps {
   children?: React.ReactNode;
-};
+  unauthorizedElement: React.ReactNode;
+}
 
-export const AuthWrapper = ({ children }: Props) => {
+export const AuthWrapper = ({
+  children,
+  unauthorizedElement,
+}: AuthWrapperProps) => {
   return (
     <AuthLoader
       loadingElement={
@@ -22,7 +27,7 @@ export const AuthWrapper = ({ children }: Props) => {
           </View>
         )
       }
-      unauthorizedElement={<LandingPage />}
+      unauthorizedElement={unauthorizedElement || <LandingPage />}
     >
       {children}
     </AuthLoader>
