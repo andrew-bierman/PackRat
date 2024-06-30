@@ -307,7 +307,7 @@ const getLocation = async () => {
  * @return {boolean} Returns true if the shape is downloadable, false otherwise.
  */
 const isShapeDownloadable = (shape) => {
-  return shape?.features[0]?.geometry?.coordinates?.length > 1;
+  return shape?.features[0]?.geometry?.coordinates?.length >= 1;
 };
 
 /**
