@@ -49,7 +49,6 @@ export default function Settings() {
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const navigate = useNavigate();
-  console.log(deleteUserForm);
 
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
