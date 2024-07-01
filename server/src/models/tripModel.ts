@@ -41,5 +41,7 @@ TripSchema.set('toJSON', {
   },
 });
 
+TripSchema.index({ geojson: '2dsphere' });
+
 const Trip = myDB.model('Trip', TripSchema);
 export default Trip;

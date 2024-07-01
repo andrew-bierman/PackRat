@@ -23,5 +23,7 @@ const ItemSchema = new Schema(
   { timestamps: true },
 );
 
+ItemSchema.index({ location: '2dsphere' });
+
 const Item = myDB.model('Item', ItemSchema);
 export default Item;

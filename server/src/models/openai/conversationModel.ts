@@ -21,6 +21,9 @@ const ConversationSchema = new Schema(
   { timestamps: true },
 );
 
+// Adding an index to the 'userId' field
+ConversationSchema.index({ userId: 1 });
+
 const Conversation = myDB.model('Conversation', ConversationSchema);
 
 export default Conversation;

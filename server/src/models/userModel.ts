@@ -210,6 +210,10 @@ UserSchema.methods.toJSON = function (): Partial<IUser> {
   return userObject;
 };
 
+UserSchema.index({ 'packs.geometry': '2dsphere' });
+UserSchema.index({ 'trips.geometry': '2dsphere' });
+UserSchema.index({ location: '2dsphere' });
+
 const User: Model<IUser> = myDB.model<IUser>('User', UserSchema);
 
 export default User;
