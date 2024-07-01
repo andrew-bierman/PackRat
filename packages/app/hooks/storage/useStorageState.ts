@@ -50,7 +50,7 @@ export function useStorageState(key: string): UseStateHook<string> {
           console.error('Local storage is unavailable:', e);
         }
       } else {
-        SecureStore.getItemAsync(key).then((value) => {
+        await SecureStore.getItemAsync(key).then((value) => {
           setState(value);
         });
       }
