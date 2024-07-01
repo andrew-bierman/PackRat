@@ -32,6 +32,7 @@ export default function Items() {
     { label: 'Food', value: 'Food' },
     { label: 'Water', value: 'Water' },
     { label: 'Essentials', value: 'Essentials' },
+    { label: 'All items', value: 'All items' },
   ];
 
   const sortItemsByCategory = (items, selectedCategory) => {
