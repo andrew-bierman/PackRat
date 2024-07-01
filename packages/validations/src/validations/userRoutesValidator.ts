@@ -72,6 +72,10 @@ export const deleteUser = z.object({
   userId: z.string(),
 });
 
+export const deleteUserForm = z.object({
+  confirmText: z.literal('delete'),
+});
+
 export const linkFirebaseAuth = z.object({
   firebaseAuthToken: z.string(),
 });

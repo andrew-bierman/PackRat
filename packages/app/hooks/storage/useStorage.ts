@@ -14,8 +14,8 @@ const useAsyncState = <T>(
   );
 };
 
-export function useStorage(key: string): UseStateHook<string> {
-  const [state, setState] = useAsyncState<string>(null);
+export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
+  const [state, setState] = useAsyncState(initialValue || '');
 
   useEffect(() => {
     (async () => {

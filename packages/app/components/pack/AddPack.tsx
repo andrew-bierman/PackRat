@@ -1,29 +1,31 @@
-import React from 'react';
-import { Platform, View } from 'react-native';
 import {
-  RText,
+  BaseModal,
+  DropdownComponent,
   Form,
-  FormSelect as OriginalFormSelect,
   FormInput,
+  FormSelect as OriginalFormSelect,
+  RText,
   SubmitButton,
   useModal,
 } from '@packrat/ui';
-import { BaseModal } from '@packrat/ui';
-import useTheme from '../../hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack, usePackId } from 'app/hooks/packs';
-import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
-import { RContextMenu } from '@packrat/ui/src/RContextMenu';
-
-interface MenuItems {
-  label: string;
-  onSelect: () => void;
-}
+import { useAddNewPack } from 'app/hooks/packs';
+import { useRouter } from 'app/hooks/router';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
+import React from 'react';
+import { View } from 'react-native';
+import useTheme from '../../hooks/useTheme';
 
 const FormSelect: any = OriginalFormSelect;
 
-export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuccess }) => {
+export const AddPack = ({
+  isCreatingTrip = false,
+  onSuccess,
+}: {
+  isCreatingTrip: boolean;
+  onSuccess: any;
+}) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -54,7 +56,6 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
       }
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
-        return;
       }
 
       // setPackIdParam(response.id);
@@ -62,13 +63,13 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
   };
 
   const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'true');
+    if (itemValue === 'Yes') {
+      setIsPublic(true);
+    } else {
+      setIsPublic(false);
+    }
   };
-
-  const menuItems: MenuItems[] = [
-    { label: 'Yes', onSelect: () => setIsPublic(true) },
-    { label: 'No', onSelect: () => setIsPublic(false) },
-  ];
+  const { xxs, xxl, xs } = useResponsive();
 
   return (
     <View style={styles.container}>
@@ -83,18 +84,15 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
             label="Name"
             style={{ textAlign: 'left', width: 200 }}
           />
-          {Platform.OS === 'web' ? (
-            <FormSelect
-              onValueChange={handleonValueChange}
-              options={packSelectOptions}
-              name="isPublic"
-              label="Is Public"
-              accessibilityLabel="Choose Service"
-              placeholder={'Is Public'}
-            />
-          ) : (
-            <RContextMenu menuItems={menuItems} menuName="Is Public" />
-          )}
+          <DropdownComponent
+            value={null}
+            data={packSelectOptions}
+            onValueChange={handleonValueChange}
+            placeholder="Is Public:"
+            width={xxs ? '50%' : xs ? '50%' : xxl ? '10%' : '50%'}
+            native={true}
+            zeego={true}
+          />
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
@@ -109,7 +107,11 @@ export const AddPack : React.FC<AddPackProps> = ({ isCreatingTrip = false, onSuc
   );
 };
 
-export const AddPackContainer = ({ isCreatingTrip }) => {
+export const AddPackContainer = ({
+  isCreatingTrip,
+}: {
+  isCreatingTrip: boolean;
+}) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
       <PackModalContent isCreatingTrip={isCreatingTrip} />
