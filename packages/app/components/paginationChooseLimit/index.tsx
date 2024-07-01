@@ -23,7 +23,7 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
         value={limit}
         width="100%"
         accessibilityLabel="choose the number of items to be displayed"
-        placeholder="Choose a value"
+        placeholder={limit}
         onValueChange={(itemValue: string) => {
           setLimit(itemValue);
         }}
