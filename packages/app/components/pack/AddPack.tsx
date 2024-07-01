@@ -13,7 +13,7 @@ import { useAddNewPack } from 'app/hooks/packs';
 import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 
@@ -31,6 +31,7 @@ export const AddPack = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
+  const [selectedValue, SetSelectedValue] = useState('No')
   // const [_, setPackIdParam] = usePackId();
 
   const {
@@ -64,8 +65,10 @@ export const AddPack = ({
 
   const handleonValueChange = (itemValue) => {
     if (itemValue === 'Yes') {
+      SetSelectedValue('Yes')
       setIsPublic(true);
     } else {
+      SetSelectedValue('No')
       setIsPublic(false);
     }
   };
@@ -88,8 +91,8 @@ export const AddPack = ({
             value={null}
             data={packSelectOptions}
             onValueChange={handleonValueChange}
-            placeholder="Is Public:"
-            width={xxs ? '50%' : xs ? '50%' : xxl ? '10%' : '50%'}
+            placeholder={`Is Public: ${selectedValue}`}
+            width={xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '50%'}
             native={true}
             zeego={true}
           />

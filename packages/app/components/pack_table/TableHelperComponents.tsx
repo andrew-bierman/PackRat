@@ -46,11 +46,12 @@ interface CategoryRowProps {
 interface TitleRowProps {
   title: string;
 }
-
-interface MenuItems {
-  label: string;
-  onSelect: () => void;
-}
+const optionValues = [
+  { label: 'kg', value: 'kg' },
+  { label: 'g', value: 'g' },
+  { label: 'lb', value: 'lb' },
+  { label: 'oz', value: 'oz' },
+];
 
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);

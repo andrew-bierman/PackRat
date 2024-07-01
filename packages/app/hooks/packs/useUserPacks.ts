@@ -22,7 +22,7 @@ export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
       queryBy: queryString,
     },
     (oldData) => {
-      //This was added to fix typescript error and passing oldData to determine new data
+      // This was added to fix typescript error and passing oldData to determine new data
       return data;
     },
   );
