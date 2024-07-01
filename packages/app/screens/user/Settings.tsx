@@ -16,15 +16,20 @@ import {
   FormSelect,
   SubmitButton,
   RIconButton,
+  RSpinner,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
 import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
-import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
+import {
+  userSettingsSchema,
+  passwordChangeSchema,
+  deleteUserForm,
+} from '@packrat/validations';
 import { Platform } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
-
+import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -36,16 +41,14 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
   value: key,
 }));
 
-
-
 export default function Settings() {
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
     useProfileSettings();
+  const { deleteProfile, isLoading } = useDeleteProfile();
 
   const { isDark, currentTheme } = useTheme();
   const router = useRouter();
   const navigate = useNavigate();
-
 
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
@@ -65,25 +68,23 @@ export default function Settings() {
             flexDirection: 'row',
           }}
         >
-       
-            <RIconButton
-              backgroundColor="transparent"
-              icon={
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
-                  color={isDark ? 'white' : 'black'}
-                />
+          <RIconButton
+            backgroundColor="transparent"
+            icon={
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={isDark ? 'white' : 'black'}
+              />
+            }
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                window?.history?.back();
+              } else {
+                navigate('/profile');
               }
-              onPress={() => {
-                if (Platform.OS === 'web') {
-                  window?.history?.back();
-                } else {
-                  navigate('/profile');
-                }
-              }}
-            />
-        
+            }}
+          />
           <RH2>Profile</RH2>
         </RStack>
         <Form
@@ -185,6 +186,39 @@ export default function Settings() {
             >
               Change password
             </SubmitButton>
+          </RStack>
+        </Form>
+        <RStack marginTop={20} marginBottom={10}>
+          <RH2>Delete account</RH2>
+          <RSeparator marginVertical={8} />
+          <RText fontSize={16}>
+            Deleting your account will remove all your information from our
+            database. This cannot be undone
+          </RText>
+        </RStack>
+        <Form validationSchema={deleteUserForm}>
+          <RStack width="100%" marginHorizontal="auto">
+            <RLabel htmlFor="confirmText">
+              To confirm this, type "delete"
+            </RLabel>
+            <RStack space="$2" flexDirection="row">
+              <FormInput
+                id="confirmText"
+                style={{ minWidth: 268 }}
+                name="confirmText"
+              />
+              <SubmitButton
+                onSubmit={deleteProfile}
+                disabled={isLoading}
+                color="white"
+                style={{
+                  backgroundColor: 'red',
+                  opacity: isLoading ? 0.4 : 1,
+                }}
+              >
+                {isLoading ? <RSpinner color="#f6f6f6" /> : 'Delete account'}
+              </SubmitButton>
+            </RStack>
           </RStack>
         </Form>
       </RStack>
