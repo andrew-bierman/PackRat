@@ -1,5 +1,6 @@
 import { extendTheme } from 'native-base';
 import { DefaultTheme } from 'react-native-paper';
+import { type ThemeType } from './types';
 
 export const theme = {
   colors: {
@@ -126,4 +127,19 @@ export const darkPaperTheme = {
       level1: darkTheme.colors.background,
     },
   },
+};
+
+/**
+ * Get theme object by theme type eg light, dark... etc
+ * @param {ThemeType} themeType
+ * @returns {object}
+ */
+export const getTheme = (themeType: ThemeType) => {
+  switch (themeType) {
+    case 'DARK':
+      return darkTheme;
+    // extend types here
+    default:
+      return theme;
+  }
 };
