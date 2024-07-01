@@ -15,7 +15,7 @@ config.transformer.minifierConfig.compress.drop_console = true;
 config.resolver.assetExts.push('cjs');
 
 // Include 'mjs' and 'cjs' in source extensions
-config.resolver.sourceExts.push('mjs', 'cjs', '.solito.js');
+config.resolver.sourceExts.push('mjs', 'cjs', '.solito.js', 'native.ts', 'web.ts');
 
 // Find the project and workspace directories
 const projectRoot = __dirname;

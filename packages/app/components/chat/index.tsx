@@ -44,7 +44,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     setUserInput,
     setTypeId,
     isLoading,
-  } = useChat({ itemTypeId });
+  } = useChat({ itemTypeId  });
 
   const [messages, setMessages] = useState(parsedMessages);
 
@@ -204,15 +204,17 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
           }}
         >
           <Button
-            position="absolute"
-            backgroundColor="$background"
-            top="$2"
-            right="$2"
             size="$2"
             circular
             icon={X}
             onPress={() => setIsChatOpen(false)}
-            style={{ zIndex: 1001 }}
+            style={{
+              zIndex: 1001,
+              position: 'absolute',
+              backgroundColor: `$background`,
+              top: `$2`,
+              right: `$2`,
+            }}
           />
           <ChatComponent itemTypeId={itemTypeId} />
         </Animated.View>

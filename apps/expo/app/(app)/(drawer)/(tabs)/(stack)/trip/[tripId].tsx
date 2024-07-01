@@ -15,10 +15,10 @@ export default function Trip() {
         </Head>
       )}
       <Stack.Screen
+        name="Trip"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Trip',
-          name: 'Trip',
+          title: 'Trip'
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

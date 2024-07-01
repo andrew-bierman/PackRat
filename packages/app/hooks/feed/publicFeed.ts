@@ -21,7 +21,7 @@ type OptionalDataType = {
 export const usePublicFeed = (queryString, selectedTypes) => {
   let data: OptionalDataType = [];
   let isLoading = true;
-  let refetch = null;
+  let refetch = () => {};
   try {
     const queryOptions = {
       refetchOnWindowFocus: false,

@@ -14,6 +14,11 @@ import { api } from 'app/constants/api';
 import { RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
+interface Pack {
+  bounds: number[][];
+  metadata: string;
+}
+
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -37,9 +42,11 @@ export default function DownloadedMaps() {
 
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState(null);
+  const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState(null);
+  const [pack, setPack] = useState<Pack | null>(null);
+    const [zoomLevel, setZoomLevel] = useState<number | null>(null);
+
 
   let shape, zoomLevel;
   if (pack != null) {
@@ -140,8 +147,8 @@ export default function DownloadedMaps() {
             <Mapbox.Camera
               zoomLevel={zoomLevel}
               centerCoordinate={[
-                (pack.bounds[0] + pack.bounds[2]) / 2,
-                (pack.bounds[1] + pack.bounds[3]) / 2,
+                (pack?.bounds[0]?.[0] + pack?.bounds[1]?.[0]) / 2 ?? 0,
+                (pack?.bounds[0]?.[1] + pack?.bounds[1]?.[1]) / 2 ?? 0,
               ]}
               animationMode={'flyTo'}
               animationDuration={2000}

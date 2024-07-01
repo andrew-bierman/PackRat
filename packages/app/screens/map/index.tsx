@@ -14,6 +14,10 @@ import useTheme from 'app/hooks/useTheme';
 import { ErrorBoundary } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
+interface MapViewRef {
+  current: Mapbox.MapView | null;
+}
+
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export default function Map() {
@@ -24,7 +28,7 @@ export default function Map() {
 
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
-    const mapViewRef = useRef(null);
+    const mapViewRef = useRef<MapViewRef>(null);
 
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',

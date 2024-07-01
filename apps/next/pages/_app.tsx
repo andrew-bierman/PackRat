@@ -19,6 +19,7 @@ import { PortalProvider } from 'tamagui';
 import { Container, MainContentWeb } from '@packrat/ui';
 
 import * as WebBrowser from 'expo-web-browser';
+import { config } from '@packrat/ui/src/tamagui.config';
 WebBrowser.maybeCompleteAuthSession();
 
 if (process.env.NODE_ENV === 'production') {

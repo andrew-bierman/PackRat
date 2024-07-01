@@ -8,8 +8,23 @@ import { useAuthUser } from 'app/auth/hooks';
 import useTheme from '../../hooks/useTheme';
 import { CopyPackModal } from 'app/components/pack/CopyPackModal';
 
+interface CustomCardHeaderProps {
+  data: {
+    owner_id: string | { id: string };
+    owners?: Array<{ name: string }>;
+  };
+  title: string | JSX.Element;
+  link?: string;
+  actionsComponent: JSX.Element;
+}
+
 const RText: any = OriginalRText;
-export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
+export const CustomCardHeader = ({
+  data,
+  title,
+  link,
+  actionsComponent,
+}: CustomCardHeaderProps) => {
   const { isCopied, handleCopyLink } = useCopyClipboard(link);
   const user = useAuthUser();
   const { isDark } = useTheme();

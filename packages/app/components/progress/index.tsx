@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Progress } from 'native-base';
 import useTheme from 'app/hooks/useTheme';
-import { useProgressStore } from 'app/global-state/progressStore';
+import { useProgressStore } from 'app/atoms/progressStore';
 
 const ProgressBarComponent = () => {
   const { currentTheme } = useTheme();

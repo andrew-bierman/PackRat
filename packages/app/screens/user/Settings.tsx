@@ -147,10 +147,10 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack marginTop={20} marginBottom={10}>
+        <RStack style={{ marginTop: 20, marginBottom: 10 }}>
           <RH2>Change Password</RH2>
-          <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RSeparator marginVertical={8}/>
+          <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
           <RStack space="$3" width="100%" marginHorizontal="auto">

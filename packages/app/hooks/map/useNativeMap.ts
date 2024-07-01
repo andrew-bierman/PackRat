@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import { offlineManager } from '@rnmapbox/maps';
+import { offlineManager, MapView  } from '@rnmapbox/maps';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions } from 'react-native';
 import {
@@ -15,8 +15,23 @@ interface Location {
   latitude: number;
 }
 
+interface GeoJsonProperties {
+  name?: string;
+}
+
+interface Geometry {
+  type: string;
+  coordinates: any;
+}
+
+interface Feature {
+  type: string;
+  properties?: GeoJsonProperties;
+  geometry: Geometry;
+}
+
 interface Shape {
-  features: Array<{ properties: { name: string } }>;
+  features: Feature[];
 }
 
 interface UseNativeMapProps {
@@ -99,7 +114,7 @@ const useMapDimensions = () => {
 
 export const useNativeMap = ({ shape: shapeProp }: UseNativeMapProps) => {
   const camera = useRef(null);
-  const mapViewRef = useRef(null);
+  const mapViewRef = useRef<MapView>(null);
   const cancelRef = useRef(null);
 
   const { location, getPosition } = useLocation();
@@ -109,25 +124,24 @@ export const useNativeMap = ({ shape: shapeProp }: UseNativeMapProps) => {
 
   const [mapFullscreen, setMapFullscreen] = useState(false);
   const [showMapNameInputDialog, setShowMapNameInputDialog] = useState(false);
-  const [shape, setShape] = useState(shapeProp);
-  const [mapName, setMapName] = useState(shape?.features[0]?.properties?.name);
+  const [shape, setShape] = useState<Shape>(shapeProp);
+  const [mapName, setMapName] = useState<string | undefined>(
+    shape?.features[0]?.properties?.name,
+  );
   const [trailCenterPoint, setTrailCenterPoint] = useState(
     findTrailCenter(shape),
   );
 
-  let bounds;
+  let bounds: [number[], number[]] = [
+    [0, 0],
+    [0, 0],
+  ];
+
   try {
     validateShape(shape);
-    bounds = getShapeSourceBounds(shape);
-    if (bounds[0] && bounds[1]) {
-      bounds = [bounds[0], bounds[1]];
-    }
+    bounds = getShapeSourceBounds(shape) as [number[], number[]];
   } catch (error) {
     Alert.alert('Invalid Shape', error.message);
-    bounds = [
-      [0, 0],
-      [0, 0],
-    ]; // Fallback bounds
   }
 
   const zoomLevel = calculateZoomLevel(bounds, {

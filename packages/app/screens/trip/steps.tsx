@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { TripCard } from 'app/components/trip/TripCard';
+import TripCard from 'app/components/trip/TripCard';
 import WeatherCard from 'app/components/weather/WeatherCard';
 import { GearList } from 'app/components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
@@ -8,8 +8,9 @@ import TripDateRange from 'app/components/trip/TripDateRange';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
-import { useParks } from 'app/hooks/parks';
+import  useParks from 'app/hooks/parks';
 
+const { currentTheme } = useTheme()
 const steps = [
   {
     name: 'Step 1',
@@ -21,7 +22,7 @@ const steps = [
           <FontAwesome
             name="map"
             size={20}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         )}
       />
@@ -29,7 +30,7 @@ const steps = [
     sidebarData: {
       title: 'Where are you heading?',
       Icon: () => (
-        <FontAwesome name="map" size={20} color={theme.colors.cardIconColor} />
+        <FontAwesome name="map" size={20} color={currentTheme.colors.cardIconColor} />
       ),
     },
   },
@@ -51,7 +52,7 @@ const steps = [
           <FontAwesome5
             name="hiking"
             size={20}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         )}
       />
@@ -68,7 +69,7 @@ const steps = [
           <FontAwesome5
             name="mountain"
             size={20}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         )}
       />
@@ -92,7 +93,7 @@ const steps = [
           <FontAwesome5
             name="route"
             size={24}
-            color={theme.colors.cardIconColor}
+            color={currentTheme.colors.cardIconColor}
           />
         )}
         title="Map"

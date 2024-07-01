@@ -1,5 +1,5 @@
 import axios from 'app/config/axios';
-import { api } from 'constants/api';
+import { api } from '../constants/api';
 import osmtogeojson from 'osmtogeojson';
 
 /**

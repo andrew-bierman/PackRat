@@ -7,6 +7,8 @@ import { useDeleteItem } from 'app/hooks/items';
 import Layout from 'app/components/layout/Layout';
 import { PaginationLimit } from '../paginationChooseLimit';
 import { RButton, RStack, RText } from '@packrat/ui';
+import useResponsive from 'app/hooks/useResponsive';
+import { useScreenWidth } from 'app/hooks/common/useScreenWidth';
 import { AntDesign } from '@expo/vector-icons';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
@@ -68,11 +70,11 @@ export const ItemsTable = ({
     setPage(page - 1);
   };
 
+  const { screenWidth } = useScreenWidth()
 const filteredData = data.map(item => {
   const { id, categoryId, createdAt, updatedAt, ownerId,global, ...filteredItem } = item;
   return filteredItem;
 });
-
   return (
     <Layout>
       <ScrollView>
@@ -84,7 +86,7 @@ const filteredData = data.map(item => {
             marginTop: 20,
             marginBottom:20,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: xxxs ? '100vw' : xs ? '80vw' : '60vw',
+            width: xxxs? screenWidth * 1 : xs ? screenWidth * 0.8 : screenWidth * 0.6,
           }}
         >
           {isLoading ? (
