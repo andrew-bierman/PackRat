@@ -30,6 +30,7 @@ import {
 import { Platform } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
 import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
+import { useAuthUser } from 'app/auth/hooks';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -42,8 +43,9 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
 }));
 
 export default function Settings() {
+  const userData = useAuthUser();
   const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
-    useProfileSettings();
+    useProfileSettings(userData.id);
   const { deleteProfile, isLoading } = useDeleteProfile();
 
   const { isDark, currentTheme } = useTheme();

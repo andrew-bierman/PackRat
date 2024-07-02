@@ -12,7 +12,7 @@ const PROFILE_SETTINGS_DEFAULTS = {
   preferredWeight: '',
 };
 
-export const useProfileSettings = () => {
+export const useProfileSettings = (id: string) => {
   const user = useAuthUser();
   const updateUser = useUpdateUser();
   const updateUserPassword = useUpdateUserPassword();
@@ -27,8 +27,7 @@ export const useProfileSettings = () => {
   };
 
   const handleEditUser = (data) => {
-    if (!user) return;
-    const { id } = user;
+    if (!id) return;
 
     updateUser({
       userId: id,
