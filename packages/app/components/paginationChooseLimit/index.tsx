@@ -2,7 +2,6 @@ import { View } from 'react-native';
 import React, { useState } from 'react';
 import { DropdownComponent, RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import useResponsive from 'app/hooks/useResponsive';
 
 interface PaginationLimitProps {
   limit: string | number;
@@ -33,13 +32,11 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
   );
 };
 const loadStyles = () => {
-  const { xxs } = useResponsive();
   return {
     selectContainer: {
-      marginTop: xxs ? 20 : 10,
       width: '15rem',
       marginLeft: 20,
-      marginBottom: xxs ? 70 : 10,
+      marginBottom: 70,
       alignSelf: 'left',
     },
   };
