@@ -160,7 +160,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({ itemTypeId }) => {
               },
               shadowOpacity: 0.75,
               shadowRadius: 1.24,
-              elevation: 3,
+              // elevation: 3,
             }}
             alt="PackRat Logo"
           />

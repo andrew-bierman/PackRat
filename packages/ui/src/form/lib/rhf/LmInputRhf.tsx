@@ -67,11 +67,11 @@ const getInputKeyboardType = ({
   defaultKeyBoardType,
 }) => {
   if (isNumeric) {
-    return 'number-pwd';
+    return 'number-pad';
   }
 
   if (isDecimal) {
-    return 'decimal-pwd';
+    return 'decimal-pad';
   }
 
   return defaultKeyBoardType;

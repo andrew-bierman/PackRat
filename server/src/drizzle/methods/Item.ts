@@ -1,5 +1,5 @@
 import { DbClient } from '../../db/client';
-import { and, count, eq, sql } from 'drizzle-orm';
+import { and, count, eq, like, sql } from 'drizzle-orm';
 import { type InsertItem, item as ItemTable } from '../../db/schema';
 
 export class Item {
@@ -103,7 +103,10 @@ export class Item {
   async findGlobal(limit: number, offset: number, searchString: string) {
     try {
       const items = await DbClient.instance.query.item.findMany({
-        where: eq(ItemTable.global, true),
+        where: and(
+          eq(ItemTable.global, true),
+          like(ItemTable.name, `%${searchString}%`),
+        ),
         with: {
           category: {
             columns: { id: true, name: true },

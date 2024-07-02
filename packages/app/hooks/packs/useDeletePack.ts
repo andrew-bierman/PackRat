@@ -12,5 +12,5 @@ export const useDeletePack = (id) => {
     } catch {}
   };
 
-  return handleDeletePack;
+  return { handleDeletePack };
 };

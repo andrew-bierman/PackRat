@@ -36,7 +36,7 @@ export const CustomCardHeader = ({ data, title, link, actionsComponent }) => {
           </RText>
         </RLink>
       </View>
-      {user?.id !== data.owner_id && (
+      {user?.id !== data.owner_id && data.type !== 'trip' && (
         <RButton
           onPress={() => {
             setIsCopyPackModalOpen(true);

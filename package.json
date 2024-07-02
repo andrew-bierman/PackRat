@@ -55,7 +55,7 @@
     "next": "cd apps/next && yarn dev",
     "prebuild:expo": "cd apps/expo && yarn run prebuild:clean",
     "postinstall": "yarn build-ui && yarn build:validations && yarn build-crosspath && yarn setup:env && yarn fix:packages",
-    "preinstall": "npx only-allow yarn",
+    "preinstall:yarn": "npx only-allow yarn",
     "fix:packages": "yarn patch-package",
     "regen": "yarn install --refresh-lockfile",
     "setup:env": "npx ts-node .github/scripts/env.ts",
@@ -103,10 +103,6 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "client/**/*.{js,jsx,ts,tsx}": [
-      "cd client && yarn run lint",
-      "prettier --write"
-    ],
     "server/**/*.{js,ts}": [
       "cd server && yarn run lint",
       "prettier --write"

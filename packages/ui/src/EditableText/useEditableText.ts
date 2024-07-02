@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 
 export const useEditableText = ({ value, onChange, defaultValue, onSave }) => {
-  const [internalValue, setInternalValue] = useState(defaultValue);
+  const [internalValue, setInternalValue] = useState(value ?? defaultValue);
+
   const currentValue = onChange === undefined ? internalValue : value;
 
   const handleChange = (e) => {
-    const newValue = e.target.value;
+    const newValue = e.nativeEvent.text; // For React Native
 
     if (onChange === undefined) {
       setInternalValue(newValue);
@@ -25,7 +26,9 @@ export const useEditableText = ({ value, onChange, defaultValue, onSave }) => {
   }, [value]);
 
   useEffect(() => {
-    setInternalValue(defaultValue);
+    if (value === undefined) {
+      setInternalValue(defaultValue);
+    }
   }, [defaultValue]);
 
   return {

@@ -31,9 +31,7 @@ export function swapOnClick<D>(d: D) {
 const DatePickerProvider =
   _DatePickerProvider as React.ComponentType<DatePickerProviderProps>;
 
-type DatePickerProps = PopoverProps & {
-  config: DatePickerProviderProps['config'];
-};
+type DatePickerProps = PopoverProps;
 
 export const { Provider: HeaderTypeProvider, useStyledContext: useHeaderType } =
   createStyledContext({
@@ -42,26 +40,24 @@ export const { Provider: HeaderTypeProvider, useStyledContext: useHeaderType } =
   });
 
 const DatePickerImpl = (props: DatePickerProps) => {
-  const { children, config, ...rest } = props;
+  const { children, ...rest } = props;
 
   return (
-    <DatePickerProvider config={config}>
-      <Popover keepChildrenMounted size="$5" allowFlip {...rest}>
-        <Adapt when="sm" platform="touch">
-          <Popover.Sheet modal dismissOnSnapToBottom snapPointsMode="fit">
-            <Popover.Sheet.Frame padding="$4">
-              <Adapt.Contents />
-            </Popover.Sheet.Frame>
-            <Popover.Sheet.Overlay
-              animation="lazy"
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-            />
-          </Popover.Sheet>
-        </Adapt>
-        {children}
-      </Popover>
-    </DatePickerProvider>
+    <Popover keepChildrenMounted size="$5" allowFlip {...rest}>
+      <Adapt when="sm" platform="touch">
+        <Popover.Sheet modal dismissOnSnapToBottom snapPointsMode="fit">
+          <Popover.Sheet.Frame padding="$4">
+            <Adapt.Contents />
+          </Popover.Sheet.Frame>
+          <Popover.Sheet.Overlay
+            animation="lazy"
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
+        </Popover.Sheet>
+      </Adapt>
+      {children}
+    </Popover>
   );
 };
 
@@ -112,7 +108,7 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
     const { value, onButtonPress, size = '$3', onReset, ...rest } = props;
     return (
       <View $platform-native={{ minWidth: '100%' }}>
-        <Input size={size}>
+        <Input size={size} style={{overflow: 'hidden'}}>
           <Input.Box>
             <Input.Section>
               <Input.Area value={value} ref={ref} {...rest} />

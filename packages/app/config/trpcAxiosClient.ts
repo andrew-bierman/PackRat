@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { InformUser } from 'app/utils/ToastUtils';
+import { logoutAuthUser } from 'app/utils/userUtils';
 import { getErrorMessageFromError } from 'app/utils/apiUtils';
 
 const REQUESTS_TO_SKIP_SUCCESS_MESSAGE = [
@@ -35,6 +36,10 @@ const responseInterceptor = (response: AxiosResponse) => {
 };
 
 const responseErrorInterceptor = (response: AxiosResponse) => {
+  if (response?.response?.data?.error?.data?.httpStatus === 401) {
+    logoutAuthUser();
+  }
+
   if (
     response.config.method === 'get' ||
     REQUESTS_TO_SKIP_ERROR_MESSAGE.some((url) =>

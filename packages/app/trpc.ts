@@ -3,6 +3,7 @@ import type { AppRouter } from 'server/src/routes/trpcRouter';
 import { api } from './constants/api';
 import { createTRPCReact } from '@trpc/react-query';
 import { Storage } from 'app/utils/storage';
+import { QueryClient } from '@tanstack/react-query';
 import axios from 'app/config/trpcAxiosClient';
 
 export const getToken = async () => {
@@ -50,3 +51,5 @@ export const trpc = queryTrpc.createClient({
   ],
   transformer: undefined,
 });
+
+export const queryClient = new QueryClient();

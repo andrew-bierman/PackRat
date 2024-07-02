@@ -104,6 +104,6 @@ const loadStyles = () => ({
   },
   container: {
     gap: 50,
-    padding: 50,
+    padding: 20,
   },
 });

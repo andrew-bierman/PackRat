@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Switch } from 'tamagui';
-import { Platform, View } from 'react-native';
+import { Switch} from 'tamagui';
+import { View } from 'react-native';
 import {
   RIconButton,
   RSwitch,
@@ -12,11 +12,10 @@ import {
   RButton,
   Form,
   FormInput,
+  DropdownComponent,
 } from '@packrat/ui';
 import { AntDesign } from '@expo/vector-icons';
-import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
-import { useScreenWidth } from 'app/hooks/common';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -61,7 +60,6 @@ const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState('');
 
   const onSearch = (search) => setSearchQuery(search);
-  const { screenWidth } = useScreenWidth();
 
   return (
     <Layout>
@@ -69,11 +67,10 @@ const FeedSearchFilter = ({
         <View style={styles.searchContainer}>
           <Form>
             <RStack
-              space={3}
-              style={{ flexDirection: 'row', justifyContent: 'center' }}
+              style={{ flexDirection: 'row',marginLeft:40, }}
             >
               <FormInput
-                width={screenWidth <= 425 ? '30vw' : '12vw'}
+                width='100%'
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -119,7 +116,6 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="single-switch"
                   size="$1.5"
-                  width="$4"
                   checked={selectedTypes.pack}
                   onCheckedChange={handleTogglePack}
                 >
@@ -135,7 +131,6 @@ const FeedSearchFilter = ({
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
-                  width="$4"
                   checked={selectedTypes.trip}
                   onCheckedChange={handleToggleTrip}
                 >
@@ -146,12 +141,12 @@ const FeedSearchFilter = ({
             <RStack
               style={{
                 flexDirection: 'row',
-                gap: Platform.OS === 'web' ? 10 : 60,
                 alignItems: 'center',
+                justifyContent:'space-between'
               }}
             >
               <RText
-                fontSize={Platform.OS === 'web' ? 17 : 15}
+                fontSize={17}
                 fontWeight="bold"
                 color={currentTheme.colors.textColor}
               >
@@ -161,15 +156,9 @@ const FeedSearchFilter = ({
                 value={queryString}
                 data={dataValues}
                 onValueChange={handleSortChange}
-                placeholder="Sort By"
+                placeholder={queryString}
                 style={styles.dropdown}
-                width={
-                  Platform.OS === 'web'
-                    ? screenWidth <= 425
-                      ? '30vw'
-                      : '8vw'
-                    : 120
-                }
+                width='55%'
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -203,9 +192,9 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.card,
       padding: 15,
       fontSize: 18,
-      width: '60vw',
+      width: '100%',
       borderRadius: 10,
-      marginTop: Platform.OS !== 'web' ? 20 : 0,
+      marginTop:  20,
     },
     searchContainer: {
       flexDirection: 'row',

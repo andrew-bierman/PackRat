@@ -38,7 +38,7 @@ export const BaseDialog = ({
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet zIndex={200000} modal dismissOnSnapToBottom>
-          <Sheet.Frame padding="$4" gap="$4">
+          <Sheet.Frame padding="$4" gap="$0">
             <Adapt.Contents />
           </Sheet.Frame>
 
@@ -74,9 +74,10 @@ export const BaseDialog = ({
           exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
           gap="$4"
         >
-          <Dialog.Title>{title}</Dialog.Title>
-
-          <Dialog.Description>{description}</Dialog.Description>
+          {title && <Dialog.Title>{title}</Dialog.Title>}
+          {description && (
+            <Dialog.Description>{description}</Dialog.Description>
+          )}
           {children}
         </Dialog.Content>
       </Dialog.Portal>

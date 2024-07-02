@@ -8,6 +8,8 @@ import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Layout from 'app/components/layout/Layout';
+import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+import { useScreenWidth } from 'app/hooks/common';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
@@ -44,10 +46,9 @@ const Dashboard = () => {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const { screenWidth } = useScreenWidth();
   return {
     container: {
-      flex: 1,
-      flexGrow: 1,
       backgroundColor: currentTheme.colors.background,
       width: '100%',
       paddingBottom: 50,
@@ -57,6 +58,12 @@ const loadStyles = (theme) => {
       justifyContent: 'flex-start',
       alignItems: 'stretch',
       paddingHorizontal: 20,
+      width:
+        Platform.OS === 'web'
+          ? screenWidth <= SCREEN_WIDTH
+            ? '100vw'
+            : '90vw'
+          : '100%',
     },
     cardContainer: {
       flexDirection: 'column',

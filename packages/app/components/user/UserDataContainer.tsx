@@ -96,19 +96,17 @@ export default function UserDataContainer({
       <LargeCard
         customStyle={{
           backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
+          padding:10
         }}
       >
         <RStack
           style={{
-            gap: 16,
+            gap: 10,
             alignItems: 'center',
-            justifyContent: 'center',
             width: '100%',
-            padding: 24,
           }}
         >
           <RText
-            // color={currentTheme.colors.black}
             style={{
               textTransform: 'capitalize',
               fontSize: 24,
@@ -120,10 +118,6 @@ export default function UserDataContainer({
           </RText>
           <RStack
             style={{
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
               width: '100%',
               padding: 4,
             }}
@@ -145,10 +139,11 @@ export default function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    paddingHorizontal: 3,
-                    paddingVertical: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    padding:10
+                    // paddingHorizontal: 1,
+                    // paddingVertical: 3,
+                    // justifyContent: 'center',
+                    // alignItems: 'center',
                   }}
                 />
 

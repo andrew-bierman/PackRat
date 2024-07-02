@@ -35,7 +35,7 @@ export function Drawer() {
       </Popover.Trigger>
       <Adapt when="sm" platform="touch">
         <Popover.Sheet modal dismissOnSnapToBottom>
-          <Popover.Sheet.Frame padding="$4">
+          <Popover.Sheet.Frame padding="$1">
             <Adapt.Contents />
           </Popover.Sheet.Frame>
 

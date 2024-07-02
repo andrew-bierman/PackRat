@@ -57,15 +57,14 @@ const DataList = ({ data }: DataListProps) => {
           <View style={{ width: 'auto%', paddingBottom: 10 } as any}>
             <SearchFilter
               isSortHidden={true}
-              value={searchQuery}
-              onChange={() => {
-                setSearchQuery;
-              }}
+              queryString={searchQuery}
+              setSearchQuery={setSearchQuery}
+
             />
             <FlatList
               data={filteredData.slice(0, 2)}
               horizontal={false}
-              keyExtractor={(item) => item?._id + item?.type}
+              keyExtractor={(item) =>  item?.id}
               renderItem={({ item }) => (
                 <Card key={item?._id} type={item?.type} {...item} />
               )}
@@ -75,7 +74,7 @@ const DataList = ({ data }: DataListProps) => {
           </View>
         </BaseModal>
       ) : (
-        <View style={{ marginLeft: 20 }}>
+        <View style={{ width:'30%' ,alignSelf:'center'}}>
           <BaseDialog
             title="See all"
             trigger="See all"
@@ -89,17 +88,14 @@ const DataList = ({ data }: DataListProps) => {
             footerComponent={undefined}
           >
             <SearchFilter
-              isSortHidden={true}
-              value={searchQuery}
-              onChange={() => {
-                setSearchQuery;
-              }}
-            />
+             isSortHidden={true}
+             queryString={searchQuery}
+             setSearchQuery={setSearchQuery}/>
 
             <FlatList
               data={filteredData}
               horizontal={false}
-              keyExtractor={(item) => item?._id + item?.type}
+              keyExtractor={(item) => item?._id }
               renderItem={({ item }) => (
                 <Card key={item?._id} type={item?.type} {...item} />
               )}

@@ -62,7 +62,26 @@ export function LmSelect({
     value ?? defaultValue ?? '',
   );
   const id = useId();
-  // rest.size = rest.size || '$4'
+
+  const handleChange = (val: string) => {
+    setSelectVal(val);
+    if (typeof onValueChange === 'function') {
+      onValueChange(val);
+    }
+  };
+
+  const memoizedOptions = useMemo(
+    () =>
+      options.map((item, i) => (
+        <Select.Item index={i} key={item.value} value={`${item.value}`}>
+          <Select.ItemText>{item.label}</Select.ItemText>
+          <Select.ItemIndicator marginLeft="auto">
+            <CheckRegular size={16} />
+          </Select.ItemIndicator>
+        </Select.Item>
+      )),
+    [options]
+  );
 
   return (
     <LmFormFieldContainer
@@ -86,17 +105,11 @@ export function LmSelect({
         disablePreventBodyScroll
         {...rest}
         value={selectVal}
-        onValueChange={(val) => {
-          setSelectVal(val);
-          if (typeof onValueChange === 'function') {
-            onValueChange(val);
-          }
-        }}
+        onValueChange={handleChange}
       >
         <Select.Trigger
           width={fullWidth ? '100%' : width}
           iconAfter={<CaretDownRegular />}
-          // minHeight={rest.size}
         >
           <Select.Value placeholder={placeholder} />
         </Select.Trigger>
@@ -135,24 +148,8 @@ export function LmSelect({
           <Select.Viewport>
             <Select.Group>
               {dropDownLabel && <Select.Label>{dropDownLabel}</Select.Label>}
-              {useMemo(
-                () =>
-                  options.map((item, i) => (
-                    <Select.Item
-                      index={i}
-                      key={item.value}
-                      value={`${item.value}`}
-                    >
-                      <Select.ItemText>{item.label}</Select.ItemText>
-                      <Select.ItemIndicator marginLeft="auto">
-                        <CheckRegular size={16} />
-                      </Select.ItemIndicator>
-                    </Select.Item>
-                  )),
-                [options],
-              )}
+              {memoizedOptions}
             </Select.Group>
-            {/* Native gets an extra icon */}
             {rest.native && (
               <YStack
                 position="absolute"
