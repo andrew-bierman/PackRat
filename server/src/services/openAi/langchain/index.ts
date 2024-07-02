@@ -1,8 +1,8 @@
 import { ChatOpenAI } from 'langchain/chat_models/openai';
 import { AIMessage, HumanMessage, SystemMessage } from 'langchain/schema';
 import Conversation from '../../../models/openai/conversationModel';
-import { getPackByIdService } from '../../../services/pack/pack.service';
-import { getTripByIdService } from '../../../services/trip/getTripByIdService';
+import { getPackByIdService } from '../../pack/getPackByIdService';
+import { getTripByIdService } from '../../trip/getTripByIdService';
 import mongoose from 'mongoose';
 import User from '../../../models/userModel';
 
@@ -80,7 +80,7 @@ export async function checkAPIKey() {
   }
 }
 
-async function getPackInformation(packId) {
+export async function getPackInformation(packId) {
   if (!packId) return '';
   const packData: any = await getPackByIdService(packId);
   return `Analyze the pack titled '${packData.name}', owned by ${packData.owners

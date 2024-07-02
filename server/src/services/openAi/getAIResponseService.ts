@@ -1,9 +1,8 @@
 import OpenAI from 'openai';
 import Instructor from '@instructor-ai/instructor';
-import { z } from 'zod';
 import { Conversation } from '../../drizzle/methods/Conversation';
 import { User } from '../../drizzle/methods/User';
-
+import { getPackInformation } from './referredItemInformation';
 /**
  * Retrieves AI response for a given user input in a conversation.
  * @param {PrismaClient} prisma - Prisma client.
@@ -12,10 +11,12 @@ import { User } from '../../drizzle/methods/User';
  * @param {string} userInput - The user input in the conversation.
  * @returns {Object} - The AI response and the updated conversation.
  */
+
 export const getAIResponseService = async (
   userId: string,
   itemTypeId: string,
   userInput: string,
+  type: string,
   openAIAPIKey: string,
 ): Promise<object> => {
   if (!openAIAPIKey) {
@@ -31,10 +32,30 @@ export const getAIResponseService = async (
     apiKey: openAIAPIKey,
   });
 
+  // Apply the patch to the OpenAI client
+  const client = Instructor({
+    client: openai,
+    mode: 'FUNCTIONS',
+  });
+
   const user = await userClass.findUser({ userId });
 
   if (!user) {
     throw new Error('User not found');
+  }
+
+  let itemInfo;
+  switch (type) {
+    case 'trip':
+      console.log('trip');
+      // info = await getTripInformation(itemTypeId);
+      break;
+    case 'pack':
+      itemInfo = await getPackInformation(itemTypeId);
+      break;
+    default:
+      console.log('trip');
+      throw new Error(`Invalid type: ${itemTypeId}`);
   }
 
   let conversation: any = await conversationClass.findConversation(
@@ -60,10 +81,7 @@ export const getAIResponseService = async (
   // a detailed system message to instruct the model about its role
   const systemMessage = {
     role: 'system',
-    content: `You are a helpful assistant that provides hiking advice. 
-    You should only provide advice related to hiking and not generate any other type of content whatsoever.
-    If a user asks for help outside of the hiking domain, respond with: "Sorry, I can not help with that 😅!"
-    Additionally, make your responses more detailed when the user asks relevant hiking-related questions.`,
+    content: itemInfo,
   };
 
   // Add the system message to the beginning of the messages array
@@ -72,11 +90,10 @@ export const getAIResponseService = async (
   // Add the user message
   messages.push({ role: 'user', content: userInput });
 
-  const response = await openai.chat.completions.create({
+  const response = await client.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages,
-    temperature: 0.5, // Lower temperature to make output more deterministic
-    // min_tokens: 100, // Limit the length of the response this doesnt exist still
+    temperature: 0.8,
   });
 
   const aiResponse = response.choices?.[0]?.message?.content?.trim() || '';

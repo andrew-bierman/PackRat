@@ -23,10 +23,11 @@ export const getPackByIdService = async (packId: string) => {
     const pack = (await packClass.findPack({
       id: packId,
     })) as PackWithItemPacks;
+
     const packData = {
       ...pack,
-      scores: JSON.parse(pack.scores as string),
-      grades: JSON.parse(pack.grades as string),
+      scores: pack.scores ? JSON.parse(pack.scores as string) : {},
+      grades: pack.grades ? JSON.parse(pack.grades as string) : {},
       total_weight: packClass.computeTotalWeight(pack),
       favorites_count: packClass.computeFavouritesCount(pack),
       total_score: packClass.computeTotalScores(pack),

@@ -1,29 +1,13 @@
-import { faker } from '@faker-js/faker';
-import { Check } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
-import {
-  AnimatePresence,
-  Avatar,
-  Button,
-  Text,
-  Theme,
-  View,
-  styled,
-} from 'tamagui';
+import { AnimatePresence, Text, Theme, View, styled } from 'tamagui';
 
 import useTheme from 'app/hooks/useTheme';
-import { useProfileSettings } from 'app/hooks/user';
 
 const List = styled(FlatList<Message>, {
   backgroundColor: '$background',
   gap: '$3',
 });
-
-const avatars = [
-  'https://raw.githubusercontent.com/andrew-bierman/PackRat/405cdb20a5286fd4915b05c8c7842f212094645d/packages/app/assets/user-circle-svgrepo-com.svg',
-  'https://raw.githubusercontent.com/andrew-bierman/PackRat/b0882ccc9fad3b37d6b44ed2a2865cb6ddec93d8/packages/app/assets/bot-svgrepo-com%20(2).svg',
-];
 
 const getMessages = (data: Message[]) => data;
 
@@ -41,7 +25,7 @@ const renderItem = ({
 }) => {
   return <ChatItem index={index + 1} key={index} item={message} />;
 };
-export function ChatList({ data }: { data: Message[] }) {
+export function SuggestionDescription({ data }: { data: Message[] }) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -67,18 +51,13 @@ export function ChatList({ data }: { data: Message[] }) {
   );
 }
 
-ChatList.fileName = 'ChatList';
+SuggestionDescription.fileName = 'ChatList';
 
 function ChatItem({ item, index }: { item: Message; index: number }) {
-  const { content, role } = item;
-  const itsMe = role === 'user';
-  const avatar = itsMe ? avatars[0] : avatars[1];
   const [showMessage, setShowMessage] = useState(false);
   const showDelay = 10;
   const [start, setStart] = useState(false);
   const { isDark } = useTheme();
-
-  const { user } = useProfileSettings();
 
   useEffect(() => {
     // run animations after initial render calms down
@@ -99,52 +78,28 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
     <AnimatePresence>
       {showMessage && (
         <View
-          flexDirection={itsMe ? 'row-reverse' : 'row'}
+          flexDirection={'row'}
           alignItems="flex-start"
           gap="$4"
-          alignSelf={itsMe ? 'flex-end' : 'flex-start'}
+          alignSelf={'flex-start'}
           maxWidth="100%"
           minWidth="100%"
           style={{ padding: '5px 5px', background: isDark ? '#333' : 'white' }}
         >
-          <Button
-            animation="quick"
-            // enterStyle={{
-            //   opacity: 0,
-            //   scale: 0,
-            // }}
-            size="$5"
-            circular
-            chromeless
-          >
-            <View flexDirection="row">
-              <Avatar circular size="$5">
-                <Avatar.Image
-                  // backgroundColor={itsMe ? 'white' : 'white'}
-                  resizeMode="center"
-                  source={{
-                    uri:
-                      itsMe && user?.profileImage ? user.profileImage : avatar,
-                  }}
-                />
-                <Avatar.Fallback backgroundColor="$background" />
-              </Avatar>
-            </View>
-          </Button>
           <View
             flexDirection="column"
-            alignItems={itsMe ? 'flex-end' : 'flex-start'}
+            alignItems={'flex-start'}
             gap="$2"
-            maxWidth={400}
+            // maxWidth={400}
             justifyContent="center"
             flexShrink={1}
           >
-            <Theme name={itsMe ? 'blue' : 'gray'}>
+            <Theme name={'blue'}>
               <View
                 backgroundColor="$color2"
                 padding="$4"
                 paddingVertical="$3"
-                borderRadius="$6"
+                borderRadius="$5"
                 flexShrink={1}
               >
                 <Text
@@ -157,17 +112,6 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
                 </Text>
               </View>
             </Theme>
-            <View flexDirection={itsMe ? 'row' : 'row-reverse'} gap="$2">
-              <Text
-                color="$color7"
-                fontSize="$3"
-                fontWeight="$3"
-                lineHeight="$3"
-              >
-                {/* {4} */}
-              </Text>
-              {/* <Check size={16} color="green" /> */}
-            </View>
           </View>
         </View>
       )}
