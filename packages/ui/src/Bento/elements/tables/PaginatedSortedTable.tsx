@@ -77,7 +77,12 @@ export function PaginatedSortedTable({
     columnHelper.accessor('category.name', {
       header: () => 'Category',
       cell: (info) => info.getValue(),
-      footer: (info) => 'category',
+      footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('unit', {
+      header: () => 'Unit',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
     }),
   ];
 
@@ -124,8 +129,10 @@ export function PaginatedSortedTable({
                 return (
                   <View fd="row" justifyContent="space-between" key={cell.id}>
                     <Text>
-                      {cell.column.id.charAt(0).toUpperCase() +
-                        cell.column.id.slice(1)}
+                      {flexRender(
+                        cell.column.columnDef.header,
+                        cell.getContext(),
+                      )}
                     </Text>
                     <Text color="$gray10">{value}</Text>
                   </View>
