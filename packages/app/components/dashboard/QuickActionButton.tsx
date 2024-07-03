@@ -5,7 +5,6 @@ import React from 'react';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
-
 const RCard: any = OriginalRCard;
 
 interface QuickActionButtonProps {

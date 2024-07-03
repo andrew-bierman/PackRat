@@ -8,7 +8,6 @@ import {
   RIconButton,
   EditableText,
   DropdownComponent,
-  
 } from '@packrat/ui';
 import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
@@ -77,32 +76,40 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
             )}
 
             <EditableText
-              isLoading={isLoading} 
-              defaultValue={title} 
-              isFocused={isEditMode} 
-              onSave={handleSaveTitle} 
+              isLoading={isLoading}
+              defaultValue={title}
+              isFocused={isEditMode}
+              onSave={handleSaveTitle}
             />
           </RStack>
         }
         actionsComponent={
-          user?.id === data.owner_id &&
-          <View style={{ alignSelf: 'flex-end', flexDirection: 'row', width: '15%', justifyContent: 'flex-end' }}>
-            <DropdownComponent
-              value={null}
-              data={optionValues}
-              onValueChange={(value) => handleActionsOpenChange(value)}
-              placeholder={
-                <RIconButton
-                  backgroundColor="transparent"
-                  icon={<MaterialIcons name="more-horiz" size={18} />}
-                  style={{ padding: 0 }}
-                />
-              }
-              width="100%"
-              native={true}
-              zeego={true}
-            />
-          </View>
+          user?.id === data.owner_id && (
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                flexDirection: 'row',
+                width: '15%',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <DropdownComponent
+                value={null}
+                data={optionValues}
+                onValueChange={(value) => handleActionsOpenChange(value)}
+                placeholder={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={<MaterialIcons name="more-horiz" size={18} />}
+                    style={{ padding: 0 }}
+                  />
+                }
+                width="100%"
+                native={true}
+                zeego={true}
+              />
+            </View>
+          )
         }
       />
     </>

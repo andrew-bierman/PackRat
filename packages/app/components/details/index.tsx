@@ -80,5 +80,5 @@ export const DetailsComponent = ({
     }
   };
 
-  return <RStack style={{width: '100%'}}>{renderDetails()}</RStack>;
+  return <RStack style={{ width: '100%' }}>{renderDetails()}</RStack>;
 };

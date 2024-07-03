@@ -108,7 +108,7 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>(
     const { value, onButtonPress, size = '$3', onReset, ...rest } = props;
     return (
       <View $platform-native={{ minWidth: '100%' }}>
-        <Input size={size} style={{overflow: 'hidden'}}>
+        <Input size={size} style={{ overflow: 'hidden' }}>
           <Input.Box>
             <Input.Section>
               <Input.Area value={value} ref={ref} {...rest} />

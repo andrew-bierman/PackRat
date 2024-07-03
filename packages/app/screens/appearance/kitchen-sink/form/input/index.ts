@@ -1,4 +1,4 @@
-import Input from './Input'
+import Input from './Input';
 export const InputRoute = {
   component: Input,
   route: 'input',

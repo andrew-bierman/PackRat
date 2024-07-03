@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Switch} from 'tamagui';
+import { Switch } from 'tamagui';
 import { View } from 'react-native';
 import {
   RIconButton,
@@ -66,11 +66,9 @@ const FeedSearchFilter = ({
       <View style={styles.filterContainer}>
         <View style={styles.searchContainer}>
           <Form>
-            <RStack
-              style={{ flexDirection: 'row',marginLeft:40, }}
-            >
+            <RStack style={{ flexDirection: 'row', marginLeft: 40 }}>
               <FormInput
-                width='100%'
+                width="100%"
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -142,7 +140,7 @@ const FeedSearchFilter = ({
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent:'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <RText
@@ -158,7 +156,7 @@ const FeedSearchFilter = ({
                 onValueChange={handleSortChange}
                 placeholder={queryString}
                 style={styles.dropdown}
-                width='55%'
+                width="55%"
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -194,7 +192,7 @@ const loadStyles = (theme: any) => {
       fontSize: 18,
       width: '100%',
       borderRadius: 10,
-      marginTop:  20,
+      marginTop: 20,
     },
     searchContainer: {
       flexDirection: 'row',
