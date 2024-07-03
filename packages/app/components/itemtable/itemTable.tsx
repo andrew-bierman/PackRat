@@ -1,15 +1,11 @@
 import React from 'react';
-import { ScrollView, View, Platform } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import useResponsive from 'app/hooks/useResponsive';
 import Loader from '../Loader';
 import useTheme from '../../hooks/useTheme';
-import { useDeleteItem } from 'app/hooks/items';
 import Layout from 'app/components/layout/Layout';
+import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
 import { PaginationLimit } from '../paginationChooseLimit';
-import { RButton, RStack, RText } from '@packrat/ui';
-import { AntDesign } from '@expo/vector-icons';
-import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
-
 interface ItemType {
   global: string;
   name: string;
@@ -20,9 +16,9 @@ interface ItemType {
   id: string;
   type: string;
   ownerId: string;
-  categoryId:string;
-  updatedAt:any;
-  createdAt:any;
+  categoryId: string;
+  updatedAt: any;
+  createdAt: any;
 }
 
 interface ItemsTableProps {
@@ -58,20 +54,19 @@ export const ItemsTable = ({
 }: ItemsTableProps) => {
   const { xs, xxxs } = useResponsive();
   const { isDark } = useTheme();
-  const { handleDeleteItem } = useDeleteItem();
 
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
-
-  const handlePreviousPage = () => {
-    setPage(page - 1);
-  };
-
-const filteredData = data.map(item => {
-  const { id, categoryId, createdAt, updatedAt, ownerId,global, ...filteredItem } = item;
-  return filteredItem;
-});
+  const filteredData = data.map((item) => {
+    const {
+      id,
+      categoryId,
+      createdAt,
+      updatedAt,
+      ownerId,
+      global,
+      ...filteredItem
+    } = item;
+    return filteredItem;
+  });
 
   return (
     <Layout>
@@ -80,17 +75,15 @@ const filteredData = data.map(item => {
           style={{
             paddingVertical: 16,
             flex: 1,
-            paddingTop: 30,
-            marginTop: 20,
-            marginBottom:20,
+            padding: 30,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: xxxs ? '100vw' : xs ? '80vw' : '60vw',
+            width: '100%',
           }}
         >
           {isLoading ? (
             <Loader />
           ) : (
-            <BasicTable
+            <PaginatedSortedTable
               groupedData={filteredData}
               handleCheckboxChange={handleCheckboxChange}
               onDelete={onDelete}
@@ -98,47 +91,11 @@ const filteredData = data.map(item => {
               currentPack={currentPack}
               refetch={refetch}
               setRefetch={setRefetch}
+              totalPages={totalPages}
+              page={page}
+              setPage={setPage}
             />
           )}
-
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 20,
-            }}
-          >
-            <RButton
-              style={{
-                width: 50,
-                backgroundColor: page < 2 ? 'gray' : '#0284c7',
-                borderRadius: 5,
-                borderColor: page < 2 ? 'gray' : '#0284c7',
-                borderWidth: 1,
-                borderStyle: 'solid',
-              }}
-              disabled={page < 2}
-              onPress={handlePreviousPage}
-            >
-              <AntDesign name="left" size={16} color="white" />
-            </RButton>
-            <RButton
-              style={{
-                marginLeft: 10,
-                width: 50,
-                backgroundColor: page === totalPages ? 'gray' : '#0284c7',
-                borderRadius: 5,
-                borderColor: page === totalPages ? 'gray' : '#0284c7',
-                borderWidth: 1,
-                borderStyle: 'solid',
-              }}
-              disabled={page === totalPages}
-              onPress={handleNextPage}
-            >
-              <AntDesign name="right" size={16} color="white" />
-            </RButton>
-          </View>
           <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
       </ScrollView>
