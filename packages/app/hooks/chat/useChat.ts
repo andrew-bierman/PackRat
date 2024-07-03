@@ -1,23 +1,43 @@
 import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
-import { useGetAIResponse } from './useGetAIResponse';
+import { useGetAIResponse, useGetAISuggestions } from './useGetAIResponse';
 import { useAuthUser } from 'app/auth/hooks';
+import { v4 as uuidv4 } from 'uuid';
 
-interface useChatParams {
-  itemTypeId: string | null;
+interface Reasoning {
+  role: string;
+  content: string;
 }
 
-export const useChat = ({ itemTypeId }: useChatParams) => {
+interface Suggestion {
+  name: string;
+  weight: number;
+  unit: string;
+  quantity: number;
+  category: string;
+}
+
+interface Suggestions {
+  reasoning: Reasoning[];
+  suggestion: Suggestion[];
+}
+
+export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
   const [typeId, setTypeId] = useState(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestions>({
+    reasoning: [],
+    suggestion: [],
+  });
 
   const [userInput, setUserInput] = useState('');
-  // const [parsedMessages, setParsedMessages] = useState([]);
 
   const { data: chatsData, refetch } = useGetUserChats(user.id, typeId);
 
   const { getAIResponse } = useGetAIResponse();
+  const { getAISuggestions } = useGetAISuggestions();
 
   const conversations = chatsData?.conversations?.history || '';
 
@@ -42,21 +62,6 @@ export const useChat = ({ itemTypeId }: useChatParams) => {
       return accumulator;
     }, []);
   };
-
-  // const conversation = conversations?.find(
-  //   (chat) => chat._id === conversationId,
-  // );
-
-  // useEffect(() => {
-  //
-  //   setParsedMessages(
-  //     conversation ? parseConversationHistory(conversation.history) : [],
-  //   );
-  // }, [conversationId]);
-
-  // /
-
-  // Compute parsedMessages directly
   const parsedMessages = conversations
     ? parseConversationHistory(conversations)
     : [];
@@ -64,8 +69,6 @@ export const useChat = ({ itemTypeId }: useChatParams) => {
   //
 
   /**
-   * Handles sending a message.
-   *
    * @return {Promise<void>} This function returns nothing.
    */
   const handleSendMessage = async (userMessage) => {
@@ -74,10 +77,46 @@ export const useChat = ({ itemTypeId }: useChatParams) => {
     await getAIResponse({
       userId: user?.id,
       userInput: userMessage,
-      itemTypeId: typeId,
+      itemTypeId: typeId.itemTypeId,
+      type: typeId.type,
     });
     await refetch();
     setIsLoading(false);
+  };
+
+  const handleSubmitAnalysis = async () => {
+    try {
+      setIsAnalysisLoading(true);
+      const response = await getAISuggestions({
+        userId: user.id,
+        itemTypeId: typeId.itemTypeId,
+        type: typeId.type,
+      });
+
+      setSuggestions({
+        reasoning: [{ role: 'ai', content: response.aiResponse }],
+        suggestion: {
+          ...response.refined,
+          Items: response.refined.Items.map((item) => {
+            const modifiedItem = {
+              ...item,
+              ownerId: user.id,
+              packId: itemTypeId.itemTypeId,
+              type: item.category,
+              id: uuidv4(),
+            };
+            delete modifiedItem.category;
+            return modifiedItem;
+          }),
+        },
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsAnalysisLoading(false);
+    }
   };
 
   return {
@@ -87,7 +126,11 @@ export const useChat = ({ itemTypeId }: useChatParams) => {
     userInput,
     isLoading,
     handleSendMessage,
+    handleSubmitAnalysis,
     setUserInput,
     setTypeId,
+    suggestions,
+    isAnalysisLoading,
+    setSuggestions,
   };
 };

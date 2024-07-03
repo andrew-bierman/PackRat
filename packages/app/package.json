@@ -100,6 +100,7 @@
     "immer": "^10.0.3",
     "jotai": "^2.6.4",
     "lodash": "^4.17.21",
+    "lucide-react-native": "^0.400.0",
     "mapbox-gl": "1.13.3",
     "moti": "^0.27.2",
     "native-base": "^3.4.28",
