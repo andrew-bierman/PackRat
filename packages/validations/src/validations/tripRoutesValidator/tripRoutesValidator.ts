@@ -51,7 +51,7 @@ export const addTripDetails = z.object({
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
-  type: z.enum(tripActivityValues),
+  type: z.nativeEnum(TripActivity),
   park: z.string().optional(),
   trail: z.string().optional(),
   geoJSON: z.object({
