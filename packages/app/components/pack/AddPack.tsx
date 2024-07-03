@@ -92,7 +92,7 @@ export const AddPack = ({
             data={packSelectOptions}
             onValueChange={handleonValueChange}
             placeholder={`Is Public: ${selectedValue}`}
-            width={xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '50%'}
+            width={xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '8%'}
             native={true}
             zeego={true}
           />

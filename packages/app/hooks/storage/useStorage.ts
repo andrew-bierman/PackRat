@@ -1,17 +1,12 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { Storage, storageEvents } from 'app/utils/storage';
 
+storageEvents.setMaxListeners(20);
+
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
-const useAsyncState = <T>(
-  initialValue: T | null,
-): [[boolean, T | null], (value?: T | null) => void] => {
-  return useReducer(
-    (state: [boolean, T | null], action: T | null): [boolean, T | null] => {
-      return [false, action];
-    },
-    [true, initialValue],
-  );
+const useAsyncState = (initialValue) => {
+  return useReducer((state = null, action) => [false, action], initialValue);
 };
 
 export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
@@ -27,26 +22,26 @@ export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
       }
     })();
 
-    const handleChange = (evt: { key: string; value: string | null }) => {
+    const handleChange = (evt) => {
       if (evt.key !== key) return;
       setState(evt.value);
     };
 
-    const handleRemove = (evt: { key: string }) => {
+    const handleRemove = (evt) => {
       if (evt.key !== key) return;
       setState(null);
     };
 
-    storageEvents.once('change', handleChange);
-    storageEvents.once('remove', handleRemove);
+    storageEvents.on('change', handleChange);
+    storageEvents.on('remove', handleRemove);
 
     return () => {
-      storageEvents.removeListener('change', handleChange);
-      storageEvents.removeListener('remove', handleRemove);
+      storageEvents.off('change', handleChange);
+      storageEvents.off('remove', handleRemove);
     };
   }, [key]);
 
-  // Set value in storage
+  // Set
   const setValue = useCallback(
     (value: string | null) => {
       Storage.setItem(key, value);
