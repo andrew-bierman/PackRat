@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useUpdateUser } from './useUpdateUser';
-import { useAuthUser } from '../../auth/hooks';
+import { useAuthUser, useUserQuery } from '../../auth/hooks';
 import { useUpdateUserPassword } from './useUpdateUserPassword';
 
 const PROFILE_SETTINGS_DEFAULTS = {
@@ -13,7 +13,7 @@ const PROFILE_SETTINGS_DEFAULTS = {
 };
 
 export const useProfileSettings = () => {
-  const user = useAuthUser();
+  const { user, refetch } = useUserQuery();
   const updateUser = useUpdateUser();
   const updateUserPassword = useUpdateUserPassword();
   const [passwords, setPasswords] = useState<any>({
@@ -33,7 +33,7 @@ export const useProfileSettings = () => {
     updateUser({
       userId: id,
       ...data,
-    });
+    }).then(() => refetch());
   };
 
   const handleUpdatePassword = (data) => {
