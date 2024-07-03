@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { TripActivity } from './enums';
 
+const tripActivityValues = Object.values(TripActivity) as [string, ...string[]];
+
 export const addTripForm = z.object({
   name: z.string().nonempty(),
   description: z.string().nonempty(),
@@ -49,7 +51,7 @@ export const addTripDetails = z.object({
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
-  type: z.nativeEnum(TripActivity),
+  type: z.enum(tripActivityValues),
   park: z.string().optional(),
   trail: z.string().optional(),
   geoJSON: z.object({
