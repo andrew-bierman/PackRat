@@ -38,9 +38,9 @@ const loadStyles = (theme: any) => {
       fontSize: 18,
       lineHeight: 28,
       letterSpacing: 1,
-      // fontFamily: "sans-serif",
+      // fontFamily: 'sans-serif',
       color: currentTheme.colors.text,
-      textAlign: 'center',
+      textAlign: 'left',
       marginBottom: 20,
     },
     textDark: {
@@ -49,7 +49,7 @@ const loadStyles = (theme: any) => {
       letterSpacing: 1,
       // fontFamily: "sans-serif",
       color: currentTheme.colors.text,
-      textAlign: 'center',
+      textAlign: 'left',
       marginBottom: 20,
     },
   };

@@ -18,6 +18,11 @@ const useAbout = () => {
     Linking.openURL(discordUrl);
   };
 
+  const handlePrivacyLink = () => {
+    const privacyUrl = 'https://packrat.world/privacy';
+    Linking.openURL(privacyUrl);
+  };
+
   const aboutSections = [
     `Welcome to PackRat, the ultimate adventure planner designed specifically for outdoor enthusiasts who have a passion for exploring the wonders of the natural world. With our comprehensive app, we aim to revolutionize the way you plan and organize your outdoor excursions, be it a thrilling weekend camping trip, an invigorating day hike, or an epic cross-country road trip. Let us be your trusted companion in creating unforgettable adventures and seamless experiences in the great outdoors.`,
 
@@ -39,6 +44,7 @@ const useAbout = () => {
   return {
     handleGithubLink,
     handleDiscordLink,
+    handlePrivacyLink,
     aboutSections,
   };
 };
