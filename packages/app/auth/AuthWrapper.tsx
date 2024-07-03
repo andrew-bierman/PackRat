@@ -7,12 +7,12 @@ import LandingPage from 'app/components/landing_page';
 
 interface AuthWrapperProps {
   children?: React.ReactNode;
-  unauthorizedElement: React.ReactNode;
+  unauthorizedElement?: React.ReactNode;
 }
 
 export const AuthWrapper = ({
   children,
-  unauthorizedElement,
+  unauthorizedElement = <Redirect to="/login" />,
 }: AuthWrapperProps) => {
   return (
     <AuthLoader

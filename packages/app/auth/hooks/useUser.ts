@@ -11,7 +11,11 @@ export const useUserQuery = () => {
   const { token, isLoading: isTokenLoading } = useAuthUserToken();
   const isRequestEnabled = !!token && !isTokenLoading;
 
-  const { data, isLoading: isRequestLoading } = queryTrpc.getMe.useQuery(null, {
+  const {
+    refetch,
+    data,
+    isLoading: isRequestLoading,
+  } = queryTrpc.getMe.useQuery(null, {
     enabled: isRequestEnabled,
   });
 
@@ -20,11 +24,11 @@ export const useUserQuery = () => {
   // TODO fix loading state
   const isLoading = (isRequestEnabled && isRequestLoading) || isTokenLoading;
 
-  return { user: data, isLoading };
+  return { user: data, isLoading, refetch };
 };
 
 export const useAuthUser = () => {
-  const { user } = useUserQuery();
+  const { user, isLoading, refetch } = useUserQuery();
 
   return user;
 };

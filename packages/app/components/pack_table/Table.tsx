@@ -62,7 +62,7 @@ export const TableContainer = ({
   if (error) return <ErrorMessage message={String(error)} />;
 
   return (
-    <View style={[styles.container ]}>
+    <View style={[styles.container]}>
       {data?.length ? (
         <>
           <BasicTable

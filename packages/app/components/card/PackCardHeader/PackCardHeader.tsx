@@ -8,11 +8,6 @@ import {
   RIconButton,
   EditableText,
   DropdownComponent,
-  ThreeDotsMenu,
-  YStack,
-  RButton,
-  RContextMenu,
-  
 } from '@packrat/ui';
 import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
@@ -109,30 +104,32 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
           </RStack>
         }
         actionsComponent={
-          user?.id === data.owner_id &&
-          (Platform.OS === 'web' ? (
-            <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
-              <YStack space="$1">
-                <RButton onPress={handleEdit}>Edit</RButton>
-                <RButton onPress={handleSavePack}>Save</RButton>
-                <RButton onPress={handleDelete}>Delete</RButton>
-              </YStack>
-            </ThreeDotsMenu>
-          ) : (
-            <RContextMenu
-              menuItems={menuItems}
-              menuName={
-                <RIconButton
-                  backgroundColor="transparent"
-                  icon={<MaterialIcons name="more-horiz" size={18} />}
-                  style={{ padding: 0 }}
-                />
-              }
-              width="100%"
-              native={true}
-              zeego={true}
-            />
-          ))
+          user?.id === data.owner_id && (
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                flexDirection: 'row',
+                width: '15%',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <DropdownComponent
+                value={null}
+                data={optionValues}
+                onValueChange={(value) => handleActionsOpenChange(value)}
+                placeholder={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={<MaterialIcons name="more-horiz" size={18} />}
+                    style={{ padding: 0 }}
+                  />
+                }
+                width="100%"
+                native={true}
+                zeego={true}
+              />
+            </View>
+          )
         }
       />
     </>

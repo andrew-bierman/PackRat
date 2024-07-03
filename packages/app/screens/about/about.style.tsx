@@ -33,7 +33,6 @@ const loadStyles = (theme: any) => {
     },
 
     buttonContainer: {
-      flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       width: '100%',

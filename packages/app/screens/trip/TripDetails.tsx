@@ -129,7 +129,6 @@ export function TripDetails() {
                               <RStack>
                                 <Text style={styles.descriptionText}>
                                   Start Date:{data.start_date}
-                                  
                                 </Text>
                               </RStack>
                             )}
@@ -137,7 +136,6 @@ export function TripDetails() {
                               <RStack>
                                 <Text style={styles.descriptionText}>
                                   End Date:{data.end_date}
-                                  
                                 </Text>
                               </RStack>
                             )}

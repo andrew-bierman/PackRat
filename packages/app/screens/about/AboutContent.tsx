@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { RButton, RStack } from '@packrat/ui';
+import { RButton, RStack, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useAbout from 'app/hooks/about/useAbout';
@@ -19,7 +19,12 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
 
   const styles = useCustomStyles(loadStyles);
 
-  const { handleGithubLink, handleDiscordLink, aboutSections } = useAbout();
+  const {
+    handleGithubLink,
+    handleDiscordLink,
+    handlePrivacyLink,
+    aboutSections,
+  } = useAbout();
 
   return (
     <Layout>
@@ -51,6 +56,9 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
               </Text>
             </RStack>
           </RButton>
+          <RText onPress={handlePrivacyLink}>
+            <Text>Privacy Policy</Text>
+          </RText>
           {/* <Button
               style={styles.discordButton}
               // onPress={handleDiscordLink}

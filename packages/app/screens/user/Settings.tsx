@@ -1,11 +1,9 @@
 import React from 'react';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
-  RInput,
   RSeparator,
   RText,
   RStack,
-  RButton,
   RH5,
   RH2,
   RScrollView,
@@ -20,7 +18,6 @@ import {
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
-import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import {
   userSettingsSchema,
@@ -42,12 +39,10 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
 }));
 
 export default function Settings() {
-  const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
-    useProfileSettings();
+  const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
 
-  const { isDark, currentTheme } = useTheme();
-  const router = useRouter();
+  const { isDark } = useTheme();
   const navigate = useNavigate();
 
   return user ? (

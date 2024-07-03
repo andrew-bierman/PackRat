@@ -5,7 +5,7 @@ const loadStyles = (theme) => {
 
   return {
     container: {
-      flex: isWeb? 1: 0,
+      flex: isWeb ? 1 : 0,
       padding: 10,
       width: '100%',
     },

@@ -27,69 +27,74 @@ const DateRangePicker = ({
 }: RangePickerProps) => {
   const [range, setRange] = useState<[RangeDate?, RangeDate?]>(() => {
     if (!Array.isArray(selectedDates)) {
-      return []
+      return [];
     }
 
-    return selectedDates.map((date) => moment(date)) as [RangeDate, RangeDate]
-  })
+    return selectedDates.map((date) => moment(date)) as [RangeDate, RangeDate];
+  });
 
   const onDayPress = (day) => {
-    const selectedDay = moment(day.dateString, 'YYYY-MM-DD')
-    if(range.length < 1 || selectedDay.isSame(range[0], 'day')) {
-      return setRange([selectedDay])
+    const selectedDay = moment(day.dateString, 'YYYY-MM-DD');
+    if (range.length < 1 || selectedDay.isSame(range[0], 'day')) {
+      return setRange([selectedDay]);
     }
-    const newRange = moment.range(range[0], selectedDay)
-    let rangeResult = [moment(newRange.start), moment(newRange.end)]
-    if(rangeResult[0].isAfter(rangeResult[1])) {
-      rangeResult = [rangeResult[1], rangeResult[0]]
+    const newRange = moment.range(range[0], selectedDay);
+    let rangeResult = [moment(newRange.start), moment(newRange.end)];
+    if (rangeResult[0].isAfter(rangeResult[1])) {
+      rangeResult = [rangeResult[1], rangeResult[0]];
     }
 
-    setRange(rangeResult)
-    onDatesChange([range[0]?.toDate(), range[1]?.toDate()])
-    setOpen(false)
+    setRange(rangeResult);
+    onDatesChange([range[0]?.toDate(), range[1]?.toDate()]);
+    setOpen(false);
   };
 
   const markedDates = useMemo(() => {
-    const result = {}
+    const result = {};
     const period = {
       color: '#000000',
       textColor: '#ffffff',
       startingDay: false,
       endingDay: false,
-    }
+    };
     const [start, end] = range;
 
-    if(start) {
-      const dateString = moment(start).format('YYYY-MM-DD')
-      result[dateString] =  {...period, startingDay: true}
+    if (start) {
+      const dateString = moment(start).format('YYYY-MM-DD');
+      result[dateString] = { ...period, startingDay: true };
     }
 
-    if(end) {
-      const dateString = moment(end).format('YYYY-MM-DD')
+    if (end) {
+      const dateString = moment(end).format('YYYY-MM-DD');
       result[dateString] = {
-        ...period, 
+        ...period,
         endingDay: true,
-      }
+      };
 
-        // Mark all dates between start and end
-        const dates = Array.from(moment.range(start, end).by('day'));
-        dates.forEach((date) => {
-          const dateString = date.format('YYYY-MM-DD');
-          if (dateString !== moment(start).format('YYYY-MM-DD') && dateString !== moment(end).format('YYYY-MM-DD')) {
-            result[dateString] = period;
-          }
-        });
+      // Mark all dates between start and end
+      const dates = Array.from(moment.range(start, end).by('day'));
+      dates.forEach((date) => {
+        const dateString = date.format('YYYY-MM-DD');
+        if (
+          dateString !== moment(start).format('YYYY-MM-DD') &&
+          dateString !== moment(end).format('YYYY-MM-DD')
+        ) {
+          result[dateString] = period;
+        }
+      });
     }
 
-    return result
-  }, [range])
-
+    return result;
+  }, [range]);
 
   return (
-    <>    
-      <Modal visible={open} onRequestClose={() => {
-        setOpen(false)
-      }}>
+    <>
+      <Modal
+        visible={open}
+        onRequestClose={() => {
+          setOpen(false);
+        }}
+      >
         <View>
           <Calendar
             markingType={'period'}
@@ -97,21 +102,26 @@ const DateRangePicker = ({
             markedDates={markedDates}
             onDayPress={onDayPress}
           />
-          <RButton onPress={() => setOpen(false)} style={{marginHorizontal: 12, marginTop: 12}} >Close</RButton>
+          <RButton
+            onPress={() => setOpen(false)}
+            style={{ marginHorizontal: 12, marginTop: 12 }}
+          >
+            Close
+          </RButton>
         </View>
       </Modal>
       <DatePickerInput
-          value={`${range[0]?.format('YYYY-MM-DD') || ''}${
-            range[0] && range[1] ? ' - ' : ''
-          }${range[1]?.format('YYYY-MM-DD') || ''}`}
-          placeholder="Start date - End date"
-          onReset={() => {
-            setRange([]);
-          }}
-          onPressIn={() => setOpen(true)}
-          onButtonPress={() => setOpen(true)}
-          size='$3'
-        />
+        value={`${range[0]?.format('YYYY-MM-DD') || ''}${
+          range[0] && range[1] ? ' - ' : ''
+        }${range[1]?.format('YYYY-MM-DD') || ''}`}
+        placeholder="Start date - End date"
+        onReset={() => {
+          setRange([]);
+        }}
+        onPressIn={() => setOpen(true)}
+        onButtonPress={() => setOpen(true)}
+        size="$3"
+      />
     </>
   );
 };

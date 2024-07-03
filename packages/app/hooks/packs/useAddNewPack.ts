@@ -61,7 +61,6 @@ export const useAddNewPack = (): UseAddNewPackResult  => {
     { value: 'No', label: 'No' },
   ];
 
-
   const isPublicOption = packSelectOptions[0];
   if (!isPublicOption) {
     throw new Error('No select options available.');

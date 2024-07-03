@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 
-
 const Layout = ({ children }) => {
   return (
     <View
@@ -8,9 +7,9 @@ const Layout = ({ children }) => {
         display: 'flex',
         justifyContent: 'center',
         marginTop: 20,
-        alignItems:'center',
+        alignItems: 'center',
         backgroundColor: 'transparent',
-        width:'100%',
+        width: '100%',
       }}
     >
       {children}

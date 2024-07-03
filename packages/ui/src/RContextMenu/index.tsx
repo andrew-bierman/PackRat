@@ -51,17 +51,16 @@ const ContextMenu = {
   ),
 };
 
-const RContextMenu = ({menuItems = [], menuName}: {menuItems: MenuItems[], menuName: React.ReactNode}) => {
+const RContextMenu = ({ menuItems = [], menuName }) => {
   return (
     <ContextMenu.Root>
       <ContextMenu.Trigger>
         <RButton>{menuName}</RButton>
       </ContextMenu.Trigger>
       <ContextMenu.Content>
-        {menuItems.map(({label, onSelect=()=> {}}) => (
-          <ContextMenu.Item key={label} onSelect={onSelect} >
-        <ContextMenu.ItemTitle>{label}</ContextMenu.ItemTitle>
-
+        {menuItems.map(({ label, onSelect = () => {} }) => (
+          <ContextMenu.Item key={label} onSelect={onSelect}>
+            <ContextMenu.ItemTitle>{label}</ContextMenu.ItemTitle>
           </ContextMenu.Item>
         ))}
       </ContextMenu.Content>

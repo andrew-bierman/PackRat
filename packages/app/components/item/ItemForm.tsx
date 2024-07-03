@@ -21,7 +21,6 @@ const FormRadioGroup: any = OriginalFormRadioGroup;
 
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 
-
 interface ItemFormProps {
   handleSubmit: (data: Item) => void;
   showSubmitButton?: boolean;
@@ -59,18 +58,16 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-    const [selectedUnit, setSelectedUnit] = useState('lb')
-
+  const [selectedUnit, setSelectedUnit] = useState('lb');
 
   const radioOptions = Object.values(ItemCategoryEnum)
     .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
     .map((radioOption) => ({ label: radioOption, value: radioOption }));
 
-  const  handleUnitChange = (i) => {
-    console.log(i)
-    setSelectedUnit(i)
-  }
-
+  const handleUnitChange = (i) => {
+    console.log(i);
+    setSelectedUnit(i);
+  };
 
   return (
     <View>
@@ -96,25 +93,25 @@ export const ItemForm = ({
             <View>
               <FormInput name="weight" placeholder="Weight" isDecimal={true} />
             </View>
-            {data && (
-              Platform.OS === 'web' ? (
+            {data &&
+              (Platform.OS === 'web' ? (
                 <FormSelect
-                options={data}
-                name="unit"
-                placeholder={'Unit'}
-                width="100"
-              />
+                  options={data}
+                  name="unit"
+                  placeholder={'Unit'}
+                  width="100"
+                />
               ) : (
-             <DropdownComponent
-             value={selectedUnit}
-             data={data}
-             onValueChange={handleUnitChange}
-             placeholder={selectedUnit}
-             width="50%"
-             native={true}
-             zeego={true}
-           />)
-            )}
+                <DropdownComponent
+                  value={selectedUnit}
+                  data={data}
+                  onValueChange={handleUnitChange}
+                  placeholder={selectedUnit}
+                  width="50%"
+                  native={true}
+                  zeego={true}
+                />
+              ))}
           </View>
           <FormInput
             name="quantity"

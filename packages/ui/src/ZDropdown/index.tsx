@@ -17,11 +17,11 @@ const DropdownMenu = {
           padding: 10,
           borderRadius: 8,
           gap: 10,
-          boxShadow: '0px 0px 16px -8px #484848',
+          // boxShadow: '0px 0px 16px -8px #484848',
         }}
       />
     ),
-    'Content'
+    'Content',
   ),
   Item: ZeegoDropdownMenu.create(
     (props: ItemProps) => (
@@ -38,7 +38,7 @@ const DropdownMenu = {
         }}
       />
     ),
-    'Item'
+    'Item',
   ),
 };
 

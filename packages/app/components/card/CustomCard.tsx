@@ -49,7 +49,7 @@ export const CustomCard = ({
         isWeb && {
           borderRadius: 10,
           padding: isWeb ? '15 25' : 0,
-          width:'80%'
+          width: '80%',
         },
       ]}
     >

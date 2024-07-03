@@ -1,5 +1,8 @@
 import { Modal, Text, View, Image, Dimensions } from 'react-native';
-import Mapbox, { offlineManager } from '@rnmapbox/maps';
+import Mapbox, {
+  offlineManager,
+  OfflineCreatePackOptions,
+} from '@rnmapbox/maps';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
@@ -44,9 +47,7 @@ export default function DownloadedMaps() {
     useTheme();
   const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState<Pack | null>(null);
-    const [zoomLevel, setZoomLevel] = useState<number | null>(null);
-
+  const [pack, setPack] = useState<OfflineCreatePackOptions | null>(null);
 
   let shape, zoomLevel;
   if (pack != null) {

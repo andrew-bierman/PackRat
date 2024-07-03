@@ -216,7 +216,7 @@ const loadStyles = (theme) => {
       paddingBottom: 12,
       paddingLeft: 16,
       width: '100%',
-      marginBottom:40,
+      marginBottom: 40,
       backgroundColor: currentTheme.colors.background,
     },
     headerContainer: {
