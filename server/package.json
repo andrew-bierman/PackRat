@@ -29,7 +29,8 @@
     "seed:local": "wrangler d1 execute production --local --file=./seed/seed.sql",
     "studio": "drizzle-kit studio",
     "setup:local": "yarn generate && yarn migrate:local && yarn seed:local",
-    "deploy": "wrangler deploy --minify src/index.ts",
+    "deploy": "wrangler deploy src/index.ts",
+    "deploy:minify": "wrangler deploy --minify src/index.ts",
     "postinstall": "yarn generate",
     "clean": "rm -rf node_modules"
   },

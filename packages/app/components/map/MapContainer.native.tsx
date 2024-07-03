@@ -4,7 +4,7 @@ import { View, Platform } from 'react-native';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import { defaultShape } from '../../utils/mapFunctions';
 import useTheme from '../../hooks/useTheme';
-import NativeMap from './NativeMap';
+import NativeMap from './Map';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 export function MapContainer({ shape }) {

@@ -96,7 +96,7 @@ export default function UserDataContainer({
       <LargeCard
         customStyle={{
           backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
-          padding:10
+          padding: 10,
         }}
       >
         <RStack
@@ -139,7 +139,7 @@ export default function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    padding:10
+                    padding: 10,
                     // paddingHorizontal: 1,
                     // paddingVertical: 3,
                     // justifyContent: 'center',

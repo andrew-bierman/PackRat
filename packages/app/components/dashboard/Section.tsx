@@ -4,7 +4,6 @@ import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity } from 'react-native';
 
-
 interface SectionProps {
   children: React.ReactNode;
   onPress?: (event: GestureResponderEvent) => void;
@@ -12,11 +11,11 @@ interface SectionProps {
 const Section: React.FC<SectionProps> = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);
   return (
-      <View style={styles.section} >
+    <View style={styles.section}>
       <RCard style={{ borderRadius: 8 }}>
         <RCard.Header style={styles.card}>{children}</RCard.Header>
       </RCard>
-      </View>
+    </View>
   );
 };
 
@@ -32,7 +31,6 @@ const loadStyles = (theme: any) => {
       width: '100%',
       borderRadius: 8,
       backgroundColor: currentTheme.colors.secondaryBlue,
-
     },
   };
 };
