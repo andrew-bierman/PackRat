@@ -14,6 +14,7 @@ import {
   RStack,
   RText,
 } from '@packrat/ui';
+import useResponsive from 'app/hooks/useResponsive';
 
 export default function Items() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -31,6 +32,7 @@ export default function Items() {
     { label: 'Food', value: 'Food' },
     { label: 'Water', value: 'Water' },
     { label: 'Essentials', value: 'Essentials' },
+    { label: 'All items', value: 'All items' },
   ];
 
   const sortItemsByCategory = (items, selectedCategory) => {
@@ -76,7 +78,7 @@ export default function Items() {
               data={optionValues}
               onValueChange={handleSort}
               placeholder={value}
-              width="50%"
+              width="80%"
               native={true}
               zeego={true}
             />
@@ -105,6 +107,7 @@ export default function Items() {
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const { xxs, xs } = useResponsive();
 
   return {
     mainContainer: {
@@ -129,7 +132,7 @@ const loadStyles = (theme) => {
       borderRadius: 10,
     },
     sortContainer: {
-      width: 150,
+      width: xxs ? '50%' : xs ? '50%' : '20%',
       justifyContent: 'space-between',
       flexDirection: 'row',
       alignItems: 'center',
