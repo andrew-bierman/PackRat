@@ -8,7 +8,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     cardStyles: {
       height: 100,
-      width:'100%',
+      width: '100%',
       backgroundColor: appTheme.colors.primary,
       borderRadius: 5,
       padding: 20,

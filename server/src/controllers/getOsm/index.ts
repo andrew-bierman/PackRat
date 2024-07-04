@@ -4,7 +4,7 @@ export * from './postSingleGeoJSON';
 export * from './postCollectionGeoJSON';
 export * from './updateDatabaseWithGeoJSONDataFromOverpass';
 export * from './getPhotonResults';
-export * from './getEnhancedPhotonDetails';
+// export * from './getEnhancedPhotonDetails';
 export * from './getParksOSM';
 export * from './getPhotonDetails';
 export * from './getNominatimDetails';

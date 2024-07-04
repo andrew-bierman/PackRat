@@ -21,6 +21,7 @@ const TripsIndexLazyImport = createFileRoute('/trips/')()
 const SignInIndexLazyImport = createFileRoute('/sign-in/')()
 const RegisterIndexLazyImport = createFileRoute('/register/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const PrivacyIndexLazyImport = createFileRoute('/privacy/')()
 const PasswordResetIndexLazyImport = createFileRoute('/password-reset/')()
 const PacksIndexLazyImport = createFileRoute('/packs/')()
 const MapsIndexLazyImport = createFileRoute('/maps/')()
@@ -66,6 +67,11 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const PrivacyIndexLazyRoute = PrivacyIndexLazyImport.update({
+  path: '/privacy/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/privacy/index.lazy').then((d) => d.Route))
 
 const PasswordResetIndexLazyRoute = PasswordResetIndexLazyImport.update({
   path: '/password-reset/',
@@ -225,6 +231,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PasswordResetIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/privacy/': {
+      preLoaderRoute: typeof PrivacyIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/': {
       preLoaderRoute: typeof ProfileIndexLazyImport
       parentRoute: typeof rootRoute
@@ -267,6 +277,7 @@ export const routeTree = rootRoute.addChildren([
   MapsIndexLazyRoute,
   PacksIndexLazyRoute,
   PasswordResetIndexLazyRoute,
+  PrivacyIndexLazyRoute,
   ProfileIndexLazyRoute,
   RegisterIndexLazyRoute,
   SignInIndexLazyRoute,

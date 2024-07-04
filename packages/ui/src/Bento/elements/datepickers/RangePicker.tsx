@@ -212,10 +212,10 @@ function Calendar({
                         disabled={!d.inCurrentMonth}
                         {...(d.range === 'in-range' || d.selected
                           ? {
-                            hoverStyle: {
-                              backgroundColor: 'transparent',
-                            },
-                          }
+                              hoverStyle: {
+                                backgroundColor: 'transparent',
+                              },
+                            }
                           : {})}
                       >
                         <Button.Text
@@ -311,14 +311,12 @@ export function RangePicker({
   //   const Y = now.getFullYear()
   //   const D = now.getDate()
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
-          value={`${selectedDates[0]?.toDateString() || ''}${selectedDates[0] && selectedDates[1] ? ' - ' : ''
-            }${selectedDates[1]?.toDateString() || ''}`}
+          value={`${selectedDates[0]?.toDateString() || ''}${
+            selectedDates[0] && selectedDates[1] ? ' - ' : ''
+          }${selectedDates[1]?.toDateString() || ''}`}
           placeholder="Start date - End date"
           onReset={() => {
             onDatesChange([]);
@@ -330,21 +328,23 @@ export function RangePicker({
 
       <DatePicker.Content>
         <DatePicker.Content.Arrow />
-        <DatePickerProvider config={{
-          selectedDates,
-          onDatesChange,
-          offsetDate,
-          onOffsetChange,
-          dates: {
-            mode: 'range',
-            // limit years to 2 years before and after current year
-            //   minDate: new Date(Y, M - 2, 1),
-            //   maxDate: new Date(Y, M + 2, 0),
-          },
-          calendar: {
-            offsets: [-1, 1],
-          },
-        }}>
+        <DatePickerProvider
+          config={{
+            selectedDates,
+            onDatesChange,
+            offsetDate,
+            onOffsetChange,
+            dates: {
+              mode: 'range',
+              // limit years to 2 years before and after current year
+              //   minDate: new Date(Y, M - 2, 1),
+              //   maxDate: new Date(Y, M + 2, 0),
+            },
+            calendar: {
+              offsets: [-1, 1],
+            },
+          }}
+        >
           <DatePickerBody />
         </DatePickerProvider>
       </DatePicker.Content>

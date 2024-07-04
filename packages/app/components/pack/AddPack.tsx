@@ -21,10 +21,10 @@ const FormSelect: any = OriginalFormSelect;
 
 export const AddPack = ({
   isCreatingTrip = false,
-  onSuccess,
+  onSuccess = () => {},
 }: {
-  isCreatingTrip: boolean;
-  onSuccess: any;
+  isCreatingTrip?: boolean;
+  onSuccess?: any;
 }) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

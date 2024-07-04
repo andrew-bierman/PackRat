@@ -14,15 +14,31 @@ const YStack: any = OriginalYStack;
 const Select: any = OriginalSelect;
 
 export default function RSelect(props) {
-  const { textKey = 'label', valueKey = 'value', zeego = false, native = false, ...otherProps } = props;
+  const {
+    textKey = 'label',
+    valueKey = 'value',
+    zeego = false,
+    native = false,
+    ...otherProps
+  } = props;
 
   return (
-    <SelectItem zeego={zeego} native={native} textKey={textKey} valueKey={valueKey} {...otherProps} />
+    <SelectItem
+      zeego={zeego}
+      native={native}
+      textKey={textKey}
+      valueKey={valueKey}
+      {...otherProps}
+    />
   );
 }
 
 const extractOptionAttributes = (item, index, textKey, valueKey) => {
-  if (typeof item === 'string' || typeof item === 'number' || typeof item === 'boolean') {
+  if (
+    typeof item === 'string' ||
+    typeof item === 'number' ||
+    typeof item === 'boolean'
+  ) {
     return { text: item.toString(), value: item.toString(), index };
   }
 
@@ -59,7 +75,9 @@ export function SelectItem(props) {
   const options = useMemo(() => {
     if (!Array.isArray(data)) return [];
     return data
-      .map((item, index) => extractOptionAttributes(item, index, textKey, valueKey))
+      .map((item, index) =>
+        extractOptionAttributes(item, index, textKey, valueKey),
+      )
       .map(({ text, value, index }) => (
         <Select.Item key={`${text} + ${value}`} index={index} value={value}>
           <Select.ItemText>

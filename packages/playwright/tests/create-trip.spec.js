@@ -15,6 +15,7 @@ test('test', async ({ page }) => {
   await page.getByPlaceholder('Start date - End date').click();
   await page.getByRole('button', { name: '17' }).nth(1).click();
   await page.getByRole('button', { name: '20' }).nth(1).click();
-  await page.goto('https://packrat.pages.dev/trip/create?id=lxupicy18yl1woljm4ll24l4');
-
+  await page.goto(
+    'https://packrat.pages.dev/trip/create?id=lxupicy18yl1woljm4ll24l4',
+  );
 });

@@ -80,7 +80,7 @@ export function LmSelect({
           </Select.ItemIndicator>
         </Select.Item>
       )),
-    [options]
+    [options],
   );
 
   return (

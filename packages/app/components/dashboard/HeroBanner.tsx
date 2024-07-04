@@ -73,7 +73,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       ? `Let's find a new trail, ${firstNameOrUser}`
       : "Let's find a new trail";
 
-
   return (
     <View style={styles.banner}>
       <Hero

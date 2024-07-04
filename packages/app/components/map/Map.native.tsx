@@ -37,13 +37,36 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 
+interface GeoJsonProperties {
+  name?: string;
+}
+
+interface Geometry {
+  type: string;
+  coordinates: any;
+}
+
+interface Feature {
+  type: 'Feature';
+  properties?: GeoJsonProperties;
+  geometry: Geometry;
+}
+
+interface Shape {
+  features: Feature[];
+}
+
+interface NativeMapProps {
+  shape: Shape;
+}
+
 const RButton: any = OriginalRButton;
 const RInput: any = OriginalRInput;
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-function NativeMap({ shape: shapeProp }) {
+const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
   const styles = useCustomStyles(loadStyles);
   const {
     camera,
@@ -81,7 +104,7 @@ function NativeMap({ shape: shapeProp }) {
         const parsedGpx = new DOMParser().parseFromString(gpxString);
         const geojson = toGeoJSON(parsedGpx);
         validateShape(geojson);
-        setShape(geojson);
+        setShape(geojson as Shape);
       }
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -202,7 +225,7 @@ function NativeMap({ shape: shapeProp }) {
             <Mapbox.ShapeSource
               id="source1"
               lineMetrics={true}
-              shape={shape.features[0]}
+              shape={shape.features[0] as GeoJSON.Feature<GeoJSON.Geometry>}
               cluster
               clusterRadius={80}
               clusterMaxZoomLevel={14}
@@ -232,7 +255,10 @@ function NativeMap({ shape: shapeProp }) {
             )}
           </>
         ) : (
-          <Mapbox.ShapeSource id={'some-feature'} shape={shape.features[0]}>
+          <Mapbox.ShapeSource
+            id={'some-feature'}
+            shape={shape.features[0] as GeoJSON.Feature<GeoJSON.Geometry>}
+          >
             <Mapbox.LineLayer
               sourceID="some-feature"
               id="some-feature-line"
@@ -356,7 +382,7 @@ function NativeMap({ shape: shapeProp }) {
       )}
     </SafeAreaView>
   );
-}
+};
 
 const loadStyles = () => ({
   page: {
