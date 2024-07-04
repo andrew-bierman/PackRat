@@ -198,6 +198,17 @@ export default function ProfileContainer({ id = null }) {
     error,
   } = useProfile(id);
 
+  useEffect(() => {
+    console.log('ProfileContainer rendered');
+    console.log({
+      isLoading,
+      error,
+      user,
+      favoritesList,
+      packsList,
+      tripsList,
+    });
+  }, [isLoading, error, user, favoritesList, packsList, tripsList]);
   return (
     <View>
       <ScrollView>
@@ -250,22 +261,22 @@ export default function ProfileContainer({ id = null }) {
               )}
             </View>
             {packsList.length > 0 && (
-              // <View style={styles.userDataContainer}>
-              <UserDataContainer
-                data={packsList}
-                type="packs"
-                userId={user?.id}
-              />
-              // </View>
+              <View style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={packsList}
+                  type="packs"
+                  userId={user?.id}
+                />
+              </View>
             )}
             {tripsList.length > 0 && (
-              // <View style={styles.userDataContainer}>
-              <UserDataContainer
-                data={tripsList}
-                type="trips"
-                userId={user?.id}
-              />
-              // </View>
+              <View style={styles.userDataContainer}>
+                <UserDataContainer
+                  data={tripsList}
+                  type="trips"
+                  userId={user?.id}
+                />
+              </View>
             )}
           </View>
         </RStack>

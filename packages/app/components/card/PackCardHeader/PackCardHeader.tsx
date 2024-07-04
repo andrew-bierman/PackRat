@@ -115,7 +115,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
             >
               <DropdownComponent
                 value={null}
-                data={optionValues}
+                data={menuItems}
                 onValueChange={(value) => handleActionsOpenChange(value)}
                 placeholder={
                   <RIconButton

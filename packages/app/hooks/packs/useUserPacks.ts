@@ -20,11 +20,7 @@ export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
     {
       ownerId: ownerId || '',
       queryBy: queryString,
-    },
-    (oldData) => {
-      // This was added to fix typescript error and passing oldData to determine new data
-      return data;
-    },
+    }
   );
 
   // Extract packs or set an empty array if data is undefined.
