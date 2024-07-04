@@ -8,8 +8,8 @@ const useSearchInput = ({ onSelect, onChange, searchString }) => {
 
   const handleSearchResultClick = (result) => {
     if (onSelect) {
-      const newSearchValue = onSelect(result);
-      onChange(newSearchValue);
+      onSelect(result);
+      onChange('');
       setIsVisible(false);
     }
   };
