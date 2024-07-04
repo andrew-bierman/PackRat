@@ -68,6 +68,7 @@ export const ItemsTable = ({
     return filteredItem;
   });
 
+
   return (
     <Layout>
       <ScrollView>

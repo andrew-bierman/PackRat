@@ -12,19 +12,16 @@ import {
 import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
-import { useEditPack } from 'app/hooks/packs/useEditPack';
-import { Dimensions, Platform } from 'react-native';
-import { CopyPackModal } from '../../pack/CopyPackModal';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
-interface MenuItems {
-  label: string;
-  onSelect: () => void;
-}
 interface PackCardHeaderProps {
   data: any;
   title: string;
   link?: string;
+}
+interface optionValues{
+  label: string;
+  value: string
 }
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
@@ -43,29 +40,16 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark } = useTheme();
   const router = useRouter();
 
-  const handleDelete = () => {
-    handleDeletePack();
-    setIsOpen(false);
-  };
-  const handleSavePack = () => {
-    const packDetails = {
-      id: data.id,
-      name: data.name,
-      is_public: data.is_public,
-    };
-    setIsOpen(false);
-    editPack(packDetails);
-  };
-
-  const menuItems: MenuItems[] = [
-    { label: 'Edit', onSelect: handleEdit },
-    { label: 'Save', onSelect: handleSavePack },
-    { label: 'Delete', onSelect: handleDelete },
+  const optionValues: optionValues[] = [
+    { label: 'Edit', value: 'Edit' },
+    { label: 'Save', value: 'Save' },
+    { label: 'Delete', value: 'Delete' },
   ];
 
   return (
     <>
       <CustomCardHeader
+        link={''}
         data={data}
         title={
           <RStack
@@ -115,7 +99,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
             >
               <DropdownComponent
                 value={null}
-                data={menuItems}
+                data={optionValues}
                 onValueChange={(value) => handleActionsOpenChange(value)}
                 placeholder={
                   <RIconButton

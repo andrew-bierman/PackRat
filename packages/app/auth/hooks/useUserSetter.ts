@@ -6,7 +6,7 @@ export const useUserSetter = () => {
   const utils = queryTrpc.useUtils();
 
   const setUser = useCallback(
-    (data: User | null) => utils.getMe.setData(null, data),
+    (data: User | null) => utils.getMe.setData(undefined, data),
     [utils],
   );
 

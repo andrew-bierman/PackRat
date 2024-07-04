@@ -10,12 +10,13 @@ import { CopyPackModal } from 'app/components/pack/CopyPackModal';
 
 interface CustomCardHeaderProps {
   data: {
-    owner_id: string | { id: string };
+    owner_id: string;
     owners?: Array<{ name: string }>;
+    type: string;
   };
   title: string | JSX.Element;
   link?: string;
-  actionsComponent: JSX.Element;
+  actionsComponent: boolean | JSX.Element | undefined;
 }
 
 const RText: any = OriginalRText;
@@ -25,10 +26,12 @@ export const CustomCardHeader = ({
   link,
   actionsComponent,
 }: CustomCardHeaderProps) => {
-  const { isCopied, handleCopyLink } = useCopyClipboard(link);
+  const { isCopied, handleCopyLink } = useCopyClipboard({ link });
   const user = useAuthUser();
   const { isDark } = useTheme();
   const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
+
+  console.log("dataaaaaaaaaaaaa", data.owners)
 
   return (
     <>
@@ -37,15 +40,15 @@ export const CustomCardHeader = ({
       </RStack>
       <View>
         <RLink
-          href={`/profile/${data?.owner_id?.id || data?.owner_id}`}
+          href={`/profile/${data?.owner_id}`}
           style={{ textDecoration: 'none' }}
         >
           <RText>
             {user?.id === data.owner_id
               ? 'Your Profile'
               : `View ${
-                  data.owners && data.owners.length
-                    ? data.owners[0].name
+                  data.owners && data.owners?.length
+                    ? data.owners[0]?.name
                     : 'Profile'
                 }`}
           </RText>
