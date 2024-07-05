@@ -3,6 +3,8 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
+import { securityHeaders } from './middleware/securityHeaders';
+import { enforceHttps } from './middleware/enforceHttps';
 // import { logger } from 'hono/logger';
 // import { compress } from 'hono/compress';
 import router from './routes';
@@ -26,6 +28,12 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  Note: On Cloudflare Workers, the response body will be compressed automatically, so there is no need to use this middleware.
 //  Bun: This middleware uses CompressionStream which is not yet supported in bun.
 //  ref: https://hono.dev/middleware/builtin/compress
+
+// SETUP HTTPS Enforcement Middleware
+app.use('*', enforceHttps());
+
+// SETUP SECURITY HEADERS
+app.use('*', securityHeaders()); // Apply to all routes
 
 // SETUP CORS
 app.use('*', async (c, next) => {
