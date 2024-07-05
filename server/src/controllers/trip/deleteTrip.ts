@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { Trip } from '../../drizzle/methods/trip';
 
@@ -23,10 +23,12 @@ import { Trip } from '../../drizzle/methods/trip';
 // };
 
 export function deleteTripRoute() {
-  return publicProcedure.input(validator.deleteTrip).mutation(async (opts) => {
-    const { tripId } = opts.input;
-    const tripClass = new Trip();
-    await tripClass.delete(tripId);
-    return 'trip was deleted successfully';
-  });
+  return protectedProcedure
+    .input(validator.deleteTrip)
+    .mutation(async (opts) => {
+      const { tripId } = opts.input;
+      const tripClass = new Trip();
+      await tripClass.delete(tripId);
+      return 'trip was deleted successfully';
+    });
 }

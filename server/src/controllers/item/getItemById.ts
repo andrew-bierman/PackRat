@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
 
@@ -23,7 +23,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function getItemByIdRoute() {
-  return publicProcedure.input(validator.getItemById).query(async (opts) => {
+  return protectedProcedure.input(validator.getItemById).query(async (opts) => {
     const { id } = opts.input;
     const item = await getItemByIdService(id);
     return item;

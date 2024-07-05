@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 
 // import { prisma } from '../../prisma';
@@ -18,7 +18,7 @@ import { getUserFavoritesService } from '../../services/favorite/favorite.servic
 // };
 
 export function getUserFavoritesRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;

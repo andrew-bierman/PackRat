@@ -4,7 +4,7 @@ import {
   InvalidRequestParamsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 // import * as validators from '@packrat/validations';
 import * as validator from '@packrat/validations';
@@ -32,7 +32,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function getParksOSMRoute() {
-  return publicProcedure.input(validator.getParksOSM).query(async (opts) => {
+  return protectedProcedure.input(validator.getParksOSM).query(async (opts) => {
     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = opts.input;
     const { env }: any = opts.ctx;
     return await getParksOSMService(lat, lon, radius, env.OSM_URI);

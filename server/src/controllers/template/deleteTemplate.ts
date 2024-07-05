@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 import { z } from 'zod';
 import { Template } from '../../drizzle/methods/template';
@@ -33,7 +33,7 @@ import { Template } from '../../drizzle/methods/template';
 
 export function deleteTemplateRoute() {
   const templateClass = new Template();
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ templateId: z.string() }))
     .mutation(async (opts) => {
       const { templateId } = opts.input;

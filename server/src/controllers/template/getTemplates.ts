@@ -1,5 +1,5 @@
 import { Template } from '../../drizzle/methods/template';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 // import { prisma } from '../../prisma';
 /**
@@ -23,7 +23,7 @@ import { publicProcedure } from '../../trpc';
 
 export function getTemplatesRoute() {
   const templateClass = new Template();
-  return publicProcedure.query(async (opts) => {
+  return protectedProcedure.query(async (opts) => {
     const templates = await templateClass.findMany();
     return templates;
   });

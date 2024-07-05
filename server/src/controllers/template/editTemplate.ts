@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
 
@@ -21,7 +21,7 @@ import { z } from 'zod';
 // };
 
 export function editTemplateRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         templateId: z.string(),

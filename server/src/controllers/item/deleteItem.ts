@@ -1,6 +1,6 @@
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 /**
  * Deletes an item from the database.
@@ -24,8 +24,10 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function deleteItemRoute() {
-  return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
-    const { itemId, packId } = opts.input;
-    return await deleteItemService(itemId, packId);
-  });
+  return protectedProcedure
+    .input(validator.deleteItem)
+    .mutation(async (opts) => {
+      const { itemId, packId } = opts.input;
+      return await deleteItemService(itemId, packId);
+    });
 }

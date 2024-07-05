@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { addTripService } from '../../services/trip/addTripService';
 import * as validator from '@packrat/validations';
 /**
@@ -47,7 +47,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function addTripRoute() {
-  return publicProcedure.input(validator.addTrip).mutation(async (opts) => {
+  return protectedProcedure.input(validator.addTrip).mutation(async (opts) => {
     const tripData = opts.input;
     return await addTripService(tripData);
   });

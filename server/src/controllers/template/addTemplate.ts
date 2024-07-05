@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { addTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
@@ -31,7 +31,7 @@ import { User } from '../../drizzle/methods/User';
 // };
 
 export function addTemplateRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         type: z.any(),

@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -23,7 +23,7 @@ import { z } from 'zod';
 // };
 
 export function addGlobalItemToPackRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         packId: z.string(),

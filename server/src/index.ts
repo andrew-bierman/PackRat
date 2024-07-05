@@ -4,7 +4,7 @@ import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
 // import { logger } from 'hono/logger';
-import { compress } from 'hono/compress';
+// import { compress } from 'hono/compress';
 import router from './routes';
 
 interface Bindings {

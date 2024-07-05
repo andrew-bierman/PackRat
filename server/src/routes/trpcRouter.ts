@@ -87,37 +87,37 @@ import {
 
 import {
   router as trpcRouter,
-  publicProcedure,
-  protectedProcedure,
+  // publicProcedure,
+  // protectedProcedure,
 } from '../trpc';
-import { z } from 'zod';
+// import { z } from 'zod';
 
-export const helloRouter = trpcRouter({
-  world: publicProcedure.input(z.string()).query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  }),
-});
+// export const helloRouter = trpcRouter({
+//   world: publicProcedure.input(z.string()).query(async ({ input }) => {
+//     console.log('input', input);
+//     return `Hello ${input}!`;
+//   }),
+// });
 
-export const helloRouter2 = () => {
-  return publicProcedure.query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  });
-};
+// export const helloRouter2 = () => {
+//   return publicProcedure.query(async ({ input }) => {
+//     console.log('input', input);
+//     return `Hello ${input}!`;
+//   });
+// };
 
 export const appRouter = trpcRouter({
-  hello1: trpcRouter({
-    world: publicProcedure.query(() => {
-      return 'Hello World';
-    }),
-  }),
-  hello2: helloRouter,
-  hello3: publicProcedure.query(async (opts) => {
-    return 'Hello World';
-  }),
-  helloRouter2: helloRouter2(),
-  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
+  // hello1: trpcRouter({
+  //   world: publicProcedure.query(() => {
+  //     return 'Hello World';
+  //   }),
+  // }),
+  // hello2: helloRouter,
+  // hello3: publicProcedure.query(async (opts) => {
+  //   return 'Hello World';
+  // }),
+  // helloRouter2: helloRouter2(),
+  // protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
   // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),

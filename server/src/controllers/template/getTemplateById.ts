@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 // import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
@@ -36,7 +36,7 @@ import { Template } from '../../drizzle/methods/template';
 
 export function getTemplateByIdRoute() {
   const templateClass = new Template();
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ templateId: z.string() }))
     .query(async (opts) => {
       const { templateId } = opts.input;
