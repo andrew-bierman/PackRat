@@ -5,9 +5,8 @@ import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
 import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
-// import { logger } from 'hono/logger';
-// import { compress } from 'hono/compress';
 import router from './routes';
+import { CORS_METHODS } from './config';
 
 interface Bindings {
   [key: string]: any;
@@ -30,7 +29,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  ref: https://hono.dev/middleware/builtin/compress
 
 // SETUP HTTPS Enforcement Middleware
-app.use('*', enforceHttps());
+app.use('*', enforceHttps()); // Apply to all routes
 
 // SETUP SECURITY HEADERS
 app.use('*', securityHeaders()); // Apply to all routes
@@ -39,11 +38,11 @@ app.use('*', securityHeaders()); // Apply to all routes
 app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
   const corsMiddleware = cors({
-    // origin: CORS_ORIGIN,
+    // origin: CORS_ORIGIN, // uncomment this line to enable CORS
     origin: '*', // temporary
     credentials: true,
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowMethods: CORS_METHODS,
   });
   return corsMiddleware(c, next);
 });
