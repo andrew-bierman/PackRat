@@ -1,4 +1,4 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -6,14 +6,15 @@ export const SCREEN_WIDTH = width;
 export const SCREEN_HEIGHT = height;
 
 export const loadStyles = (theme: any) => {
+  const isWeb = Platform.OS === 'web';
   const { currentTheme } = theme;
 
   return {
     container: {
       flex: 1,
       padding: 16,
-      position: 'fixed',
-      right: 250,
+      position: isWeb ? 'fixed' : 'absolute',
+      right: 50,
       bottom: 30,
       width: 60,
       height: 60,
