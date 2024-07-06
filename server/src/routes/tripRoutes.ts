@@ -59,6 +59,7 @@ router.get(
  */
 router.get(
   '/:ownerId',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.getTrips, req.params, next)) as any,
   tryCatchWrapper(getTrips),
 );
@@ -82,6 +83,7 @@ router.get(
  */
 router.get(
   '/t/:tripId',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.getTripById, req.params, next)) as any,
   tryCatchWrapper(getTripById),
@@ -131,6 +133,7 @@ router.get(
  */
 router.post(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.addTrip, req.body, next)) as any,
   tryCatchWrapper(addTrip),
 );
@@ -181,6 +184,7 @@ router.post(
  */
 router.put(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.editTrip, req.body, next)) as any,
   tryCatchWrapper(editTrip),
 );
@@ -207,6 +211,7 @@ router.put(
  */
 router.delete(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.deleteTrip, req.body, next)) as any,
   tryCatchWrapper(deleteTrip),
 );

@@ -12,7 +12,7 @@ interface AuthWrapperProps {
 
 export const AuthWrapper = ({
   children,
-  unauthorizedElement = <Redirect to="/login" />,
+  unauthorizedElement = <Redirect to="/sign-in" />,
 }: AuthWrapperProps) => {
   return (
     <AuthLoader
