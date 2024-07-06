@@ -1,8 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { addTemplateService } from '../../services/template/template.service';
-import { z } from 'zod';
 import { User } from '../../drizzle/methods/User';
+import * as validator from '@packrat/validations';
 
 // import { prisma } from '../../prisma';
 /**
@@ -32,14 +32,7 @@ import { User } from '../../drizzle/methods/User';
 
 export function addTemplateRoute() {
   return protectedProcedure
-    .input(
-      z.object({
-        type: z.any(),
-        templateId: z.string(),
-        isGlobalTemplate: z.boolean(),
-        createdBy: z.string(),
-      }),
-    )
+    .input(validator.addTemplate)
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const userClass = new User();

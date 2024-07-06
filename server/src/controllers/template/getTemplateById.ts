@@ -1,7 +1,7 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
 // import { responseHandler } from '../../helpers/responseHandler';
-import { z } from 'zod';
+import * as validator from '@packrat/validations';
 import { Template } from '../../drizzle/methods/template';
 
 // import { prisma } from '../../prisma';
@@ -37,7 +37,7 @@ import { Template } from '../../drizzle/methods/template';
 export function getTemplateByIdRoute() {
   const templateClass = new Template();
   return protectedProcedure
-    .input(z.object({ templateId: z.string() }))
+    .input(validator.getTemplateById)
     .query(async (opts) => {
       const { templateId } = opts.input;
       const template = await templateClass.findTemplate(templateId, true);
