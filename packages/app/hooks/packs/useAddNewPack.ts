@@ -120,7 +120,10 @@ export const useAddNewPack = (): UseAddNewPackResult  => {
           ownerId: packData.owner_id,
           queryBy: '',
         },
-        () => newQueryData,
+        () => ({
+          ...newQueryData,
+          message: oldQueryData?.message,
+        }),
       );
 
       setName('');

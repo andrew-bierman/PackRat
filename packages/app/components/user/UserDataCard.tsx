@@ -46,7 +46,19 @@ const UserDataCard = ({
   differentUser,
 }: UserDataCardProps) => {
   const { editPack: changePackStatus } = useEditPack();
-
+  console.log("Data Data Data ",type,
+    destination,
+    id,
+    name,
+    total_weight,
+    is_public,
+    favorited_by,
+    favorites_count,
+    createdAt,
+    state,
+    setState,
+    index,
+    differentUser,)
   /**
    * Updates the state at the specified index with the given boolean value.
    *
@@ -147,7 +159,7 @@ const UserDataCard = ({
                   // marginTop: '-3px',
                 }}
               >
-                Total Weight: {total_weight?.toFixed(2)}
+                Total Weight: {total_weight?.toFixed(2)}g
               </RText>
             ) : (
               <RText

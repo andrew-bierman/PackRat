@@ -93,7 +93,7 @@ export function PackDetails() {
                               currentPack={currentPack}
                               isAddItemModalOpen={isAddItemModalOpen}
                               setIsAddItemModalOpen={setIsAddItemModalOpen}
-                              refetch={refetch}
+                              // refetch={refetch}
                               setRefetch={() => setRefetch((prev) => !prev)}
                             />
                           ) : null;

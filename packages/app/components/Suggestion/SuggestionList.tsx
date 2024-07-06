@@ -4,12 +4,36 @@ import { RButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 
-export function SuggestionList({ suggestion, onAddItem }) {
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface Item {
+  id: string;
+  name: string;
+  ownerId: string;
+  weight: number;
+  quantity: number;
+  unit: string;
+  category: Category;
+}
+
+interface SuggestionListProps {
+  suggestion: { Items: Item[] } | null;
+  onAddItem: (itemId: string) => void;
+}
+
+export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
   const [itemsList, setItemsList] = useState([]);
   const { isDark } = useTheme();
 
   useEffect(() => {
-    setItemsList(suggestion?.Items || []);
+    if (suggestion?.Items) {
+      setItemsList(suggestion.Items);
+    } else {
+      setItemsList([]);
+    }
   }, [suggestion]);
 
   return (

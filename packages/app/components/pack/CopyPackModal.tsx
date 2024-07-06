@@ -30,7 +30,7 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
     try {
       const response = await addNewPackAsync({
         name: packName,
-        is_public: currentPack.is_public,
+        isPublic: currentPack.is_public,
       });
       for (const item of currentPack.items) {
         await addPackItem({

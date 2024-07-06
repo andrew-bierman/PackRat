@@ -198,17 +198,6 @@ export default function ProfileContainer({ id = null }) {
     error,
   } = useProfile(id);
 
-  useEffect(() => {
-    console.log('ProfileContainer rendered');
-    console.log({
-      isLoading,
-      error,
-      user,
-      favoritesList,
-      packsList,
-      tripsList,
-    });
-  }, [isLoading, error, user, favoritesList, packsList, tripsList]);
   return (
     <View>
       <ScrollView>

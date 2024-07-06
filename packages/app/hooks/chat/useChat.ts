@@ -24,6 +24,8 @@ interface Suggestions {
 
 export const useChat = (itemTypeId = null) => {
   const user = useAuthUser();
+
+  console.log('user', user)
   const [typeId, setTypeId] = useState(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
@@ -34,7 +36,10 @@ export const useChat = (itemTypeId = null) => {
 
   const [userInput, setUserInput] = useState('');
 
-  const { data: chatsData, refetch } = useGetUserChats(user.id, typeId);
+  const { data: chatsData, refetch } = useGetUserChats(
+    user.id,
+    typeId.itemTypeId,
+  );
 
   const { getAIResponse } = useGetAIResponse();
   const { getAISuggestions } = useGetAISuggestions();
@@ -75,7 +80,7 @@ export const useChat = (itemTypeId = null) => {
     setIsLoading(true);
     setUserInput('');
     await getAIResponse({
-      userId: user?.id,
+      userId: user.id,
       userInput: userMessage,
       itemTypeId: typeId.itemTypeId,
       type: typeId.type,
