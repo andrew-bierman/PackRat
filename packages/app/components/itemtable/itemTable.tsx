@@ -75,7 +75,7 @@ export const ItemsTable = ({
           style={{
             paddingVertical: 16,
             flex: 1,
-            padding: 30,
+            // padding: 30,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
             width: '100%',
           }}
