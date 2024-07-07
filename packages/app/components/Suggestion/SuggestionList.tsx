@@ -25,7 +25,7 @@ interface SuggestionListProps {
 }
 
 export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
-  const [itemsList, setItemsList] = useState([]);
+  const [itemsList, setItemsList] = useState<Item[]>([]);
   const { isDark } = useTheme();
 
   useEffect(() => {
@@ -48,12 +48,14 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
       alignItems="center"
     >
       <View
+        style={{
+          minWidth: '100%',
+        }}
         $group-window-gtXs={{
           padding: '$3',
           width: 600,
         }}
         gap="$1.5"
-        minWidth="100%"
       >
         {itemsList.map((item, i) => (
           <React.Fragment key={item.id}>
@@ -79,7 +81,6 @@ function Item({ item, onAddItem }) {
   return (
     <YGroup.Item>
       <View
-        flexDirection="row"
         paddingVertical="$1"
         paddingHorizontal="$1.5"
         gap="$2"
@@ -88,10 +89,12 @@ function Item({ item, onAddItem }) {
           gap: '$4',
         }}
         backgroundColor="$color1"
-        alignItems="center"
-        style={{ borderRadius: 5 }}
+        style={{ borderRadius: 5, flexDirection: 'row', aligItems: 'center' }}
       >
-        <View flexDirection="column" flexShrink={1} justifyContent="center">
+        <View
+          style={{ flexDirection: 'column', justifyContent: 'center' }}
+          flexShrink={1}
+        >
           <Text selectable>{item.name}</Text>
           <Text
             selectable
@@ -108,8 +111,7 @@ function Item({ item, onAddItem }) {
           onPress={() => {
             handleAddItem(item);
           }}
-          style={{ borderRadius: 5 }}
-          marginLeft="auto"
+          style={{ borderRadius: 5, marginLeft: 'auto' }}
           disabled={isLoading}
         >
           Add

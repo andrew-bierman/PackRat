@@ -39,12 +39,12 @@ interface ItemsTableProps {
   data: ItemType[];
   isLoading: boolean;
   totalPages: number;
-  handleCheckboxChange: (itemId: string) => void;
-  onDelete: (params: { itemId: string; packId: string }) => void;
-  hasPermissions: boolean;
-  currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  handleCheckboxChange?: (itemId: string) => void;
+  onDelete?: (params: { itemId: string; packId: string }) => void;
+  hasPermissions?: boolean;
+  currentPack?: any;
+  refetch?: () => void;
+  setRefetch?: () => void;
 }
 
 export const ItemsTable = ({
