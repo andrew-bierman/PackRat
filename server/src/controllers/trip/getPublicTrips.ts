@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 import * as validator from '@packrat/validations';
 import { z } from 'zod';
@@ -23,7 +23,7 @@ import { z } from 'zod';
 // };
 
 export function getPublicTripsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ queryBy: z.string() }))
     .query(async (opts) => {
       const { queryBy } = opts.input;

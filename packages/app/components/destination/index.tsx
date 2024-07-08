@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import MapContainer from 'app/components/map/MapContainer';
+import { MapContainer } from 'app/components/map';
 import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
@@ -16,6 +16,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
+
 
 const RText: any = OriginalRText;
 

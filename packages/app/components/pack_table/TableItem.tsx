@@ -11,7 +11,7 @@ import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 
-type ModalName = 'edit' | 'delete';
+type ModalName = 'edit' | 'delete' | null;
 
 interface TableItemProps {
   itemData: any;
@@ -23,6 +23,11 @@ interface TableItemProps {
   currentPack: any;
   refetch: boolean;
   setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface DropDownItems{
+  label: string,
+  onSelect: () => void,
 }
 
 const TableItem = ({
@@ -51,13 +56,13 @@ const TableItem = ({
     setActiveModal(null);
   };
 
-  let rowActionItems = [
+  let rowActionItems: DropDownItems[] = [
     { label: 'Delete', onSelect: () => openModal('delete') },
     // TODO Implement Ignore Pack Item functional
     // { label: 'Ignore', onSelect: () => {} },
   ];
 
-  if (authUser.id === itemData.ownerId) {
+  if (authUser && itemData && authUser.id === itemData.ownerId) {
     rowActionItems = [
       {
         label: 'Edit',

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const addTemplate = z.object({
-  type: z.string(),
+  type: z.any(),
   templateId: z.string(),
   isGlobalTemplate: z.boolean(),
   createdBy: z.string(),

@@ -5,7 +5,7 @@ import { AnimatePresence, Text, Theme, View, styled } from 'tamagui';
 import useTheme from 'app/hooks/useTheme';
 
 const List = styled(FlatList<Message>, {
-  backgroundColor: '$background',
+  // backgroundColor: '$background',
   gap: '$3',
 });
 
@@ -34,9 +34,7 @@ export function SuggestionDescription({ data }: { data: Message[] }) {
 
   return (
     <View
-      flexDirection="column"
-      height={'100%'}
-      minWidth="100%"
+      style={{ flexDirection: 'column', height: '100%', minWidth: '100%' }}
       $group-window-gtXs={{ height: 700 }}
     >
       <List
@@ -46,6 +44,7 @@ export function SuggestionDescription({ data }: { data: Message[] }) {
         data={messages}
         renderItem={renderItem}
         windowSize={2}
+        style={{ backgroundColor: '$background' }}
       />
     </View>
   );
@@ -78,21 +77,26 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
     <AnimatePresence>
       {showMessage && (
         <View
-          flexDirection={'row'}
-          alignItems="flex-start"
+          style={{
+            padding: '5px 5px',
+            background: isDark ? '#333' : 'white',
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            alignSelf: 'self-start',
+            maxWidth: '100%',
+            minWidth: '100%'
+          }}
           gap="$4"
-          alignSelf={'flex-start'}
-          maxWidth="100%"
-          minWidth="100%"
-          style={{ padding: '5px 5px', background: isDark ? '#333' : 'white' }}
         >
           <View
-            flexDirection="column"
-            alignItems={'flex-start'}
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              flexShrink: '1'
+            }}
             gap="$2"
             // maxWidth={400}
-            justifyContent="center"
-            flexShrink={1}
           >
             <Theme name={'blue'}>
               <View

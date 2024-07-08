@@ -1,5 +1,5 @@
 import { getPacksService } from '../../services/pack/pack.service';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
 /**
@@ -25,7 +25,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function getPacksRoute() {
-  return publicProcedure.input(validator.getPacks).query(async (opts) => {
+  return protectedProcedure.input(validator.getPacks).query(async (opts) => {
     const { ownerId, queryBy } = opts.input;
     const packs = await getPacksService(ownerId, queryBy);
     return {

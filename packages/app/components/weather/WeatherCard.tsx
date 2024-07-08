@@ -57,7 +57,7 @@ export default function WeatherCard({
   const styles = useCustomStyles(loadStyles);
   const { dateFormatted, day, restOfWeek } = useDate();
 
-  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
+  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject!.weather[0]!.icon}@2x.png`;
 
   return (
     <RStack
@@ -156,7 +156,7 @@ export default function WeatherCard({
             {convertToCelsius(weatherObject.main.temp)}
           </RText>
           <RText style={{ fontWeight: 700 }}>
-            {weatherObject.weather[0].description}
+            {weatherObject!.weather[0]!.description}
           </RText>
         </RStack>
       </RStack>
@@ -240,7 +240,7 @@ export default function WeatherCard({
           style={styles.cardContainer}
         >
           {weatherWeek.map((day, i) => {
-            const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+            const weatherIconUrl = `https://openweathermap.org/img/wn/${day!.weather[0]!.icon}@2x.png`;
 
             return (
               <RStack
@@ -284,7 +284,7 @@ export default function WeatherCard({
             <RStack key={index} style={styles.weatherInfo}>
               <RText style={{ color: styles.tempColor.color }}>{day}</RText>
               <RText style={{ color: styles.tempColor.color }}>
-                {convertToCelsius(weatherWeek[index].main.temp)}
+                {convertToCelsius(weatherWeek[index]!.main!.temp)}
               </RText>
             </RStack>
           );

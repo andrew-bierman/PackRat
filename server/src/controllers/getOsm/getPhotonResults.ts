@@ -4,7 +4,7 @@ import {
   RetrievingPhotonDetailsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 // import * as validators from '@packrat/validations';
 import * as validator from '@packrat/validations';
@@ -30,7 +30,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function getPhotonResultsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.getPhotonResults)
     .query(async (opts) => {
       const response = await getPhotonResultsService(opts.input.searchString);

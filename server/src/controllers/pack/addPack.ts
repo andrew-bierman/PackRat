@@ -1,6 +1,6 @@
 import { addPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 /**
  * Adds a new pack to the database.
@@ -16,7 +16,7 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function addPackRoute() {
-  return publicProcedure.input(validator.addPack).mutation(async (opts) => {
+  return protectedProcedure.input(validator.addPack).mutation(async (opts) => {
     const { name, owner_id, is_public } = opts.input;
     const pack = await addPackService(name, owner_id, is_public);
     return pack;

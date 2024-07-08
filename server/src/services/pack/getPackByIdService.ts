@@ -14,17 +14,34 @@ interface PackWithItemPacks {
   is_public: boolean | null;
   grades: Object | null;
   scores: Object | null;
-  itemPacks: ItemPack[];
+  itemPacks?: ItemPack[];
 }
 
-export const getPackByIdService = async (packId: string) => {
+// Define a specific return type for getPackByIdService
+export interface PackData {
+  type: string | null;
+  id: string;
+  name: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  owner_id: string | null;
+  is_public: boolean | null;
+  grades: any;
+  scores: any;
+  total_weight: number;
+  favorites_count: number;
+  total_score: number;
+  items: any[];
+}
+
+export const getPackByIdService = async (packId: string): Promise<PackData> => {
   try {
     const packClass = new Pack();
     const pack = (await packClass.findPack({
       id: packId,
     })) as PackWithItemPacks;
 
-    const packData = {
+    const packData: PackData = {
       ...pack,
       scores: pack.scores ? JSON.parse(pack.scores as string) : {},
       grades: pack.grades ? JSON.parse(pack.grades as string) : {},

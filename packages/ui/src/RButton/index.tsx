@@ -1,6 +1,6 @@
+import React, { useCallback } from 'react';
 import { Button, ButtonProps, styled } from 'tamagui';
 import { useHaptic } from 'app/hooks/common';
-import { useCallback } from 'react';
 
 interface HapticRButtonProps extends ButtonProps {
   hapticStrength?: 'light' | 'medium' | 'heavy';
@@ -11,33 +11,33 @@ const StyledButton = styled(Button, {
   color: 'white',
 } as any);
 
-const RButton: React.FC<HapticRButtonProps> = ({
-  hapticStrength,
-  onPress,
-  ...props
-}) => {
-  const haptic = useHaptic();
+const RButton = React.forwardRef<HTMLElement, HapticRButtonProps>(
+  ({ hapticStrength, onPress, ...props }, ref) => {
+    const haptic = useHaptic();
 
-  const triggerHapticFeedback = useCallback(() => {
-    switch (hapticStrength) {
-      case 'light':
-        haptic.light();
-        break;
-      case 'medium':
-        haptic.medium();
-        break;
-      case 'heavy':
-        haptic.heavy();
-        break;
-    }
-  }, [hapticStrength]);
+    const triggerHapticFeedback = useCallback(() => {
+      switch (hapticStrength) {
+        case 'light':
+          haptic.light();
+          break;
+        case 'medium':
+          haptic.medium();
+          break;
+        case 'heavy':
+          haptic.heavy();
+          break;
+      }
+    }, [hapticStrength]);
 
-  const handlePress = (e) => {
-    onPress?.(e);
-    triggerHapticFeedback();
-  };
+    const handlePress = (e: any) => {
+      onPress?.(e);
+      triggerHapticFeedback();
+    };
 
-  return <StyledButton {...props} onPress={handlePress} />;
-};
+    return <StyledButton {...props} ref={ref} onPress={handlePress} />;
+  },
+);
+
+RButton.displayName = 'RButton';
 
 export default RButton;

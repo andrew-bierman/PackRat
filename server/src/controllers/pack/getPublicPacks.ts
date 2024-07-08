@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
 
@@ -22,7 +22,7 @@ import { z } from 'zod';
 // };
 
 export function getPublicPacksRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ queryBy: z.string() }))
     .query(async (opts) => {
       const { queryBy } = opts.input;
