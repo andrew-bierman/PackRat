@@ -1,3 +1,4 @@
+import React from 'react';
 import useTheme from '../../hooks/useTheme';
 import { convertToCelsius } from '../../utils/convertToCelsius';
 import { convertToKmh } from '../../utils/convertToKmh';
@@ -11,8 +12,6 @@ import {
 import { RImage, RStack as OriginalRStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
-import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
-import { defaultWeekObj } from '../../constants/defaultWeekObj';
 
 const RStack: any = OriginalRStack;
 
@@ -43,14 +42,21 @@ interface WeatherDay {
   };
 }
 
+interface Location {
+  name: string;
+  country: string;
+}
+
 interface WeatherCardProps {
   weatherObject?: WeatherObject;
   weatherWeek?: WeatherDay[];
+  location?: Location;
 }
 
 export default function WeatherCard({
-  weatherObject = defaultWeatherObject,
-  weatherWeek = defaultWeekObj,
+  weatherObject,
+  weatherWeek,
+  location,
 }: WeatherCardProps) {
   // Hooks
   const { currentTheme } = useTheme();
@@ -131,7 +137,9 @@ export default function WeatherCard({
           }}
         >
           <FontAwesome name="map-marker" size={16} color="black" />
-          <RText>{`${weatherObject.name}, ${weatherObject.sys.country}`}</RText>
+          {location ? (
+            <RText>{`${location?.name}, ${location?.country}`}</RText>
+          ) : null}
         </RStack>
 
         <RStack>
@@ -260,7 +268,7 @@ export default function WeatherCard({
                   }}
                   alt="waetherIcon"
                 />
-                <RText>{formatDay(restOfWeek[i])}</RText>
+                <RText>{restOfWeek[i]}</RText>
                 <RText style={{ fontWeight: 700 }}>
                   {convertToCelsius(day.main.temp)}
                 </RText>

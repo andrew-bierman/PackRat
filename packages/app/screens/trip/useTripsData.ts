@@ -1,5 +1,4 @@
 // useTripsData.js
-import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import useParks from 'app/hooks/parks';
 import useTrails from 'app/hooks/trails';
 import {
@@ -23,18 +22,6 @@ export const useTripsData = () => {
   });
 
   const {
-    data: weatherData,
-    isLoading: weatherLoading,
-    isError: weatherError,
-  } = useFetchWeather(latLng);
-
-  const {
-    data: weatherWeekData,
-    isLoading: weekWeatherLoading,
-    isError: weekWeatherError,
-  } = useFetchWeatherWeak(latLng);
-
-  const {
     error: parksError,
     isLoading: parksLoading,
     filteredParks: parksData,
@@ -54,12 +41,6 @@ export const useTripsData = () => {
     photonDetails,
     hasPhotonError,
     isPhotonLoading,
-    weatherData,
-    weatherLoading,
-    weatherError,
-    weatherWeekData,
-    weekWeatherLoading,
-    weekWeatherError,
     parksData,
     parksError,
     parksLoading,

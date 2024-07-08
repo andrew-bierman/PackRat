@@ -17,7 +17,7 @@ export const useCurrentDestination = () => {
   }, [osm.osmId, osm.osmType, data]);
 
   const latLng = useMemo(() => {
-    if (!currentDestination) return {};
+    if (!currentDestination) return null;
 
     return parseCoordinates(currentDestination);
   }, [currentDestination]);
