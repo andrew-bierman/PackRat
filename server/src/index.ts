@@ -3,7 +3,7 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
-// import { logger } from 'hono/logger';
+import { logger } from 'hono/logger';
 import { compress } from 'hono/compress';
 import router from './routes';
 
@@ -42,7 +42,7 @@ app.use('*', async (c, next) => {
 
 // SETUP LOGGING
 //  tRPC is already logging requests, but you can add your own middleware
-//  app.use('*', logger());
+app.use('*', logger());
 
 // SETUP TRPC SERVER
 app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));

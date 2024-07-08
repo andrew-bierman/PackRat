@@ -1,87 +1,88 @@
-// import express, { type Request, type Response } from 'express';
-// import path from 'path';
-// import csrf from 'csurf';
-// import packRoutes from './packRoutes';
-// import itemRoutes from './itemRoutes';
-// import tripRoutes from './tripRoutes';
-// import weatherRoutes from './weatherRoutes';
-// import geoCodeRoutes from './geoCodeRoutes';
-// import getParkRoutes from './getParkRoutes';
-// import getTrailRoutes from './getTrailRoutes';
-// import osmRoutes from './osmRoutes';
-// import passwordResetRoutes from './passwordResetRoutes';
-// import openAiRoutes from './openAiRoutes';
-// // import templateRoutes from './templateRoutes';
-// import favoriteRouters from './favoriteRoutes';
-// import userRoutes from './userRoutes';
+import express, { Request, Response } from 'express';
+import path from 'path';
+import csrf from 'csurf';
+import packRoutes from './packRoutes';
+import itemRoutes from './itemRoutes';
+import tripRoutes from './tripRoutes';
+import weatherRoutes from './weatherRoutes';
+import geoCodeRoutes from './geoCodeRoutes';
+import getParkRoutes from './getParkRoutes';
+import getTrailRoutes from './getTrailRoutes';
+import osmRoutes from './osmRoutes';
+import passwordResetRoutes from './passwordResetRoutes';
+import openAiRoutes from './openAiRoutes';
+import templateRoutes from './templateRoutes';
+import favoriteRoutes from './favoriteRoutes';
+import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
-import { type Context, Hono, type Next } from 'hono';
+import { Context, Hono, Next } from 'hono';
 
 const router = new Hono();
 
 // Create a CSRF middleware
-// const csrfProtection = csrf({ cookie: true });
+const csrfProtection = csrf({ cookie: true });
 
-// /**
-//  * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
-//  *
-//  * @param {Request} req - The incoming request object.
-//  * @param {Response} res - The response object.
-//  * @param {NextFunction} next - The next function to call in the middleware chain.
-//  */
-// const logger = (req: Request, res: Response, next: express.NextFunction) => {
-//   console.log(`Incoming ${req.method} ${req.path}`);
-//   res.on('finish', () => {
-//     console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-//     console.log(`Body ${req.body}`);
-//   });
-//   next();
-// };
+/**
+ * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
+ *
+ * @param {Context} c - The Hono context object.
+ * @param {Function} next - The next function to call in the middleware chain.
+ */
+const logger = async (c: Context, next: Next) => {
+  console.log(`Incoming ${c.req.method} ${c.req.url}`);
+  await next();
+  console.log(`Finished ${c.req.method} ${c.req.url} ${c.res.status}`);
+  console.log(`Body ${await c.req.text()}`);
+};
 
-// // use logger middleware in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.use(logger);
-// }
+// Use logger middleware in development
+if (process.env.NODE_ENV !== 'production') {
+  router.use('*', logger);
+}
 
-// use routes
-// router.use('/user', userRoutes);
-// router.use('/pack', packRoutes);
-// router.use('/item', itemRoutes);
-// router.use('/trip', tripRoutes);
-// router.use('/weather', weatherRoutes);
-// router.use('/geocode', geoCodeRoutes);
-// router.use('/getparks', getParkRoutes);
-// router.use('/gettrails', getTrailRoutes);
-// router.use('/osm', osmRoutes);
-// router.use('/password-reset', passwordResetRoutes);
-// router.use('/openai', openAiRoutes);
-// router.use('/template', templateRoutes);
-// router.use('/favorite', favoriteRouters);
-// router.use('/openai', openAiRoutes);
+// Use CSRF middleware
+router.use(csrfProtection);
+
+// Use routes
+router.use('/user', userRoutes);
+router.use('/pack', packRoutes);
+router.use('/item', itemRoutes);
+router.use('/trip', tripRoutes);
+router.use('/weather', weatherRoutes);
+router.use('/geocode', geoCodeRoutes);
+router.use('/getparks', getParkRoutes);
+router.use('/gettrails', getTrailRoutes);
+router.use('/osm', osmRoutes);
+router.use('/password-reset', passwordResetRoutes);
+router.use('/openai', openAiRoutes);
+router.use('/template', templateRoutes);
+router.use('/favorite', favoriteRoutes);
+router.use('/openai', openAiRoutes);
 router.route('/mapPreview', mapPreviewRouter);
 
+// Create a separate router for '/hello' route
 const helloRouter = new Hono();
-helloRouter.get('/', (c: Context, next: Next) => {
+helloRouter.get('/', async (c: Context) => {
   return c.text('Hello, world!');
 });
 router.route('/hello', helloRouter);
 
 // Also listen to /api for backwards compatibility
-// router.use('/api/user', userRoutes);
-// router.use('/api/pack', packRoutes);
-// router.use('/api/item', itemRoutes);
-// router.use('/api/trip', tripRoutes);
-// router.use('/api/weather', weatherRoutes);
-// router.use('/api/geocode', geoCodeRoutes);
-// router.use('/api/getparks', getParkRoutes);
-// router.use('/api/gettrails', getTrailRoutes);
-// router.use('/api/osm', osmRoutes);
-// router.use('/api/password-reset', passwordResetRoutes);
-// router.use('/api/openai', openAiRoutes);
-// router.use('/api/template', templateRoutes);
-// router.use('/api/favorite', favoriteRouters);
-// router.use('/api/openai', openAiRoutes);
-// router.use('/api/mapPreview', mapPreviewRouter);
+router.use('/api/user', userRoutes);
+router.use('/api/pack', packRoutes);
+router.use('/api/item', itemRoutes);
+router.use('/api/trip', tripRoutes);
+router.use('/api/weather', weatherRoutes);
+router.use('/api/geocode', geoCodeRoutes);
+router.use('/api/getparks', getParkRoutes);
+router.use('/api/gettrails', getTrailRoutes);
+router.use('/api/osm', osmRoutes);
+router.use('/api/password-reset', passwordResetRoutes);
+router.use('/api/openai', openAiRoutes);
+router.use('/api/template', templateRoutes);
+router.use('/api/favorite', favoriteRoutes);
+router.use('/api/openai', openAiRoutes);
+router.use('/api/mapPreview', mapPreviewRouter);
 
 // // Static routes for serving the React Native Web app
 // if (process.env.NODE_ENV === 'production') {
@@ -89,31 +90,30 @@ router.route('/hello', helloRouter);
 //   const serverType = process.env.REACT_APP_SERVER_TYPE || 'vite';
 
 //   // Serve the client's index.html file at the root route
-//   router.get('/', (req, res) => {
-// // Attach the CSRF token cookie to the response
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
+//   router.get('/', async (c: Context) => {
+//     const basePath =
+//       serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+//     return c.html(path.resolve(__dirname, basePath, 'index.html'));
 //   });
 
 //   // Serve the static assets
-//   const staticPath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//   router.use(express.static(path.join(__dirname, staticPath)));
+//   const staticPath =
+//     serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+//   router.use('*', express.static(path.join(__dirname, staticPath)));
 
 //   // Serve the client's index.html file at all other routes NOT starting with /api
-//   router.get(/^(?!\/?api).*/, (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
+//   router.get(/^(?!\/?api).*/, async (c: Context) => {
+//     const basePath =
+//       serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
+//     return c.html(path.resolve(__dirname, basePath, 'index.html'));
 //   });
 // }
 
 // // Attach the CSRF token to a specific route in development
 // if (process.env.NODE_ENV !== 'production') {
-//   router.get('/api/csrf/restore', (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     res.status(201).json({});
+//   router.get('/api/csrf/restore', async (c: Context) => {
+//     // c.res.cookie("XSRF-TOKEN", c.req.csrfToken());
+//     return c.res.status(201).json({});
 //   });
 // }
 
