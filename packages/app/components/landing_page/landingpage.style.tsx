@@ -87,14 +87,15 @@ const loadStyles = (theme) => {
     },
     transparentButton: {
       backgroundColor: 'transparent',
+      height: 80,
     },
     icon: {
-      fontSize: 28,
+      fontSize: 40,
       color: '#34a89a',
       marginRight: 10,
     },
     featureText: {
-      fontSize: 18,
+      fontSize: 22,
       color: currentTheme.colors.text,
     },
     cardContent: {
