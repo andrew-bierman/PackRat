@@ -9,7 +9,7 @@ export const useProfile = (id = null) => {
   const authUser = useAuthUser();
   const userId = id ?? authUser?.id;
 
-  const isCurrentUser = useMatchesCurrentUser(userId); // TODO: Implement this hook in more components
+  const isCurrentUser = useMatchesCurrentUser(userId as string); // TODO: Implement this hook in more components
 
   const {
     data: allPacks,
@@ -27,13 +27,13 @@ export const useProfile = (id = null) => {
     data: allFavorites,
     isLoading: allFavoritesLoading,
     error: allFavoritesError,
-  } = useFetchUserFavorites(userId); // TODO: Add enabled as parameter
+  } = useFetchUserFavorites(userId as string); // TODO: Add enabled as parameter
 
   const {
     data: userData,
     isLoading: userIsLoading,
     error: userError,
-  } = useGetUser(userId);
+  } = useGetUser(userId as string);
 
   const user = !isCurrentUser ? userData : authUser;
 

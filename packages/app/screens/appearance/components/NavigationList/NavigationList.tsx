@@ -24,8 +24,10 @@ export function NavigationList({
         return (
           <Accordion.Item key={key} value={key}>
             <Accordion.Trigger
-              flexDirection="row"
-              justifyContent="space-between"
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}
             >
               {({ open }: { open: boolean }) => (
                 <>
@@ -42,7 +44,9 @@ export function NavigationList({
                 bordered
                 width="100%"
                 size="$4"
-                overflow="auto"
+                style={{
+                  overflow: 'auto'
+                }}
               >
                 {value.map(({ route }) => {
                   return (

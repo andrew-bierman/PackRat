@@ -6,12 +6,15 @@ import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
 import useResponsive from 'app/hooks/useResponsive';
+import { useScreenWidth } from 'app/hooks/common';
+
 
 type TripSearchCardProps = {
   searchRef: any;
 };
 
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
+  const {screenWidth} = useScreenWidth()
   const { currentTheme } = useTheme();
   const [, setGEOLocation] = useGEOLocationSearch();
 
@@ -32,7 +35,7 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
-      <View style={{ width: xs ? '50vw' : '30vw' }}>
+      <View style={{ width: xs ? screenWidth * 0.5 : screenWidth * 0.3 }}>
         <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       </View>
     </TripCardBase>

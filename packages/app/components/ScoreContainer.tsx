@@ -171,7 +171,7 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
 interface ScoreContainerProps {
   type: 'pack' | 'trip';
   data: any;
-  isOwner: boolean;
+  isOwner: boolean | undefined | null;
 }
 export const ScoreContainer: React.FC<ScoreContainerProps> = ({
   type,

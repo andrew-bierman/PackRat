@@ -30,7 +30,7 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
     try {
       const response = await addNewPackAsync({
         name: packName,
-        is_public: currentPack.is_public,
+        isPublic: currentPack.is_public,
       });
       for (const item of currentPack.items) {
         await addPackItem({
@@ -40,7 +40,7 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
           unit: item.unit,
           packId: response.id,
           type: item.category.name,
-          ownerId: user.id,
+          ownerId: user?.id!,
         });
       }
       onClose();
@@ -73,8 +73,8 @@ export const CopyPackModal = ({ isOpen, onClose, currentPack }) => {
     >
       <RInput
         placeholder="Pack Name"
-        name="name"
-        label="Name"
+        // name="name"
+        // label="Name"
         value={packName}
         onChangeText={(t) => setPackName(t)}
         style={{ width: 200 }}
