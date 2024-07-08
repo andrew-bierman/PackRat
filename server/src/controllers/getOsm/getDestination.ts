@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
@@ -24,7 +24,7 @@ import { z } from 'zod';
 // };
 
 export function getDestinationRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async (opts) => {
       const { id } = opts.input;

@@ -39,6 +39,7 @@ const router = new Hono();
  */
 router.post(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.addToFavorite, req.body, next)) as any,
   tryCatchWrapper(addToFavorite),

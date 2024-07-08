@@ -1,6 +1,6 @@
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 /**
  * Duplicates a public pack.
@@ -24,7 +24,7 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function duplicatePublicPackRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.duplicatePublicPack)
     .mutation(async (opts) => {
       const { packId, ownerId, items } = opts.input;
