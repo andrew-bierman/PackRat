@@ -12,22 +12,24 @@ interface AuthWrapperProps {
 
 export const AuthWrapper = ({
   children,
-  unauthorizedElement = <Redirect to="/sign-in" />,
+  unauthorizedElement,
 }: AuthWrapperProps) => {
+  const loadingElement =
+    Platform.OS === 'web' ? (
+      <RText>Loading...</RText>
+    ) : (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <RSpinner color="#0284c7" />
+      </View>
+    );
+
+  const defaultUnauthorizedElement =
+    Platform.OS === 'web' ? <Redirect to="/login" /> : <LandingPage />;
+
   return (
     <AuthLoader
-      loadingElement={
-        Platform.OS === 'web' ? (
-          <RText>Loading...</RText>
-        ) : (
-          <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-          >
-            <RSpinner color="#0284c7" />
-          </View>
-        )
-      }
-      unauthorizedElement={unauthorizedElement || <LandingPage />}
+      loadingElement={loadingElement}
+      unauthorizedElement={unauthorizedElement || defaultUnauthorizedElement}
     >
       {children}
     </AuthLoader>
