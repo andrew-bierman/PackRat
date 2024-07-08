@@ -22,9 +22,16 @@ interface Suggestions {
   suggestion: Suggestion[];
 }
 
-export const useChat = (itemTypeId = null) => {
+interface TypeId {
+  itemTypeId: string;
+  type: string;
+}
+
+export const useChat = (itemTypeId: TypeId | null = null) => {
   const user = useAuthUser();
-  const [typeId, setTypeId] = useState(itemTypeId);
+
+  console.log('user', user)
+  const [typeId, setTypeId] = useState<TypeId | null>(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestions>({

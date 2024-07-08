@@ -28,9 +28,7 @@ interface Item {
   category: Category;
 }
 
-interface GroupedData {
-  [key: string]: Item[];
-}
+type GroupedData = Record<string, Item[]>;
 
 interface PaginatedSortedTableProps {
   groupedData: GroupedData;

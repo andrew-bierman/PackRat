@@ -9,7 +9,7 @@ import { usePackId } from 'app/hooks/packs/usePackId';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
-import { FlatList, View } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import { useFetchSinglePack } from '../../hooks/packs';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
@@ -46,7 +46,7 @@ export function PackDetails() {
   } = useFetchSinglePack(packId);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
 
-  const styles = useCustomStyles(loadStyles);
+  // const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
 
   // check if user is owner of pack, and that pack and user exists
@@ -163,24 +163,24 @@ export function PackDetails() {
   );
 }
 
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  console.log('currentTheme', currentTheme);
-  return {
-    packsContainer: {
-      flexDirection: 'column',
-      minHeight: '100vh',
-      padding: 25,
-      fontSize: 26,
-    },
-    dropdown: {
-      backgroundColor: currentTheme.colors.white,
-    },
-    boxStyle: {
-      padding: 5,
-      borderRadius: 10,
-      width: '100%',
-      minHeight: 400,
-    },
-  };
-};
+// const loadStyles = (theme) => {
+//   const { currentTheme } = theme;
+//   console.log('currentTheme', currentTheme);
+//   return {
+//     packsContainer: {
+//       flexDirection: 'column',
+//       minHeight: Platform.OS === 'web' ? '100vh' : '100%',
+//       padding: 25,
+//       fontSize: 26,
+//     },
+//     dropdown: {
+//       backgroundColor: currentTheme.colors.white,
+//     },
+//     boxStyle: {
+//       padding: 5,
+//       borderRadius: 10,
+//       width: '100%',
+//       minHeight: 400,
+//     },
+//   };
+// };

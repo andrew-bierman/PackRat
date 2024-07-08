@@ -34,7 +34,7 @@ export const TripDateRangeCard = ({
           end_date: dates[1],
         }
       : null;
-    setDateRange(dateRange);
+    setDateRange(dateRange as DateRange);
     setSelectedDates(dates);
   };
 

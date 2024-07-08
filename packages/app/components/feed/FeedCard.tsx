@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import useTheme from '../../hooks/useTheme';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, TouchableOpacity, View } from 'react-native';
 import { DuplicateIcon } from '../DuplicateIcon/index';
 import { truncateString } from '../../utils/truncateString';
 import {
@@ -35,7 +35,7 @@ interface CardProps {
     id: string;
   }>;
   favorites_count: number;
-  owner_id: string;
+  owner_id: string | { id: String };
   destination: string;
   createdAt: string;
   owners: Array<{ any: any }>;
@@ -43,9 +43,9 @@ interface CardProps {
   itemPacks?: any[];
 }
 
-// interface User {
-//   id: string;
-// }
+interface User {
+  id: string;
+}
 
 export default function Card({
   type,
@@ -121,7 +121,7 @@ export default function Card({
   let numberOfNights;
 
   if (duration) numberOfNights = JSON.parse(duration).numberOfNights;
-
+  const calculatedWidth = Platform.OS === 'web' ? '60vw' : '60%';
   return (
     <Layout>
       <View
@@ -284,7 +284,7 @@ export default function Card({
                             gap: 8,
                           }}
                         >
-                          {user?.id === owner_id.id ? null : (
+                          {user?.id === owner_id ? (
                             <TouchableOpacity onPress={handleAddToFavorite}>
                               <AntDesign
                                 name="heart"
@@ -296,7 +296,7 @@ export default function Card({
                                 }
                               />
                             </TouchableOpacity>
-                          )}
+                          ) : null}
 
                           <RText
                             color={currentTheme.colors.textColor}

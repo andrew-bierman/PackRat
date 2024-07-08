@@ -19,6 +19,10 @@ interface PackCardHeaderProps {
   title: string;
   link?: string;
 }
+interface optionValues{
+  label: string;
+  value: string
+}
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isLoading, refetch } = useFetchSinglePack(data?.id);
@@ -36,7 +40,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
   const { isDark } = useTheme();
   const router = useRouter();
 
-  const optionValues = [
+  const optionValues: optionValues[] = [
     { label: 'Edit', value: 'Edit' },
     { label: 'Save', value: 'Save' },
     { label: 'Delete', value: 'Delete' },

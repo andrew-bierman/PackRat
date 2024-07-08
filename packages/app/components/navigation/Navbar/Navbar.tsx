@@ -42,7 +42,7 @@ export const Navbar = () => {
             />
             <Text
               style={styles.logoText}
-              onClick={() => {
+              onPress={() => {
                 navigate('/');
               }}
             >
@@ -71,31 +71,31 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     ? NavbarStyles.floatingBg
     : currentTheme.colors.background;
 
-  return {
+  return StyleSheet.create({
     drawerStyles: {
       backgroundColor: currentTheme.colors.background,
     },
     safeArea: {
       backgroundColor,
       width: '100%',
-      margin: 'auto',
+      margin: 0,
       transition: NavbarStyles.transition,
-      ...(isFloating
-        ? {
-            backdropFilter: NavbarStyles.floatingBlur,
-            marginTop: NavbarStyles.floatingSpacing,
-            padding: NavbarStyles.floatingSpacing,
-            borderRadius: NavbarStyles.floatingRadius,
-          }
-        : {}),
-      ...(isWeb
-        ? {
-            position: 'fixed',
-            top: 0,
-            zIndex: 100,
-            width: '100vw',
-          }
-        : {}),
+      ...Platform.select({
+        web: {
+          ...(isFloating
+            ? {
+                backdropFilter: NavbarStyles.floatingBlur,
+                marginTop: NavbarStyles.floatingSpacing,
+                padding: NavbarStyles.floatingSpacing,
+                borderRadius: NavbarStyles.floatingRadius,
+              }
+            : {}),
+          position: 'fixed' as 'fixed' | 'relative',
+          top: 0,
+          zIndex: 100,
+          width: Platform.OS === 'web' ? '100vw' : "100%",
+        },
+      }),
     },
     container: {
       width: '100vw',
@@ -156,5 +156,5 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       // Apply styles for the selected item's text
       // ...
     },
-  };
+  });
 };

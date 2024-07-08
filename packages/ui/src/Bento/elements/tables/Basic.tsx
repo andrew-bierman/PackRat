@@ -45,8 +45,8 @@ interface BasicTableProps {
   onDelete: (params: { itemId: string; packId: string }) => void;
   hasPermissions: boolean;
   currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /** ------ EXAMPLE ------ */

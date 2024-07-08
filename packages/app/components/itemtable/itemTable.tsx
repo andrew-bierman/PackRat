@@ -6,11 +6,17 @@ import useTheme from '../../hooks/useTheme';
 import Layout from 'app/components/layout/Layout';
 import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
 import { PaginationLimit } from '../paginationChooseLimit';
+
+interface Category {
+  id: string;
+  name: string;
+}
+
 interface ItemType {
   global: string;
   name: string;
   weight: number;
-  category?: { name: string };
+  category?: Category;
   quantity: number;
   unit: string;
   id: string;
@@ -21,6 +27,10 @@ interface ItemType {
   createdAt: any;
 }
 
+interface GroupedData {
+  [type: string]: ItemType[];
+}
+
 interface ItemsTableProps {
   limit: number;
   setLimit: (limit: number) => void;
@@ -29,12 +39,12 @@ interface ItemsTableProps {
   data: ItemType[];
   isLoading: boolean;
   totalPages: number;
-  handleCheckboxChange: (itemId: string) => void;
-  onDelete: (params: { itemId: string; packId: string }) => void;
-  hasPermissions: boolean;
-  currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  handleCheckboxChange?: (itemId: string) => void;
+  onDelete?: (params: { itemId: string; packId: string }) => void;
+  hasPermissions?: boolean;
+  currentPack?: any;
+  refetch?: () => void;
+  setRefetch?: () => void;
 }
 
 export const ItemsTable = ({
@@ -55,6 +65,17 @@ export const ItemsTable = ({
   const { xs, xxxs } = useResponsive();
   const { isDark } = useTheme();
 
+  const groupByType = (items: ItemType[]): Record<string, ItemType[]> => {
+    return items.reduce((acc, item) => {
+      const { type } = item;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(item);
+      return acc;
+    }, {} as GroupedData);
+  };
+
   const filteredData = data.map((item) => {
     const {
       id,
@@ -67,6 +88,8 @@ export const ItemsTable = ({
     } = item;
     return filteredItem;
   });
+
+  const groupedData = groupByType(filteredData);
 
   return (
     <Layout>
@@ -84,10 +107,10 @@ export const ItemsTable = ({
             <Loader />
           ) : (
             <PaginatedSortedTable
-              groupedData={filteredData}
+              groupedData={groupedData}
               handleCheckboxChange={handleCheckboxChange}
               onDelete={onDelete}
-              hasPermissions={false}
+              hasPermissions={hasPermissions}
               currentPack={currentPack}
               refetch={refetch}
               setRefetch={setRefetch}
