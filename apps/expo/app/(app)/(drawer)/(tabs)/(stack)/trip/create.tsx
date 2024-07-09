@@ -14,7 +14,6 @@ export default function Trip() {
         </Head>
       )}
       <Stack.Screen
-        name="Create Trip"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Create Trip',

@@ -19,7 +19,6 @@ const Profile = () => {
         </Head>
       )}
       <Stack.Screen
-        name={`${userRealName}'s Profile`}
         options={{
           title: `${userRealName}'s Profile`,
         }}

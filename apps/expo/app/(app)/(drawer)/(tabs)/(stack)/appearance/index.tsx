@@ -12,10 +12,9 @@ export default function Appearance() {
         </Head>
       )}
       <Stack.Screen
-        name="Appearance"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Appearance'
+          title: 'Appearance',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

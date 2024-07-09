@@ -12,7 +12,6 @@ export default function SettingsPage() {
         </Head>
       )}
       <Stack.Screen
-        name="Settings"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Settings',

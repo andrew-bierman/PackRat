@@ -68,7 +68,6 @@ export default function Search() {
         </Head>
       )}
       <Stack.Screen
-        name="Search"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Search',
