@@ -5,10 +5,7 @@ import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
 import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
-import { securityHeaders } from './middleware/securityHeaders';
-import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
-import { CORS_METHODS } from './config';
 import { CORS_METHODS } from './config';
 
 interface Bindings {
@@ -26,36 +23,13 @@ const HTTP_ENDPOINT = '/api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-// SETUP COMPRESSION
-//  Note: On Cloudflare Workers, the response body will be compressed automatically, so there is no need to use this middleware.
-//  Bun: This middleware uses CompressionStream which is not yet supported in bun.
-//  ref: https://hono.dev/middleware/builtin/compress
+// Custom Middleware for Mode Selection
+const modeSelectionMiddleware = async (c: any, next: any) => {
+  const serverMode = c.env.SERVER_MODE || 'tRPC'; // Default to 'tRPC' if not set
 
-// SETUP HTTPS Enforcement Middleware
-app.use('*', enforceHttps()); // Apply to all routes
-
-// SETUP SECURITY HEADERS
-app.use('*', securityHeaders()); // Apply to all routes
-
-// SETUP CORS
-app.use('*', async (c, next) => {
-  const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
-  const corsMiddleware = cors({
-    // origin: CORS_ORIGIN, // uncomment this line to enable CORS
-    origin: '*', // temporary
-    credentials: true,
-    allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: CORS_METHODS,
-  });
-  return corsMiddleware(c, next);
-});
-
-// SETUP LOGGING
-//  tRPC is already logging requests, but you can add your own middleware
-//  app.use('*', logger());
-
-// SETUP TRPC SERVER
-app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
+  if (serverMode === 'tRPC') {
+    // SETUP TRPC SERVER
+    app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
 
     // SETUP TRPC PLAYGROUND
     app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
