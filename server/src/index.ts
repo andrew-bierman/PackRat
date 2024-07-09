@@ -3,9 +3,10 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
-// import { logger } from 'hono/logger';
-import { compress } from 'hono/compress';
+import { securityHeaders } from './middleware/securityHeaders';
+import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
+import { CORS_METHODS } from './config';
 
 interface Bindings {
   [key: string]: any;
@@ -22,42 +23,46 @@ const HTTP_ENDPOINT = '/api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-// SETUP COMPRESSION
-//  Note: On Cloudflare Workers, the response body will be compressed automatically, so there is no need to use this middleware.
-//  Bun: This middleware uses CompressionStream which is not yet supported in bun.
-//  ref: https://hono.dev/middleware/builtin/compress
+// Custom Middleware for Mode Selection
+const modeSelectionMiddleware = async (c: any, next: any) => {
+  const serverMode = c.env.SERVER_MODE || 'tRPC'; // Default to 'tRPC' if not set
 
-// SETUP CORS
+  if (serverMode === 'tRPC') {
+    // SETUP TRPC SERVER
+    app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
+
+    // SETUP TRPC PLAYGROUND
+    app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
+      const handler = await fetchHandler({
+        router: appRouter,
+        trpcApiEndpoint: TRPC_API_ENDPOINT,
+        playgroundEndpoint: TRPC_PLAYGROUND_ENDPOINT,
+      });
+      return handler(c.req.raw);
+    });
+  } else if (serverMode === 'REST') {
+    // SET UP HTTP ROUTES
+    app.route(`${HTTP_ENDPOINT}`, router);
+  }
+
+  await next();
+};
+
+// Apply the Mode Selection Middleware
+app.use('*', modeSelectionMiddleware);
+
+// Common Middleware Setup
+app.use('*', enforceHttps()); // HTTPS Enforcement
+app.use('*', securityHeaders()); // Security Headers
 app.use('*', async (c, next) => {
-  const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
+  // CORS Setup
   const corsMiddleware = cors({
-    // origin: CORS_ORIGIN,
-    origin: '*', // temporary
+    origin: '*', // Adjust according to your CORS policy
     credentials: true,
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowMethods: CORS_METHODS,
   });
   return corsMiddleware(c, next);
 });
-
-// SETUP LOGGING
-//  tRPC is already logging requests, but you can add your own middleware
-//  app.use('*', logger());
-
-// SETUP TRPC SERVER
-app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
-
-// SETUP TRPC PLAYGROUND
-app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
-  const handler = await fetchHandler({
-    router: appRouter,
-    trpcApiEndpoint: TRPC_API_ENDPOINT,
-    playgroundEndpoint: TRPC_PLAYGROUND_ENDPOINT,
-  });
-  return handler(c.req.raw);
-});
-
-// SET UP HTTP ROUTES
-app.route(`${HTTP_ENDPOINT}`, router);
 
 export default app;
