@@ -19,7 +19,7 @@ import {
   emailExistsRoute,
   updatePasswordRoute,
 } from '../controllers/auth';
-import { getWeatherRoute, getWeatherWeekRoute } from '../controllers/weather';
+import { getWeatherRoute } from '../controllers/weather';
 import {
   addTripRoute,
   deleteTripRoute,
@@ -104,7 +104,6 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
-  getWeatherWeek: getWeatherWeekRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),
