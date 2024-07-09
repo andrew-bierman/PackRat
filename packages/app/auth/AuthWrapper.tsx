@@ -24,7 +24,7 @@ export const AuthWrapper = ({
     );
 
   const defaultUnauthorizedElement =
-    Platform.OS === 'web' ? <Redirect to="/login" /> : <LandingPage />;
+    Platform.OS === 'web' ? <Redirect to="/sign-in" /> : <LandingPage />;
 
   return (
     <AuthLoader
