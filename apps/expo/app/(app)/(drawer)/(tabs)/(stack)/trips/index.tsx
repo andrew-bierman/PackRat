@@ -12,7 +12,6 @@ export default function FeedNav() {
         </Head>
       )}
       <Stack.Screen
-        name="Trips"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Trips',

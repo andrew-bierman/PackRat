@@ -12,10 +12,9 @@ export default function Packs() {
         </Head>
       )}
       <Stack.Screen
-        name="Packs"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Packs'
+          title: 'Packs',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
