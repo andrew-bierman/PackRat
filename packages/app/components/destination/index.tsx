@@ -15,8 +15,7 @@ import {
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
-import { WeatherData } from 'components/weather/WeatherData';
-
+import { WeatherData } from 'app/components/weather/WeatherData';
 
 const RText: any = OriginalRText;
 
