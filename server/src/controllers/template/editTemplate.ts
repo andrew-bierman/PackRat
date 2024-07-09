@@ -1,6 +1,7 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { editTemplateService } from '../../services/template/template.service';
 import { z } from 'zod';
+import * as validator from '@packrat/validations';
 
 /**
  * Edits a template.
@@ -21,14 +22,8 @@ import { z } from 'zod';
 // };
 
 export function editTemplateRoute() {
-  return publicProcedure
-    .input(
-      z.object({
-        templateId: z.string(),
-        type: z.any(),
-        isGlobalTemplate: z.boolean(),
-      }),
-    )
+  return protectedProcedure
+    .input(validator.editTemplate)
     .mutation(async (opts) => {
       const { templateId, type, isGlobalTemplate } = opts.input;
       const updatedTemplate = await editTemplateService(

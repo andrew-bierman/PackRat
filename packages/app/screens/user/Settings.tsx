@@ -89,8 +89,10 @@ export default function Settings() {
           <RStack
             space="$3"
             maw="100%"
-            width="fit-content"
-            marginHorizontal="auto"
+            style={{
+              width: Platform.OS === 'web' ? null : 'fit-content',
+              marginHorizontal: 'auto',
+            }}
           >
             <ImageUpload
               label="Profile Picture"
@@ -142,13 +144,16 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack marginTop={20} marginBottom={10}>
+        <RStack style={{ marginTop: 20, marginBottom: 10 }}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
-          <RStack space="$3" width="100%" marginHorizontal="auto">
+          <RStack
+            space="$3"
+            style={{ width: '100%', marginHorizontal: 'auto' }}
+          >
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput
@@ -186,17 +191,17 @@ export default function Settings() {
         <RStack marginTop={20} marginBottom={10}>
           <RH2>Delete account</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>
+          <RText size={16}>
             Deleting your account will remove all your information from our
             database. This cannot be undone
           </RText>
         </RStack>
         <Form validationSchema={deleteUserForm}>
-          <RStack width="100%" marginHorizontal="auto">
+          <RStack style={{ width: '100%', marginHorizontal: 'auto' }}>
             <RLabel htmlFor="confirmText">
               To confirm this, type "delete"
             </RLabel>
-            <RStack space="$2" flexDirection="row">
+            <RStack space="$2" style={{ flexDirection: 'row' }}>
               <FormInput
                 id="confirmText"
                 style={{ minWidth: 268 }}

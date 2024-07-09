@@ -15,10 +15,10 @@ export default function Pack() {
         </Head>
       )}
       <Stack.Screen
+        name="Pack"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Pack',
-          name: 'Pack',
+          title: 'Pack'
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

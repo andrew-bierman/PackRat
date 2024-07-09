@@ -3,6 +3,7 @@ import {
   getWeatherWeekRoute as getWeatherWeek,
   getWeatherRoute as getWeather,
 } from '../controllers/weather/index';
+import authTokenMiddleware from '../middleware/auth';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = new Hono();
@@ -26,7 +27,7 @@ const router = new Hono();
  *       '500':
  *         description: Error retrieving current weather
  */
-router.get('/', tryCatchWrapper(getWeather));
+router.get('/', authTokenMiddleware as any, tryCatchWrapper(getWeather));
 
 /**
  * @swagger
@@ -40,6 +41,10 @@ router.get('/', tryCatchWrapper(getWeather));
  *       '500':
  *         description: Error retrieving weekly weather forecast
  */
-router.get('/week', tryCatchWrapper(getWeatherWeek));
+router.get(
+  '/week',
+  authTokenMiddleware as any,
+  tryCatchWrapper(getWeatherWeek),
+);
 
 export default router;

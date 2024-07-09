@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 // /**
 //  * Retrieves favorite packs for a user.
@@ -17,7 +17,7 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function getFavoritePacksByUserRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async (opts) => {
       const { userId } = opts.input;

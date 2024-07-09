@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -10,8 +10,8 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Array} An array of items matching the search criteria.
  */
-const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
-  z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
+// const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
+//   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
 
 // export const searchItemsByName = async (req, res, next) => {
 //   try {
@@ -26,7 +26,7 @@ const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
 // };
 
 export function searchItemsByNameRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ name: z.string() }))
     .query(async (opts) => {
       const { name } = opts.input;

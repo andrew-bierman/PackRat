@@ -5,7 +5,7 @@ import {
   InvalidRequestParamsError,
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validators from '@packrat/validations';
 import { getOsmService } from '../../services/osm/getOsmService';
 import { z } from 'zod';
@@ -29,7 +29,7 @@ import { z } from 'zod';
 // };
 
 export function getOsmRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         activityType: z.string(),

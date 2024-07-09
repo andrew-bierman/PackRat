@@ -6,6 +6,11 @@ import RText from '../RText';
 type ContentProps = ComponentProps<(typeof ZeegoContextMenu)['Content']>;
 type ItemProps = ComponentProps<(typeof ZeegoContextMenu)['Item']>;
 
+interface MenuItems{
+  label: string,
+  onSelect: () => void,
+}
+
 const ContextMenu = {
   ...ZeegoContextMenu,
   Content: ZeegoContextMenu.create(

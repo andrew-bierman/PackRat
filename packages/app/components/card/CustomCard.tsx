@@ -15,10 +15,7 @@ interface CustomCardProps {
   type: 'pack' | 'trip';
   destination?: string;
   data: {
-    owner_id: {
-      id: string;
-      username?: string;
-    };
+    owner_id: string
     owners?: Array<{ name: string }> | null;
   };
 }
@@ -38,6 +35,7 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
+  console.log('CustomCardProps ', data  )
 
   return (
     <View

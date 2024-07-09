@@ -15,7 +15,7 @@ export const useUserQuery = () => {
     refetch,
     data,
     isLoading: isRequestLoading,
-  } = queryTrpc.getMe.useQuery(null, {
+  } = queryTrpc.getMe.useQuery(undefined, {
     enabled: isRequestEnabled,
   });
 

@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UnableToEditPackError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { editPackService } from '../../services/pack/pack.service';
@@ -25,7 +25,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function editPackRoute() {
-  return publicProcedure.input(validator.editPack).mutation(async (opts) => {
+  return protectedProcedure.input(validator.editPack).mutation(async (opts) => {
     const packData = opts.input;
     const pack = await editPackService(packData);
     return pack;

@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from '@packrat/validations';
 import { getTrailsService } from '../../services/trails/getTrailsService';
@@ -34,7 +34,7 @@ import { z } from 'zod';
 // };
 
 export function getTrailsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         administrative_area_level_1: z.string(),

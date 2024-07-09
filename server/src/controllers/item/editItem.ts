@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { editItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
 
@@ -23,7 +23,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function editItemRoute() {
-  return publicProcedure.input(validator.editItem).mutation(async (opts) => {
+  return protectedProcedure.input(validator.editItem).mutation(async (opts) => {
     const { id, name, weight, unit, quantity, type } = opts.input;
 
     if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {

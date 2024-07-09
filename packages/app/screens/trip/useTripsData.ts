@@ -16,8 +16,8 @@ export const useTripsData = () => {
     isLoading: isPhotonLoading,
   } = useGetPhotonDetails({
     properties: {
-      osm_id: osm?.osmId,
-      osm_type: osm?.osmType,
+      osm_id: osm?.osmId ?? '',
+      osm_type: osm?.osmType ?? '',
     },
   });
 
