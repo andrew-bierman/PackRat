@@ -13,9 +13,9 @@ import {
   useGetPhotonDetails,
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
-import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
+import { WeatherData } from 'components/weather/WeatherData';
 
 
 const RText: any = OriginalRText;
@@ -79,10 +79,6 @@ export const DestinationPage = () => {
   const styles = useCustomStyles(loadStyles);
 
   const { currentDestination, latLng } = useCurrentDestination();
-
-  const { data: weatherData } = useFetchWeather(latLng);
-
-  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 
   const [osm] = useGEOLocationSearch();
   const {
@@ -196,10 +192,7 @@ export const DestinationPage = () => {
             contentProps={{ shape }}
             type="map"
           />
-          <WeatherCard
-            weatherObject={weatherData}
-            weatherWeek={weatherWeekData}
-          />
+          <WeatherData latLng={latLng} />
         </View>
       )}
     </ScrollView>

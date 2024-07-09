@@ -95,6 +95,7 @@ router.get(
  */
 router.get(
   '/p/:packId',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.getPackById, req.params, next)) as any,
   tryCatchWrapper(getPackById),
@@ -123,6 +124,7 @@ router.get(
  */
 router.put(
   '/score/:packId',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.getPackById, req.params, next)) as any,
   tryCatchWrapper(scorePack),
@@ -157,6 +159,7 @@ router.put(
  */
 router.post(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.addPack, req.body, next)) as any,
   tryCatchWrapper(addPack),
 );
@@ -190,6 +193,7 @@ router.post(
  */
 router.put(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.editPack, req.body, next)) as any,
   tryCatchWrapper(editPack),
 );
@@ -219,6 +223,7 @@ router.put(
  */
 router.delete(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.deletePack, req.body, next)) as any,
   tryCatchWrapper(deletePack),
 );
@@ -248,6 +253,7 @@ router.delete(
  */
 router.post(
   '/duplicate',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.duplicatePublicPack, req.body, next)) as any,
   tryCatchWrapper(duplicatePublicPack),

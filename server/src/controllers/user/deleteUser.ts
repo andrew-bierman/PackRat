@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 
@@ -26,10 +26,12 @@ import { User } from '../../drizzle/methods/User';
 // };
 
 export function deleteUserRoute() {
-  return publicProcedure.input(validator.deleteUser).mutation(async (opts) => {
-    const { userId } = opts.input;
-    const user = new User();
-    await user.delete(userId);
-    return 'User deleted successfully';
-  });
+  return protectedProcedure
+    .input(validator.deleteUser)
+    .mutation(async (opts) => {
+      const { userId } = opts.input;
+      const user = new User();
+      await user.delete(userId);
+      return 'User deleted successfully';
+    });
 }

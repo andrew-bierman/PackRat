@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getItemsGloballyService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -10,7 +10,7 @@ import { z } from 'zod';
  */
 
 export function getItemsGloballyRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         limit: z.number(),

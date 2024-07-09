@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 import { hashPassword } from '../../utils/user';
@@ -34,7 +34,7 @@ import bcrypt from 'bcryptjs';
 // };
 
 export function editUserRoute() {
-  return publicProcedure.input(validator.editUser).mutation(async (opts) => {
+  return protectedProcedure.input(validator.editUser).mutation(async (opts) => {
     const {
       id,
       name,

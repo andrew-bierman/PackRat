@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UnableToEditTripError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 
@@ -31,7 +31,7 @@ import { Trip } from '../../drizzle/methods/trip';
 // };
 
 export function editTripRoute() {
-  return publicProcedure.input(validator.editTrip).mutation(async (opts) => {
+  return protectedProcedure.input(validator.editTrip).mutation(async (opts) => {
     const tripData = { ...opts.input };
     const tripClass = new Trip();
     const trip = await tripClass.update(tripData);

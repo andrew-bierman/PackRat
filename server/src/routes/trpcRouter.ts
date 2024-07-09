@@ -19,7 +19,7 @@ import {
   emailExistsRoute,
   updatePasswordRoute,
 } from '../controllers/auth';
-import { getWeatherRoute, getWeatherWeekRoute } from '../controllers/weather';
+import { getWeatherRoute } from '../controllers/weather';
 import {
   addTripRoute,
   deleteTripRoute,
@@ -85,40 +85,9 @@ import {
   postSingleGeoJSONRoute,
 } from '../controllers/getOsm';
 
-import {
-  router as trpcRouter,
-  publicProcedure,
-  protectedProcedure,
-} from '../trpc';
-import { z } from 'zod';
-
-export const helloRouter = trpcRouter({
-  world: publicProcedure.input(z.string()).query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  }),
-});
-
-export const helloRouter2 = () => {
-  return publicProcedure.query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  });
-};
+import { router as trpcRouter } from '../trpc';
 
 export const appRouter = trpcRouter({
-  hello1: trpcRouter({
-    world: publicProcedure.query(() => {
-      return 'Hello World';
-    }),
-  }),
-  hello2: helloRouter,
-  hello3: publicProcedure.query(async (opts) => {
-    return 'Hello World';
-  }),
-  helloRouter2: helloRouter2(),
-  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
-  // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
   signUp: signUpRoute(),
@@ -135,7 +104,6 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
-  getWeatherWeek: getWeatherWeekRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),

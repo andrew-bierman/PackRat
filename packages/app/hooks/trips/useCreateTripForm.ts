@@ -7,11 +7,7 @@ import { useAuthUser } from 'app/auth/hooks';
 import { usePackId } from 'app/hooks/packs';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
-export const useCreateTripForm = (
-  weather,
-  currentDestination,
-  photonDetails,
-) => {
+export const useCreateTripForm = (currentDestination, photonDetails) => {
   const { store, setTripValue, setDateRange } = useCreateTripStore();
   const authUser = useAuthUser();
   const [packId] = usePackId();
@@ -28,13 +24,12 @@ export const useCreateTripForm = (
   const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(
     () => ({
       ...store,
-      weather,
       destination: currentDestination?.properties?.name,
       owner_id: authUser?.id,
       pack_id: packId,
       geoJSON: photonDetails,
     }),
-    [store, weather, packId, photonDetails, authUser?.id],
+    [store, packId, photonDetails, authUser?.id],
   );
 
   useEffect(() => {

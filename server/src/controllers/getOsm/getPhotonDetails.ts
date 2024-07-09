@@ -4,7 +4,7 @@ import {
 } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsService';
 
 /**
@@ -28,7 +28,7 @@ import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsServ
 // };
 
 export function getPhotonDetailsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({ id: z.union([z.string(), z.number()]), type: z.string() }),
     )

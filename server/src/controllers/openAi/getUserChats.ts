@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { FailedToRetrieveUserChats } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getUserChatsService } from '../../services/openAi/openAi.service';
@@ -24,7 +24,7 @@ import { z } from 'zod';
 // };
 
 export function getUserChatsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ userId: z.string(), itemTypeId: z.string() }))
     .query(async (opts) => {
       const { userId, itemTypeId } = opts.input;
