@@ -39,9 +39,9 @@ class VectorClient {
   // }
 
   // New API-based insert method
-  public async insert(id: string, values: number[]) {
+  public async insert(id: string, values: number[], namespace: string) {
     const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/insert`;
-    const ndjsonBody = `${JSON.stringify({ id, values })}\n`;
+    const ndjsonBody = `${JSON.stringify({ id, values, namespace })}\n`;
 
     const response = await fetch(url, {
       method: 'PUT',
@@ -69,7 +69,7 @@ class VectorClient {
   // }
 
   // New API-based search method
-  public async search(queryEmbedding: number[]) {
+  public async search(queryEmbedding: number[], namespace: string) {
     const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/vectors/query`;
     const response = await fetch(url, {
       method: 'POST',
@@ -78,7 +78,7 @@ class VectorClient {
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        queries: [{ values: queryEmbedding, topK: 5 }],
+        queries: [{ values: queryEmbedding, topK: 5, namespace }],
       }),
     });
 
@@ -92,9 +92,9 @@ class VectorClient {
     return await response.json();
   }
 
-  public async syncRecord({ id, content }: { id: string; content: string }) {
+  public async syncRecord({ id, content, namespace }: { id: string; content: string, namespace: string }) {
     const values = await AiClient.getEmbedding(content);
-    await this.insert(id, values);
+    await this.insert(id, values, namespace);
   }
 }
 
