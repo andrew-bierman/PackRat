@@ -42,19 +42,11 @@ export default function UserDataContainer({
 }: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [dataState, setDataState] = useState(
-    data.length > 0 ? Array(data.length).fill(false) : [],
-  );
-  useEffect(() => {
-    setDataState(Array(data.length).fill(false));
-  }, [data]);
   const currentUser = useAuthUser();
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
-
-  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
@@ -62,8 +54,6 @@ export default function UserDataContainer({
       <UserDataCard
         key={item.id}
         {...item}
-        state={dataState}
-        setState={setDataState}
         index={index}
         differentUser={differentUser}
       />
