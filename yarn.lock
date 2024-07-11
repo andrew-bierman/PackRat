@@ -10812,6 +10812,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cookie@npm:^0":
+  version: 0.6.0
+  resolution: "@types/cookie@npm:0.6.0"
+  checksum: 10/b883348d5bf88695fbc2c2276b1c49859267a55cae3cf11ea1dccc1b3be15b466e637ce3242109ba27d616c77c6aa4efe521e3d557110b4fdd9bc332a12445c2
+  languageName: node
+  linkType: hard
+
 "@types/cookie@npm:^0.4.1":
   version: 0.4.1
   resolution: "@types/cookie@npm:0.4.1"
@@ -28678,7 +28685,9 @@ __metadata:
     "@babel/runtime": "npm:^7.21.0"
     "@manypkg/cli": "npm:^0.21.0"
     "@prisma/extension-accelerate": "npm:^0.6.2"
+    "@types/cookie": "npm:^0"
     check-dependency-version-consistency: "npm:^4.1.0"
+    cookie: "npm:^0.6.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
     eslint: "npm:^8.56.0"

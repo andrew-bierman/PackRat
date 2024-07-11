@@ -1,6 +1,7 @@
 import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
+import { Context, Next } from 'hono';
 
 // /**
 //  * Sign in a user.
@@ -8,15 +9,35 @@ import { User } from '../../drizzle/methods/User';
 //  * @param {Object} res - The response object.
 //  * @return {Object} The user object.
 //  */
-// export const userSignIn = async (req, res) => {
-//   const { email, password } = req.body;
+// export const userSignIn = async (c: Context, next: Next) => {
+//   const { email, password } = await c.req.json();
 //   const user = await prisma.user.findByCredentials({
 //     email,
 //     password,
 //   });
 //   await User(user).generateAuthToken();
-//   res.status(200).send({ user });
+//   c.json(user, 200);
 // };
+
+export const userSignIn = async (c: Context, next: Next) => {
+  try {
+    const { email, password } = await c.req.json();
+    const userClass = new User();
+    console.log('DONEDONEDNEOFNDSOFJSD')
+    const user = await userClass.findByCredentials(email, password);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);
+
+    c.json(user, 200);
+  } catch (error) {
+    console.error('Error signing in user:', error);
+    c.json({ error: 'Internal Server Error' }, 500);
+  }
+};
 
 export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {

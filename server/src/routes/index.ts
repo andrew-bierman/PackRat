@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
-import csrf from 'csurf';
+// import csrf from 'csurf';
+import { csrf } from 'hono/csrf';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
@@ -15,12 +16,16 @@ import templateRoutes from './templateRoutes';
 import favoriteRoutes from './favoriteRoutes';
 import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
-import { Context, Hono, Next } from 'hono';
+import { Hono } from 'hono';
+import type { Context, Next } from 'hono';
+import { zodParser } from '../middleware/validators/zodParser';
+import * as validator from '@packrat/validations';
 
 const router = new Hono();
 
 // Create a CSRF middleware
-const csrfProtection = csrf({ cookie: true });
+// const csrfProtection = csrf({ cookie: true });
+const csrfProtection = csrf();
 
 /**
  * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
@@ -44,7 +49,7 @@ if (process.env.NODE_ENV !== 'production') {
 router.use(csrfProtection);
 
 // Use routes
-router.use('/user', userRoutes);
+router.route('/user', userRoutes);
 router.use('/pack', packRoutes);
 router.use('/item', itemRoutes);
 router.use('/trip', tripRoutes);
@@ -63,8 +68,22 @@ router.route('/mapPreview', mapPreviewRouter);
 // Create a separate router for '/hello' route
 const helloRouter = new Hono();
 helloRouter.get('/', async (c: Context) => {
+  console.log(c);
   return c.text('Hello, world!');
 });
+
+helloRouter.get(
+  'GetFello/:userId',
+  ((c: Context, next: Next) => {
+    console.log('context is loading', c.req.param());
+    zodParser(validator.getUserById, c.req.param(), next);
+    next();
+  }) as any,
+  async (c: Context, next: Next) => {
+    // console.log(c.req);
+    return c.text('Hello, Forld!');
+  },
+);
 router.route('/hello', helloRouter);
 
 // Also listen to /api for backwards compatibility
@@ -110,11 +129,11 @@ router.use('/api/mapPreview', mapPreviewRouter);
 // }
 
 // // Attach the CSRF token to a specific route in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.get('/api/csrf/restore', async (c: Context) => {
-//     // c.res.cookie("XSRF-TOKEN", c.req.csrfToken());
-//     return c.res.status(201).json({});
-//   });
-// }
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/api/csrf/restore', async (c: Context) => {
+    // c.res.cookie("XSRF-TOKEN", c.req.csrfToken());
+    return c.res.status(201).json({});
+  });
+}
 
 export default router;

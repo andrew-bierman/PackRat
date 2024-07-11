@@ -1,12 +1,12 @@
-import { Hono } from 'hono';
+import { Context, Hono, Next } from 'hono';
 import {
   getUsersRoute as getUsers,
-  getUserByIdRoute as getUserById,
+  getUserById,
   // addUserRoute as ,
   editUserRoute as editUser,
   deleteUserRoute as deleteUser,
   // addToFavoriteRoute as addToFavorite,
-  userSignInRoute as userSignIn,
+  userSignIn,
   signUpRoute as userSignup,
   sentEmailRoute as sentEmail,
   resetPasswordRoute as resetPassword,
@@ -79,8 +79,8 @@ router.get(
  */
 router.get(
   '/:userId',
-  ((req, res, next) => {
-    zodParser(validator.getUserById, req.params, next);
+  ((c: Context, next: Next) => {
+    zodParser(validator.getUserById, c.req.param(), next);
     next();
   }) as any,
   tryCatchWrapper(getUserById),
@@ -115,7 +115,10 @@ router.get(
  */
 router.post(
   '/signin',
-  ((req, res, next) => zodParser(validator.userSignIn, req.body, next)) as any,
+  (async (c: Context, next: Next) => {
+    console.log('Parse Body', await c.req.json());
+    zodParser(validator.userSignIn, await c.req.json(), next);
+  }) as any,
   tryCatchWrapper(userSignIn),
 );
 
