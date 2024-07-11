@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: android-apk
-          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
+          path: /home/runner/work/PackRat/PackRat/apps/expo/*.aab
 
   build-ios:
     runs-on: macos-latest
