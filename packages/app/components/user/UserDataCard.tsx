@@ -1,3 +1,4 @@
+import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { View } from 'react-native';
@@ -7,10 +8,12 @@ import {
   RStack,
   RSwitch,
   RLink,
+  RSkeleton,
 } from '@packrat/ui';
 import { truncateString } from '../../utils/truncateString';
 import { useEditPack } from 'app/hooks/packs';
 import { Platform } from 'react-native';
+import { useEditTrips } from 'app/hooks/trips';
 
 const RText: any = OriginalRText;
 
@@ -24,8 +27,6 @@ interface UserDataCardProps {
   favorited_by?: string[];
   favorites_count: number;
   createdAt: string;
-  state: boolean[];
-  setState: React.Dispatch<React.SetStateAction<boolean[]>>;
   index: number;
   differentUser: boolean;
 }
@@ -40,51 +41,35 @@ const UserDataCard = ({
   favorited_by,
   favorites_count,
   createdAt,
-  state,
-  setState,
   index,
   differentUser,
 }: UserDataCardProps) => {
-  const { editPack: changePackStatus } = useEditPack();
-  console.log("Data Data Data ",type,
-    destination,
-    id,
-    name,
-    total_weight,
-    is_public,
-    favorited_by,
-    favorites_count,
-    createdAt,
-    state,
-    setState,
-    index,
-    differentUser,)
-  /**
-   * Updates the state at the specified index with the given boolean value.
-   *
-   * @param {number} index - The index of the state to be updated.
-   * @param {boolean} boolState - The boolean value to update the state with.
-   * @return {void} This function does not return a value.
-   */
-  const updateState = (index, boolState) => {
-    let states = state;
-    states = states.map((state, iterator) => {
-      return iterator === index ? boolState : state;
-    });
-    setState(states);
-  };
+  const { editPack: changePackStatus, isLoading: isPackLoading } =
+    useEditPack();
+  const { editTrips: changeTripStatus, isLoading: isTripLoading } =
+    useEditTrips();
 
-  /**
-   * Updates the status of an item at the specified index.
-   *
-   * @param {number} index - The index of the item to update.
-   * @return {void} This function does not return a value.
-   */
   const handleChangeStatus = (index) => {
-    updateState(index, true);
     if (type === 'pack') {
-      changePackStatus({ id, is_public: !is_public, name });
-    } else if (type === 'trip') {
+      return changePackStatus(
+        { id, is_public: !is_public, name },
+        {
+          onSuccess: (utils) => {
+            utils.getUserFavorites.invalidate();
+          },
+        },
+      );
+    }
+
+    if (type === 'trip') {
+      changeTripStatus(
+        { id, is_public: !is_public },
+        {
+          onSuccess: (utils) => {
+            utils.getUserFavorites.invalidate();
+          },
+        },
+      );
     }
   };
 
@@ -133,8 +118,14 @@ const UserDataCard = ({
                 <RText style={{ fontSize: 16, color: 'black' }}>
                   {truncatedName}
                 </RText>
-                {state[index] ? (
-                  <RText style={{ fontSize: 16 }}>Loading....</RText>
+                {(isPackLoading && type === 'pack') ||
+                (isTripLoading && type === 'trip') ? (
+                  <RSkeleton
+                    style={{
+                      height: 20,
+                      width: 36,
+                    }}
+                  />
                 ) : (
                   <>
                     {!differentUser && (
