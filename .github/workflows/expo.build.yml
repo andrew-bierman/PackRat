@@ -2,9 +2,9 @@ name: EAS Local Build
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ['**']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -37,10 +37,10 @@ jobs:
       - name: Run Local Build for Android
         working-directory: ./apps/expo
         run: |
-          eas build --profile preview --platform android --local --non-interactive
+          eas build --profile production --platform android --local --non-interactive
         env:
           EXPO_PUBLIC_ANDROID_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_ANDROID_CLIENT_ID }}
-
+          EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
