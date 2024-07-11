@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
@@ -24,7 +24,7 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 // };
 
 export function getGeoCodeRoute() {
-  return publicProcedure.query(async (opts) => {
+  return protectedProcedure.query(async (opts) => {
     if (!opts.input) {
       throw new Error('Input is missing');
     }

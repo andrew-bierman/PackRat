@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import { postSingleGeoJSONService } from '../../services/osm/osm.service';
 import { z } from 'zod';
@@ -19,7 +19,7 @@ import { z } from 'zod';
 // };
 
 export function postSingleGeoJSONRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ geojson: z.any() }))
     .mutation(async (opts) => {
       const { geojson } = opts.input;

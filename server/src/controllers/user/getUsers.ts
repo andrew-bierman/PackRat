@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { User } from '../../drizzle/methods/User';
@@ -37,7 +37,7 @@ import { User } from '../../drizzle/methods/User';
 // };
 
 export function getUsersRoute() {
-  return publicProcedure.query(async (opts) => {
+  return protectedProcedure.query(async (opts) => {
     const userClass = new User();
     const users = await userClass.findMany();
     return users;

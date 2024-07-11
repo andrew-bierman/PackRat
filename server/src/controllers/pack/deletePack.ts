@@ -1,6 +1,6 @@
 import { deletePackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 /**
  * Deletes a pack.
  * @param {Object} req - The request object.
@@ -20,9 +20,11 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function deletePackRoute() {
-  return publicProcedure.input(validator.deletePack).mutation(async (opts) => {
-    const { packId } = opts.input;
-    await deletePackService(packId);
-    return { msg: 'pack was deleted successfully' };
-  });
+  return protectedProcedure
+    .input(validator.deletePack)
+    .mutation(async (opts) => {
+      const { packId } = opts.input;
+      await deletePackService(packId);
+      return { msg: 'pack was deleted successfully' };
+    });
 }

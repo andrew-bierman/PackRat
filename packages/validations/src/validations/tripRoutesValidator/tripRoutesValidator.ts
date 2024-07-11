@@ -47,7 +47,6 @@ export const getTripById = z.object({
 
 export const addTripDetails = z.object({
   duration: z.string(),
-  weather: z.string(),
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
@@ -68,7 +67,6 @@ export const editTrip = z.object({
   id: z.string(),
   name: z.string(),
   duration: z.string(),
-  weather: z.string(),
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),

@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
 import * as validator from '@packrat/validations';
 import { responseHandler } from '../../helpers/responseHandler';
@@ -25,7 +25,7 @@ export const getUserById = async (c: Context, next: Next) => {
 };
 
 export function getUserByIdRoute() {
-  return publicProcedure.input(validator.getUserById).query(async (opts) => {
+  return protectedProcedure.input(validator.getUserById).query(async (opts) => {
     const { userId } = opts.input;
     return await getUserByIdService(userId);
   });

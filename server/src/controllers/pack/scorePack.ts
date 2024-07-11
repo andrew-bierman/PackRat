@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { scorePackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
 
@@ -23,9 +23,11 @@ import * as validator from '@packrat/validations';
 // };
 
 export function scorePackRoute() {
-  return publicProcedure.input(validator.getPackById).mutation(async (opts) => {
-    const { packId } = opts.input;
-    const pack = await scorePackService(packId);
-    return pack;
-  });
+  return protectedProcedure
+    .input(validator.getPackById)
+    .mutation(async (opts) => {
+      const { packId } = opts.input;
+      const pack = await scorePackService(packId);
+      return pack;
+    });
 }

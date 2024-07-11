@@ -1,5 +1,5 @@
 import { getAISuggestionService } from '../../services/openAi/openAi.service';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 
 /**
@@ -10,7 +10,7 @@ import { z } from 'zod';
  */
 
 export function getAISuggestionsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         userId: z.string(),

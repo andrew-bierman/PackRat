@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import * as validator from '@packrat/validations';
 import {
   getAIResponseRoute as getAIResponse,
   getUserChatsRoute as getUserChats,
@@ -6,6 +7,7 @@ import {
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
+import { zodParser } from '../middleware/validators/zodParser';
 
 const router = new Hono();
 
@@ -57,6 +59,8 @@ router.post(
   '/ai-response',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.getAIResponse, req.body, next)) as any,
   tryCatchWrapper(getAIResponse),
 );
 
@@ -64,6 +68,8 @@ router.get(
   '/user-chats/:userId',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.getUserChats, req.body, next)) as any,
   tryCatchWrapper(getUserChats),
 );
 

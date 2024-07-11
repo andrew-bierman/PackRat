@@ -12,5 +12,13 @@ export const useFetchWeather = (latLng, isDisabled = false) => {
         keepPreviousData: true,
       },
     );
-  return { refetch, data, error, isLoading, isError };
+  return {
+    refetch,
+    weatherToday: data?.list?.[0],
+    weatherWeek: data?.list?.slice(0, 4),
+    location: data?.city || {},
+    error,
+    isLoading,
+    isError,
+  };
 };

@@ -17,7 +17,6 @@ import {
 import * as validator from '@packrat/validations';
 
 import { googleSigninRoute as signInGoogle } from '../controllers/passport/index';
-import { REDIRECT_URL } from '../config';
 import {
   emailExistsRoute as emailExists,
   updatePasswordRoute as updatePassword,
@@ -79,6 +78,7 @@ router.get(
  */
 router.get(
   '/:userId',
+  authTokenMiddleware as any,
   ((c: Context, next: Next) => {
     zodParser(validator.getUserById, c.req.param(), next);
     next();
@@ -305,6 +305,7 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  */
 router.put(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.editUser, req.body, next)) as any,
   tryCatchWrapper(editUser),
 );
@@ -334,17 +335,20 @@ router.put(
  */
 router.delete(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.deleteUser, req.body, next)) as any,
   tryCatchWrapper(deleteUser),
 );
 
 router.post(
   '/checkcode',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
   tryCatchWrapper(checkCode),
 );
 router.post(
   '/updatepassword',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.updatePassword, req.body, next)) as any,
   tryCatchWrapper(updatePassword),

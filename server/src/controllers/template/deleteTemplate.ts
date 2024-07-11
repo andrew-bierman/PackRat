@@ -1,6 +1,6 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
-import { z } from 'zod';
+import * as validator from '@packrat/validations';
 import { Template } from '../../drizzle/methods/template';
 
 // import { prisma } from '../../prisma';
@@ -33,8 +33,8 @@ import { Template } from '../../drizzle/methods/template';
 
 export function deleteTemplateRoute() {
   const templateClass = new Template();
-  return publicProcedure
-    .input(z.object({ templateId: z.string() }))
+  return protectedProcedure
+    .input(validator.deleteTemplate)
     .mutation(async (opts) => {
       const { templateId } = opts.input;
       const template = await templateClass.findTemplate(templateId);

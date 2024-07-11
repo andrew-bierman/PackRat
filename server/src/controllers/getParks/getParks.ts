@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import * as validators from '@packrat/validations';
 import { getParksService } from '../../services/parks/getParksService';
@@ -16,7 +16,7 @@ import { getParksService } from '../../services/parks/getParksService';
 // };
 
 export function getParksRoute() {
-  return publicProcedure.input(validators.getParks).query(async (opts) => {
+  return protectedProcedure.input(validators.getParks).query(async (opts) => {
     const { abbrState } = opts.input;
     const { env }: any = opts.ctx;
     return await getParksService({
