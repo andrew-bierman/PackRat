@@ -39,15 +39,20 @@ class VectorClient {
   // }
 
   // New API-based insert method
-  public async insert(id: string, values: number[], namespace: string) {
+  public async insert(
+    id: string,
+    values: number[],
+    namespace: string,
+    metadata: { isPublic: boolean },
+  ) {
     const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/insert`;
-    const ndjsonBody = `${JSON.stringify({ id, values, namespace })}\n`;
+    const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
 
     const response = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/x-ndjson',
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
       },
       body: ndjsonBody,
     });
@@ -62,14 +67,26 @@ class VectorClient {
     return await response.json();
   }
 
-
   // Commented out the original logic
   // public async search(queryEmbedding: number[]) {
   //   return await this.instance.query(queryEmbedding, { topK: 5 });
   // }
 
   // New API-based search method
-  public async search(content: string, namespace: string, topK: number) {
+  /**
+   *
+   * @param {string} content - Search query content.
+   * @param {string} namespace - Segment vectors; only vectors within the provided namespace are used for search.
+   * @param {string} topK - Return the top K similar vectors (default = 3).
+   * @param {boolean|null} isPublic - Filter vectors based on visibility. Pass `null` to not apply the filter.
+   * @returns {Promise<Object>} A promise that resolves with object that contains matches.
+   */
+  public async search(
+    content: string,
+    namespace: string,
+    topK: number = 3,
+    isPublic?: boolean,
+  ) {
     const values = await AiClient.getEmbedding(content);
     const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/vectors/query`;
     const response = await fetch(url, {
@@ -79,7 +96,14 @@ class VectorClient {
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        queries: [{ values, topK, namespace }],
+        queries: [
+          {
+            values,
+            topK,
+            namespace,
+            filter: isPublic != null ? { isPublic } : {},
+          },
+        ],
       }),
     });
 
@@ -93,9 +117,19 @@ class VectorClient {
     return await response.json();
   }
 
-  public async syncRecord({ id, content, namespace }: { id: string; content: string, namespace: string }) {
+  public async syncRecord({
+    id,
+    content,
+    namespace,
+    metadata,
+  }: {
+    id: string;
+    content: string;
+    namespace: string;
+    metadata: { isPublic: boolean };
+  }) {
     const values = await AiClient.getEmbedding(content);
-    await this.insert(id, values, namespace);
+    await this.insert(id, values, namespace, metadata);
   }
 }
 

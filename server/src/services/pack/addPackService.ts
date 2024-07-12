@@ -33,6 +33,9 @@ export const addPackService = async (
     await VectorClient.instance.syncRecord({
       id: createdPack.id,
       content: name,
+      metadata: {
+        isPublic: createdPack.is_public,
+      },
       namespace: 'packs',
     });
   });
