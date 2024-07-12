@@ -1,15 +1,26 @@
 import { AiClient } from '../integrations/ai/client';
+import axios, { type AxiosInstance } from 'axios';
 
 class VectorClient {
   private static _instance: VectorClient | null = null;
   private apiKey: string;
   private indexName: string;
   private accountId: string;
+  private readonly VECTORIZE_INDEX_URL: string;
+  private axiosInstance: AxiosInstance;
 
   private constructor(apiKey: string, indexName: string, accountId: string) {
     this.apiKey = apiKey;
     this.indexName = indexName;
     this.accountId = accountId;
+    this.VECTORIZE_INDEX_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}`;
+    this.axiosInstance = axios.create({
+      baseURL: this.VECTORIZE_INDEX_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+    });
   }
 
   public static get instance(): VectorClient {
@@ -45,7 +56,7 @@ class VectorClient {
     namespace: string,
     metadata: { isPublic: boolean },
   ) {
-    const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/insert`;
+    const url = `${this.VECTORIZE_INDEX_URL}/insert`;
     const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
 
     const response = await fetch(url, {
@@ -65,6 +76,49 @@ class VectorClient {
     }
 
     return await response.json();
+  }
+
+  public async upsert(
+    id: string,
+    values: number[],
+    namespace: string,
+    metadata: { isPublic: boolean },
+  ) {
+    const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
+
+    try {
+      const response = await this.axiosInstance.post('/upsert', ndjsonBody);
+      return response.data;
+    } catch (error) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      if (error.response) {
+        console.error(error.response.data);
+        console.error(error.response.status);
+        throw new Error(`Failed to upsert vector: ${error.response.status}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        throw new Error('No response was received from vector index');
+      } else {
+        throw new Error('Unknown error');
+      }
+    }
+  }
+
+  public async delete(id: string) {
+    const response = await this.axiosInstance.post(
+      '/delete-by-ids',
+      {
+        ids: [id],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    return await response.data;
   }
 
   // Commented out the original logic
@@ -117,19 +171,23 @@ class VectorClient {
     return await response.json();
   }
 
-  public async syncRecord({
-    id,
-    content,
-    namespace,
-    metadata,
-  }: {
-    id: string;
-    content: string;
-    namespace: string;
-    metadata: { isPublic: boolean };
-  }) {
+  public async syncRecord(
+    {
+      id,
+      content,
+      namespace,
+      metadata,
+    }: {
+      id: string;
+      content: string;
+      namespace: string;
+      metadata: { isPublic: boolean };
+    },
+    upsert: boolean = false,
+  ) {
     const values = await AiClient.getEmbedding(content);
-    await this.insert(id, values, namespace, metadata);
+    if (!upsert) await this.insert(id, values, namespace, metadata);
+    else await this.upsert(id, values, namespace, metadata);
   }
 }
 

@@ -1,4 +1,6 @@
 import { Pack } from '../../drizzle/methods/pack';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Edits a pack in the service.
@@ -20,5 +22,20 @@ export const editPackService = async (packData: any) => {
     name: name || pack.name,
   };
   const updatedPack = await packClass.update(updatedData);
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.syncRecord(
+      {
+        id: updatedData.id,
+        content: name,
+        metadata: {
+          isPublic: updatedData.is_public,
+        },
+        namespace: 'packs',
+      },
+      true,
+    );
+  });
+
   return updatedPack;
 };

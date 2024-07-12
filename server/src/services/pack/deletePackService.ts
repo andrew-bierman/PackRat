@@ -1,4 +1,6 @@
 import { Pack } from '../../drizzle/methods/pack';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Deletes a pack by its ID.
@@ -9,5 +11,10 @@ import { Pack } from '../../drizzle/methods/pack';
 export const deletePackService = async (packId: string): Promise<object> => {
   const packClass = new Pack();
   await packClass.delete(packId);
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.delete(packId);
+  });
+
   return { message: 'Pack was deleted successfully' };
 };
