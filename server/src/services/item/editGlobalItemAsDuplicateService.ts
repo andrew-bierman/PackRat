@@ -3,6 +3,8 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
@@ -64,6 +66,17 @@ export const editGlobalItemAsDuplicateService = async (
     oldItemId: itemId,
     newItemId: newItem.id,
     packId,
+  });
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.syncRecord({
+      id: newItem.id,
+      content: name,
+      metadata: {
+        isPublic: newItem.global,
+      },
+      namespace: 'items',
+    });
   });
 
   return newItem;

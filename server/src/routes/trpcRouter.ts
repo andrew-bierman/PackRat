@@ -64,6 +64,7 @@ import {
   getItemsGloballyRoute,
   getItemsRoute,
   searchItemsByNameRoute,
+  getSimilarItemsRoute,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
@@ -182,6 +183,7 @@ export const appRouter = trpcRouter({
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
   deleteGlobalItem: deleteGlobalItemRoute(), // Done,
+  getSimilarItems: getSimilarItemsRoute(),
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

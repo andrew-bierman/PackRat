@@ -2,6 +2,8 @@
 
 import { Item } from '../../drizzle/methods/Item';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Deletes an item from the database.
@@ -18,6 +20,10 @@ export const deleteItemService = async (itemId: string, packId?: string) => {
   if (packId) {
     await ItemPacksClass.delete(itemId, packId);
   }
+
+  Queue.getInstance().addTask(async () => {
+    VectorClient.instance.delete(itemId);
+  });
 
   return { message: 'Item deleted successfully' };
 };

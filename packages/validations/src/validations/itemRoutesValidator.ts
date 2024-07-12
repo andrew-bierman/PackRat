@@ -67,3 +67,5 @@ export const getItemsGlobally = z.object({
   limit: z.number(),
   page: z.number(),
 });
+
+export const getSimilarItems = z.object({ id: z.string(), limit: z.number() });

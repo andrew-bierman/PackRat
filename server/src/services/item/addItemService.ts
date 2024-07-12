@@ -5,6 +5,8 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
@@ -69,5 +71,17 @@ export const addItemService = async (
   // );
 
   // return { newItem: updatedItem, packId };
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.syncRecord({
+      id: item.id,
+      content: name,
+      namespace: 'items',
+      metadata: {
+        isPublic: item.global,
+      },
+    });
+  });
+
   return item;
 };

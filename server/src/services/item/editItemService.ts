@@ -3,7 +3,9 @@
 import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { Queue } from '../../queue/client';
 import { ItemCategory as categories } from '../../utils/itemCategory';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Edit an item in the service.
@@ -60,6 +62,20 @@ export const editItemService = async (
     unit: unit || item.unit,
     quantity: quantity || item.quantity,
     categoryId: category.id || item.categoryId,
+  });
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.syncRecord(
+      {
+        id: newItem.id,
+        content: name,
+        metadata: {
+          isPublic: newItem.global,
+        },
+        namespace: 'packs',
+      },
+      true,
+    );
   });
 
   return newItem;

@@ -1,7 +1,9 @@
 import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
+import { Queue } from '../../queue/client';
 import { ItemCategory as categories } from '../../utils/itemCategory';
+import { VectorClient } from '../../vector/client';
 // import { prisma } from '../../prisma';
 
 /**
@@ -41,5 +43,17 @@ export const addItemGlobalService = async (
     global: true,
     ownerId,
   });
+
+  Queue.getInstance().addTask(async () => {
+    await VectorClient.instance.syncRecord({
+      id: newItem.id,
+      content: name,
+      namespace: 'items',
+      metadata: {
+        isPublic: newItem.global,
+      },
+    });
+  });
+
   return newItem;
 };

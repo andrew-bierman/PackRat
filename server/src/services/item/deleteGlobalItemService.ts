@@ -1,6 +1,8 @@
 // import { prisma } from '../../prisma';
 
 import { Item } from '../../drizzle/methods/Item';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Deletes a global item by its ID.
@@ -13,5 +15,10 @@ export const deleteGlobalItemService = async (
 ): Promise<object> => {
   const itemClass = new Item();
   await itemClass.delete(itemId);
+
+  Queue.getInstance().addTask(async () => {
+    VectorClient.instance.delete(itemId);
+  });
+
   return { message: 'Item deleted successfully' };
 };
