@@ -69,7 +69,8 @@ class VectorClient {
   // }
 
   // New API-based search method
-  public async search(queryEmbedding: number[], namespace: string) {
+  public async search(content: string, namespace: string, topK: number) {
+    const values = await AiClient.getEmbedding(content);
     const url = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}/vectors/query`;
     const response = await fetch(url, {
       method: 'POST',
@@ -78,7 +79,7 @@ class VectorClient {
         Authorization: `Bearer ${this.apiKey}`,
       },
       body: JSON.stringify({
-        queries: [{ values: queryEmbedding, topK: 5, namespace }],
+        queries: [{ values, topK, namespace }],
       }),
     });
 
