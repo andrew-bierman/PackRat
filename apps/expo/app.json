@@ -19,6 +19,7 @@
       "bundleIdentifier": "com.andrewbierman.packrat"
     },
     "android": {
+      "versionCode": 100002,
       "adaptiveIcon": {
         "foregroundImage": "./assets/packrat-app-icon.png",
         "backgroundColor": "#ffffff"
