@@ -53,6 +53,7 @@ const extractToken = (req: Request): string => {
  * @throws {ZodError} If token structure is invalid.
  */
 const verifyToken = (token: string): JwtPayload => {
+  console.log('JWT_SECRET', JWT_SECRET)
   const decoded: JwtPayload = jwt.verify(token, JWT_SECRET ?? '') as JwtPayload;
   const parsedToken = TokenSchema.parse(decoded); // Will throw if invalid
   return parsedToken;
@@ -113,5 +114,6 @@ const handleError = (err: Error, res: Response) => {
     res.status(401).send({ error: 'Not authorized to access this resource.' });
   }
 };
+
 
 export default auth;

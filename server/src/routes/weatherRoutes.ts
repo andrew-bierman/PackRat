@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import {
-  getWeatherWeekRoute as getWeatherWeek,
+  // getWeatherWeekRoute as getWeatherWeek,
   getWeatherRoute as getWeather,
 } from '../controllers/weather/index';
 import authTokenMiddleware from '../middleware/auth';
@@ -41,10 +41,10 @@ router.get('/', authTokenMiddleware as any, tryCatchWrapper(getWeather));
  *       '500':
  *         description: Error retrieving weekly weather forecast
  */
-router.get(
-  '/week',
-  authTokenMiddleware as any,
-  tryCatchWrapper(getWeatherWeek),
-);
+// router.get(
+//   '/week',
+//   authTokenMiddleware as any,
+//   tryCatchWrapper(getWeatherWeek),
+// );
 
 export default router;

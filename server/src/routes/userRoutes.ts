@@ -7,9 +7,9 @@ import {
   deleteUserRoute as deleteUser,
   // addToFavoriteRoute as addToFavorite,
   userSignIn,
-  signUpRoute as userSignup,
-  sentEmailRoute as sentEmail,
-  resetPasswordRoute as resetPassword,
+  userSignup,
+  sentEmail,
+  resetPassword,
   getGoogleAuthURLRoute as getGoogleAuthURL,
   // googleSignin,
   getMeRoute as getMe,
@@ -23,7 +23,7 @@ import {
   checkCodeRoute as checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
-import authTokenMiddleware from '../middleware/auth';
+import authMiddlewareHTTP from '../middleware/authHTTPS';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 
@@ -50,7 +50,7 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   checkRole(['admin']) as any,
   tryCatchWrapper(getUsers),
 );
@@ -78,7 +78,7 @@ router.get(
  */
 router.get(
   '/:userId',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   ((c: Context, next: Next) => {
     zodParser(validator.getUserById, c.req.param(), next);
     next();
@@ -234,7 +234,7 @@ router.post(
  */
 router.get(
   '/me/info',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getMe),
 );
@@ -305,7 +305,7 @@ router.post('/google', tryCatchWrapper(signInGoogle));
  */
 router.put(
   '/',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   ((req, res, next) => zodParser(validator.editUser, req.body, next)) as any,
   tryCatchWrapper(editUser),
 );
@@ -335,20 +335,20 @@ router.put(
  */
 router.delete(
   '/',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   ((req, res, next) => zodParser(validator.deleteUser, req.body, next)) as any,
   tryCatchWrapper(deleteUser),
 );
 
 router.post(
   '/checkcode',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
   tryCatchWrapper(checkCode),
 );
 router.post(
   '/updatepassword',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   ((req, res, next) =>
     zodParser(validator.updatePassword, req.body, next)) as any,
   tryCatchWrapper(updatePassword),

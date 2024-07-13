@@ -2,6 +2,8 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { User } from '../../drizzle/methods/User';
+import { Context, Next } from 'hono';
+import { UserNotFoundError } from '../../helpers/errors';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -35,6 +37,22 @@ import { User } from '../../drizzle/methods/User';
 //     next(UserNotFoundError);
 //   }
 // };
+
+export const getUsers = async (c: Context, next: Next) => {
+  try {
+    const userClass = new User();
+    const users = await userClass.findMany();
+    
+    if (!users) {
+      throw new UserNotFoundError();
+    }
+
+    c.res.status(200).json(users);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    c.res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 export function getUsersRoute() {
   return protectedProcedure.query(async (opts) => {
