@@ -21,11 +21,14 @@ export async function getSimilarPacksService(id: string, limit: number = 5) {
     throw new Error(`Pack with id: ${id} not found`);
   }
 
-  const { matches } = await VectorClient.instance.search(
-    pack.name,
-    'packs',
-    limit,
-  );
+  const {
+    result: { matches },
+  } = await VectorClient.instance.search(pack.name, 'packs', limit, null);
+
+  // passing empty array to the db query below throws
+  if (!matches.length) {
+    return [];
+  }
 
   const similarPacksResult = await DbClient.instance
     .select()
@@ -33,12 +36,12 @@ export async function getSimilarPacksService(id: string, limit: number = 5) {
     .where(
       inArray(
         PacksTable.id,
-        matches.matches.map((m) => m.id),
+        matches.map((m) => m.id),
       ),
     );
 
   // add similarity score to packs result
-  const similarPacks = matches.matches.map((match) => {
+  const similarPacks = matches.map((match) => {
     return {
       ...similarPacksResult.find((p) => p.id == match.id),
       similarityScore: match.score,
