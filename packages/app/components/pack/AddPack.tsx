@@ -73,7 +73,6 @@ export const AddPack = ({
     }
   };
   const { xxs, xxl, xs } = useResponsive();
-  console.log(selectedValue);
 
   return (
     <View style={styles.container}>
