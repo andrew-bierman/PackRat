@@ -23,7 +23,11 @@ export const createContext = (honoContext: Context) => async () => {
     indexName: 'vector-index', // TODO: Change to 'VECTOR_INDEX
     accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
   });
-  await AiClient.init(honoContext.env.AI);
+  await AiClient.init({
+    apiKey: honoContext.env.AI_API_KEY,
+    accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
+    // honoContext.env.AI
+  });
 
   const user = await extractTokenAndGetUser(req.raw, env.JWT_SECRET);
 
