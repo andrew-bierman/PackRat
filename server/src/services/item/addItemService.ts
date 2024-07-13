@@ -81,8 +81,7 @@ export const addItemService = async (
       metadata: {
         isPublic: item.global,
       },
-    })
-  );
+    });
 
   return item;
 };
