@@ -130,7 +130,7 @@ export function SelectItem(props) {
               width={'$4'}
               pointerEvents="none"
             >
-              <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
+              {/* <ChevronDown size={getFontSize((props.size ?? '$true') as any)} /> */}
             </YStack>
           )}
         </Select.Viewport>
