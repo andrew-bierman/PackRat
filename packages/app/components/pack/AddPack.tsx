@@ -14,7 +14,7 @@ import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import useTheme from '../../hooks/useTheme';
 
 const FormSelect: any = OriginalFormSelect;
@@ -31,7 +31,7 @@ export const AddPack = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [selectedValue, SetSelectedValue] = useState('No')
+  const [selectedValue, SetSelectedValue] = useState('No');
   // const [_, setPackIdParam] = usePackId();
 
   const {
@@ -65,14 +65,15 @@ export const AddPack = ({
 
   const handleonValueChange = (itemValue) => {
     if (itemValue === 'Yes') {
-      SetSelectedValue('Yes')
+      SetSelectedValue('Yes');
       setIsPublic(true);
     } else {
-      SetSelectedValue('No')
+      SetSelectedValue('No');
       setIsPublic(false);
     }
   };
   const { xxs, xxl, xs } = useResponsive();
+  console.log(selectedValue);
 
   return (
     <View style={styles.container}>
@@ -85,16 +86,21 @@ export const AddPack = ({
             placeholder="Name"
             name="name"
             label="Name"
-            style={{ textAlign: 'left', width: 200 }}
+            style={{
+              textAlign: 'left',
+              width: 200,
+              alignItems: 'inherit',
+              justifyContent: 'center',
+            }}
           />
           <DropdownComponent
-            value={null}
+            value={selectedValue}
             data={packSelectOptions}
             onValueChange={handleonValueChange}
-            placeholder={`Is Public: ${selectedValue}`}
-            width={xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '8%'}
+            placeholder="Is Public"
+            width={xxs ? '50%' : xs ? '50%' : xxl ? '80%' : '8%'}
             native={true}
-            zeego={true}
+            zeego={Platform.OS !== 'web'}
           />
 
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
