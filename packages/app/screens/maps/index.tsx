@@ -3,7 +3,8 @@ import Mapbox, {
   offlineManager,
   OfflineCreatePackOptions,
 } from '@rnmapbox/maps';
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
 import { theme } from 'app/theme';
@@ -59,11 +60,13 @@ export default function DownloadedMaps() {
     });
   }
 
-  useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setOfflinePacks(packs);
-    });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      offlineManager.getPacks().then((packs) => {
+        setOfflinePacks(packs);
+      });
+    }, []),
+  );
 
   return (
     <View
@@ -147,10 +150,7 @@ export default function DownloadedMaps() {
           >
             <Mapbox.Camera
               zoomLevel={zoomLevel}
-              centerCoordinate={[
-                (pack?.bounds[0]?.[0] + pack?.bounds[1]?.[0]) / 2 ?? 0,
-                (pack?.bounds[0]?.[1] + pack?.bounds[1]?.[1]) / 2 ?? 0,
-              ]}
+              centerCoordinate={getCenterCoordinates(pack?.bounds)}
               animationMode={'flyTo'}
               animationDuration={2000}
             />
@@ -167,7 +167,8 @@ export default function DownloadedMaps() {
               <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
             {/* // top location */}
-            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
+            {/* TODO implement notations */}
+            {/* {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
               <Mapbox.PointAnnotation
                 id={'cicleCap'}
                 coordinate={
@@ -180,7 +181,7 @@ export default function DownloadedMaps() {
                   <CircleCapComp />
                 </View>
               </Mapbox.PointAnnotation>
-            )}
+            )} */}
           </Mapbox.MapView>
 
           <MapButtonsOverlay
@@ -195,6 +196,19 @@ export default function DownloadedMaps() {
     </View>
   );
 }
+
+const getCenterCoordinates = (bounds: [number, number, number, number]) => {
+  const [
+    southWestLongitude,
+    southWestLatitude,
+    northEastLongitude,
+    northEastLatitude,
+  ] = bounds;
+  const centerLatitude = (northEastLatitude + southWestLatitude) / 2;
+  const centerLongitude = (northEastLongitude + southWestLongitude) / 2;
+
+  return [centerLongitude, centerLatitude];
+};
 
 const loadStyles = ({ currentTheme }) => {
   return {
