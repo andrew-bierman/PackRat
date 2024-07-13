@@ -34,6 +34,7 @@ export const createContext = (honoContext: Context) => async () => {
   return {
     env: restEnv as ContextEnv,
     user,
+    executionCtx: honoContext.executionCtx,
   };
 };
 

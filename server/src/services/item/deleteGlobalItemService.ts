@@ -1,7 +1,7 @@
 // import { prisma } from '../../prisma';
 
+import { type ExecutionContext } from 'hono';
 import { Item } from '../../drizzle/methods/Item';
-import { Queue } from '../../queue/client';
 import { VectorClient } from '../../vector/client';
 
 /**
@@ -12,13 +12,12 @@ import { VectorClient } from '../../vector/client';
  */
 export const deleteGlobalItemService = async (
   itemId: string,
+  executionCtx: ExecutionContext,
 ): Promise<object> => {
   const itemClass = new Item();
   await itemClass.delete(itemId);
 
-  Queue.getInstance().addTask(async () => {
-    VectorClient.instance.delete(itemId);
-  });
+  executionCtx.waitUntil(VectorClient.instance.delete(itemId));
 
   return { message: 'Item deleted successfully' };
 };

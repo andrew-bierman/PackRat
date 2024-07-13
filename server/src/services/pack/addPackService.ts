@@ -1,5 +1,5 @@
+import { type ExecutionContext } from 'hono';
 import { Pack } from '../../drizzle/methods/pack';
-import { Queue } from '../../queue/client';
 import { VectorClient } from '../../vector/client';
 
 /**
@@ -13,6 +13,7 @@ export const addPackService = async (
   name: string,
   owner_id: string,
   is_public: boolean,
+  executionCtx: ExecutionContext,
 ) => {
   const packClass = new Pack();
   // Check if a pack with the same name already exists
@@ -25,20 +26,16 @@ export const addPackService = async (
   // Create the new pack
   const createdPack = await packClass.create({ name, owner_id, is_public });
 
-  // Get the queue instance
-  const queue = Queue.getInstance();
-
-  // Add the vector sync task to the queue
-  queue.addTask(async () => {
-    await VectorClient.instance.syncRecord({
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
       id: createdPack.id,
       content: name,
       metadata: {
         isPublic: createdPack.is_public,
       },
       namespace: 'packs',
-    });
-  });
+    }),
+  );
 
   return createdPack;
 };

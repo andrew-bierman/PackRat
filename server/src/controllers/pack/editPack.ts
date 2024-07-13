@@ -27,7 +27,7 @@ import * as validator from '@packrat/validations';
 export function editPackRoute() {
   return publicProcedure.input(validator.editPack).mutation(async (opts) => {
     const packData = opts.input;
-    const pack = await editPackService(packData);
+    const pack = await editPackService(packData, opts.ctx.executionCtx);
     return pack;
   });
 }

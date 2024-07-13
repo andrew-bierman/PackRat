@@ -1,9 +1,9 @@
 // import { prisma } from '../../prisma';
 
+import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { Queue } from '../../queue/client';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
 
@@ -19,6 +19,7 @@ import { VectorClient } from '../../vector/client';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
+  executionCtx: ExecutionContext,
   id: string,
   name?: string,
   weight?: number,
@@ -64,8 +65,8 @@ export const editItemService = async (
     categoryId: category.id || item.categoryId,
   });
 
-  Queue.getInstance().addTask(async () => {
-    await VectorClient.instance.syncRecord(
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord(
       {
         id: newItem.id,
         content: name,
@@ -75,8 +76,8 @@ export const editItemService = async (
         namespace: 'packs',
       },
       true,
-    );
-  });
+    ),
+  );
 
   return newItem;
 };

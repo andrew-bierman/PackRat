@@ -26,6 +26,6 @@ import { publicProcedure } from '../../trpc';
 export function deleteItemRoute() {
   return publicProcedure.input(validator.deleteItem).mutation(async (opts) => {
     const { itemId, packId } = opts.input;
-    return await deleteItemService(itemId, packId);
+    return await deleteItemService(itemId, opts.ctx.executionCtx, packId);
   });
 }

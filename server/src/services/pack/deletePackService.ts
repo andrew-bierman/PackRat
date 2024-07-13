@@ -1,5 +1,5 @@
+import { type ExecutionContext } from 'hono';
 import { Pack } from '../../drizzle/methods/pack';
-import { Queue } from '../../queue/client';
 import { VectorClient } from '../../vector/client';
 
 /**
@@ -8,13 +8,14 @@ import { VectorClient } from '../../vector/client';
  * @param {string} packId - The ID of the pack to be deleted.
  * @return {Object} - An object containing a message indicating the success of the deletion.
  */
-export const deletePackService = async (packId: string): Promise<object> => {
+export const deletePackService = async (
+  packId: string,
+  executionCtx: ExecutionContext,
+): Promise<object> => {
   const packClass = new Pack();
   await packClass.delete(packId);
 
-  Queue.getInstance().addTask(async () => {
-    await VectorClient.instance.delete(packId);
-  });
+  executionCtx.waitUntil(VectorClient.instance.delete(packId));
 
   return { message: 'Pack was deleted successfully' };
 };

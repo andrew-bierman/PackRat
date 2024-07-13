@@ -30,6 +30,6 @@ export function deleteGlobalItemRoute() {
     )
     .mutation(async (opts) => {
       const { itemId } = opts.input;
-      return await deleteGlobalItemService(itemId);
+      return await deleteGlobalItemService(itemId, opts.ctx.executionCtx);
     });
 }
