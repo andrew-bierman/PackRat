@@ -60,7 +60,7 @@ class VectorClient {
     const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
 
     const response = await fetch(url, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/x-ndjson',
         Authorization: `Bearer ${this.apiKey}`,
