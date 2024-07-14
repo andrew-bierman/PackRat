@@ -73,15 +73,16 @@ export const addItemService = async (
 
   // return { newItem: updatedItem, packId };
 
-  executionCtx.waitUntil
-    await VectorClient.instance.syncRecord({
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
       id: item.id,
       content: name,
       namespace: 'items',
       metadata: {
         isPublic: item.global,
       },
-    });
+    }),
+  );
 
   return item;
 };
