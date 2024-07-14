@@ -1,3 +1,4 @@
+import { PackAndItemVisibilityFilter } from '@packrat/shared-types';
 import { z } from 'zod';
 
 export const getItemByName = z.object({
@@ -68,4 +69,10 @@ export const getItemsGlobally = z.object({
   page: z.number(),
 });
 
-export const getSimilarItems = z.object({ id: z.string(), limit: z.number() });
+export const getSimilarItems = z.object({
+  id: z.string(),
+  limit: z.number(),
+  visibility: z
+    .nativeEnum(PackAndItemVisibilityFilter)
+    .default(PackAndItemVisibilityFilter.ALL),
+});

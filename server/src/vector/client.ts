@@ -131,14 +131,14 @@ class VectorClient {
    * @param {string} content - Search query content.
    * @param {string} namespace - Segment vectors; only vectors within the provided namespace are used for search.
    * @param {string} topK - Return the top K similar vectors (default = 3).
-   * @param {boolean|null} isPublic - Filter vectors based on visibility. Pass `null` to not apply the filter.
+   * @param {Object} filter - Optional [metadata filter](https://developers.cloudflare.com/vectorize/reference/metadata-filtering)
    * @returns {Promise<Object>} A promise that resolves with Query Vectors Response which contains matches.
    */
   public async search(
     content: string,
     namespace: string,
     topK: number = 3,
-    isPublic: boolean | null,
+    filter?: { [key: string]: any },
   ) {
     const vector = await AiClient.getEmbedding(content);
     const url = `${this.VECTORIZE_INDEX_URL}/query`;
@@ -152,7 +152,7 @@ class VectorClient {
         vector,
         topK,
         namespace,
-        ...(isPublic != null ? { filter: { isPublic } } : {}),
+        ...(filter ? { filter } : {}),
       }),
     });
 

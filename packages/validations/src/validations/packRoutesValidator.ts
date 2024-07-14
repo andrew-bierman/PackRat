@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PackAndItemVisibilityFilter } from '@packrat/shared-types';
 
 export const getPacks = z.object({
   ownerId: z.string(),
@@ -42,4 +43,12 @@ export const duplicatePublicPack = z.object({
   packId: z.string(),
   ownerId: z.string(),
   items: z.array(z.string()),
+});
+
+export const getSimilarPacks = z.object({
+  id: z.string(),
+  limit: z.number(),
+  visibility: z
+    .nativeEnum(PackAndItemVisibilityFilter)
+    .default(PackAndItemVisibilityFilter.ALL),
 });

@@ -6,8 +6,8 @@ export function getSimilarItemsRoute() {
   return publicProcedure
     .input(validator.getSimilarItems)
     .query(async (opts) => {
-      const { id } = opts.input;
-      const items = await getSimilarItemsService(id);
+      const { id, limit, visibility } = opts.input;
+      const items = await getSimilarItemsService(id, limit, visibility);
       return items;
     });
 }

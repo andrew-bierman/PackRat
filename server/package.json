@@ -42,6 +42,7 @@
     "@hono/trpc-server": "^0.1.1",
     "@instructor-ai/instructor": "^1.3.0",
     "@libsql/client": "^0.4.0-pre.5",
+    "@packrat/shared-types": "*",
     "@packrat/validations": "*",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.7.0",

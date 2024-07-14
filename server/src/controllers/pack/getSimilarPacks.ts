@@ -1,13 +1,11 @@
 import { publicProcedure } from '../../trpc';
 import { getSimilarPacksService } from '../../services/pack/pack.service';
-import { z } from 'zod';
+import { getSimilarPacks } from '@packrat/validations';
 
 export function getSimilarPacksRoute() {
-  return publicProcedure
-    .input(z.object({ id: z.string(), limit: z.number() }))
-    .query(async (opts) => {
-      const { id, limit } = opts.input;
-      const packs = await getSimilarPacksService(id, limit);
-      return packs;
-    });
+  return publicProcedure.input(getSimilarPacks).query(async (opts) => {
+    const { id, limit, visibility } = opts.input;
+    const packs = await getSimilarPacksService(id, limit, visibility);
+    return packs;
+  });
 }

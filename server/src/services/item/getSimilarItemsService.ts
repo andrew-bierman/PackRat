@@ -3,6 +3,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { VectorClient } from '../../vector/client';
 import { item as ItemsTable } from '../../db/schema';
 import { inArray } from 'drizzle-orm';
+import { PackAndItemVisibilityFilter } from '@packrat/shared-types';
 
 /**
  * Retrieves items that are similar to the provided item.
@@ -11,7 +12,11 @@ import { inArray } from 'drizzle-orm';
  * @param {string} limit - Max number of similar items to return (default = 5).
  * @return {Promise<any[]>} A promise that resolves with an array of items.
  */
-export async function getSimilarItemsService(id: string, limit: number = 5) {
+export async function getSimilarItemsService(
+  id: string,
+  limit: number = 5,
+  visibility: PackAndItemVisibilityFilter,
+) {
   const itemObj = new Item();
   let item = await itemObj.findItem({
     id,
@@ -23,7 +28,17 @@ export async function getSimilarItemsService(id: string, limit: number = 5) {
 
   const {
     result: { matches },
-  } = await VectorClient.instance.search(item.name, 'items', limit, null);
+  } = await VectorClient.instance.search(
+    item.name,
+    'items',
+    limit,
+    visibility == PackAndItemVisibilityFilter.ALL
+      ? undefined
+      : {
+          isPublic:
+            visibility == PackAndItemVisibilityFilter.PUBLIC ? true : false,
+        },
+  );
 
   // passing empty array to the db query below throws
   if (!matches.length) {
