@@ -284,7 +284,7 @@ export default function Card({
                             gap: 8,
                           }}
                         >
-                          {user?.id === owner_id ? (
+                          {user?.id !== owner_id ? (
                             <TouchableOpacity onPress={handleAddToFavorite}>
                               <AntDesign
                                 name="heart"
