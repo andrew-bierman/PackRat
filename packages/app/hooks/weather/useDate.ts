@@ -1,15 +1,10 @@
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
+import { getCurrentUTCDate } from 'app/utils/dates';
 
 export const useDate = () => {
-  const date = new Date();
+  const date = getCurrentUTCDate();
   const dateFormatted = format(date, 'MMMM d, yyyy');
-  const getNext4Days = (currentDate) => {
-    return Array.from({ length: 4 }, (_, i) =>
-      format(addDays(currentDate, i + 1), 'EEEE'),
-    );
-  };
   const day = date.getDay();
-  const restOfWeek = getNext4Days(date);
 
-  return { dateFormatted, day, restOfWeek };
+  return { dateFormatted, day };
 };
