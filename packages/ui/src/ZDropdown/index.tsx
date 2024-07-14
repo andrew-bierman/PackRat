@@ -47,10 +47,7 @@ const RDropdownMenu = ({ menuItems = [], menuName }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <RButton
-          style={{ backgroundColor: '#deddda', color: 'black' }}
-          iconAfter={ChevronDown}
-        >
+        <RButton style={{ backgroundColor: '#deddda', color: 'black' }}>
           {menuName}
         </RButton>
       </DropdownMenu.Trigger>

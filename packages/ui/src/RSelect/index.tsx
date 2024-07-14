@@ -113,7 +113,12 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger alignSelf="center" width={220} iconAfter={ChevronDown}>
+      <Select.Trigger
+        alignSelf="center"
+        alignItems="center"
+        justifyContent="center"
+        width={220}
+      >
         <Select.Value>{placeholder}</Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>
