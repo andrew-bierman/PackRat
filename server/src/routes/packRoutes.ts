@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Context, Hono, Next } from 'hono';
 import {
   getPacksRoute as getPacks,
   getPackByIdRoute as getPackById,
@@ -11,9 +11,10 @@ import {
 } from '../controllers/pack/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
-import authTokenMiddleware from '../middleware/auth';
+import authMiddlewareHTTP from '../middleware/authHTTPS';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
+import { Env } from '../db/client';
 
 const router = new Hono();
 
@@ -38,7 +39,7 @@ const router = new Hono();
  */
 router.get(
   '/',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   checkRole(['user', 'admin']) as any,
   tryCatchWrapper(getPublicPacks),
 );
@@ -66,9 +67,10 @@ router.get(
  */
 router.get(
   '/:ownerId',
-  authTokenMiddleware as any,
+  authMiddlewareHTTP as any,
   checkRole(['user', 'admin']) as any,
-  ((req, res, next) => zodParser(validator.getPacks, req.params, next)) as any,
+  (async (c: Context<Env>, next: Next) =>
+    zodParser(validator.getPacks, await c.req.param(), next)) as any,
   tryCatchWrapper(getPacks),
 );
 
@@ -95,9 +97,9 @@ router.get(
  */
 router.get(
   '/p/:packId',
-  authTokenMiddleware as any,
-  ((req, res, next) =>
-    zodParser(validator.getPackById, req.params, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context<Env>, next: Next) =>
+    zodParser(validator.getPackById, await c.req.param(), next)) as any,
   tryCatchWrapper(getPackById),
 );
 
@@ -124,9 +126,9 @@ router.get(
  */
 router.put(
   '/score/:packId',
-  authTokenMiddleware as any,
-  ((req, res, next) =>
-    zodParser(validator.getPackById, req.params, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context<Env>, next: Next) =>
+    zodParser(validator.getPackById, await c.req.param(), next)) as any,
   tryCatchWrapper(scorePack),
 );
 
@@ -159,8 +161,9 @@ router.put(
  */
 router.post(
   '/',
-  authTokenMiddleware as any,
-  ((req, res, next) => zodParser(validator.addPack, req.body, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context<Env>, next: NExt) =>
+    zodParser(validator.addPack, await c.req.json(), next)) as any,
   tryCatchWrapper(addPack),
 );
 
@@ -193,8 +196,9 @@ router.post(
  */
 router.put(
   '/',
-  authTokenMiddleware as any,
-  ((req, res, next) => zodParser(validator.editPack, req.body, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context<Env>, next: Next) =>
+    zodParser(validator.editPack, await c.req.json(), next)) as any,
   tryCatchWrapper(editPack),
 );
 
@@ -223,8 +227,9 @@ router.put(
  */
 router.delete(
   '/',
-  authTokenMiddleware as any,
-  ((req, res, next) => zodParser(validator.deletePack, req.body, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.deletePack, await c.req.json(), next)) as any,
   tryCatchWrapper(deletePack),
 );
 
@@ -253,9 +258,9 @@ router.delete(
  */
 router.post(
   '/duplicate',
-  authTokenMiddleware as any,
-  ((req, res, next) =>
-    zodParser(validator.duplicatePublicPack, req.body, next)) as any,
+  authMiddlewareHTTP as any,
+  (async (c: Context<Env>, next: Next) =>
+    zodParser(validator.duplicatePublicPack, await c.req.json(), next)) as any,
   tryCatchWrapper(duplicatePublicPack),
 );
 

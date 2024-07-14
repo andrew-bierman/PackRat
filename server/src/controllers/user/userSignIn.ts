@@ -19,11 +19,10 @@ import { Context, Next } from 'hono';
 //   c.json(user, 200);
 // };
 
-export const userSignIn = async (c: Context, next: Next) => {
+export const userSignIn = async (c: Context) => {
   try {
     const { email, password } = await c.req.json();
     const userClass = new User();
-    console.log('DONEDONEDNEOFNDSOFJSD')
     const user = await userClass.findByCredentials(email, password);
 
     if (!user) {

@@ -12,15 +12,14 @@ import { Context, Next } from 'hono';
  */
 export const getUserById = async (c: Context, next: Next) => {
   try {
-    console.log('DONEDONEDONE')
     const { userId } = await c.req.param();
 
     const user = await getUserByIdService(userId);
 
     c.res.locals.data = user;
-    // responseHandler(c.res);
+    responseHandler(c.res);
   } catch (error) {
-    // next(UserNotFoundError);
+    next(UserNotFoundError);
   }
 };
 

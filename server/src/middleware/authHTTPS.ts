@@ -26,9 +26,8 @@ const extractTokenHTTP = async (c: Context): Promise<string> => {
  * @returns {JwtPayload} - The decoded JWT payload.
  * @throws {ZodError} If token structure is invalid.
  */
-const verifyTokenHTTP = (token: string): JwtPayload => {
-  // TODO the JWT_SECRET is returning undefined here to fix this
-  const decoded: JwtPayload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+const verifyTokenHTTP = (secret: string, token: string): JwtPayload => {
+  const decoded: JwtPayload = jwt.verify(token, secret ?? '') as JwtPayload;
   console.log('Decoded', decoded);
   const parsedToken = TokenSchema.parse(decoded); // Will throw if invalid
   return parsedToken;
@@ -58,12 +57,10 @@ const findUserHTTP = async (
 const authMiddlewareHTTP = async (c: Context, next: Next) => {
   try {
     const token = await extractTokenHTTP(c);
-    const decoded = verifyTokenHTTP(token);
-    // console.log('done3');
-    // const user = await findUserHTTP(decoded, token);
-    // console.log('done4');
-    // c.set('token', token);
-    // c.set('user', user);
+    const decoded = verifyTokenHTTP(c.env.JWT_SECRET, token);
+    const user = await findUserHTTP(decoded, token);
+    c.set('token', token);
+    c.set('user', user);
 
     await next();
   } catch (err) {

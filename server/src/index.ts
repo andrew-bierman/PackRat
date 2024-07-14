@@ -22,6 +22,7 @@ const HTTP_ENDPOINT = '/api';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+
 // SETUP COMPRESSION
 //  Note: On Cloudflare Workers, the response body will be compressed automatically, so there is no need to use this middleware.
 //  Bun: This middleware uses CompressionStream which is not yet supported in bun.

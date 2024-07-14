@@ -1,4 +1,4 @@
-import { Context, Hono, Next } from 'hono';
+import { type Context, Hono, type Next } from 'hono';
 import {
   getUsersRoute as getUsers,
   getUserById,
@@ -26,6 +26,7 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authMiddlewareHTTP from '../middleware/authHTTPS';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
+import { type Env } from '../db/client';
 
 const router = new Hono();
 
@@ -116,7 +117,6 @@ router.get(
 router.post(
   '/signin',
   (async (c: Context, next: Next) => {
-    console.log('Parse Body', await c.req.json());
     zodParser(validator.userSignIn, await c.req.json(), next);
   }) as any,
   tryCatchWrapper(userSignIn),
@@ -152,7 +152,8 @@ router.post(
 
 router.post(
   '/signup',
-  ((req, res, next) => zodParser(validator.userSignUp, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.userSignUp, await c.req.json(), next)) as any,
   tryCatchWrapper(userSignup),
 );
 
@@ -181,7 +182,8 @@ router.post(
  */
 router.post(
   '/reset-password-email',
-  ((req, res, next) => zodParser(validator.sentEmail, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.sentEmail, await c.req.json(), next)) as any,
   tryCatchWrapper(sentEmail),
 );
 
@@ -212,7 +214,8 @@ router.post(
  */
 router.post(
   '/reset-password',
-  ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.checkCode, await c.req.json(), next)) as any,
   tryCatchWrapper(resetPassword),
 );
 
@@ -306,7 +309,8 @@ router.post('/google', tryCatchWrapper(signInGoogle));
 router.put(
   '/',
   authMiddlewareHTTP as any,
-  ((req, res, next) => zodParser(validator.editUser, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.editUser, await c.req.json(), next)) as any,
   tryCatchWrapper(editUser),
 );
 
@@ -336,26 +340,29 @@ router.put(
 router.delete(
   '/',
   authMiddlewareHTTP as any,
-  ((req, res, next) => zodParser(validator.deleteUser, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.deleteUser, await c.req.json(), next)) as any,
   tryCatchWrapper(deleteUser),
 );
 
 router.post(
   '/checkcode',
   authMiddlewareHTTP as any,
-  ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
+  (async (c: Context, next) =>
+    zodParser(validator.checkCode, await c.req.json(), next)) as any,
   tryCatchWrapper(checkCode),
 );
 router.post(
   '/updatepassword',
   authMiddlewareHTTP as any,
-  ((req, res, next) =>
-    zodParser(validator.updatePassword, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.updatePassword, await c.req.json(), next)) as any,
   tryCatchWrapper(updatePassword),
 );
 router.post(
   '/emailexists',
-  ((req, res, next) => zodParser(validator.emailExists, req.body, next)) as any,
+  (async (c: Context, next: Next) =>
+    zodParser(validator.emailExists, await c.req.json(), next)) as any,
   tryCatchWrapper(emailExists),
 );
 
