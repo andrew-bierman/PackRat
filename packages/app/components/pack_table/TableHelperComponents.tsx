@@ -11,7 +11,7 @@ import useResponsive from 'app/hooks/useResponsive';
 import useTheme from 'app/hooks/useTheme';
 import { formatNumber } from 'app/utils/formatNumber';
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { Row } from 'react-native-table-component';
 import loadStyles from './packtable.style';
 
@@ -132,7 +132,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
         placeholder="Select weight unit"
         width="100%"
         native={true}
-        zeego={Platform.OS !== 'web'}
+        // zeego={true}
       />
     </View>
   );
