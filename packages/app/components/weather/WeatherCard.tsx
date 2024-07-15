@@ -168,7 +168,11 @@ export default function WeatherCard({
                 PRECIPITATION
               </RText>
             </RStack>
-            <RText>{currentWeather.precipitation}mm</RText>
+            <RText>
+              {currentWeather.precipitation
+                ? `${currentWeather.precipitation}mm`
+                : 'Not available'}
+            </RText>
           </RStack>
           <RStack style={styles.weatherInfo}>
             <RStack style={styles.iconsSection}>
@@ -352,7 +356,7 @@ const separateCurrentSegment = (
       const date = getUTCDateFromStr(current.date);
 
       if (
-        (isAfter(date, now) || isEqual(date, now)) &&
+        (isAfter(now, date) || isEqual(date, now)) &&
         !result.currentWeather
       ) {
         result.currentWeather = current;
