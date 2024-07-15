@@ -55,7 +55,8 @@ export default function UserDataContainer({
         key={item.id}
         {...item}
         index={index}
-        differentUser={differentUser}
+        differentUser={currentUser?.id !== item.owner_id}
+        currentUserId={currentUser?.id}
       />
     );
   };
