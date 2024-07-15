@@ -15,7 +15,7 @@ export const WeatherData = ({
 
   return weatherToday && weatherWeek ? (
     <WeatherCard
-      weatherObject={weatherToday}
+      weatherToday={weatherToday}
       weatherWeek={weatherWeek}
       location={location}
     />
