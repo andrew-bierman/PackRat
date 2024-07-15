@@ -22,7 +22,10 @@ export const useUserQuery = () => {
   // Sometimes the isLoading state don't work as expected so we have this solution here
   // isLoading stays true when request is not enabled
   // TODO fix loading state
-  const isLoading = (isRequestEnabled && isRequestLoading) || isTokenLoading;
+  const isLoading =
+    (isRequestEnabled && isRequestLoading) ||
+    isTokenLoading === undefined ||
+    isTokenLoading;
 
   return { user: data, isLoading, refetch };
 };
