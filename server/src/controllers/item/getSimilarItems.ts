@@ -1,9 +1,9 @@
 import { getSimilarItemsService } from '../../services/item/getSimilarItemsService';
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
 export function getSimilarItemsRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.getSimilarItems)
     .query(async (opts) => {
       const { id, limit, visibility } = opts.input;

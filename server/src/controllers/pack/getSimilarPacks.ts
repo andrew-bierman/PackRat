@@ -1,9 +1,9 @@
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { getSimilarPacksService } from '../../services/pack/pack.service';
 import { getSimilarPacks } from '@packrat/validations';
 
 export function getSimilarPacksRoute() {
-  return publicProcedure.input(getSimilarPacks).query(async (opts) => {
+  return protectedProcedure.input(getSimilarPacks).query(async (opts) => {
     const { id, limit, visibility } = opts.input;
 
     if (limit < 1) {
