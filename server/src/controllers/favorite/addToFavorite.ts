@@ -1,5 +1,5 @@
 import { addToFavoriteService } from '../../services/favorite/favorite.service';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
 // import { prisma } from '../../prisma';
@@ -29,7 +29,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function addToFavoriteRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.addToFavorite)
     .mutation(async (opts) => {
       const { packId, userId } = opts.input;

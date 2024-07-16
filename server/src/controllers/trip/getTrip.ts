@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getTripsService } from '../../services/trip/getTripsService';
 import * as validator from '@packrat/validations';
 
@@ -22,7 +22,7 @@ import * as validator from '@packrat/validations';
 // };
 
 export function getTripsRoute() {
-  return publicProcedure.input(validator.getTrips).query(async (opts) => {
+  return protectedProcedure.input(validator.getTrips).query(async (opts) => {
     const { owner_id } = opts.input;
     if (!owner_id) {
       throw new Error('Owner id is required');

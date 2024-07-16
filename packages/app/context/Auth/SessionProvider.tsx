@@ -3,7 +3,14 @@ import { useRouter } from 'app/hooks/router';
 import React, { useEffect } from 'react';
 import { useStorageState } from 'app/hooks/storage/useStorageState';
 
-const AuthContext = React.createContext(null);
+interface AuthContextType {
+  sessionSignIn: (session: any) => void; // Adjust 'any' to the specific session type
+  sessionSignOut: () => void;
+  session: string | null;
+  isLoading: boolean;
+}
+
+const AuthContext = React.createContext<AuthContextType | null>(null);
 
 // // This hook can be used to access the user info. TODO: implement
 export function useAuth() {

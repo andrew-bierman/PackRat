@@ -25,10 +25,11 @@ export const useWater = ({ currentPack, setWaterItem }) => {
     const data = {
       name: 'Water',
       weight: waterWeight,
-      quantity: '1',
+      quantity: 1,
       unit: 'oz',
       packId: currentPack.id,
       type: ItemCategoryEnum.WATER,
+      ownerId: currentPack?.ownerId,
     };
 
     addPackItem(data);

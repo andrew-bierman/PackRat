@@ -15,7 +15,6 @@ export default function Appearance() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Appearance',
-          name: 'Appearance',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

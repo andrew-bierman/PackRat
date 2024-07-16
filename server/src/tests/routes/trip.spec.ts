@@ -93,7 +93,7 @@ describe('Trip Routes', () => {
         pack_id: partialTrip.pack_id ?? '',
       };
 
-      const createdTrip = await caller.addTrip(input);
+      const createdTrip = await caller.addTrip(input as any);
       expect(createdTrip).toBeDefined();
     });
   });

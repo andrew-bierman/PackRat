@@ -6,6 +6,7 @@ import { useRouter } from 'app/hooks/router';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
 import { RStack } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
+import { View } from 'native-base';
 
 interface SearchResult {
   properties: {
@@ -58,7 +59,9 @@ export default function Search() {
   };
 
   return (
-    <RStack paddingTop={24} backgroundColor={currentTheme.colors.text}>
+    <RStack
+      style={{ paddingTop: 24, backgroundColor: currentTheme.colors.text }}
+    >
       {Platform.OS === 'web' && (
         <Head>
           <title>Search</title>
@@ -73,12 +76,13 @@ export default function Search() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <PlacesAutocomplete
-        style={{ width: '100%' }}
-        onSelect={handleSearchSelect}
-        placeholder="Search for a place"
-        ref={ref}
-      />
+      <View style={{ width: '100%' }}>
+        <PlacesAutocomplete
+          onSelect={handleSearchSelect}
+          placeholder="Search for a place"
+          ref={ref}
+        />
+      </View>
       {/* Add search virtual list for feed, packs, trips, places with prop to determine which to display */}
     </RStack>
   );

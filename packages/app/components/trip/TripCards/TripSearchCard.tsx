@@ -3,23 +3,25 @@ import { TripCardBase } from './TripCardBase';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
 
 import { FontAwesome } from '@expo/vector-icons';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
+import useResponsive from 'app/hooks/useResponsive';
 import { useScreenWidth } from 'app/hooks/common';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
+
 
 type TripSearchCardProps = {
   searchRef: any;
 };
 
 export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
+  const {screenWidth} = useScreenWidth()
   const { currentTheme } = useTheme();
   const [, setGEOLocation] = useGEOLocationSearch();
-  const {screenWidth} = useScreenWidth();
 
   const handleSelectLocation = (geoJSON) => {
     setGEOLocation(geoJSON);
   };
+  const { xs } = useResponsive();
 
   return (
     <TripCardBase
@@ -33,14 +35,16 @@ export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
       )}
       title="Where are you heading?"
     >
-      <View style={{width:  screenWidth <= SCREEN_WIDTH ? '50vw' :'30vw'}}>
-      <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      <View style={{ width: xs ? screenWidth * 0.5 : screenWidth * 0.3 }}>
+        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
       </View>
     </TripCardBase>
   );
 };
 
 const loadStyles = (theme) => {
+  const { xxs } = useResponsive();
+
   const { currentTheme } = theme;
 
   return {
@@ -51,8 +55,8 @@ const loadStyles = (theme) => {
     gap: 10,
     flex: 1,
     paddingHorizontal: 60,
-    paddingVertical: 70,
-    height: Platform.OS === 'web' ? 450 : '100%',
+    paddingVertical: 20,
+    height: xxs ? '100%' : 450,
     alignSelf: 'center',
   };
 };

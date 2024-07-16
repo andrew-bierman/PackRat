@@ -46,6 +46,7 @@ const router = new Hono();
  */
 router.get(
   '/packItems/:packId',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.getItems, req.body, next)) as any,
   tryCatchWrapper(getItems),
 );
@@ -69,6 +70,7 @@ router.get(
  */
 router.get(
   '/i/:packId',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.getItemById, req.body, next)) as any,
   tryCatchWrapper(getItemById),
 );
@@ -127,6 +129,7 @@ router.get(
  */
 router.post(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.addItem, req.body, next)) as any,
   tryCatchWrapper(addItem),
 );
@@ -161,6 +164,7 @@ router.post(
  */
 router.put(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.editItem, req.body, next)) as any,
   tryCatchWrapper(editItem),
 );
@@ -187,6 +191,7 @@ router.put(
  */
 router.delete(
   '/',
+  authTokenMiddleware as any,
   ((req, res, next) => zodParser(validator.deleteItem, req.body, next)) as any,
   tryCatchWrapper(deleteItem),
 );
@@ -221,6 +226,7 @@ router.delete(
  */
 router.post(
   '/global',
+  authTokenMiddleware as any,
   ((req, res, next) =>
     zodParser(validator.addItemGlobal, req.body, next)) as any,
   tryCatchWrapper(addItemGlobal),
@@ -243,6 +249,8 @@ router.get(
   '/global',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.getItemsGlobally, req.body, next)) as any,
   tryCatchWrapper(getItemsGlobally),
 );
 
@@ -263,6 +271,8 @@ router.post(
   '/global/select/:packId',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.addGlobalItemToPack, req.body, next)) as any,
   tryCatchWrapper(addGlobalItemToPack),
 );
 /**
@@ -282,6 +292,8 @@ router.put(
   '/global/:itemId',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.editGlobalItemAsDuplicate, req.body, next)) as any,
   tryCatchWrapper(editGlobalItemAsDuplicate),
 );
 
@@ -309,6 +321,8 @@ router.delete(
   '/global/:itemId',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
+  ((req, res, next) =>
+    zodParser(validator.deleteGlobalItem, req.body, next)) as any,
   tryCatchWrapper(deleteGlobalItem),
 );
 

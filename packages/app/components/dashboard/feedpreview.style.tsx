@@ -8,7 +8,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     cardStyles: {
       height: 100,
-      width: 250,
+      width: '100%',
       backgroundColor: appTheme.colors.primary,
       borderRadius: 5,
       padding: 20,
@@ -25,7 +25,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     feedItemTitle: {
       fontWeight: 'bold',
-      fontSize: 16,
+      fontSize: 17,
       color: currentTheme.colors.text,
       marginBottom: 5,
     },

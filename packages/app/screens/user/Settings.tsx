@@ -1,11 +1,9 @@
 import React from 'react';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
-  RInput,
   RSeparator,
   RText,
   RStack,
-  RButton,
   RH5,
   RH2,
   RScrollView,
@@ -16,13 +14,19 @@ import {
   FormSelect,
   SubmitButton,
   RIconButton,
+  RSpinner,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
-import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
-import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
+import {
+  userSettingsSchema,
+  passwordChangeSchema,
+  deleteUserForm,
+} from '@packrat/validations';
 import { Platform } from 'react-native';
+import { useNavigate } from 'app/hooks/navigation';
+import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -35,11 +39,11 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
 }));
 
 export default function Settings() {
-  const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
-    useProfileSettings();
+  const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
+  const { deleteProfile, isLoading } = useDeleteProfile();
 
-  const { isDark, currentTheme } = useTheme();
-  const router = useRouter();
+  const { isDark } = useTheme();
+  const navigate = useNavigate();
 
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
@@ -50,6 +54,7 @@ export default function Settings() {
         paddingVertical={20}
         paddingHorizontal={8}
         marginHorizontal="auto"
+        marginVertical={40}
       >
         <RStack
           style={{
@@ -58,25 +63,23 @@ export default function Settings() {
             flexDirection: 'row',
           }}
         >
-          {Platform.OS === 'web' && (
-            <RIconButton
-              backgroundColor="transparent"
-              icon={
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
-                  color={isDark ? 'white' : 'black'}
-                />
+          <RIconButton
+            backgroundColor="transparent"
+            icon={
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={isDark ? 'white' : 'black'}
+              />
+            }
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                window?.history?.back();
+              } else {
+                navigate('/profile');
               }
-              onPress={() => {
-                if (Platform.OS === 'web') {
-                  window?.history?.back();
-                } else {
-                  router.back();
-                }
-              }}
-            />
-          )}
+            }}
+          />
           <RH2>Profile</RH2>
         </RStack>
         <Form
@@ -86,8 +89,10 @@ export default function Settings() {
           <RStack
             space="$3"
             maw="100%"
-            width="fit-content"
-            marginHorizontal="auto"
+            style={{
+              width: Platform.OS === 'web' ? null : 'fit-content',
+              marginHorizontal: 'auto',
+            }}
           >
             <ImageUpload
               label="Profile Picture"
@@ -139,13 +144,16 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack marginTop={20} marginBottom={10}>
+        <RStack style={{ marginTop: 20, marginBottom: 10 }}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
-          <RStack space="$3" width="100%" marginHorizontal="auto">
+          <RStack
+            space="$3"
+            style={{ width: '100%', marginHorizontal: 'auto' }}
+          >
             <RStack space="$2">
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput
@@ -178,6 +186,39 @@ export default function Settings() {
             >
               Change password
             </SubmitButton>
+          </RStack>
+        </Form>
+        <RStack marginTop={20} marginBottom={10}>
+          <RH2>Delete account</RH2>
+          <RSeparator marginVertical={8} />
+          <RText size={16}>
+            Deleting your account will remove all your information from our
+            database. This cannot be undone
+          </RText>
+        </RStack>
+        <Form validationSchema={deleteUserForm}>
+          <RStack style={{ width: '100%', marginHorizontal: 'auto' }}>
+            <RLabel htmlFor="confirmText">
+              To confirm this, type "delete"
+            </RLabel>
+            <RStack space="$2" style={{ flexDirection: 'row' }}>
+              <FormInput
+                id="confirmText"
+                style={{ minWidth: 268 }}
+                name="confirmText"
+              />
+              <SubmitButton
+                onSubmit={deleteProfile}
+                disabled={isLoading}
+                color="white"
+                style={{
+                  backgroundColor: 'red',
+                  opacity: isLoading ? 0.4 : 1,
+                }}
+              >
+                {isLoading ? <RSpinner color="#f6f6f6" /> : 'Delete account'}
+              </SubmitButton>
+            </RStack>
           </RStack>
         </Form>
       </RStack>

@@ -334,12 +334,7 @@ const loadStyles = (theme) => {
       width: '100%',
       flex: 1,
     },
-    userDataContainer: {
-      marginBottom: 25,
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+
     userDataCard: {
       borderRadius: 15,
       backgroundColor: currentTheme.colors.card,

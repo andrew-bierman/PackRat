@@ -6,24 +6,32 @@ import {
   Sheet,
   YStack as OriginalYStack,
   getFontSize,
+  Text,
 } from 'tamagui';
+import { RDropdownMenu } from '../ZDropdown';
 
 const YStack: any = OriginalYStack;
 const Select: any = OriginalSelect;
 
-// Entry point for the Select component
 export default function RSelect(props) {
-  // Default key names for text and value, can be overridden by props
-  const { textKey = 'label', valueKey = 'value', ...otherProps } = props;
+  const {
+    textKey = 'label',
+    valueKey = 'value',
+    native = false,
+    ...otherProps
+  } = props;
 
   return (
-    <SelectItem native textKey={textKey} valueKey={valueKey} {...otherProps} />
+    <SelectItem
+      native={native}
+      textKey={textKey}
+      valueKey={valueKey}
+      {...otherProps}
+    />
   );
 }
 
-// Function to extract option attributes from data items
 const extractOptionAttributes = (item, index, textKey, valueKey) => {
-  // Handle simple types: strings, numbers, and booleans
   if (
     typeof item === 'string' ||
     typeof item === 'number' ||
@@ -32,7 +40,6 @@ const extractOptionAttributes = (item, index, textKey, valueKey) => {
     return { text: item.toString(), value: item.toString(), index };
   }
 
-  // Handle objects
   if (typeof item === 'object' && item !== null) {
     return {
       text: item[textKey] ?? item.toString(),
@@ -41,11 +48,9 @@ const extractOptionAttributes = (item, index, textKey, valueKey) => {
     };
   }
 
-  // Default case for other invalid types
   return { text: 'Invalid Item', value: 'invalid', index };
 };
 
-// Component to render the Select dropdown
 export function SelectItem(props) {
   const {
     value = '',
@@ -54,6 +59,7 @@ export function SelectItem(props) {
     placeholder = 'Select an option',
     textKey = 'label',
     valueKey = 'value',
+    native = false,
     ...forwardedProps
   } = props;
 
@@ -81,9 +87,8 @@ export function SelectItem(props) {
       ));
   }, [data, textKey, valueKey]);
 
-  // Conditional rendering based on options
   if (options.length === 0) {
-    return <div>No options available</div>;
+    return <Text>No options available</Text>;
   }
 
   return (
@@ -93,38 +98,13 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger width={220} iconAfter={ChevronDown}>
+      <Select.Trigger width={220}>
         <Select.Value>{placeholder}</Select.Value>
       </Select.Trigger>
-      <Adapt when="sm" platform="touch">
-        <Sheet
-          native={!!props.native}
-          modal
-          dismissOnSnapToBottom
-          animationConfig={{
-            type: 'spring',
-            damping: 20,
-            mass: 1.2,
-            stiffness: 250,
-          }}
-        >
-          <Sheet.Frame>
-            <Sheet.ScrollView>
-              <Adapt.Contents />
-            </Sheet.ScrollView>
-          </Sheet.Frame>
-          <Sheet.Overlay
-            animation="lazy"
-            enterStyle={{ opacity: 0 } as any}
-            exitStyle={{ opacity: 0 } as any}
-          />
-        </Sheet>
-      </Adapt>
       <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>
           <Select.Group>{options}</Select.Group>
-
-          {props.native && (
+          {native && (
             <YStack
               position="absolute"
               right={0}
@@ -135,11 +115,38 @@ export function SelectItem(props) {
               width={'$4'}
               pointerEvents="none"
             >
-              <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
+              {/* <ChevronDown size={getFontSize((props.size ?? '$true') as any)} /> */}
             </YStack>
           )}
         </Select.Viewport>
       </Select.Content>
+      {native && (
+        <Adapt when="sm" platform="touch">
+          <Sheet
+            native
+            modal
+            snapPointsMode="fit"
+            dismissOnSnapToBottom
+            animationConfig={{
+              type: 'spring',
+              damping: 20,
+              mass: 1.2,
+              stiffness: 250,
+            }}
+          >
+            <Sheet.Frame>
+              <Sheet.ScrollView>
+                <Adapt.Contents />
+              </Sheet.ScrollView>
+            </Sheet.Frame>
+            <Sheet.Overlay
+              animation="lazy"
+              enterStyle={{ opacity: 0 } as any}
+              exitStyle={{ opacity: 0 } as any}
+            />
+          </Sheet>
+        </Adapt>
+      )}
     </Select>
   );
 }

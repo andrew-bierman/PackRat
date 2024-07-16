@@ -10,7 +10,7 @@ import loadStyles from './feedpreview.style';
 interface FeedItem {
   id: string;
   name: string;
-  type: string;
+  type: string | null;
   description: string;
 }
 
@@ -23,9 +23,11 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   const styles = useCustomStyles(loadStyles);
   const { data: feedData } = useFeed();
 
+  console.log('feedData', feedData)
+
   return (
     <Carousel itemWidth={itemWidth}>
-      {feedData?.map((item: FeedItem, index: number) => {
+      {feedData?.filter((item): item is FeedItem => item.type !== null).map((item: FeedItem, index: number) => {
         const linkStr = `/${item.type}/${item.id}`;
         return linkStr ? (
           <RLink
@@ -67,6 +69,6 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
 };
 
 const FeedPreview: React.FC = () => {
-  return <FeedPreviewScroll itemWidth={250} />;
+  return <FeedPreviewScroll itemWidth={200} />;
 };
 export default FeedPreview;

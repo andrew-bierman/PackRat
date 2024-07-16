@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import MapContainer from 'app/components/map/MapContainer';
+import { MapContainer } from 'app/components/map';
 import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
@@ -13,9 +13,9 @@ import {
   useGetPhotonDetails,
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
-import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
+import { WeatherData } from 'app/components/weather/WeatherData';
 
 const RText: any = OriginalRText;
 
@@ -78,10 +78,6 @@ export const DestinationPage = () => {
   const styles = useCustomStyles(loadStyles);
 
   const { currentDestination, latLng } = useCurrentDestination();
-
-  const { data: weatherData } = useFetchWeather(latLng);
-
-  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
 
   const [osm] = useGEOLocationSearch();
   const {
@@ -195,10 +191,7 @@ export const DestinationPage = () => {
             contentProps={{ shape }}
             type="map"
           />
-          <WeatherCard
-            weatherObject={weatherData}
-            weatherWeek={weatherWeekData}
-          />
+          <WeatherData latLng={latLng} />
         </View>
       )}
     </ScrollView>
@@ -215,6 +208,7 @@ const loadStyles = (theme) => {
       paddingBottom: 12,
       paddingLeft: 16,
       width: '100%',
+      marginBottom: 40,
       backgroundColor: currentTheme.colors.background,
     },
     headerContainer: {

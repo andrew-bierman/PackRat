@@ -32,8 +32,9 @@ const router = new Hono();
  */
 router.get(
   '/*',
-  // tryCatchWrapper(getMapPreview)
-  getMapPreview,
+  authTokenMiddleware as any,
+  tryCatchWrapper(getMapPreview),
+  // getMapPreview,
 );
 
 export default router;

@@ -1,5 +1,4 @@
 // useTripsData.js
-import { useFetchWeather, useFetchWeatherWeak } from 'app/hooks/weather';
 import useParks from 'app/hooks/parks';
 import useTrails from 'app/hooks/trails';
 import {
@@ -17,22 +16,10 @@ export const useTripsData = () => {
     isLoading: isPhotonLoading,
   } = useGetPhotonDetails({
     properties: {
-      osm_id: osm?.osmId,
-      osm_type: osm?.osmType,
+      osm_id: osm?.osmId ?? '',
+      osm_type: osm?.osmType ?? '',
     },
   });
-
-  const {
-    data: weatherData,
-    isLoading: weatherLoading,
-    isError: weatherError,
-  } = useFetchWeather(latLng);
-
-  const {
-    data: weatherWeekData,
-    isLoading: weekWeatherLoading,
-    isError: weekWeatherError,
-  } = useFetchWeatherWeak(latLng);
 
   const {
     error: parksError,
@@ -54,12 +41,6 @@ export const useTripsData = () => {
     photonDetails,
     hasPhotonError,
     isPhotonLoading,
-    weatherData,
-    weatherLoading,
-    weatherError,
-    weatherWeekData,
-    weekWeatherLoading,
-    weekWeatherError,
     parksData,
     parksError,
     parksLoading,

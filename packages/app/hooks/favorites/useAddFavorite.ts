@@ -10,7 +10,7 @@ export function useAddFavorite() {
     mutation.mutate(newFavorite, {
       onSuccess: () => {
         // Invalidate and refetch. Update to be more specific
-        utils.getFavoritePacksByUser.invalidate();
+        utils.getUserFavorites.invalidate();
         utils.getPublicPacks.invalidate();
       },
     });

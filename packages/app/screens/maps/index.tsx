@@ -1,5 +1,8 @@
 import { Modal, Text, View, Image, Dimensions } from 'react-native';
-import Mapbox, { offlineManager } from '@rnmapbox/maps';
+import Mapbox, {
+  offlineManager,
+  OfflineCreatePackOptions,
+} from '@rnmapbox/maps';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
@@ -11,7 +14,13 @@ import {
   getShapeSourceBounds,
 } from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
-import { RStack } from '@packrat/ui';
+import { RScrollView, RStack } from '@packrat/ui';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+
+interface Pack {
+  bounds: number[][];
+  metadata: string;
+}
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -32,19 +41,19 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
+  const styles = useCustomStyles(loadStyles);
+
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState(null);
+  const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState(null);
+  const [pack, setPack] = useState<OfflineCreatePackOptions | null>(null);
 
   let shape, zoomLevel;
   if (pack != null) {
     shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
     const dw = Dimensions.get('screen').width;
-    const bounds = getShapeSourceBounds(shape);
-
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
+    zoomLevel = calculateZoomLevel(pack.bounds, {
       width: dw,
       height: 360,
     });
@@ -57,65 +66,75 @@ export default function DownloadedMaps() {
   }, []);
 
   return (
-    <View style={{ backgroundColor: currentTheme.colors.background }}>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginBottom: 20,
-          color: currentTheme.colors.text,
-        }}
-      >
-        Downloaded Maps
-      </Text>
-      {offlinePacks ? (
-        <View style={{ gap: 4 }}>
-          {offlinePacks.map(({ pack }) => {
-            const metadata = JSON.parse(pack.metadata);
-            return (
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
-                onPress={() => {
-                  setPack(pack);
-                  setShowMap(true);
-                }}
-              >
-                {pack && (
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 200,
-                      borderRadius: 10,
-                    }}
-                    source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
-                    }}
-                  />
-                )}
-                <Text
+    <View
+      style={{
+        backgroundColor: currentTheme.colors.background,
+        height: '100%',
+      }}
+    >
+      <RScrollView nestedScrollEnabled={true} mb={50}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginVertical: 20,
+            color: currentTheme.colors.text,
+          }}
+        >
+          Downloaded Maps
+        </Text>
+        {offlinePacks ? (
+          <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
+            {offlinePacks.map(({ pack }) => {
+              const metadata = JSON.parse(pack.metadata);
+              return (
+                <TouchableOpacity
                   style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    marginTop: 5,
-                    color: currentTheme.colors.text,
+                    padding: 8,
+                    backgroundColor: `${currentTheme.colors.secondaryBlue}`,
+                    borderRadius: 15,
+                  }}
+                  onPress={() => {
+                    setPack(pack);
+                    setShowMap(true);
                   }}
                 >
-                  {metadata.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      ) : (
-        <RStack>
-          <Text>loading...</Text>
-        </RStack>
-      )}
+                  {pack && (
+                    <Image
+                      style={{
+                        width: '100%',
+                        height: 200,
+                        borderRadius: 15,
+                      }}
+                      source={{
+                        uri: `${api}/mapPreview/${
+                          pack?.bounds[0] + ',' + pack?.bounds[1]
+                        },10,60,60/600x600`,
+                      }}
+                    />
+                  )}
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      marginTop: 5,
+                      textAlign: 'center',
+                      color: currentTheme.colors.text,
+                    }}
+                  >
+                    {metadata.name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ) : (
+          <RStack>
+            <Text>loading...</Text>
+          </RStack>
+        )}
+      </RScrollView>
       {showMap ? (
         <Modal visible={true}>
           <Mapbox.MapView
@@ -129,8 +148,8 @@ export default function DownloadedMaps() {
             <Mapbox.Camera
               zoomLevel={zoomLevel}
               centerCoordinate={[
-                (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
+                (pack?.bounds[0]?.[0] + pack?.bounds[1]?.[0]) / 2 ?? 0,
+                (pack?.bounds[0]?.[1] + pack?.bounds[1]?.[1]) / 2 ?? 0,
               ]}
               animationMode={'flyTo'}
               animationDuration={2000}
@@ -145,13 +164,7 @@ export default function DownloadedMaps() {
               clusterMaxZoomLevel={14}
               style={{ zIndex: 1 }}
             >
-              <Mapbox.LineLayer
-                id="layer1"
-                style={[
-                  styles.lineLayer,
-                  { lineColor: currentTheme.colors.cardIconColor },
-                ]}
-              />
+              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
             </Mapbox.ShapeSource>
             {/* // top location */}
             {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
@@ -160,7 +173,7 @@ export default function DownloadedMaps() {
                 coordinate={
                   shape?.features[0]?.geometry?.coordinates[
                     shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ]
+                  ][0]
                 }
               >
                 <View>
@@ -183,9 +196,12 @@ export default function DownloadedMaps() {
   );
 }
 
-const styles = StyleSheet.create({
-  lineLayer: {
-    lineWidth: 4,
-    lineOpacity: 1,
-  },
-});
+const loadStyles = ({ currentTheme }) => {
+  return {
+    lineLayer: {
+      lineWidth: 4,
+      lineOpacity: 1,
+      lineColor: currentTheme.colors.cardIconColor,
+    },
+  };
+};

@@ -12,7 +12,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
   //   radius,
   //   selectedSearch,
   // }); // Assumed to be a valid hook from tRPC.
-  const { lat, lon } = latLng;
+  const { lat, lon } = latLng || {};
   const isEnabled = Boolean(lat && lon);
   // SWAP FOR TRPC react query
   const { data, isLoading, error } = queryTrpc.getTrailsOSM.useQuery(

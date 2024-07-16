@@ -16,7 +16,6 @@ export default function ResetPasswordRoute() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Reset Password',
-          name: 'Reset Password',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

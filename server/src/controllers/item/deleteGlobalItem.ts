@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import { z } from 'zod';
 
@@ -22,7 +22,7 @@ import { z } from 'zod';
 // };
 
 export function deleteGlobalItemRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         itemId: z.string(),

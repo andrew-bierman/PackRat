@@ -59,7 +59,7 @@ export function TripDetails() {
 
   const data = rawData as TripData;
 
-  const { weatherObject, weatherWeek } = useTripWeather(data);
+  const { weatherObject } = useTripWeather(data);
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -128,22 +128,14 @@ export function TripDetails() {
                             {data.start_date && (
                               <RStack>
                                 <Text style={styles.descriptionText}>
-                                  Start Date:{' '}
-                                  {format(
-                                    new Date(data.start_date),
-                                    'MM/dd/yyyy',
-                                  )}
+                                  Start Date:{data.start_date}
                                 </Text>
                               </RStack>
                             )}
                             {data.end_date && (
                               <RStack>
                                 <Text style={styles.descriptionText}>
-                                  End Date:{' '}
-                                  {format(
-                                    new Date(data.end_date),
-                                    'MM/dd/yyyy',
-                                  )}
+                                  End Date:{data.end_date}
                                 </Text>
                               </RStack>
                             )}
@@ -154,13 +146,7 @@ export function TripDetails() {
                           <TableContainerComponent currentPack={data?.packs} />
                         );
                       case SECTION.WEATHER:
-                        return (
-                          <WeatherCardComponent
-                            weatherObject={weatherObject}
-                            weatherWeek={weatherWeek}
-                            data={data}
-                          />
-                        );
+                        return null; // TODO handle saved trip weather
                       case SECTION.TRIP:
                         return (
                           <TripCardComponent

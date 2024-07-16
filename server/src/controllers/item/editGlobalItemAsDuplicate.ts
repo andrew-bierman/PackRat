@@ -1,6 +1,6 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 import { z } from 'zod';
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -40,7 +40,7 @@ import { publicProcedure } from '../../trpc';
 // };
 
 export function editGlobalItemAsDuplicateRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(
       z.object({
         itemId: z.string(),

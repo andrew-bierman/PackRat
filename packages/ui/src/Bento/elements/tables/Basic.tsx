@@ -11,8 +11,12 @@ import { Table } from './common/tableParts';
 import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
-import { ZDropdown, ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+
 import { Platform } from 'react-native';
+import { RDropdownMenu } from '../../../ZDropdown';
+import RIconButton from '../../../RIconButton';
+import { ChevronDown } from '@tamagui/lucide-icons';
 
 type ModalName = 'edit' | 'delete';
 
@@ -41,8 +45,8 @@ interface BasicTableProps {
   onDelete: (params: { itemId: string; packId: string }) => void;
   hasPermissions: boolean;
   currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /** ------ EXAMPLE ------ */
@@ -55,8 +59,12 @@ export function BasicTable({
   setRefetch,
 }: BasicTableProps) {
   const ActionButtons = ({ item }) => {
-    const [activeModal, setActiveModal] = React.useState<ModalName | null>(null);
-    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null);
+    const [activeModal, setActiveModal] = React.useState<ModalName | null>(
+      null,
+    );
+    const [selectedItemId, setSelectedItemId] = React.useState<string | null>(
+      null,
+    );
 
     const openModal = (modalName: ModalName, itemId: string) => {
       setActiveModal(modalName);
@@ -85,24 +93,38 @@ export function BasicTable({
           showTrigger={false}
         >
           {selectedItemId === item.id && (
-            <AddItem id={item.id} packId={item.id} isEdit={true} initialData={item} />
+            <AddItem
+              id={item.id}
+              packId={item.id}
+              isEdit={true}
+              initialData={item}
+            />
           )}
         </EditPackItemModal>
         <DeletePackItemModal
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
-          onConfirm={() => onDelete({ itemId: item.id, packId: currentPack.id })}
+          onConfirm={() =>
+            onDelete({ itemId: item.id, packId: currentPack.id })
+          }
         />
         {hasPermissions ? (
           Platform.OS === 'android' ||
           Platform.OS === 'ios' ||
           window.innerWidth < 900 ? (
             <View>
-              <ZDropdown.Native
-                dropdownItems={[
+              <RDropdownMenu
+                menuItems={[
                   { label: 'Edit', onSelect: handleEditClick },
                   { label: 'Delete', onSelect: handleDeleteClick },
                 ]}
+                menuName={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={ChevronDown}
+                    style={{ padding: 0 }}
+                  />
+                }
               />
             </View>
           ) : (
@@ -119,7 +141,6 @@ export function BasicTable({
       </>
     );
   };
-
 
   const columnHelper = createColumnHelper<Item>();
   const columns = [
@@ -143,18 +164,22 @@ export function BasicTable({
       cell: (info) => info.getValue(),
       // footer: (info) => 'category',
     }),
-    columnHelper.display({
-      id: 'actions',
-      cell: (props) => <ActionButtons item={props.row.original} />,
-      header: () => 'Actions',
-      // footer: (info) => info.column.id,
-    }),
   ];
+
+  if (hasPermissions) {
+    columns.push(
+      columnHelper.display({
+        id: 'actions',
+        cell: (props) => <ActionButtons item={props.row.original} />,
+        header: () => 'Actions',
+      }),
+    );
+  }
 
   const CELL_WIDTH = '$18';
 
   const [activeModal, setActiveModal] = React.useState<string | null>(null);
-  
+
   // Flatten the grouped data into a single array of items
   const data = Object.values(groupedData).flat();
 
@@ -182,7 +207,13 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
         {tableData.map((row, i) => (
           <View
             key={i}
@@ -210,7 +241,11 @@ export function BasicTable({
                 );
               })}
               {hasPermissions && (
-                <View fd="row" justifyContent="space-between" alignItems="center">
+                <View
+                  fd="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
                   <Text>Action</Text>
                   <ActionButtons item={row} />
                 </View>
@@ -244,7 +279,12 @@ export function BasicTable({
               {headerGroup.headers.map((header) => (
                 <Table.HeaderCell key={header.id}>
                   <Text>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}
@@ -264,7 +304,6 @@ export function BasicTable({
             </Table.Row>
           ))}
         </Table.Body>
-        
       </Table>
     </View>
   );

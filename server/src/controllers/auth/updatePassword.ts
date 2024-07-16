@@ -1,4 +1,4 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import * as validator from '@packrat/validations';
 import { hashPassword } from '../../utils/user';
@@ -43,7 +43,7 @@ import { hashPassword } from '../../utils/user';
 // };
 
 export function updatePasswordRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.updatePassword)
     .mutation(async (opts) => {
       const { email, password } = opts.input;
