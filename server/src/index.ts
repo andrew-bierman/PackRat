@@ -1,14 +1,16 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
 import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
-import { cors } from 'hono/cors';
 import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
 import { CORS_METHODS } from './config';
+import { queue } from './queue';
 
-interface Bindings {
+export interface Bindings {
   [key: string]: any;
   DB: IDBDatabase;
   JWT_VERIFICATION_KEY: string;
@@ -48,8 +50,7 @@ app.use('*', async (c, next) => {
 });
 
 // SETUP LOGGING
-//  tRPC is already logging requests, but you can add your own middleware
-//  app.use('*', logger());
+app.use('*', logger());
 
 // SETUP TRPC SERVER
 app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
@@ -67,4 +68,12 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
 // SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
 
-export default app;
+// SETUP CLOUDFLARE WORKER WITH EVENT HANDLERS
+const worker = {
+  ...app,
+  fetch: app.fetch,
+  queue,
+};
+
+// EXPORT WORKER
+export default worker;
