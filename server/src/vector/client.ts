@@ -1,5 +1,16 @@
 import { AiClient } from '../integrations/ai/client';
 
+interface VectorsQueryResponse {
+  result: {
+    count: number;
+    matches: { id: string; namespace: string; score: number }[];
+  };
+  result_info: string | null;
+  success: boolean;
+  errors: { code: number; message: string }[];
+  messages: { code: number; message: string }[];
+}
+
 class VectorClient {
   private static _instance: VectorClient | null = null;
   private apiKey: string;
@@ -132,14 +143,14 @@ class VectorClient {
    * @param {string} namespace - Segment vectors; only vectors within the provided namespace are used for search.
    * @param {string} topK - Return the top K similar vectors (default = 3).
    * @param {Object} filter - Optional [metadata filter](https://developers.cloudflare.com/vectorize/reference/metadata-filtering)
-   * @returns {Promise<Object>} A promise that resolves with Query Vectors Response which contains matches.
+   * @returns {Promise<VectorsQueryResponse>} A promise that resolves with the vectors query response which contains the matches.
    */
   public async search(
     content: string,
     namespace: string,
     topK: number = 3,
     filter?: { [key: string]: any },
-  ) {
+  ): Promise<VectorsQueryResponse> {
     const vector = await AiClient.getEmbedding(content);
     const url = `${this.VECTORIZE_INDEX_URL}/query`;
     const response = await fetch(url, {
