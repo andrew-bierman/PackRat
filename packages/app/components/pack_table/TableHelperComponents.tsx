@@ -132,7 +132,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
         placeholder="Select weight unit"
         width="100%"
         native={true}
-        zeego={true}
+        // zeego={true}
       />
     </View>
   );
