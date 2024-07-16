@@ -73,7 +73,7 @@ export const editItemService = async (
         metadata: {
           isPublic: newItem.global,
         },
-        namespace: 'packs',
+        namespace: 'items',
       },
       true,
     ),
