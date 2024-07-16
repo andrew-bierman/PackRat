@@ -13,13 +13,12 @@ import { Context, Next } from 'hono';
 export const getUserById = async (c: Context, next: Next) => {
   try {
     const { userId } = await c.req.param();
-
     const user = await getUserByIdService(userId);
-
-    c.res.locals.data = user;
-    responseHandler(c.res);
+    console.log('user', user)
+    c.set('data', user)
+    return await responseHandler(c);
   } catch (error) {
-    next(UserNotFoundError);
+    // next(UserNotFoundError);
   }
 };
 

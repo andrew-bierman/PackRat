@@ -6,6 +6,7 @@ import { TRPCError } from '@trpc/server';
 import { z, ZodError } from 'zod';
 import { TokenSchema } from './validators/authTokenValidator';
 import { type Context, type Next } from 'hono';
+import { responseHandler } from '../helpers/responseHandler';
 
 /**
  * Extracts the token from the request header.
@@ -27,10 +28,13 @@ const extractTokenHTTP = async (c: Context): Promise<string> => {
  * @throws {ZodError} If token structure is invalid.
  */
 const verifyTokenHTTP = (secret: string, token: string): JwtPayload => {
-  const decoded: JwtPayload = jwt.verify(token, secret ?? '') as JwtPayload;
-  console.log('Decoded', decoded);
-  const parsedToken = TokenSchema.parse(decoded); // Will throw if invalid
-  return parsedToken;
+  try {
+    const decoded: JwtPayload = jwt.verify(token, secret) as JwtPayload;
+    TokenSchema.parse(decoded);
+    return decoded;
+  } catch (err) {
+    throw new Error('Invalid token.');
+  }
 };
 
 /**
@@ -58,13 +62,16 @@ const authMiddlewareHTTP = async (c: Context, next: Next) => {
   try {
     const token = await extractTokenHTTP(c);
     const decoded = verifyTokenHTTP(c.env.JWT_SECRET, token);
+    console.log('Decodedeed', decoded);
     const user = await findUserHTTP(decoded, token);
+    console.log('token ', token, ' decoded ', decoded, ' user ', user);
     c.set('token', token);
     c.set('user', user);
 
-    await next();
+    return await next();
   } catch (err) {
-    handleErrorHTTP(err, c);
+    console.log('Eror', err);
+    return await handleErrorHTTP(err, c);
   }
 };
 
@@ -73,13 +80,20 @@ const authMiddlewareHTTP = async (c: Context, next: Next) => {
  * @param {Error} err - The error object.
  * @param {Context} c - The Hono context object.
  */
-const handleErrorHTTP = (err: Error, c: Context) => {
+const handleErrorHTTP = async (err: Error, c: Context) => {
   if (err instanceof ZodError) {
     console.error('Invalid token structure:', err.message);
-    c.res.json({ error: 'Invalid token structure.' }, 400);
+    const error = { error: 'Invalid token structure.', statusCode: 400 };
+    c.set('error', error);
+    return await responseHandler(c);
   } else {
     console.error(err.message);
-    c.res.json({ error: 'Not authorized to access this resource.' }, 401);
+    const error = {
+      error: 'Not authorized to access this resource.',
+      statusCode: 401,
+    };
+    c.set('error', error);
+    return await responseHandler(c);
   }
 };
 

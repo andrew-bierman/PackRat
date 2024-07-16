@@ -47,10 +47,13 @@ export const getUsers = async (c: Context, next: Next) => {
       throw new UserNotFoundError();
     }
 
-    c.res.status(200).json(users);
+    c.set('data', users);
+    return await responseHandler(c)
   } catch (error) {
     console.error('Error fetching users:', error);
-    c.res.status(500).json({ error: 'Internal Server Error' });
+    const err = { error: 'Internal Server Error', statusCode: 500 }
+    c.set('error', err)
+    return responseHandler(c)
   }
 };
 

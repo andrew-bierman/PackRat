@@ -2,6 +2,7 @@ import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 import { Context, Next } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 // /**
 //  * Sign in a user.
@@ -26,12 +27,15 @@ export const userSignIn = async (c: Context) => {
     const user = await userClass.findByCredentials(email, password);
 
     if (!user) {
-      throw new Error('User not found');
+      const error = { error: 'User Not Found', statusCode: '200' };
+      c.set('error', error);
+      return await responseHandler(c);
     }
 
     await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);
 
-    c.json(user, 200);
+    c.set('data', user)
+    return await responseHandler(c)
   } catch (error) {
     console.error('Error signing in user:', error);
     c.json({ error: 'Internal Server Error' }, 500);

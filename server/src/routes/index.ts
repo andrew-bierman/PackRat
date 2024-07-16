@@ -20,6 +20,7 @@ import { Hono } from 'hono';
 import type { Context, Next } from 'hono';
 import { zodParser } from '../middleware/validators/zodParser';
 import * as validator from '@packrat/validations';
+import { responseHandler } from '../helpers/responseHandler';
 
 const router = new Hono();
 
@@ -65,11 +66,16 @@ router.route('/favorite', favoriteRoutes);
 router.route('/openai', openAiRoutes);
 router.route('/mapPreview', mapPreviewRouter);
 
+const response = async (ctx: Context) => {
+  return await ctx.json({ 'Hello, world!': ctx });
+};
+
 // Create a separate router for '/hello' route
 const helloRouter = new Hono();
 helloRouter.get('/', async (c: Context) => {
-  console.log(c);
-  return c.text('Hello, world!');
+  const data = 'Hello, world!';
+  return await response(c);
+  // return c.json({'Hello, world!': c});
 });
 
 helloRouter.get(

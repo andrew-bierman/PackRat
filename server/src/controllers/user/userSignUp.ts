@@ -6,6 +6,7 @@ import { User } from '../../drizzle/methods/User';
 import { hashPassword } from '../../utils/user';
 import { Context, Next } from 'hono';
 import { Env } from '../../env';
+import { responseHandler } from '../../helpers/responseHandler';
 
 // export const userSignup = async (req: Request, res: Response) => {
 //   const { email } = req.body;
@@ -23,9 +24,9 @@ import { Env } from '../../env';
 //   res.status(201).send({ user: newUser });
 // };
 
-export const userSignup = async (c: Context<Env>, next: Next) => {
+export const userSignup = async (c: Context) => {
   try {
-    const body = await c.req.parseBody();
+    const body = await c.req.json();
     const { email, password, name, username } = body as {
       email: string;
       password: string;
@@ -37,11 +38,15 @@ export const userSignup = async (c: Context<Env>, next: Next) => {
     // Check if user already exists
     const userExists = await userClass.findUser({ email });
     if (userExists) {
-      return c.res.json({ error: 'Email already registered' }, 400);
+      console.log('userExists', userExists)
+      const error = { error: 'Email already registered', statusCode: 400 }
+      c.set('error', error)
+      // return c.res.json({ error: 'Email already registered' }, 400);
+      return await responseHandler(c);
     }
 
     // Environment variables
-    const { env }: any = c.req;
+    const { env }: any = c;
     const { STMP_EMAIL, SEND_GRID_API_KEY, JWT_SECRET } = env;
 
     // Hash the password
@@ -67,10 +72,12 @@ export const userSignup = async (c: Context<Env>, next: Next) => {
     );
 
     // Send response with new user
-    c.res.json(newUser, 201);
-  } catch (error) {
-    console.error('Error signing up user:', error);
-    c.res.json({ error: 'Internal Server Error' }, 500);
+    c.set('data', newUser);
+    return await responseHandler(c);
+  } catch (err) {
+    const error = { error: `Internal Server Error ${err}`, statusCode: '500' }
+    c.set('error', error)
+    return await responseHandler(c)
   }
 };
 

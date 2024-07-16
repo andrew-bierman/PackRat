@@ -3,6 +3,7 @@ import { resetEmail } from '../../utils/accountEmail';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 import { Context, Next } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Sends an email to the specified email address.
@@ -31,14 +32,16 @@ import { Context, Next } from 'hono';
 //   }
 // };
 
-export const sentEmail = async (c: Context, next: Next) => {
+export const sentEmail = async (c: Context) => {
   try {
-    const { email } = await c.req.parseBody();
+    const { email } = await c.req.json();
 
     const userClass = new User();
     const user = await userClass.findUser({ email });
     if (!user) {
-      return c.json({ error: 'User not found' }, 404);
+      const error = { error: 'User not found', statusCode: 404 };
+      c.set('error', error);
+      return await responseHandler(c);
     }
 
     const { env }: any = c.req;
@@ -51,15 +54,13 @@ export const sentEmail = async (c: Context, next: Next) => {
     );
 
     await resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
-
-    c.json(
-      {
-        message: 'Reset Token has been sent successfully',
-        status: 'success',
-        statusCode: 200,
-      },
-      200,
-    );
+    const data = {
+      message: 'Reset Token has been sent successfully',
+      status: 'success',
+      statusCode: 200,
+    },
+    c.set('data', data)
+    return await responseHandler(c)
   } catch (err) {
     console.error('Error sending reset email:', err);
     c.json({ message: err.message }, 400);

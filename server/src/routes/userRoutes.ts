@@ -1,6 +1,6 @@
 import { type Context, Hono, type Next } from 'hono';
 import {
-  getUsersRoute as getUsers,
+  getUsers,
   getUserById,
   // addUserRoute as ,
   editUserRoute as editUser,
@@ -80,10 +80,9 @@ router.get(
 router.get(
   '/:userId',
   authMiddlewareHTTP as any,
-  ((c: Context, next: Next) => {
-    zodParser(validator.getUserById, c.req.param(), next);
-    next();
-  }) as any,
+  async (c: Context, next: Next) => {
+    return await zodParser(validator.getUserById, await c.req.param(), next);
+  },
   tryCatchWrapper(getUserById),
 );
 
@@ -116,9 +115,9 @@ router.get(
  */
 router.post(
   '/signin',
-  (async (c: Context, next: Next) => {
-    zodParser(validator.userSignIn, await c.req.json(), next);
-  }) as any,
+  async (c: Context, next: Next) => {
+    return await zodParser(validator.userSignIn, await c.req.json(), next);
+  },
   tryCatchWrapper(userSignIn),
 );
 
@@ -152,8 +151,9 @@ router.post(
 
 router.post(
   '/signup',
-  (async (c: Context, next: Next) =>
-    zodParser(validator.userSignUp, await c.req.json(), next)) as any,
+  async (c: Context, next: Next) => {
+    return await zodParser(validator.userSignUp, await c.req.json(), next);
+  },
   tryCatchWrapper(userSignup),
 );
 

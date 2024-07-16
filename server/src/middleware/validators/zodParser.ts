@@ -6,7 +6,7 @@ type ZodParserFunction = (
   input: any,
   next: NextFunction,
 ) => any;
-export const zodParser: ZodParserFunction = (schema, input, next) => {
+export const zodParser: ZodParserFunction = async (schema, input, next) => {
   schema.parse(input);
-  next();
+  return await next();
 };
