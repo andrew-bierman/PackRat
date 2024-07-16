@@ -2,25 +2,23 @@ import { Hono } from 'hono';
 import {
   getUsers,
   getUserById,
-  // addUserRoute as ,
-  editUserRoute as editUser,
-  deleteUserRoute as deleteUser,
+  editUser,
+  deleteUser,
   // addToFavoriteRoute as addToFavorite,
   userSignIn,
   userSignup,
   sentEmail,
   resetPassword,
-  getGoogleAuthURLRoute as getGoogleAuthURL,
-  // googleSignin,
+  getGoogleAuthURL,
   getMe,
 } from '../controllers/user/index';
 import * as validator from '@packrat/validations';
 
-import { googleSigninRoute as signInGoogle } from '../controllers/passport/index';
+import { signInGoogle } from '../controllers/passport/index';
 import {
-  emailExistsRoute as emailExists,
-  updatePasswordRoute as updatePassword,
-  checkCodeRoute as checkCode,
+  emailExists,
+  updatePassword,
+  checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
@@ -31,14 +29,14 @@ const router = new Hono();
 
 router.get(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['admin']) as any,
+  authTokenMiddleware,
+  checkRole(['admin']),
   tryCatchWrapper(getUsers),
 );
 
 router.get(
   '/:userId',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.getUserById, 'params'),
   tryCatchWrapper(getUserById),
 );
@@ -69,128 +67,46 @@ router.post(
 
 router.get(
   '/me/info',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   tryCatchWrapper(getMe),
 );
 
-/**
- * @swagger
- * /user/google/url:
- *   get:
- *     summary: Get Google authentication URL
- *     tags: [User]
- *     responses:
- *       '200':
- *         description: Successful response with Google authentication URL
- *       '500':
- *         description: Error retrieving Google authentication URL
- */
 router.get('/google/url', tryCatchWrapper(getGoogleAuthURL));
 
 // router.get(`/${REDIRECT_URL}`, tryCatchWrapper(googleSignin));
 
-/**
- * @swagger
- * /user/google:
- *   post:
- *     summary: Sign in with Google
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_token:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Successful sign-in with Google
- *       '400':
- *         description: Invalid request parameters
- *       '500':
- *         description: Error signing in with Google
- */
 router.post('/google', tryCatchWrapper(signInGoogle));
 
-/**
- * @swagger
- * /user:
- *   put:
- *     summary: Edit user
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Successful response editing the user
- *       '400':
- *         description: Invalid request parameters
- *       '500':
- *         description: Error editing the user
- */
 router.put(
   '/',
-  authTokenMiddleware as any,
-  // ((req, res, next) => zodParser(validator.editUser, req.body, next)) as any,
+  authTokenMiddleware,
+  zodParser(validator.editUser, 'body'),
   tryCatchWrapper(editUser),
 );
 
-/**
- * @swagger
- * /user:
- *   delete:
- *     summary: Delete user
- *     tags: [User]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userId:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Successful response deleting the user
- *       '400':
- *         description: Invalid request parameters
- *       '500':
- *         description: Error deleting the user
- */
 router.delete(
   '/',
-  authTokenMiddleware as any,
-  // ((req, res, next) => zodParser(validator.deleteUser, req.body, next)) as any,
+  authTokenMiddleware,
+  zodParser(validator.deleteUser, 'body'),
   tryCatchWrapper(deleteUser),
 );
 
 router.post(
   '/checkcode',
-  authTokenMiddleware as any,
-  // ((req, res, next) => zodParser(validator.checkCode, req.body, next)) as any,
+  authTokenMiddleware,
+  zodParser(validator.checkCode, 'body'),
   tryCatchWrapper(checkCode),
 );
 router.post(
   '/updatepassword',
-  authTokenMiddleware as any,
-  // ((req, res, next) =>
-  //   zodParser(validator.updatePassword, req.body, next)) as any,
+  authTokenMiddleware,
+  zodParser(validator.updatePassword, 'body'),
   tryCatchWrapper(updatePassword),
 );
 router.post(
   '/emailexists',
-  // ((req, res, next) => zodParser(validator.emailExists, req.body, next)) as any,
+  zodParser(validator.emailExists, 'body'),
   tryCatchWrapper(emailExists),
 );
 

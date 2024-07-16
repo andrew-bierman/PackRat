@@ -10,37 +10,17 @@ import { hashPassword } from '../../utils/user';
  * @param {object} res - The response object.
  * @return {Promise<void>} - A promise that resolves to nothing.
  */
-// export const updatePassword = async (req, res, next) => {
-//   try {
-//     let { email, oldPassword, newPassword } = req.body;
-
-//     const user = await prisma.user.findFirst({
-//       where: {
-//         email,
-//       },
-//     });
-
-//     if (!user) throw new Error('Unable to verify');
-
-//     const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-//     if (!isMatch) throw new Error('Incorrect password');
-
-//     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-
-//     newPassword = await bcrypt.hash(newPassword, salt);
-
-//     const val = await findUserAndUpdate(email, newPassword, 'password');
-
-//     if (val) {
-//       responseHandler(res);
-//     } else {
-//       next(UnableTouUpdatePasswordError);
-//     }
-//   } catch (error) {
-//     next(UnableTouUpdatePasswordError);
-//   }
-// };
+export const updatePassword = async (c) => {
+  try {
+    const { email, password } = await c.req.parseBody();
+    const JWT_SECRET = c.env.JWT_SECRET;
+    const hashedPassword = await hashPassword(JWT_SECRET, password);
+    const user = await findUserAndUpdate(email, hashedPassword, 'password');
+    return c.json({ user }, 200);
+  } catch (error) {
+    return c.json({ error: `Email Doesnt Exist: ${error.message}` }, 404);
+  }
+};
 
 export function updatePasswordRoute() {
   return protectedProcedure
