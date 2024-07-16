@@ -2,6 +2,8 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import * as validator from '@packrat/validations';
 import { hashPassword } from '../../utils/user';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 // import { prisma } from '../../prisma';
 
 /**
@@ -41,6 +43,20 @@ import { hashPassword } from '../../utils/user';
 //     next(UnableTouUpdatePasswordError);
 //   }
 // };
+
+export async function updatePassword(ctx: Context) {
+  const { email, password } = await ctx.req.json();
+  const { env }: any = ctx;
+  const JWT_SECRET = env.JWT_SECRET;
+  const hashedPassword = await hashPassword(JWT_SECRET, password);
+  const user = await findUserAndUpdate(email, hashedPassword, 'password');
+  if (!user) {
+    ctx.set('errror', { error: 'User with these cridentals not found' });
+    return await responseHandler(ctx);
+  }
+  ctx.set('data', user);
+  return await responseHandler(ctx);
+}
 
 export function updatePasswordRoute() {
   return protectedProcedure

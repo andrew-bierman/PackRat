@@ -33,6 +33,6 @@ export async function responseHandler(
   if (error) {
     return await ctx.json({ error }, 400);
   } else {
-    return await ctx.json(data ?? { message: 'Success' });
+    return await ctx.json({ data }, 200);
   }
 }

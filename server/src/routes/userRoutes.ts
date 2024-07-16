@@ -18,9 +18,9 @@ import * as validator from '@packrat/validations';
 
 import { googleSigninRoute as signInGoogle } from '../controllers/passport/index';
 import {
-  emailExistsRoute as emailExists,
-  updatePasswordRoute as updatePassword,
-  checkCodeRoute as checkCode,
+  emailExists,
+  updatePassword,
+  checkCode,
 } from '../controllers/auth/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authMiddlewareHTTP from '../middleware/authHTTPS';
@@ -348,7 +348,7 @@ router.delete(
 router.post(
   '/checkcode',
   authMiddlewareHTTP as any,
-  (async (c: Context, next) =>
+  (async (c: Context, next: Next) =>
     zodParser(validator.checkCode, await c.req.json(), next)) as any,
   tryCatchWrapper(checkCode),
 );

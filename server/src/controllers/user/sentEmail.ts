@@ -58,7 +58,7 @@ export const sentEmail = async (c: Context) => {
       message: 'Reset Token has been sent successfully',
       status: 'success',
       statusCode: 200,
-    },
+    };
     c.set('data', data)
     return await responseHandler(c)
   } catch (err) {

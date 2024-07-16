@@ -9,6 +9,7 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import * as validators from '@packrat/validations';
 import { getOsmService } from '../../services/osm/getOsmService';
 import { z } from 'zod';
+import { Context } from 'hono';
 
 /**
  * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
@@ -27,6 +28,28 @@ import { z } from 'zod';
 //     next(ErrorRetrievingOverpassError);
 //   }
 // };
+
+export async function getOsm(ctx: Context) {
+  try {
+    const { env }: any = ctx;
+    const { activityType, startPoint, endPoint } = await ctx.req.json();
+    const response = await getOsmService({
+      activityType,
+      startPoint,
+      endPoint,
+      osmURI: env.OSM_URI,
+    });
+    if (!response) {
+      ctx.set('data', { error: 'OSM Not Found' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', response);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getOsmRoute() {
   return protectedProcedure

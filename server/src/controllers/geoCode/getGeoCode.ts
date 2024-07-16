@@ -4,6 +4,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { oneEntity } from '../../utils/oneEntity';
 // import * as validators from '@packrat/validations';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
+import { type Context } from 'hono';
 
 // /**
 //  * Retrieves the geocode for a given address array.
@@ -22,6 +23,27 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 //     next(ErrorFetchingGeoCodeError);
 //   }
 // };
+
+export async function getGeoCode(ctx: Context) {
+  try {
+    const { addressArray } = await ctx.req.query();
+    const { env }: any = ctx;
+    const result: any = await geoCodeService({
+      addressArray,
+      geoCodeUri: env.GEO_CODE_URL,
+      geoapifyKey: env.GEOAPIFY_KEY,
+    });
+    if (result.message !== 'ok') {
+      ctx.set('data', { error: 'Error finding geoCode' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', result.result);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getGeoCodeRoute() {
   return protectedProcedure.query(async (opts) => {

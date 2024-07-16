@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import {
-  getDestinationRoute as getDestination,
-  getOsmRoute as getOsm,
-  getParksOSMRoute as getParksOSM,
+  getDestination,
+  getOsm,
+  getParksOSM,
   getPhotonResultsRoute as getPhotonResults,
   getTrailsOSMRoute as getTrailsOSM,
   postSingleGeoJSONRoute as postSingleGeoJSON,

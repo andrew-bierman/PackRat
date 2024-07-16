@@ -2,11 +2,11 @@ import { Hono } from 'hono';
 import * as validator from '@packrat/validations';
 import {
   addToFavoriteRoute as addToFavorite,
-  getFavoritePacksByUserRoute as getFavoritePacksByUser,
-  getUserFavoritesRoute as getUserFavorites,
+  getFavoritePacksByUser,
+  getUserFavorites,
 } from '../controllers/favorite/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
-import authTokenMiddleware from '../middleware/auth';
+import authTokenMiddleware from '../middleware/authHTTPS';
 import checkRole from '../middleware/checkRole';
 import { zodParser } from '../middleware/validators/zodParser';
 

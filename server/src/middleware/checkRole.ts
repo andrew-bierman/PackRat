@@ -1,6 +1,8 @@
 import { type Request, type Response, type NextFunction } from 'express';
 import { RoleSchema } from './validators/roleValidator';
 import { ZodError } from 'zod';
+import { type Context, type Next } from 'hono';
+import { responseHandler } from '../helpers/responseHandler';
 // import { type User } from '@prisma/client/edge';
 
 /**
@@ -9,26 +11,28 @@ import { ZodError } from 'zod';
  * @returns {Function} - Express middleware function.
  */
 const checkRole = (roles: string[]) => {
-  return (req: Request, res: Response, env: Env, next: NextFunction) => {
-    const user: any = req.user;
-
+  return async (ctx: Context, next: Next) => {
     try {
+      const user: any = ctx.get('user');
       // Make sure all roles are valid.
       roles.forEach((role) => RoleSchema.parse(role));
 
       // Check if user's role is in the allowed roles list.
       if (!roles.includes(user.role)) {
-        return res.status(403).send({ error: 'Insufficient permissions' });
+        ctx.set('error', { error: 'Insufficient permissions' });
+        return await responseHandler(ctx);
       }
 
       next();
     } catch (err) {
       if (err instanceof ZodError) {
         console.error('Invalid role provided:', err.errors);
-        res.status(400).send({ error: 'Invalid role provided.' });
+        ctx.set('error', { error: 'Invalid role provided.' });
+        return await responseHandler(ctx);
       } else {
         console.error(err.message);
-        res.status(500).send({ error: 'Internal server error' });
+        ctx.set('error', { error: 'Internal server error' });
+        return await responseHandler(ctx);
       }
     }
   };

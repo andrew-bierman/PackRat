@@ -3,6 +3,7 @@ import { NoDestinationFoundWithThatIDError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { getDestinationService } from '../../services/osm/osm.service';
 import { z } from 'zod';
+import { Context } from 'hono';
 
 // /**
 //  * Retrieves the destination based on the given ID.
@@ -22,6 +23,22 @@ import { z } from 'zod';
 //   res.locals.data = destination;
 //   responseHandler(res);
 // };
+
+export async function getDestination(ctx: Context) {
+  try {
+    const { id } = await ctx.req.param();
+    const response = await getDestinationService(id);
+    if (!response) {
+      ctx.set('data', { error: 'No Destination Found' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', response);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getDestinationRoute() {
   return protectedProcedure
