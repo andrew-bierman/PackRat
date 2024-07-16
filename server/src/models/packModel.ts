@@ -65,5 +65,8 @@ PackSchema.virtual('totalScore').get(function () {
 PackSchema.set('toObject', { virtuals: true });
 PackSchema.set('toJSON', { virtuals: true });
 
+PackSchema.index({ coordinates: '2dsphere' });
+
+
 const Pack = myDB.model('Pack', PackSchema);
 export default Pack;
