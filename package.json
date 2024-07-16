@@ -66,6 +66,7 @@
     "setup": "yarn && yarn setup:expo && yarn setup:server",
     "start:prod:ts-node": "cd server && yarn start:ts-node",
     "start:prod": "cd server && yarn start:prod",
+    "start:prod:bun": "cd apps/bun-server && yarn start:prod",
     "start": "node packages/cli/src/start.js",
     "test:all": "yarn test:expo && yarn test:server",
     "test:expo": "cd apps/expo && yarn test",
