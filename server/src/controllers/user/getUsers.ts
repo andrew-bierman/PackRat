@@ -2,6 +2,7 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { responseHandler } from '../../helpers/responseHandler';
 import { User } from '../../drizzle/methods/User';
+import { Context, Next } from 'hono';
 
 // Middleware to check if user is authenticated
 // export const isAuthenticated = async (req, res, next) => {
@@ -21,20 +22,18 @@ import { User } from '../../drizzle/methods/User';
  * @param {Object} res - The response object.
  * @return {Promise} The JSON response containing the users.
  */
-// export const getUsers = async (req, res, next) => {
-//   try {
-//     const users = await prisma.user.findMany({
-//       include: {
-//         favorites: true,
-//       },
-//     });
-
-//     res.locals.data = users;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UserNotFoundError);
-//   }
-// };
+// Adjust the getUsers function to be compatible with Hono
+export const getUsers = async (c) => {
+  try {
+    const userClass = new User();
+    const users = await userClass.findMany();
+    if (!c.locals) c.locals = {};
+    c.locals.data = users;
+    return responseHandler(c);
+  } catch (error) {
+    return c.json({ error: `Failed to get users: ${error.message}` }, 500);
+  }
+};
 
 export function getUsersRoute() {
   return protectedProcedure.query(async (opts) => {

@@ -1,17 +1,10 @@
-import type express from 'express';
+// Assuming responseHandler is a function intended to set headers and send a response in Hono
+export function responseHandler(c, message: string = 'Success') {
+  const data = c.locals?.data ?? { message: 'Success' };
 
-export function responseHandler(
-  res: express.Response,
-  message: string = 'Success',
-) {
-  const data = res.locals?.data ?? { message: 'Success' };
+  // Set headers using Hono's method
+  c.header('X-Response-Message', message);
+  c.header('Access-Control-Expose-Headers', 'X-Response-Message');
 
-  // Set the custom header
-  res.setHeader('X-Response-Message', message);
-
-  res.setHeader('Access-Control-Expose-Headers', 'X-Response-Message');
-
-  console.log('message', message);
-
-  return res.status(200).json(data);
+  return c.json(data, 200);
 }

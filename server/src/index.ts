@@ -7,6 +7,7 @@ import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
 import { CORS_METHODS } from './config';
+import { httpDBContext } from './trpc/httpDBContext';
 
 interface Bindings {
   [key: string]: any;
@@ -64,7 +65,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   return handler(c.req.raw);
 });
 
-// SET UP HTTP ROUTES
-app.route(`${HTTP_ENDPOINT}`, router);
+// A middleware to initiate db connection and add it to the context
+app.use(`${HTTP_ENDPOINT}/*`, httpDBContext);
+app.route(`${HTTP_ENDPOINT}/`, router);
 
 export default app;

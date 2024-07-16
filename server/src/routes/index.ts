@@ -13,9 +13,9 @@
 // import openAiRoutes from './openAiRoutes';
 // // import templateRoutes from './templateRoutes';
 // import favoriteRouters from './favoriteRoutes';
-// import userRoutes from './userRoutes';
+import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
-import { type Context, Hono, type Next } from 'hono';
+import { Hono } from 'hono';
 
 const router = new Hono();
 
@@ -44,7 +44,7 @@ const router = new Hono();
 // }
 
 // use routes
-// router.use('/user', userRoutes);
+router.route('/user', userRoutes);
 // router.use('/pack', packRoutes);
 // router.use('/item', itemRoutes);
 // router.use('/trip', tripRoutes);
@@ -60,11 +60,11 @@ const router = new Hono();
 // router.use('/openai', openAiRoutes);
 router.route('/mapPreview', mapPreviewRouter);
 
-const helloRouter = new Hono();
-helloRouter.get('/', (c: Context, next: Next) => {
-  return c.text('Hello, world!');
-});
-router.route('/hello', helloRouter);
+// const helloRouter = new Hono();
+// helloRouter.get('/', (c: Context, next: Next) => {
+//   return c.text('Hello, world!');
+// });
+// router.route('/hello', helloRouter);
 
 // Also listen to /api for backwards compatibility
 // router.use('/api/user', userRoutes);

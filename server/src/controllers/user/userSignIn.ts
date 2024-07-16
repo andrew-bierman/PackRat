@@ -8,15 +8,17 @@ import { User } from '../../drizzle/methods/User';
 //  * @param {Object} res - The response object.
 //  * @return {Object} The user object.
 //  */
-// export const userSignIn = async (req, res) => {
-//   const { email, password } = req.body;
-//   const user = await prisma.user.findByCredentials({
-//     email,
-//     password,
-//   });
-//   await User(user).generateAuthToken();
-//   res.status(200).send({ user });
-// };
+export const userSignIn = async (c) => {
+  try {
+    const { email, password } = await c.req.parseBody();
+    const userClass = new User();
+    const user = await userClass.findByCredentials(email, password);
+    await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);
+    return c.json({ user }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to sign in: ${error.message}` }, 500);
+  }
+};
 
 export function userSignInRoute() {
   return publicProcedure.input(validator.userSignIn).mutation(async (opts) => {
