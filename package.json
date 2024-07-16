@@ -39,6 +39,7 @@
     "copy:env:packages": "cp .env packages/.env",
     "copy:env:server": "cp .env server/.env",
     "dev:expo": "cd apps/expo && yarn start",
+    "dev:vite": "cd apps/vite && yarn dev",
     "dev:next": "cd apps/next && yarn dev",
     "dev:server": "cd server && yarn start",
     "expo:export": "cd apps/expo && cp app.example.json app.json && npx expo export --platform web",
