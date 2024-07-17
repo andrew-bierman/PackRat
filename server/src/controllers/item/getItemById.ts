@@ -9,18 +9,15 @@ import * as validator from '@packrat/validations';
  * @param {string} req.body.id - The ID of the item to retrieve.
  * @return {Object} The retrieved item.
  */
-// export const getItemById = async (req, res, next) => {
-//   try {
-//     const { id } = req.body;
-
-//     const item = await getItemByIdService(id);
-
-//     res.locals.data = item;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
+export const getItemById = async (c) => {
+  try {
+    const { id } = await c.req.parseBody();
+    const item = await getItemByIdService(id);
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get item: ${error.message}` }, 500);
+  }
+};
 
 export function getItemByIdRoute() {
   return protectedProcedure.input(validator.getItemById).query(async (opts) => {

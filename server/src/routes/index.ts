@@ -2,7 +2,7 @@
 // import path from 'path';
 // import csrf from 'csurf';
 // import packRoutes from './packRoutes';
-// import itemRoutes from './itemRoutes';
+import itemRoutes from './itemRoutes';
 // import tripRoutes from './tripRoutes';
 // import weatherRoutes from './weatherRoutes';
 // import geoCodeRoutes from './geoCodeRoutes';
@@ -46,7 +46,7 @@ const router = new Hono();
 // use routes
 router.route('/user', userRoutes);
 // router.use('/pack', packRoutes);
-// router.use('/item', itemRoutes);
+router.route('/item', itemRoutes);
 // router.use('/trip', tripRoutes);
 // router.use('/weather', weatherRoutes);
 // router.use('/geocode', geoCodeRoutes);

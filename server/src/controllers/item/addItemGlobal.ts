@@ -9,24 +9,24 @@ import * as validator from '@packrat/validations';
  * @return {object} The added item.
  */
 
-// export const addItemGlobal = async (req, res, next) => {
-//   try {
-//     const { name, weight, quantity, unit, type } = req.body;
+export const addItemGlobal = async (c) => {
+  try {
+    const { name, weight, quantity, unit, type, ownerId } =
+      await c.req.parseBody();
 
-//     const newItem = await addItemGlobalService(
-//       name,
-//       weight,
-//       quantity,
-//       unit,
-//       type,
-//     );
-
-//     res.locals.data = newItem;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToAddItemError);
-//   }
-// };
+    const item = await addItemGlobalService(
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+      ownerId,
+    );
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to add item: ${error.message}` }, 500);
+  }
+};
 
 export function addItemGlobalRoute() {
   return protectedProcedure

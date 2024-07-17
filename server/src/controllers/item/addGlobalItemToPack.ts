@@ -8,19 +8,18 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-// export const addGlobalItemToPack = async (req, res, next) => {
-//   try {
-//     const { packId } = req.params;
-//     const { itemId, ownerId } = req.body;
-
-//     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
-
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
+export const addGlobalItemToPack = async (c) => {
+  try {
+    const { packId, itemId, ownerId } = await c.req.parseBody();
+    const item = await addGlobalItemToPackService(packId, itemId, ownerId);
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to add item to pack: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function addGlobalItemToPackRoute() {
   return protectedProcedure

@@ -8,26 +8,25 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Object} The updated item and pack ID.
  */
-// export const addItem = async (req, res, next) => {
-//   try {
-//     const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
+export const addItem = async (c) => {
+  try {
+    const { name, weight, quantity, unit, packId, type, ownerId } =
+      await c.req.parseBody();
 
-//     const result = await addItemService(
-//       name,
-//       weight,
-//       quantity,
-//       unit,
-//       packId,
-//       type,
-//       ownerId,
-//     );
-
-//     res.locals.data = { newItem: result.newItem, packId: result.packId };
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToAddItemError);
-//   }
-// };
+    const result = await addItemService(
+      name,
+      weight,
+      quantity,
+      unit,
+      packId,
+      type,
+      ownerId,
+    );
+    return c.json({ result }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to add item: ${error.message}` }, 500);
+  }
+};
 
 export function addItemRoute() {
   return protectedProcedure.input(validator.addItem).mutation(async (opts) => {

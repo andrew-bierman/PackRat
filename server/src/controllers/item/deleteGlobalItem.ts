@@ -8,18 +8,18 @@ import { z } from 'zod';
  * @param {Object} res - The response object.
  * @return {Promise<void>} - Returns a promise that resolves to void.
  */
-// export const deleteGlobalItem = async (req, res, next) => {
-//   try {
-//     const { itemId } = req.params;
-
-//     const itemDeleted = await deleteGlobalItemService(itemId);
-
-//     res.locals.data = itemDeleted;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToDeleteItemError);
-//   }
-// };
+export const deleteGlobalItem = async (c) => {
+  try {
+    const { itemId } = await c.req.parseBody();
+    const itemDeleted = await deleteGlobalItemService(itemId);
+    return c.json({ itemDeleted }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to delete global item: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function deleteGlobalItemRoute() {
   return protectedProcedure
