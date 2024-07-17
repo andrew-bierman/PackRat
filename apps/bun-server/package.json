@@ -1,7 +1,8 @@
 {
   "name": "bun-server",
   "scripts": {
-    "start": "bun ./dist/index.js",
+    "start": "bun src/index.ts",
+    "start:prod": "bun start",
     "dev": "bun --watch ./src/index.ts",
     "build": "tsc"
   },
