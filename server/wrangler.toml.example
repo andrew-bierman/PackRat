@@ -10,17 +10,17 @@ database_name = "production"
 database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
 
 [[queues.producers]]
-  queue = "packrat-error-queue"
-  binding = "ERROR_QUEUE"
+  queue = "etl-queue"
+  binding = "ETL_QUEUE"
 
 [[queues.consumers]]
-  queue = "packrat-error-queue"
-  max_batch_size = 100
-  max_batch_timeout = 30
+  queue = "etl-queue"
+  max_batch_size = 10
+  max_batch_timeout = 5
 
 [[r2_buckets]]
-  bucket_name = "packrat-error-bucket"
-  binding = "ERROR_BUCKET"
+  bucket_name = "etl-bucket"
+  binding = "ETL_BUCKET"
 
 # Add vars below
 # [vars]

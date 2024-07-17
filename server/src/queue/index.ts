@@ -1,7 +1,7 @@
 import { MessageBatch } from '@cloudflare/workers-types';
 import { Bindings } from '..';
 
-async function handleLogQueue(batch: MessageBatch<Error>, env: Bindings) {
+async function handleEtlQueue(batch: MessageBatch<Error>, env: Bindings) {
   for (const message of batch.messages) {
     console.log('Processing log message:', message.body);
     // Add your log processing logic here
@@ -23,7 +23,7 @@ const queueHandlersMap = new Map<
   string,
   (batch: MessageBatch<Error>, env: Bindings) => Promise<void>
 >([
-  ['log-queue', handleLogQueue],
+  ['etl-queue', handleEtlQueue],
   // Add more handlers here
 ]);
 

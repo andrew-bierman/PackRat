@@ -2,13 +2,13 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { fetchHandler } from 'trpc-playground/handlers/fetch';
+import { CORS_METHODS } from './config';
+import { enforceHttps } from './middleware/enforceHttps';
+import { securityHeaders } from './middleware/securityHeaders';
+import { queue } from './queue';
+import router from './routes';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
-import { securityHeaders } from './middleware/securityHeaders';
-import { enforceHttps } from './middleware/enforceHttps';
-import router from './routes';
-import { CORS_METHODS } from './config';
-import { queue } from './queue';
 
 export interface Bindings {
   [key: string]: any;
@@ -17,6 +17,8 @@ export interface Bindings {
   APP_URL: string;
   CORS_ORIGIN: string;
   MAPBOX_ACCESS_TOKEN: string;
+  readonly ETL_QUEUE: Queue<Error>;
+  readonly ETL_BUCKET: R2Bucket;
 }
 
 const TRPC_API_ENDPOINT = '/api/trpc';
