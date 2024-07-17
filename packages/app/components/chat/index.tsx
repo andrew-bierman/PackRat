@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Animated,
+  Platform,
 } from 'react-native';
-import { RButton, RImage, RInput, RStack } from '@packrat/ui';
+import { RButton, RIconButton, RImage, RInput, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useChat } from 'app/hooks/chat/useChat';
 import { loadStyles } from './chat.style';
@@ -14,10 +15,12 @@ import { ChatList } from '@packrat/ui/src/Bento/elements/list';
 import { X } from '@tamagui/lucide-icons';
 import { MessageCircle, Camera, Settings, Home } from 'lucide-react-native';
 import { ActionItem } from './ActionItem';
+import { Ionicons } from '@expo/vector-icons';
 import {
   SuggestionDescription,
   SuggestionList,
 } from '../../components/Suggestion';
+import useTheme from 'app/hooks/useTheme';
 
 interface ChatComponentProps {
   showChatSelector?: boolean;
@@ -253,40 +256,50 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
       useNativeDriver: false,
     }).start();
   }, [isChatOpen]);
+  const { currentTheme } = useTheme();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      <View
         style={{
           width: 50,
           height: 50,
-          borderRadius: 25,
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={() => {
-          if (isChatOpen || isSuggestionsOpen) {
-            setIsItemOpen(false);
-            setIsChatOpen(false);
-            setIsSuggestionsOpen(false);
-          } else {
-            setIsItemOpen(!isItemOpen);
-          }
-        }}
       >
-        <RImage
-          source={{
-            // TODO: Update this to use the intended chat logo
-            uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/4ad449702c088e505c4b484219121d365150f971/packages/app/assets/chat-svgrepo-com%20(1).svg',
+        <RIconButton
+          backgroundColor="transparent"
+          style={{
             width: 50,
             height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 0,
           }}
-          width={40}
-          height={40}
-          style={styles.logo}
-          alt="PackRat Logo"
+          icon={
+            <Ionicons
+              name="chatbubble-ellipses-sharp"
+              size={50}
+              color={
+                Platform.OS === 'web'
+                  ? 'white'
+                  : currentTheme.colors.secondaryBlue
+              }
+            />
+          }
+          onPress={() => {
+            if (isChatOpen || isSuggestionsOpen) {
+              setIsItemOpen(false);
+              setIsChatOpen(false);
+              setIsSuggestionsOpen(false);
+            } else {
+              setIsItemOpen(!isItemOpen);
+            }
+          }}
         />
-      </TouchableOpacity>
+      </View>
+
       {isItemOpen && (
         <Animated.View style={{ ...styles.animatedView, width: 308 }}>
           <View style={{ width: 300 }}>
