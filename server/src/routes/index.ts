@@ -1,7 +1,7 @@
 // import express, { type Request, type Response } from 'express';
 // import path from 'path';
 // import csrf from 'csurf';
-// import packRoutes from './packRoutes';
+import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 // import tripRoutes from './tripRoutes';
 // import weatherRoutes from './weatherRoutes';
@@ -45,7 +45,7 @@ const router = new Hono();
 
 // use routes
 router.route('/user', userRoutes);
-// router.use('/pack', packRoutes);
+router.route('/pack', packRoutes);
 router.route('/item', itemRoutes);
 // router.use('/trip', tripRoutes);
 // router.use('/weather', weatherRoutes);

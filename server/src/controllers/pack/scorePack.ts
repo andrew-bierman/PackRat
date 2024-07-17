@@ -8,19 +8,15 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object used to send the response.
  * @return {Promise} A promise that resolves to the updated pack object or an error message.
  */
-// export const scorePack = async (req, res, next) => {
-//   try {
-//     const { packId } = req.params;
-
-//     const updatedPack = await scorePackService(packId);
-
-//     console.log('updatedPack', updatedPack);
-
-//     res.status(200).json({ msg: 'Pack was scored successfully', updatedPack });
-//   } catch (error) {
-//     next(UnableToScorePackError);
-//   }
-// };
+export const scorePack = async (c) => {
+  try {
+    const { packId } = await c.req.parseParams();
+    const pack = await scorePackService(packId);
+    return c.json({ pack }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to score pack: ${error.message}` }, 500);
+  }
+};
 
 export function scorePackRoute() {
   return protectedProcedure
