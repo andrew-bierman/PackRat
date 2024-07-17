@@ -8,18 +8,15 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Promise<void>} The trips owned by the specified owner.
  */
-// export const getTrips = async (req, res, next) => {
-//   try {
-//     const { ownerId } = req.params;
-
-//     const trips = await getTripsService(ownerId);
-
-//     res.locals.data = trips;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(TripNotFoundError);
-//   }
-// };
+export const getTrips = async (c) => {
+  try {
+    const { owner_id } = await c.req.parseParams();
+    const trips = await getTripsService(owner_id);
+    return c.json({ trips }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get trips: ${error.message}` }, 500);
+  }
+};
 
 export function getTripsRoute() {
   return protectedProcedure.input(validator.getTrips).query(async (opts) => {

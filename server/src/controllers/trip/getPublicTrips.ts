@@ -1,6 +1,5 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
-import * as validator from '@packrat/validations';
 import { z } from 'zod';
 
 /**
@@ -9,18 +8,18 @@ import { z } from 'zod';
  * @param {object} res - The response object.
  * @return {object} The public trips as a JSON response.
  */
-// export const getPublicTrips = async (req, res, next) => {
-//   try {
-//     const { queryBy } = req.query;
-
-//     const publicTrips = await getPublicTripsService(queryBy);
-
-//     res.locals.data = publicTrips;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(TripNotFoundError);
-//   }
-// };
+export const getPublicTrips = async (c) => {
+  try {
+    const { queryBy } = await c.req.parseBody();
+    const trips = await getPublicTripsService(queryBy);
+    return c.json({ trips }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to get public trips: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function getPublicTripsRoute() {
   return protectedProcedure

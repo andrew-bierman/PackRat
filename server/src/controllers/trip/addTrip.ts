@@ -7,44 +7,14 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to a success message or rejects with an error message.
  */
-// export const addTrip = async (req, res, next) => {
-//   try {
-//     const {
-//       name,
-//       description,
-//       duration,
-//       weather,
-//       start_date,
-//       end_date,
-//       destination,
-//       geoJSON,
-//       owner_id,
-//       packs,
-//       is_public,
-//     } = req.body;
-
-//     const tripDetails = {
-//       name,
-//       description,
-//       duration,
-//       weather,
-//       start_date,
-//       end_date,
-//       destination,
-//       geoJSON,
-//       owner_id,
-//       packs,
-//       is_public,
-//     };
-
-//     const result = await addTripService(tripDetails);
-
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToAddTripError);
-//   }
-// };
+export const addTrip = async (c) => {
+  try {
+    const tripData = await c.req.parseBody();
+    return await addTripService(tripData);
+  } catch (error) {
+    return c.json({ error: `Failed to add trip: ${error.message}` }, 500);
+  }
+};
 
 export function addTripRoute() {
   return protectedProcedure.input(validator.addTrip).mutation(async (opts) => {
