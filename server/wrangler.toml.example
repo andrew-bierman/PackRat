@@ -1,4 +1,4 @@
-name = "packrat_api"
+name = "packrat-api"
 main = "src/index.ts"
 compatibility_date = "2024-03-14"
 compatibility_flags = ["nodejs_compat"] # Sometimes this is needed for tests
