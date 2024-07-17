@@ -124,7 +124,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '15%',
+        width: '55%',
       }}
     >
       <DropdownComponent
