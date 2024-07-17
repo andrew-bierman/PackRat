@@ -4,7 +4,7 @@
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
-// import weatherRoutes from './weatherRoutes';
+import weatherRoutes from './weatherRoutes';
 // import geoCodeRoutes from './geoCodeRoutes';
 // import getParkRoutes from './getParkRoutes';
 // import getTrailRoutes from './getTrailRoutes';
@@ -49,7 +49,7 @@ router.route('/user', userRoutes);
 router.route('/pack', packRoutes);
 router.route('/item', itemRoutes);
 router.route('/trip', tripRoutes);
-// router.use('/weather', weatherRoutes);
+router.route('/weather', weatherRoutes);
 // router.use('/geocode', geoCodeRoutes);
 // router.use('/getparks', getParkRoutes);
 // router.use('/gettrails', getTrailRoutes);
