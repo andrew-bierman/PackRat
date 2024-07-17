@@ -63,7 +63,7 @@ router.route('/mapPreview', mapPreviewRouter);
 router.route('/health', healthRoutes);
 
 const helloRouter = new Hono();
-helloRouter.get('/', (c: Context, next: Next) => {
+helloRouter.get('/', (c) => {
   return c.text('Hello, world!');
 });
 router.route('/hello', helloRouter);
