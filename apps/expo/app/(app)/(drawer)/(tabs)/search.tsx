@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { useCallback, useRef } from 'react';
 import { Stack, useFocusEffect } from 'expo-router';
@@ -68,7 +69,6 @@ export default function Search() {
         </Head>
       )}
       <Stack.Screen
-        name="Search"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Search',

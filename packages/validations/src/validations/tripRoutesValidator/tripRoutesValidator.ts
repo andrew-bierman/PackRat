@@ -65,12 +65,12 @@ export const addTrip = addTripDetails.merge(addTripForm);
 
 export const editTrip = z.object({
   id: z.string(),
-  name: z.string(),
-  duration: z.string(),
-  start_date: z.string(),
-  end_date: z.string(),
-  destination: z.string(),
-  is_public: z.boolean(),
+  name: z.string().optional(),
+  duration: z.string().optional(),
+  start_date: z.string().optional(),
+  end_date: z.string().optional(),
+  destination: z.string().optional(),
+  is_public: z.boolean().optional(),
 });
 
 export const deleteTrip = z.object({

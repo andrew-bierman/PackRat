@@ -1,3 +1,4 @@
+import React from 'react';
 import Feed from 'app/screens/feed/Feed';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
@@ -12,7 +13,6 @@ export default function FeedNav() {
         </Head>
       )}
       <Stack.Screen
-        name="Trips"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Trips',

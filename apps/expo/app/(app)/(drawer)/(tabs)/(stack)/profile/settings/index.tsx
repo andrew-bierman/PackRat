@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import Settings from 'app/screens/user/Settings';
@@ -12,7 +13,6 @@ export default function SettingsPage() {
         </Head>
       )}
       <Stack.Screen
-        name="Settings"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Settings',

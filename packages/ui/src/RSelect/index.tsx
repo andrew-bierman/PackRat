@@ -17,14 +17,12 @@ export default function RSelect(props) {
   const {
     textKey = 'label',
     valueKey = 'value',
-    zeego = false,
     native = false,
     ...otherProps
   } = props;
 
   return (
     <SelectItem
-      zeego={zeego}
       native={native}
       textKey={textKey}
       valueKey={valueKey}
@@ -62,7 +60,6 @@ export function SelectItem(props) {
     textKey = 'label',
     valueKey = 'value',
     native = false,
-    zeego = false,
     ...forwardedProps
   } = props;
 
@@ -94,18 +91,6 @@ export function SelectItem(props) {
     return <Text>No options available</Text>;
   }
 
-  if (zeego) {
-    return (
-      <RDropdownMenu
-        menuItems={data.map((item) => ({
-          label: item[textKey],
-          onSelect: () => handleChange(item[valueKey]),
-        }))}
-        menuName={placeholder}
-      />
-    );
-  }
-
   return (
     <Select
       value={value}
@@ -113,7 +98,7 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger width={220} iconAfter={ChevronDown}>
+      <Select.Trigger>
         <Select.Value>{placeholder}</Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>
@@ -130,7 +115,7 @@ export function SelectItem(props) {
               width={'$4'}
               pointerEvents="none"
             >
-              <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
+              {/* <ChevronDown size={getFontSize((props.size ?? '$true') as any)} /> */}
             </YStack>
           )}
         </Select.Viewport>
@@ -140,6 +125,7 @@ export function SelectItem(props) {
           <Sheet
             native
             modal
+            snapPointsMode="fit"
             dismissOnSnapToBottom
             animationConfig={{
               type: 'spring',

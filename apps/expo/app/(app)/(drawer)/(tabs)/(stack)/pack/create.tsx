@@ -1,3 +1,4 @@
+import React from 'react';
 import { AddPack } from 'app/components/pack/AddPack';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
@@ -13,7 +14,6 @@ export default function Pack() {
         </Head>
       )}
       <Stack.Screen
-        name="Create Pack"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Create Pack',

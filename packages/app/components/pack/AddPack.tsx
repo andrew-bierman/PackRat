@@ -4,6 +4,8 @@ import {
   Form,
   FormInput,
   FormSelect as OriginalFormSelect,
+  RStack,
+  RSwitch,
   RText,
   SubmitButton,
   useModal,
@@ -14,7 +16,8 @@ import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
+import { Switch } from 'tamagui';
 import useTheme from '../../hooks/useTheme';
 
 const FormSelect: any = OriginalFormSelect;
@@ -31,13 +34,13 @@ export const AddPack = ({
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [selectedValue, SetSelectedValue] = useState('No')
-  // const [_, setPackIdParam] = usePackId();
+  const { xxs, xxl, xs } = useResponsive();
 
   const {
     addNewPackAsync,
     isError,
     isLoading,
+    isPublic,
     setIsPublic,
     packSelectOptions,
   } = useAddNewPack();
@@ -58,21 +61,16 @@ export const AddPack = ({
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
       }
-
-      // setPackIdParam(response.id);
     } catch {}
   };
 
-  const handleonValueChange = (itemValue) => {
-    if (itemValue === 'Yes') {
-      SetSelectedValue('Yes')
-      setIsPublic(true);
-    } else {
-      SetSelectedValue('No')
-      setIsPublic(false);
-    }
+  const handleOnValueChange = () => {
+    setIsPublic((prevIsPublic) => {
+      const newIsPublic = !prevIsPublic;
+      console.log('isPublic:', newIsPublic);
+      return newIsPublic;
+    });
   };
-  const { xxs, xxl, xs } = useResponsive();
 
   return (
     <View style={styles.container}>
@@ -85,18 +83,29 @@ export const AddPack = ({
             placeholder="Name"
             name="name"
             label="Name"
-            style={{ textAlign: 'left', width: 200 }}
+            style={{
+              textAlign: 'left',
+              width: 200,
+              alignItems: 'inherit',
+              justifyContent: 'center',
+            }}
           />
-          <DropdownComponent
-            value={null}
-            data={packSelectOptions}
-            onValueChange={handleonValueChange}
-            placeholder={`Is Public: ${selectedValue}`}
-            width={xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '8%'}
-            native={true}
-            zeego={true}
-          />
-
+          <RStack
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <RText>Public </RText>
+            <RSwitch
+              checked={isPublic}
+              onCheckedChange={handleOnValueChange}
+              size="$1.5"
+            >
+              <Switch.Thumb />
+            </RSwitch>
+          </RStack>
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}

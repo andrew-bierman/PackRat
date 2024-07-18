@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform } from 'react-native';
 import { DestinationPage } from 'app/components/destination';
 // import DestinationPage from "../../components/destination";
@@ -13,10 +14,9 @@ export default function Destination() {
         </Head>
       )}
       <Stack.Screen
-        name="Destination"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Destination'
+          title: 'Destination',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

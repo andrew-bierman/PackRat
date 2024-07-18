@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
-// import csrf from 'csurf';
 import { csrf } from 'hono/csrf';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
@@ -16,8 +15,9 @@ import templateRoutes from './templateRoutes';
 import favoriteRoutes from './favoriteRoutes';
 import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
+import healthRoutes from './healthRoutes';
 import { Hono } from 'hono';
-import type { Context, Next } from 'hono';
+import { type Context, Hono, type Next } from 'hono';
 import { zodParser } from '../middleware/validators/zodParser';
 import * as validator from '@packrat/validations';
 import { responseHandler } from '../helpers/responseHandler';
@@ -65,6 +65,7 @@ router.route('/template', templateRoutes);
 router.route('/favorite', favoriteRoutes);
 router.route('/openai', openAiRoutes);
 router.route('/mapPreview', mapPreviewRouter);
+router.route('/health', healthRoutes);
 
 const response = async (ctx: Context) => {
   return await ctx.json({ 'Hello, world!': ctx });

@@ -125,7 +125,7 @@ interface DropdownComponentProps {
   style?: any;
   placeholder?: any;
   native?: boolean;
-  zeego?: boolean;
+  // zeego?: boolean;
   [x: string]: any; // for the rest of the props
 }
 
@@ -133,22 +133,17 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
   width,
   style = {},
   placeholder,
-  zeego = false,
+  // zeego = false,
   ...props
 }) => {
   const isWeb = Platform.OS === 'web';
 
   return (
-    <View
-      style={[
-        { ...style, width: width || '100%' },
-        !isWeb && { flexDirection: 'row', justifyContent: 'center' },
-      ]}
-    >
+    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
       <RSelect
         placeholder={placeholder || 'Select'}
         native={!isWeb}
-        zeego={zeego}
+        // zeego={zeego}
         {...props}
       />
     </View>
