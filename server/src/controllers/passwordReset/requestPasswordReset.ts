@@ -3,12 +3,35 @@ import { z } from 'zod';
 import { resetEmail } from '../../utils/accountEmail';
 import { User } from '../../drizzle/methods/User';
 
-/**
- * Sends a password reset email to the user and updates the user's password reset token.
- * @param {Object} req - The HTTP request object.
- * @param {Object} res - The HTTP response object.
- * @return {Object} The HTTP response object with a success message or an error message.
- */
+export const requestPasswordResetEmailAndToken = async (c) => {
+  try {
+    const { email } = await c.req.parseBody();
+    const userClass = new User();
+    const jwtSecret = c.env.JWT_SECRET;
+    const clientUrl = c.env.CLIENT_URL;
+    const user = await userClass.findUser({ email });
+    if (!user) {
+      return { error: 'No user found with this email address' };
+    }
+    const resetUrl = await userClass.generateResetToken(
+      jwtSecret,
+      clientUrl,
+      user.id,
+    );
+    await resetEmail(
+      email,
+      resetUrl,
+      c.env.STMP_EMAIL,
+      c.env.SEND_GRID_API_KEY,
+    );
+    return c.json({ message: 'Password reset email sent successfully' }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to send password reset email: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function requestPasswordResetEmailAndTokenRoute() {
   return publicProcedure
