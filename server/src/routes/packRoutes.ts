@@ -28,7 +28,7 @@ router.get(
   '/:ownerId',
   authTokenMiddleware,
   checkRole(['user', 'admin']),
-  zodParser(validator.getPacks, 'query'),
+  zodParser(validator.getPacks, 'params'),
   tryCatchWrapper(getPacks),
 );
 

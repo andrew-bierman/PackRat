@@ -4,7 +4,7 @@ import { protectedProcedure } from '../../trpc';
 
 export const deletePack = async (c) => {
   try {
-    const { packId } = await c.req.parseBody();
+    const { packId } = await c.req.json();
     await deletePackService(packId);
     return c.json({ msg: 'pack was deleted successfully' }, 200);
   } catch (error) {

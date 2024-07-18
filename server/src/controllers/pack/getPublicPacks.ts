@@ -1,10 +1,11 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-export const getPublicPacks = async (c) => {
+export const getPublicPacks = async (c: Context) => {
   try {
-    const { queryBy } = await c.req.parseQuery();
+    const { queryBy } = await c.req.query();
     const packs = await getPublicPacksService(queryBy);
     return c.json(
       { packs, message: 'Public packs retrieved successfully' },

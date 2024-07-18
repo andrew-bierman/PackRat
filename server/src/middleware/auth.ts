@@ -63,7 +63,8 @@ const authMiddlewareHTTP = async (c: Context, next: Next) => {
 
     await next();
   } catch (err) {
-    handleErrorHTTP(err, c);
+    return await handleErrorHTTP(err, c);
+    // return c.json('error', err.message)
   }
 };
 
@@ -75,10 +76,10 @@ const authMiddlewareHTTP = async (c: Context, next: Next) => {
 const handleErrorHTTP = (err: Error, c: Context) => {
   if (err instanceof ZodError) {
     console.error('Invalid token structure:', err.message);
-    c.json({ error: 'Invalid token structure.' }, 400);
+    return c.json({ error: 'Invalid token structure.' }, 400);
   } else {
     console.error(err.message);
-    c.json({ error: 'Not authorized to access this resource.' }, 401);
+    return c.json({ error: 'Not authorized to access this resource.' }, 401);
   }
 };
 
