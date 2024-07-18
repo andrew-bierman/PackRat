@@ -4,7 +4,7 @@ import { geoCodeService } from '../../services/geocode/geoCodeService';
 
 export const getGeoCode = async (c) => {
   try {
-    const { addressArray } = await c.req.parseBody();
+    const { addressArray } = await c.req.json();
     const result: any = await geoCodeService({
       addressArray,
       geoCodeUri: c.env.GEO_CODE_URL,

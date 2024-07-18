@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getGeoCodeRoute as getGeoCode } from '../controllers/geoCode/index';
+import { getGeoCode } from '../controllers/geoCode/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
