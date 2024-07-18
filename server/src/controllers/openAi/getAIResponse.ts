@@ -2,13 +2,29 @@ import { getAIResponseService } from '../../services/openAi/openAi.service';
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 
-/**
- * Retrieves an AI response based on user input and conversation history.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The AI response and updated conversation object.
- */
+interface AIResponseServiceResult {
+  aiResponse: any;
+  conversation: any;
+}
 
+export const getAIResponse = async (c) => {
+  try {
+    const { userId, userInput, itemTypeId, type } = await c.req.parseBody();
+    const { aiResponse, conversation } = (await getAIResponseService(
+      userId,
+      itemTypeId,
+      userInput,
+      type,
+      c.env.OPENAI_API_KEY,
+    )) as AIResponseServiceResult;
+    return c.json({ aiResponse, conversation });
+  } catch (error) {
+    return c.json(
+      { error: `Failed to get AI response: ${error.message}` },
+      500,
+    );
+  }
+};
 export function getAIResponseRoute() {
   return protectedProcedure
     .input(
