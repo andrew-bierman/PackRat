@@ -3,7 +3,8 @@ import Mapbox, {
   offlineManager,
   OfflineCreatePackOptions,
 } from '@rnmapbox/maps';
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
 import { theme } from 'app/theme';
@@ -16,6 +17,7 @@ import {
 import { api } from 'app/constants/api';
 import { RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { Map } from 'app/components/map';
 
 interface Pack {
   bounds: number[][];
@@ -42,7 +44,6 @@ function CircleCapComp() {
 
 export default function DownloadedMaps() {
   const styles = useCustomStyles(loadStyles);
-
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
@@ -59,11 +60,18 @@ export default function DownloadedMaps() {
     });
   }
 
-  useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setOfflinePacks(packs);
-    });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      offlineManager.getPacks().then((packs) => {
+        setOfflinePacks(packs);
+      });
+    }, []),
+  );
+
+  const handleExitMapFullScreen = () => {
+    setShowMap(false);
+    setPack(null);
+  };
 
   return (
     <View
@@ -137,64 +145,30 @@ export default function DownloadedMaps() {
       </RScrollView>
       {showMap ? (
         <Modal visible={true}>
-          <Mapbox.MapView
-            style={{ flex: 1 }}
-            styleURL="mapbox://styles/mapbox/outdoors-v11"
-            compassEnabled={false}
-            logoEnabled={false}
-            scrollEnabled={true}
-            zoomEnabled={true}
-          >
-            <Mapbox.Camera
-              zoomLevel={zoomLevel}
-              centerCoordinate={[
-                (pack?.bounds[0]?.[0] + pack?.bounds[1]?.[0]) / 2 ?? 0,
-                (pack?.bounds[0]?.[1] + pack?.bounds[1]?.[1]) / 2 ?? 0,
-              ]}
-              animationMode={'flyTo'}
-              animationDuration={2000}
-            />
-            {/* trail */}
-            <Mapbox.ShapeSource
-              id="source1"
-              lineMetrics={true}
-              shape={shape.features[0]}
-              cluster
-              clusterRadius={80}
-              clusterMaxZoomLevel={14}
-              style={{ zIndex: 1 }}
-            >
-              <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
-            </Mapbox.ShapeSource>
-            {/* // top location */}
-            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-              <Mapbox.PointAnnotation
-                id={'cicleCap'}
-                coordinate={
-                  shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ][0]
-                }
-              >
-                <View>
-                  <CircleCapComp />
-                </View>
-              </Mapbox.PointAnnotation>
-            )}
-          </Mapbox.MapView>
-
-          <MapButtonsOverlay
-            mapFullscreen={true}
-            disableFullScreen={() => {
-              setShowMap(false);
-            }}
+          <Map
+            shape={shape}
             downloadable={false}
+            forceFullScreen={true}
+            onExitFullScreen={handleExitMapFullScreen}
           />
         </Modal>
       ) : null}
     </View>
   );
 }
+
+const getCenterCoordinates = (bounds: [number, number, number, number]) => {
+  const [
+    southWestLongitude,
+    southWestLatitude,
+    northEastLongitude,
+    northEastLatitude,
+  ] = bounds;
+  const centerLatitude = (northEastLatitude + southWestLatitude) / 2;
+  const centerLongitude = (northEastLongitude + southWestLongitude) / 2;
+
+  return [centerLongitude, centerLatitude];
+};
 
 const loadStyles = ({ currentTheme }) => {
   return {

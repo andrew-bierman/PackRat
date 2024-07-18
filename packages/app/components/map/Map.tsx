@@ -2,18 +2,19 @@ import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 import { useWebMap } from 'app/hooks/map/useWebMap';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import mapboxgl from 'mapbox-gl';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Modal, View } from 'react-native';
 import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
 import useGpxUpload from './useGpxUpload';
+import { MapProps } from './models';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
 const DESTINATION = 'destination';
 const TRIP = 'trip';
-const WebMap = ({ shape: shapeProp }) => {
+const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
   const [downloadable, setDownloadable] = useState(false);
   const styles = useCustomStyles(loadStyles);
   const {
