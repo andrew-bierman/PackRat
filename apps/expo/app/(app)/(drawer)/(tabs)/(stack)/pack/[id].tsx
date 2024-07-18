@@ -1,3 +1,4 @@
+import React from 'react';
 import PackContainer from 'app/components/pack/PackContainer';
 import { PackDetails } from 'app/components/pack/PackDetails';
 import { DetailsComponent } from 'app/components/details';

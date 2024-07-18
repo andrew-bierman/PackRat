@@ -13,15 +13,16 @@ import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { Platform, View } from 'react-native';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface PackCardHeaderProps {
   data: any;
   title: string;
   link?: string;
 }
-interface optionValues{
+interface optionValues {
   label: string;
-  value: string
+  value: string;
 }
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
@@ -45,6 +46,8 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     { label: 'Save', value: 'Save' },
     { label: 'Delete', value: 'Delete' },
   ];
+
+  const { xxs, xs, xxl } = useResponsive();
 
   return (
     <>
@@ -91,10 +94,8 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
           user?.id === data.owner_id && (
             <View
               style={{
-                alignSelf: 'flex-end',
-                flexDirection: 'row',
-                width: '15%',
-                justifyContent: 'flex-end',
+                minWidth: 50,
+                maxWidth: 100,
               }}
             >
               <DropdownComponent
@@ -104,13 +105,11 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 placeholder={
                   <RIconButton
                     backgroundColor="transparent"
-                    icon={<MaterialIcons name="more-horiz" size={18} />}
-                    style={{ padding: 0 }}
+                    icon={<MaterialIcons name="more-horiz" size={20} />}
+                    style={{ paddingTop: 20 }}
                   />
                 }
-                width="100%"
                 native={true}
-                zeego={true}
               />
             </View>
           )

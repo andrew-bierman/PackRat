@@ -1,3 +1,4 @@
+import React from 'react';
 import { AddPack } from 'app/components/pack/AddPack';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
