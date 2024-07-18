@@ -26,15 +26,9 @@ export async function getParks(ctx: Context) {
       npsApi: env.NPS_API,
       parksHost: env.PARKS_HOST,
     });
-    if (!response) {
-      ctx.set('data', { data: 'No Parks Found' });
-      return await responseHandler(ctx);
-    }
-    ctx.set('data', { data: response });
-    return await responseHandler(ctx);
+    return ctx.json(response, 200);
   } catch (error) {
-    ctx.set('error', error.message);
-    return await responseHandler(ctx);
+    return ctx.json({ error: error.message }, 400);
   }
 }
 
