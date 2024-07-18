@@ -6,7 +6,7 @@ import * as validator from '@packrat/validations';
 export const addTemplate = async (c) => {
   try {
     const { type, templateId, isGlobalTemplate, createdBy } =
-      await c.req.parseBody();
+      await c.req.json();
     const userClass = new User();
     const user = await userClass.findUser({ userId: createdBy });
     if (!user) {
@@ -15,7 +15,7 @@ export const addTemplate = async (c) => {
     await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
     return c.json({ message: 'Template added successfully' }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to add template: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

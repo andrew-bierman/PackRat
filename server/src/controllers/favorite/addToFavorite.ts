@@ -1,17 +1,15 @@
+import { type Context } from 'hono';
 import { addToFavoriteService } from '../../services/favorite/favorite.service';
 import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
-export const addToFavorite = async (c) => {
+export const addToFavorite = async (c: Context) => {
   try {
-    const { packId, userId } = await c.req.parseBody();
+    const { packId, userId } = await c.req.json();
     const response = await addToFavoriteService(packId, userId);
     return c.json({ response }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to add to favorites: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

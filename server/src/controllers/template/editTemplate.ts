@@ -4,7 +4,7 @@ import * as validator from '@packrat/validations';
 
 export const editTemplate = async (c) => {
   try {
-    const { templateId, type, isGlobalTemplate } = await c.req.parseBody();
+    const { templateId, type, isGlobalTemplate } = await c.req.json();
     const updatedTemplate = await editTemplateService(
       templateId,
       type,
@@ -12,7 +12,7 @@ export const editTemplate = async (c) => {
     );
     return c.json({ updatedTemplate }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to edit template: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

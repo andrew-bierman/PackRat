@@ -1,17 +1,15 @@
 import { z } from 'zod';
 import { protectedProcedure } from '../../trpc';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
+import { type Context } from 'hono';
 
-export const getUserFavorites = async (c) => {
+export const getUserFavorites = async (c: Context) => {
   try {
-    const { userId } = await c.req.parseBody();
+    const { userId } = await c.req.json();
     const favorites = await getUserFavoritesService(userId);
     return c.json({ favorites }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to get user favorites: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

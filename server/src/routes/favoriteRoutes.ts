@@ -1,9 +1,9 @@
 import { Hono } from 'hono';
 import * as validator from '@packrat/validations';
 import {
-  addToFavoriteRoute as addToFavorite,
-  getFavoritePacksByUserRoute as getFavoritePacksByUser,
-  getUserFavoritesRoute as getUserFavorites,
+  addToFavorite,
+  getFavoritePacksByUser,
+  getUserFavorites,
 } from '../controllers/favorite/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';

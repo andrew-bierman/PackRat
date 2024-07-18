@@ -5,12 +5,12 @@ import { Template } from '../../drizzle/methods/template';
 
 export const getTemplateById = async (c) => {
   try {
-    const { templateId } = await c.req.parseParams();
+    const { templateId } = await c.req.param();
     const templateClass = new Template();
     const template = await templateClass.findTemplate(templateId, true);
     return c.json({ template }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get item: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 
