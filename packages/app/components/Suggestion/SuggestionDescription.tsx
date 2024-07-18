@@ -33,20 +33,14 @@ export function SuggestionDescription({ data }: { data: Message[] }) {
   }, [data]);
 
   return (
-    <View
-      style={{ flexDirection: 'column', height: '100%', minWidth: '100%' }}
-      $group-window-gtXs={{ height: 700 }}
-    >
-      <List
-        $group-window-gtXs={{
-          padding: '$10',
-        }}
-        data={messages}
-        renderItem={renderItem}
-        windowSize={2}
-        style={{ backgroundColor: '$background' }}
-      />
-    </View>
+    <List
+      $group-window-gtXs={{
+        padding: '$10',
+      }}
+      data={messages}
+      renderItem={renderItem}
+      style={{ backgroundColor: '$background' }}
+    />
   );
 }
 
@@ -84,7 +78,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
             alignItems: 'flex-start',
             alignSelf: 'self-start',
             maxWidth: '100%',
-            minWidth: '100%'
+            minWidth: '100%',
           }}
           gap="$4"
         >
@@ -93,7 +87,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
               flexDirection: 'column',
               alignItems: 'flex-start',
               justifyContent: 'center',
-              flexShrink: '1'
+              flexShrink: 1,
             }}
             gap="$2"
             // maxWidth={400}

@@ -43,17 +43,15 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
         padding: 10,
         borderRadius: 0,
       }}
-      width="100%"
-      justifyContent="center"
-      alignItems="center"
     >
       <View
         style={{
-          minWidth: '100%',
+          minWidth: 300,
         }}
         $group-window-gtXs={{
           padding: '$3',
-          width: 600,
+          width: 800,
+          height: 100,
         }}
         gap="$1.5"
       >

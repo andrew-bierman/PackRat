@@ -94,15 +94,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             )}
           </>
         )}
-        <ScrollView
-          ref={scrollViewRef}
-          onContentSizeChange={handleLayout}
-          style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
-        >
+        <View style={{ maxHeight: 450, width: '100%', borderRadius: 10 }}>
           <ChatList data={messages} />
-        </ScrollView>
+        </View>
         <RStack
           style={{
             marginTop: 10,
@@ -195,24 +189,19 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
 
   return (
     <View>
-      <RStack style={{ flex: 1 }}>
+      <RStack>
         {!suggestions.suggestion.Items ? (
-          <Text style={{ width: '100%', textAlign: 'center' }}>
+          <Text style={{ width: 500 }}>
             Allow me to analyze your pack and help!
           </Text>
         ) : (
-          <ScrollView
-            onContentSizeChange={handleLayout}
-            style={{ maxHeight: 620, width: '100%', borderRadius: 10 }}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
-          >
+          <View style={{ maxHeight: 450, width: '100%', borderRadius: 10 }}>
             <SuggestionDescription data={suggestions.reasoning} />
             <SuggestionList
               suggestion={suggestions.suggestion}
               onAddItem={removeItem}
             />
-          </ScrollView>
+          </View>
         )}
         <RStack
           style={{
@@ -223,7 +212,7 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
           }}
         >
           <RButton
-            onClick={() => {
+            onPress={() => {
               handleSubmitAnalysis();
             }}
             disabled={isAnalysisLoading}
