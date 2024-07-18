@@ -4,10 +4,11 @@ import * as validator from '@packrat/validations';
 
 export const addTrip = async (c) => {
   try {
-    const tripData = await c.req.parseBody();
-    return await addTripService(tripData);
+    const tripData = await c.req.json();
+    const trip = await addTripService(tripData);
+    return c.json(trip, 200);
   } catch (error) {
-    return c.json({ error: `Failed to add trip: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

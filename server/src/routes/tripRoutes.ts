@@ -23,7 +23,7 @@ router.get(
 );
 
 router.get(
-  '/:ownerId',
+  '/:ownerId?',
   authTokenMiddleware,
   zodParser(validator.getTrips, 'params'),
   tryCatchWrapper(getTrips),

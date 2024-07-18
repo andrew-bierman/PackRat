@@ -8,7 +8,7 @@ export const getTrips = async (c) => {
     const trips = await getTripsService(owner_id);
     return c.json({ trips }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get trips: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

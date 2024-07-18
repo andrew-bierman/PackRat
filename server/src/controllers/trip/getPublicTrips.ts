@@ -1,17 +1,15 @@
 import { protectedProcedure } from '../../trpc';
 import { getPublicTripsService } from '../../services/trip/getPublicTripService';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-export const getPublicTrips = async (c) => {
+export const getPublicTrips = async (c: Context) => {
   try {
-    const { queryBy } = await c.req.parseBody();
+    const { queryBy } = await c.req.json();
     const trips = await getPublicTripsService(queryBy);
     return c.json({ trips }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to get public trips: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

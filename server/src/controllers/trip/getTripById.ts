@@ -4,10 +4,11 @@ import * as validator from '@packrat/validations';
 
 export const getTripById = async (c) => {
   try {
-    const { tripId } = await c.req.parseParams();
-    return await getTripByIdService(tripId);
+    const { tripId } = await c.req.param();
+    const trip = await getTripByIdService(tripId);
+    return c.json(trip, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get trip: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

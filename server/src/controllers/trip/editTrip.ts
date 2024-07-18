@@ -4,12 +4,12 @@ import { Trip } from '../../drizzle/methods/trip';
 
 export const editTrip = async (c) => {
   try {
-    const tripData = await c.req.parseBody();
+    const tripData = await c.req.json();
     const tripClass = new Trip();
     const trip = await tripClass.update(tripData);
     return c.json({ trip }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to edit trip: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 
