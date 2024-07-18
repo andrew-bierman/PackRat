@@ -2,11 +2,13 @@ import { publicProcedure } from '../../trpc';
 import { resetEmail } from '../../utils/accountEmail';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
+import { responseHandler } from '../../helpers/responseHandler';
+import { type Context } from 'hono';
 
-export const sentEmail = async (c) => {
+export const sentEmail = async (c: Context) => {
   try {
-    const { email } = await c.req.parseBody();
-
+    const { email } = await c.req.json();
+    console.log('email ', c.env.SEND_GRID_API_KEY)
     const STMP_EMAIL = c.env.STMP_EMAIL;
     const SEND_GRID_API_KEY = c.env.SEND_GRID_API_KEY;
     const JWT_SECRET = c.env.JWT_SECRET;
@@ -24,12 +26,11 @@ export const sentEmail = async (c) => {
       user.id,
     );
     await resetEmail(user.email, resetUrl, STMP_EMAIL, SEND_GRID_API_KEY);
-    return c.json({ message: 'Reset Token has been sent successfully' }, 200);
+    c.set('data', { message: 'Reset Token has been sent successfully' });
+    return await responseHandler(c);
   } catch (error) {
-    return c.json(
-      { error: `Failed to send reset token: ${error.message}` },
-      500,
-    );
+    c.set('error', error.message);
+    return await responseHandler(c);
   }
 };
 

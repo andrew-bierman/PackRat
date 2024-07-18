@@ -4,7 +4,7 @@ import { User } from '../../drizzle/methods/User';
 
 export const deleteUser = async (c) => {
   try {
-    const { userId } = await c.req.parseBody();
+    const { userId } = await c.req.json();
     const user = new User();
     await user.delete(userId);
     return c.json({ message: 'User deleted successfully' }, 200);

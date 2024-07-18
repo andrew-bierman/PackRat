@@ -4,7 +4,7 @@ import { User } from '../../drizzle/methods/User';
 
 export const userSignIn = async (c) => {
   try {
-    const { email, password } = await c.req.parseBody();
+    const { email, password } = await c.req.json();
     const userClass = new User();
     const user = await userClass.findByCredentials(email, password);
     await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);

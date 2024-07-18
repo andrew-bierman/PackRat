@@ -61,7 +61,7 @@ router.post(
 
 router.post(
   '/reset-password',
-  zodParser(validator.checkCode, 'body'),
+  zodParser(validator.resetPassword, 'body'),
   tryCatchWrapper(resetPassword),
 );
 

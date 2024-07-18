@@ -2,10 +2,11 @@ import { protectedProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import * as validator from '@packrat/validations';
 import { hashPassword } from '../../utils/user';
+import { type Context } from 'hono';
 
-export const updatePassword = async (c) => {
+export const updatePassword = async (c: Context) => {
   try {
-    const { email, password } = await c.req.parseBody();
+    const { email, password } = await c.req.json();
     const JWT_SECRET = c.env.JWT_SECRET;
     const hashedPassword = await hashPassword(JWT_SECRET, password);
     const user = await findUserAndUpdate(email, hashedPassword, 'password');

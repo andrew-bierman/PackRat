@@ -1,12 +1,12 @@
-import type { Context } from 'hono';
+import type { Context, Next } from 'hono';
 import { RoleSchema } from './validators/roleValidator';
 import { ZodError } from 'zod';
 
 // Extend the Context type to include the user property in the request and the next method.
-interface ExtendedContext extends Context {
-  req: Context['req'] & { user?: { role: string } };
-  next: () => Promise<void>;
-}
+// interface ExtendedContext extends Context {
+//   req: Context['req'] & { user?: { role: string } };
+//   next: () => Next;
+// }
 
 /**
  * Middleware to check if the user has a certain role.
@@ -14,8 +14,10 @@ interface ExtendedContext extends Context {
  * @returns {Function} - Hono middleware function.
  */
 const checkRole = (roles: string[]) => {
-  return async (c: ExtendedContext) => {
-    const user = c.req.user;
+  return async (c: Context, next: Next) => {
+    const { user } = await c.req.json();
+
+    console.log('user', user.role, roles);
 
     try {
       // Make sure all roles are valid.
@@ -28,7 +30,7 @@ const checkRole = (roles: string[]) => {
       }
 
       // Proceed to the next middleware or route handler.
-      await c.next();
+      await next();
     } catch (err) {
       if (err instanceof ZodError) {
         console.error('Invalid role provided:', err.errors);

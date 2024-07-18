@@ -6,9 +6,7 @@ export const getUsers = async (c) => {
   try {
     const userClass = new User();
     const users = await userClass.findMany();
-    if (!c.locals) c.locals = {};
-    c.locals.data = users;
-    return responseHandler(c);
+    return c.json(users, 200);
   } catch (error) {
     return c.json({ error: `Failed to get users: ${error.message}` }, 500);
   }

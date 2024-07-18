@@ -16,7 +16,7 @@ export const editUser = async (c) => {
       preferredWeather,
       preferredWeight,
       password,
-    } = await c.req.parseBody();
+    } = await c.req.json();
 
     const JWT_SECRET = c.env.JWT_SECRET;
     const userClass = new User();

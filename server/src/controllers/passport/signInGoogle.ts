@@ -7,16 +7,17 @@ import z from 'zod';
 import { User } from '../../drizzle/methods/User';
 import { and, eq } from 'drizzle-orm';
 import { user as UserTable } from '../../db/schema';
+import { type Context } from 'hono';
 
-export const signInGoogle = async (c) => {
+export const signInGoogle = async (c: Context) => {
   try {
-    const { idToken } = await c.req.parseBody();
+    const { idToken } = await c.req.json();
 
     const decodedToken: any = jwt.decode(idToken);
     if (!decodedToken) {
       throw new Error('Invalid ID token');
     }
-
+    console.log('decodedToken', decodedToken)
     const {
       payload: { email, name, sub: googleId },
     } = decodedToken;
@@ -87,8 +88,8 @@ export const signInGoogle = async (c) => {
       return c.json(updatedUser?.[0], 200);
     }
   } catch (err) {
-    c.json({ message: err.message });
-    throw new Error(`Google Signin failed: ${err.message}`);
+    return c.json({ message: err.message });
+    // throw new Error(`Google Signin failed: ${err.message}`);
   }
 };
 

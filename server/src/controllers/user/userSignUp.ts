@@ -7,7 +7,7 @@ import { hashPassword } from '../../utils/user';
 
 export const userSignup = async (c) => {
   try {
-    let { email, password, name, username } = await c.req.parseBody();
+    let { email, password, name, username } = await c.req.json();
     const userClass = new User();
     const userExists = await userClass.findUser({ email });
     if (userExists) {

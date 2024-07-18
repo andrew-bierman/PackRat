@@ -4,13 +4,14 @@ import { emailExistsService } from '../../services/user/emailExistsService';
 
 export const emailExists = async (c) => {
   try {
-    const { email } = await c.req.parseBody();
+    const { email } = await c.req.json();
 
     const emailExists = await emailExistsService({
       sendGridApiKey: c.env.SEND_GRID_API_KEY,
       smtpEmail: c.env.STMP_EMAIL,
       email,
     });
+    console.log('emailExists', emailExists)
     return c.json({ emailExists }, 200);
   } catch (error) {
     return c.json({ error: `Failed to delete user: ${error.message}` }, 404);

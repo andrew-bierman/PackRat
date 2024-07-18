@@ -1,6 +1,7 @@
+import { type Context } from 'hono';
 import { publicProcedure } from '../../trpc';
 
-export const getGoogleAuthURL = async (c) => {
+export const getGoogleAuthURL = async (c: Context) => {
   try {
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.profile',
@@ -14,7 +15,7 @@ export const getGoogleAuthURL = async (c) => {
 
     const googleUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent&client_secret=${clientSecret}`;
 
-    return c.json({ googleUrl, status: 'success', statusCode: 200 }, 200);
+    return c.json({ googleUrl, status: 'success' }, 200);
   } catch (error) {
     return c.json(
       { error: `Failed to get Google Auth URL: ${error.message}` },

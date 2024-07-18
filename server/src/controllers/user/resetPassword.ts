@@ -5,7 +5,7 @@ import { hashPassword } from '../../utils/user';
 
 export const resetPassword = async (c) => {
   try {
-    const { resetToken, password } = await c.req.parseBody();
+    const { resetToken, password } = await c.req.json();
     const JWT_SECRET = c.env.JWT_SECRET;
     const userClass = new User();
     const user = await userClass.validateResetToken(resetToken, JWT_SECRET);

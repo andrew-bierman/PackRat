@@ -2,19 +2,24 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
 import * as validator from '@packrat/validations';
 import { responseHandler } from '../../helpers/responseHandler';
+import { type Context } from 'hono';
 
-export const getUserById = async (c) => {
+export const getUserById = async (ctx: Context) => {
   try {
     // Correctly accessing route parameters in Hono
-    const userId = c.req.param('userId');
-
+    const { userId } = await ctx.req.param();
     const user = await getUserByIdService(userId);
 
-    if (!c.locals) c.locals = {};
-    c.locals.data = user;
-    return responseHandler(c);
+    // if (!c.locals) c.locals = {};
+    // c.locals.data = user;
+    // return responseHandler(c);
+
+    ctx.set('data', user);
+    return await responseHandler(ctx);
   } catch (error) {
-    return c.json({ error: `Failed to get user: ${error.message}` }, 500);
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+    // return c.json({ error: `Failed to get user: ${error.message}` }, 500);
   }
 };
 
