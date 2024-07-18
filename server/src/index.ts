@@ -1,13 +1,14 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { fetchHandler } from 'trpc-playground/handlers/fetch';
-import { appRouter } from './routes/trpcRouter';
-import { honoTRPCServer } from './trpc/server';
-import { cors } from 'hono/cors';
-import { securityHeaders } from './middleware/securityHeaders';
-import { enforceHttps } from './middleware/enforceHttps';
-import router from './routes';
 import { CORS_METHODS } from './config';
+import { enforceHttps } from './middleware/enforceHttps';
+import { securityHeaders } from './middleware/securityHeaders';
+import router from './routes';
+import { appRouter } from './routes/trpcRouter';
+import { adminRouter } from './static/admin';
+import { honoTRPCServer } from './trpc/server';
 
 interface Bindings {
   [key: string]: any;
@@ -21,6 +22,7 @@ interface Bindings {
 const TRPC_API_ENDPOINT = '/api/trpc';
 const TRPC_PLAYGROUND_ENDPOINT = '/trpc-playground';
 const HTTP_ENDPOINT = '/api';
+const ADMIN_ENDPOINT = '/admin';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -66,5 +68,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
 
 // SET UP HTTP ROUTES
 app.route(`${HTTP_ENDPOINT}`, router);
+
+// SETUP STATIC ADMIN PANEL
+app.route(ADMIN_ENDPOINT, adminRouter);
 
 export default app;
