@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { useCallback, useRef } from 'react';
 import { Stack, useFocusEffect } from 'expo-router';

@@ -1,3 +1,4 @@
+import React from 'react';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';

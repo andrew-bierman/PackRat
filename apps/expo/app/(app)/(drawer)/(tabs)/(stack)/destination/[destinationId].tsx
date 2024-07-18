@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform } from 'react-native';
 import { DestinationPage } from 'app/components/destination';
 // import DestinationPage from "../../components/destination";
