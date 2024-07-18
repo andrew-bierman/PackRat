@@ -8,15 +8,9 @@ export async function getPhotonResults(ctx: Context) {
   try {
     const { searchString } = await ctx.req.query();
     const response = await getPhotonResultsService(searchString);
-    if (!response) {
-      ctx.set('data', { data: 'No Phontons Found' });
-      return await responseHandler(ctx);
-    }
-    ctx.set('data', { data: response.features });
-    return await responseHandler(ctx);
+    return ctx.json(response.features, 200)
   } catch (error) {
-    ctx.set('error', error.message);
-    return await responseHandler(ctx);
+    return ctx.json({error: error.message}, 500)
   }
 }
 

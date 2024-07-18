@@ -9,7 +9,7 @@ interface AIResponseServiceResult {
 
 export const getAISuggestions = async (c) => {
   try {
-    const { userId, itemTypeId, type } = await c.req.parseBody();
+    const { userId, itemTypeId, type } = await c.req.json();
     const { aiResponse, refined } = (await getAISuggestionService(
       userId,
       itemTypeId,

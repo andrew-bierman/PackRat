@@ -8,15 +8,9 @@ export async function postSingleGeoJSON(ctx: Context) {
   try {
     const { geojson } = await ctx.req.json();
     const response = await postSingleGeoJSONService(geojson);
-    if (!response) {
-      ctx.set('data', { data: 'No Post Single GeoJson Found' });
-      return await responseHandler(ctx);
-    }
-    ctx.set('data', { data: response });
-    return await responseHandler(ctx);
+    return ctx.json({ response }, 200);
   } catch (error) {
-    ctx.set('error', { error: error.message });
-    return await responseHandler(ctx);
+    return ctx.json({ error: error.message }, 500);
   }
 }
 

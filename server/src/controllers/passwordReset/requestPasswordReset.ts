@@ -5,7 +5,7 @@ import { User } from '../../drizzle/methods/User';
 
 export const requestPasswordResetEmailAndToken = async (c) => {
   try {
-    const { email } = await c.req.parseBody();
+    const { email } = await c.req.json();
     const userClass = new User();
     const jwtSecret = c.env.JWT_SECRET;
     const clientUrl = c.env.CLIENT_URL;
@@ -26,10 +26,7 @@ export const requestPasswordResetEmailAndToken = async (c) => {
     );
     return c.json({ message: 'Password reset email sent successfully' }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to send password reset email: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

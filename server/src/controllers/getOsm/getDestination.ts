@@ -1,17 +1,15 @@
 import { protectedProcedure } from '../../trpc';
 import { getDestinationService } from '../../services/osm/osm.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-export const getDestination = async (c) => {
+export const getDestination = async (c: Context) => {
   try {
-    const { id } = await c.req.parseBody();
+    const { id } = await c.req.json();
     const destination = await getDestinationService(id);
     return c.json({ destination }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to get destination: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

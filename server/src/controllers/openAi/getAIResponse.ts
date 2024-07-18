@@ -9,7 +9,7 @@ interface AIResponseServiceResult {
 
 export const getAIResponse = async (c) => {
   try {
-    const { userId, userInput, itemTypeId, type } = await c.req.parseBody();
+    const { userId, userInput, itemTypeId, type } = await c.req.json();
     const { aiResponse, conversation } = (await getAIResponseService(
       userId,
       itemTypeId,
@@ -17,12 +17,9 @@ export const getAIResponse = async (c) => {
       type,
       c.env.OPENAI_API_KEY,
     )) as AIResponseServiceResult;
-    return c.json({ aiResponse, conversation });
+    return c.json({ aiResponse, conversation }, 200);
   } catch (error) {
-    return c.json(
-      { error: `Failed to get AI response: ${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 export function getAIResponseRoute() {

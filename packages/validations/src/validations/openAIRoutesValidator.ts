@@ -11,6 +11,7 @@ export const getUserChats = z.object({
   itemTypeId: z.string(),
 });
 
+
 export const getAISuggestions = z.object({
   userId: z.string(),
   itemTypeId: z.string(),

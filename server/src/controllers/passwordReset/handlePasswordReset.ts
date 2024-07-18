@@ -31,9 +31,9 @@ export const handlePasswordReset = async (c) => {
       passwordResetTokenExpiration: null,
     });
 
-    return { message: 'Password reset successful' };
+    return c.json({ message: 'Password reset successful' }, 200);
   } catch (error) {
-    return { error: `Failed to reset password: ${error.message}` };
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

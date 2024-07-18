@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 export const getOsm = async (c) => {
   try {
-    const { activityType, startPoint, endPoint } = await c.req.parseBody();
+    const { activityType, startPoint, endPoint } = await c.req.json();
     const route = await getOsmService({
       activityType,
       startPoint,
@@ -14,7 +14,7 @@ export const getOsm = async (c) => {
     });
     return c.json({ route }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get OSM route: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

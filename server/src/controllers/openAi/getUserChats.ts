@@ -4,11 +4,11 @@ import { z } from 'zod';
 
 export const getUserChats = async (c) => {
   try {
-    const { userId, itemTypeId } = await c.req.parseBody();
+    const { userId, itemTypeId } = await c.req.json();
     const conversations = getUserChatsService(userId, itemTypeId);
-    return c.json({ conversations });
+    return c.json({ conversations }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get user chats: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

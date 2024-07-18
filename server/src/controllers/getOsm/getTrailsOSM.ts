@@ -13,15 +13,9 @@ export async function getTrailsOSM(ctx: Context) {
     } = await ctx.req.json();
     const { env }: any = ctx;
     const response = await getTrailsOsmService(env.OSM_URI, lat, lon, radius);
-    if (!response) {
-      ctx.set('data', { data: 'No Trails Found' });
-      return await responseHandler(ctx);
-    }
-    ctx.set('data', { data: response });
-    return await responseHandler(ctx);
+    return ctx.json(response, 200);
   } catch (error) {
-    ctx.set('error', { error: error.message });
-    return await responseHandler(ctx);
+    return ctx.json({ error: error.message }, 500);
   }
 }
 
