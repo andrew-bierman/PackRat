@@ -1,10 +1,11 @@
+import { type Context } from 'hono';
 import { getWeatherService } from '../../services/weather/getWeatherService';
 import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
 
-export const getWeather = async (c) => {
+export const getWeather = async (c: Context) => {
   try {
-    const { lat, lon } = await c.req.parseBody();
+    const { lat, lon } = await c.req.json();
     return await getWeatherService(
       c.env.WEATHER_URL,
       c.env.OPENWEATHER_KEY,
@@ -12,7 +13,7 @@ export const getWeather = async (c) => {
       lon,
     );
   } catch (error) {
-    return c.json({ error: `Failed to get weather: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 
