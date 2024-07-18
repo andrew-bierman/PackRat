@@ -2,6 +2,7 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import { postSingleGeoJSONService } from '../../services/osm/osm.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
 /**
  * Handles the POST request for a single GeoJSON.
@@ -17,6 +18,22 @@ import { z } from 'zod';
 //   res.locals.data = result;
 //   responseHandler(res);
 // };
+
+export async function postSingleGeoJSON(ctx: Context) {
+  try {
+    const { geojson } = await ctx.req.json();
+    const response = await postSingleGeoJSONService(geojson);
+    if (!response) {
+      ctx.set('data', { data: 'No Post Single GeoJson Found' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', { data: response });
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', { error: error.message });
+    return await responseHandler(ctx);
+  }
+}
 
 export function postSingleGeoJSONRoute() {
   return protectedProcedure

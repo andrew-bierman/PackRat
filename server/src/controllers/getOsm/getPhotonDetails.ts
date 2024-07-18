@@ -6,6 +6,7 @@ import { responseHandler } from '../../helpers/responseHandler';
 import { z } from 'zod';
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsService';
+import { Context } from 'hono';
 
 /**
  * Retrieves Photon details based on the provided ID and type.
@@ -26,6 +27,23 @@ import { getPhotonDetailsService } from '../../services/osm/getPhotonDetailsServ
 //     next(RetrievingPhotonDetailsError);
 //   }
 // };
+
+export async function getPhotonDetails(ctx: Context) {
+  try {
+    const { id, type } = await ctx.req.param();
+    const { env }: any = ctx;
+    const response = await getPhotonDetailsService(id, type, env.OSM_URI);
+    if (!response) {
+      ctx.set('data', { data: 'No Photons Details Found' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', { data: response });
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', { error: error.message });
+    return await responseHandler(ctx);
+  }
+}
 
 export function getPhotonDetailsRoute() {
   return protectedProcedure

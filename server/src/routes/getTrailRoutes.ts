@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
 import * as validator from '@packrat/validations';
-import { getTrailsRoute as getTrails } from '../controllers/getTrail/index';
+import { getTrails } from '../controllers/getTrail/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import authTokenMiddleware from '../middleware/auth';
 import checkRole from '../middleware/checkRole';
@@ -12,7 +12,8 @@ router.post(
   '/',
   authTokenMiddleware as any,
   checkRole(['user', 'admin']) as any,
-  ((req, res, next) => zodParser(validator.getTrails, req.body, next)) as any,
+  // ((req, res, next) => zodParser(validator.getTrails, req.body, next)) as any,
+  zodParser(validator.getTrails, 'body'),
   tryCatchWrapper(getTrails),
 );
 

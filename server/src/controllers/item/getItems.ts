@@ -1,6 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getItemsService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
+import { Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves a list of items associated with a pack.
@@ -21,6 +23,18 @@ import * as validator from '@packrat/validations';
 //     next(ItemNotFoundError);
 //   }
 // };
+
+export async function getItems(ctx: Context) {
+  try {
+    const { packId } = await ctx.req.json();
+    const items = await getItemsService(packId);
+    ctx.set('data', items);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getItemsRoute() {
   return protectedProcedure.input(validator.getItems).query(async (opts) => {

@@ -3,10 +3,10 @@ import {
   getDestinationRoute as getDestination,
   getOsmRoute as getOsm,
   getParksOSMRoute as getParksOSM,
-  getPhotonResultsRoute as getPhotonResults,
-  getTrailsOSMRoute as getTrailsOSM,
-  postSingleGeoJSONRoute as postSingleGeoJSON,
-  getPhotonDetailsRoute as getPhotonDetails,
+  getPhotonResults,
+  getTrailsOSM,
+  postSingleGeoJSON,
+  getPhotonDetails,
   // getEnhancedPhotonDetails,
 } from '../controllers/getOsm/index';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';

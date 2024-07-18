@@ -1,6 +1,8 @@
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
 import { publicProcedure, protectedProcedure } from '../../trpc';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Deletes an item from the database.
@@ -22,6 +24,17 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 //     next(UnableToDeleteItemError);
 //   }
 // };
+
+export async function deleteItem(ctx: Context) {
+  try {
+    const { itemId, packId } = await ctx.req.json();
+    ctx.set('data', await deleteItemService(itemId, packId));
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function deleteItemRoute() {
   return protectedProcedure

@@ -8,6 +8,7 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 // import * as validators from '@packrat/validations';
 import * as validator from '@packrat/validations';
+import { type Context } from 'hono';
 
 /**
  * Retrieves Photon results based on a search string.
@@ -28,6 +29,22 @@ import * as validator from '@packrat/validations';
 //     next(RetrievingPhotonDetailsError);
 //   }
 // };
+
+export async function getPhotonResults(ctx: Context) {
+  try {
+    const { searchString } = await ctx.req.query();
+    const response = await getPhotonResultsService(searchString);
+    if (!response) {
+      ctx.set('data', { data: 'No Phontons Found' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', { data: response.features });
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getPhotonResultsRoute() {
   return protectedProcedure

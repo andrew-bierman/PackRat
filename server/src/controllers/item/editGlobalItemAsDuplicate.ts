@@ -1,6 +1,8 @@
 import { editGlobalItemAsDuplicateService } from '../../services/item/item.service';
 import { z } from 'zod';
 import { publicProcedure, protectedProcedure } from '../../trpc';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Edit a global item by duplicating it with new changes.
@@ -38,6 +40,27 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 //     next(UnableToDeleteItemError);
 //   }
 // };
+
+export async function editGlobalItemAsDuplicate(ctx: Context) {
+  try {
+    const { itemId, packId, name, weight, quantity, unit, type } =
+      await ctx.req.json();
+    const item = await editGlobalItemAsDuplicateService(
+      itemId,
+      packId,
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+    );
+    ctx.set('data', item);
+    return await responseHandler(ctx);
+  } catch (errpr) {
+    ctx.set('errpr', errpr.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function editGlobalItemAsDuplicateRoute() {
   return protectedProcedure

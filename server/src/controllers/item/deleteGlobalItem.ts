@@ -1,6 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { deleteGlobalItemService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Deletes a global item.
@@ -20,6 +22,17 @@ import { z } from 'zod';
 //     next(UnableToDeleteItemError);
 //   }
 // };
+
+export async function deleteGlobalItem(ctx: Context) {
+  try {
+    const { itemId } = await ctx.req.param();
+    ctx.set('data', await deleteGlobalItemService(itemId));
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function deleteGlobalItemRoute() {
   return protectedProcedure

@@ -1,10 +1,21 @@
 // Assuming responseHandler is a function intended to set headers and send a response in Hono
-export function responseHandler(c, message: string = 'Success') {
-  const data = c.locals?.data ?? { message: 'Success' };
+import { type Context } from 'hono';
 
-  // Set headers using Hono's method
-  c.header('X-Response-Message', message);
-  c.header('Access-Control-Expose-Headers', 'X-Response-Message');
+export async function responseHandler(
+  ctx: Context,
+  message: string = 'Success',
+) {
+  const data = ctx.get('data');
+  const error = ctx.get('error');
 
-  return c.json(data, 200);
+  ctx.header('X-Response-Message', message);
+  ctx.header('Access-Control-Expose-Headers', 'X-Response-Message');
+
+  console.log('message', message, data, error);
+
+  if (error) {
+    return await ctx.json({ error }, 400);
+  } else {
+    return await ctx.json(data ?? { message: 'Success' }, 200);
+  }
 }

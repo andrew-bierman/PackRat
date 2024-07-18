@@ -1,6 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Retrieves an item by its ID.
@@ -21,6 +23,18 @@ import * as validator from '@packrat/validations';
 //     next(ItemNotFoundError);
 //   }
 // };
+
+export async function getItemById(ctx: Context) {
+  try {
+    const { id } = await ctx.req.param();
+    const item = await getItemByIdService(id);
+    ctx.set('data', item);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function getItemByIdRoute() {
   return protectedProcedure.input(validator.getItemById).query(async (opts) => {

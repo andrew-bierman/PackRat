@@ -1,6 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Adds a global item to a pack.
@@ -21,6 +23,22 @@ import { z } from 'zod';
 //     next(ItemNotFoundError);
 //   }
 // };
+
+export async function addGlobalItemToPack(ctx: Context) {
+  try {
+    const { packId, itemId, ownerId } = await ctx.req.json();
+    const item = await addGlobalItemToPackService(packId, itemId, ownerId);
+    if (!item) {
+      ctx.set('data', { data: 'Cannot Convert Global Item To Pack' });
+      return await responseHandler(ctx);
+    }
+    ctx.set('data', item);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function addGlobalItemToPackRoute() {
   return protectedProcedure

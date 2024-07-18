@@ -1,6 +1,7 @@
 // import { MAPBOX_ACCESS_TOKEN } from '../../config';
 import { MapPreviewError } from '../../helpers/errors';
 import { type Context, type Next } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  *  Responds with map preview image from mapbox api
@@ -43,9 +44,13 @@ const getMapPreview = async (ctx: Context, next: Next) => {
 
     console.log('newResponse', newResponse);
 
-    return newResponse;
+    // return newResponse;
+    ctx.set('data', newResponse);
+    return await responseHandler(ctx);
   } catch (error) {
     console.log(error);
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
     // next(MapPreviewError);
   }
 };

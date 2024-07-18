@@ -1,6 +1,8 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
 /**
  * Searches for items by name.
@@ -24,6 +26,18 @@ import { z } from 'zod';
 //     next(ItemNotFoundError);
 //   }
 // };
+
+export async function searchItemsByName(ctx: Context) {
+  try {
+    const { name } = await ctx.req.json();
+    const items = await searchItemsByNameService(name);
+    ctx.set('data', items);
+    return await responseHandler(ctx);
+  } catch (error) {
+    ctx.set('error', error.message);
+    return await responseHandler(ctx);
+  }
+}
 
 export function searchItemsByNameRoute() {
   return protectedProcedure
