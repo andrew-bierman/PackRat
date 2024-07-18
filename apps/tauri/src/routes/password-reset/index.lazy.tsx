@@ -1,3 +1,4 @@
+import React from 'react';
 import { RequestPasswordReset } from 'app/components/password-reset';
 import { createLazyFileRoute } from '@tanstack/react-router';
 

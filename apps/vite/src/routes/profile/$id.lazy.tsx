@@ -1,3 +1,4 @@
+import React from 'react';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
 import { useProfileId } from 'app/hooks/user';
 

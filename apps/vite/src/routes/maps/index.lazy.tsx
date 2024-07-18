@@ -1,3 +1,4 @@
+import React from 'react';
 // import DownloadedMaps from "app/screens/maps";
 
 // export default DownloadedMaps;

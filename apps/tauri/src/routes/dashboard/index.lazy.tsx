@@ -1,3 +1,4 @@
+import React from 'react';
 import Dashboard from 'app/screens/dashboard';
 
 import { AuthWrapper } from 'app/auth/AuthWrapper';
