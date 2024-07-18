@@ -1,12 +1,6 @@
 import { getUserByTokenService } from '../../services/user/getUserByToken';
 import { protectedProcedure } from '../../trpc';
 
-/**
- * Retrieves the user information and sends it as a response.
- * @param {object} req - The request object.
- * @param {object} res - The response object.
- * @return {object} The user information.
- */
 export const getMe = async (c) => {
   try {
     const { user } = c;

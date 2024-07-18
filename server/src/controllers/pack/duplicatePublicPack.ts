@@ -1,13 +1,7 @@
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 
-/**
- * Duplicates a public pack.
- * @param {Object} req - the request object
- * @param {Object} res - the response object
- * @return {Promise} - a promise that resolves with the duplicated pack
- */
 export const duplicatePublicPack = async (c) => {
   try {
     const { packId, ownerId, items } = await c.req.parseBody();

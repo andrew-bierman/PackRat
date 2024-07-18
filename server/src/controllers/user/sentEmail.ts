@@ -3,12 +3,6 @@ import { resetEmail } from '../../utils/accountEmail';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 
-/**
- * Sends an email to the specified email address.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise<void>} - A promise that resolves when the email is sent.
- */
 export const sentEmail = async (c) => {
   try {
     const { email } = await c.req.parseBody();

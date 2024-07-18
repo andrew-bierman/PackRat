@@ -2,12 +2,6 @@ import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { Trip } from '../../drizzle/methods/trip';
 
-/**
- * Edits a trip by updating the trip details.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The updated trip object.
- */
 export const editTrip = async (c) => {
   try {
     const tripData = await c.req.parseBody();

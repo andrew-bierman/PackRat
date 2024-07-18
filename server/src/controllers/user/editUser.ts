@@ -3,14 +3,6 @@ import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 import { hashPassword } from '../../utils/user';
 
-/**
- * Edits a user.
- * @param {Object} req - The request object.
- * @param {Object} req.body - The body of the request.
- * @param {string} req.body.userId - The ID of the user to edit.
- * @param {Object} res - The response object.
- * @return {Promise} A promise that resolves to the edited user.
- */
 export const editUser = async (c) => {
   try {
     let {

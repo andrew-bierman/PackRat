@@ -2,12 +2,6 @@ import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 import { hashPassword } from '../../utils/user';
-/**
- * Resets the user's password.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise<void>} A promise that resolves when the password is successfully reset.
- */
 
 export const resetPassword = async (c) => {
   try {

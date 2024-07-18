@@ -1,16 +1,7 @@
 // import { MAPBOX_ACCESS_TOKEN } from '../../config';
-import { MapPreviewError } from '../../helpers/errors';
 import { type Context, type Next } from 'hono';
 import { responseHandler } from '../../helpers/responseHandler';
 
-/**
- *  Responds with map preview image from mapbox api
- *
- * @param {Request} req - Request object
- * @param {Response} res - Respone object
- * @param {NextFunction} next - The next middleware
- * @returns {Promise} - Resolves with the preview image
- */
 const getMapPreview = async (ctx: Context, next: Next) => {
   try {
     const { env }: any = ctx;

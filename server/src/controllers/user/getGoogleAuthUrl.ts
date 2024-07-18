@@ -1,11 +1,5 @@
 import { publicProcedure } from '../../trpc';
 
-/**
- * Retrieves the Google authentication URL.
- * @param {object} req - The request object.
- * @param {object} res - The response object.
- * @return {object} The Google authentication URL and status.
- */
 export const getGoogleAuthURL = async (c) => {
   try {
     const scopes = [

@@ -2,12 +2,6 @@ import { publicProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import { User } from '../../drizzle/methods/User';
 
-// /**
-//  * Sign in a user.
-//  * @param {Object} req - The request object.
-//  * @param {Object} res - The response object.
-//  * @return {Object} The user object.
-//  */
 export const userSignIn = async (c) => {
   try {
     const { email, password } = await c.req.parseBody();

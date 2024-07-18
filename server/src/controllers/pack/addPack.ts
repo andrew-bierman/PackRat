@@ -1,13 +1,7 @@
 import { addPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 
-/**
- * Adds a new pack to the database.
- * @param {Object} req - The HTTP request object.
- * @param {Object} res - The HTTP response object.
- * @return {Promise} A promise that resolves to the created pack.
- */
 export const addPack = async (c) => {
   try {
     const { name, owner_id, is_public } = await c.req.parseBody();

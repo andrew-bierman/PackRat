@@ -2,12 +2,7 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getUserByIdService } from '../../services/user/getUserByIdService';
 import * as validator from '@packrat/validations';
 import { responseHandler } from '../../helpers/responseHandler';
-/**
- * Retrieves a user by their ID from the database and returns the user object as a JSON response.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The user object as a JSON response.
- */
+
 export const getUserById = async (c) => {
   try {
     // Correctly accessing route parameters in Hono

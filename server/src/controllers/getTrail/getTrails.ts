@@ -1,38 +1,8 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
-import * as validators from '@packrat/validations';
 import { getTrailsService } from '../../services/trails/getTrailsService';
 import { z } from 'zod';
-import { Context } from 'hono';
-
-/**
- * Retrieves trails based on the provided parameters.
- * @param {Object} req - The request object containing the parameters.
- * @param {Object} res - The response object.
- * @return {Promise} A promise that resolves with the retrieved trail data or an error message.
- */
-// export const getTrails = async (req, res, next) => {
-//   const radiusParams = 25;
-//   const activityParams = true;
-//   const {
-//     administrative_area_level_1,
-//     country,
-//     locality,
-//     latitude,
-//     longitude,
-//   } = req.body;
-//   const response = await getTrailsService(
-//     administrative_area_level_1,
-//     country,
-//     locality,
-//     latitude,
-//     longitude,
-//     radiusParams,
-//     activityParams,
-//   );
-//   res.locals.data = response;
-//   responseHandler(res);
-// };
+import type { Context } from 'hono';
 
 export async function getTrails(ctx: Context) {
   try {

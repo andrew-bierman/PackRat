@@ -1,12 +1,7 @@
 import { deletePackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure, protectedProcedure } from '../../trpc';
-/**
- * Deletes a pack.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise} A promise that resolves with the deletion result.
- */
+import { protectedProcedure } from '../../trpc';
+
 export const deletePack = async (c) => {
   try {
     const { packId } = await c.req.parseBody();

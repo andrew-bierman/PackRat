@@ -1,13 +1,7 @@
 import { getPacksService } from '../../services/pack/pack.service';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
-/**
- * Retrieves packs associated with a specific owner.
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @return {Promise} - Array of packs.
- */
 export const getPacks = async (c) => {
   try {
     const { ownerId, queryBy } = await c.req.parseQuery();
