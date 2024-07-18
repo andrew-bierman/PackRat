@@ -8,18 +8,15 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Object} The pack object as a JSON response.
  */
-// export const getPackById = async (req, res, next) => {
-//   try {
-//     const { packId } = req.params;
-
-//     const pack = await getPackByIdService(packId);
-
-//     res.locals.data = pack;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(PackNotFoundError);
-//   }
-// };
+export const getPackById = async (c) => {
+  try {
+    const { packId } = await c.req.parseParams();
+    const pack = await getPackByIdService(packId);
+    return c.json({ pack }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get pack: ${error.message}` }, 500);
+  }
+};
 
 export function getPackByIdRoute() {
   return protectedProcedure.input(validator.getPackById).query(async (opts) => {

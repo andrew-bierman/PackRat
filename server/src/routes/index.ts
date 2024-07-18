@@ -1,20 +1,21 @@
 // import express, { type Request, type Response } from 'express';
 // import path from 'path';
 // import csrf from 'csurf';
-// import packRoutes from './packRoutes';
-// import itemRoutes from './itemRoutes';
-// import tripRoutes from './tripRoutes';
-// import weatherRoutes from './weatherRoutes';
+import packRoutes from './packRoutes';
+import itemRoutes from './itemRoutes';
+import tripRoutes from './tripRoutes';
+import weatherRoutes from './weatherRoutes';
 // import geoCodeRoutes from './geoCodeRoutes';
 // import getParkRoutes from './getParkRoutes';
 // import getTrailRoutes from './getTrailRoutes';
 // import osmRoutes from './osmRoutes';
-// import passwordResetRoutes from './passwordResetRoutes';
-// import openAiRoutes from './openAiRoutes';
-// // import templateRoutes from './templateRoutes';
+import passwordResetRoutes from './passwordResetRoutes';
+import openAiRoutes from './openAiRoutes';
+import templateRoutes from './templateRoutes';
 // import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
+import healthRoutes from './healthRoutes';
 import { Hono } from 'hono';
 
 const router = new Hono();
@@ -45,26 +46,26 @@ const router = new Hono();
 
 // use routes
 router.route('/user', userRoutes);
-// router.use('/pack', packRoutes);
-// router.use('/item', itemRoutes);
-// router.use('/trip', tripRoutes);
-// router.use('/weather', weatherRoutes);
+router.route('/pack', packRoutes);
+router.route('/item', itemRoutes);
+router.route('/trip', tripRoutes);
+router.route('/weather', weatherRoutes);
 // router.use('/geocode', geoCodeRoutes);
 // router.use('/getparks', getParkRoutes);
 // router.use('/gettrails', getTrailRoutes);
 // router.use('/osm', osmRoutes);
-// router.use('/password-reset', passwordResetRoutes);
-// router.use('/openai', openAiRoutes);
-// router.use('/template', templateRoutes);
+router.route('/password-reset', passwordResetRoutes);
+router.route('/openai', openAiRoutes);
+router.route('/template', templateRoutes);
 // router.use('/favorite', favoriteRouters);
-// router.use('/openai', openAiRoutes);
 router.route('/mapPreview', mapPreviewRouter);
+router.route('/health', healthRoutes);
 
-// const helloRouter = new Hono();
-// helloRouter.get('/', (c: Context, next: Next) => {
-//   return c.text('Hello, world!');
-// });
-// router.route('/hello', helloRouter);
+const helloRouter = new Hono();
+helloRouter.get('/', (c) => {
+  return c.text('Hello, world!');
+});
+router.route('/hello', helloRouter);
 
 // Also listen to /api for backwards compatibility
 // router.use('/api/user', userRoutes);

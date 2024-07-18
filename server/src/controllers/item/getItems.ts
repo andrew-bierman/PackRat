@@ -11,18 +11,15 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {string} req.params.packId - The ID of the pack to retrieve items for.
  * @return {Object} An array of items associated with the pack.
  */
-// export const getItems = async (req, res, next) => {
-//   try {
-//     const { packId } = req.params;
-
-//     const items = await getItemsService(packId);
-
-//     res.locals.data = items;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
+export const getItems = async (c) => {
+  try {
+    const packId = c.req.param('packId');
+    const items = await getItemsService(packId);
+    return c.json({ items }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get items: ${error.message}` }, 500);
+  }
+};
 
 export async function getItems(ctx: Context) {
   try {

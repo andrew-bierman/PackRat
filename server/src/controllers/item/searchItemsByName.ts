@@ -12,20 +12,15 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {Object} res - The response object.
  * @return {Array} An array of items matching the search criteria.
  */
-// const JoiObjectId = (message: any = 'valid id'): z.ZodString =>
-//   z.string().regex(/^[0-9a-fA-F]{24}$/, { message });
-
-// export const searchItemsByName = async (req, res, next) => {
-//   try {
-//     const { name, packId } = req.query;
-
-//     const items = await searchItemsByNameService(name, packId);
-
-//     res.status(200).json(items);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
+export const searchItemsByName = async (c) => {
+  try {
+    const { name } = c.req.query();
+    const items = await searchItemsByNameService(name);
+    return c.json({ items }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get items: ${error.message}` }, 500);
+  }
+};
 
 export async function searchItemsByName(ctx: Context) {
   try {

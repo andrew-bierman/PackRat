@@ -8,12 +8,15 @@ import { publicProcedure, protectedProcedure } from '../../trpc';
  * @param {Object} res - The HTTP response object.
  * @return {Promise} A promise that resolves to the created pack.
  */
-
-// export const addPack = async (req, res) => {
-//  const { name, owner_id, is_public } = req.body;
-//  const result = await addPackService(name, owner_id, is_public);
-//  res.status(200).json({ msg: 'success', ...result });
-// };
+export const addPack = async (c) => {
+  try {
+    const { name, owner_id, is_public } = await c.req.parseBody();
+    const pack = await addPackService(name, owner_id, is_public);
+    return c.json({ pack }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to add pack: ${error.message}` }, 500);
+  }
+};
 
 export function addPackRoute() {
   return protectedProcedure.input(validator.addPack).mutation(async (opts) => {

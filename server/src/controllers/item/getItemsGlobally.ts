@@ -10,6 +10,15 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {Object} res - The response object.
  * @return {Object} The items, page, and total pages.
  */
+export const getItemsGlobally = async (c) => {
+  try {
+    const { limit, page, searchString } = await c.req.parseBody();
+    const result = await getItemsGloballyService(limit, page, searchString);
+    return c.json({ ...result, items: result.items }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get items: ${error.message}` }, 500);
+  }
+};
 
 export async function getItemsGlobally(ctx: Context) {
   try {

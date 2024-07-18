@@ -1,3 +1,4 @@
+import React from 'react';
 import PackContainer from 'app/components/pack/PackContainer';
 import { TripDetails } from 'app/screens/trip/TripDetails';
 import { DetailsComponent } from 'app/components/details';

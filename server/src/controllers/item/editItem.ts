@@ -4,25 +4,16 @@ import * as validator from '@packrat/validations';
 import { type Context } from 'hono';
 import { responseHandler } from '../../helpers/responseHandler';
 
-// export const editItem = async (req, res, next) => {
-//   try {
-//     const { id, name, weight, unit, quantity, type } = req.body;
+export const editItem = async (c) => {
+  try {
+    const { id, name, weight, unit, quantity, type } = await c.req.parseBody();
 
-//     const newItem = await editItemService(
-//       id,
-//       name,
-//       weight,
-//       unit,
-//       quantity,
-//       type,
-//     );
-
-//     res.locals.data = newItem;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToEditItemError);
-//   }
-// };
+    const item = await editItemService(id, name, weight, unit, quantity, type);
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to edit item: ${error.message}` }, 500);
+  }
+};
 
 export async function editItem(ctx: Context) {
   try {

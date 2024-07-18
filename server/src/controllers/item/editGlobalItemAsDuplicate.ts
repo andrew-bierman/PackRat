@@ -19,27 +19,29 @@ import { responseHandler } from '../../helpers/responseHandler';
  * @param {Object} res - The response object.
  * @return {Object} The updated item.
  */
-// export const editGlobalItemAsDuplicate = async (req, res, next) => {
-//   try {
-//     const { itemId } = req.params;
-//     const { packId, name, weight, quantity, unit, type } = req.body;
+export const editGlobalItemAsDuplicate = async (c) => {
+  try {
+    const { itemId } = await c.req.parseParams();
+    const { packId, name, weight, quantity, unit, type } =
+      await c.req.parseBody();
 
-//     const newItem = await editGlobalItemAsDuplicateService(
-//       itemId,
-//       packId,
-//       name,
-//       weight,
-//       quantity,
-//       unit,
-//       type,
-//     );
-
-//     res.locals.data = newItem;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToDeleteItemError);
-//   }
-// };
+    const item = await editGlobalItemAsDuplicateService(
+      itemId,
+      packId,
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+    );
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to edit item as duplicate: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export async function editGlobalItemAsDuplicate(ctx: Context) {
   try {

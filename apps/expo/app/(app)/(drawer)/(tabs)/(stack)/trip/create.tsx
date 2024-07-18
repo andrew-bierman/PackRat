@@ -1,3 +1,4 @@
+import React from 'react';
 import CreateTrip from 'app/screens/trip/createTrip';
 
 import { Platform } from 'react-native';

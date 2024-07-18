@@ -7,18 +7,14 @@ import * as validator from '@packrat/validations';
  * @param {Object} res - The response object.
  * @return {Promise} A promise that resolves to the trip details.
  */
-// export const getTripById = async (req, res, next) => {
-//   try {
-//     const { tripId } = req.params;
-
-//     const tripDetails = await getTripByIdService(tripId);
-
-//     res.locals.data = tripDetails;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(TripNotFoundError);
-//   }
-// };
+export const getTripById = async (c) => {
+  try {
+    const { tripId } = await c.req.parseParams();
+    return await getTripByIdService(tripId);
+  } catch (error) {
+    return c.json({ error: `Failed to get trip: ${error.message}` }, 500);
+  }
+};
 
 export function getTripByIdRoute() {
   return protectedProcedure.input(validator.getTripById).query(async (opts) => {

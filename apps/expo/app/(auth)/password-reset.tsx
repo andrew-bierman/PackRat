@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform } from 'react-native';
 import { RequestPasswordReset } from 'app/components/password-reset';
 import { Stack } from 'expo-router';
