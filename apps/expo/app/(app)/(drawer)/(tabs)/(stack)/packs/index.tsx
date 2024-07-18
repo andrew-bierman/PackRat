@@ -1,3 +1,4 @@
+import React from 'react';
 import Feed from 'app/screens/feed/Feed';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';

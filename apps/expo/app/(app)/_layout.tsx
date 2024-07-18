@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link, Slot } from 'expo-router';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { Stack } from 'expo-router';
