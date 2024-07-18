@@ -10,7 +10,7 @@ export const zodParser = (
     try {
       let input: any;
       if (location === 'body') {
-        input = await c.req.json();
+        input = await c.req.parseBody();
       } else if (location === 'query') {
         input = c.req.query();
       } else if (location === 'params') {

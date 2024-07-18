@@ -1,35 +1,16 @@
 import { getParksOSMService } from '../../services/osm/getParksOSMService';
-import {
-  ErrorRetrievingParksOSMError,
-  InvalidRequestParamsError,
-} from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-import { publicProcedure, protectedProcedure } from '../../trpc';
-import { z } from 'zod';
-// import * as validators from '@packrat/validations';
+import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
-/**
- * Retrieves parks data from OpenStreetMap based on the provided latitude, longitude, and radius.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise} The response object containing the parks data.
- */
-// export const getParksOSM = async (req, res, next) => {
-//   try {
-//     const { lat = 45.5231, lon = -122.6765, radius = 50000 } = req.query;
-
-//     if (!lat || !lon || !radius) {
-//       next(InvalidRequestParamsError);
-//     }
-//     const result = await getParksOSMService(lat, lon, radius);
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     console.error(error);
-//     next(ErrorRetrievingParksOSMError);
-//   }
-// };
+export const getParksOSM = async (c) => {
+  try {
+    const { lat, lon, radius } = await c.req.parseBody();
+    const parks = await getParksOSMService(lat, lon, radius, c.env.OSM_URI);
+    return c.json({ parks }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get parks: ${error.message}` }, 500);
+  }
+};
 
 export function getParksOSMRoute() {
   return protectedProcedure.input(validator.getParksOSM).query(async (opts) => {

@@ -1,15 +1,7 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { getItemsGloballyService } from '../../services/item/item.service';
 import { z } from 'zod';
-import { type Context } from 'hono';
-import { responseHandler } from '../../helpers/responseHandler';
 
-/**
- * Retrieves globally available items.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The items, page, and total pages.
- */
 export const getItemsGlobally = async (c) => {
   try {
     const { limit, page, searchString } = await c.req.parseBody();
@@ -19,18 +11,6 @@ export const getItemsGlobally = async (c) => {
     return c.json({ error: `Failed to get items: ${error.message}` }, 500);
   }
 };
-
-export async function getItemsGlobally(ctx: Context) {
-  try {
-    const { limit, page, searchString } = await ctx.req.json();
-    const result = await getItemsGloballyService(limit, page, searchString);
-    ctx.set('data', { ...result, items: result.items });
-    return await responseHandler(ctx);
-  } catch (error) {
-    ctx.set('error', error.message);
-    return await responseHandler(ctx);
-  }
-}
 
 export function getItemsGloballyRoute() {
   return protectedProcedure

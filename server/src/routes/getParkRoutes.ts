@@ -10,8 +10,8 @@ const router = new Hono();
 
 router.get(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   zodParser(validator.getParks, 'body'),
   tryCatchWrapper(getParks),
 );

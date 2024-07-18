@@ -5,6 +5,6 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 
 const router = new Hono();
 
-router.get('/', authTokenMiddleware as any, tryCatchWrapper(getWeather));
+router.get('/', authTokenMiddleware, tryCatchWrapper(getWeather));
 
 export default router;

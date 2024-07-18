@@ -10,9 +10,8 @@ const router = new Hono();
 
 router.post(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
-  // ((req, res, next) => zodParser(validator.getTrails, req.body, next)) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   zodParser(validator.getTrails, 'body'),
   tryCatchWrapper(getTrails),
 );

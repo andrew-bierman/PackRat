@@ -1,32 +1,22 @@
-import osmtogeojson from 'osmtogeojson';
-import {
-  ErrorProcessingOverpassError,
-  ErrorRetrievingOverpassError,
-  InvalidRequestParamsError,
-} from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-import { publicProcedure, protectedProcedure } from '../../trpc';
-import * as validators from '@packrat/validations';
+import { ErrorRetrievingOverpassError } from '../../helpers/errors';
+import { protectedProcedure } from '../../trpc';
 import { getOsmService } from '../../services/osm/getOsmService';
 import { z } from 'zod';
 
-/**
- * Retrieves OpenStreetMap data based on the provided activity type, start point, and end point.
- * @param {Object} req - The request object containing the activity type, start point, and end point.
- * @param {Object} res - The response object used to send the retrieved OpenStreetMap data.
- * @return {Promise<void>} - A promise that resolves when the OpenStreetMap data is successfully retrieved and sent.
- */
-// export const getOsm = async (req, res, next) => {
-//   console.log('req', req); // log the request body to see what it looks like
-//   try {
-//     const { activityType, startPoint, endPoint } = req.body;
-//     const result = await getOsmService({ activityType, startPoint, endPoint });
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ErrorRetrievingOverpassError);
-//   }
-// };
+export const getOsm = async (c) => {
+  try {
+    const { activityType, startPoint, endPoint } = await c.req.parseBody();
+    const route = await getOsmService({
+      activityType,
+      startPoint,
+      endPoint,
+      osmURI: c.env.OSM_URI,
+    });
+    return c.json({ route }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to get OSM route: ${error.message}` }, 500);
+  }
+};
 
 export function getOsmRoute() {
   return protectedProcedure
@@ -48,7 +38,6 @@ export function getOsmRoute() {
           osmURI: env.OSM_URI,
         });
       } catch (error) {
-        // throw ErrorRetrievingOverpassError;
         return ErrorRetrievingOverpassError;
       }
     });

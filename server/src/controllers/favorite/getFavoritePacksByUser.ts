@@ -2,19 +2,18 @@ import { z } from 'zod';
 import { getFavoritePacksByUserService } from '../../services/favorite/favorite.service';
 import { publicProcedure, protectedProcedure } from '../../trpc';
 
-// /**
-//  * Retrieves favorite packs for a user.
-//  * @param {Object} req - The request object.
-//  * @param {Object} res - The response object.
-//  * @return {Promise} - The favorite packs of the user.
-//  */
-// export const getFavoritePacksByUser = async (req, res, next) => {
-//   const { userId } = req.body;
-//   const packs = await getFavoritePacksByUserService(userId);
-//   if (!packs) next(PackNotFoundError);
-//   res.locals.data = packs;
-//   responseHandler(res);
-// };
+export const getFavoritePacksByUser = async (c) => {
+  try {
+    const { userId } = await c.req.parseBody();
+    const packs = await getFavoritePacksByUserService(userId);
+    return c.json({ packs }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to get favorite packs: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function getFavoritePacksByUserRoute() {
   return protectedProcedure

@@ -15,39 +15,39 @@ const router = new Hono();
 
 router.get(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   tryCatchWrapper(getTemplates),
 );
 
 router.get(
   '/:templateId',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   tryCatchWrapper(getTemplateById),
 );
 
 router.post(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
-  isAdmin as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
   tryCatchWrapper(addTemplate),
 );
 
 router.put(
   '/:templateId',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
-  isAdmin as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
   tryCatchWrapper(editTemplate),
 );
 
 router.delete(
   '/:templateId',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
-  isAdmin as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
+  isAdmin,
   tryCatchWrapper(deleteTemplate),
 );
 

@@ -17,42 +17,42 @@ const router = new Hono();
 
 router.get(
   '/',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   checkRole(['user', 'admin']),
   tryCatchWrapper(getPublicTrips),
 );
 
 router.get(
   '/:ownerId',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.getTrips, 'params'),
   tryCatchWrapper(getTrips),
 );
 
 router.get(
   '/t/:tripId',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.getTripById, 'params'),
   tryCatchWrapper(getTripById),
 );
 
 router.post(
   '/',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.addTrip, 'body'),
   tryCatchWrapper(addTrip),
 );
 
 router.put(
   '/',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.editTrip, 'body'),
   tryCatchWrapper(editTrip),
 );
 
 router.delete(
   '/',
-  authTokenMiddleware as any,
+  authTokenMiddleware,
   zodParser(validator.deleteTrip, 'body'),
   tryCatchWrapper(deleteTrip),
 );

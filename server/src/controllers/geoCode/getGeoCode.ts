@@ -1,27 +1,23 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { ErrorFetchingGeoCodeError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
-import { oneEntity } from '../../utils/oneEntity';
-// import * as validators from '@packrat/validations';
 import { geoCodeService } from '../../services/geocode/geoCodeService';
 
-// /**
-//  * Retrieves the geocode for a given address array.
-//  * @param {Object} req - The request object.
-//  * @param {Object} req.query - The query parameters.
-//  * @param {string} req.query.addressArray - The address array to retrieve the geocode for.
-//  * @param {Object} res - The response object.
-//  * @return {Promise<void>} - A promise that resolves when the geocode is retrieved and the response is sent.
-//  */
-// export const getGeoCode = async (req, res, next) => {
-//   const result: any = await geoCodeService(req.query);
-//   if (result.message === 'ok') {
-//     res.locals.data = result.result;
-//     responseHandler(res);
-//   } else {
-//     next(ErrorFetchingGeoCodeError);
-//   }
-// };
+export const getGeoCode = async (c) => {
+  try {
+    const { addressArray } = await c.req.parseBody();
+    const result: any = await geoCodeService({
+      addressArray,
+      geoCodeUri: c.env.GEO_CODE_URL,
+      geoapifyKey: c.env.GEOAPIFY_KEY,
+    });
+    if (result.message === 'ok') {
+      return c.json({ result: result.result }, 200);
+    }
+    return c.json({ error: ErrorFetchingGeoCodeError.message }, 500);
+  } catch (error) {
+    return c.json({ error: `Failed to get GeoCode: ${error.message}` }, 500);
+  }
+};
 
 export function getGeoCodeRoute() {
   return protectedProcedure.query(async (opts) => {

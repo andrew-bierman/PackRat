@@ -8,8 +8,8 @@ const router = new Hono();
 
 router.get(
   '/',
-  authTokenMiddleware as any,
-  checkRole(['user', 'admin']) as any,
+  authTokenMiddleware,
+  checkRole(['user', 'admin']),
   tryCatchWrapper(getGeoCode),
 );
 
