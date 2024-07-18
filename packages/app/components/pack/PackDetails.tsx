@@ -62,6 +62,7 @@ export function PackDetails() {
         <View
           style={{
             minHeight: '100%',
+            marginBottom: 50,
           }}
         >
           <DetailsComponent
@@ -134,14 +135,10 @@ export function PackDetails() {
       <View
         style={{
           position: 'absolute',
-          right: 50,
-          bottom: 30,
-          width: 60,
-          height: 60,
-          marginBottom: 20,
-
-          justifyContent: 'center',
-          alignItems: 'center',
+          right: -40,
+          bottom: 20,
+          flexDirection: 'row',
+          alignSelf: 'flex-end',
         }}
       >
         <ChatContainer
