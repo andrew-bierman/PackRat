@@ -27,15 +27,9 @@ export async function getTrails(ctx: Context) {
       radiusParams,
       activityParams,
     });
-    if (!response) {
-      ctx.set('data', 'No Trails Found');
-      return await responseHandler(ctx);
-    }
-    ctx.set('data', response);
-    return await responseHandler(ctx);
+    return ctx.json(response, 200);
   } catch (error) {
-    ctx.set('error', error.message);
-    return await responseHandler(ctx);
+    return ctx.json({ error: error.message }, 400);
   }
 }
 
