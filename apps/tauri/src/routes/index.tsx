@@ -1,3 +1,4 @@
+import React from 'react';
 import Dashboard from 'app/screens/dashboard';
 import LandingPage from 'app/components/landing_page';
 import { useAuthUser } from 'app/auth/hooks';
