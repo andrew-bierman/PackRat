@@ -1,14 +1,15 @@
 import { protectedProcedure } from '../../trpc';
 import { getItemByIdService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
+import { type Context } from 'hono';
 
-export const getItemById = async (c) => {
+export const getItemById = async (c: Context) => {
   try {
-    const { id } = await c.req.parseBody();
+    const { id } = await c.req.param();
     const item = await getItemByIdService(id);
     return c.json({ item }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get item: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

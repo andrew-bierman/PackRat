@@ -1,10 +1,12 @@
 import { protectedProcedure } from '../../trpc';
 import { searchItemsByNameService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-export const searchItemsByName = async (c) => {
+export const searchItemsByName = async (c: Context) => {
   try {
-    const { name } = c.req.query();
+    const { name } = await c.req.query();
+    
     const items = await searchItemsByNameService(name);
     return c.json({ items }, 200);
   } catch (error) {

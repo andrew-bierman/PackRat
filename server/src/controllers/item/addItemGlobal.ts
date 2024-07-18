@@ -1,11 +1,12 @@
+import { type Context } from 'hono';
 import { addItemGlobalService } from '../../services/item/item.service';
 import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
-export const addItemGlobal = async (c) => {
+export const addItemGlobal = async (c: Context) => {
   try {
     const { name, weight, quantity, unit, type, ownerId } =
-      await c.req.parseBody();
+      await c.req.json();
 
     const item = await addItemGlobalService(
       name,

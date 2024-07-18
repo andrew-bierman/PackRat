@@ -26,18 +26,22 @@ export const addItemService = async (
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
 ) => {
+ 
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
   }
+  
   const itemCategoryClass = new ItemCategory();
   const itemClass = new Item();
   const itemPacksClass = new ItemPacks();
   const itemOwnersClass = new ItemOwners();
+  
   category = (await itemCategoryClass.findItemCategory({ name: type })) || null;
   if (!category) {
     category = await itemCategoryClass.create({ name: type });
   }
+  
   const item = await itemClass.create({
     name,
     weight,
@@ -49,8 +53,8 @@ export const addItemService = async (
   });
 
   // await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });
-  await itemPacksClass.create({ itemId: item.id, packId });
-  await itemOwnersClass.create({ itemId: item.id, ownerId });
+  // await itemPacksClass.create({ itemId: item.id, packId });
+  // await itemOwnersClass.create({ itemId: item.id, ownerId });
   // const pack = await packClass.update(
   //   {
   //     itemDocuments: newItem.id,

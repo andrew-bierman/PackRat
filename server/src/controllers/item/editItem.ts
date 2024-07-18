@@ -4,7 +4,7 @@ import * as validator from '@packrat/validations';
 
 export const editItem = async (c) => {
   try {
-    const { id, name, weight, unit, quantity, type } = await c.req.parseBody();
+    const { id, name, weight, unit, quantity, type } = await c.req.json();
 
     const item = await editItemService(id, name, weight, unit, quantity, type);
     return c.json({ item }, 200);

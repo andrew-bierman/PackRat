@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const getItemsGlobally = async (c) => {
   try {
-    const { limit, page, searchString } = await c.req.parseBody();
+    const { limit, page, searchString } = await c.req.json();
     const result = await getItemsGloballyService(limit, page, searchString);
     return c.json({ ...result, items: result.items }, 200);
   } catch (error) {

@@ -1,15 +1,16 @@
 import { protectedProcedure } from '../../trpc';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-export const addGlobalItemToPack = async (c) => {
+export const addGlobalItemToPack = async (c: Context) => {
   try {
-    const { packId, itemId, ownerId } = await c.req.parseBody();
+    const { packId, itemId, ownerId } = await c.req.json();
     const item = await addGlobalItemToPackService(packId, itemId, ownerId);
     return c.json({ item }, 200);
   } catch (error) {
     return c.json(
-      { error: `Failed to add item to pack: ${error.message}` },
+      { error: `${error.message}` },
       500,
     );
   }

@@ -21,7 +21,7 @@ import { zodParser } from '../middleware/validators/zodParser';
 const router = new Hono();
 
 router.get(
-  '/packItems/:packId',
+  '/packItems/:packId?',
   authTokenMiddleware,
   zodParser(validator.getItems, 'params'),
   tryCatchWrapper(getItems),
@@ -78,7 +78,7 @@ router.get(
 );
 
 router.post(
-  '/global/select/:packId',
+  '/global/select/',
   authTokenMiddleware,
   checkRole(['user', 'admin']),
   zodParser(validator.addGlobalItemToPack, 'body'),

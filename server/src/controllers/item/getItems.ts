@@ -4,11 +4,11 @@ import * as validator from '@packrat/validations';
 
 export const getItems = async (c) => {
   try {
-    const packId = c.req.param('packId');
-    const items = await getItemsService(packId);
+    const { packId } = c.req.param();
+    const items = await getItemsService(packId || null);
     return c.json({ items }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to get items: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

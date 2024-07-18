@@ -4,7 +4,7 @@ import { protectedProcedure } from '../../trpc';
 
 export const editGlobalItemAsDuplicate = async (c) => {
   try {
-    const { itemId } = await c.req.parseParams();
+    const { itemId } = await c.req.param();
     const { packId, name, weight, quantity, unit, type } =
       await c.req.parseBody();
 

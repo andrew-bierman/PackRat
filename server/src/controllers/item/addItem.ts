@@ -5,7 +5,7 @@ import * as validator from '@packrat/validations';
 export const addItem = async (c) => {
   try {
     const { name, weight, quantity, unit, packId, type, ownerId } =
-      await c.req.parseBody();
+      await c.req.json();
 
     const result = await addItemService(
       name,
@@ -18,7 +18,7 @@ export const addItem = async (c) => {
     );
     return c.json({ result }, 200);
   } catch (error) {
-    return c.json({ error: `Failed to add item: ${error.message}` }, 500);
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 
