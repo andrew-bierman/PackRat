@@ -139,7 +139,13 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
   const isWeb = Platform.OS === 'web';
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '70%',
+      }}
+    >
       <RSelect
         placeholder={placeholder || 'Select'}
         native={!isWeb}

@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
+  const onSearch = (search) => (setSearchQuery ? setSearchQuery(search) : null);
 
   return (
     <Layout>
@@ -155,8 +155,7 @@ const FeedSearchFilter = ({
                 data={dataValues}
                 onValueChange={handleSortChange}
                 placeholder={queryString}
-                style={styles.dropdown}
-                width="55%"
+                native={true}
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -181,7 +180,7 @@ const loadStyles = (theme: any) => {
 
   return {
     mainContainer: {
-      flex: 1,
+      // flex: 1,
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
