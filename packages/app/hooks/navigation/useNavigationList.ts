@@ -85,13 +85,14 @@ const logedInMenuItems: NavigationItem[] = [
     text: 'Feed',
     iconSource: MaterialCommunityIcons,
   },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/trips',
-    icon: 'routes',
-    text: 'Trips',
-    iconSource: MaterialCommunityIcons,
-  },
+  // DISABLE TROP TEMP
+  // {
+  //   type: NavigationItemTypeEnum.LINK,
+  //   href: '/trips',
+  //   icon: 'routes',
+  //   text: 'Trips',
+  //   iconSource: MaterialCommunityIcons,
+  // },
   {
     type: NavigationItemTypeEnum.LINK,
     href: '/packs',
@@ -128,13 +129,14 @@ const logedInMenuItems: NavigationItem[] = [
     type: NavigationItemTypeEnum.DIVIDER,
     Component: Separator,
   },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/appearance',
-    icon: 'theme-light-dark',
-    text: 'Appearance',
-    iconSource: MaterialCommunityIcons,
-  },
+  // DISABLE SCREEN TEMP
+  // {
+  //   type: NavigationItemTypeEnum.LINK,
+  //   href: '/appearance',
+  //   icon: 'theme-light-dark',
+  //   text: 'Appearance',
+  //   iconSource: MaterialCommunityIcons,
+  // },
   {
     type: NavigationItemTypeEnum.LINK,
     href: '/logout',
