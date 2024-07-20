@@ -1,33 +1,26 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { addItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
 
-/**
- * Adds an item to the database based on the provided request body.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The updated item and pack ID.
- */
-// export const addItem = async (req, res, next) => {
-//   try {
-//     const { name, weight, quantity, unit, packId, type, ownerId } = req.body;
+export const addItem = async (c) => {
+  try {
+    const { name, weight, quantity, unit, packId, type, ownerId } =
+      await c.req.json();
 
-//     const result = await addItemService(
-//       name,
-//       weight,
-//       quantity,
-//       unit,
-//       packId,
-//       type,
-//       ownerId,
-//     );
-
-//     res.locals.data = { newItem: result.newItem, packId: result.packId };
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToAddItemError);
-//   }
-// };
+    const result = await addItemService(
+      name,
+      weight,
+      quantity,
+      unit,
+      packId,
+      type,
+      ownerId,
+    );
+    return c.json({ result }, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function addItemRoute() {
   return protectedProcedure.input(validator.addItem).mutation(async (opts) => {

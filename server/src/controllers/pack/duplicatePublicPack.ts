@@ -1,27 +1,19 @@
 import { duplicatePublicPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 
-/**
- * Duplicates a public pack.
- * @param {Object} req - the request object
- * @param {Object} res - the response object
- * @return {Promise} - a promise that resolves with the duplicated pack
- */
-// export const duplicatePublicPack = async (req, res, next) => {
-//   try {
-//     const { packId, ownerId, items } = req.body;
-
-//     const result = await duplicatePublicPackService(packId, ownerId, items);
-
-//     res.status(200).json({
-//       msg: 'pack was duplicated successfully',
-//       data: result.pack,
-//     });
-//   } catch (error) {
-//     next(UnableToDuplicatePackError);
-//   }
-// };
+export const duplicatePublicPack = async (c) => {
+  try {
+    const { packId, ownerId, items } = await c.req.json();
+    const result = await duplicatePublicPackService(packId, ownerId, items);
+    return c.json({ result }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `Failed to duplicate public pack: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function duplicatePublicPackRoute() {
   return protectedProcedure

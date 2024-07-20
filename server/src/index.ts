@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { logger } from 'hono/logger';
 import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
@@ -9,6 +8,7 @@ import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
 import { CORS_METHODS } from './config';
 import { Ai } from '@cloudflare/ai';
+import { httpDBContext } from './trpc/httpDBContext';
 
 interface Bindings {
   [key: string]: any;
@@ -54,7 +54,8 @@ app.use('*', async (c, next) => {
 });
 
 // SETUP LOGGING
-app.use('*', logger());
+//  tRPC is already logging requests, but you can add your own middleware
+//  app.use('*', logger());
 
 // SETUP TRPC SERVER
 app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
@@ -69,7 +70,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   return handler(c.req.raw);
 });
 
-// SET UP HTTP ROUTES
-app.route(`${HTTP_ENDPOINT}`, router);
+// A middleware to initiate db connection and add it to the context
+app.use(`${HTTP_ENDPOINT}/*`, httpDBContext);
+app.route(`${HTTP_ENDPOINT}/`, router);
 
 export default app;

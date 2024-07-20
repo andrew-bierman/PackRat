@@ -101,6 +101,7 @@
     "passport-local": "^1.0.0",
     "piscina": "^4.0.0",
     "prisma": "^5.7.0",
+    "radash": "^12.1.0",
     "superjson": "^2.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",

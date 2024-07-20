@@ -1,3 +1,4 @@
+import React from 'react';
 import About from 'app/screens/about';
 import { Platform, ScrollView, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';

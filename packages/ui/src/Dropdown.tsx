@@ -140,10 +140,11 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
 
   return (
     <View
-      style={[
-        { ...style, width: width || '100%' },
-        !isWeb && { flexDirection: 'row', justifyContent: 'center' },
-      ]}
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: '70%',
+      }}
     >
       <RSelect
         placeholder={placeholder || 'Select'}

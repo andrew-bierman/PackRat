@@ -3,16 +3,9 @@ import {
   ErrorRetrievingNominatimError,
   InvalidRequestParamsError,
 } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
 
-/**
- * Retrieves Nominatim details based on the provided latitude, longitude, or place ID.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Promise<void>} - Returns nothing.
- */
-export const getNominatimDetails = async (req, res, next) => {
-  const { lat, lon, place_id } = req.query;
+export const getNominatimDetails = async (c) => {
+  const { lat, lon, place_id } = c.req.query();
 
   let nominatimUrl = '';
 
@@ -21,19 +14,17 @@ export const getNominatimDetails = async (req, res, next) => {
   } else if (lat && lon) {
     nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
   } else {
-    next(InvalidRequestParamsError);
+    c.next(InvalidRequestParamsError);
   }
   try {
     const response = await fetch(nominatimUrl);
 
     if (response.ok) {
-      res.locals.data = await response.json();
-      responseHandler(res);
+      c.json({ response }, 200);
     } else {
-      console.log(response.status, response.statusText);
-      next(ErrorProcessingNominatimError);
+      c.next(ErrorProcessingNominatimError);
     }
   } catch (error) {
-    next(ErrorRetrievingNominatimError);
+    c.next(ErrorRetrievingNominatimError);
   }
 };

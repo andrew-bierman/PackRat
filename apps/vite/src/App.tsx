@@ -1,6 +1,7 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import * as WebBrowser from 'expo-web-browser';
 import './styles/global.css';
 
 // Import the generated route tree
@@ -16,7 +17,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
 // Render the app
