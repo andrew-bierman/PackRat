@@ -21,7 +21,15 @@ export function editItemRoute() {
       throw new Error('Invalid item type');
     }
 
-    const item = await editItemService(id, name, weight, unit, quantity, type);
+    const item = await editItemService(
+      opts.ctx.executionCtx,
+      id,
+      name,
+      weight,
+      unit,
+      quantity,
+      type,
+    );
     return item;
   });
 }

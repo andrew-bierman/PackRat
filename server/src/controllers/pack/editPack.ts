@@ -15,7 +15,7 @@ export const editPack = async (c) => {
 export function editPackRoute() {
   return protectedProcedure.input(validator.editPack).mutation(async (opts) => {
     const packData = opts.input;
-    const pack = await editPackService(packData);
+    const pack = await editPackService(packData, opts.ctx.executionCtx);
     return pack;
   });
 }
