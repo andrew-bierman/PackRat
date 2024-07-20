@@ -1,13 +1,29 @@
 import { getAISuggestionService } from '../../services/openAi/openAi.service';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 
-/**
- * Retrieves an AI response based on user input and conversation history.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The AI response and updated conversation object.
- */
+interface AIResponseServiceResult {
+  aiResponse: any;
+  refined: any;
+}
+
+export const getAISuggestions = async (c) => {
+  try {
+    const { userId, itemTypeId, type } = await c.req.json();
+    const { aiResponse, refined } = (await getAISuggestionService(
+      userId,
+      itemTypeId,
+      type,
+      c.env.OPENAI_API_KEY,
+    )) as AIResponseServiceResult;
+    return c.json({ aiResponse, refined });
+  } catch (error) {
+    return c.json(
+      { error: `Failed to get AI response: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function getAISuggestionsRoute() {
   return protectedProcedure

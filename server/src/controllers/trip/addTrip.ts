@@ -1,50 +1,16 @@
 import { publicProcedure, protectedProcedure } from '../../trpc';
 import { addTripService } from '../../services/trip/addTripService';
 import * as validator from '@packrat/validations';
-/**
- * Adds a trip to the database.
- * @param {Object} req - The request object containing the trip details.
- * @param {Object} res - The response object.
- * @return {Promise} A promise that resolves to a success message or rejects with an error message.
- */
-// export const addTrip = async (req, res, next) => {
-//   try {
-//     const {
-//       name,
-//       description,
-//       duration,
-//       weather,
-//       start_date,
-//       end_date,
-//       destination,
-//       geoJSON,
-//       owner_id,
-//       packs,
-//       is_public,
-//     } = req.body;
 
-//     const tripDetails = {
-//       name,
-//       description,
-//       duration,
-//       weather,
-//       start_date,
-//       end_date,
-//       destination,
-//       geoJSON,
-//       owner_id,
-//       packs,
-//       is_public,
-//     };
-
-//     const result = await addTripService(tripDetails);
-
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToAddTripError);
-//   }
-// };
+export const addTrip = async (c) => {
+  try {
+    const tripData = await c.req.json();
+    const trip = await addTripService(tripData);
+    return c.json(trip, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function addTripRoute() {
   return protectedProcedure.input(validator.addTrip).mutation(async (opts) => {

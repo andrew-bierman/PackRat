@@ -1,27 +1,16 @@
 import { deleteItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 
-/**
- * Deletes an item from the database.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The deleted item.
- */
-
-// export const deleteItem = async (req, res, next) => {
-//   try {
-//     const { itemId, packId } = req.body;
-
-//     const itemDeleted = await deleteItemService(itemId, packId);
-
-//     res.locals.data = itemDeleted;
-//     responseHandler(res);
-//   } catch (error) {
-//     console.error(error);
-//     next(UnableToDeleteItemError);
-//   }
-// };
+export const deleteItem = async (c) => {
+  try {
+    const { itemId, packId } = await c.req.parseBody();
+    const itemDeleted = await deleteItemService(itemId, packId);
+    return c.json({ itemDeleted }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to delete item: ${error.message}` }, 500);
+  }
+};
 
 export function deleteItemRoute() {
   return protectedProcedure

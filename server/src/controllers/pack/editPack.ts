@@ -1,28 +1,16 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
-import { UnableToEditPackError } from '../../helpers/errors';
-import { responseHandler } from '../../helpers/responseHandler';
+import { protectedProcedure } from '../../trpc';
 import { editPackService } from '../../services/pack/pack.service';
 import * as validator from '@packrat/validations';
 
-/**
- * Edits a pack in the database.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The updated pack.
- */
-
-// export const editPack = async (req, res, next) => {
-//   try {
-//     const { id } = req.body;
-
-//     const newPack = await editPackService(id, req.body);
-
-//     res.locals.data = newPack;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(UnableToEditPackError);
-//   }
-// };
+export const editPack = async (c) => {
+  try {
+    const packData = await c.req.json();
+    const pack = await editPackService(packData);
+    return c.json({ pack }, 200);
+  } catch (error) {
+    return c.json({ error: `Failed to edit pack: ${error.message}` }, 500);
+  }
+};
 
 export function editPackRoute() {
   return protectedProcedure.input(validator.editPack).mutation(async (opts) => {
