@@ -166,6 +166,7 @@ const FeedSearchFilter = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 display: 'flex',
+                gap: 10,
                 width: '100%',
                 marginTop: 15,
                 justifyContent: 'space-between'
