@@ -1,25 +1,33 @@
-import { createContext, useReducer } from 'react';
-import { theme, darkTheme } from '../theme';
+import { type PropsWithChildren, createContext, useReducer } from 'react';
+import { getTheme } from '../theme';
+import { ThemeEnum, type ThemeType } from '../theme/types';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { useStorage } from '../hooks/storage/useStorage';
+import { useIsomorphicLayoutEffect } from 'tamagui';
 
+const DEFAULT_THEME = ThemeEnum.LIGHT as ThemeType;
+
+// Set default theme in initial state
 const initialState = {
-  isDark: false,
-  isLight: true,
-  currentTheme: theme,
+  isDark: DEFAULT_THEME === ThemeEnum.DARK,
+  isLight: DEFAULT_THEME === ThemeEnum.LIGHT,
+  currentTheme: getTheme(DEFAULT_THEME),
 };
+
+/**
+ * Enables dark mode by updating the state object.
+ *
+ * @param {object} state - The current state object.
+ * @return {object} The updated state object with dark mode enabled.
+ */
+
 const handlers = {
-  /**
-   * Enables dark mode by updating the state object.
-   *
-   * @param {object} state - The current state object.
-   * @return {object} The updated state object with dark mode enabled.
-   */
   ENABLE_DARK_MODE: (state) => ({
     ...state,
     isDark: true,
     isLight: false,
-    currentTheme: darkTheme,
+    currentTheme: getTheme(ThemeEnum.DARK),
   }),
   /**
    * Enables light mode by updating the state object.
@@ -31,13 +39,15 @@ const handlers = {
     ...state,
     isDark: false,
     isLight: true,
-    currentTheme: theme,
+    currentTheme: getTheme(ThemeEnum.LIGHT),
   }),
 };
+
 const reducer = (state, action) => {
   const handler = handlers[action.type];
   return handler ? handler(state, action) : state;
 };
+
 const ThemeContext = createContext({
   ...initialState,
   platform: 'JWT',
@@ -49,15 +59,21 @@ const ThemeContext = createContext({
   },
 });
 
-/**
- * Creates a ThemeProvider component that wraps the provided children with a context provider for managing the theme state.
- *
- * @param {Object} props - The properties object.
- * @param {ReactNode} props.children - The children components to be wrapped.
- * @return {ReactNode} - The wrapped children components.
- */
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [[isThemeLoading, storedTheme], setStoredTheme] = useStorage('theme');
+
+  /**
+   * Initializes the app theme based on the stored theme preference.
+   * If no preference is stored, sets the default theme preference in local storage.
+   */
+  useIsomorphicLayoutEffect(() => {
+    if (storedTheme) {
+      dispatch({ type: `ENABLE_${storedTheme}_MODE` });
+    } else {
+      setStoredTheme(DEFAULT_THEME);
+    }
+  }, [isThemeLoading]);
 
   /**
    * Enable dark mode.
@@ -66,6 +82,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableDarkMode = () => {
     dispatch({ type: 'ENABLE_DARK_MODE' });
+    setStoredTheme(ThemeEnum.DARK);
   };
   /**
    * Enables light mode.
@@ -75,6 +92,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableLightMode = () => {
     dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    setStoredTheme(ThemeEnum.LIGHT);
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
