@@ -1,21 +1,17 @@
 import { z } from 'zod';
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
+import { type Context } from 'hono';
 
-// import { prisma } from '../../prisma';
-/**
- * Retrieves the favorite items of a user.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @returns {Array} An array of favorite items belonging to the user.
- */
-// export const getUserFavorites = async (req, res, next) => {
-//   const { userId } = req.params;
-//   const favorites = await getUserFavoritesService(userId, next);
-//   if (!favorites) next(UserFavoritesNotFoundError);
-//   res.locals.data = favorites;
-//   responseHandler(res);
-// };
+export const getUserFavorites = async (c: Context) => {
+  try {
+    const { userId } = await c.req.json();
+    const favorites = await getUserFavoritesService(userId);
+    return c.json({ favorites }, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function getUserFavoritesRoute() {
   return protectedProcedure

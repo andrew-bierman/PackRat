@@ -3,6 +3,8 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+import { VectorClient } from '../../vector/client';
+import { type ExecutionContext } from 'hono';
 
 /**
  * Edits a global item by creating a duplicate item in a specific pack.
@@ -24,6 +26,7 @@ export const editGlobalItemAsDuplicateService = async (
   quantity: number,
   unit: string,
   type: string,
+  executionCtx: ExecutionContext,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -65,6 +68,17 @@ export const editGlobalItemAsDuplicateService = async (
     newItemId: newItem.id,
     packId,
   });
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
+      id: newItem.id,
+      content: name,
+      metadata: {
+        isPublic: newItem.global,
+      },
+      namespace: 'items',
+    }),
+  );
 
   return newItem;
 };

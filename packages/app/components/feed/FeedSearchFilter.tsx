@@ -16,7 +16,6 @@ import {
   InputWithIcon,
   DropdownComponent,
 } from '@packrat/ui';
-import { AntDesign } from '@expo/vector-icons';
 import { Search, X } from '@tamagui/lucide-icons';
 import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
@@ -128,7 +127,15 @@ const FeedSearchFilter = ({
               <RStack
                 style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
               >
+                {/* DISABLE TRIP TEMP */}
                 <RText
+                  fontSize={18}
+                  fontWeight="bold"
+                  color={currentTheme.colors.textColor}
+                >
+                  Discover Other Users' Public Packs
+                </RText>
+                {/* <RText
                   fontSize={18}
                   fontWeight="bold"
                   color={currentTheme.colors.textColor}
@@ -150,7 +157,7 @@ const FeedSearchFilter = ({
                   color={currentTheme.colors.textColor}
                 >
                   Trips
-                </RText>
+                </RText> 
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
@@ -158,7 +165,7 @@ const FeedSearchFilter = ({
                   onCheckedChange={handleToggleTrip}
                 >
                   <Switch.Thumb />
-                </RSwitch>
+                </RSwitch>*/}
               </RStack>
             )}
             <RStack
@@ -210,7 +217,7 @@ const loadStyles = (theme: any) => {
 
   return {
     mainContainer: {
-      flex: 1,
+      // flex: 1,
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,

@@ -9,6 +9,7 @@ import { useFeed } from 'app/hooks/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
+import { disableScreen } from '../../hoc/disableScreen';
 import { SearchProvider } from 'app/components/feed/SearchProvider';
 
 const URL_PATHS = {
@@ -213,4 +214,4 @@ const loadStyles = (theme) => {
   };
 };
 
-export default Feed;
+export default disableScreen(Feed, (props) => props.feedType === 'userTrips');

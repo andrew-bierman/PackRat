@@ -1,5 +1,7 @@
 import { Pack } from '../../drizzle/methods/pack';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { type ExecutionContext } from 'hono';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Duplicates a public pack service.
@@ -13,6 +15,7 @@ export const duplicatePublicPackService = async (
   packId: string,
   ownerId: string,
   items: any[],
+  executionCtx: ExecutionContext,
 ): Promise<object> => {
   const packClass = new Pack();
   const itemPacksClass = new ItemPacks();
@@ -30,6 +33,17 @@ export const duplicatePublicPackService = async (
   items?.map(
     async (itemId: any) =>
       await itemPacksClass.create({ itemId, packId: newPack.id }),
+  );
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
+      id: newPack.id,
+      content: newPack.name,
+      metadata: {
+        isPublic: newPack.is_public,
+      },
+      namespace: 'packs',
+    }),
   );
 
   return { pack: newPack };

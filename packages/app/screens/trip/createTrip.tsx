@@ -18,8 +18,9 @@ import {
   TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 import { WeatherData } from 'app/components/weather/WeatherData';
+import { disableScreen } from 'app/hoc/disableScreen';
 
-export default function Trips() {
+function Trips() {
   const styles = useCustomStyles(loadStyles);
 
   const placesAutoCompleteRef = useRef({});
@@ -94,3 +95,5 @@ const loadStyles = () => ({
     padding: 20,
   },
 });
+
+export default disableScreen(Trips);

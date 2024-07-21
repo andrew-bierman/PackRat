@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
@@ -91,6 +91,8 @@ export function SelectItem(props) {
     return <Text>No options available</Text>;
   }
 
+  const [position, setPosition] = useState(0);
+
   return (
     <Select
       value={value}
@@ -104,20 +106,6 @@ export function SelectItem(props) {
       <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>
           <Select.Group>{options}</Select.Group>
-          {native && (
-            <YStack
-              position="absolute"
-              right={0}
-              top={0}
-              bottom={0}
-              alignItems="center"
-              justifyContent="center"
-              width={'$4'}
-              pointerEvents="none"
-            >
-              {/* <ChevronDown size={getFontSize((props.size ?? '$true') as any)} /> */}
-            </YStack>
-          )}
         </Select.Viewport>
       </Select.Content>
       {native && (
@@ -126,6 +114,8 @@ export function SelectItem(props) {
             native
             modal
             snapPointsMode="fit"
+            position={position}
+            onPositionChange={setPosition}
             dismissOnSnapToBottom
             animationConfig={{
               type: 'spring',
