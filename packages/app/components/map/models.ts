@@ -2,5 +2,6 @@ export interface MapProps {
   shape: any;
   onExitFullScreen?: () => void;
   forceFullScreen?: boolean;
-  downloadable?: boolean;
+  shouldEnableDownload?: boolean;
+  mapName?: string;
 }
