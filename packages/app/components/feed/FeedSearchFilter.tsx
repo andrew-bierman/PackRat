@@ -12,10 +12,10 @@ import {
   RSeparator as OriginalRSeparator,
   RButton,
   Form,
-  InputWithIcon
+  InputWithIcon,
+  DropdownComponent
 } from '@packrat/ui';
 import { Search, X } from '@tamagui/lucide-icons';
-import DropdownComponent from 'app/components/Dropdown';
 import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
