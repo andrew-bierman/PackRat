@@ -14,7 +14,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
 
-type OfflineMap = {
+interface OfflineMap {
   name: string;
   styleURL: string;
   bounds: [number[], number[]];
@@ -23,7 +23,7 @@ type OfflineMap = {
   metadata: {
     shape: string;
   };
-};
+}
 
 export const user = sqliteTable('user', {
   id: text('id')

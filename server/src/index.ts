@@ -7,7 +7,7 @@ import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
 import { CORS_METHODS } from './config';
-import { Ai } from '@cloudflare/ai';
+import { type Ai } from '@cloudflare/ai';
 import { httpDBContext } from './trpc/httpDBContext';
 
 interface Bindings {

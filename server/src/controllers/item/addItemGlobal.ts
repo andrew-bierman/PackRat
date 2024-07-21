@@ -5,8 +5,7 @@ import * as validator from '@packrat/validations';
 
 export const addItemGlobal = async (c: Context) => {
   try {
-    const { name, weight, quantity, unit, type, ownerId } =
-      await c.req.json();
+    const { name, weight, quantity, unit, type, ownerId } = await c.req.json();
 
     const item = await addItemGlobalService(
       name,
