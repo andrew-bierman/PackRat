@@ -11,8 +11,12 @@ import { Table } from './common/tableParts';
 import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
 import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
 import { AddItem } from 'app/components/item/AddItem';
-import { ZDropdown, ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+
 import { Platform } from 'react-native';
+import { RDropdownMenu } from '../../../ZDropdown';
+import RIconButton from '../../../RIconButton';
+import { ChevronDown } from '@tamagui/lucide-icons';
 
 type ModalName = 'edit' | 'delete';
 
@@ -41,8 +45,8 @@ interface BasicTableProps {
   onDelete: (params: { itemId: string; packId: string }) => void;
   hasPermissions: boolean;
   currentPack: any;
-  refetch: () => void;
-  setRefetch: () => void;
+  refetch: boolean;
+  setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /** ------ EXAMPLE ------ */
@@ -109,11 +113,18 @@ export function BasicTable({
           Platform.OS === 'ios' ||
           window.innerWidth < 900 ? (
             <View>
-              <ZDropdown.Native
-                dropdownItems={[
+              <RDropdownMenu
+                menuItems={[
                   { label: 'Edit', onSelect: handleEditClick },
                   { label: 'Delete', onSelect: handleDeleteClick },
                 ]}
+                menuName={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={ChevronDown}
+                    style={{ padding: 0 }}
+                  />
+                }
               />
             </View>
           ) : (
@@ -153,13 +164,17 @@ export function BasicTable({
       cell: (info) => info.getValue(),
       // footer: (info) => 'category',
     }),
-    columnHelper.display({
-      id: 'actions',
-      cell: (props) => <ActionButtons item={props.row.original} />,
-      header: () => 'Actions',
-      // footer: (info) => info.column.id,
-    }),
   ];
+
+  if (hasPermissions) {
+    columns.push(
+      columnHelper.display({
+        id: 'actions',
+        cell: (props) => <ActionButtons item={props.row.original} />,
+        header: () => 'Actions',
+      }),
+    );
+  }
 
   const CELL_WIDTH = '$18';
 

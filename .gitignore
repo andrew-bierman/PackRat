@@ -1,6 +1,7 @@
 mongodb-data
 *.env
 .env.local
+types
 .env.production
 .env.old
 node_modules

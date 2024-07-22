@@ -163,7 +163,7 @@ function calculateZoomLevel(bounds, mapDim) {
   const lngDiff = ne.lng - sw.lng;
   const lngFraction = (lngDiff < 0 ? lngDiff + 360 : lngDiff) / 360;
 
-  const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
+  const latZoom = zoom(mapDim.height, WORLD_DIM.height, Math.abs(latFraction));
   const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
   return latZoom;
@@ -307,7 +307,7 @@ const getLocation = async () => {
  * @return {boolean} Returns true if the shape is downloadable, false otherwise.
  */
 const isShapeDownloadable = (shape) => {
-  return shape?.features[0]?.geometry?.coordinates?.length > 1;
+  return shape?.features[0]?.geometry?.coordinates?.length >= 1;
 };
 
 /**
@@ -371,6 +371,64 @@ const multiPolygonBounds = (multipolygonData) => {
   return [centerLng, centerLat];
 };
 
+const validateCoordinates = (coordinates: any) => {
+  if (!Array.isArray(coordinates)) {
+    throw new Error('Invalid coordinates: Must be an array.');
+  }
+  coordinates.forEach((coord) => {
+    if (!Array.isArray(coord)) {
+      if (typeof coord !== 'number') {
+        throw new Error(
+          'Invalid coordinates: Each coordinate must be a number.',
+        );
+      }
+    } else {
+      validateCoordinates(coord);
+    }
+  });
+};
+
+const validateGeoJSON = (geojson: any) => {
+  if (!geojson || typeof geojson !== 'object') {
+    throw new Error('Invalid GeoJSON: Data is not an object.');
+  }
+  if (!geojson.type) {
+    throw new Error('Invalid GeoJSON: Missing "type" property.');
+  }
+  if (!geojson.features || !Array.isArray(geojson.features)) {
+    throw new Error('Invalid GeoJSON: Missing or invalid "features" property.');
+  }
+
+  geojson.features.forEach((feature) => {
+    try {
+      if (feature.geometry && feature.geometry.coordinates) {
+        if (feature.geometry.type === 'Point') {
+          validateCoordinates(feature.geometry.coordinates);
+        } else if (
+          feature.geometry.type === 'LineString' ||
+          feature.geometry.type === 'Polygon'
+        ) {
+          feature.geometry.coordinates.forEach(validateCoordinates);
+        } else if (feature.geometry.type === 'MultiPolygon') {
+          feature.geometry.coordinates.forEach((polygon) => {
+            polygon.forEach(validateCoordinates);
+          });
+        }
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  });
+};
+
+const validateShape = (shape: any) => {
+  try {
+    validateGeoJSON(shape);
+  } catch (error) {
+    throw new Error(`Invalid shape: ${error.message}`);
+  }
+};
+
 export {
   defaultShape,
   getShapeSourceBounds,
@@ -388,4 +446,7 @@ export {
   isLineString,
   isPolygonOrMultiPolygon,
   multiPolygonBounds,
+  validateGeoJSON,
+  validateShape,
+  validateCoordinates,
 };

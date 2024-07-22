@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import useTheme from '../../hooks/useTheme';
 import { convertToCelsius } from '../../utils/convertToCelsius';
 import { convertToKmh } from '../../utils/convertToKmh';
@@ -11,53 +12,33 @@ import {
 import { RImage, RStack as OriginalRStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
-import { defaultWeatherObject } from '../../constants/defaultWeatherObj';
-import { defaultWeekObj } from '../../constants/defaultWeekObj';
+import { WeatherResult } from 'hooks/weather';
+import { getCurrentUTCDate, getUTCDateFromStr } from 'app/utils/dates';
+import { format, isAfter, isEqual } from 'date-fns';
 
 const RStack: any = OriginalRStack;
 
-interface WeatherObject {
+interface Location {
   name: string;
-  sys: {
-    country: string;
-  };
-  weather: {
-    description: any;
-    icon: string;
-  }[];
-  main: {
-    temp: number;
-    humidity: number;
-  };
-  wind: {
-    speed: number;
-  };
+  country: string;
 }
 
-interface WeatherDay {
-  weather: {
-    icon: string;
-  }[];
-  main: {
-    temp: number;
-  };
-}
-
-interface WeatherCardProps {
-  weatherObject?: WeatherObject;
-  weatherWeek?: WeatherDay[];
+interface WeatherCardProps extends WeatherResult {
+  location?: Location;
 }
 
 export default function WeatherCard({
-  weatherObject = defaultWeatherObject,
-  weatherWeek = defaultWeekObj,
+  weatherToday,
+  weatherWeek,
+  location,
 }: WeatherCardProps) {
   // Hooks
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { dateFormatted, day, restOfWeek } = useDate();
-
-  const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherObject.weather[0].icon}@2x.png`;
+  const { dateFormatted, day } = useDate();
+  const { currentWeather, restSegments } = useMemo(() => {
+    return separateCurrentSegment(weatherToday);
+  }, [weatherToday]);
 
   return (
     <RStack
@@ -122,7 +103,7 @@ export default function WeatherCard({
         >
           {dayNumToString(day)}
         </RText>
-        <RText>{dateFormatted}</RText>
+        <RText>{dateFormatted} ( UTC )</RText>
         <RStack
           style={{
             flexDirection: 'row',
@@ -131,13 +112,15 @@ export default function WeatherCard({
           }}
         >
           <FontAwesome name="map-marker" size={16} color="black" />
-          <RText>{`${weatherObject.name}, ${weatherObject.sys.country}`}</RText>
+          {location ? (
+            <RText>{`${location?.name}, ${location?.country}`}</RText>
+          ) : null}
         </RStack>
 
         <RStack>
           <RImage
             source={{
-              uri: weatherIconUrl,
+              uri: getWeatherIconURI(currentWeather.icon),
               width: 62,
               height: 62,
             }}
@@ -153,10 +136,10 @@ export default function WeatherCard({
               fontWeight: 600,
             }}
           >
-            {convertToCelsius(weatherObject.main.temp)}
+            {convertToCelsius(currentWeather.temp)}
           </RText>
           <RText style={{ fontWeight: 700 }}>
-            {weatherObject.weather[0].description}
+            {currentWeather.description}
           </RText>
         </RStack>
       </RStack>
@@ -185,7 +168,11 @@ export default function WeatherCard({
                 PRECIPITATION
               </RText>
             </RStack>
-            <RText>0%</RText>
+            <RText>
+              {currentWeather.precipitation
+                ? `${currentWeather.precipitation}mm`
+                : 'Not available'}
+            </RText>
           </RStack>
           <RStack style={styles.weatherInfo}>
             <RStack style={styles.iconsSection}>
@@ -203,7 +190,7 @@ export default function WeatherCard({
                 HUMIDITY
               </RText>
             </RStack>
-            <RText>{weatherObject.main.humidity}%</RText>
+            <RText>{currentWeather.humidity}%</RText>
           </RStack>
           <RStack style={styles.weatherInfo}>
             <RStack style={styles.iconsSection}>
@@ -221,7 +208,7 @@ export default function WeatherCard({
                 WIND
               </RText>
             </RStack>
-            <RText>{convertToKmh(weatherObject.wind.speed)}</RText>
+            <RText>{convertToKmh(currentWeather.wind)}</RText>
           </RStack>
         </RStack>
 
@@ -239,8 +226,8 @@ export default function WeatherCard({
           flex={0.5}
           style={styles.cardContainer}
         >
-          {weatherWeek.map((day, i) => {
-            const weatherIconUrl = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+          {restSegments.map((segment, i) => {
+            const weatherIconUrl = getWeatherIconURI(segment.icon);
 
             return (
               <RStack
@@ -260,9 +247,11 @@ export default function WeatherCard({
                   }}
                   alt="waetherIcon"
                 />
-                <RText>{formatDay(restOfWeek[i])}</RText>
+                <RText>
+                  {format(getUTCDateFromStr(segment.date), 'HH:mm')} ( UTC )
+                </RText>
                 <RText style={{ fontWeight: 700 }}>
-                  {convertToCelsius(day.main.temp)}
+                  {convertToCelsius(segment.temp)}
                 </RText>
               </RStack>
             );
@@ -279,12 +268,12 @@ export default function WeatherCard({
         backgroundColor={styles.tempColor.backgroundColor}
         style={styles.card}
       >
-        {restOfWeek.map((day, index) => {
+        {weatherWeek.map(({ day, avgTemp }, index) => {
           return (
             <RStack key={index} style={styles.weatherInfo}>
               <RText style={{ color: styles.tempColor.color }}>{day}</RText>
               <RText style={{ color: styles.tempColor.color }}>
-                {convertToCelsius(weatherWeek[index].main.temp)}
+                {convertToCelsius(avgTemp)}
               </RText>
             </RStack>
           );
@@ -293,10 +282,6 @@ export default function WeatherCard({
     </RStack>
   );
 }
-
-const formatDay = (day) => {
-  return dayNumToString(day)?.slice?.(0, 3) || '';
-};
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
@@ -356,4 +341,37 @@ const loadStyles = (theme) => {
       flex: 1,
     },
   };
+};
+
+const getWeatherIconURI = (icon: string) => {
+  return `https://openweathermap.org/img/wn/${icon}@2x.png`;
+};
+
+const separateCurrentSegment = (
+  weatherToday: WeatherResult['weatherToday'],
+) => {
+  return weatherToday.reduce(
+    (result, current, index, arr) => {
+      const now = getCurrentUTCDate();
+      const date = getUTCDateFromStr(current.date);
+
+      if (
+        (isAfter(now, date) || isEqual(date, now)) &&
+        !result.currentWeather
+      ) {
+        result.currentWeather = current;
+        return result;
+      }
+
+      if (index === arr.length - 1 && !result.currentWeather) {
+        result.currentWeather = current;
+        return result;
+      }
+
+      result.restSegments.push(current);
+
+      return result;
+    },
+    { currentWeather: null, restSegments: [] },
+  );
 };

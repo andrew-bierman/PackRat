@@ -1,16 +1,20 @@
+import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import {
   RH2,
   RText as OriginalRText,
   RStack,
   RSwitch,
   RLink,
+  RSkeleton,
 } from '@packrat/ui';
 import { truncateString } from '../../utils/truncateString';
 import { useEditPack } from 'app/hooks/packs';
 import { Platform } from 'react-native';
+import { useEditTrips } from 'app/hooks/trips';
+import { useAddFavorite } from 'app/hooks/favorites';
 
 const RText: any = OriginalRText;
 
@@ -21,11 +25,9 @@ interface UserDataCardProps {
   name: string;
   total_weight?: number;
   is_public: boolean;
-  favorited_by?: string[];
+  currentUserId?: number;
   favorites_count: number;
   createdAt: string;
-  state: boolean[];
-  setState: React.Dispatch<React.SetStateAction<boolean[]>>;
   index: number;
   differentUser: boolean;
 }
@@ -37,43 +39,49 @@ const UserDataCard = ({
   name,
   total_weight,
   is_public,
-  favorited_by,
+  currentUserId,
   favorites_count,
   createdAt,
-  state,
-  setState,
   index,
   differentUser,
 }: UserDataCardProps) => {
-  const { editPack: changePackStatus } = useEditPack();
+  const { editPack: changePackStatus, isLoading: isPackLoading } =
+    useEditPack();
+  const { editTrips: changeTripStatus, isLoading: isTripLoading } =
+    useEditTrips();
+  const { addFavorite } = useAddFavorite();
 
-  /**
-   * Updates the state at the specified index with the given boolean value.
-   *
-   * @param {number} index - The index of the state to be updated.
-   * @param {boolean} boolState - The boolean value to update the state with.
-   * @return {void} This function does not return a value.
-   */
-  const updateState = (index, boolState) => {
-    let states = state;
-    states = states.map((state, iterator) => {
-      return iterator === index ? boolState : state;
-    });
-    setState(states);
+  const handleChangeStatus = (index) => {
+    if (type === 'pack') {
+      return changePackStatus(
+        { id, is_public: !is_public, name },
+        {
+          onSuccess: (utils) => {
+            utils.getUserFavorites.invalidate();
+          },
+        },
+      );
+    }
+
+    if (type === 'trip') {
+      changeTripStatus(
+        { id, is_public: !is_public },
+        {
+          onSuccess: (utils) => {
+            utils.getUserFavorites.invalidate();
+          },
+        },
+      );
+    }
   };
 
-  /**
-   * Updates the status of an item at the specified index.
-   *
-   * @param {number} index - The index of the item to update.
-   * @return {void} This function does not return a value.
-   */
-  const handleChangeStatus = (index) => {
-    updateState(index, true);
-    if (type === 'pack') {
-      changePackStatus({ id, is_public: !is_public, name });
-    } else if (type === 'trip') {
-    }
+  const handleAddToFavorite = () => {
+    const data = {
+      packId: id,
+      userId: currentUserId,
+    };
+
+    addFavorite(data);
   };
 
   const truncatedName = truncateString(name, 25);
@@ -121,8 +129,14 @@ const UserDataCard = ({
                 <RText style={{ fontSize: 16, color: 'black' }}>
                   {truncatedName}
                 </RText>
-                {state[index] ? (
-                  <RText style={{ fontSize: 16 }}>Loading....</RText>
+                {(isPackLoading && type === 'pack') ||
+                (isTripLoading && type === 'trip') ? (
+                  <RSkeleton
+                    style={{
+                      height: 20,
+                      width: 36,
+                    }}
+                  />
                 ) : (
                   <>
                     {!differentUser && (
@@ -147,7 +161,7 @@ const UserDataCard = ({
                   // marginTop: '-3px',
                 }}
               >
-                Total Weight: {total_weight}g
+                Total Weight: {total_weight?.toFixed(2)}g
               </RText>
             ) : (
               <RText
@@ -194,15 +208,28 @@ const UserDataCard = ({
                 gap: 10,
               }}
             >
-              <RText color="gray" fontWeight={400}>
-                {favorites_count}
-              </RText>
-              <AntDesign
-                name="heart"
-                size={16}
-                color="red"
-                style={{ display: 'flex', position: 'absolute', right: 0 }}
-              />
+              {differentUser ? (
+                <TouchableOpacity onPress={handleAddToFavorite}>
+                  <AntDesign
+                    name="heart"
+                    size={16}
+                    color="red"
+                    style={{ display: 'flex', position: 'absolute', right: 0 }}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <RStack
+                  color="gray"
+                  gap="$2"
+                  flexDirection="row"
+                  fontWeight={400}
+                >
+                  <AntDesign name="heart" size={16} color="red" />
+                  <View>
+                    <RText>{favorites_count}</RText>
+                  </View>
+                </RStack>
+              )}
             </View>
           </RStack>
         </RStack>

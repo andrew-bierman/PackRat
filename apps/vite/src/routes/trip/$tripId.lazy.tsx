@@ -1,3 +1,4 @@
+import React from 'react';
 import { TripDetails } from 'app/screens/trip/TripDetails';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { createLazyFileRoute } from '@tanstack/react-router';

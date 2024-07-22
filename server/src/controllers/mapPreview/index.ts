@@ -1,21 +1,13 @@
 // import { MAPBOX_ACCESS_TOKEN } from '../../config';
-import { MapPreviewError } from '../../helpers/errors';
-import { type Context, type Next } from 'hono';
+import { type Context } from 'hono';
+import { responseHandler } from '../../helpers/responseHandler';
 
-/**
- *  Responds with map preview image from mapbox api
- *
- * @param {Request} req - Request object
- * @param {Response} res - Respone object
- * @param {NextFunction} next - The next middleware
- * @returns {Promise} - Resolves with the preview image
- */
-const getMapPreview = async (ctx: Context, next: Next) => {
+const getMapPreview = async (ctx: Context) => {
   try {
     const { env }: any = ctx;
     const { MAPBOX_ACCESS_TOKEN } = env;
 
-    const queryParams = Object.entries(ctx.req.query).reduce(
+    const queryParams = Object.entries(await ctx.req.query).reduce(
       (acc, [key, val], i, arr) =>
         `${acc}${key}=${val}${i == arr.length - 1 ? '' : '&'}`,
       '',
@@ -43,9 +35,11 @@ const getMapPreview = async (ctx: Context, next: Next) => {
 
     console.log('newResponse', newResponse);
 
-    return newResponse;
+    // return newResponse;
+    return ctx.json(newResponse, 200);
   } catch (error) {
     console.log(error);
+    return ctx.json({ error: error.message }, 400);
     // next(MapPreviewError);
   }
 };

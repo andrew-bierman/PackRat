@@ -35,7 +35,7 @@ const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
 );
 
 const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
-  data?.geojson?.features?.length && (
+  (data?.geojson?.features?.length && (
     // data?.geojson && (
     <TripMapCard
       shape={data.geojson}
@@ -43,7 +43,7 @@ const TripCardComponent = ({ data, weatherObject, currentTheme }) =>
       //   data?.weather ? JSON?.parse(data?.weather)?.coord : weatherObject?.coord
       // }
     />
-  );
+  )) || <RText></RText>;
 
 const ScoreContainerComponent = ({ data, isOwner }) => (
   <View style={{ marginTop: '5%' }}>

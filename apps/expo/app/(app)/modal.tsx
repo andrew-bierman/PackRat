@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { Stack, router, Link } from 'expo-router';
 import Head from 'expo-router/head';
@@ -17,6 +18,7 @@ export default function Modal() {
         </Head>
       )}
       <Stack.Screen
+        name="Modal"
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Modal',
@@ -25,9 +27,12 @@ export default function Modal() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
 
           presentation: 'modal',
+          headerShown: false,
+          headerTitle: 'model',
         }}
-        screenOptions={{ headerShown: false, headerTitle: 'modal' }}
+        // screenOptions={{ headerShown: false, headerTitle: 'modal' }}
       />
+
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
         {!isPresented && <Link href="../">Dismiss</Link>}

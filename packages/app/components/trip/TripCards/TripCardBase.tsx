@@ -83,7 +83,6 @@ const loadStylesBase = ({ currentTheme }) => {
     alignItems: 'center',
     gap: 25,
     flex: 1,
-    paddingHorizontal: 100,
     alignSelf: 'center',
   };
 };

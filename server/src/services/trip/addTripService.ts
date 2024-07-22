@@ -8,7 +8,7 @@ export const addTripService = async (tripData: any) => {
     const { geoJSON, ...otherTripData } = tripData;
     const tripClass = new Trip();
     // Create Trip
-    const newTrip = await tripClass.create(otherTripData);
+    const newTrip = await tripClass.create({ ...otherTripData, weather: 'w' }); // TODO remove not null from db
     const geojsonClass = new GeoJson();
     const tripGeoJsonClass = new TripGeoJson();
     if (!geoJSON) {

@@ -1,3 +1,4 @@
+import React from 'react';
 import Register from 'app/screens/RegisterScreen';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';

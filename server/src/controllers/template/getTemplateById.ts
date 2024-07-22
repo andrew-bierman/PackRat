@@ -1,43 +1,23 @@
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { TemplateNotFoundError } from '../../helpers/errors';
-// import { responseHandler } from '../../helpers/responseHandler';
-import { z } from 'zod';
+import * as validator from '@packrat/validations';
 import { Template } from '../../drizzle/methods/template';
 
-// import { prisma } from '../../prisma';
-/**
- * Retrieves a template by its ID.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise} A promise that resolves with the template or rejects with an error.
- */
-// export const getTemplateById = async (req, res, next) => {
-//   const { templateId } = req.params;
-
-//   const template = await prisma.template.findUnique({
-//     where: {
-//       id: templateId,
-//     },
-//     include: {
-//       createdBy: {
-//         select: {
-//           username: true,
-//         },
-//       },
-//     } as never,
-//   });
-//   if (template) {
-//     res.locals.data = template;
-//     responseHandler(res);
-//   } else {
-//     next(TemplateNotFoundError);
-//   }
-// };
+export const getTemplateById = async (c) => {
+  try {
+    const { templateId } = await c.req.param();
+    const templateClass = new Template();
+    const template = await templateClass.findTemplate(templateId, true);
+    return c.json({ template }, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function getTemplateByIdRoute() {
   const templateClass = new Template();
-  return publicProcedure
-    .input(z.object({ templateId: z.string() }))
+  return protectedProcedure
+    .input(validator.getTemplateById)
     .query(async (opts) => {
       const { templateId } = opts.input;
       const template = await templateClass.findTemplate(templateId, true);

@@ -19,13 +19,13 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface MapButtonsOverlayProps {
   mapFullscreen: boolean;
-  enableFullScreen: () => void;
+  enableFullScreen?: () => void;
   disableFullScreen: () => void;
-  handleChangeMapStyle: (style: string) => void;
+  handleChangeMapStyle?: (style: string) => void;
   downloadable: boolean;
-  downloading: boolean;
-  fetchLocation: () => void;
-  onDownload: () => void;
+  downloading?: boolean;
+  fetchLocation?: () => void;
+  onDownload?: () => void;
   handleGpxUpload?: () => void;
   progress?: number;
   navigateToMaps?: () => void;
@@ -332,9 +332,9 @@ const loadStyles = (theme) => {
       height: 21,
     },
     downloadText: {
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: '500',
-      marginLeft: 8,
+      marginRight: 8,
     },
     modal: {
       alignItems: 'center',
