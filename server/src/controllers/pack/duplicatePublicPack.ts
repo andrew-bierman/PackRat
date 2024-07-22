@@ -20,7 +20,12 @@ export function duplicatePublicPackRoute() {
     .input(validator.duplicatePublicPack)
     .mutation(async (opts) => {
       const { packId, ownerId, items } = opts.input;
-      const result = await duplicatePublicPackService(packId, ownerId, items);
+      const result = await duplicatePublicPackService(
+        packId,
+        ownerId,
+        items,
+        opts.ctx.executionCtx,
+      );
       return result;
     });
 }

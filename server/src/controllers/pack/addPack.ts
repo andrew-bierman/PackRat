@@ -15,7 +15,12 @@ export const addPack = async (c) => {
 export function addPackRoute() {
   return protectedProcedure.input(validator.addPack).mutation(async (opts) => {
     const { name, owner_id, is_public } = opts.input;
-    const pack = await addPackService(name, owner_id, is_public);
+    const pack = await addPackService(
+      name,
+      owner_id,
+      is_public,
+      opts.ctx.executionCtx,
+    );
     return pack;
   });
 }

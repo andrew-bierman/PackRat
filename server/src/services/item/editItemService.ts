@@ -1,9 +1,11 @@
 // import { prisma } from '../../prisma';
 
+import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Edit an item in the service.
@@ -17,6 +19,7 @@ import { ItemCategory as categories } from '../../utils/itemCategory';
  * @return {Promise<object>} - the edited item
  */
 export const editItemService = async (
+  executionCtx: ExecutionContext,
   id: string,
   name?: string,
   weight?: number,
@@ -61,6 +64,20 @@ export const editItemService = async (
     quantity: quantity || item.quantity,
     categoryId: category.id || item.categoryId,
   });
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord(
+      {
+        id: newItem.id,
+        content: name,
+        metadata: {
+          isPublic: newItem.global,
+        },
+        namespace: 'items',
+      },
+      true,
+    ),
+  );
 
   return newItem;
 };
