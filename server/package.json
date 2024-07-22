@@ -31,6 +31,7 @@
     "setup:local": "yarn generate && yarn migrate:local && yarn seed:local",
     "deploy": "wrangler deploy src/index.ts",
     "deploy:minify": "wrangler deploy --minify src/index.ts",
+    "deploy:prod": "yarn deploy",
     "postinstall": "yarn generate",
     "clean": "rm -rf node_modules"
   },
