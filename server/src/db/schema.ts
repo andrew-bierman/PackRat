@@ -14,6 +14,17 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
 
+interface OfflineMap {
+  name: string;
+  styleURL: string;
+  bounds: [number[], number[]];
+  minZoom: number;
+  maxZoom: number;
+  metadata: {
+    shape: string;
+  };
+}
+
 export const user = sqliteTable('user', {
   id: text('id')
     .primaryKey()
@@ -31,6 +42,9 @@ export const user = sqliteTable('user', {
   passwordResetTokenExpiration: integer('password_reset_token_expiration', {
     mode: 'timestamp',
   }),
+  offlineMaps: text('offline_maps', { mode: 'json' }).$type<
+    Record<string, OfflineMap>
+  >(),
   role: text('role', { enum: ['admin', 'user'] })
     .default('user')
     .$type<'admin' | 'user'>(),

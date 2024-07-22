@@ -27,7 +27,7 @@ export const addItemService = async (
   packId: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
-  executionCtx: ExecutionContext
+  executionCtx: ExecutionContext,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
