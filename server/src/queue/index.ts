@@ -23,7 +23,7 @@ const queueHandlersMap = new Map<
   string,
   (batch: MessageBatch<Error>, env: Bindings) => Promise<void>
 >([
-  ['etl-queue', handleEtlQueue],
+  ['packrat-etl-queue', handleEtlQueue],
   // Add more handlers here
 ]);
 
