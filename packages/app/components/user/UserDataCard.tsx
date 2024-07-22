@@ -225,7 +225,9 @@ const UserDataCard = ({
                   fontWeight={400}
                 >
                   <AntDesign name="heart" size={16} color="red" />
-                  <View>{favorites_count}</View>
+                  <View>
+                    <RText>{favorites_count}</RText>
+                  </View>
                 </RStack>
               )}
             </View>

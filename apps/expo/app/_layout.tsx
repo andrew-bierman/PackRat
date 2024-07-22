@@ -1,3 +1,4 @@
+import React from 'react';
 import { Provider } from 'app/provider';
 import { Stack } from 'expo-router';
 

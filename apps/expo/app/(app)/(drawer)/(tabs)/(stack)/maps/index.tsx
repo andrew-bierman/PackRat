@@ -1,3 +1,4 @@
+import React from 'react';
 import Maps from 'app/screens/maps';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';

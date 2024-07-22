@@ -7,14 +7,20 @@ import { securityHeaders } from './middleware/securityHeaders';
 import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
 import { CORS_METHODS } from './config';
+import { Ai } from '@cloudflare/ai';
+import { httpDBContext } from './trpc/httpDBContext';
 
 interface Bindings {
   [key: string]: any;
   DB: IDBDatabase;
+  VECTOR_INDEX: VectorizeIndex;
+  AI: Ai;
   JWT_VERIFICATION_KEY: string;
   APP_URL: string;
   CORS_ORIGIN: string;
   MAPBOX_ACCESS_TOKEN: string;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  VECTORIZE_API_KEY: string;
 }
 
 const TRPC_API_ENDPOINT = '/api/trpc';
@@ -64,7 +70,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   return handler(c.req.raw);
 });
 
-// SET UP HTTP ROUTES
-app.route(`${HTTP_ENDPOINT}`, router);
+// A middleware to initiate db connection and add it to the context
+app.use(`${HTTP_ENDPOINT}/*`, httpDBContext);
+app.route(`${HTTP_ENDPOINT}/`, router);
 
 export default app;

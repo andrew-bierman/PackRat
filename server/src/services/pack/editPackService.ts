@@ -1,4 +1,7 @@
+import { type ExecutionContext } from 'hono';
 import { Pack } from '../../drizzle/methods/pack';
+import { Queue } from '../../queue/client';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Edits a pack in the service.
@@ -7,7 +10,10 @@ import { Pack } from '../../drizzle/methods/pack';
  * @param {object} packData
  * @return {object}
  */
-export const editPackService = async (packData: any) => {
+export const editPackService = async (
+  packData: any,
+  executionCtx: ExecutionContext,
+) => {
   const packClass = new Pack();
   const { id, name, is_public } = packData;
   const pack = await packClass.findPack({ id });
@@ -20,5 +26,20 @@ export const editPackService = async (packData: any) => {
     name: name || pack.name,
   };
   const updatedPack = await packClass.update(updatedData);
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord(
+      {
+        id: updatedData.id,
+        content: name,
+        metadata: {
+          isPublic: updatedData.is_public,
+        },
+        namespace: 'packs',
+      },
+      true,
+    ),
+  );
+
   return updatedPack;
 };

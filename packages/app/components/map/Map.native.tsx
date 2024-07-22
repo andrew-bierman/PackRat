@@ -36,6 +36,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
+import { MapProps } from './models';
 
 interface GeoJsonProperties {
   name?: string;
@@ -56,17 +57,18 @@ interface Shape {
   features: Feature[];
 }
 
-interface NativeMapProps {
-  shape: Shape;
-}
-
 const RButton: any = OriginalRButton;
 const RInput: any = OriginalRInput;
 
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
+const NativeMap: React.FC<MapProps> = ({
+  shape: shapeProp,
+  onExitFullScreen,
+  forceFullScreen = false,
+  downloadable = true,
+}) => {
   const styles = useCustomStyles(loadStyles);
   const {
     camera,
@@ -93,6 +95,9 @@ const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
     fullMapDimension,
     previewMapStyle,
   } = useNativeMap({ shape: shapeProp });
+
+  // For some reason not setting default state value not working from hook
+  const isFullScreenMode = forceFullScreen || mapFullscreen;
 
   const handleShapeUpload = async () => {
     try {
@@ -168,15 +173,17 @@ const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
   }
 
   const element = (
-    <View style={mapFullscreen ? (fullMapDimension as any) : previewMapStyle}>
+    <View
+      style={isFullScreenMode ? (fullMapDimension as any) : previewMapStyle}
+    >
       <Mapbox.MapView
         ref={mapViewRef}
         style={{ flex: 1 }}
         styleURL={mapStyle}
         compassEnabled={false}
         logoEnabled={false}
-        scrollEnabled={mapFullscreen}
-        zoomEnabled={mapFullscreen}
+        scrollEnabled={isFullScreenMode}
+        zoomEnabled={isFullScreenMode}
       >
         <Mapbox.Camera
           ref={camera}
@@ -276,11 +283,12 @@ const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
       </Mapbox.MapView>
 
       <MapButtonsOverlay
-        mapFullscreen={mapFullscreen}
+        mapFullscreen={isFullScreenMode}
         enableFullScreen={() => {
           setMapFullscreen(true);
         }}
         disableFullScreen={() => {
+          onExitFullScreen?.();
           setMapFullscreen(false);
         }}
         handleChangeMapStyle={setMapStyle}
@@ -290,7 +298,7 @@ const NativeMap: React.FC<NativeMapProps> = ({ shape: shapeProp }) => {
           });
         }}
         styles={styles}
-        downloadable={isShapeDownloadable(shape)}
+        downloadable={downloadable || isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
         onDownload={() => {

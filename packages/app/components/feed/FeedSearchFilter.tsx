@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
 
-  const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
+  const onSearch = (search) => (setSearchQuery ? setSearchQuery(search) : null);
 
   return (
     <Layout>
@@ -103,7 +103,15 @@ const FeedSearchFilter = ({
               <RStack
                 style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
               >
+                {/* DISABLE TRIP TEMP */}
                 <RText
+                  fontSize={18}
+                  fontWeight="bold"
+                  color={currentTheme.colors.textColor}
+                >
+                  Discover Other Users' Public Packs
+                </RText>
+                {/* <RText
                   fontSize={18}
                   fontWeight="bold"
                   color={currentTheme.colors.textColor}
@@ -125,7 +133,7 @@ const FeedSearchFilter = ({
                   color={currentTheme.colors.textColor}
                 >
                   Trips
-                </RText>
+                </RText> 
                 <RSwitch
                   id="two-switch"
                   size="$1.5"
@@ -133,7 +141,7 @@ const FeedSearchFilter = ({
                   onCheckedChange={handleToggleTrip}
                 >
                   <Switch.Thumb />
-                </RSwitch>
+                </RSwitch>*/}
               </RStack>
             )}
             <RStack
@@ -155,8 +163,7 @@ const FeedSearchFilter = ({
                 data={dataValues}
                 onValueChange={handleSortChange}
                 placeholder={queryString}
-                style={styles.dropdown}
-                width="55%"
+                native={true}
               />
             </RStack>
             {(feedType === 'userPacks' || feedType === 'userTrips') && (
@@ -181,7 +188,7 @@ const loadStyles = (theme: any) => {
 
   return {
     mainContainer: {
-      flex: 1,
+      // flex: 1,
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,

@@ -1,26 +1,20 @@
-import { publicProcedure, protectedProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { addGlobalItemToPackService } from '../../services/item/item.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-/**
- * Adds a global item to a pack.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Object} The updated item.
- */
-// export const addGlobalItemToPack = async (req, res, next) => {
-//   try {
-//     const { packId } = req.params;
-//     const { itemId, ownerId } = req.body;
-
-//     const result = await addGlobalItemToPackService(packId, itemId, ownerId);
-
-//     res.locals.data = result;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(ItemNotFoundError);
-//   }
-// };
+export const addGlobalItemToPack = async (c: Context) => {
+  try {
+    const { packId, itemId, ownerId } = await c.req.json();
+    const item = await addGlobalItemToPackService(packId, itemId, ownerId);
+    return c.json({ item }, 200);
+  } catch (error) {
+    return c.json(
+      { error: `${error.message}` },
+      500,
+    );
+  }
+};
 
 export function addGlobalItemToPackRoute() {
   return protectedProcedure

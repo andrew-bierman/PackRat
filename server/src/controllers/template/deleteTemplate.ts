@@ -3,33 +3,21 @@ import { TemplateNotFoundError } from '../../helpers/errors';
 import * as validator from '@packrat/validations';
 import { Template } from '../../drizzle/methods/template';
 
-// import { prisma } from '../../prisma';
-
-/**
- * Deletes a template.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise<void>} A Promise that resolves when the template is deleted.
- */
-// export const deleteTemplate = async (req, res, next) => {
-//   const { templateId } = req.params;
-//   const template = await prisma.template.findUnique({
-//     where: {
-//       id: templateId,
-//     },
-//   });
-
-//   if (template) {
-//     await prisma.template.delete({
-//       where: {
-//         id: templateId,
-//       },
-//     });
-//     res.json({ message: 'Template removed' });
-//   } else {
-//     next(TemplateNotFoundError);
-//   }
-// };
+export const deleteTemplate = async (c) => {
+  try {
+    const { templateId } = await c.req.json();
+    const templateClass = new Template();
+    const template = await templateClass.findTemplate(templateId);
+    if (template) {
+      await templateClass.delete(templateId);
+      return c.json({ message: 'Template removed' }, 200);
+    } else {
+      return c.json({ error: TemplateNotFoundError.message }, 404);
+    }
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function deleteTemplateRoute() {
   const templateClass = new Template();

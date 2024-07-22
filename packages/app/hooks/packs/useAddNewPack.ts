@@ -50,7 +50,7 @@ interface UseAddNewPackResult {
   packSelectOptions: { value: string; label: string }[];
 }
 
-export const useAddNewPack = (): UseAddNewPackResult  => {
+export const useAddNewPack = (): UseAddNewPackResult => {
   const user = useAuthUser();
   const [name, setName] = useState('');
   const [isPublic, setIsPublic] = useState(false);

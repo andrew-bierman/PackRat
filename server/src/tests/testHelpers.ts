@@ -26,7 +26,10 @@ const TEST_USER = {
 
 const createCaller = createCallerFactory(appRouter);
 
-export async function setupTest(env: Record<string, any>) {
+export async function setupTest(
+  env: Record<string, any>,
+  executionCtx: ExecutionContext,
+) {
   const { DB, ...rest } = env;
   // const db = await createDb(env.DB)
   await DbClient.init(env.DB);
@@ -54,6 +57,7 @@ export async function setupTest(env: Record<string, any>) {
   const ctx: any = {
     user: TEST_USER,
     env: rest,
+    executionCtx,
     // db
   };
 

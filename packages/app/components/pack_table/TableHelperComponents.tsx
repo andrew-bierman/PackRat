@@ -122,17 +122,17 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
     <View
       style={{
         alignSelf: 'center',
-        width: xxs ? '50%' : xs ? '50%' : xxl ? '15%' : '50%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '55%',
       }}
     >
       <DropdownComponent
         value={value}
         data={optionValues}
         onValueChange={(itemValue) => onChange(itemValue)}
-        placeholder="Select weight unit"
-        width="100%"
+        placeholder={`Select Weight unit :  ${value}`}
         native={true}
-        zeego={true}
       />
     </View>
   );

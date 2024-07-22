@@ -46,8 +46,14 @@ export function SignInScreen({
               label="Email ID"
               keyboardType="email-address"
               name="email"
+              aria-label="Email"
             />
-            <FormInput label="Password" secureTextEntry name="password" />
+            <FormInput
+              label="Password"
+              secureTextEntry
+              name="password"
+              aria-label="Password"
+            />
             <Theme inverse>
               <SubmitButton
                 disabled={signInStatus === 'loading'}

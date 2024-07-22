@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
@@ -17,14 +17,12 @@ export default function RSelect(props) {
   const {
     textKey = 'label',
     valueKey = 'value',
-    zeego = false,
     native = false,
     ...otherProps
   } = props;
 
   return (
     <SelectItem
-      zeego={zeego}
       native={native}
       textKey={textKey}
       valueKey={valueKey}
@@ -62,7 +60,6 @@ export function SelectItem(props) {
     textKey = 'label',
     valueKey = 'value',
     native = false,
-    zeego = false,
     ...forwardedProps
   } = props;
 
@@ -94,17 +91,7 @@ export function SelectItem(props) {
     return <Text>No options available</Text>;
   }
 
-  if (zeego) {
-    return (
-      <RDropdownMenu
-        menuItems={data.map((item) => ({
-          label: item[textKey],
-          onSelect: () => handleChange(item[valueKey]),
-        }))}
-        menuName={placeholder}
-      />
-    );
-  }
+  const [position, setPosition] = useState(0);
 
   return (
     <Select
@@ -113,26 +100,12 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger width={220} iconAfter={ChevronDown}>
+      <Select.Trigger>
         <Select.Value>{placeholder}</Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>
           <Select.Group>{options}</Select.Group>
-          {native && (
-            <YStack
-              position="absolute"
-              right={0}
-              top={0}
-              bottom={0}
-              alignItems="center"
-              justifyContent="center"
-              width={'$4'}
-              pointerEvents="none"
-            >
-              <ChevronDown size={getFontSize((props.size ?? '$true') as any)} />
-            </YStack>
-          )}
         </Select.Viewport>
       </Select.Content>
       {native && (
@@ -140,6 +113,9 @@ export function SelectItem(props) {
           <Sheet
             native
             modal
+            snapPointsMode="fit"
+            position={position}
+            onPositionChange={setPosition}
             dismissOnSnapToBottom
             animationConfig={{
               type: 'spring',
