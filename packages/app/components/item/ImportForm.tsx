@@ -6,12 +6,13 @@ import DocumentPicker from './DocumentPicker/DocumentPicker';
 import Papa from 'papaparse';
 import { InformUser } from 'app/utils/ToastUtils';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
+import { useAddItem } from 'app/hooks/items';
 
 interface ImportFormProps {
   showSubmitButton?: boolean;
   closeModalHandler?: () => void;
-  packId: string;
-  ownerId: string;
+  packId?: string;
+  ownerId?: string;
   currentPack?: {
     items: Array<{
       category: {
@@ -19,6 +20,7 @@ interface ImportFormProps {
       };
     }>;
   } | null;
+  currentpage?: string;
 }
 
 interface SelectedType {
@@ -32,14 +34,14 @@ const data = [
 ];
 
 export const ImportForm: FC<ImportFormProps> = ({
-  showSubmitButton = true,
   packId,
-  currentPack,
   ownerId,
   closeModalHandler,
+  currentpage,
 }) => {
   const { currentTheme } = useTheme();
-  const { isLoading, isError, addPackItem } = useAddPackItem();
+  const { addPackItem } = useAddPackItem();
+  const { handleAddNewItem } = useAddItem();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
@@ -102,11 +104,28 @@ export const ImportForm: FC<ImportFormProps> = ({
                 };
               });
 
-              data.forEach((item, index) => {
-                if (index < data.length - 1) {
-                  addPackItem(item);
-                }
-              });
+              console.log(data);
+
+              if (currentpage === 'items') {
+                data.forEach((item, index) => {
+                  if (index < data.length - 1) {
+                    handleAddNewItem(item, () => {
+                      InformUser({
+                        title: 'Items imported successfully',
+                        placement: 'bottom',
+                        duration: 3000,
+                        style: { backgroundColor: 'green' },
+                      });
+                    });
+                  }
+                });
+              } else {
+                data.forEach((item, index) => {
+                  if (index < data.length - 1) {
+                    addPackItem(item);
+                  }
+                });
+              }
             } catch (error) {
               InformUser({
                 title:
