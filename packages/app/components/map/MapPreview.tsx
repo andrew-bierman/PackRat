@@ -1,7 +1,9 @@
 import { RImage } from '@packrat/ui';
 import { useProcessedShape, useMapPreviewData } from './useMapPreview';
+import { useAuthUserToken } from 'app/auth/hooks';
 export default function MapPreview({ shape }) {
   const processedShape = useProcessedShape(shape);
+  const { token } = useAuthUserToken();
   const mapPreviewData: any = useMapPreviewData(shape, processedShape);
 
   if (!mapPreviewData) return null;
@@ -14,6 +16,9 @@ export default function MapPreview({ shape }) {
       }}
       source={{
         uri: mapPreviewData.uri,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }}
     />
   );

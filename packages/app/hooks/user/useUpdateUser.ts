@@ -13,7 +13,7 @@ export const useUpdateUser = () => {
       setUser(updatedUser);
       return updatedUser; // Return the updated user or a value to indicate success
     } catch (error) {
-      console.error('Failed to update the user');
+      console.error('Failed to update the user', error);
       throw error;
     }
   };

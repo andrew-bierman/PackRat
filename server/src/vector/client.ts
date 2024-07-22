@@ -3,19 +3,19 @@ import { AiClient } from '../integrations/ai/client';
 interface VectorsQueryResponse {
   result: {
     count: number;
-    matches: { id: string; namespace: string; score: number }[];
+    matches: Array<{ id: string; namespace: string; score: number }>;
   };
   result_info: string | null;
   success: boolean;
-  errors: { code: number; message: string }[];
-  messages: { code: number; message: string }[];
+  errors: Array<{ code: number; message: string }>;
+  messages: Array<{ code: number; message: string }>;
 }
 
 class VectorClient {
   private static _instance: VectorClient | null = null;
-  private apiKey: string;
-  private indexName: string;
-  private accountId: string;
+  private readonly apiKey: string;
+  private readonly indexName: string;
+  private readonly accountId: string;
   private readonly VECTORIZE_INDEX_URL: string;
 
   private constructor(apiKey: string, indexName: string, accountId: string) {
@@ -149,7 +149,7 @@ class VectorClient {
     content: string,
     namespace: string,
     topK: number = 3,
-    filter?: { [key: string]: any },
+    filter?: Record<string, any>,
   ): Promise<VectorsQueryResponse> {
     const vector = await AiClient.getEmbedding(content);
     const url = `${this.VECTORIZE_INDEX_URL}/query`;

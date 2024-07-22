@@ -6846,6 +6846,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^1.23.1":
+  version: 1.23.1
+  resolution: "@react-native-async-storage/async-storage@npm:1.23.1"
+  dependencies:
+    merge-options: "npm:^3.0.4"
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.60 <1.0
+  checksum: 10/9d0acc7edb0ba9ee414d6e62c656e5d571c9d9615e7e9f4748865b965178998f2e73786b8050387ada00ddb6faaca97b5cf2e010ceaeebe91571991364a0f515
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:12.3.6":
   version: 12.3.6
   resolution: "@react-native-community/cli-clean@npm:12.3.6"
@@ -28625,6 +28636,7 @@ __metadata:
     "@babel/runtime": "npm:^7.21.0"
     "@manypkg/cli": "npm:^0.21.0"
     "@prisma/extension-accelerate": "npm:^0.6.2"
+    "@react-native-async-storage/async-storage": "npm:^1.23.1"
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"

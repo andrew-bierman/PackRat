@@ -9,6 +9,13 @@ interface HapticRButtonProps extends ButtonProps {
 const StyledButton = styled(Button, {
   backgroundColor: '#0C66A1', // temp fix, we need to set up proper tamagui theme
   color: 'white',
+  variants: {
+    disabled: {
+      true: {
+        backgroundColor: '#5C788A',
+      },
+    },
+  },
 } as any);
 
 const RButton = React.forwardRef<HTMLElement, HapticRButtonProps>(
