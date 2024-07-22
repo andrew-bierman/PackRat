@@ -4,7 +4,7 @@ import useResponsive from 'app/hooks/useResponsive';
 import Loader from '../Loader';
 import useTheme from '../../hooks/useTheme';
 import Layout from 'app/components/layout/Layout';
-import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
+import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 import { PaginationLimit } from '../paginationChooseLimit';
 
 interface Category {
@@ -101,23 +101,23 @@ export const ItemsTable = ({
             padding: 30,
             backgroundColor: isDark ? '#1A1A1D' : 'white',
             width: '100%',
+            borderRadius: 12,
+            
           }}
         >
           {isLoading ? (
             <Loader />
           ) : (
-            <PaginatedSortedTable
+            <BasicTable
               groupedData={groupedData}
-              handleCheckboxChange={handleCheckboxChange}
               onDelete={onDelete}
-              hasPermissions={hasPermissions}
+              handleCheckboxChange={handleCheckboxChange}
               currentPack={currentPack}
-              refetch={refetch}
+              hasPermissions={hasPermissions}
+              refetch={refetch ?? false}
               setRefetch={setRefetch}
-              totalPages={totalPages}
-              page={page}
-              setPage={setPage}
-            />
+            ></BasicTable>
+            // <></>
           )}
           <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
