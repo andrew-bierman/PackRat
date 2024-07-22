@@ -1,4 +1,5 @@
 import {
+  DatePickerProvider,
   DatePickerProvider as _DatePickerProvider,
   useDatePickerContext,
 } from '@rehookify/datepicker';
@@ -310,25 +311,7 @@ export function RangePicker({
   //   const Y = now.getFullYear()
   //   const D = now.getDate()
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-      config={{
-        selectedDates,
-        onDatesChange,
-        offsetDate,
-        onOffsetChange,
-        dates: {
-          mode: 'range',
-          // limit years to 2 years before and after current year
-          //   minDate: new Date(Y, M - 2, 1),
-          //   maxDate: new Date(Y, M + 2, 0),
-        },
-        calendar: {
-          offsets: [-1, 1],
-        },
-      }}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
           value={`${selectedDates[0]?.toDateString() || ''}${
@@ -345,7 +328,25 @@ export function RangePicker({
 
       <DatePicker.Content>
         <DatePicker.Content.Arrow />
-        <DatePickerBody />
+        <DatePickerProvider
+          config={{
+            selectedDates,
+            onDatesChange,
+            offsetDate,
+            onOffsetChange,
+            dates: {
+              mode: 'range',
+              // limit years to 2 years before and after current year
+              //   minDate: new Date(Y, M - 2, 1),
+              //   maxDate: new Date(Y, M + 2, 0),
+            },
+            calendar: {
+              offsets: [-1, 1],
+            },
+          }}
+        >
+          <DatePickerBody />
+        </DatePickerProvider>
       </DatePicker.Content>
     </DatePicker>
   );

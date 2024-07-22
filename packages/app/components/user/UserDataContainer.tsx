@@ -42,19 +42,11 @@ export default function UserDataContainer({
 }: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [dataState, setDataState] = useState(
-    data.length > 0 ? Array(data.length).fill(false) : [],
-  );
-  useEffect(() => {
-    setDataState(Array(data.length).fill(false));
-  }, [data]);
   const currentUser = useAuthUser();
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
-
-  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
@@ -62,10 +54,9 @@ export default function UserDataContainer({
       <UserDataCard
         key={item.id}
         {...item}
-        state={dataState}
-        setState={setDataState}
         index={index}
-        differentUser={differentUser}
+        differentUser={currentUser?.id !== item.owner_id}
+        currentUserId={currentUser?.id}
       />
     );
   };
@@ -96,19 +87,17 @@ export default function UserDataContainer({
       <LargeCard
         customStyle={{
           backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
+          padding: 10,
         }}
       >
         <RStack
           style={{
-            gap: 16,
+            gap: 10,
             alignItems: 'center',
-            justifyContent: 'center',
             width: '100%',
-            padding: 24,
           }}
         >
           <RText
-            // color={currentTheme.colors.black}
             style={{
               textTransform: 'capitalize',
               fontSize: 24,
@@ -120,10 +109,6 @@ export default function UserDataContainer({
           </RText>
           <RStack
             style={{
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
               width: '100%',
               padding: 4,
             }}
@@ -145,10 +130,11 @@ export default function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    paddingHorizontal: 3,
-                    paddingVertical: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    padding: 10,
+                    // paddingHorizontal: 1,
+                    // paddingVertical: 3,
+                    // justifyContent: 'center',
+                    // alignItems: 'center',
                   }}
                 />
 

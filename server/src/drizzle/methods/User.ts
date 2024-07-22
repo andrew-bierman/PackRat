@@ -256,7 +256,7 @@ export class User {
   }
 
   async findUnique(query: {
-    where: { email?: string; googleId?: string };
+    where: { email?: string; googleId?: string; id?: string; token?: string };
     with?: { favoriteDocuments?: boolean; id?: boolean; username?: boolean };
   }) {
     try {
@@ -266,6 +266,12 @@ export class User {
       }
       if (query.where.googleId) {
         conditions.push(eq(UserTable.googleId, query.where.googleId));
+      }
+      if (query.where.id && query.where.token) {
+        conditions.push(
+          eq(UserTable.id, query.where.id),
+          eq(UserTable.token, query.where.token),
+        );
       }
       const user = await DbClient.instance
         .select()

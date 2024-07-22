@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { Storage, storageEvents } from 'app/utils/storage';
 
+storageEvents.setMaxListeners(20);
+
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
 const useAsyncState = (initialValue) => {
   return useReducer((state = null, action) => [false, action], initialValue);
 };
 
-export function useStorage(key: string): UseStateHook<string> {
-  const [state, setState] = useAsyncState(key);
+export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
+  const [state, setState] = useAsyncState(initialValue || '');
 
   useEffect(() => {
     (async () => {
@@ -30,12 +32,12 @@ export function useStorage(key: string): UseStateHook<string> {
       setState(null);
     };
 
-    storageEvents.once('change', handleChange);
-    storageEvents.once('remove', handleRemove);
+    storageEvents.on('change', handleChange);
+    storageEvents.on('remove', handleRemove);
 
     return () => {
-      storageEvents.removeListener('change', handleChange);
-      storageEvents.removeListener('remove', handleRemove);
+      storageEvents.off('change', handleChange);
+      storageEvents.off('remove', handleRemove);
     };
   }, [key]);
 

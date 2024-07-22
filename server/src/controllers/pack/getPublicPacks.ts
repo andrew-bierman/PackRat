@@ -1,28 +1,26 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { getPublicPacksService } from '../../services/pack/pack.service';
 import { z } from 'zod';
+import { type Context } from 'hono';
 
-/**
- * Retrieves public packs based on the given query parameter.
- * @param {Object} req - the request object
- * @param {Object} res - the response object
- * @return {Promise} - a promise that resolves with the retrieved public packs
- */
-// export const getPublicPacks = async (req, res, next) => {
-//   try {
-//     const { queryBy } = req.query;
-
-//     const publicPacks = await getPublicPacksService(queryBy);
-
-//     res.locals.data = publicPacks;
-//     responseHandler(res);
-//   } catch (error) {
-//     next(PackNotFoundError);
-//   }
-// };
+export const getPublicPacks = async (c: Context) => {
+  try {
+    const { queryBy } = await c.req.query();
+    const packs = await getPublicPacksService(queryBy);
+    return c.json(
+      { packs, message: 'Public packs retrieved successfully' },
+      200,
+    );
+  } catch (error) {
+    return c.json(
+      { error: `Failed to get public packs: ${error.message}` },
+      500,
+    );
+  }
+};
 
 export function getPublicPacksRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(z.object({ queryBy: z.string() }))
     .query(async (opts) => {
       const { queryBy } = opts.input;

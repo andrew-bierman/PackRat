@@ -56,23 +56,13 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const headerRow = ['Item Name', 'Weight', 'Quantity', ''];
-  let flexArr = [2, 1, 1, 1];
   const { deletePackItem } = useDeletePackItem();
 
-  if (
-    Platform.OS === 'android' ||
-    Platform.OS === 'ios' ||
-    window.innerWidth < 900
-  ) {
-    flexArr = [1, 1, 1, 1];
-  }
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={String(error)} />;
-  const isWeb = Platform.OS === 'web';
 
   return (
-    <View style={[styles.container, !isWeb && { width: '100%' }]}>
+    <View style={[styles.container]}>
       {data?.length ? (
         <>
           <BasicTable
@@ -81,7 +71,7 @@ export const TableContainer = ({
             handleCheckboxChange={handleCheckboxChange}
             currentPack={currentPack}
             hasPermissions={isAuthUserPack}
-            refetch={refetch}
+            refetch={refetch ?? false}
             setRefetch={setRefetch}
           ></BasicTable>
           {/* <Table style={styles.tableStyle} flexArr={flexArr}>

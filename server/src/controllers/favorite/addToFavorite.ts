@@ -1,35 +1,20 @@
+import { type Context } from 'hono';
 import { addToFavoriteService } from '../../services/favorite/favorite.service';
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 
-// import { prisma } from '../../prisma';
-/**
- * Adds or removes a pack from a user's favorites list and updates the corresponding pack's favorited_by array.
- * @param {Object} req - The request object containing the packId and userId properties in the body.
- * @param {Object} res - The response object used to send the HTTP response.
- * @return {Object} The updated user object in the response body.
- */
-// export const addToFavorite = async (req, res, next) => {
-//   const { packId, userId } = req.body;
-//   await addToFavoriteService(packId, userId);
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       id: userId, // Assuming userId is the user's ID
-//     },
-//     select: {
-//       // Exclude the 'password' field
-//       id: true,
-//       email: true,
-//       name: true, // Include other fields you want
-//     },
-//   });
-//   if (!user) next(UserNotFoundError);
-//   res.locals.data = user;
-//   responseHandler(res);
-// };
+export const addToFavorite = async (c: Context) => {
+  try {
+    const { packId, userId } = await c.req.json();
+    const response = await addToFavoriteService(packId, userId);
+    return c.json({ response }, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function addToFavoriteRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.addToFavorite)
     .mutation(async (opts) => {
       const { packId, userId } = opts.input;

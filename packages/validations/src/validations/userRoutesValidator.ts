@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 const emailValidator = z
-  .string()
+  .string({ required_error: 'Email is required' })
   .email()
   .transform((str) => str.trim().toLowerCase());
 
 const passwordValidator = z
-  .string()
+  .string({ required_error: 'Password is required' })
   .min(7)
   .refine((str) => !str.includes('password'), {
     message: `The password cannot contain the word 'password'`,
@@ -70,6 +70,10 @@ export const editUser = z.object({
 
 export const deleteUser = z.object({
   userId: z.string(),
+});
+
+export const deleteUserForm = z.object({
+  confirmText: z.literal('delete'),
 });
 
 export const linkFirebaseAuth = z.object({

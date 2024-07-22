@@ -18,6 +18,7 @@ export const Navbar = () => {
   const styles = useMemo(() => {
     return StyleSheet.create(loadStyles(currentTheme, isScrolled, screenWidth));
   }, [isScrolled, currentTheme, screenWidth]);
+  const navigate = useNavigate();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -35,8 +36,18 @@ export const Navbar = () => {
               height={40}
               style={styles.logo}
               alt="PackRat Logo"
+              onClick={() => {
+                navigate('/');
+              }}
             />
-            <Text style={styles.logoText}>PackRat</Text>
+            <Text
+              style={styles.logoText}
+              onPress={() => {
+                navigate('/');
+              }}
+            >
+              PackRat
+            </Text>
           </View>
           <Drawer />
         </View>
@@ -60,31 +71,31 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     ? NavbarStyles.floatingBg
     : currentTheme.colors.background;
 
-  return {
+  return StyleSheet.create({
     drawerStyles: {
       backgroundColor: currentTheme.colors.background,
     },
     safeArea: {
       backgroundColor,
       width: '100%',
-      margin: 'auto',
+      margin: 0,
       transition: NavbarStyles.transition,
-      ...(isFloating
-        ? {
-            backdropFilter: NavbarStyles.floatingBlur,
-            marginTop: NavbarStyles.floatingSpacing,
-            padding: NavbarStyles.floatingSpacing,
-            borderRadius: NavbarStyles.floatingRadius,
-          }
-        : {}),
-      ...(isWeb
-        ? {
-            position: 'fixed',
-            top: 0,
-            zIndex: 100,
-            width: '100vw',
-          }
-        : {}),
+      ...Platform.select({
+        web: {
+          ...(isFloating
+            ? {
+                backdropFilter: NavbarStyles.floatingBlur,
+                marginTop: NavbarStyles.floatingSpacing,
+                padding: NavbarStyles.floatingSpacing,
+                borderRadius: NavbarStyles.floatingRadius,
+              }
+            : {}),
+          position: 'fixed' as 'fixed' | 'relative',
+          top: 0,
+          zIndex: 100,
+          width: Platform.OS === 'web' ? '100vw' : "100%",
+        },
+      }),
     },
     container: {
       width: '100vw',
@@ -112,11 +123,13 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     logo: {
       marginRight: 10,
+      cursor: 'pointer',
     },
     logoText: {
       color: currentTheme.colors.text,
       fontSize: 38,
       fontWeight: '900',
+      cursor: 'pointer',
     },
     menuBar: {
       flexDirection: 'row',
@@ -143,5 +156,5 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       // Apply styles for the selected item's text
       // ...
     },
-  };
+  });
 };

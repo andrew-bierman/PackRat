@@ -49,21 +49,13 @@ export function ChatList({ data }: { data: Message[] }) {
   }, [data]);
 
   return (
-    <View
-      flexDirection="column"
-      height={'100%'}
-      minWidth="100%"
-      $group-window-gtXs={{ height: 700 }}
-    >
-      <List
-        $group-window-gtXs={{
-          padding: '$10',
-        }}
-        data={messages}
-        renderItem={renderItem}
-        windowSize={2}
-      />
-    </View>
+    <List
+      $group-window-gtXs={{
+        padding: '$10',
+      }}
+      data={messages}
+      renderItem={renderItem}
+    />
   );
 }
 
@@ -74,7 +66,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
   const itsMe = role === 'user';
   const avatar = itsMe ? avatars[0] : avatars[1];
   const [showMessage, setShowMessage] = useState(false);
-  const showDelay = index * 50;
+  const showDelay = 10;
   const [start, setStart] = useState(false);
   const { isDark } = useTheme();
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import CreateTrip from 'app/screens/trip/createTrip';
 
 import { Platform } from 'react-native';
@@ -17,7 +18,6 @@ export default function Trip() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Create Trip',
-          name: 'Create Trip',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

@@ -6,7 +6,7 @@
  */
 export function formatNumber(num: number): string {
   if (num != null) {
-    return Number(num).toLocaleString();
+    return Number(num).toFixed(2).toLocaleString();
   } else {
     return '';
   }

@@ -15,10 +15,7 @@ interface CustomCardProps {
   type: 'pack' | 'trip';
   destination?: string;
   data: {
-    owner_id: {
-      id: string;
-      username?: string;
-    };
+    owner_id: string
     owners?: Array<{ name: string }> | null;
   };
 }
@@ -38,6 +35,7 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
+  console.log('CustomCardProps ', data  )
 
   return (
     <View
@@ -49,6 +47,7 @@ export const CustomCard = ({
         isWeb && {
           borderRadius: 10,
           padding: isWeb ? '15 25' : 0,
+          width: '80%',
         },
       ]}
     >
@@ -72,7 +71,7 @@ export const CustomCard = ({
           )}
         </View>
         <RSeparator />
-        {type === 'pack' && authUser?.id === data.owner_id.id ? (
+        {type === 'pack' && authUser?.id === data.owner_id ? (
           <>
             <View
               style={
@@ -82,7 +81,7 @@ export const CustomCard = ({
                   paddingRight: 16,
                   paddingLeft: 16,
                   position: 'relative',
-                  zIndex: '1',
+                  zIndex: 1,
                 } as any
               }
             >

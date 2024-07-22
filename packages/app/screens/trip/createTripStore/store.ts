@@ -29,7 +29,7 @@ export const setDateRange = (
   } | null,
 ): SetDateRangeAction => ({
   type: 'setDateRange',
-  payload: dateRange,
+  payload: dateRange || { start_date: new Date(), end_date: new Date() },
 });
 
 export const createTripInitialState: Partial<Record<addTripKey, any>> = {

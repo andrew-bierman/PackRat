@@ -1,7 +1,6 @@
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import React, { useState } from 'react';
-import DropdownComponent from '../Dropdown';
-import { RLabel } from '@packrat/ui';
+import { DropdownComponent, RLabel } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface PaginationLimitProps {
@@ -23,7 +22,7 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
         value={limit}
         width="100%"
         accessibilityLabel="choose the number of items to be displayed"
-        placeholder="Choose a value"
+        placeholder={limit}
         onValueChange={(itemValue: string) => {
           setLimit(itemValue);
         }}
@@ -32,12 +31,13 @@ export const PaginationLimit = ({ limit, setLimit }: PaginationLimitProps) => {
     </View>
   );
 };
-const loadStyles = () => ({
-  selectContainer: {
-    marginTop: Platform.OS === 'web' ? 10 : 20,
-    width: '15rem',
-    marginLeft: 20,
-    marginBottom: Platform.OS === 'web' ? 10 : 70,
-    alignSelf: 'left',
-  },
-});
+const loadStyles = () => {
+  return {
+    selectContainer: {
+      width: '15rem',
+      marginLeft: 20,
+      marginBottom: 70,
+      alignSelf: 'left',
+    },
+  };
+};

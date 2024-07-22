@@ -2,7 +2,11 @@ import { useState } from 'react';
 import * as Clipboard from 'expo-clipboard';
 import { Platform } from 'react-native';
 
-export const useCopyClipboard = (link: string) => {
+interface useCopyClipboardProps {
+  link: string | undefined;
+}
+
+export const useCopyClipboard = ({ link }: useCopyClipboardProps) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyLink = (overideLink = '') => {
