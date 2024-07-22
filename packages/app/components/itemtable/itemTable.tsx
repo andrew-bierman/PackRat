@@ -117,7 +117,6 @@ export const ItemsTable = ({
               refetch={refetch ?? false}
               setRefetch={setRefetch}
             ></BasicTable>
-            // <></>
           )}
           <PaginationLimit limit={limit} setLimit={setLimit} />
         </View>
