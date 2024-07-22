@@ -4,6 +4,7 @@ import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import DocumentPicker from './DocumentPicker/DocumentPicker';
 import Papa from 'papaparse';
+import { InformUser } from 'app/utils/ToastUtils';
 
 interface ImportFormProps {
   handleSubmit: () => void;
@@ -46,7 +47,6 @@ export const ImportForm: FC<ImportFormProps> = ({
       const res = await DocumentPicker.pick({
         type: [selectedType.value],
       });
-      console.log('File imported', res);
 
       if (selectedType.value === '.csv') {
         let fileContent;
@@ -61,7 +61,34 @@ export const ImportForm: FC<ImportFormProps> = ({
         Papa.parse(fileContent, {
           header: true,
           complete: (result) => {
-            console.log('Parsed CSV data:', result.data);
+            const expectedHeaders = [
+              'Name',
+              'Weight',
+              'Unit',
+              'Quantity',
+              'Category',
+            ];
+            // Get headers from the parsed result
+            const parsedHeaders = result.meta.fields;
+            try {
+              // Check if all expected headers are present
+              const allHeadersPresent = expectedHeaders.every((header) =>
+                parsedHeaders.includes(header),
+              );
+              if (!allHeadersPresent) {
+                throw new Error(
+                  'CSV does not contain all the expected Item headers',
+                );
+              }
+              console.log('Parsed CSV data:', result.data);
+            } catch (error) {
+              InformUser({
+                title: 'CSV does not contain the expected Item headers',
+                placement: 'bottom',
+                duration: 3000,
+                style: { backgroundColor: 'red' },
+              });
+            }
           },
           error: (error) => {
             console.error('Error parsing CSV:', error);

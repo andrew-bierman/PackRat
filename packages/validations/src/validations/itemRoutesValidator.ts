@@ -76,3 +76,13 @@ export const getSimilarItems = z.object({
     .nativeEnum(PackAndItemVisibilityFilter)
     .default(PackAndItemVisibilityFilter.ALL),
 });
+
+export const importItemHeaders = z.object({
+  Name: z.string(),
+  Weight: z.string(),
+  Unit: z.string(),
+  Quantity: z.string(),
+  Category: z.string(),
+});
+
+export type ImportItemHeaders = z.infer<typeof importItemHeaders>;
