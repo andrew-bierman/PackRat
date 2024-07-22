@@ -11,18 +11,25 @@ binding = "DB"
 database_name = "production"
 database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
 
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VECTOR_INDEX"
+index_name = "vector-index"
+
 [[queues.producers]]
-  queue = "etl-queue"
-  binding = "ETL_QUEUE"
+queue = "etl-queue"
+binding = "ETL_QUEUE"
 
 [[queues.consumers]]
-  queue = "etl-queue"
-  max_batch_size = 10
-  max_batch_timeout = 5
+queue = "etl-queue"
+max_batch_size = 10
+max_batch_timeout = 5
 
 [[r2_buckets]]
-  bucket_name = "etl-bucket"
-  binding = "ETL_BUCKET"
+bucket_name = "etl-bucket"
+binding = "ETL_BUCKET"
 
 # Add vars below
 # [vars]
@@ -37,3 +44,6 @@ database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
 # WEATHER_URL=""
 # WEATHER_WEEK_URL=""
 # OPENWEATHER_KEY=""
+# VECTORIZE_API_KEY=""
+# AI_API_KEY=""
+# CLOUDFLARE_ACCOUNT_ID=""

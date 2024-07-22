@@ -6,3 +6,4 @@ export * from './duplicatePublicPack';
 export * from './getPackById';
 export * from './getPublicPacks';
 export * from './scorePack';
+export * from './getSimilarPacks';

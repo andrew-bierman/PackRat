@@ -17,7 +17,7 @@ export function deletePackRoute() {
     .input(validator.deletePack)
     .mutation(async (opts) => {
       const { packId } = opts.input;
-      await deletePackService(packId);
+      await deletePackService(packId, opts.ctx.executionCtx);
       return { msg: 'pack was deleted successfully' };
     });
 }

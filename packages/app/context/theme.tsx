@@ -1,12 +1,16 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer, useState } from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStorageState } from 'app/hooks/storage/useStorageState';
 
 const initialState = {
-  isDark: false,
-  isLight: true,
+  isDark: null,
+  isLight: null,
   currentTheme: theme,
+  loading: true,
 };
 const handlers = {
   /**
@@ -58,6 +62,29 @@ const ThemeContext = createContext({
  */
 export const ThemeProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [[, storedIsEnabled], setStoredIsEnabled] =
+    useStorageState('isEnabled');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTheme = async () => {
+      try {
+        if (storedIsEnabled !== null) {
+          const isEnabled = JSON.parse(storedIsEnabled);
+          dispatch({
+            type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
+          });
+        } else {
+          dispatch({ type: 'ENABLE_LIGHT_MODE' });
+        }
+      } catch (e) {
+        console.error('Local storage is unavailable:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTheme();
+  }, [storedIsEnabled]);
 
   /**
    * Enable dark mode.
@@ -66,6 +93,7 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableDarkMode = () => {
     dispatch({ type: 'ENABLE_DARK_MODE' });
+    setStoredIsEnabled(JSON.stringify(true));
   };
   /**
    * Enables light mode.
@@ -75,11 +103,12 @@ export const ThemeProvider = ({ children }) => {
    */
   const enableLightMode = () => {
     dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    setStoredIsEnabled(JSON.stringify(false));
   };
 
   const key = `themeContext + isDark=${state.isDark} + isLight=${state.isLight}`;
 
-  return (
+  return loading ? null : (
     <ThemeContext.Provider
       key={key}
       value={{

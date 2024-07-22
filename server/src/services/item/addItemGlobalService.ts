@@ -1,7 +1,9 @@
+import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
+import { VectorClient } from '../../vector/client';
 // import { prisma } from '../../prisma';
 
 /**
@@ -21,6 +23,7 @@ export const addItemGlobalService = async (
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
+  executionCtx: ExecutionContext,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -41,5 +44,17 @@ export const addItemGlobalService = async (
     global: true,
     ownerId,
   });
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
+      id: newItem.id,
+      content: name,
+      namespace: 'items',
+      metadata: {
+        isPublic: newItem.global,
+      },
+    }),
+  );
+
   return newItem;
 };
