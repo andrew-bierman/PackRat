@@ -11206,6 +11206,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/papaparse@npm:^5":
+  version: 5.3.14
+  resolution: "@types/papaparse@npm:5.3.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/9bd5cc0e6a2c02def6c8903dc4604e499907cb465186ed3532390468082a06f023adbac0216428d0d8e8fe017206780a03d20007041e9fed47c8d391cd69a536
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
@@ -12706,6 +12715,7 @@ __metadata:
     "@types/jest": "npm:^29.5.11"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.14.2"
+    "@types/papaparse": "npm:^5"
     "@types/react": "npm:~18.2.55"
     "@types/react-native": "npm:^0.72.5"
     "@types/react-test-renderer": "npm:^18.0.0"
@@ -12757,6 +12767,7 @@ __metadata:
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
     osmtogeojson: "npm:^3.0.0-beta.5"
+    papaparse: "npm:^5.4.1"
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -12764,6 +12775,7 @@ __metadata:
     react-hook-form: "npm:^7.51.0"
     react-native: "npm:0.73.6"
     react-native-action-button: "npm:^2.8.5"
+    react-native-document-picker: "npm:^9.3.0"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
     react-native-flash-message: "npm:^0.4.2"
@@ -28634,6 +28646,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"papaparse@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "papaparse@npm:5.4.1"
+  checksum: 10/5e6dc978187182ad2efa1d264ffe73d2042cd23b8fb1dcb0b0f5c8c7c772c11e3eb4e166fb0893880ed24529a96abe9065d704cc5b4cb96abf037413cfe43788
+  languageName: node
+  linkType: hard
+
 "param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -30499,6 +30518,22 @@ __metadata:
     moment:
       optional: true
   checksum: 10/3fd911ce33bb9f57335781b0eb9211ea331abf821ed178092e3e5c8788512e51458d7e064e01f58733171257da5b569e726418c88d6b56c464b131488ef0fd8b
+  languageName: node
+  linkType: hard
+
+"react-native-document-picker@npm:^9.3.0":
+  version: 9.3.0
+  resolution: "react-native-document-picker@npm:9.3.0"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 10/173fbce533622b47426a481811bef7431b133ff93d59ab01102b94d161d8f7901a75413aff881ffd19586ecc9cdb196b26e6254c7dc08a3aaac3dce74b53dadd
   languageName: node
   linkType: hard
 

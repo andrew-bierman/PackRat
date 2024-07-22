@@ -47,12 +47,8 @@ export const ImportItem = ({
   const { isLoading, isError, importPackItem } = useImportPackItem();
   const { editPackItem } = useEditPackItem(isItemPage);
 
-  const handleSubmit = (data: Item) => {
-    if (isEdit) {
-      editPackItem(data as any);
-    } else {
-      importPackItem(data);
-    }
+  const handleSubmit = () => {
+    console.log('Submit');
     if (closeModalHandler) closeModalHandler();
   };
 
