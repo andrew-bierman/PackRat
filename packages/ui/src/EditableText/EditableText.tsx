@@ -1,6 +1,5 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { TextInput } from 'react-native';
-
 import { useEditableText } from './useEditableText';
 import { LoadingPlaceholder } from '../LoadingPlaceholder';
 import { useInputFocus } from './useInputFocus';
@@ -38,7 +37,6 @@ export const EditableText = ({
         style={{
           fontSize: 20,
           fontWeight: 'bold',
-          // TODO change to theme value: currentTheme.colors.textPrimary
           color: '#0284c7',
           pointerEvents: 'auto',
         }}

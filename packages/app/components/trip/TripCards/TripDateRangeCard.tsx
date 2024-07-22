@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import React, { useState } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { format } from 'date-fns';
-import {
-  DatePickerModal,
-  enGB,
-  registerTranslation,
-} from 'react-native-paper-dates';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useTheme from 'app/hooks/useTheme';
-import { RStack, RText, Datepickers } from '@packrat/ui';
 import { TripCardBase } from './TripCardBase';
-import { View } from 'react-native';
-const { RangePicker } = Datepickers;
+import { RangePicker } from '@packrat/ui/src/Bento/elements/datepickers';
 
 export interface DateRange {
   start_date: Date | null;
@@ -44,8 +34,7 @@ export const TripDateRangeCard = ({
           end_date: dates[1],
         }
       : null;
-    console.log({ dateRange });
-    setDateRange(dateRange);
+    setDateRange(dateRange as DateRange);
     setSelectedDates(dates);
   };
 
@@ -60,16 +49,14 @@ export const TripDateRangeCard = ({
       )}
       title="Trip Date Range"
     >
-      <View style={{ width: '50vw' }}>
-        <RangePicker
-          selectedDates={selectedDates}
-          onDatesChange={onDatesChange}
-          offsetDate={offsetDate}
-          onOffsetChange={onOffsetChange}
-          open={open}
-          setOpen={setOpen}
-        />
-      </View>
+      <RangePicker
+        selectedDates={selectedDates}
+        onDatesChange={onDatesChange}
+        offsetDate={offsetDate}
+        onOffsetChange={onOffsetChange}
+        open={open}
+        setOpen={setOpen}
+      />
     </TripCardBase>
   );
 };

@@ -1,3 +1,4 @@
+import React from 'react';
 import Login from 'app/screens/LoginScreen';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import Settings from 'app/screens/user/Settings';
@@ -15,7 +16,6 @@ export default function SettingsPage() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Settings',
-          name: 'Settings',
           // http://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

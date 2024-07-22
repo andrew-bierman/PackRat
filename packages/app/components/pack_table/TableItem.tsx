@@ -11,8 +11,7 @@ import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 
-
-type ModalName = 'edit' | 'delete';
+type ModalName = 'edit' | 'delete' | null;
 
 interface TableItemProps {
   itemData: any;
@@ -24,6 +23,11 @@ interface TableItemProps {
   currentPack: any;
   refetch: boolean;
   setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface DropDownItems{
+  label: string,
+  onSelect: () => void,
 }
 
 const TableItem = ({
@@ -52,13 +56,13 @@ const TableItem = ({
     setActiveModal(null);
   };
 
-  let rowActionItems = [
+  let rowActionItems: DropDownItems[] = [
     { label: 'Delete', onSelect: () => openModal('delete') },
     // TODO Implement Ignore Pack Item functional
     // { label: 'Ignore', onSelect: () => {} },
   ];
 
-  if (authUser.id === itemData.ownerId) {
+  if (authUser && itemData && authUser.id === itemData.ownerId) {
     rowActionItems = [
       {
         label: 'Edit',
@@ -70,7 +74,7 @@ const TableItem = ({
 
   let rowData = [
     <RText px={8}>{name}</RText>,
-    <RText px={0}>{${formatNumber(weight)} ${unit}}</RText>,
+    <RText px={0}>{`${formatNumber(weight)} ${unit}`}</RText>,
     <RText px={0}>{quantity}</RText>,
   ];
   if (hasPermissions) {
@@ -84,7 +88,7 @@ const TableItem = ({
       rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
-  
+
   /*
   * this id is passed as pack id but it is a item id which is confusing
   Todo need to change the name for this passing argument and remaining functions which are getting it

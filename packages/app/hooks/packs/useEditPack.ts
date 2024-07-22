@@ -5,10 +5,14 @@ export const useEditPack = () => {
 
   const mutation = queryTrpc.editPack.useMutation();
 
-  const editPack = (updatedPack) => {
+  const editPack = (
+    updatedPack,
+    options?: { onSuccess?: (queryUtils: typeof utils) => void },
+  ) => {
     mutation.mutate(updatedPack, {
       onSuccess: () => {
         utils.getPacks.invalidate();
+        options?.onSuccess?.(utils);
       },
     });
   };

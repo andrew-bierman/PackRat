@@ -1,20 +1,19 @@
 import { Feather as OriginalFeather } from '@expo/vector-icons';
 import {
-  RButton,
-  RCheckbox,
-  RSkeleton,
-  RStack,
+  DropdownComponent,
   RText as OriginalRText,
+  RCheckbox,
+  RStack,
 } from '@packrat/ui';
+import { categoryIcons } from 'app/constants/pack/icons';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
+import useTheme from 'app/hooks/useTheme';
+import { formatNumber } from 'app/utils/formatNumber';
+import React from 'react';
 import { View } from 'react-native';
 import { Row } from 'react-native-table-component';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import useTheme from 'app/hooks/useTheme';
-import DropdownComponent from '../Dropdown';
-import { categoryIcons } from 'app/constants/pack/icons';
-import { formatNumber } from 'app/utils/formatNumber';
 import loadStyles from './packtable.style';
-import React from 'react';
 
 const RText: any = OriginalRText;
 const Feather: any = OriginalFeather;
@@ -47,11 +46,17 @@ interface CategoryRowProps {
 interface TitleRowProps {
   title: string;
 }
+const optionValues = [
+  { label: 'kg', value: 'kg' },
+  { label: 'g', value: 'g' },
+  { label: 'lb', value: 'lb' },
+  { label: 'oz', value: 'oz' },
+];
 
 const TitleRow = ({ title }: TitleRowProps) => {
   const styles = useCustomStyles(loadStyles);
   const rowData = [
-    <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
+    <RStack style={{ flexDirection: 'row', ...styles.mainTitle }} key="2">
       <RText fontSize="$2" style={styles.titleText}>
         {title}
       </RText>
@@ -69,7 +74,10 @@ const CategoryRow = ({ category }: CategoryRowProps) => {
   const styles = useCustomStyles(loadStyles);
 
   const rowData = [
-    <RStack style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}>
+    <RStack
+      style={{ flexDirection: 'row', gap: 8, ...styles.categoryRow }}
+      key="1"
+    >
       <Feather
         name={categoryIcons[category]}
         size={16}
@@ -109,14 +117,24 @@ const IgnoreItemCheckbox = ({
 );
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
+  const { xxs, xxl, xs } = useResponsive();
   return (
-    <DropdownComponent
-      value={value}
-      accessibilityLabel="Select weight unit"
-      placeholder="Select weight unit"
-      onValueChange={(itemValue) => onChange(itemValue)}
-      data={['kg', 'g', 'lb', 'oz']}
-    />
+    <View
+      style={{
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '55%',
+      }}
+    >
+      <DropdownComponent
+        value={value}
+        data={optionValues}
+        onValueChange={(itemValue) => onChange(itemValue)}
+        placeholder={`Select Weight unit :  ${value}`}
+        native={true}
+      />
+    </View>
   );
 };
 
@@ -137,10 +155,10 @@ const ErrorMessage = ({ message }: ErrorMessageProps) => (
 );
 
 export {
-  WeightUnitDropdown,
-  TotalWeightBox,
-  IgnoreItemCheckbox,
-  ErrorMessage,
   CategoryRow,
+  ErrorMessage,
+  IgnoreItemCheckbox,
   TitleRow,
+  TotalWeightBox,
+  WeightUnitDropdown,
 };

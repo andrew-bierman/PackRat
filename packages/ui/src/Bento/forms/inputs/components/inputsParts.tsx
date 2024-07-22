@@ -164,6 +164,7 @@ const InputImpl = InputFrame.styleable((props, ref) => {
 const InputSection = styled(XGroup.Item, {
   justifyContent: 'center',
   alignItems: 'center',
+  overflow: 'hidden',
   context: InputContext,
 });
 

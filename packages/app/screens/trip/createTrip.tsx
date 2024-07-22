@@ -2,8 +2,7 @@ import React from 'react';
 import { RStack } from '@packrat/ui';
 import { ScrollView } from 'react-native';
 import { theme } from '../../theme';
-import WeatherCard from '../../components/weather/WeatherCard';
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
 import { SaveTripContainer } from 'app/components/trip/createTripModal';
 import useTheme from '../../hooks/useTheme';
@@ -18,8 +17,10 @@ import {
   TripActivityCard,
   TripDateRangeCard,
 } from 'app/components/trip/TripCards';
+import { WeatherData } from 'app/components/weather/WeatherData';
+import { disableScreen } from 'app/hoc/disableScreen';
 
-export default function Trips() {
+function Trips() {
   const styles = useCustomStyles(loadStyles);
 
   const placesAutoCompleteRef = useRef({});
@@ -28,18 +29,13 @@ export default function Trips() {
     photonDetails,
     isPhotonLoading,
     hasPhotonError,
-    weatherData,
-    weatherLoading,
-    weatherError,
-    weatherWeekData,
-    weekWeatherLoading,
-    weekWeatherError,
     parksData,
     filteredTrails,
+    latLng,
   } = useTripsData();
 
   const { isValid, setDateRange, togglePlace, tripStore, setTripValue } =
-    useCreateTripForm(weatherData, currentDestination, photonDetails);
+    useCreateTripForm(currentDestination, photonDetails);
 
   const dateRange = {
     start_date: tripStore.start_date,
@@ -52,15 +48,7 @@ export default function Trips() {
         {/* <MultiStepForm steps={steps} /> */}
         <RStack style={styles.container}>
           <TripSearchCard searchRef={placesAutoCompleteRef} />
-          {!weekWeatherError &&
-            !weatherError &&
-            !weatherLoading &&
-            !weekWeatherLoading && (
-              <WeatherCard
-                weatherObject={weatherData}
-                weatherWeek={weatherWeekData}
-              />
-            )}
+          {latLng ? <WeatherData latLng={latLng} /> : null}
           <TripTrailCard
             data={filteredTrails || []}
             onToggle={(trail) => togglePlace('trail', trail)}
@@ -104,6 +92,8 @@ const loadStyles = () => ({
   },
   container: {
     gap: 50,
-    padding: 50,
+    padding: 20,
   },
 });
+
+export default disableScreen(Trips);

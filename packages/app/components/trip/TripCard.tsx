@@ -70,7 +70,7 @@ export default function TripCard({
           ? styles.searchContainer
           : isMap
             ? styles.mapCard
-            : styles.containerMobile
+            : styles.mutualStyles
               ? styles.containerMobile
               : styles.mutualStyles
       }
