@@ -14,6 +14,7 @@ import {
   RButton as OriginalRButton,
   RInput as OriginalRInput,
   RStack,
+  RText,
 } from '@packrat/ui';
 
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
@@ -37,6 +38,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 import { MapProps } from './models';
+import { useUserQuery } from 'app/auth/hooks';
+import { useUpdateUser } from 'app/hooks/user/useUpdateUser';
 
 interface GeoJsonProperties {
   name?: string;
@@ -66,9 +69,13 @@ Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 const NativeMap: React.FC<MapProps> = ({
   shape: shapeProp,
   onExitFullScreen,
+  mapName: predefinedMapName,
   forceFullScreen = false,
-  downloadable = true,
+  shouldEnableDownload = true,
 }) => {
+  const { user, refetch } = useUserQuery();
+  console.log({ user });
+  const updateUser = useUpdateUser();
   const styles = useCustomStyles(loadStyles);
   const {
     camera,
@@ -85,7 +92,7 @@ const NativeMap: React.FC<MapProps> = ({
     setShowMapNameInputDialog,
     shape,
     setShape,
-    mapName,
+    mapName: rawMapName,
     setMapName,
     trailCenterPoint,
     setTrailCenterPoint,
@@ -98,6 +105,13 @@ const NativeMap: React.FC<MapProps> = ({
 
   // For some reason not setting default state value not working from hook
   const isFullScreenMode = forceFullScreen || mapFullscreen;
+
+  const mapName = rawMapName?.trim();
+  const mapNameErrorMessage = !mapName
+    ? 'The map name must not be empty'
+    : user?.offlineMaps?.[mapName?.toLowerCase()] != null
+      ? 'A map with the same name already exist'
+      : '';
 
   const handleShapeUpload = async () => {
     try {
@@ -114,6 +128,36 @@ const NativeMap: React.FC<MapProps> = ({
     } catch (error) {
       Alert.alert('Error', error.message);
     }
+  };
+
+  const handleDownloadMap = async () => {
+    const bounds = mapViewRef.current
+      ? await mapViewRef.current.getVisibleBounds()
+      : null;
+    const downloadOptions = {
+      name: mapName,
+      styleURL: 'mapbox://styles/mapbox/outdoors-v11',
+      bounds,
+      minZoom: 0,
+      maxZoom: 8,
+      metadata: {
+        shape: JSON.stringify(shape),
+      },
+    };
+
+    // Save the map under user profile.
+    updateUser({
+      id: user.id,
+      offlineMaps: {
+        ...(user.offlineMaps || {}),
+        [mapName.toLowerCase()]: downloadOptions,
+      },
+    })
+      .then(() => refetch())
+      .then(() => {
+        onDownload(downloadOptions);
+      })
+      .catch(() => {});
   };
 
   function CircleCapComp() {
@@ -298,13 +342,17 @@ const NativeMap: React.FC<MapProps> = ({
           });
         }}
         styles={styles}
-        downloadable={downloadable || isShapeDownloadable(shape)}
+        downloadable={shouldEnableDownload && isShapeDownloadable(shape)}
         downloading={downloading}
         shape={shape}
         onDownload={() => {
-          setShowMapNameInputDialog(true);
+          if (predefinedMapName) {
+            handleDownloadMap();
+          } else {
+            setShowMapNameInputDialog(true);
+          }
         }}
-        handleGpxUpload={handleShapeUpload}
+        handleGpxUpload={shouldEnableDownload && handleShapeUpload}
         progress={progress}
       />
     </View>
@@ -334,11 +382,14 @@ const NativeMap: React.FC<MapProps> = ({
                   onChangeText={(text) => {
                     setMapName(text);
                   }}
-                  value={mapName}
+                  value={rawMapName}
                   mx="3"
                   placeholder="map name"
                   w="100%"
                 />
+                <RText style={styles.mapNameFieldErrorMessage}>
+                  {mapNameErrorMessage}
+                </RText>
               </AlertDialog.Body>
               <AlertDialog.Footer>
                 <RStack
@@ -360,24 +411,10 @@ const NativeMap: React.FC<MapProps> = ({
                   </RButton>
                   <RButton
                     colorScheme="success"
-                    onPress={async () => {
+                    disabled={!!mapNameErrorMessage}
+                    onPress={() => {
                       setShowMapNameInputDialog(false);
-                      const bounds = mapViewRef.current
-                        ? await mapViewRef.current.getVisibleBounds()
-                        : null;
-                      const downloadOptions = {
-                        name: mapName,
-                        styleURL: 'mapbox://styles/mapbox/outdoors-v11',
-                        bounds,
-                        minZoom: 0,
-                        maxZoom: 8,
-                        metadata: {
-                          shape: JSON.stringify(shape),
-                        },
-                      };
-
-                      onDownload(downloadOptions);
-                      setShowMapNameInputDialog(false);
+                      handleDownloadMap();
                     }}
                   >
                     OK
@@ -438,6 +475,11 @@ const loadStyles = () => ({
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  mapNameFieldErrorMessage: {
+    color: theme.colors.error,
+    fontStyle: 'italic',
+    fontSize: 12,
   },
 });
 

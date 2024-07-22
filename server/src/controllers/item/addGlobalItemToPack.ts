@@ -9,10 +9,7 @@ export const addGlobalItemToPack = async (c: Context) => {
     const item = await addGlobalItemToPackService(packId, itemId, ownerId);
     return c.json({ item }, 200);
   } catch (error) {
-    return c.json(
-      { error: `${error.message}` },
-      500,
-    );
+    return c.json({ error: `${error.message}` }, 500);
   }
 };
 

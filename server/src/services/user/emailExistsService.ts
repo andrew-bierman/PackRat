@@ -18,7 +18,7 @@ export async function emailExistsService({
       throw new Error(val);
     }
     const result1 = await sendEmailNotice({ sendGridApiKey, smtpEmail, email });
-    console.log('result1result1', result1)
+    console.log('result1result1', result1);
     if (result1.status) {
       const { newcode } = result1;
       const result2 = await findUserAndUpdate(email, newcode, 'code');
@@ -27,9 +27,8 @@ export async function emailExistsService({
       }
     }
   } catch (error) {
-    console.log('error', error.message)
+    console.log('error', error.message);
     throw new Error(error.message);
-   
   }
 }
 
