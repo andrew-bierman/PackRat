@@ -1,28 +1,10 @@
 import { View } from 'react-native';
 import { ImportForm } from './ImportForm';
-import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
-import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
-import {
-  addItem as addItemSchema,
-  editItem as editItemSchema,
-  type Item,
-} from '@packrat/validations';
+import { type Item } from '@packrat/validations';
 import { useAuthUser } from 'app/auth/hooks';
 
 interface ImportItemProps {
   id?: string;
-  isEdit?: boolean;
-  initialData?: {
-    global: string;
-    id: string;
-    name?: string;
-    weight?: number;
-    quantity?: number;
-    category?: {
-      name: string;
-    };
-    unit?: string;
-  };
   packId: string;
   currentPack?: any;
   editAsDuplicate?: any;
@@ -37,29 +19,21 @@ interface ImportItemProps {
 type ImportItem = Omit<Item, 'id'> & { id: string };
 
 export const ImportItem = ({
-  isEdit,
   currentPack,
   closeModalHandler,
   isItemPage,
+  packId,
 }: ImportItemProps) => {
   const user = useAuthUser();
-
-  const { isLoading, isError, importPackItem } = useImportPackItem();
-  const { editPackItem } = useEditPackItem(isItemPage);
-
-  const handleSubmit = () => {
-    console.log('Submit');
-    if (closeModalHandler) closeModalHandler();
-  };
+  const ownerId = user?.id;
 
   return (
     <View>
       <ImportForm
-        validationSchema={isEdit ? editItemSchema : addItemSchema}
-        handleSubmit={handleSubmit}
-        isLoading={isLoading}
-        isEdit={isEdit}
+        closeModalHandler={closeModalHandler}
+        packId={packId}
         currentPack={currentPack}
+        ownerId={ownerId}
       />
     </View>
   );

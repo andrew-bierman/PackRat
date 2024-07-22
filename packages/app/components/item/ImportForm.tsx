@@ -5,13 +5,20 @@ import useTheme from '../../hooks/useTheme';
 import DocumentPicker from './DocumentPicker/DocumentPicker';
 import Papa from 'papaparse';
 import { InformUser } from 'app/utils/ToastUtils';
+import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 
 interface ImportFormProps {
-  handleSubmit: () => void;
   showSubmitButton?: boolean;
-  isLoading?: boolean;
-  isEdit?: boolean;
-  validationSchema?: any;
+  closeModalHandler?: () => void;
+  packId: string;
+  ownerId: string;
+  currentPack?: {
+    items: Array<{
+      category: {
+        name: string;
+      };
+    }>;
+  } | null;
 }
 
 interface SelectedType {
@@ -25,13 +32,15 @@ const data = [
 ];
 
 export const ImportForm: FC<ImportFormProps> = ({
-  handleSubmit,
   showSubmitButton = true,
-  isLoading,
-  isEdit,
-  validationSchema,
+  packId,
+  currentPack,
+  ownerId,
+  closeModalHandler,
 }) => {
   const { currentTheme } = useTheme();
+  const { isLoading, isError, addPackItem } = useAddPackItem();
+
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
     value: '.csv',
@@ -80,14 +89,34 @@ export const ImportForm: FC<ImportFormProps> = ({
                   'CSV does not contain all the expected Item headers',
                 );
               }
-              console.log('Parsed CSV data:', result.data);
+              const data = result.data.map((item, index) => {
+                return {
+                  id: `${Date.now().toString()}${index}`,
+                  name: item.Name,
+                  weight: Number(item.Weight),
+                  unit: item.Unit,
+                  quantity: Number(item.Quantity),
+                  type: item.Category,
+                  packId: packId,
+                  ownerId: ownerId,
+                };
+              });
+
+              data.forEach((item, index) => {
+                if (index < data.length - 1) {
+                  addPackItem(item);
+                }
+              });
             } catch (error) {
               InformUser({
-                title: 'CSV does not contain the expected Item headers',
+                title:
+                  'CSV does not contain the expected Item headers or data must be corrupt',
                 placement: 'bottom',
                 duration: 3000,
                 style: { backgroundColor: 'red' },
               });
+            } finally {
+              closeModalHandler();
             }
           },
           error: (error) => {
