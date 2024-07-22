@@ -29,16 +29,12 @@ export function PackDetails() {
   const canCopy = false;
   const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
-  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [isImportItemModalOpen, setIsImportItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const { xxs, xxl, xs } = useResponsive();
 
-  const { data: userPacks, isLoading: isUserPacksLoading } =
-    useUserPacks(userId);
   const {
     data: currentPack,
     isLoading,
@@ -113,8 +109,6 @@ export function PackDetails() {
                               setIsImportItemModalOpen={
                                 setIsImportItemModalOpen
                               }
-                              // refetch={refetch}
-                              setRefetch={() => setRefetch((prev) => !prev)}
                             />
                           </View>
                         ) : null;

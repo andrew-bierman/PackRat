@@ -1,6 +1,5 @@
-import { View, Platform } from 'react-native';
+import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
 import { ImportItemGlobal } from 'app/components/item/ImportItemGlobal';
@@ -18,14 +17,10 @@ import {
 import useResponsive from 'app/hooks/useResponsive';
 
 export default function Items() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
   const [value, setValue] = useState('Food');
-
-  console.log('data', data);
 
   // for zeego = {false} options will be:
   // const optionValues = ['Food', 'Water', 'Essentials'];

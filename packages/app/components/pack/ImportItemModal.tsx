@@ -6,7 +6,6 @@ interface ImportItemModalProps {
   currentPack: any;
   isImportItemModalOpen: boolean;
   setIsImportItemModalOpen: any;
-  setRefetch?: () => void;
 }
 
 export const ImportItemModal = ({
@@ -14,7 +13,6 @@ export const ImportItemModal = ({
   currentPack,
   isImportItemModalOpen,
   setIsImportItemModalOpen,
-  setRefetch = () => {},
 }: ImportItemModalProps) => {
   return (
     <BaseModal
@@ -28,7 +26,6 @@ export const ImportItemModal = ({
       <ImportItem
         packId={currentPackId}
         currentPack={currentPack}
-        setRefetch={setRefetch}
         closeModalHandler={() => setIsImportItemModalOpen(false)}
       />
     </BaseModal>
