@@ -1,3 +1,4 @@
+import React from 'react';
 import Settings from 'app/screens/user/Settings';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { createLazyFileRoute } from '@tanstack/react-router';

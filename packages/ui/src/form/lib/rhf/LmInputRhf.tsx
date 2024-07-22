@@ -41,22 +41,24 @@ export function LmInputRhf<T extends FieldValues = FieldValues>({
       render={({
         field: { onChange, value, onBlur, ref },
         fieldState: { error },
-      }) => (
-        <LmInput
-          {...inputProps}
-          ref={ref}
-          keyboardType={getInputKeyboardType({
-            isNumeric,
-            isDecimal,
-            defaultKeyBoardType: keyboardType,
-          })}
-          value={(value ?? '').toString()} // Ensure value is defined before calling toString()
-          onBlur={onBlur}
-          error={!!error}
-          onChangeText={(text) => onChange(handleOnChange(text))}
-          helperText={error ? error.message : inputProps.helperText}
-        />
-      )}
+      }) => {
+        return (
+          <LmInput
+            {...inputProps}
+            ref={ref}
+            keyboardType={getInputKeyboardType({
+              isNumeric,
+              isDecimal,
+              defaultKeyBoardType: keyboardType,
+            })}
+            value={(value ?? '').toString()} // Ensure value is defined before calling toString()
+            onBlur={onBlur}
+            error={!!error}
+            onChangeText={(text) => onChange(handleOnChange(text))}
+            helperText={error ? error.message : inputProps.helperText}
+          />
+        );
+      }}
     />
   );
 }
@@ -67,11 +69,11 @@ const getInputKeyboardType = ({
   defaultKeyBoardType,
 }) => {
   if (isNumeric) {
-    return 'number-pwd';
+    return 'number-pad';
   }
 
   if (isDecimal) {
-    return 'decimal-pwd';
+    return 'decimal-pad';
   }
 
   return defaultKeyBoardType;

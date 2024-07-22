@@ -20,10 +20,10 @@ export const DetailsComponent = ({
   additionalComps,
   link,
 }: DetailsComponent) => {
+  console.log('type', type)
   const renderDetails = () => {
     switch (type) {
       case 'pack':
-        // Add pack-specific logic here
         return (
           <>
             <CustomCard
@@ -75,10 +75,9 @@ export const DetailsComponent = ({
           </>
         );
       default:
-        // Handle unknown types
         return null;
     }
   };
 
-  return <RStack>{renderDetails()}</RStack>;
+  return <RStack style={{ width: '100%' }}>{renderDetails()}</RStack>;
 };

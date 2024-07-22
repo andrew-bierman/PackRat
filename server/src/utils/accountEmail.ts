@@ -99,12 +99,12 @@ export const resetEmail = async (
       body: JSON.stringify(emailData),
     });
 
-    if (!response.ok) {
-      console.log('Email did not Send');
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    // if (!response.ok) {
+    //   console.log('Email did not Send');
+    //   throw new Error(`HTTP error! status: ${response.status}`);
+    // }
 
-    console.log('Email Sent');
+    console.log('Email Sent', response);
     // return await response.json();
   } catch (error) {
     console.error('Error resetting email:', error);

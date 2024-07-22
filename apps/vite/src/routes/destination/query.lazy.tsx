@@ -1,3 +1,4 @@
+import React from 'react';
 import { DestinationPage } from 'app/components/destination';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 // import DestinationPage from "../../components/destination";

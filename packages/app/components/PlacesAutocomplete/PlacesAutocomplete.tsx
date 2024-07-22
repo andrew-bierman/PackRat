@@ -18,7 +18,7 @@ export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
   function PlacesAutoComplete({ onSelect, placeholder }, ref) {
     const { data, handleSelect, search, setSearch } =
       usePlacesAutoComplete(onSelect);
-    const inputRef = useRef<TextInput>();
+    const inputRef = useRef<TextInput>(null);
 
     useImperativeHandle(
       ref,

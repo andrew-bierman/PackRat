@@ -3,9 +3,11 @@ import { fetchHandler } from 'trpc-playground/handlers/fetch';
 import { appRouter } from './routes/trpcRouter';
 import { honoTRPCServer } from './trpc/server';
 import { cors } from 'hono/cors';
-// import { logger } from 'hono/logger';
-import { compress } from 'hono/compress';
+import { securityHeaders } from './middleware/securityHeaders';
+import { enforceHttps } from './middleware/enforceHttps';
 import router from './routes';
+import { CORS_METHODS } from './config';
+import { httpDBContext } from './trpc/httpDBContext';
 
 interface Bindings {
   [key: string]: any;
@@ -27,15 +29,21 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  Bun: This middleware uses CompressionStream which is not yet supported in bun.
 //  ref: https://hono.dev/middleware/builtin/compress
 
+// SETUP HTTPS Enforcement Middleware
+app.use('*', enforceHttps()); // Apply to all routes
+
+// SETUP SECURITY HEADERS
+app.use('*', securityHeaders()); // Apply to all routes
+
 // SETUP CORS
 app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
   const corsMiddleware = cors({
-    // origin: CORS_ORIGIN,
+    // origin: CORS_ORIGIN, // uncomment this line to enable CORS
     origin: '*', // temporary
     credentials: true,
     allowHeaders: ['Content-Type', 'Authorization'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowMethods: CORS_METHODS,
   });
   return corsMiddleware(c, next);
 });
@@ -57,7 +65,8 @@ app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
   return handler(c.req.raw);
 });
 
-// SET UP HTTP ROUTES
-app.route(`${HTTP_ENDPOINT}`, router);
+// A middleware to initiate db connection and add it to the context
+app.use(`${HTTP_ENDPOINT}/*`, httpDBContext);
+app.route(`${HTTP_ENDPOINT}/`, router);
 
 export default app;

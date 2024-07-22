@@ -1,3 +1,4 @@
+import React from 'react';
 import { MainContentWeb } from '@packrat/ui';
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
