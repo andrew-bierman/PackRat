@@ -57,6 +57,9 @@ export default function UserDataContainer({
         {...item}
         index={index}
         differentUser={currentUser?.id !== item.owner_id}
+        isFavorite={item?.userFavoritePacks?.some(
+          (obj) => obj?.['userId'] === currentUser?.id,
+        )}
         currentUserId={currentUser?.id}
       />
     );
@@ -139,7 +142,9 @@ export default function UserDataContainer({
                   }}
                 />
 
-                <SearchProvider><DataList data={data} /></SearchProvider>
+                <SearchProvider>
+                  <DataList data={data} />
+                </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
               <RLink href="/" style={{ textDecoration: 'none' }}>

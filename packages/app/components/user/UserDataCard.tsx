@@ -15,6 +15,7 @@ import { useEditPack } from 'app/hooks/packs';
 import { Platform } from 'react-native';
 import { useEditTrips } from 'app/hooks/trips';
 import { useAddFavorite } from 'app/hooks/favorites';
+import useTheme from 'app/hooks/useTheme';
 
 const RText: any = OriginalRText;
 
@@ -30,6 +31,7 @@ interface UserDataCardProps {
   createdAt: string;
   index: number;
   differentUser: boolean;
+  isFavorite: boolean;
 }
 
 const UserDataCard = ({
@@ -44,12 +46,14 @@ const UserDataCard = ({
   createdAt,
   index,
   differentUser,
+  isFavorite,
 }: UserDataCardProps) => {
   const { editPack: changePackStatus, isLoading: isPackLoading } =
     useEditPack();
   const { editTrips: changeTripStatus, isLoading: isTripLoading } =
     useEditTrips();
   const { addFavorite } = useAddFavorite();
+  const { currentTheme } = useTheme();
 
   const handleChangeStatus = (index) => {
     if (type === 'pack') {
@@ -81,7 +85,7 @@ const UserDataCard = ({
       userId: currentUserId,
     };
 
-    addFavorite(data);
+    addFavorite(data, String(currentUserId));
   };
 
   const truncatedName = truncateString(name, 25);
@@ -208,28 +212,33 @@ const UserDataCard = ({
                 gap: 10,
               }}
             >
-              {differentUser ? (
-                <TouchableOpacity onPress={handleAddToFavorite}>
+              <RStack
+                color="gray"
+                gap="$2"
+                flexDirection="row"
+                fontWeight={400}
+              >
+                <TouchableOpacity
+                  onPress={handleAddToFavorite}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <AntDesign
                     name="heart"
                     size={16}
-                    color="red"
-                    style={{ display: 'flex', position: 'absolute', right: 0 }}
+                    color={
+                      isFavorite ? 'red' : currentTheme.colors.cardIconColor
+                    }
                   />
                 </TouchableOpacity>
-              ) : (
-                <RStack
-                  color="gray"
-                  gap="$2"
-                  flexDirection="row"
-                  fontWeight={400}
-                >
-                  <AntDesign name="heart" size={16} color="red" />
-                  <View>
-                    <RText>{favorites_count}</RText>
-                  </View>
-                </RStack>
-              )}
+                <View>
+                  <RText>{favorites_count}</RText>
+                </View>
+              </RStack>
             </View>
           </RStack>
         </RStack>
