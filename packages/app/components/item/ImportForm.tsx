@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react';
 import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import DocumentPicker from './DocumentPicker/DocumentPicker';
+import useDocumentPicker from './DocumentPicker/DocumentPicker';
 import Papa from 'papaparse';
 import { InformUser } from 'app/utils/ToastUtils';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
@@ -42,6 +42,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { addPackItem } = useAddPackItem();
   const { handleAddNewItem } = useAddItem();
+  const DocumentPicker = useDocumentPicker();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',

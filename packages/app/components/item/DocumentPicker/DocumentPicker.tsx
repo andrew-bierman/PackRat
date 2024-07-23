@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Platform } from 'react-native';
 
 const loadDocumentPicker = async () => {
@@ -12,6 +13,18 @@ const loadDocumentPicker = async () => {
   }
 };
 
-const DocumentPicker = await loadDocumentPicker();
+const useDocumentPicker = () => {
+  const [DocumentPicker, setDocumentPicker] = useState(null);
 
-export default DocumentPicker;
+  useEffect(() => {
+    const loadPicker = async () => {
+      const picker = await loadDocumentPicker();
+      setDocumentPicker(() => picker);
+    };
+    loadPicker();
+  }, []);
+
+  return DocumentPicker;
+};
+
+export default useDocumentPicker;
