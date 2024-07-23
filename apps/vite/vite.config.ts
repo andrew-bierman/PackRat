@@ -89,6 +89,10 @@ export default defineConfig(({ mode }) => {
           __dirname,
           '../../node_modules/react-native-web/dist/modules/AssetRegistry',
         ),
+        'react-native-document-picker': resolve(
+          __dirname,
+          '../../packages/app/components/item/DocumentPicker/DocumentPicker.tsx',
+        ),
       },
     },
     optimizeDeps: {
