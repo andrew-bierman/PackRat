@@ -17,6 +17,7 @@
     "migrate:down:local": "drizzle-kit drop",
     "migrate:down": "yarn run migrate:down:local",
     "migrate:local": "wrangler d1 migrations apply preview --local --env preview",
+    "migrate:preview": "wrangler d1 migrations apply preview --remote --env preview",
     "migrate:prod": "wrangler d1 migrations apply production --remote --env production",
     "migrate": "yarn run migrate:local",
     "postinstall": "yarn generate",
