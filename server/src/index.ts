@@ -53,6 +53,8 @@ app.use('*', async (c, next) => {
     allowHeaders: ['Content-Type', 'Authorization'],
     allowMethods: CORS_METHODS,
   });
+  // change for testing the workflow
+  console.log('CORS middleware setup');
   return corsMiddleware(c, next);
 });
 
