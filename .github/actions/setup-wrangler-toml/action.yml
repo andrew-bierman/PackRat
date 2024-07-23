@@ -4,6 +4,7 @@ runs:
   using: 'composite'
   steps:
     - name: Generate wrangler.toml
+      shell: bash
       run: |
         echo 'name = "packrat-api-staging"' > ${{ github.workspace }}/server/wrangler.toml
         echo 'main = "src/index.ts"' >> ${{ github.workspace }}/server/wrangler.toml
