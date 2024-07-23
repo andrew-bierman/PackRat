@@ -31,6 +31,7 @@ interface UserDataCardProps {
   createdAt: string;
   index: number;
   differentUser: boolean;
+  activeUserId?: string;
   isFavorite: boolean;
 }
 
@@ -46,6 +47,7 @@ const UserDataCard = ({
   createdAt,
   index,
   differentUser,
+  activeUserId,
   isFavorite,
 }: UserDataCardProps) => {
   const { editPack: changePackStatus, isLoading: isPackLoading } =
@@ -85,7 +87,7 @@ const UserDataCard = ({
       userId: currentUserId,
     };
 
-    addFavorite(data, String(currentUserId));
+    addFavorite(data, String(activeUserId));
   };
 
   const truncatedName = truncateString(name, 25);

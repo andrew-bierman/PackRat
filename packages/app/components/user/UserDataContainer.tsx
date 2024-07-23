@@ -57,6 +57,7 @@ export default function UserDataContainer({
         {...item}
         index={index}
         differentUser={currentUser?.id !== item.owner_id}
+        activeUserId={userId}
         isFavorite={item?.userFavoritePacks?.some(
           (obj) => obj?.['userId'] === currentUser?.id,
         )}
