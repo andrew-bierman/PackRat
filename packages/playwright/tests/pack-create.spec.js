@@ -16,5 +16,4 @@ test('test', async ({ page }) => {
   await page.getByLabel('Is Public').click();
   await page.getByLabel('Yes').click();
   await page.getByRole('button', { name: 'Add Pack' }).click();
- 
 });

@@ -11,7 +11,7 @@ function useParks({ latLng, radius = 5000 }) {
   //   lon,
   //   selectedSearch,
   // })
-  const { lat, lon } = latLng;
+  const { lat, lon } = latLng || {};
   const isEnabled = Boolean(lat && lon);
   const { data, error, isLoading } = queryTrpc.getParksOSM.useQuery(
     {

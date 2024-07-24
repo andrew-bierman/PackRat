@@ -59,7 +59,7 @@ const loadStyles = (theme) => {
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
-      backgroundColor: '#34a89a',
+      backgroundColor: currentTheme.colors.secondaryBlue,
       height: 50,
       paddingVertical: 12, // Increase padding for better touch area
       paddingHorizontal: 30,
@@ -87,14 +87,15 @@ const loadStyles = (theme) => {
     },
     transparentButton: {
       backgroundColor: 'transparent',
+      height: 80,
     },
     icon: {
-      fontSize: 28,
-      color: '#34a89a',
+      fontSize: 40,
+      color: currentTheme.colors.text,
       marginRight: 10,
     },
     featureText: {
-      fontSize: 18,
+      fontSize: 22,
       color: currentTheme.colors.text,
     },
     cardContent: {

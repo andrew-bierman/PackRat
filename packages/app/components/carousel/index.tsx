@@ -28,8 +28,10 @@ const Carousel: React.FC<CarouselProps> = ({
 
   const handleScroll = (event: { nativeEvent: NativeScrollEvent }) => {
     const contentOffset = event.nativeEvent.contentOffset;
-    const newIndex = Math.round(contentOffset.x / itemWidth);
-    setCurrentIndex(newIndex);
+    if (itemWidth) {
+      const newIndex = Math.round(contentOffset.x / itemWidth);
+      setCurrentIndex(newIndex);
+    }
   };
 
   const scrollToIndex = (index: number) => {
@@ -51,6 +53,7 @@ const Carousel: React.FC<CarouselProps> = ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        flex: 1,
       }}
     >
       <ScrollButton

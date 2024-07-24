@@ -1,13 +1,42 @@
-import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { describe, it, vi, expect, beforeAll, beforeEach } from 'vitest';
 import { setupTest } from '../testHelpers';
 import type { trpcCaller } from '../testHelpers';
-import { env } from 'cloudflare:test';
+import {
+  createExecutionContext,
+  env,
+  waitOnExecutionContext,
+} from 'cloudflare:test';
 import { Pack as PackClass } from '../../drizzle/methods/pack';
 import { User as UserClass } from '../../drizzle/methods/User';
 import type { Pack, User } from '../../db/schema';
+import { type ExecutionContext } from 'hono';
+
+const { mockSyncRecord, mockDeleteVector, mockSearchVector } = vi.hoisted(
+  () => {
+    return {
+      mockSyncRecord: vi.fn(),
+      mockDeleteVector: vi.fn(),
+      mockSearchVector: vi.fn(),
+    };
+  },
+);
+vi.mock('../../vector/client', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('../../vector/client')>();
+  return {
+    ...mod,
+    VectorClient: {
+      instance: {
+        syncRecord: mockSyncRecord,
+        delete: mockDeleteVector,
+        search: mockSearchVector,
+      },
+    },
+  };
+});
 
 describe('Pack routes', () => {
   let caller: trpcCaller;
+  let executionCtx: ExecutionContext;
   const packClass = new PackClass();
   const userClass = new UserClass();
 
@@ -15,13 +44,18 @@ describe('Pack routes', () => {
   let owner: User;
 
   beforeAll(async () => {
-    caller = await setupTest(env);
+    executionCtx = createExecutionContext();
+    caller = await setupTest(env, executionCtx);
     owner = await userClass.create({
       email: 'test@abc.com',
       name: 'test',
       username: 'test',
       password: 'test123',
     });
+
+    // clear modules cache to ensure that dependents use the latest mock modules
+    // this prevents unusual assertion failures during reruns in watch mode
+    vi.resetModules();
   });
 
   beforeEach(async () => {
@@ -57,19 +91,39 @@ describe('Pack routes', () => {
   });
 
   describe('editPack', () => {
+    const nameToBeUpdated = 'updated pack';
+    let packId: string;
+    let isPublic: boolean;
+
     it('should update pack name', async () => {
-      const nameToBeUpdated = 'updated pack';
+      isPublic = pack?.is_public === null ? false : pack?.is_public;
       const updatedPack = await caller.editPack({
         ...pack,
         id: pack?.id?.toString(),
-        is_public: pack?.is_public === null ? false : pack?.is_public,
+        is_public: isPublic,
         name: nameToBeUpdated,
       });
+      packId = updatedPack.id;
       expect(updatedPack.name).toEqual(nameToBeUpdated);
+    });
+
+    it('should sync edited pack with vectorize', async () => {
+      await waitOnExecutionContext(executionCtx);
+      expect(mockSyncRecord).toHaveBeenCalledWith(
+        {
+          id: packId,
+          content: nameToBeUpdated,
+          metadata: { isPublic },
+          namespace: 'packs',
+        },
+        true,
+      );
     });
   });
 
   describe('addPack', () => {
+    let createdPackId = null;
+
     it('should create a pack', async () => {
       const { id, ...partialPack } = pack;
       const input = {
@@ -83,16 +137,62 @@ describe('Pack routes', () => {
             : partialPack.owner_id,
       };
       const createdPack = await caller.addPack(input);
+      createdPackId = createdPack.id;
       expect(createdPack).toBeDefined();
+    });
+
+    it('should sync created pack with vectorize', async () => {
+      await waitOnExecutionContext(executionCtx);
+      expect(mockSyncRecord).toHaveBeenCalledWith({
+        id: createdPackId,
+        content: 'test 123',
+        metadata: { isPublic: true },
+        namespace: 'packs',
+      });
     });
   });
 
   describe('deletePack', () => {
+    let packId: string;
     it('should delete the pack', async () => {
+      packId = pack.id;
       const { msg } = await caller.deletePack({
-        packId: pack.id,
+        packId,
       });
       expect(msg).toEqual('pack was deleted successfully');
+    });
+
+    it('should delete the pack from vectorize as well', async () => {
+      await waitOnExecutionContext(executionCtx);
+      expect(mockDeleteVector).toHaveBeenCalledWith(packId);
+    });
+  });
+
+  describe('getSimilarPacks', () => {
+    let similarPacks = null;
+    let packId: string;
+    it('should invoke vector search', async () => {
+      packId = pack.id;
+      mockSearchVector.mockResolvedValue({
+        result: { matches: [{ id: packId, score: 0.89519173 }] },
+      });
+
+      similarPacks = await caller.getSimilarPacks({
+        id: packId,
+        limit: 3,
+      });
+      expect(mockSearchVector).toHaveBeenCalledWith(
+        pack.name,
+        'packs',
+        3,
+        undefined,
+      );
+    });
+
+    it('should return similar packs', async () => {
+      expect(similarPacks).toEqual([
+        { ...pack, id: packId, similarityScore: 0.89519173 },
+      ]);
     });
   });
 });

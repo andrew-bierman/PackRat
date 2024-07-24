@@ -1,31 +1,21 @@
 import React, { useState } from 'react';
 
-import PackContainer from './PackContainer';
-import { DetailsHeader } from '../details/header';
-import { TableContainer } from '../pack_table/Table';
-import { RButton, RText } from '@packrat/ui';
-import { DetailsComponent } from '../details';
-import {
-  Dimensions,
-  Platform,
-  View,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import { theme } from '../../theme';
 import { CLIENT_URL } from '@packrat/config';
+import { RText } from '@packrat/ui';
+import { useAuthUser } from 'app/auth/hooks';
+import Layout from 'app/components/layout/Layout';
+import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
+import { usePackId } from 'app/hooks/packs/usePackId';
+import { useUserPacks } from 'app/hooks/packs/useUserPacks';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
+import { FlatList, Platform, View } from 'react-native';
+import { useFetchSinglePack } from '../../hooks/packs';
 import ScoreContainer from '../ScoreContainer';
 import ChatContainer from '../chat';
-import { AddItem } from '../item/AddItem';
+import { DetailsComponent } from '../details';
+import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useUserPacks } from 'app/hooks/packs/useUserPacks';
-import { usePackId } from 'app/hooks/packs/usePackId';
-import { useFetchSinglePack } from '../../hooks/packs';
-import { useAuthUser } from 'app/auth/hooks';
-import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
-import Layout from 'app/components/layout/Layout';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -44,6 +34,7 @@ export function PackDetails() {
   const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
+  const { xxs, xxl, xs } = useResponsive();
 
   const { data: userPacks, isLoading: isUserPacksLoading } =
     useUserPacks(userId);
@@ -55,7 +46,7 @@ export function PackDetails() {
   } = useFetchSinglePack(packId);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
 
-  const styles = useCustomStyles(loadStyles);
+  // const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
 
   // check if user is owner of pack, and that pack and user exists
@@ -66,122 +57,119 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <>
-      <Layout>
-        
-          {!isError && (
-            <>
-              <DetailsComponent
-                type="pack"
-                data={currentPack}
-                isLoading={isLoading}
-                error={error as any}
-                additionalComps={
-                  <>
-                      <FlatList
-                        data={Object.entries(SECTION)}
-                        contentContainerStyle={{ paddingBottom: 50 }}
-                        keyExtractor={([key, val]) => val}
-                        renderItem={({ item }) => {
-                          {
-                            switch (item[1]) {
-                              case SECTION.TABLE:
-                                return (
-                                  <TableContainer
-                                    currentPack={currentPack}
-                                    copy={canCopy}
-                                    hasPermissions={isAuthUserPack}
-                                  />
-                                );
-                              case SECTION.CTA:
-                                return isAuthUserPack ? (
-                                  <AddItemModal
-                                    currentPackId={
-                                      currentPackId ? currentPackId : ''
-                                    }
-                                    currentPack={currentPack}
-                                    isAddItemModalOpen={isAddItemModalOpen}
-                                    setIsAddItemModalOpen={
-                                      setIsAddItemModalOpen
-                                    }
-                                    // refetch={refetch}
-                                    setRefetch={() =>
-                                      setRefetch((prev) => !prev)
-                                    }
-                                  />
-                                ) : null;
-                              case SECTION.SCORECARD:
-                                return (
-                                  <ScoreContainer
-                                    type="pack"
-                                    data={currentPack}
-                                    isOwner={isOwner}
-                                  />
-                                );
-                              // case SECTION.CHAT:
-                              //   return (
-                              //     <View style={styles.boxStyle}>
-                              //       <ChatContainer
-                              //         itemTypeId={currentPackId}
-                              //         title="Chat"
-                              //         trigger="Open Chat"
-                              //       />
-                              //     </View>
-                              //   );
-                              default:
-                                return null;
-                            }
-                          }
-                        }}
-                      />
-                  </>
-                }
-                link={link}
-              />
-            </>
-          )}
-      </Layout>
+    <Layout>
+      {!isError && (
+        <View
+          style={{
+            minHeight: '100%',
+            marginBottom: 50,
+          }}
+        >
+          <DetailsComponent
+            type="pack"
+            data={currentPack}
+            isLoading={isLoading}
+            error={error as any}
+            additionalComps={
+              <>
+                <FlatList
+                  data={Object.entries(SECTION)}
+                  contentContainerStyle={{ paddingBottom: 50 }}
+                  keyExtractor={([key, val]) => val}
+                  renderItem={({ item }) => {
+                    switch (item[1]) {
+                      case SECTION.TABLE:
+                        return (
+                          <TableContainer
+                            currentPack={currentPack}
+                            copy={canCopy}
+                            hasPermissions={isAuthUserPack}
+                          />
+                        );
+                      case SECTION.CTA:
+                        return isAuthUserPack ? (
+                          <AddItemModal
+                            currentPackId={currentPackId || ''}
+                            currentPack={currentPack}
+                            isAddItemModalOpen={isAddItemModalOpen}
+                            setIsAddItemModalOpen={setIsAddItemModalOpen}
+                            // refetch={refetch}
+                            setRefetch={() => setRefetch((prev) => !prev)}
+                          />
+                        ) : null;
+                      case SECTION.SCORECARD:
+                        return (
+                          <View
+                            style={{
+                              minHeight: xxs ? 800 : xs ? 800 : xxl ? 100 : 800,
+                            }}
+                          >
+                            <ScoreContainer
+                              type="pack"
+                              data={currentPack}
+                              isOwner={isOwner}
+                            />
+                          </View>
+                        );
+                      // case SECTION.CHAT:
+                      //   return (
+                      //     <View style={styles.boxStyle}>
+                      //       <ChatContainer
+                      //         itemTypeId={currentPackId}
+                      //         title="Chat"
+                      //         trigger="Open Chat"
+                      //       />
+                      //     </View>
+                      //   );
+                      default:
+                        return null;
+                    }
+                  }}
+                />
+              </>
+            }
+            link={link}
+          />
+        </View>
+      )}
       <View
         style={{
           position: 'absolute',
-          right: 50,
-          bottom: 30,
-          width: 60,
-          height: 60,
-          marginBottom: 20,
-
-          justifyContent: 'center',
-          alignItems: 'center',
+          right: -40,
+          bottom: 20,
+          flexDirection: 'row',
+          alignSelf: 'flex-end',
         }}
       >
         <ChatContainer
           itemTypeId={currentPackId}
           title="Chat"
           trigger="Open Chat"
+          type="pack"
         />
       </View>
-    </>
+    </Layout>
   );
 }
 
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  console.log('currentTheme', currentTheme);
-  return {
-    packsContainer: {
-      flexDirection: 'column',
-      minHeight: '100vh',
-      padding: 25,
-      fontSize: 26,
-    },
-    dropdown: {
-      backgroundColor: currentTheme.colors.white,
-    },
-    boxStyle: {
-      padding: 5,
-      borderRadius: 10,
-      width: '100%',
-      minHeight: 400,
-    },
-  };
-};
+// const loadStyles = (theme) => {
+//   const { currentTheme } = theme;
+//   console.log('currentTheme', currentTheme);
+//   return {
+//     packsContainer: {
+//       flexDirection: 'column',
+//       minHeight: Platform.OS === 'web' ? '100vh' : '100%',
+//       padding: 25,
+//       fontSize: 26,
+//     },
+//     dropdown: {
+//       backgroundColor: currentTheme.colors.white,
+//     },
+//     boxStyle: {
+//       padding: 5,
+//       borderRadius: 10,
+//       width: '100%',
+//       minHeight: 400,
+//     },
+//   };
+// };

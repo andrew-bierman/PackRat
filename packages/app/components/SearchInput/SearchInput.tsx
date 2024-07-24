@@ -220,25 +220,32 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               </RIconButton>
             )}
           </RStack>
-          {showSearchResults && results?.length > 0 && (
-            <RScrollView keyboardShouldPersistTaps="handled">
-              <View role="list" style={{ width: '100%' }}>
-                {results.map((result, i) => (
-                  <Pressable
-                    key={`result + ${i}`}
-                    role="listitem"
-                    onPress={() => {
-                      handleSearchResultClick(result);
-                    }}
-                    paddingHorizontal={16}
-                    paddingVertical={8}
-                  >
-                    {cloneElement(ResultItemComponent, { item: result })}
-                  </Pressable>
-                ))}
-              </View>
-            </RScrollView>
-          )}
+          <RStack
+            style={{
+              position: 'relative',
+              display: isVisible ? 'block' : 'none',
+            }}
+          >
+            {showSearchResults && results?.length > 0 && (
+              <RScrollView keyboardShouldPersistTaps="handled">
+                <View role="list" style={{ width: '100%' }}>
+                  {results.map((result, i) => (
+                    <Pressable
+                      key={`result + ${i}`}
+                      role="listitem"
+                      onPress={() => {
+                        handleSearchResultClick(result);
+                      }}
+                      paddingHorizontal={16}
+                      paddingVertical={8}
+                    >
+                      {cloneElement(ResultItemComponent, { item: result })}
+                    </Pressable>
+                  ))}
+                </View>
+              </RScrollView>
+            )}
+          </RStack>
         </RStack>
       );
     }

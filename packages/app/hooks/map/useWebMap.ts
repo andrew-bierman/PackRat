@@ -187,13 +187,13 @@ const useMapEffects = ({
     } catch (error) {
       console.error(error);
     }
-  }, [mapFullscreen]);
+  }, [mapFullscreen, shape]);
 
   // Effect to handle shape changes and update map layers
   useEffect(() => {
     if (map.current && isPoint(shape)) {
       addPoints(map.current);
-    } else if (map.current && shape.features[0].geometry.type !== 'Point') {
+    } else if (map.current && !isPoint(shape)) {
       removeTrailLayer(map.current);
       addTrailLayer(map.current);
       map.current.setCenter(trailCenterPointRef.current);
@@ -404,7 +404,7 @@ const useMapActions = ({
         map.current.setStyle(style);
         if (isPoint(shape)) {
           map.current.on('style.load', () => addPoints(map.current));
-        } else if (isPolygonOrMultiPolygon) {
+        } else if (isPolygonOrMultiPolygon(shape)) {
           // Add Polygon
         } else {
           map.current.on('style.load', () => {

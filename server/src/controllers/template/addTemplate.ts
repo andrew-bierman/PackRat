@@ -1,45 +1,27 @@
-import { publicProcedure } from '../../trpc';
+import { publicProcedure, protectedProcedure } from '../../trpc';
 import { UserNotFoundError } from '../../helpers/errors';
 import { addTemplateService } from '../../services/template/template.service';
-import { z } from 'zod';
 import { User } from '../../drizzle/methods/User';
-
-// import { prisma } from '../../prisma';
-/**
- * Adds a template to the database.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @return {Promise<void>} The created template.
- */
-// export const addTemplate = async (req, res, next) => {
-//   const { type, templateId, isGlobalTemplate, createdBy } = req.body;
-
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       id: createdBy,
-//     },
-//   });
-
-//   if (!user) {
-//     next(UserNotFoundError);
-//   }
-
-//   await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
-
-//   res.locals.data = { message: 'Template added successfully' };
-//   responseHandler(res);
-// };
+import * as validator from '@packrat/validations';
+export const addTemplate = async (c) => {
+  try {
+    const { type, templateId, isGlobalTemplate, createdBy } =
+      await c.req.json();
+    const userClass = new User();
+    const user = await userClass.findUser({ userId: createdBy });
+    if (!user) {
+      throw new Error(UserNotFoundError.message);
+    }
+    await addTemplateService(type, templateId, isGlobalTemplate, createdBy);
+    return c.json({ message: 'Template added successfully' }, 200);
+  } catch (error) {
+    return c.json({ error: `${error.message}` }, 500);
+  }
+};
 
 export function addTemplateRoute() {
-  return publicProcedure
-    .input(
-      z.object({
-        type: z.any(),
-        templateId: z.string(),
-        isGlobalTemplate: z.boolean(),
-        createdBy: z.string(),
-      }),
-    )
+  return protectedProcedure
+    .input(validator.addTemplate)
     .mutation(async (opts) => {
       const { type, templateId, isGlobalTemplate, createdBy } = opts.input;
       const userClass = new User();

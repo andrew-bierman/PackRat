@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigationList } from 'app/hooks/navigation';
 import { NavigationItem } from './NavigationItem';
 import { useIsMobileView } from 'app/hooks/common';
@@ -18,7 +19,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({
   const { navigationItems } = useNavigationList();
   return (
     <>
-      {navigationItems?.map(({ type, ...Item }) => {
+      {navigationItems?.map(({ type, ...Item }, index) => {
         const item = Item as any;
         return (
           <View
@@ -32,13 +33,13 @@ export const NavigationList: React.FC<NavigationListProps> = ({
             hoverStyle={{
               bg: currentTheme.colors.secondary as any,
             }}
-            key={item.href}
+            key={item.href + index}
           >
             {type === 'link' ? (
               <NavigationItem
                 item={item}
                 itemStyle={itemStyle}
-                key={item.href}
+                key={item.href + index}
                 onSelect={onItemSelect}
                 isMobileView={isMobileView}
               />

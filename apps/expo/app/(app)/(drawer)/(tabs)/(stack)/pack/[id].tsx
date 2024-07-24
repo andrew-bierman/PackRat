@@ -1,3 +1,4 @@
+import React from 'react';
 import PackContainer from 'app/components/pack/PackContainer';
 import { PackDetails } from 'app/components/pack/PackDetails';
 import { DetailsComponent } from 'app/components/details';
@@ -18,7 +19,6 @@ export default function Pack() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Pack',
-          name: 'Pack',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component

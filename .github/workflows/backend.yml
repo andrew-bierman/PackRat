@@ -5,11 +5,12 @@ on:
   push:
     branches:
       - master
+      - andrew_testing
     paths:
       - 'packages/api/**'
       - 'server/**'
 
-concurrency: 
+concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
@@ -50,11 +51,36 @@ jobs:
           # packageManager: bun
           packageManager: yarn
           secrets: |
-            APP_URL
-            JWT_VERIFICATION_KEY
             CI
+            GOOGLE_CLIENT_ID
+            GOOGLE_CLIENT_SECRET
+            STMP_EMAIL
+            STMP_PASSWORD
+            JWT_SECRET
+            SEND_GRID_API_KEY
+            MAPBOX_ACCESS_TOKEN
+            OSM_URI
+            WEATHER_URL
+            WEATHER_WEEK_URL
+            OPENWEATHER_KEY
+            VECTORIZE_API_KEY
+            CLOUDFLARE_ACCOUNT_ID
+            VITE_PUBLIC_APP_URL
         env:
           APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
           JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
+          STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          OSM_URI: ${{ secrets.OSM_URI }}
+          WEATHER_URL: ${{ secrets.WEATHER_URL }}
+          WEATHER_WEEK_URL: ${{ secrets.WEATHER_WEEK_URL }}
+          OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
+          VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CI: true
           NO_D1_WARNING: true

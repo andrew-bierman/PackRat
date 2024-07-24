@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import MapContainer from 'app/components/map/MapContainer';
+import { MapContainer } from 'app/components/map';
 import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
 import WeatherCard from '../weather/WeatherCard';
@@ -13,9 +13,9 @@ import {
   useGetPhotonDetails,
 } from 'app/hooks/destination';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
-import { useFetchWeather, useFetchWeatherWeak } from '../../hooks/weather';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
+import { WeatherData } from 'app/components/weather/WeatherData';
 
 const RText: any = OriginalRText;
 
@@ -79,10 +79,6 @@ export const DestinationPage = () => {
 
   const { currentDestination, latLng } = useCurrentDestination();
 
-  const { data: weatherData } = useFetchWeather(latLng);
-
-  const { data: weatherWeekData } = useFetchWeatherWeak(latLng);
-
   const [osm] = useGEOLocationSearch();
   const {
     data: geoJSON,
@@ -136,72 +132,80 @@ export const DestinationPage = () => {
   const map = () => <MapContainer shape={shape} />;
 
   return (
-    <ScrollView>
-      {isLoading && (
-        <RText style={{ width: '90%', alignSelf: 'center' }}>Loading...</RText>
-      )}
-      {!isLoading && !isError && (
-        <View style={styles.container}>
-          <View
-            style={{
-              zIndex: 1,
-              width: '100%',
-              ...styles.headerContainer,
-            }}
+    <View style={styles.container}>
+      <ScrollView>
+        {isLoading && (
+          <RText
+            style={{ width: '90%', alignSelf: 'center', textAlign: 'center' }}
           >
-            {Platform.OS === 'web' ? (
-              <PlacesAutocomplete
-                onSelect={handleSearchSelect}
-                placeholder={'Search by park, city, or trail'}
-              />
-            ) : (
-              <RButton
+            Loading...
+          </RText>
+        )}
+        <View style={{ flex: 1, marginBottom: 40 }}>
+          {!isLoading && !isError && (
+            <>
+              <View
                 style={{
-                  backgroundColor: currentTheme.colors.text,
-                  minWidth: '100%',
-                  height: 25,
-                  flexDirection: 'row',
-                }}
-                onPress={() => {
-                  router.push('/search');
+                  zIndex: 1,
+                  width: '100%',
+                  ...styles.headerContainer,
                 }}
               >
-                <MaterialCommunityIcons
-                  name="magnify"
-                  size={24}
-                  color={currentTheme.colors.background}
-                />
-                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
-                  Search by park, city, or trail
-                </RText>
-              </RButton>
-            )}
-          </View>
+                {Platform.OS === 'web' ? (
+                  <PlacesAutocomplete
+                    onSelect={handleSearchSelect}
+                    placeholder={'Search by park, city, or trail'}
+                  />
+                ) : (
+                  <RButton
+                    style={{
+                      backgroundColor: currentTheme.colors.text,
+                      minWidth: '100%',
+                      height: 25,
+                      flexDirection: 'row',
+                    }}
+                    onPress={() => {
+                      router.push('/search');
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="magnify"
+                      size={24}
+                      color={currentTheme.colors.background}
+                    />
+                    <RText
+                      color={currentTheme.colors.textDarkGrey}
+                      opacity={0.6}
+                    >
+                      Search by park, city, or trail
+                    </RText>
+                  </RButton>
+                )}
+              </View>
 
-          <DestinationHeader
-            geoJSON={geoJSON}
-            selectedSearchResult={currentDestination}
-          />
-          <LargeCard
-            title="Map"
-            Icon={() => (
-              <Ionicons
-                name="location"
-                size={24}
-                color={currentTheme.colors.textPrimary}
+              <DestinationHeader
+                geoJSON={geoJSON}
+                selectedSearchResult={currentDestination}
               />
-            )}
-            ContentComponent={map}
-            contentProps={{ shape }}
-            type="map"
-          />
-          <WeatherCard
-            weatherObject={weatherData}
-            weatherWeek={weatherWeekData}
-          />
+              <LargeCard
+                title="Map"
+                Icon={() => (
+                  <Ionicons
+                    name="location"
+                    size={24}
+                    color={currentTheme.colors.textPrimary}
+                  />
+                )}
+                ContentComponent={map}
+                contentProps={{ shape }}
+                type="map"
+              />
+              <WeatherData latLng={latLng} />
+            </>
+          )}
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -215,7 +219,6 @@ const loadStyles = (theme) => {
       paddingBottom: 12,
       paddingLeft: 16,
       width: '100%',
-      marginBottom:40,
       backgroundColor: currentTheme.colors.background,
     },
     headerContainer: {
@@ -253,6 +256,8 @@ const loadStyles = (theme) => {
       justifyContent: 'space-between',
       marginBottom: 20,
       width: '100%',
+      backgroundColor: isDark ? '#2D2D2D' : currentTheme.colors.white,
+      padding: 25,
     },
   };
 };

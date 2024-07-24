@@ -10,6 +10,7 @@ import { View } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
 import Layout from 'app/components/layout/Layout';
+import { SearchProvider } from 'app/components/feed/SearchProvider';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -42,19 +43,11 @@ export default function UserDataContainer({
 }: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [dataState, setDataState] = useState(
-    data.length > 0 ? Array(data.length).fill(false) : [],
-  );
-  useEffect(() => {
-    setDataState(Array(data.length).fill(false));
-  }, [data]);
   const currentUser = useAuthUser();
 
   const typeUppercase = type.charAt(0).toUpperCase() + type.slice(1);
 
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
-
-  const cardType = type === 'packs' || type === 'favorites' ? 'pack' : 'trip';
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
@@ -62,10 +55,13 @@ export default function UserDataContainer({
       <UserDataCard
         key={item.id}
         {...item}
-        state={dataState}
-        setState={setDataState}
         index={index}
-        differentUser={differentUser}
+        differentUser={currentUser?.id !== item.owner_id}
+        activeUserId={userId}
+        isFavorite={item?.userFavoritePacks?.some(
+          (obj) => obj?.['userId'] === currentUser?.id,
+        )}
+        currentUserId={currentUser?.id}
       />
     );
   };
@@ -96,7 +92,7 @@ export default function UserDataContainer({
       <LargeCard
         customStyle={{
           backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
-          padding:10
+          padding: 10,
         }}
       >
         <RStack
@@ -139,7 +135,7 @@ export default function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    padding:10
+                    padding: 10,
                     // paddingHorizontal: 1,
                     // paddingVertical: 3,
                     // justifyContent: 'center',
@@ -147,7 +143,9 @@ export default function UserDataContainer({
                   }}
                 />
 
-                <DataList data={data} />
+                <SearchProvider>
+                  <DataList data={data} />
+                </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
               <RLink href="/" style={{ textDecoration: 'none' }}>

@@ -1,49 +1,23 @@
-import { publicProcedure } from '../../trpc';
+import { protectedProcedure } from '../../trpc';
 import { findUserAndUpdate } from '../../services/user/user.service';
 import * as validator from '@packrat/validations';
 import { hashPassword } from '../../utils/user';
-// import { prisma } from '../../prisma';
+import { type Context } from 'hono';
 
-/**
- * Updates the password for a user.
- * @param {object} req - The request object.
- * @param {object} res - The response object.
- * @return {Promise<void>} - A promise that resolves to nothing.
- */
-// export const updatePassword = async (req, res, next) => {
-//   try {
-//     let { email, oldPassword, newPassword } = req.body;
-
-//     const user = await prisma.user.findFirst({
-//       where: {
-//         email,
-//       },
-//     });
-
-//     if (!user) throw new Error('Unable to verify');
-
-//     const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-//     if (!isMatch) throw new Error('Incorrect password');
-
-//     const salt = await bcrypt.genSalt(parseInt(JWT_SECRET));
-
-//     newPassword = await bcrypt.hash(newPassword, salt);
-
-//     const val = await findUserAndUpdate(email, newPassword, 'password');
-
-//     if (val) {
-//       responseHandler(res);
-//     } else {
-//       next(UnableTouUpdatePasswordError);
-//     }
-//   } catch (error) {
-//     next(UnableTouUpdatePasswordError);
-//   }
-// };
+export const updatePassword = async (c: Context) => {
+  try {
+    const { email, password } = await c.req.json();
+    const JWT_SECRET = c.env.JWT_SECRET;
+    const hashedPassword = await hashPassword(JWT_SECRET, password);
+    const user = await findUserAndUpdate(email, hashedPassword, 'password');
+    return c.json({ user }, 200);
+  } catch (error) {
+    return c.json({ error: `Email Doesnt Exist: ${error.message}` }, 404);
+  }
+};
 
 export function updatePasswordRoute() {
-  return publicProcedure
+  return protectedProcedure
     .input(validator.updatePassword)
     .mutation(async (opts) => {
       const { email, password } = opts.input;

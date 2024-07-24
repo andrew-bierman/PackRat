@@ -1,7 +1,9 @@
 // import { prisma } from '../../prisma';
 
+import { type ExecutionContext } from 'hono';
 import { Item } from '../../drizzle/methods/Item';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Deletes an item from the database.
@@ -10,7 +12,11 @@ import { ItemPacks } from '../../drizzle/methods/ItemPacks';
  * @param {string} packId - The ID of the pack that the item belongs to.
  * @return {Promise<object>} - The deleted item object.
  */
-export const deleteItemService = async (itemId: string, packId?: string) => {
+export const deleteItemService = async (
+  itemId: string,
+  executionCtx: ExecutionContext,
+  packId?: string,
+) => {
   const itemClass = new Item();
   const ItemPacksClass = new ItemPacks();
 
@@ -18,6 +24,8 @@ export const deleteItemService = async (itemId: string, packId?: string) => {
   if (packId) {
     await ItemPacksClass.delete(itemId, packId);
   }
+
+  executionCtx.waitUntil(VectorClient.instance.delete(itemId));
 
   return { message: 'Item deleted successfully' };
 };

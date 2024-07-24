@@ -3,13 +3,12 @@ import QuickActionButton from './QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/hooks/dashboard';
 
-
 const QuickActionsSection = () => {
   const styles = useCustomStyles(loadStyles);
   const { handleActionSelect, quickActionData } = useQuickActions();
 
   return (
-    <RStack style={{ flexDirection: 'row', ...styles.section, }}>
+    <RStack style={{ flexDirection: 'row', ...styles.section }}>
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -29,7 +28,7 @@ const loadStyles = (theme) => {
   return {
     section: {
       marginBottom: 20,
-      paddingHorizontal: 20, // Added padding here.
+      paddingHorizontal: 20,
       display: 'flex',
       justifyContent: 'center',
     },

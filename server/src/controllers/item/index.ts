@@ -9,3 +9,4 @@ export * from './getItemById';
 export * from './editGlobalItemAsDuplicate';
 export * from './getItemsGlobally';
 export * from './searchItemsByName';
+export * from './getSimilarItems';

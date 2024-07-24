@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 const emailValidator = z
-  .string()
+  .string({ required_error: 'Email is required' })
   .email()
   .transform((str) => str.trim().toLowerCase());
 
 const passwordValidator = z
-  .string()
+  .string({ required_error: 'Password is required' })
   .min(7)
   .refine((str) => !str.includes('password'), {
     message: `The password cannot contain the word 'password'`,
@@ -63,6 +63,22 @@ export const editUser = z.object({
   code: z.string().optional(),
   role: z.enum(['user', 'admin']).optional(),
   username: z.string().optional(),
+  offlineMaps: z
+    .record(
+      z.string(),
+      z.object({
+        name: z.string(),
+        styleURL: z.string(),
+        metadata: z.object({
+          shape: z.string(),
+        }),
+        bounds: z.array(z.array(z.number())),
+        minZoom: z.number(),
+        maxZoom: z.number(),
+      }),
+    )
+    .optional()
+    .nullable(),
   profileImage: z.string().optional().nullable(),
   preferredWeather: z.string().optional(),
   preferredWeight: z.string().optional(),
@@ -70,6 +86,10 @@ export const editUser = z.object({
 
 export const deleteUser = z.object({
   userId: z.string(),
+});
+
+export const deleteUserForm = z.object({
+  confirmText: z.literal('delete'),
 });
 
 export const linkFirebaseAuth = z.object({

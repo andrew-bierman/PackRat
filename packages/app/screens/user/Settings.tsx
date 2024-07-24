@@ -1,11 +1,9 @@
 import React from 'react';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
-  RInput,
   RSeparator,
   RText,
   RStack,
-  RButton,
   RH5,
   RH2,
   RScrollView,
@@ -16,15 +14,19 @@ import {
   FormSelect,
   SubmitButton,
   RIconButton,
+  RSpinner,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
 import { useProfileSettings } from 'app/hooks/user';
-import { useRouter } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
-import { userSettingsSchema, passwordChangeSchema } from '@packrat/validations';
-import { Platform } from 'react-native';
+import {
+  userSettingsSchema,
+  passwordChangeSchema,
+  deleteUserForm,
+} from '@packrat/validations';
+import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
-
+import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -36,16 +38,12 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
   value: key,
 }));
 
-
-
 export default function Settings() {
-  const { user, handleEditUser, handlePasswordsChange, handleUpdatePassword } =
-    useProfileSettings();
+  const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
+  const { deleteProfile, isLoading } = useDeleteProfile();
 
-  const { isDark, currentTheme } = useTheme();
-  const router = useRouter();
+  const { isDark } = useTheme();
   const navigate = useNavigate();
-
 
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
@@ -65,37 +63,30 @@ export default function Settings() {
             flexDirection: 'row',
           }}
         >
-       
-            <RIconButton
-              backgroundColor="transparent"
-              icon={
-                <AntDesign
-                  name="arrowleft"
-                  size={24}
-                  color={isDark ? 'white' : 'black'}
-                />
+          <RIconButton
+            backgroundColor="transparent"
+            icon={
+              <AntDesign
+                name="arrowleft"
+                size={24}
+                color={isDark ? 'white' : 'black'}
+              />
+            }
+            onPress={() => {
+              if (Platform.OS === 'web') {
+                window?.history?.back();
+              } else {
+                navigate('/profile');
               }
-              onPress={() => {
-                if (Platform.OS === 'web') {
-                  window?.history?.back();
-                } else {
-                  navigate('/profile');
-                }
-              }}
-            />
-        
+            }}
+          />
           <RH2>Profile</RH2>
         </RStack>
         <Form
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user, profileImage: user.profileImage || '' }}
         >
-          <RStack
-            space="$3"
-            maw="100%"
-            width="fit-content"
-            marginHorizontal="auto"
-          >
+          <RStack space="$3" maw="100%" style={{ marginHorizontal: 'auto' }}>
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
@@ -146,14 +137,16 @@ export default function Settings() {
           </RStack>
         </Form>
 
-        <RStack marginTop={20} marginBottom={10}>
+        <RStack style={{ marginTop: 20, marginBottom: 10 }}>
           <RH2>Change Password</RH2>
           <RSeparator marginVertical={8} />
-          <RText fontSize={16}>We will email you to verify the change.</RText>
+          <RText size={16}>We will email you to verify the change.</RText>
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
-          <RStack space="$3" width="100%" marginHorizontal="auto">
-            <RStack space="$2">
+          <RStack
+            style={{ gap: 16, maxWidth: '100%', marginHorizontal: 'auto' }}
+          >
+            <RStack>
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput
                 id="oldPassword"
@@ -162,7 +155,7 @@ export default function Settings() {
                 passwordIconProps={{ color: 'black' }}
               />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="newPassword">New password</RLabel>
               <FormInput
                 id="newPassword"
@@ -170,7 +163,7 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
               <FormInput
                 id="confirmPassword"
@@ -185,6 +178,37 @@ export default function Settings() {
             >
               Change password
             </SubmitButton>
+          </RStack>
+        </Form>
+        <RStack marginTop={20} marginBottom={10}>
+          <RH2>Delete account</RH2>
+          <RSeparator marginVertical={8} />
+          <RText size={16}>
+            Deleting your account will remove all your information from our
+            database. This cannot be undone
+          </RText>
+        </RStack>
+        <Form validationSchema={deleteUserForm}>
+          <RStack style={{ width: '100%', marginHorizontal: 'auto' }}>
+            <RLabel htmlFor="confirmText">
+              To confirm this, type "delete"
+            </RLabel>
+            <RStack style={{ width: '100%', gap: 16, flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <FormInput id="confirmText" name="confirmText" />
+              </View>
+              <SubmitButton
+                onSubmit={deleteProfile}
+                disabled={isLoading}
+                color="white"
+                style={{
+                  backgroundColor: 'red',
+                  opacity: isLoading ? 0.4 : 1,
+                }}
+              >
+                {isLoading ? <RSpinner color="#f6f6f6" /> : 'Delete account'}
+              </SubmitButton>
+            </RStack>
           </RStack>
         </Form>
       </RStack>

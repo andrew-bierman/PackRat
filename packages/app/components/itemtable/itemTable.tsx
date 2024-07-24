@@ -1,22 +1,35 @@
 import React from 'react';
-import { Dimensions, Platform, ScrollView, Text, View } from 'react-native';
-import { Table, Row, Cell } from 'react-native-table-component';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
-import { formatNumber } from '../../utils/formatNumber';
-import { EditPackItemModal } from '../pack_table/EditPackItemModal';
-import { DeletePackItemModal } from '../pack_table/DeletePackItemModal';
-import { PaginationLimit } from '../paginationChooseLimit';
-import Loader from '../Loader';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { loadStyles } from './itemsTable.style';
-import { AddItem } from '../item/AddItem';
-import { useDeleteItem } from 'app/hooks/items';
-import { useAuthUser } from 'app/auth/hooks';
-import Layout from 'app/components/layout/Layout';
-import { RButton, RStack, RText } from '@packrat/ui';
+import { ScrollView, View } from 'react-native';
 import useResponsive from 'app/hooks/useResponsive';
+import Loader from '../Loader';
+import useTheme from '../../hooks/useTheme';
+import Layout from 'app/components/layout/Layout';
+import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
+import { PaginationLimit } from '../paginationChooseLimit';
 
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface ItemType {
+  global: string;
+  name: string;
+  weight: number;
+  category?: Category;
+  quantity: number;
+  unit: string;
+  id: string;
+  type: string;
+  ownerId: string;
+  categoryId: string;
+  updatedAt: any;
+  createdAt: any;
+}
+
+interface GroupedData {
+  [type: string]: ItemType[];
+}
 
 interface ItemsTableProps {
   limit: number;
@@ -26,26 +39,12 @@ interface ItemsTableProps {
   data: ItemType[];
   isLoading: boolean;
   totalPages: number;
-}
-
-interface ItemType {
-  global: string;
-  name: string;
-  weight: number;
-  category?: { name: string };
-  quantity: number;
-  unit: string;
-  id: string;
-  type: string;
-  ownerId: string;
-}
-
-interface TitleRowProps {
-  title: string;
-}
-
-interface TableItemProps {
-  itemData: ItemType;
+  handleCheckboxChange?: (itemId: string) => void;
+  onDelete?: (params: { itemId: string; packId: string }) => void;
+  hasPermissions?: boolean;
+  currentPack?: any;
+  refetch?: () => void;
+  setRefetch?: () => void;
 }
 
 export const ItemsTable = ({
@@ -56,185 +55,80 @@ export const ItemsTable = ({
   data,
   isLoading,
   totalPages,
+  handleCheckboxChange,
+  onDelete,
+  hasPermissions,
+  currentPack,
+  refetch,
+  setRefetch,
 }: ItemsTableProps) => {
-  const flexArr = [1.5, 1, 1, 1, 0.65, 0.65, 0.65];
-  const { xs, xxs, xxxs } =  useResponsive();
-  const { handleDeleteItem } = useDeleteItem();
+  const { xs, xxxs } = useResponsive();
+  const { isDark } = useTheme();
 
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
-  const styles = useCustomStyles(loadStyles);
-  const TitleRow = ({ title }: TitleRowProps) => {
-    const rowData = [
-      <RStack style={{ flexDirection: 'row', ...styles.mainTitle }}>
-        <Text style={styles.titleText}>{title}</Text>
-      </RStack>,
-    ];
+  const groupByType = (items: ItemType[]): Record<string, ItemType[]> => {
+    return items.reduce((acc, item) => {
+      const { type } = item;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(item);
+      return acc;
+    }, {} as GroupedData);
+  };
 
-    return (
-      <Row data={rowData} style={styles.title} textStyle={styles.titleText} />
-    );
-  };
-  const TableItem = ({ itemData }: TableItemProps) => {
-    const { name, weight, category, quantity, unit, id, type, ownerId } =
-      itemData;
-    const authUser = useAuthUser();
+  const filteredData = data.map((item) => {
+    const {
+      id,
+      categoryId,
+      createdAt,
+      updatedAt,
+      ownerId,
+      global,
+      ...filteredItem
+    } = item;
+    return filteredItem;
+  });
 
-    const rowData = [
-      <RText
-        style={{
-          color: isDark ? 'white' : 'black',
-          fontSize:15,
-        }}
-      >
-        {name}
-      </RText>,
-      <RText style={{ color: isDark ? 'white' : 'black' }}>
-        {formatNumber(weight)} {unit}
-      </RText>,
-      <RText style={{ color: isDark ? 'white' : 'black' }}>{quantity}</RText>,
-      <RText
-        style={{
-          color: isDark ? 'white' : 'black',
-          fontSize:15,
-        }}
-      >
-        {category?.name || type}
-      </RText>,
-    ];
-    return (
-      <Row
-        data={rowData}
-        style={{
-          backgroundColor: isDark ? '#1A1A1D' : 'white',
-          borderBottomWidth: !isDark ? 1 : 'none',
-          borderBottomColor: !isDark ? '#D1D5DB' : 'none',
-          ...styles.row,
-        }}
-        flexArr={flexArr}
-      />
-    );
-  };
-  /**
-   * Handles the logic for navigating to the next page.
-   *
-   * @return {undefined} This function doesn't return anything.
-   */
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
-  /**
-   * Handles the action of going to the previous page.
-   *
-   * @return {undefined} There is no return value.
-   */
-  const handlePreviousPage = () => {
-    setPage(page - 1);
-  };
+  const groupedData = groupByType(filteredData);
 
   return (
-    <Layout>
-      <ScrollView>
-        <View
-          style={{
-            paddingVertical: 16,
-            flex: 1,
-            paddingTop: 30,
-            marginTop: 20,
-            backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: xxxs? '100vw' : xs ? '80vw' : '60vw',
-          }}
-        >
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'center',
-              maxWidth: '100%',
-            }}
-          >
-            <Table
-              style={styles.tableStyle}
-              borderStyle={{ borderColor: 'transparent' }}
-            >
-              <TitleRow title="Global Items List" />
-              <Row
-                flexArr={flexArr}
-                data={['Item Name', 'Weight', 'Quantity', 'Category'].map(
-                  (header, index) => (
-                    <Cell
-                      key={index}
-                      data={
-                        <RText
-                          style={{
-                            fontSize: 15,
-                                 
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          {header}
-                        </RText>
-                      }
-                      textStyle={styles.headerText}
-                    />
-                  ),
-                )}
-                style={styles.head}
-              />
-              <ScrollView
-                style={{ height:  'auto' }}
-              >
-                {isLoading ? (
-                  <Loader />
-                ) : (
-                  data.map((item, index) => {
-                    return <TableItem key={index} itemData={item} />;
-                  })
-                )}
-              </ScrollView>
-            </Table>
-          </ScrollView>
+    <View
+      style={{
+        padding: 30,
+        backgroundColor: isDark ? '#1A1A1D' : 'white',
+        borderRadius: 12,
+        margin: 20,
+      }}
+    >
+      <Layout>
+        <ScrollView>
           <View
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginTop: 20,
+              flexGrow: 1,
+              backgroundColor: isDark ? '#1A1A1D' : 'white',
+              width: '100%',
             }}
           >
-            <RButton
-              style={{
-                width: 50,
-                backgroundColor: page < 2 ? 'gray' : '#0284c7',
-                borderRadius: 5,
-                borderColor: page < 2 ? 'gray' : '#0284c7',
-                borderWidth: 1,
-                borderStyle: 'solid',
-              }}
-              disabled={page < 2}
-              onPress={handlePreviousPage}
-            >
-              <AntDesign name="left" size={16} color="white" />
-            </RButton>
-            <RButton
-              style={{
-                marginLeft: 10,
-                width: 50,
-                backgroundColor: page === totalPages ? 'gray' : '#0284c7',
-                borderRadius: 5,
-                borderColor: page === totalPages ? 'gray' : '#0284c7',
-                borderWidth: 1,
-                borderStyle: 'solid',
-              }}
-              disabled={page === totalPages}
-              onPress={handleNextPage}
-            >
-              <AntDesign name="right" size={16} color="white" />
-            </RButton>
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <PaginatedSortedTable
+                groupedData={groupedData}
+                handleCheckboxChange={handleCheckboxChange}
+                onDelete={onDelete}
+                hasPermissions={hasPermissions}
+                currentPack={currentPack}
+                refetch={refetch}
+                setRefetch={setRefetch}
+                totalPages={totalPages}
+                page={page}
+                setPage={setPage}
+              />
+            )}
+            <PaginationLimit limit={limit} setLimit={setLimit} />
           </View>
-          <PaginationLimit limit={limit} setLimit={setLimit} />
-        </View>
-      </ScrollView>
-    </Layout>
+        </ScrollView>
+      </Layout>
+    </View>
   );
 };

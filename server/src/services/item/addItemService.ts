@@ -5,6 +5,8 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
+import { VectorClient } from '../../vector/client';
+import { type ExecutionContext } from 'hono';
 
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
@@ -25,6 +27,7 @@ export const addItemService = async (
   packId: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
+  executionCtx: ExecutionContext,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -69,5 +72,17 @@ export const addItemService = async (
   // );
 
   // return { newItem: updatedItem, packId };
+
+  executionCtx.waitUntil(
+    VectorClient.instance.syncRecord({
+      id: item.id,
+      content: name,
+      namespace: 'items',
+      metadata: {
+        isPublic: item.global,
+      },
+    }),
+  );
+
   return item;
 };

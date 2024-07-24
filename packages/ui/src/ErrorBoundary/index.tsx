@@ -4,7 +4,10 @@ import { Text } from 'tamagui';
 
 interface Props {
   children?: ReactNode;
-  FallbackComponent?: React.ComponentType<{ error: Error, resetErrorBoundary: () => void }>;
+  FallbackComponent?: React.ComponentType<{
+    error: Error;
+    resetErrorBoundary: () => void;
+  }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
 }
 
@@ -15,13 +18,11 @@ const DefaultFallbackComponent = ({ error }: { error: Error }) => (
 const ErrorBoundary: React.FC<Props> = ({
   children,
   FallbackComponent = DefaultFallbackComponent,
-  onError = (error, errorInfo) => console.error('Uncaught error:', error, errorInfo),
+  onError = (error, errorInfo) =>
+    console.error('Uncaught error:', error, errorInfo),
 }) => {
   return (
-    <ReactErrorBoundary
-      FallbackComponent={FallbackComponent}
-      onError={onError}
-    >
+    <ReactErrorBoundary FallbackComponent={FallbackComponent} onError={onError}>
       {children}
     </ReactErrorBoundary>
   );

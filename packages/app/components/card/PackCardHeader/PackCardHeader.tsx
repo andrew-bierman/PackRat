@@ -4,29 +4,25 @@ import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/auth/hooks';
 import {
-  ThreeDotsMenu,
-  YStack,
-  RButton,
-  EditableText,
-  RIconButton,
   RStack,
-  RInput,
-  RText,
-  RContextMenu,
+  RIconButton,
+  EditableText,
+  DropdownComponent,
 } from '@packrat/ui';
-import { useDeletePack, useFetchSinglePack } from 'app/hooks/packs';
+import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
-import { useEditPack } from 'app/hooks/packs/useEditPack';
-import { Platform } from 'react-native';
-import { CopyPackModal } from '../../pack/CopyPackModal';
-import { View } from 'react-native';
-
+import { Platform, View } from 'react-native';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface PackCardHeaderProps {
   data: any;
   title: string;
   link?: string;
+}
+interface optionValues {
+  label: string;
+  value: string;
 }
 
 export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
@@ -42,25 +38,17 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
     setIsOpen,
   } = usePackTitleInput(data);
 
-  const { isDark, currentTheme } = useTheme();
-
+  const { isDark } = useTheme();
   const router = useRouter();
-  const { editPack } = useEditPack();
 
-  const handleDelete = () => {
-    handleDeletePack();
-    setIsOpen(false);
-  };
-  const handleSavePack = () => {
-    const packDetails = {
-      id: data.id,
-      name: data.name,
-      is_public: data.is_public,
-    };
-    setIsOpen(false);
-    editPack(packDetails);
-  };
-  
+  const optionValues: optionValues[] = [
+    { label: 'Edit', value: 'Edit' },
+    { label: 'Save', value: 'Save' },
+    { label: 'Delete', value: 'Delete' },
+  ];
+
+  const { xxs, xs, xxl } = useResponsive();
+
   return (
     <>
       <CustomCardHeader
@@ -93,41 +81,37 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 }}
               />
             )}
-            
-              <EditableText
-                isLoading={isLoading}
-                defaultValue={title}
-                isFocused={isEditMode}
-                onSave={handleSaveTitle}
-              />
+
+            <EditableText
+              isLoading={isLoading}
+              defaultValue={title}
+              isFocused={isEditMode}
+              onSave={handleSaveTitle}
+            />
           </RStack>
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            Platform.OS === "web" ? (
-              <ThreeDotsMenu open={isOpen} onOpenChange={handleActionsOpenChange}>
-              <YStack space="$1">
-                <RButton onPress={handleEdit}>Edit</RButton>
-                <RButton onPress={handleSavePack}>Save</RButton>
-                <RButton onPress={handleDelete}>Delete</RButton>
-              </YStack>
-            </ThreeDotsMenu>
-            ) : (
-              <RContextMenu
-              menuItems={[
-                { label: 'Edit', onSelect:handleEdit },
-                { label: 'Save', onSelect: handleSavePack },
-                {label:'Delete', onSelect:handleDeletePack}
-              ]}
-              menuName={
-                <RIconButton
-          backgroundColor="transparent"
-          icon={<MaterialIcons name="more-horiz" size={18} />}
-          style={{ padding: 0 }}
-        />
-              }
-            />
-            )
+            <View
+              style={{
+                minWidth: 50,
+                maxWidth: 100,
+              }}
+            >
+              <DropdownComponent
+                value={null}
+                data={optionValues}
+                onValueChange={(value) => handleActionsOpenChange(value)}
+                placeholder={
+                  <RIconButton
+                    backgroundColor="transparent"
+                    icon={<MaterialIcons name="more-horiz" size={20} />}
+                    style={{ paddingTop: 20 }}
+                  />
+                }
+                native={true}
+              />
+            </View>
           )
         }
       />

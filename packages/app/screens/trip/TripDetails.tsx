@@ -59,7 +59,7 @@ export function TripDetails() {
 
   const data = rawData as TripData;
 
-  const { weatherObject, weatherWeek } = useTripWeather(data);
+  const { weatherObject } = useTripWeather(data);
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -129,7 +129,6 @@ export function TripDetails() {
                               <RStack>
                                 <Text style={styles.descriptionText}>
                                   Start Date:{data.start_date}
-                                  
                                 </Text>
                               </RStack>
                             )}
@@ -137,7 +136,6 @@ export function TripDetails() {
                               <RStack>
                                 <Text style={styles.descriptionText}>
                                   End Date:{data.end_date}
-                                  
                                 </Text>
                               </RStack>
                             )}
@@ -148,13 +146,7 @@ export function TripDetails() {
                           <TableContainerComponent currentPack={data?.packs} />
                         );
                       case SECTION.WEATHER:
-                        return (
-                          <WeatherCardComponent
-                            weatherObject={weatherObject}
-                            weatherWeek={weatherWeek}
-                            data={data}
-                          />
-                        );
+                        return null; // TODO handle saved trip weather
                       case SECTION.TRIP:
                         return (
                           <TripCardComponent

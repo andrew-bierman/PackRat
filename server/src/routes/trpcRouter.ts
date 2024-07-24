@@ -19,7 +19,7 @@ import {
   emailExistsRoute,
   updatePasswordRoute,
 } from '../controllers/auth';
-import { getWeatherRoute, getWeatherWeekRoute } from '../controllers/weather';
+import { getWeatherRoute } from '../controllers/weather';
 import {
   addTripRoute,
   deleteTripRoute,
@@ -47,10 +47,15 @@ import {
   getPackByIdRoute,
   getPacksRoute,
   getPublicPacksRoute,
+  getSimilarPacksRoute,
   scorePackRoute,
 } from '../controllers/pack';
 
-import { getAIResponseRoute, getUserChatsRoute } from '../controllers/openAi';
+import {
+  getAIResponseRoute,
+  getUserChatsRoute,
+  getAISuggestionsRoute,
+} from '../controllers/openAi';
 import {
   addGlobalItemToPackRoute,
   addItemGlobalRoute,
@@ -63,6 +68,7 @@ import {
   getItemsGloballyRoute,
   getItemsRoute,
   searchItemsByNameRoute,
+  getSimilarItemsRoute,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
@@ -81,40 +87,9 @@ import {
   postSingleGeoJSONRoute,
 } from '../controllers/getOsm';
 
-import {
-  router as trpcRouter,
-  publicProcedure,
-  protectedProcedure,
-} from '../trpc';
-import { z } from 'zod';
-
-export const helloRouter = trpcRouter({
-  world: publicProcedure.input(z.string()).query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  }),
-});
-
-export const helloRouter2 = () => {
-  return publicProcedure.query(async ({ input }) => {
-    console.log('input', input);
-    return `Hello ${input}!`;
-  });
-};
+import { router as trpcRouter } from '../trpc';
 
 export const appRouter = trpcRouter({
-  hello1: trpcRouter({
-    world: publicProcedure.query(() => {
-      return 'Hello World';
-    }),
-  }),
-  hello2: helloRouter,
-  hello3: publicProcedure.query(async (opts) => {
-    return 'Hello World';
-  }),
-  helloRouter2: helloRouter2(),
-  protectedHello: protectedProcedure.query(async (opts) => 'Hello World'),
-  // user routes
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
   signUp: signUpRoute(),
@@ -131,7 +106,6 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
-  getWeatherWeek: getWeatherWeekRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),
@@ -157,6 +131,7 @@ export const appRouter = trpcRouter({
   deletePack: deletePackRoute(), // Done
   scorePack: scorePackRoute(), // Done
   duplicatePublicPack: duplicatePublicPackRoute(), // Not Implemented
+  getSimilarPacks: getSimilarPacksRoute(),
   // osm routes - currently breaking tests, see patch file
   getPhotonResults: getPhotonResultsRoute(),
   getTrailsOSM: getTrailsOSMRoute(),
@@ -167,6 +142,7 @@ export const appRouter = trpcRouter({
   getPhotonDetails: getPhotonDetailsRoute(),
   // open ai routes
   getAIResponse: getAIResponseRoute(),
+  getAISuggestions: getAISuggestionsRoute(),
   getUserChats: getUserChatsRoute(),
   // item routes
   getItems: getItemsRoute(),
@@ -180,6 +156,7 @@ export const appRouter = trpcRouter({
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
   deleteGlobalItem: deleteGlobalItemRoute(), // Done,
+  getSimilarItems: getSimilarItemsRoute(),
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

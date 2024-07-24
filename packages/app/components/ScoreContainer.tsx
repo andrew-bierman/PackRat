@@ -11,6 +11,7 @@ import {
   useScoreProgress,
 } from 'app/hooks/score';
 import { View } from 'react-native';
+import { useMedia } from 'tamagui';
 
 interface ScoreProgressChartProps {
   score: number;
@@ -170,7 +171,7 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
 interface ScoreContainerProps {
   type: 'pack' | 'trip';
   data: any;
-  isOwner: boolean;
+  isOwner: boolean | undefined | null;
 }
 export const ScoreContainer: React.FC<ScoreContainerProps> = ({
   type,
@@ -192,15 +193,17 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
   } = useScoreData(type, data);
 
   const handleScoreClick = useCalculateStore(id, type);
-
-  const isWeb = Platform.OS === 'web';
+  const media = useMedia();
 
   return (
     <RStack style={styles.box}>
       <XStack
-        style={[styles.hStack, !isWeb && { flexDirection: 'column', gap: 10 }]}
+        style={[
+          styles.hStack,
+          !media.gtXs && { flexDirection: 'column', gap: 32 },
+        ]}
       >
-        <YStack style={styles.vStack}>
+        <YStack style={media.gtXs ? styles.vStack : styles.vStackXS}>
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
@@ -213,7 +216,13 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           )}
         </YStack>
         {isAlreadyScored && (
-          <View style={{ width: '20vw' }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: media.gtXs ? 'column' : 'row',
+              gap: 8,
+            }}
+          >
             <ScoreProgressChart score={totalScore} />
             <GradingPieChart scores={scores} />
           </View>
@@ -239,7 +248,12 @@ const loadStyles = (theme: any) => {
     vStack: {
       justifyContent: 'center',
       alignItems: 'flex-start',
-      width: Platform.OS == 'web' ? '60%' : '100%',
+      width: '60%',
+    },
+    vStackXS: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
     },
     scoreText: {
       color: currentTheme.colors.textPrimary,

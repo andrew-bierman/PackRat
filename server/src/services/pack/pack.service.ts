@@ -6,3 +6,4 @@ export * from './getPackByIdService';
 export * from './getPackService';
 export * from './scorePackService';
 export * from './getPublicPacksService';
+export * from './getSimilarPacksService';

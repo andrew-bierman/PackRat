@@ -16,10 +16,12 @@ export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
       keepPreviousData: true,
     },
   );
-  utils.getPacks.setData({
-    ownerId: ownerId || '',
-    queryBy: queryString,
-  });
+  utils.getPacks.setData(
+    {
+      ownerId: ownerId || '',
+      queryBy: queryString,
+    }
+  );
 
   // Extract packs or set an empty array if data is undefined.
   const packs = data?.packs || [];

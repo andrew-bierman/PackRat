@@ -55,10 +55,11 @@ const LandingPage = () => {
           ) : (
             <RText
               style={{
+                height: 40,
                 color: 'white',
-                fontSize: 25,
+                fontSize: 30,
                 fontWeight: 'bold',
-                marginBottom: 10,
+                paddingTop: 8,
               }}
             >
               PackRat

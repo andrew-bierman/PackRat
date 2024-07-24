@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   RText,
   RStack,
@@ -7,8 +7,9 @@ import {
   SubmitButton,
   FormSelect as OriginalFormSelect,
   FormRadioGroup as OriginalFormRadioGroup,
+  DropdownComponent,
 } from '@packrat/ui';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { ItemCategoryEnum } from '../../constants/itemCategory';
 import useTheme from '../../hooks/useTheme';
@@ -57,10 +58,16 @@ export const ItemForm = ({
   }
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+  const [selectedUnit, setSelectedUnit] = useState('lb');
 
   const radioOptions = Object.values(ItemCategoryEnum)
     .filter((value) => !(hasWaterAdded && value === ItemCategoryEnum.WATER))
     .map((radioOption) => ({ label: radioOption, value: radioOption }));
+
+  const handleUnitChange = (i) => {
+    console.log(i);
+    setSelectedUnit(i);
+  };
 
   return (
     <View>
@@ -86,14 +93,25 @@ export const ItemForm = ({
             <View>
               <FormInput name="weight" placeholder="Weight" isDecimal={true} />
             </View>
-            {data && (
-              <FormSelect
-                options={data}
-                name="unit"
-                placeholder={'Unit'}
-                width="100"
-              />
-            )}
+            {data &&
+              (Platform.OS === 'web' ? (
+                <FormSelect
+                  options={data}
+                  name="unit"
+                  placeholder={'Unit'}
+                  width="100"
+                />
+              ) : (
+                <DropdownComponent
+                  value={selectedUnit}
+                  data={data}
+                  onValueChange={handleUnitChange}
+                  placeholder={selectedUnit}
+                  width="50%"
+                  native={true}
+                  zeego={true}
+                />
+              ))}
           </View>
           <FormInput
             name="quantity"

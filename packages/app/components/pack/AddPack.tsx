@@ -1,35 +1,46 @@
-import React from 'react';
-import { Platform, View } from 'react-native';
 import {
-  RText,
+  BaseModal,
+  DropdownComponent,
   Form,
-  FormSelect as OriginalFormSelect,
   FormInput,
+  FormSelect as OriginalFormSelect,
+  RStack,
+  RSwitch,
+  RText,
   SubmitButton,
   useModal,
 } from '@packrat/ui';
-import { BaseModal } from '@packrat/ui';
-import useTheme from '../../hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAddNewPack, usePackId } from 'app/hooks/packs';
-import { useRouter } from 'app/hooks/router';
 import { addPackSchema } from '@packrat/validations';
-import { RContextMenu } from '@packrat/ui/src/RContextMenu';
+import { useAddNewPack } from 'app/hooks/packs';
+import { useRouter } from 'app/hooks/router';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
+import React, { useState } from 'react';
+import { Platform, View } from 'react-native';
+import { Switch } from 'tamagui';
+import useTheme from '../../hooks/useTheme';
 
 const FormSelect: any = OriginalFormSelect;
 
-export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
+export const AddPack = ({
+  isCreatingTrip = false,
+  onSuccess = () => {},
+}: {
+  isCreatingTrip?: boolean;
+  onSuccess?: any;
+}) => {
   // Hooks
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
-  const [_, setPackIdParam] = usePackId();
+  const { xxs, xxl, xs } = useResponsive();
 
   const {
     addNewPackAsync,
     isError,
     isLoading,
+    isPublic,
     setIsPublic,
     packSelectOptions,
   } = useAddNewPack();
@@ -40,7 +51,7 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
    */
   const handleAddPack = async (data) => {
     try {
-      const response = await addNewPackAsync(data);
+      const response = await addNewPackAsync({ ...data, isPublic });
 
       onSuccess?.();
 
@@ -49,15 +60,16 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
       }
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
-        return;
       }
-
-      setPackIdParam(response.id);
     } catch {}
   };
 
-  const handleonValueChange = (itemValue) => {
-    setIsPublic(itemValue == 'true');
+  const handleOnValueChange = () => {
+    setIsPublic((prevIsPublic) => {
+      const newIsPublic = !prevIsPublic;
+      console.log('isPublic:', newIsPublic);
+      return newIsPublic;
+    });
   };
 
   return (
@@ -71,27 +83,29 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
             placeholder="Name"
             name="name"
             label="Name"
-            style={{ textAlign: 'left', width: 200 }}
+            style={{
+              textAlign: 'left',
+              width: 200,
+              alignItems: 'inherit',
+              justifyContent: 'center',
+            }}
           />
-          {Platform.OS === 'web' ? (
-            <FormSelect
-              onValueChange={handleonValueChange}
-              options={packSelectOptions}
-              name="isPublic"
-              label="Is Public"
-              accessibilityLabel="Choose Service"
-              placeholder={'Is Public'}
-            />
-          ) : (
-            <RContextMenu
-              menuItems={[
-                { label: 'Yes', onSelect: () => setIsPublic(true) },
-                { label: 'No', onSelect: () => setIsPublic(false) },
-              ]}
-              menuName="Is Public"
-            />
-          )}
-
+          <RStack
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <RText>Public </RText>
+            <RSwitch
+              checked={isPublic}
+              onCheckedChange={handleOnValueChange}
+              size="$1.5"
+            >
+              <Switch.Thumb />
+            </RSwitch>
+          </RStack>
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.text }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
@@ -105,7 +119,11 @@ export const AddPack = ({ isCreatingTrip = false, onSuccess }) => {
   );
 };
 
-export const AddPackContainer = ({ isCreatingTrip }) => {
+export const AddPackContainer = ({
+  isCreatingTrip,
+}: {
+  isCreatingTrip: boolean;
+}) => {
   return (
     <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
       <PackModalContent isCreatingTrip={isCreatingTrip} />
@@ -127,7 +145,6 @@ const loadStyles = (theme, appTheme) => {
   const { isDark, currentTheme } = theme;
   return {
     container: {
-      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
@@ -169,7 +186,7 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width: Platform.OS === 'web' ? '200px' : '65%',
+      width: '200px',
       marginTop: 40,
       marginBottom: 20,
     },

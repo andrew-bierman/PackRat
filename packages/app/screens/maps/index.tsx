@@ -1,17 +1,39 @@
-import { Modal, Text, View, Image, Dimensions } from 'react-native';
-import Mapbox, { offlineManager } from '@rnmapbox/maps';
-import { useEffect, useState } from 'react';
+import { Modal, Text, View, Image } from 'react-native';
+import { offlineManager } from '@rnmapbox/maps';
+import { useState, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
-import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
-import { StyleSheet } from 'react-native';
-import {
-  calculateZoomLevel,
-  getShapeSourceBounds,
-} from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
-import { RStack } from '@packrat/ui';
+import { RButton, RScrollView, RStack } from '@packrat/ui';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { Map } from 'app/components/map';
+import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
+import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
+import { ZStack } from 'tamagui';
+
+interface OfflineMap {
+  name: string;
+  styleURL: string;
+  bounds: [number[], number[]];
+  minZoom: number;
+  maxZoom: number;
+  downloaded: boolean;
+  metadata: {
+    shape: unknown;
+  };
+}
+
+const getCenterCoordinates = (bounds: [number[], number[]]) => {
+  const [
+    [southWestLongitude, southWestLatitude],
+    [northEastLongitude, northEastLatitude],
+  ] = bounds;
+  const centerLatitude = (northEastLatitude + southWestLatitude) / 2;
+  const centerLongitude = (northEastLongitude + southWestLongitude) / 2;
+
+  return [centerLongitude, centerLatitude];
+};
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -32,160 +54,122 @@ function CircleCapComp() {
 }
 
 export default function DownloadedMaps() {
+  const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState(null);
-  const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState(null);
+  const { user } = useUserQuery();
+  const { token } = useAuthUserToken();
+  const [offlineMaps, setOfflineMaps] = useState<OfflineMap[]>();
+  const refreshOfflineMapList = async () => {
+    const offlineMaps = Object.values(user.offlineMaps || {});
+    const offlineMapboxPacks: OfflineMap[] = [];
+    for (const map of offlineMaps) {
+      const offlineMap: OfflineMap = {
+        styleURL: `${map.styleURL}`,
+        name: `${map.name}`,
+        minZoom: map.minZoom,
+        maxZoom: map.maxZoom,
+        bounds: map.bounds,
+        metadata: {
+          shape: JSON.parse(map.metadata.shape),
+        },
+        downloaded: false,
+      };
 
-  let shape, zoomLevel;
-  if (pack != null) {
-    shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
-    const dw = Dimensions.get('screen').width;
-    const bounds = getShapeSourceBounds(shape);
+      let offlineMapboxPack: OfflinePack | null;
+      try {
+        offlineMapboxPack = await offlineManager.getPack(map.name);
+      } catch (error) {
+        console.error(error);
+        offlineMapboxPack = null;
+      }
 
-    zoomLevel = calculateZoomLevel(bounds[0].concat(bounds[1]), {
-      width: dw,
-      height: 360,
-    });
-  }
+      if (offlineMapboxPack) {
+        offlineMap.downloaded = true;
+      }
 
-  useEffect(() => {
-    offlineManager.getPacks().then((packs) => {
-      setOfflinePacks(packs);
-    });
-  }, []);
+      offlineMapboxPacks.push(offlineMap);
+    }
+
+    setOfflineMaps(offlineMapboxPacks);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshOfflineMapList();
+    }, [user]),
+  );
 
   return (
-    <View style={{ backgroundColor: currentTheme.colors.background }}>
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-          marginBottom: 20,
-          color: currentTheme.colors.text,
-        }}
-      >
-        Downloaded Maps
-      </Text>
-      {offlinePacks ? (
-        <View style={{ gap: 4 }}>
-          {offlinePacks.map(({ pack }) => {
-            const metadata = JSON.parse(pack.metadata);
-            return (
-              <TouchableOpacity
-                style={{
-                  padding: 20,
-                }}
-                onPress={() => {
-                  setPack(pack);
-                  setShowMap(true);
-                }}
-              >
-                {pack && (
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 200,
-                      borderRadius: 10,
-                    }}
-                    source={{
-                      uri: `${api}/mapPreview/${
-                        pack?.bounds[0] + ',' + pack?.bounds[1]
-                      },10,60,60/600x600`,
-                    }}
-                  />
-                )}
-                <Text
+    <View
+      style={{
+        backgroundColor: currentTheme.colors.background,
+        height: '100%',
+      }}
+    >
+      <RScrollView nestedScrollEnabled={true} mb={50}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginVertical: 20,
+            color: currentTheme.colors.text,
+          }}
+        >
+          Downloaded Maps
+        </Text>
+        {offlineMaps ? (
+          <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
+            {offlineMaps.map((offlineMap) => {
+              const center = getCenterCoordinates(offlineMap.bounds);
+              return (
+                <RStack
                   style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    marginTop: 5,
-                    color: currentTheme.colors.text,
+                    flexDirection: 'column',
+                    display: 'flex',
+                    padding: 8,
+                    backgroundColor: `${currentTheme.colors.secondaryBlue}`,
+                    borderRadius: 15,
                   }}
                 >
-                  {metadata.name}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      ) : (
-        <RStack>
-          <Text>loading...</Text>
-        </RStack>
-      )}
-      {showMap ? (
-        <Modal visible={true}>
-          <Mapbox.MapView
-            style={{ flex: 1 }}
-            styleURL="mapbox://styles/mapbox/outdoors-v11"
-            compassEnabled={false}
-            logoEnabled={false}
-            scrollEnabled={true}
-            zoomEnabled={true}
-          >
-            <Mapbox.Camera
-              zoomLevel={zoomLevel}
-              centerCoordinate={[
-                (pack.bounds[0][0] + pack.bounds[1][0]) / 2,
-                (pack.bounds[0][1] + pack.bounds[1][1]) / 2,
-              ]}
-              animationMode={'flyTo'}
-              animationDuration={2000}
-            />
-            {/* trail */}
-            <Mapbox.ShapeSource
-              id="source1"
-              lineMetrics={true}
-              shape={shape.features[0]}
-              cluster
-              clusterRadius={80}
-              clusterMaxZoomLevel={14}
-              style={{ zIndex: 1 }}
-            >
-              <Mapbox.LineLayer
-                id="layer1"
-                style={[
-                  styles.lineLayer,
-                  { lineColor: currentTheme.colors.cardIconColor },
-                ]}
-              />
-            </Mapbox.ShapeSource>
-            {/* // top location */}
-            {shape?.features[0]?.geometry?.coordinates?.length > 0 && (
-              <Mapbox.PointAnnotation
-                id={'cicleCap'}
-                coordinate={
-                  shape?.features[0]?.geometry?.coordinates[
-                    shape?.features[0]?.geometry?.coordinates?.length - 1
-                  ]
-                }
-              >
-                <View>
-                  <CircleCapComp />
-                </View>
-              </Mapbox.PointAnnotation>
-            )}
-          </Mapbox.MapView>
-
-          <MapButtonsOverlay
-            mapFullscreen={true}
-            disableFullScreen={() => {
-              setShowMap(false);
-            }}
-            downloadable={false}
-          />
-        </Modal>
-      ) : null}
+                  <Map
+                    shape={offlineMap.metadata.shape}
+                    shouldEnableDownload={!offlineMap.downloaded}
+                    mapName={offlineMap.name}
+                    forceFullScreen={false}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      marginTop: 5,
+                      textAlign: 'center',
+                      color: currentTheme.colors.text,
+                    }}
+                  >
+                    {offlineMap.name}
+                  </Text>
+                </RStack>
+              );
+            })}
+          </View>
+        ) : (
+          <RStack>
+            <Text>loading...</Text>
+          </RStack>
+        )}
+      </RScrollView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  lineLayer: {
-    lineWidth: 4,
-    lineOpacity: 1,
-  },
-});
+const loadStyles = ({ currentTheme }) => {
+  return {
+    lineLayer: {
+      lineWidth: 4,
+      lineOpacity: 1,
+      lineColor: currentTheme.colors.cardIconColor,
+    },
+  };
+};
