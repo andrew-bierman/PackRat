@@ -92,36 +92,43 @@ export const ItemsTable = ({
   const groupedData = groupByType(filteredData);
 
   return (
-    <Layout>
-      <ScrollView>
-        <View
-          style={{
-            paddingVertical: 16,
-            flex: 1,
-            padding: 30,
-            backgroundColor: isDark ? '#1A1A1D' : 'white',
-            width: '100%',
-          }}
-        >
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <PaginatedSortedTable
-              groupedData={groupedData}
-              handleCheckboxChange={handleCheckboxChange}
-              onDelete={onDelete}
-              hasPermissions={hasPermissions}
-              currentPack={currentPack}
-              refetch={refetch}
-              setRefetch={setRefetch}
-              totalPages={totalPages}
-              page={page}
-              setPage={setPage}
-            />
-          )}
-          <PaginationLimit limit={limit} setLimit={setLimit} />
-        </View>
-      </ScrollView>
-    </Layout>
+    <View
+      style={{
+        padding: 30,
+        backgroundColor: isDark ? '#1A1A1D' : 'white',
+        borderRadius: 12,
+        margin: 20,
+      }}
+    >
+      <Layout>
+        <ScrollView>
+          <View
+            style={{
+              flexGrow: 1,
+              backgroundColor: isDark ? '#1A1A1D' : 'white',
+              width: '100%',
+            }}
+          >
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <PaginatedSortedTable
+                groupedData={groupedData}
+                handleCheckboxChange={handleCheckboxChange}
+                onDelete={onDelete}
+                hasPermissions={hasPermissions}
+                currentPack={currentPack}
+                refetch={refetch}
+                setRefetch={setRefetch}
+                totalPages={totalPages}
+                page={page}
+                setPage={setPage}
+              />
+            )}
+            <PaginationLimit limit={limit} setLimit={setLimit} />
+          </View>
+        </ScrollView>
+      </Layout>
+    </View>
   );
 };

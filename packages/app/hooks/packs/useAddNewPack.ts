@@ -82,7 +82,7 @@ export const useAddNewPack = (): UseAddNewPackResult => {
   const addNewPackAsync = (data) => {
     return mutation.mutateAsync({
       name: data.name,
-      is_public: data.isPublic === isPublicOption.value,
+      is_public: data.isPublic,
       owner_id: user?.id,
     });
   };

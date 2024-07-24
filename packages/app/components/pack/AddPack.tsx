@@ -51,7 +51,7 @@ export const AddPack = ({
    */
   const handleAddPack = async (data) => {
     try {
-      const response = await addNewPackAsync(data);
+      const response = await addNewPackAsync({ ...data, isPublic });
 
       onSuccess?.();
 
