@@ -1,4 +1,4 @@
-import { eq, sql, asc, desc } from 'drizzle-orm';
+import { eq, sql, asc, desc, and } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
 import { convertWeight } from '../../utils/convertWeight';
@@ -152,11 +152,18 @@ export class Pack {
         ownerId,
         is_public,
       } = options;
-      const modifiedFilter = ownerId
-        ? eq(PackTable.owner_id, ownerId)
-        : is_public
-          ? eq(PackTable.is_public, is_public)
-          : null;
+      const filterConditions = [];
+
+      if (ownerId) {
+        filterConditions.push(eq(PackTable.owner_id, ownerId));
+      }
+
+      if (is_public !== undefined) {
+        filterConditions.push(eq(PackTable.is_public, is_public));
+      }
+
+      const modifiedFilter =
+        filterConditions.length > 0 ? and(...filterConditions) : null;
       const orderByFunction = this.getOrderBy({ sortOption });
       const relations = this.getRelations({
         includeRelated,

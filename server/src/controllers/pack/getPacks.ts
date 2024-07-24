@@ -15,7 +15,12 @@ export const getPacks = async (c) => {
 export function getPacksRoute() {
   return protectedProcedure.input(validator.getPacks).query(async (opts) => {
     const { ownerId, queryBy } = opts.input;
-    const packs = await getPacksService(ownerId, queryBy);
+
+    const packs = await getPacksService(
+      ownerId,
+      queryBy,
+      opts?.ctx?.user?.id !== ownerId,
+    );
     return {
       packs,
       message: 'Packs retrieved successfully',
