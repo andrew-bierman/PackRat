@@ -7,7 +7,9 @@
     "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "packrat",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.andrewbierman.packrat"
@@ -54,6 +56,9 @@
     "extra": {
       "eas": {
         "projectId": "267945b1-d9ac-4621-8541-826a2c70576d"
+      },
+      "bugsnag": {
+        "apiKey": "d92cb1ab6783c77d1c4b2404641ffdfc"
       }
     },
     "owner": "packrat"
