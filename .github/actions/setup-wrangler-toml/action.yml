@@ -92,7 +92,7 @@ runs:
         echo 'binding = "AI"' >> ${{ github.workspace }}/server/wrangler.toml
         echo '[[env.preview.vectorize]]' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'binding = "VECTOR_INDEX"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'index_name = "vector-index"' >> ${{ github.workspace }}/server/wrangler.toml
+        echo 'index_name = "vector-index-preview"' >> ${{ github.workspace }}/server/wrangler.toml
         echo '[env.preview.vars]' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'NODE_ENV = "preview"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'GOOGLE_CLIENT_ID = "${{ inputs.GOOGLE_CLIENT_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
