@@ -54,7 +54,6 @@ app.use('*', async (c, next) => {
     allowMethods: CORS_METHODS,
   });
   // change for testing the workflow
-  console.log('CORS middleware setup!!!!');
   return corsMiddleware(c, next);
 });
 
