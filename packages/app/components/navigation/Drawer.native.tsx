@@ -64,7 +64,7 @@ const loadStyles = (theme) => {
       marginHorizontal: 10,
     },
     logoText: {
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
       fontSize: 38,
       fontWeight: '900',
     },
@@ -82,7 +82,7 @@ const loadStyles = (theme) => {
       paddingHorizontal: 12,
     },
     menuBarItemText: {
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
       fontSize: 18,
     },
     drawerTrigger: {},

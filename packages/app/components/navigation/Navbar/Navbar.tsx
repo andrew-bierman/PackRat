@@ -57,7 +57,7 @@ export const Navbar = () => {
 };
 
 const NavbarStyles = {
-  floatingBg: '#0284c7',
+  floatingBg: '#0C66A1',
   floatingRadius: 25,
   floatingBlur: 'blur(2px)',
   transition: 'all 0.2s ease-in-out',
@@ -93,7 +93,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
           position: 'fixed' as 'fixed' | 'relative',
           top: 0,
           zIndex: 100,
-          width: Platform.OS === 'web' ? '100vw' : "100%",
+          width: Platform.OS === 'web' ? '100vw' : '100%',
         },
       }),
     },
@@ -124,9 +124,11 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     logo: {
       marginRight: 10,
       cursor: 'pointer',
+      backgroundColor: currentTheme.colors.iconColor,
+      borderRadius: 10,
     },
     logoText: {
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textDark,
       fontSize: 38,
       fontWeight: '900',
       cursor: 'pointer',

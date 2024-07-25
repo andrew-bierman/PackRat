@@ -256,7 +256,7 @@ const loadStyles = (theme: any) => {
       width: '100%',
     },
     scoreText: {
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.textLightPrimary,
       fontSize: 26,
       fontWeight: 'bold',
     },

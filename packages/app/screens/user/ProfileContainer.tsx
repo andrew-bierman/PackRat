@@ -122,26 +122,24 @@ const Header = ({
                 <RText>{tripsCount}</RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textColor}>Packs</RText>
-                <RText color={currentTheme.colors.textColor}>
-                  {packsCount}
-                </RText>
+                <RText color={currentTheme.colors.textDark}>Packs</RText>
+                <RText color={currentTheme.colors.textDark}>{packsCount}</RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textColor}>Favorites</RText>
-                <RText color={currentTheme.colors.textColor}>
+                <RText color={currentTheme.colors.textDark}>Favorites</RText>
+                <RText color={currentTheme.colors.textDark}>
                   {favoritesCount}
                 </RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textColor}>Certified</RText>
+                <RText color={currentTheme.colors.textDark}>Certified</RText>
                 <MaterialCommunityIcons
                   name="certificate-outline"
                   size={24}
                   color={
                     user?.is_certified_guide
                       ? currentTheme.colors.cardIconColor
-                      : currentTheme.colors.textColor
+                      : currentTheme.colors.textDark
                   }
                 />
               </View>
@@ -243,7 +241,7 @@ export default function ProfileContainer({ id = null }) {
                 <RText
                   fontSize={20}
                   fontWeight="bold"
-                  color={currentTheme.colors.textColor}
+                  color={currentTheme.colors.textDark}
                 >
                   No favorites yet
                 </RText>
@@ -316,7 +314,7 @@ const loadStyles = (theme) => {
     },
     userEmail: {
       fontSize: 16,
-      color: currentTheme.colors.textDarkGrey,
+      color: currentTheme.colors.textLightDarkGrey,
       textAlign: 'center',
     },
     card: {

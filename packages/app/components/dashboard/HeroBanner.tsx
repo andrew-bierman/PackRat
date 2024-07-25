@@ -113,7 +113,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             ) : (
               <RButton
                 style={{
-                  backgroundColor: currentTheme.colors.text,
+                  backgroundColor: currentTheme.colors.textLight,
                   minWidth: '100%',
                   flexDirection: 'row',
                 }}
@@ -124,9 +124,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
                 <MaterialCommunityIcons
                   name="magnify"
                   size={24}
-                  color={currentTheme.colors.background}
+                  color={currentTheme.colors.iconColor}
                 />
-                <RText color={currentTheme.colors.textDarkGrey} opacity={0.6}>
+                <RText
+                  color={currentTheme.colors.textLightDarkGrey}
+                  opacity={0.6}
+                >
                   Search by park, city, or trail
                 </RText>
               </RButton>
@@ -157,7 +160,7 @@ const loadStyles = (theme: any) => {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textDark,
     },
   };
 };

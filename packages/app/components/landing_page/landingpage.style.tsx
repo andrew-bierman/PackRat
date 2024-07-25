@@ -47,7 +47,7 @@ const loadStyles = (theme) => {
       fontSize: Platform.OS === 'web' ? 24 : 20,
       fontWeight: Platform.OS === 'web' ? 'bold' : 'normal',
       textAlign: 'center',
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.tertiaryBlue,
       marginBottom: 20, // Ensure spacing between text and next elements
       paddingHorizontal: 10, // Adjust text alignment on smaller screens
     },
@@ -59,7 +59,7 @@ const loadStyles = (theme) => {
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
-      backgroundColor: currentTheme.colors.secondaryBlue,
+      backgroundColor: currentTheme.colors.tertiaryBlue,
       height: 50,
       paddingVertical: 12, // Increase padding for better touch area
       paddingHorizontal: 30,
@@ -67,14 +67,14 @@ const loadStyles = (theme) => {
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
       fontSize: 18,
       fontWeight: 'bold',
     },
     card: {
       marginBottom: 10,
       width: '100%',
-      backgroundColor: currentTheme.colors.secondaryBlue,
+      backgroundColor: currentTheme.colors.tertiaryBlue,
     },
     cardHeader: {
       flexDirection: 'row',
@@ -91,18 +91,18 @@ const loadStyles = (theme) => {
     },
     icon: {
       fontSize: 40,
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
       marginRight: 10,
     },
     featureText: {
       fontSize: 22,
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
     },
     cardContent: {
       paddingHorizontal: 20,
       paddingVertical: 10,
       fontSize: 16,
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
     },
   };
 };

@@ -168,7 +168,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
           minWidth="100%"
           alignSelf="center"
           position="relative"
-          backgroundColor={currentTheme.colors.text}
+          backgroundColor={currentTheme.colors.textLight}
           borderRadius={8}
         >
           <RStack

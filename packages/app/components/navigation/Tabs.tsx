@@ -47,7 +47,7 @@ export const Tabs = () => {
         headerStyle: {
           backgroundColor: currentTheme.colors.secondaryBlue,
         },
-        headerTintColor: currentTheme.colors.text,
+        headerTintColor: currentTheme.colors.textDark,
       }}
     >
       <ExpoTabs.Screen

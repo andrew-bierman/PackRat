@@ -71,7 +71,7 @@ const loadStyles = (theme) => {
       paddingHorizontal: 12,
     },
     menuBarItemText: {
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textDark,
       fontSize: 15,
     },
     menuBarItemActive: {

@@ -34,7 +34,7 @@ export const loadStyles = () => {
     },
     titleText: {
       fontWeight: 'bold',
-      color: currentTheme.colors.text,
+      color: currentTheme.colors.textLight,
     },
     head: {
       height: 50,
