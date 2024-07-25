@@ -69,13 +69,13 @@ jobs:
         run: cd server && yarn run migrate:preview
         env:
           NO_D1_WARNING: true
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.15.0'
-          apiToken: ${{ secrets.CF_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           #   workingDirectory: packages/api
           workingDirectory: server
           command: yarn run deploy:preview
