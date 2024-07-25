@@ -4,7 +4,7 @@ import BugsnagPluginExpoApp from '@bugsnag/plugin-expo-app';
 import BugsnagPluginExpoDevice from '@bugsnag/plugin-expo-device';
 
 Bugsnag.start({
-  apiKey: 'd92cb1ab6783c77d1c4b2404641ffdfc',
+  apiKey: process.env.BUGSNAG_API_KEY,
   plugins: [BugsnagPluginReact, BugsnagPluginExpoApp, BugsnagPluginExpoDevice],
 });
 
