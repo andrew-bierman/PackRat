@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
