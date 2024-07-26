@@ -88,8 +88,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
       >
         <LargeCard
           customStyle={{
-            backgroundColor:
-              cardBackgroundColor || currentTheme.colors.secondaryBlue,
+            backgroundColor: 'transparent',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
@@ -113,7 +112,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             ) : (
               <RButton
                 style={{
-                  backgroundColor: currentTheme.colors.textLight,
+                  backgroundColor: currentTheme.colors.textPrimary,
                   minWidth: '100%',
                   flexDirection: 'row',
                 }}
@@ -127,7 +126,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
                   color={currentTheme.colors.iconColor}
                 />
                 <RText
-                  color={currentTheme.colors.textLightDarkGrey}
+                  color={currentTheme.colors.textPrimaryDarkGrey}
                   opacity={0.6}
                 >
                   Search by park, city, or trail
@@ -160,7 +159,7 @@ const loadStyles = (theme: any) => {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
-      color: currentTheme.colors.textDark,
+      color: currentTheme.colors.tertiaryBlue,
     },
   };
 };

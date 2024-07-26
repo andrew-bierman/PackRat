@@ -23,7 +23,7 @@ export const useRequestEmailModal = () => {
       closeModal();
       InformUser({
         title: 'Password reset email sent',
-        style: { backgroundColor: currentTheme.colors.textLightPrimary },
+        style: { backgroundColor: currentTheme.colors.textPrimaryPrimary },
         placement: 'bottom',
         duration: 5000,
       });

@@ -22,13 +22,13 @@ const loadStyles = (theme: any) => {
     header: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 10,
     },
     headerDark: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 10,
     },
     textContainer: {
@@ -39,16 +39,16 @@ const loadStyles = (theme: any) => {
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: 'sans-serif',
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       textAlign: 'left',
       marginBottom: 20,
     },
-    textDark: {
+    tertiaryBlue: {
       fontSize: 18,
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: "sans-serif",
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       textAlign: 'left',
       marginBottom: 20,
     },

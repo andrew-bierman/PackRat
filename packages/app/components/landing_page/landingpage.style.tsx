@@ -67,7 +67,7 @@ const loadStyles = (theme) => {
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       fontSize: 18,
       fontWeight: 'bold',
     },
@@ -91,18 +91,18 @@ const loadStyles = (theme) => {
     },
     icon: {
       fontSize: 40,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 10,
     },
     featureText: {
       fontSize: 22,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
     },
     cardContent: {
       paddingHorizontal: 20,
       paddingVertical: 10,
       fontSize: 16,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
     },
   };
 };

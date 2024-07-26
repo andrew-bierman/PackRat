@@ -178,7 +178,7 @@ const LandingPage = () => {
               </View>
             </RLink>
           </View>
-          <StatusBar style="auto" />
+          <StatusBar style="dark" />
           {/* </ImageBackground> */}
         </View>
       </RStack>

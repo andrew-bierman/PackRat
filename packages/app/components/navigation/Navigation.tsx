@@ -105,7 +105,7 @@ const loadStyles = (theme) => {
       marginHorizontal: 10,
     },
     logoText: {
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       fontSize: 38,
       fontWeight: '900',
     },

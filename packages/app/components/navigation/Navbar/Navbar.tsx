@@ -57,7 +57,7 @@ export const Navbar = () => {
 };
 
 const NavbarStyles = {
-  floatingBg: '#0C66A1',
+  floatingBg: '#cce5ff',
   floatingRadius: 25,
   floatingBlur: 'blur(2px)',
   transition: 'all 0.2s ease-in-out',
@@ -124,11 +124,11 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     logo: {
       marginRight: 10,
       cursor: 'pointer',
-      backgroundColor: currentTheme.colors.iconColor,
+      backgroundColor: currentTheme.colors.tertiaryBlue,
       borderRadius: 10,
     },
     logoText: {
-      color: currentTheme.colors.textDark,
+      color: currentTheme.colors.tertiaryBlue,
       fontSize: 38,
       fontWeight: '900',
       cursor: 'pointer',

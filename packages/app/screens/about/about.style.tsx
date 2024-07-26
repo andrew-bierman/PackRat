@@ -22,13 +22,13 @@ const loadStyles = (theme: any) => {
     header: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.textDark,
+      color: currentTheme.colors.tertiaryBlue,
       marginRight: 10,
     },
     headerDark: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 10,
     },
 
@@ -61,21 +61,21 @@ const loadStyles = (theme: any) => {
     },
     githubIcon: {
       fontSize: 24,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 5,
     },
     githubIconDark: {
       fontSize: 24,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       marginRight: 5,
     },
     githubText: {
       fontSize: 18,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
     },
-    githubTextDark: {
+    githubtertiaryBlue: {
       fontSize: 18,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
     },
     textContainer: {
       marginBottom: 20,
@@ -85,16 +85,16 @@ const loadStyles = (theme: any) => {
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: "sans-serif",
-      color: currentTheme.colors.textDark,
+      color: currentTheme.colors.tertiaryBlue,
       textAlign: 'center',
       marginBottom: 20,
     },
-    textDark: {
+    tertiaryBlue: {
       fontSize: 18,
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: "sans-serif",
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textPrimary,
       textAlign: 'center',
       marginBottom: 20,
     },

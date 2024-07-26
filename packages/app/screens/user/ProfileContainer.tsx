@@ -122,24 +122,30 @@ const Header = ({
                 <RText>{tripsCount}</RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textDark}>Packs</RText>
-                <RText color={currentTheme.colors.textDark}>{packsCount}</RText>
+                <RText color={currentTheme.colors.tertiaryBlue}>Packs</RText>
+                <RText color={currentTheme.colors.tertiaryBlue}>
+                  {packsCount}
+                </RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textDark}>Favorites</RText>
-                <RText color={currentTheme.colors.textDark}>
+                <RText color={currentTheme.colors.tertiaryBlue}>
+                  Favorites
+                </RText>
+                <RText color={currentTheme.colors.tertiaryBlue}>
                   {favoritesCount}
                 </RText>
               </View>
               <View style={styles.cardInfo}>
-                <RText color={currentTheme.colors.textDark}>Certified</RText>
+                <RText color={currentTheme.colors.tertiaryBlue}>
+                  Certified
+                </RText>
                 <MaterialCommunityIcons
                   name="certificate-outline"
                   size={24}
                   color={
                     user?.is_certified_guide
                       ? currentTheme.colors.cardIconColor
-                      : currentTheme.colors.textDark
+                      : currentTheme.colors.tertiaryBlue
                   }
                 />
               </View>
@@ -241,7 +247,7 @@ export default function ProfileContainer({ id = null }) {
                 <RText
                   fontSize={20}
                   fontWeight="bold"
-                  color={currentTheme.colors.textDark}
+                  color={currentTheme.colors.tertiaryBlue}
                 >
                   No favorites yet
                 </RText>
@@ -314,7 +320,7 @@ const loadStyles = (theme) => {
     },
     userEmail: {
       fontSize: 16,
-      color: currentTheme.colors.textLightDarkGrey,
+      color: currentTheme.colors.textPrimaryDarkGrey,
       textAlign: 'center',
     },
     card: {

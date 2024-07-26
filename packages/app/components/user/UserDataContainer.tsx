@@ -107,7 +107,7 @@ export default function UserDataContainer({
               textTransform: 'capitalize',
               fontSize: 24,
               fontWeight: 'bold',
-              color: currentTheme.colors.textDark,
+              color: currentTheme.colors.tertiaryBlue,
             }}
           >
             {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}

@@ -4,20 +4,20 @@ import { DefaultTheme } from 'react-native-paper';
 export const theme = {
   colors: {
     primary: '#0A84FF',
-    background: '#cce5ff',
-    secondaryBlue: '#fdfbff',
+    background: '#fdfbff',
+    secondaryBlue: '#cce5ff',
     tertiaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#fafafa',
-    textLight: '#FFFFFF',
-    textDark: '#000',
-    border: '#fafafa',
+    textPrimary: '#FFFFFF',
+    textSecondary: '#526070',
+    border: '#e0e2ec',
     notification: '#0A84FF',
     error: '#FF453A',
     textGreen: '#22c55e',
-    textDarkGrey: '#3B3B3B',
+    textBlueGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
-    iconColor: '#001b3e',
+    iconColor: '#003355',
     weatherIcon: '#0284c7',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
@@ -42,22 +42,23 @@ export const theme = {
   },
 };
 
-export const blueTheme = {
+export const lightTheme = {
   colors: {
     primary: '#0A84FF',
-    background: '#0284c7',
-    secondaryBlue: '#0C66A1',
+    background: '#cce5ff',
+    secondaryBlue: '#fdfbff',
+    tertiaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#fafafa',
-    textLight: '#FFFFFF',
-    textDark: '#000',
+    textPrimary: '#FFFFFF',
+    tertiaryBlue: '#000',
     border: '#fafafa',
     notification: '#0A84FF',
     error: '#FF453A',
     textGreen: '#22c55e',
-    textDarkGrey: '#3B3B3B',
+    tertiaryBlueGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
-    iconColor: '#FFFFFF',
+    iconColor: '#001b3e',
     weatherIcon: '#0284c7',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
@@ -88,13 +89,13 @@ export const darkTheme = {
     secondaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#2D2D2D',
-    textLight: '#C5C6C7',
-    textDark: '#C5C6C7',
+    textPrimary: '#C5C6C7',
+    tertiaryBlue: '#C5C6C7',
     border: '#4E4E50',
     notification: '#0A84FF',
     error: '#FF453A',
     textGreen: '#22c55e',
-    textDarkGrey: '#3B3B3B',
+    tertiaryBlueGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
     iconColor: '#C5C6C7',
     weatherIcon: '#0A84FF',
@@ -126,7 +127,7 @@ export const nativeBaseLightTheme = extendTheme({
       500: theme.colors.background,
     },
     amber: {
-      100: theme.colors.textLight,
+      100: theme.colors.textPrimary,
     },
   },
 });
@@ -136,7 +137,7 @@ export const nativeBaseDarkTheme = extendTheme({
       500: darkTheme.colors.background,
     },
     amber: {
-      100: darkTheme.colors.textLight,
+      100: darkTheme.colors.textPrimary,
     },
   },
 });
@@ -146,7 +147,7 @@ export const lightThemePaper = {
   colors: {
     ...DefaultTheme.colors,
     primary: theme.colors.primary,
-    onSurface: theme.colors.textLight,
+    onSurface: theme.colors.textPrimary,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: theme.colors.background,
@@ -159,7 +160,7 @@ export const darkPaperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: darkTheme.colors.primary,
-    onSurface: darkTheme.colors.textLight,
+    onSurface: darkTheme.colors.textPrimary,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: darkTheme.colors.background,

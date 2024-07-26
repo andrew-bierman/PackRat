@@ -43,13 +43,14 @@ const loadStyles = (theme: any) => {
       margin: 10,
       display: 'flex',
       alignItems: 'center',
-      padding: '20',
     },
     card: {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: currentTheme.colors.primary,
+      backgroundColor: currentTheme.colors.card,
+      elevation: 0,
+      boxShadow: 'unset',
     },
     icon: {
       marginBottom: 10,
@@ -57,7 +58,7 @@ const loadStyles = (theme: any) => {
     text: {
       fontSize: 13,
       fontWeight: 'bold',
-      color: currentTheme.colors.iconColor,
+      color: currentTheme.colors.tertiaryBlue,
     },
   };
 };

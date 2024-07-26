@@ -9,7 +9,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     cardStyles: {
       height: 100,
       width: '100%',
-      backgroundColor: appTheme.colors.primary,
+      backgroundColor: currentTheme.colors.card,
       borderRadius: 5,
       padding: 20,
     },
@@ -26,14 +26,14 @@ const loadStyles = (theme: any, appTheme: any) => {
     feedItemTitle: {
       fontWeight: 'bold',
       fontSize: 17,
-      color: currentTheme.colors.textLight,
+      color: currentTheme.colors.textSecondary,
       marginBottom: 5,
     },
     feedItemType: {
       fontWeight: 'bold',
       fontSize: 16,
-      color: currentTheme.colors.textLight,
-      backgroundColor: currentTheme.colors.tertiaryBlue,
+      color: currentTheme.colors.textPrimary,
+      backgroundColor: currentTheme.colors.textSecondary,
       marginBottom: 5,
     },
   };

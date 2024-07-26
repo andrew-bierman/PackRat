@@ -9,12 +9,14 @@ import {
   Theme,
   View,
 } from 'tamagui';
+import { Text, Platform } from 'react-native';
 import { FormCard } from './components/layoutParts';
 import { RLink } from '@packrat/ui';
 import { Form, FormInput, SubmitButton } from '@packrat/ui';
 import { userSignIn } from '@packrat/validations';
 import { FontAwesome } from '@expo/vector-icons';
 import { RIconButton } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
 
 export function SignInScreen({
   promptAsync,
@@ -22,22 +24,32 @@ export function SignInScreen({
   signInStatus,
   isGoogleSignInReady,
 }) {
+  const { currentTheme } = useTheme();
   return (
-    <FormCard>
+    <FormCard
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <View
         flexDirection="column"
-        alignItems="stretch"
-        minWidth="100%"
         maxWidth="100%"
+        minWidth="100%"
+        maxHeight="100%"
+        minHeight="100%"
+        alignItems="center"
+        justifyContent="center"
         gap="$4"
         padding="$4"
         paddingVertical="$6"
-        $group-window-gtSm={{
-          paddingVertical: '$4',
-          width: 400,
-        }}
       >
-        <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
+        <H1
+          alignSelf="center"
+          size="$8"
+          $group-window-xs={{ size: '$7' }}
+          color={currentTheme.colors.tertiaryBlue}
+        >
           Sign in to your account
         </H1>
         <Form validationSchema={userSignIn}>
@@ -60,7 +72,7 @@ export function SignInScreen({
                 onSubmit={(data) => signIn(data)}
                 style={{
                   marginTop: 16,
-                  backgroundColor: '#232323',
+                  backgroundColor: currentTheme.colors.tertiaryBlue,
                   color: 'white',
                 }}
                 width="100%"
@@ -88,7 +100,12 @@ export function SignInScreen({
                   </AnimatePresence>
                 }
               >
-                Sign In
+                <Text
+                  right={Platform.OS === 'web' ? 0 : 60}
+                  style={{ color: currentTheme.colors.textPrimary }}
+                >
+                  Sign In
+                </Text>
               </SubmitButton>
             </Theme>
           </View>

@@ -123,7 +123,7 @@ export const ItemForm = ({
 
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>
-              <RText style={{ color: currentTheme.colors.textLight }}>
+              <RText style={{ color: currentTheme.colors.textPrimary }}>
                 {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
               </RText>
             </SubmitButton>

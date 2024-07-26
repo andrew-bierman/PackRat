@@ -150,7 +150,10 @@ export default function Card({
                       href={type === 'pack' ? '/pack/' + id : '/trip/' + id}
                       style={{ textDecoration: 'none' }}
                     >
-                      <RText fontSize={18} color={currentTheme.colors.textDark}>
+                      <RText
+                        fontSize={18}
+                        color={currentTheme.colors.tertiaryBlue}
+                      >
                         {truncatedName}
                       </RText>
                     </RLink>
@@ -234,7 +237,7 @@ export default function Card({
                       href={`/profile/${type === 'pack' ? owner_id : owner_id}`}
                       style={{ textDecoration: 'none' }}
                     >
-                      <RText color={currentTheme.colors.textDark}>
+                      <RText color={currentTheme.colors.textSecondary}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
                       </RText>
                     </RLink>
@@ -270,7 +273,7 @@ export default function Card({
                       <View>
                         <RText
                           fontSize="$2"
-                          color={currentTheme.colors.textDark}
+                          color={currentTheme.colors.textSecondary}
                         >
                           Favorites
                         </RText>
@@ -296,7 +299,7 @@ export default function Card({
                           ) : null}
 
                           <RText
-                            color={currentTheme.colors.textDark}
+                            color={currentTheme.colors.textSecondary}
                             fontSize="$2"
                             fontWeight="400"
                           >
@@ -309,13 +312,13 @@ export default function Card({
                       <View>
                         <RText
                           fontSize="$2"
-                          color={currentTheme.colors.textDark}
+                          color={currentTheme.colors.tertiaryBlue}
                         >
                           Nights
                         </RText>
                         <RText
                           fontSize="$2"
-                          color={currentTheme.colors.textDark}
+                          color={currentTheme.colors.tertiaryBlue}
                           style={{
                             justifyContent: 'flex-end',
                           }}

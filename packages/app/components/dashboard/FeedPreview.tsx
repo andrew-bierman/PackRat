@@ -23,47 +23,46 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   const styles = useCustomStyles(loadStyles);
   const { data: feedData } = useFeed();
 
-  console.log('feedData', feedData)
+  console.log('feedData', feedData);
 
   return (
     <Carousel itemWidth={itemWidth}>
-      {feedData?.filter((item): item is FeedItem => item.type !== null).map((item: FeedItem, index: number) => {
-        const linkStr = `/${item.type}/${item.id}`;
-        return linkStr ? (
-          <RLink
-            href={linkStr}
-            key={`${linkStr}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <View style={styles.cardStyles} key={index}>
-              <RStack
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <RText style={styles.feedItemTitle}>{item.name}</RText>
-                <RText
-                  style={styles.feedItemType}
-                  fontSize="$1"
-                  fontWeight="bold"
-                  backgroundColor={'#F2F1EB'}
-                  textTransform="capitalize"
-                  paddingVertical={4}
-                  paddingHorizontal={8}
-                  alignContent="center"
-                  borderRadius={2}
+      {feedData
+        ?.filter((item): item is FeedItem => item.type !== null)
+        .map((item: FeedItem, index: number) => {
+          const linkStr = `/${item.type}/${item.id}`;
+          return linkStr ? (
+            <RLink
+              href={linkStr}
+              key={`${linkStr}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <View style={styles.cardStyles} key={index}>
+                <RStack
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                  }}
                 >
-                  {item.type}
+                  <RText style={styles.feedItemTitle}>{item.name}</RText>
+                  <RText
+                    style={styles.feedItemType}
+                    fontSize="$1"
+                    textTransform="capitalize"
+                    paddingHorizontal={8}
+                    alignSelf="center"
+                    borderRadius={5}
+                  >
+                    {item.type}
+                  </RText>
+                </RStack>
+                <RText style={{ color: styles.feedItemType.color }}>
+                  {item.description}
                 </RText>
-              </RStack>
-              <RText style={{ color: styles.feedItemType.color }}>
-                {item.description}
-              </RText>
-            </View>
-          </RLink>
-        ) : null;
-      })}
+              </View>
+            </RLink>
+          ) : null;
+        })}
     </Carousel>
   );
 };

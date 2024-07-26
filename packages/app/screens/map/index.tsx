@@ -271,7 +271,7 @@ export default function Map() {
             <MaterialCommunityIcons
               name="arrow-expand"
               size={30}
-              color={currentTheme.colors.textLight}
+              color={currentTheme.colors.textPrimary}
             />
           </TouchableOpacity>
         </Mapbox.MapView>

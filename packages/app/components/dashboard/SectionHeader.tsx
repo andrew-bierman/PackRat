@@ -27,14 +27,14 @@ const loadStyles = () => ({
     flexDirection: 'row',
   },
   text: {
-    color: theme.colors.textDark,
+    color: theme.colors.tertiaryBlue,
     fontSize: 20,
     fontWeight: 'bold',
   },
   icon: {
     fontSize: 40,
     margin: 10,
-    color: theme.colors.textDark,
+    color: theme.colors.iconColor,
   },
 });
 

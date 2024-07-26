@@ -82,7 +82,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
         />
         <RText
           style={{
-            color: currentTheme.colors.textLightPrimary,
+            color: currentTheme.colors.textPrimaryPrimary,
             fontSize: currentTheme.font.size,
             paddingVertical: 12,
             fontWeight: 600,
@@ -115,7 +115,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
                 setOpen(true);
               }}
             >
-              <RText style={{ color: currentTheme.colors.textLight }}>
+              <RText style={{ color: currentTheme.colors.textPrimary }}>
                 Pick Date Range
               </RText>
             </RButton>
