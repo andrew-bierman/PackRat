@@ -8,9 +8,10 @@ test('test', async ({ page }) => {
   await page.getByLabel('Password').click();
   await page.getByLabel('Password').fill('12345678');
   await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByText('Create a Pack').click();
-  await page.getByPlaceholder('Name').click();
-  await page.getByPlaceholder('Name').fill('tessssssst');
-  await page.getByRole('switch').click();
-  await page.getByRole('button', { name: 'Add Pack' }).click();
+  await page.getByPlaceholder('Search by park, city, or trail').click();
+  await page.getByPlaceholder('Search by park, city, or trail').fill('los angeles');
+  await page.getByText('Los Angelescity').click();
+  await page.goto('https://packrat.pages.dev/destination/query?osmType=R&osmId=207359&name=Los%20Angeles');
+  await page.waitForLoadState('load');
+
 });
