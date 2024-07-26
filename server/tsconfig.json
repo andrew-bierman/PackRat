@@ -22,12 +22,12 @@
       "@cloudflare/workers-types/2023-07-01",
       "@cloudflare/vitest-pool-workers"
     ],
-    // "baseUrl": ".",
-    // "paths":{
-    //   "@trpc":["trpc"],
-    //   "trpc":["../src/routes/index"],
-    //   "src":["../src"]
-    // },
+    "baseUrl": ".",
+    "paths": {
+      "@packrat/validations": [
+        "../packages/validations/src"
+      ]
+    },
     "declaration": true
   },
   "exclude": [

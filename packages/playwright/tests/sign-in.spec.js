@@ -7,5 +7,6 @@ test('test', async ({ page }) => {
   await page.locator('input[type="email"]').fill('zoot3@email.com');
   await page.locator('input[type="password"]').click();
   await page.locator('input[type="password"]').fill('12345678');
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: 'Sign In' }).click();
+
 });
