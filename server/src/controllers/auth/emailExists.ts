@@ -11,7 +11,7 @@ export const emailExists = async (c) => {
       smtpEmail: c.env.STMP_EMAIL,
       email,
     });
-    console.log('emailExists', emailExists)
+    console.log('emailExists', emailExists);
     return c.json({ emailExists }, 200);
   } catch (error) {
     return c.json({ error: `Failed to delete user: ${error.message}` }, 404);
