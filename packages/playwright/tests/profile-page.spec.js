@@ -8,9 +8,6 @@ test('test', async ({ page }) => {
   await page.getByLabel('Password').click();
   await page.getByLabel('Password').fill('12345678');
   await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByText('Create a Pack').click();
-  await page.getByPlaceholder('Name').click();
-  await page.getByPlaceholder('Name').fill('tessssssst');
-  await page.getByRole('switch').click();
-  await page.getByRole('button', { name: 'Add Pack' }).click();
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await page.getByRole('button', { name: ' Profile' }).click();
 });
