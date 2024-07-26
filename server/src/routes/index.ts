@@ -1,5 +1,3 @@
-// import path from 'path';
-// import csrf from 'csurf';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
@@ -16,32 +14,12 @@ import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
 import healthRoutes from './healthRoutes';
 import { Hono } from 'hono';
+import * as CryptoJS from 'crypto-js';
+import { parseStringPromise } from 'xml2js';
+import Papa from 'papaparse';
+import querystring from 'querystring';
 
 const router = new Hono();
-
-// Create a CSRF middleware
-// const csrfProtection = csrf({ cookie: true });
-
-// /**
-//  * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
-//  *
-//  * @param {Request} req - The incoming request object.
-//  * @param {Response} res - The response object.
-//  * @param {NextFunction} next - The next function to call in the middleware chain.
-//  */
-// const logger = (req: Request, res: Response, next: express.NextFunction) => {
-//   console.log(`Incoming ${req.method} ${req.path}`);
-//   res.on('finish', () => {
-//     console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-//     console.log(`Body ${req.body}`);
-//   });
-//   next();
-// };
-
-// // use logger middleware in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.use(logger);
-// }
 
 // use routes
 router.route('/user', userRoutes);
@@ -61,10 +39,199 @@ router.route('/mapPreview', mapPreviewRouter);
 router.route('/health', healthRoutes);
 
 const helloRouter = new Hono();
-helloRouter.get('/', (c) => {
-  return c.text('Hello, world!');
+
+function generateAWSHeaders(
+  url,
+  method,
+  service,
+  region,
+  accessKey,
+  secretKey,
+  sessionToken,
+) {
+  const amzDate = new Date()
+    .toISOString()
+    .replace(/[:-]/g, '')
+    .replace(/\.\d{3}/, '');
+  const dateStamp = amzDate.slice(0, 8);
+  const canonicalUri = new URL(url).pathname;
+  const canonicalQueryString = '';
+  const payloadHash = CryptoJS.SHA256('').toString(CryptoJS.enc.Hex);
+  const canonicalHeaders =
+    `host:${new URL(url).hostname}\nx-amz-date:${amzDate}\n` +
+    (sessionToken ? `x-amz-security-token:${sessionToken}\n` : '');
+  const signedHeaders =
+    'host;x-amz-date' + (sessionToken ? ';x-amz-security-token' : '');
+  const canonicalRequest = `${method}\n${canonicalUri}\n${canonicalQueryString}\n${canonicalHeaders}\n${signedHeaders}\n${payloadHash}`;
+
+  console.log('Canonical Request:', canonicalRequest);
+
+  const algorithm = 'AWS4-HMAC-SHA256';
+  const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+  const stringToSign = `${algorithm}\n${amzDate}\n${credentialScope}\n${CryptoJS.SHA256(canonicalRequest).toString(CryptoJS.enc.Hex)}`;
+
+  console.log('String to Sign:', stringToSign);
+
+  const signingKey = getSignatureKey(secretKey, dateStamp, region, service);
+  const signature = CryptoJS.HmacSHA256(stringToSign, signingKey).toString(
+    CryptoJS.enc.Hex,
+  );
+  const authorizationHeader = `${algorithm} Credential=${accessKey}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+  return {
+    host: new URL(url).hostname,
+    'x-amz-date': amzDate,
+    'x-amz-content-sha256': payloadHash,
+    Authorization: authorizationHeader,
+    ...(sessionToken && { 'x-amz-security-token': sessionToken }),
+  };
+}
+
+function getSignatureKey(key, dateStamp, regionName, serviceName) {
+  const kDate = CryptoJS.HmacSHA256(dateStamp, 'AWS4' + key);
+  const kRegion = CryptoJS.HmacSHA256(regionName, kDate);
+  const kService = CryptoJS.HmacSHA256(serviceName, kRegion);
+  const kSigning = CryptoJS.HmacSHA256('aws4_request', kService);
+  return kSigning;
+}
+
+helloRouter.get('/', async (c) => {
+  const endpoint =
+    'https://a0adf59e1ef3edc3d2bbc2ff272474bc.r2.cloudflarestorage.com';
+  const bucket = 'packrat-scrapy-bucket';
+  const method = 'GET';
+  const region = 'auto';
+  const service = 's3';
+  const accessKeyId = '1d8b0d85792acd42af61de935c4a1c40';
+  const secretKey =
+    'e4e9897a4bd4333a6c94846cefcb549bcb386c681ab72dcd00f4f213415a0d5d';
+  const sessionToken = '';
+
+  // Generate AWS Headers for listing bucket contents
+  const listHeaders = generateAWSHeaders(
+    endpoint + '/' + bucket,
+    method,
+    service,
+    region,
+    accessKeyId,
+    secretKey,
+    sessionToken,
+  );
+
+  try {
+    // Fetch data from bucket to list contents
+    const listResponse = await fetch(`${endpoint}/${bucket}`, {
+      method,
+      headers: listHeaders,
+    });
+    const listData = await listResponse.text();
+
+    // Parse XML response
+    const parsedListData = await parseStringPromise(listData);
+    const contents = parsedListData.ListBucketResult.Contents;
+
+    // Extract and log file names
+    const fileNames = contents
+      .filter((item) => item.Key[0].startsWith('backcountry/'))
+      .map((item) => item.Key[0]);
+
+    console.log('File names in backcountry directory:', fileNames);
+
+    // Select a specific file to read
+    const fileName = 'backcountry/backcountry_2024-07-24T08-59-25.csv';
+
+    // Generate AWS Headers for fetching the specific file
+    const fileHeaders = generateAWSHeaders(
+      `${endpoint}/${bucket}/${fileName}`,
+      method,
+      service,
+      region,
+      accessKeyId,
+      secretKey,
+      sessionToken,
+    );
+
+    // Fetch the specific CSV file
+    const fileResponse = await fetch(`${endpoint}/${bucket}/${fileName}`, {
+      method,
+      headers: fileHeaders,
+    });
+    const fileData = await fileResponse.text();
+
+    // Check for errors in the file response
+    if (fileResponse.status !== 200) {
+      console.error('Error fetching file:', fileData);
+      return c.json({ error: 'Error fetching file', details: fileData });
+    }
+
+    // Parse the CSV file using PapaParse
+    Papa.parse(fileData, {
+      header: true,
+      complete: function (results) {
+        console.log('Parsed CSV file contents:', results.data);
+      },
+      error: function (error) {
+        console.error('Error parsing CSV file:', error);
+      },
+    });
+
+    return c.json({ message: 'File content logged' });
+  } catch (err) {
+    console.error('Error:', err);
+    return c.json({ error: 'An error occurred' });
+  }
 });
+
+const testapi = new Hono();
 router.route('/hello', helloRouter);
+
+testapi.get('/', async (c) => {
+  const params = c.req.query();
+  console.log('Received data:', params);
+
+  return c.json({ message: 'Data received successfully!', data: params });
+});
+
+testapi.get('/test', async (c) => {
+  try {
+    const postData = querystring.stringify({
+      project: 'PackRat',
+      spider: 'backcountry',
+    });
+
+    const response = await fetch('http://localhost:6800/schedule.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: postData,
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status === 'ok') {
+      console.log('Scraping initiated', responseData);
+      return c.json({
+        message: 'Scraping initiated successfully!',
+        response: responseData,
+      });
+    } else {
+      console.error('Error from Scrapyd:', responseData);
+      return c.json({
+        message: 'Failed to initiate scraping',
+        error: responseData,
+      });
+    }
+  } catch (error) {
+    console.error('Error initiating scraping:', error);
+    return c.json({
+      message: 'Failed to initiate scraping',
+      error: error.toString(),
+    });
+  }
+});
+
+router.route('/testapi', testapi);
 
 // Also listen to /api for backwards compatibility
 router.route('/api/user', userRoutes);
@@ -82,39 +249,5 @@ router.route('/api/template', templateRoutes);
 router.route('/api/favorite', favoriteRouters);
 router.route('/api/openai', openAiRoutes);
 router.route('/api/mapPreview', mapPreviewRouter);
-
-// // Static routes for serving the React Native Web app
-// if (process.env.NODE_ENV === 'production') {
-//   const __dirname = path.resolve();
-//   const serverType = process.env.REACT_APP_SERVER_TYPE || 'vite';
-
-//   // Serve the client's index.html file at the root route
-//   router.get('/', (req, res) => {
-// // Attach the CSRF token cookie to the response
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
-//   });
-
-//   // Serve the static assets
-//   const staticPath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//   router.use(express.static(path.join(__dirname, staticPath)));
-
-//   // Serve the client's index.html file at all other routes NOT starting with /api
-//   router.get(/^(?!\/?api).*/, (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
-//   });
-// }
-
-// // Attach the CSRF token to a specific route in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.get('/api/csrf/restore', (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     res.status(201).json({});
-//   });
-// }
 
 export default router;

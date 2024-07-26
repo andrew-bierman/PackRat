@@ -10855,6 +10855,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/crypto-js@npm:^4":
+  version: 4.2.2
+  resolution: "@types/crypto-js@npm:4.2.2"
+  checksum: 10/a40fc5a9219fd33f54ba3e094c5e5ab2904d3106681a76f1029bb038976591e9c8959099963bf4474fde21c2d8d00c1f896445206a3a58f85588f9cb1bd96a9a
+  languageName: node
+  linkType: hard
+
 "@types/csurf@npm:*, @types/csurf@npm:^1.11.2":
   version: 1.11.5
   resolution: "@types/csurf@npm:1.11.5"
@@ -11217,6 +11224,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/papaparse@npm:^5":
+  version: 5.3.14
+  resolution: "@types/papaparse@npm:5.3.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/9bd5cc0e6a2c02def6c8903dc4604e499907cb465186ed3532390468082a06f023adbac0216428d0d8e8fe017206780a03d20007041e9fed47c8d391cd69a536
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
@@ -11476,6 +11492,15 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10/9b414dc5e0b6c6f1ea4b1635b3568c58707357f68076df9e7cd33194747b7d1716d5189c0dbdd68c8d2521b148e88184cf881bac7429eb0e5c989b001539ed31
+  languageName: node
+  linkType: hard
+
+"@types/xml2js@npm:^0":
+  version: 0.4.14
+  resolution: "@types/xml2js@npm:0.4.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/d76338b8d6ce8540c7af6a32aacf96c38f6de48254568f58f6e5ac2af3f88e6bd1490e5346d3bb336990f91267d23c5cc09e8bf7e80840a63c7855dbf174ecbb
   languageName: node
   linkType: hard
 
@@ -16230,6 +16255,13 @@ __metadata:
     randombytes: "npm:^2.0.0"
     randomfill: "npm:^1.0.3"
   checksum: 10/5ab534474e24c8c3925bd1ec0de57c9022329cb267ca8437f1e3a7200278667c0bea0a51235030a9da3165c1885c73f51cfbece1eca31fd4a53cfea23f628c9b
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: 10/c7bcc56a6e01c3c397e95aa4a74e4241321f04677f9a618a8f48a63b5781617248afb9adb0629824792e7ec20ca0d4241a49b6b2938ae6f973ec4efc5c53c924
   languageName: node
   linkType: hard
 
@@ -28646,6 +28678,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"papaparse@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "papaparse@npm:5.4.1"
+  checksum: 10/5e6dc978187182ad2efa1d264ffe73d2042cd23b8fb1dcb0b0f5c8c7c772c11e3eb4e166fb0893880ed24529a96abe9065d704cc5b4cb96abf037413cfe43788
+  languageName: node
+  linkType: hard
+
 "param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -30211,6 +30250,13 @@ __metadata:
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 10/37b91720be8c8de87b49d1a68f0ceafbbeda6efe6334ce7aad080b0b4111f933a40650b8a6669c1bc629cd8bb37c67cb7b5a42ec0758662efbce44b8faa1766d
+  languageName: node
+  linkType: hard
+
+"querystring@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "querystring@npm:0.2.1"
+  checksum: 10/5ae2eeb8c6d70263a3d13ffaf234ce9593ae0e95ad8ea04aa540e14ff66679347420817aeb4fe6fdfa2aaa7fac86e311b6f1d3da2187f433082ad9125c808c14
   languageName: node
   linkType: hard
 
@@ -32391,12 +32437,15 @@ __metadata:
     "@trpc/server": "npm:^10.45.1"
     "@types/bcrypt": "npm:^5.0.0"
     "@types/cors": "npm:^2.8.13"
+    "@types/crypto-js": "npm:^4"
     "@types/csurf": "npm:^1.11.2"
     "@types/jest": "npm:^29.5.11"
     "@types/node": "npm:^20.14.2"
+    "@types/papaparse": "npm:^5"
     "@types/swagger-jsdoc": "npm:^6.0.1"
     "@types/swagger-ui-express": "npm:^4.1.3"
     "@types/validator": "npm:^13.11.1"
+    "@types/xml2js": "npm:^0"
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
     "@vitest/ui": "npm:^1.6.0"
@@ -32409,6 +32458,7 @@ __metadata:
     compression: "npm:^1.7.4"
     cors: "npm:^2.8.5"
     cross-env: "npm:^7.0.3"
+    crypto-js: "npm:^4.2.0"
     csurf: "npm:^1.11.0"
     dotenv: "npm:^16.0.3"
     drizzle-kit: "npm:^0.20.17"
@@ -32452,12 +32502,14 @@ __metadata:
     openapi-generator: "npm:^0.1.39"
     osmtogeojson: "npm:^3.0.0-beta.5"
     p-queue: "npm:^8.0.1"
+    papaparse: "npm:^5.4.1"
     passport: "npm:^0.6.0"
     passport-google-oauth20: "npm:^2.0.0"
     passport-local: "npm:^1.0.0"
     piscina: "npm:^4.0.0"
     prettier: "npm:^3.2.5"
     prisma: "npm:^5.7.0"
+    querystring: "npm:^0.2.1"
     radash: "npm:^12.1.0"
     superjson: "npm:^2.0.0"
     swagger-jsdoc: "npm:^6.2.8"
@@ -32473,6 +32525,7 @@ __metadata:
     validator: "npm:^13.9.0"
     vitest: "npm:1.3.0"
     wrangler: "npm:^3.51.2"
+    xml2js: "npm:^0.6.2"
     zod: "npm:^3.22.4"
   languageName: unknown
   linkType: soft
@@ -36762,7 +36815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xml2js@npm:0.6.2":
+"xml2js@npm:0.6.2, xml2js@npm:^0.6.2":
   version: 0.6.2
   resolution: "xml2js@npm:0.6.2"
   dependencies:
