@@ -237,7 +237,7 @@ export default function Card({
                       href={`/profile/${type === 'pack' ? owner_id : owner_id}`}
                       style={{ textDecoration: 'none' }}
                     >
-                      <RText color={currentTheme.colors.textSecondary}>
+                      <RText color={currentTheme.colors.text}>
                         View {owner?.username ? '@' + owner?.username : 'Owner'}
                       </RText>
                     </RLink>
@@ -271,10 +271,7 @@ export default function Card({
                   >
                     {type === 'pack' && (
                       <View>
-                        <RText
-                          fontSize="$2"
-                          color={currentTheme.colors.textSecondary}
-                        >
+                        <RText fontSize="$2" color={currentTheme.colors.text}>
                           Favorites
                         </RText>
                         <View
@@ -299,7 +296,7 @@ export default function Card({
                           ) : null}
 
                           <RText
-                            color={currentTheme.colors.textSecondary}
+                            color={currentTheme.colors.text}
                             fontSize="$2"
                             fontWeight="400"
                           >

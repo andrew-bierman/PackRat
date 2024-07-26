@@ -82,7 +82,7 @@ const TripDateRange = ({ dateRange, setDateRange }: TripDateRangeProps) => {
         />
         <RText
           style={{
-            color: currentTheme.colors.textPrimaryPrimary,
+            color: currentTheme.colors.text,
             fontSize: currentTheme.font.size,
             paddingVertical: 12,
             fontWeight: 600,

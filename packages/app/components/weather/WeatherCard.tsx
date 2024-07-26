@@ -74,7 +74,7 @@ export default function WeatherCard({
         />
         <RText
           style={{
-            color: currentTheme.colors.textPrimaryPrimary,
+            color: currentTheme.colors.text,
             fontSize: 18,
             fontWeight: 600,
           }}

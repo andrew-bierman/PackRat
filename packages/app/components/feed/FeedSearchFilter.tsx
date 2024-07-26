@@ -133,7 +133,7 @@ const FeedSearchFilter = ({
               <RText
                 fontSize={18}
                 fontWeight="bold"
-                color={currentTheme.colors.textSecondary}
+                color={currentTheme.colors.text}
               >
                 Discover Other Users' Public Packs
               </RText>
@@ -184,7 +184,7 @@ const FeedSearchFilter = ({
             <RText
               fontSize={17}
               fontWeight="bold"
-              color={currentTheme.colors.textSecondary}
+              color={currentTheme.colors.text}
             >
               Sort By:
             </RText>

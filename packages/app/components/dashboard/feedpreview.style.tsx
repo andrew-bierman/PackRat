@@ -26,14 +26,14 @@ const loadStyles = (theme: any, appTheme: any) => {
     feedItemTitle: {
       fontWeight: 'bold',
       fontSize: 17,
-      color: currentTheme.colors.textSecondary,
+      color: currentTheme.colors.text,
       marginBottom: 5,
     },
     feedItemType: {
       fontWeight: 'bold',
       fontSize: 16,
-      color: currentTheme.colors.textPrimary,
-      backgroundColor: currentTheme.colors.textSecondary,
+      color: currentTheme.colors.white,
+      backgroundColor: currentTheme.colors.text,
       marginBottom: 5,
     },
   };

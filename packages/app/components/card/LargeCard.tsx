@@ -74,7 +74,7 @@ const LargeCard: React.FC<LargeCardProps> = ({
         {Icon ? <Icon /> : null}
         <RText
           style={{
-            color: currentTheme.colors.textPrimaryPrimary,
+            color: currentTheme.colors.text,
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}

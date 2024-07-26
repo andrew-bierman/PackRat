@@ -45,7 +45,7 @@ export const GearList = () => {
           />
           <RText
             style={{
-              color: currentTheme.colors.textPrimaryPrimary,
+              color: currentTheme.colors.text,
               fontSize: currentTheme.font.size,
               paddingTop: 12,
               paddingBottom: 12,

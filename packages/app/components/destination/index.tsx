@@ -193,7 +193,7 @@ export const DestinationPage = () => {
                   <Ionicons
                     name="location"
                     size={24}
-                    color={currentTheme.colors.textPrimaryPrimary}
+                    color={currentTheme.colors.text}
                   />
                 )}
                 ContentComponent={map}
@@ -232,7 +232,7 @@ const loadStyles = (theme) => {
       alignItems: 'flex-start',
     },
     headerText: {
-      color: currentTheme.colors.textPrimaryPrimary,
+      color: currentTheme.colors.text,
       fontSize: 22,
       fontWeight: 'bold',
     },
