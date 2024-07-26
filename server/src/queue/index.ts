@@ -1,5 +1,5 @@
-import { MessageBatch } from '@cloudflare/workers-types';
-import { Bindings } from '..';
+import { type MessageBatch } from '@cloudflare/workers-types';
+import { type Bindings } from '..';
 
 async function handleEtlQueue(batch: MessageBatch<Error>, env: Bindings) {
   for (const message of batch.messages) {
@@ -23,7 +23,7 @@ const queueHandlersMap = new Map<
   string,
   (batch: MessageBatch<Error>, env: Bindings) => Promise<void>
 >([
-  ['etl-queue', handleEtlQueue],
+  ['packrat-etl-queue', handleEtlQueue],
   // Add more handlers here
 ]);
 

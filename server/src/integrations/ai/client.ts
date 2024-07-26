@@ -1,9 +1,9 @@
-import { Ai } from "@cloudflare/ai";
+import { Ai } from '@cloudflare/ai';
 
 class AiClient {
   private static _instance: AiClient | null = null;
-  private apiKey: string;
-  private accountId: string;
+  private readonly apiKey: string;
+  private readonly accountId: string;
   private readonly MODEL_NAME: string = '@cf/baai/bge-base-en-v1.5';
   private readonly EXECUTE_AI_MODEL_URL: string;
 

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "139ca60e-e238-46a7-b360-e18f0451c9b7",
-  "prevId": "79e15743-f558-4a68-bdb3-8220ab3aefe5",
+  "id": "57e2d274-a728-4d09-9aff-74d3b92399fa",
+  "prevId": "139ca60e-e238-46a7-b360-e18f0451c9b7",
   "tables": {
     "conversation": {
       "name": "conversation",
@@ -941,6 +941,13 @@
         "password_reset_token_expiration": {
           "name": "password_reset_token_expiration",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "offline_maps": {
+          "name": "offline_maps",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false

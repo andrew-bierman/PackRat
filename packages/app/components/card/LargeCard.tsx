@@ -126,10 +126,14 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
-      padding: currentTheme.size.cardPadding,
+      padding:
+        Platform.OS === 'web'
+          ? currentTheme.size.cardPadding
+          : currentTheme.size.mobilePadding,
       paddingHorizontal: currentTheme.padding.paddingInside,
       marginBottom: 20,
       height: Platform.OS === 'web' ? 650 : '23%',
+      minHeight: 350,
       overflow: 'hidden',
     },
   };

@@ -18,7 +18,7 @@ export async function getSimilarItemsService(
   visibility: PackAndItemVisibilityFilter,
 ) {
   const itemObj = new Item();
-  let item = await itemObj.findItem({
+  const item = await itemObj.findItem({
     id,
   });
 
@@ -35,8 +35,7 @@ export async function getSimilarItemsService(
     visibility == PackAndItemVisibilityFilter.ALL
       ? undefined
       : {
-          isPublic:
-            visibility == PackAndItemVisibilityFilter.PUBLIC ? true : false,
+          isPublic: visibility == PackAndItemVisibilityFilter.PUBLIC,
         },
   );
 

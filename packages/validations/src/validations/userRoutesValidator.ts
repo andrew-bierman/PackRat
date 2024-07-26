@@ -63,6 +63,22 @@ export const editUser = z.object({
   code: z.string().optional(),
   role: z.enum(['user', 'admin']).optional(),
   username: z.string().optional(),
+  offlineMaps: z
+    .record(
+      z.string(),
+      z.object({
+        name: z.string(),
+        styleURL: z.string(),
+        metadata: z.object({
+          shape: z.string(),
+        }),
+        bounds: z.array(z.array(z.number())),
+        minZoom: z.number(),
+        maxZoom: z.number(),
+      }),
+    )
+    .optional()
+    .nullable(),
   profileImage: z.string().optional().nullable(),
   preferredWeather: z.string().optional(),
   preferredWeight: z.string().optional(),

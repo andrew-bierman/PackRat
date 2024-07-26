@@ -55,7 +55,9 @@ export function editUserRoute() {
       profileImage,
       preferredWeather,
       preferredWeight,
+      offlineMaps,
     } = opts.input;
+    console.error('failed to logging');
     let { password } = opts.input;
     const { env }: any = opts.ctx;
     const JWT_SECRET = env.JWT_SECRET;
@@ -74,6 +76,7 @@ export function editUserRoute() {
       ...(profileImage && { profileImage }),
       ...(preferredWeather && { preferredWeather }),
       ...(preferredWeight && { preferredWeight }),
+      ...(offlineMaps && { offlineMaps }),
     };
     const editedUser = await userClass.update(data);
     return editedUser;
