@@ -24,6 +24,12 @@ export const addItem = z.object({
   id: z.string().optional(),
 });
 
+export const importItem = z.object({
+  content: z.string(),
+  packId: z.string(),
+  ownerId: z.string(),
+});
+
 export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({

@@ -7,6 +7,7 @@ import Papa from 'papaparse';
 import { InformUser } from 'app/utils/ToastUtils';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useAddItem } from 'app/hooks/items';
+import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
 
 interface ImportFormProps {
   showSubmitButton?: boolean;
@@ -42,6 +43,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { addPackItem } = useAddPackItem();
   const { handleAddNewItem } = useAddItem();
+  const { importPackItem } = useImportPackItem();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
@@ -64,8 +66,6 @@ export const ImportForm: FC<ImportFormProps> = ({
         return;
       }
 
-      console.log(res);
-
       let fileContent;
 
       if (selectedType.value === '.csv') {
@@ -82,79 +82,96 @@ export const ImportForm: FC<ImportFormProps> = ({
           fileContent = await response.text();
         }
 
-        Papa.parse(fileContent, {
-          header: true,
-          complete: (result) => {
-            const expectedHeaders = [
-              'Name',
-              'Weight',
-              'Unit',
-              'Quantity',
-              'Category',
-            ];
-            // Get headers from the parsed result
-            const parsedHeaders = result.meta.fields;
-            try {
-              // Check if all expected headers are present
-              const allHeadersPresent = expectedHeaders.every((header) =>
-                parsedHeaders.includes(header),
-              );
-              if (!allHeadersPresent) {
-                throw new Error(
-                  'CSV does not contain all the expected Item headers',
-                );
-              }
-              const data = result.data.map((item, index) => {
-                return {
-                  id: `${Date.now().toString()}${index}`,
-                  name: item.Name,
-                  weight: Number(item.Weight),
-                  unit: item.Unit,
-                  quantity: Number(item.Quantity),
-                  type: item.Category,
-                  packId: packId,
-                  ownerId: ownerId,
-                };
-              });
+        if (currentpage === 'items') {
+          // data.forEach((item, index) => {
+          //   if (index < data.length - 1) {
+          //     handleAddNewItem(item, () => {
+          //       InformUser({
+          //         title: 'Items imported successfully',
+          //         placement: 'bottom',
+          //         duration: 3000,
+          //         style: { backgroundColor: 'green' },
+          //       });
+          //     });
+          //   }
+          // });
+        } else {
+          importPackItem({ content: fileContent, packId, ownerId });
+        }
 
-              console.log(data);
+        console.log('fileContent:', typeof fileContent);
 
-              if (currentpage === 'items') {
-                data.forEach((item, index) => {
-                  if (index < data.length - 1) {
-                    handleAddNewItem(item, () => {
-                      InformUser({
-                        title: 'Items imported successfully',
-                        placement: 'bottom',
-                        duration: 3000,
-                        style: { backgroundColor: 'green' },
-                      });
-                    });
-                  }
-                });
-              } else {
-                data.forEach((item, index) => {
-                  if (index < data.length - 1) {
-                    addPackItem(item);
-                  }
-                });
-              }
-            } catch (error) {
-              InformUser({
-                title:
-                  'CSV does not contain the expected Item headers or data must be corrupt',
-                placement: 'bottom',
-                duration: 3000,
-                style: { backgroundColor: 'red' },
-              });
-            } finally {
-              closeModalHandler();
-            }
-          },
-          error: (error) => {
-            console.error('Error parsing CSV:', error);
-          },
-        });
+        // Papa.parse(fileContent, {
+        //   header: true,
+        //   complete: (result) => {
+        //     const expectedHeaders = [
+        //       'Name',
+        //       'Weight',
+        //       'Unit',
+        //       'Quantity',
+        //       'Category',
+        //     ];
+        //     // Get headers from the parsed result
+        //     const parsedHeaders = result.meta.fields;
+        //     try {
+        //       // Check if all expected headers are present
+        //       const allHeadersPresent = expectedHeaders.every((header) =>
+        //         parsedHeaders.includes(header),
+        //       );
+        //       if (!allHeadersPresent) {
+        //         throw new Error(
+        //           'CSV does not contain all the expected Item headers',
+        //         );
+        //       }
+        //       const data = result.data.map((item, index) => {
+        //         return {
+        //           id: `${Date.now().toString()}${index}`,
+        //           name: item.Name,
+        //           weight: Number(item.Weight),
+        //           unit: item.Unit,
+        //           quantity: Number(item.Quantity),
+        //           type: item.Category,
+        //           packId: packId,
+        //           ownerId: ownerId,
+        //         };
+        //       });
+
+        //       if (currentpage === 'items') {
+        //         data.forEach((item, index) => {
+        //           if (index < data.length - 1) {
+        //             handleAddNewItem(item, () => {
+        //               InformUser({
+        //                 title: 'Items imported successfully',
+        //                 placement: 'bottom',
+        //                 duration: 3000,
+        //                 style: { backgroundColor: 'green' },
+        //               });
+        //             });
+        //           }
+        //         });
+        //       } else {
+        //         data.forEach((item, index) => {
+        //           if (index < data.length - 1) {
+        //             addPackItem(item);
+        //           }
+        //         });
+        //       }
+        //     } catch (error) {
+        //       InformUser({
+        //         title:
+        //           'CSV does not contain the expected Item headers or data must be corrupt',
+        //         placement: 'bottom',
+        //         duration: 3000,
+        //         style: { backgroundColor: 'red' },
+        //       });
+        //     } finally {
+        //       closeModalHandler();
+        //     }
+        //   },
+        //   error: (error) => {
+        //     console.error('Error parsing CSV:', error);
+        //   },
+        // });
       }
     } catch (err) {
       console.error('Error importing file:', err);
