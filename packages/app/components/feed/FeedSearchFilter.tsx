@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
@@ -71,7 +71,7 @@ const FeedSearchFilter = ({
     debounceTimerRef.current = setTimeout(() => {
       setSearchQuery(v);
     }, 600);
-  }
+  };
 
   useEffect(() => {
     return () => {
@@ -82,16 +82,18 @@ const FeedSearchFilter = ({
   }, []);
 
   return (
-    <Layout>
-      <View style={styles.filterContainer}>
-        <View style={styles.searchContainer}>
-          <Form>
-            <RStack
-              style={{ flexDirection: 'row', margin: 0, padding: 0 }}
-            >
-              <InputWithIcon LeftIcon={<Search />} RightIcon={<X />} onChange={handleSetSearchValue} placeholder={`Search ${feedType || 'Feed'}`}
-                value={searchValue} />
-              {/* <FormInput
+    <View style={styles.filterContainer}>
+      <View style={styles.searchContainer}>
+        <Form>
+          <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+            <InputWithIcon
+              LeftIcon={<Search />}
+              RightIcon={<X />}
+              onChange={handleSetSearchValue}
+              placeholder={`Search ${feedType || 'Feed'}`}
+              value={searchValue}
+            />
+            {/* <FormInput
                 width='100%'
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
@@ -109,33 +111,33 @@ const FeedSearchFilter = ({
                   />
                 }
               /> */}
-            </RStack>
-          </Form>
-        </View>
-        <RSeparator />
-        {!isSortHidden && (
-          <RStack
-            // flex={1}
-            flexWrap="wrap"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            padding={2}
-            margin={2}
-          >
-            {feedType === 'public' && (
-              <RStack
-                style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+          </RStack>
+        </Form>
+      </View>
+      <RSeparator />
+      {!isSortHidden && (
+        <RStack
+          // flex={1}
+          flexWrap="wrap"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={2}
+          margin={2}
+        >
+          {feedType === 'public' && (
+            <RStack
+              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            >
+              {/* DISABLE TRIP TEMP */}
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
               >
-                {/* DISABLE TRIP TEMP */}
-                <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.textColor}
-                >
-                  Discover Other Users' Public Packs
-                </RText>
-                {/* <RText
+                Discover Other Users' Public Packs
+              </RText>
+              {/* <RText
                   fontSize={18}
                   fontWeight="bold"
                   color={currentTheme.colors.textColor}
@@ -166,49 +168,46 @@ const FeedSearchFilter = ({
                 >
                   <Switch.Thumb />
                 </RSwitch>*/}
-              </RStack>
-            )}
-            <RStack
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                display: 'flex',
-                gap: 10,
-                width: '100%',
-                marginTop: 15,
-                justifyContent: 'space-between'
-              }}
-            >
-              <RText
-                fontSize={17}
-                fontWeight="bold"
-                color={currentTheme.colors.textColor}
-              >
-                Sort By:
-              </RText>
-              <DropdownComponent
-                value={queryString}
-                data={dataValues}
-                onValueChange={handleSortChange}
-                placeholder={queryString}
-                style={styles.dropdown}
-                width='75%'
-              />
             </RStack>
-            {(feedType === 'userPacks' || feedType === 'userTrips') && (
-              <RButton onPress={handleCreateClick}>Create</RButton>
-            )}
+          )}
+          <RStack
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              display: 'flex',
+              gap: 10,
+              width: '100%',
+              marginTop: 15,
+              justifyContent: 'space-between',
+            }}
+          >
+            <RText
+              fontSize={17}
+              fontWeight="bold"
+              color={currentTheme.colors.textColor}
+            >
+              Sort By:
+            </RText>
+            <DropdownComponent
+              value={queryString}
+              data={dataValues}
+              onValueChange={handleSortChange}
+              placeholder={queryString}
+            />
           </RStack>
-        )}
+          {(feedType === 'userPacks' || feedType === 'userTrips') && (
+            <RButton onPress={handleCreateClick}>Create</RButton>
+          )}
+        </RStack>
+      )}
 
-        <RSeparator
-          marginTop={10}
-          marginBottom={10}
-          marginRight={0}
-          marginLeft={0}
-        />
-      </View>
-    </Layout>
+      <RSeparator
+        marginTop={10}
+        marginBottom={10}
+        marginRight={0}
+        marginLeft={0}
+      />
+    </View>
   );
 };
 
@@ -238,9 +237,7 @@ const loadStyles = (theme: any) => {
       padding: 10,
       borderRadius: 5,
     },
-    dropdown: {
-      height: 50
-    },
+
     cardContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',

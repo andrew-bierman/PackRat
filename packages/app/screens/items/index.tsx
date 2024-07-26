@@ -100,15 +100,17 @@ export default function Items() {
           </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (
-          <ItemsTable
-            limit={limit}
-            setLimit={handleLimitChange}
-            page={page}
-            setPage={handlePageChange}
-            data={sortedItems}
-            isLoading={isFetching}
-            totalPages={data?.totalPages}
-          />
+          <View style={{padding:10, width:'100%'}}>
+            <ItemsTable
+              limit={limit}
+              setLimit={handleLimitChange}
+              page={page}
+              setPage={handlePageChange}
+              data={sortedItems}
+              isLoading={isFetching}
+              totalPages={data?.totalPages}
+            />
+         </View>
         )}
       </RStack>
     </RScrollView>
@@ -124,7 +126,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
       flex: 1,
-      paddingTop: 10,
+      padding: 10,
       alignItems: 'center',
     },
     button: {

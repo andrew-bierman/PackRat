@@ -6,12 +6,13 @@ export function useAddFavorite() {
   const mutation = queryTrpc.addToFavorite.useMutation();
 
   // A wrapper function to abstract away the .mutate call
-  const addFavorite = (newFavorite) => {
+  const addFavorite = (newFavorite, userId?: string) => {
     mutation.mutate(newFavorite, {
       onSuccess: () => {
         // Invalidate and refetch. Update to be more specific
         utils.getUserFavorites.invalidate();
         utils.getPublicPacks.invalidate();
+        utils.getPacks.invalidate(userId ? { ownerId: userId } : undefined);
       },
     });
   };

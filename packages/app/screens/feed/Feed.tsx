@@ -105,21 +105,18 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    const feedSearchFilterComponent = (
-      <FeedSearchFilter
-        feedType={feedType}
-        handleSortChange={handleSortChange}
-        handleTogglePack={handleTogglePack}
-        handleToggleTrip={handleToggleTrip}
-        selectedTypes={selectedTypes}
-        queryString={queryString}
-        setSearchQuery={setSearchQuery}
-        handleCreateClick={handleCreateClick}
-      />
-    );
-
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
+        <FeedSearchFilter
+          feedType={feedType}
+          handleSortChange={handleSortChange}
+          handleTogglePack={handleTogglePack}
+          handleToggleTrip={handleToggleTrip}
+          selectedTypes={selectedTypes}
+          queryString={queryString}
+          setSearchQuery={setSearchQuery}
+          handleCreateClick={handleCreateClick}
+        />
         <FlatList
           data={filteredData}
           horizontal={false}
@@ -132,7 +129,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
               {...item}
             />
           )}
-          ListHeaderComponent={() => feedSearchFilterComponent}
           ListFooterComponent={() => <View style={{ height: 50 }} />}
           ListEmptyComponent={() => (
             <RText style={{ textAlign: 'center', marginTop: 20 }}>
@@ -176,7 +172,11 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     router.push(createUrlPath);
   };
 
-  return <View style={styles.mainContainer}><SearchProvider>{renderData()}</SearchProvider></View>;
+  return (
+    <View style={styles.mainContainer}>
+      <SearchProvider>{renderData()}</SearchProvider>
+    </View>
+  );
 };
 
 const loadStyles = (theme) => {
