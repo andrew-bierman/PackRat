@@ -105,7 +105,7 @@ export function SignUpScreen({
                 <Paragraph>Or</Paragraph>
                 <Separator />
               </View>
-              <View flexDirection="row" flexWrap="wrap" gap="$3">
+              {/* <View flexDirection="row" flexWrap="wrap" gap="$3">
                 <RIconButton
                   disabled={!isGoogleSignInReady}
                   flex={1}
@@ -117,7 +117,7 @@ export function SignUpScreen({
                 >
                   Continue with Google
                 </RIconButton>
-              </View>
+              </View> */}
             </Theme>
           </View>
         </Form>
