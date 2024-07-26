@@ -17,7 +17,7 @@ export const signInGoogle = async (c: Context) => {
     if (!decodedToken) {
       throw new Error('Invalid ID token');
     }
-    console.log('decodedToken', decodedToken)
+    console.log('decodedToken', decodedToken);
     const {
       payload: { email, name, sub: googleId },
     } = decodedToken;

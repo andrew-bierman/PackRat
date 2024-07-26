@@ -17,7 +17,6 @@ export async function getPublicPacksService(queryBy: string = 'createdAt') {
       is_public: true,
     });
 
-
     // Apply sorting if necessary
     packs = await sortFunction({
       packs,

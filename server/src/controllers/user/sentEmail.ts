@@ -8,7 +8,7 @@ import { type Context } from 'hono';
 export const sentEmail = async (c: Context) => {
   try {
     const { email } = await c.req.json();
-    console.log('email ', c.env.SEND_GRID_API_KEY)
+    console.log('email ', c.env.SEND_GRID_API_KEY);
     const STMP_EMAIL = c.env.STMP_EMAIL;
     const SEND_GRID_API_KEY = c.env.SEND_GRID_API_KEY;
     const JWT_SECRET = c.env.JWT_SECRET;

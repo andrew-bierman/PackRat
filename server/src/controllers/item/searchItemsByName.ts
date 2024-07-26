@@ -6,7 +6,7 @@ import { type Context } from 'hono';
 export const searchItemsByName = async (c: Context) => {
   try {
     const { name } = await c.req.query();
-    
+
     const items = await searchItemsByNameService(name);
     return c.json({ items }, 200);
   } catch (error) {

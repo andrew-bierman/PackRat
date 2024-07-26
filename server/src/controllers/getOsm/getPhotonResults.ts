@@ -8,9 +8,9 @@ export async function getPhotonResults(ctx: Context) {
   try {
     const { searchString } = await ctx.req.query();
     const response = await getPhotonResultsService(searchString);
-    return ctx.json(response.features, 200)
+    return ctx.json(response.features, 200);
   } catch (error) {
-    return ctx.json({error: error.message}, 500)
+    return ctx.json({ error: error.message }, 500);
   }
 }
 

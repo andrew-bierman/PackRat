@@ -24,7 +24,7 @@ import {
   passwordChangeSchema,
   deleteUserForm,
 } from '@packrat/validations';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
 import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
 
@@ -86,14 +86,7 @@ export default function Settings() {
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user, profileImage: user.profileImage || '' }}
         >
-          <RStack
-            space="$3"
-            maw="100%"
-            style={{
-              width: Platform.OS === 'web' ? null : 'fit-content',
-              marginHorizontal: 'auto',
-            }}
-          >
+          <RStack space="$3" maw="100%" style={{ marginHorizontal: 'auto' }}>
             <ImageUpload
               label="Profile Picture"
               name="profileImage"
@@ -151,10 +144,9 @@ export default function Settings() {
         </RStack>
         <Form validationSchema={passwordChangeSchema}>
           <RStack
-            space="$3"
-            style={{ width: '100%', marginHorizontal: 'auto' }}
+            style={{ gap: 16, maxWidth: '100%', marginHorizontal: 'auto' }}
           >
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="oldPassword">Old password</RLabel>
               <FormInput
                 id="oldPassword"
@@ -163,7 +155,7 @@ export default function Settings() {
                 passwordIconProps={{ color: 'black' }}
               />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="newPassword">New password</RLabel>
               <FormInput
                 id="newPassword"
@@ -171,7 +163,7 @@ export default function Settings() {
                 secureTextEntry={true}
               />
             </RStack>
-            <RStack space="$2">
+            <RStack>
               <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
               <FormInput
                 id="confirmPassword"
@@ -201,12 +193,10 @@ export default function Settings() {
             <RLabel htmlFor="confirmText">
               To confirm this, type "delete"
             </RLabel>
-            <RStack space="$2" style={{ flexDirection: 'row' }}>
-              <FormInput
-                id="confirmText"
-                style={{ minWidth: 268 }}
-                name="confirmText"
-              />
+            <RStack style={{ width: '100%', gap: 16, flexDirection: 'row' }}>
+              <View style={{ flex: 1 }}>
+                <FormInput id="confirmText" name="confirmText" />
+              </View>
               <SubmitButton
                 onSubmit={deleteProfile}
                 disabled={isLoading}

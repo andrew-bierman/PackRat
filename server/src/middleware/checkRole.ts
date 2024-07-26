@@ -35,7 +35,7 @@ const checkRole = (roles: string[]) => {
       // Proceed to the next middleware or route handler.
       await next();
     } catch (err) {
-      console.log('error', err)
+      console.log('error', err);
       if (err instanceof ZodError) {
         console.error('Invalid role provided:', err.errors);
         return c.json({ error: 'Invalid role provided.' }, 400);

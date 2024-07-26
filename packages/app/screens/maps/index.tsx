@@ -1,28 +1,39 @@
-import { Modal, Text, View, Image, Dimensions } from 'react-native';
-import Mapbox, {
-  offlineManager,
-  OfflineCreatePackOptions,
-} from '@rnmapbox/maps';
+import { Modal, Text, View, Image } from 'react-native';
+import { offlineManager } from '@rnmapbox/maps';
 import { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapButtonsOverlay from 'app/components/map/MapButtonsOverlay';
-import { theme } from 'app/theme';
 import useTheme from 'app/hooks/useTheme';
-import { StyleSheet } from 'react-native';
-import {
-  calculateZoomLevel,
-  getShapeSourceBounds,
-} from 'app/utils/mapFunctions';
 import { api } from 'app/constants/api';
-import { RScrollView, RStack } from '@packrat/ui';
+import { RButton, RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Map } from 'app/components/map';
+import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
+import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
+import { ZStack } from 'tamagui';
 
-interface Pack {
-  bounds: number[][];
-  metadata: string;
+interface OfflineMap {
+  name: string;
+  styleURL: string;
+  bounds: [number[], number[]];
+  minZoom: number;
+  maxZoom: number;
+  downloaded: boolean;
+  metadata: {
+    shape: unknown;
+  };
 }
+
+const getCenterCoordinates = (bounds: [number[], number[]]) => {
+  const [
+    [southWestLongitude, southWestLatitude],
+    [northEastLongitude, northEastLatitude],
+  ] = bounds;
+  const centerLatitude = (northEastLatitude + southWestLatitude) / 2;
+  const centerLongitude = (northEastLongitude + southWestLongitude) / 2;
+
+  return [centerLongitude, centerLatitude];
+};
 
 function CircleCapComp() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
@@ -46,32 +57,48 @@ export default function DownloadedMaps() {
   const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const [offlinePacks, setOfflinePacks] = useState<any[]>([]);
-  const [showMap, setShowMap] = useState(false);
-  const [pack, setPack] = useState<OfflineCreatePackOptions | null>(null);
+  const { user } = useUserQuery();
+  const { token } = useAuthUserToken();
+  const [offlineMaps, setOfflineMaps] = useState<OfflineMap[]>();
+  const refreshOfflineMapList = async () => {
+    const offlineMaps = Object.values(user.offlineMaps || {});
+    const offlineMapboxPacks: OfflineMap[] = [];
+    for (const map of offlineMaps) {
+      const offlineMap: OfflineMap = {
+        styleURL: `${map.styleURL}`,
+        name: `${map.name}`,
+        minZoom: map.minZoom,
+        maxZoom: map.maxZoom,
+        bounds: map.bounds,
+        metadata: {
+          shape: JSON.parse(map.metadata.shape),
+        },
+        downloaded: false,
+      };
 
-  let shape, zoomLevel;
-  if (pack != null) {
-    shape = pack && JSON.parse(JSON.parse(pack.metadata).shape);
-    const dw = Dimensions.get('screen').width;
-    zoomLevel = calculateZoomLevel(pack.bounds, {
-      width: dw,
-      height: 360,
-    });
-  }
+      let offlineMapboxPack: OfflinePack | null;
+      try {
+        offlineMapboxPack = await offlineManager.getPack(map.name);
+      } catch (error) {
+        console.error(error);
+        offlineMapboxPack = null;
+      }
+
+      if (offlineMapboxPack) {
+        offlineMap.downloaded = true;
+      }
+
+      offlineMapboxPacks.push(offlineMap);
+    }
+
+    setOfflineMaps(offlineMapboxPacks);
+  };
 
   useFocusEffect(
     useCallback(() => {
-      offlineManager.getPacks().then((packs) => {
-        setOfflinePacks(packs);
-      });
-    }, []),
+      refreshOfflineMapList();
+    }, [user]),
   );
-
-  const handleExitMapFullScreen = () => {
-    setShowMap(false);
-    setPack(null);
-  };
 
   return (
     <View
@@ -92,36 +119,26 @@ export default function DownloadedMaps() {
         >
           Downloaded Maps
         </Text>
-        {offlinePacks ? (
+        {offlineMaps ? (
           <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
-            {offlinePacks.map(({ pack }) => {
-              const metadata = JSON.parse(pack.metadata);
+            {offlineMaps.map((offlineMap) => {
+              const center = getCenterCoordinates(offlineMap.bounds);
               return (
-                <TouchableOpacity
+                <RStack
                   style={{
+                    flexDirection: 'column',
+                    display: 'flex',
                     padding: 8,
                     backgroundColor: `${currentTheme.colors.secondaryBlue}`,
                     borderRadius: 15,
                   }}
-                  onPress={() => {
-                    setPack(pack);
-                    setShowMap(true);
-                  }}
                 >
-                  {pack && (
-                    <Image
-                      style={{
-                        width: '100%',
-                        height: 200,
-                        borderRadius: 15,
-                      }}
-                      source={{
-                        uri: `${api}/mapPreview/${
-                          pack?.bounds[0] + ',' + pack?.bounds[1]
-                        },10,60,60/600x600`,
-                      }}
-                    />
-                  )}
+                  <Map
+                    shape={offlineMap.metadata.shape}
+                    shouldEnableDownload={!offlineMap.downloaded}
+                    mapName={offlineMap.name}
+                    forceFullScreen={false}
+                  />
                   <Text
                     style={{
                       fontSize: 16,
@@ -131,9 +148,9 @@ export default function DownloadedMaps() {
                       color: currentTheme.colors.text,
                     }}
                   >
-                    {metadata.name}
+                    {offlineMap.name}
                   </Text>
-                </TouchableOpacity>
+                </RStack>
               );
             })}
           </View>
@@ -143,32 +160,9 @@ export default function DownloadedMaps() {
           </RStack>
         )}
       </RScrollView>
-      {showMap ? (
-        <Modal visible={true}>
-          <Map
-            shape={shape}
-            downloadable={false}
-            forceFullScreen={true}
-            onExitFullScreen={handleExitMapFullScreen}
-          />
-        </Modal>
-      ) : null}
     </View>
   );
 }
-
-const getCenterCoordinates = (bounds: [number, number, number, number]) => {
-  const [
-    southWestLongitude,
-    southWestLatitude,
-    northEastLongitude,
-    northEastLatitude,
-  ] = bounds;
-  const centerLatitude = (northEastLatitude + southWestLatitude) / 2;
-  const centerLongitude = (northEastLongitude + southWestLongitude) / 2;
-
-  return [centerLongitude, centerLatitude];
-};
 
 const loadStyles = ({ currentTheme }) => {
   return {
