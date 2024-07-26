@@ -58,6 +58,8 @@ export const TableContainer = ({
   });
   const { deletePackItem } = useDeletePackItem();
 
+  console.log('data', data);
+
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={String(error)} />;
 

@@ -1,8 +1,8 @@
-import { View, Platform } from 'react-native';
+import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
 import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
+import { ImportItemGlobal } from 'app/components/item/ImportItemGlobal';
 import { ItemsTable } from 'app/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useItems } from 'app/hooks/items/useItems';
@@ -17,8 +17,6 @@ import {
 import useResponsive from 'app/hooks/useResponsive';
 
 export default function Items() {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-    useTheme();
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
@@ -72,7 +70,9 @@ export default function Items() {
       <RStack style={styles.mainContainer}>
         <RStack style={styles.container}>
           <RStack style={styles.sortContainer}>
-            <RText style={{ fontWeight: 'bold' }}>Sort By:</RText>
+            <RText style={{ fontWeight: 'bold', textWrap: 'nowrap' }}>
+              Sort By:
+            </RText>
             <DropdownComponent
               value={value}
               data={optionValues}
@@ -83,9 +83,19 @@ export default function Items() {
               zeego={true}
             />
           </RStack>
-          <View style={{ marginBottom: 10 }}>
+          <View
+            style={{
+              marginBottom: 10,
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 5,
+            }}
+          >
             <BaseModal title="Add a global Item" trigger="Add Item">
               <AddItemGlobal />
+            </BaseModal>
+            <BaseModal title="Import global Item" trigger="Import Item">
+              <ImportItemGlobal />
             </BaseModal>
           </View>
         </RStack>
