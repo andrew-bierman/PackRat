@@ -12752,7 +12752,7 @@ __metadata:
     expo-checkbox: "npm:~2.7.0"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.1"
-    expo-document-picker: "npm:~11.10.1"
+    expo-document-picker: "npm:^12.0.2"
     expo-file-system: "npm:~16.0.8"
     expo-font: "npm:~11.10.3"
     expo-image-picker: "npm:~14.7.1"
@@ -12786,7 +12786,6 @@ __metadata:
     react-hook-form: "npm:^7.51.0"
     react-native: "npm:0.73.6"
     react-native-action-button: "npm:^2.8.5"
-    react-native-document-picker: "npm:^9.3.0"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
     react-native-flash-message: "npm:^0.4.2"
@@ -19840,6 +19839,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/c40ac3a468f9fc2b10fcf50be00059fd42b8017486f6767a1df7a78178d81a0e4b0cc2dc0b8f9df7f2ecf12a6673e97bd65ab5e44316f2a4c54240c874f31957
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "expo-document-picker@npm:12.0.2"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/4eb929c6751ed6f82f2f521a4c8a9e10fdfe6f3e9fd44c4f18c6103db09a84697fb923993d3d658b6560ba20ffac276a166d59822575d70d4706057c0d0a291f
   languageName: node
   linkType: hard
 
@@ -30530,22 +30538,6 @@ __metadata:
     moment:
       optional: true
   checksum: 10/3fd911ce33bb9f57335781b0eb9211ea331abf821ed178092e3e5c8788512e51458d7e064e01f58733171257da5b569e726418c88d6b56c464b131488ef0fd8b
-  languageName: node
-  linkType: hard
-
-"react-native-document-picker@npm:^9.3.0":
-  version: 9.3.0
-  resolution: "react-native-document-picker@npm:9.3.0"
-  dependencies:
-    invariant: "npm:^2.2.4"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-windows: "*"
-  peerDependenciesMeta:
-    react-native-windows:
-      optional: true
-  checksum: 10/173fbce533622b47426a481811bef7431b133ff93d59ab01102b94d161d8f7901a75413aff881ffd19586ecc9cdb196b26e6254c7dc08a3aaac3dce74b53dadd
   languageName: node
   linkType: hard
 

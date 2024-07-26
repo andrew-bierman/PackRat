@@ -2,7 +2,7 @@ import React, { useState, FC } from 'react';
 import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import useDocumentPicker from './DocumentPicker/DocumentPicker';
+import * as DocumentPicker from 'expo-document-picker';
 import Papa from 'papaparse';
 import { InformUser } from 'app/utils/ToastUtils';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
@@ -42,7 +42,6 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { addPackItem } = useAddPackItem();
   const { handleAddNewItem } = useAddItem();
-  const DocumentPicker = useDocumentPicker();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
@@ -56,17 +55,30 @@ export const ImportForm: FC<ImportFormProps> = ({
 
   const handleItemImport = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const res = await DocumentPicker.getDocumentAsync({
         type: [selectedType.value],
       });
 
+      if (res.canceled) {
+        console.log('User canceled file picker');
+        return;
+      }
+
+      console.log(res);
+
+      let fileContent;
+
       if (selectedType.value === '.csv') {
-        let fileContent;
         if (Platform.OS === 'web') {
-          const file = res[0];
-          fileContent = await file.text(); // On the web, read the file content directly
+          if (res.assets && res.assets.length > 0) {
+            const file = res.assets[0];
+            const base64Content = file.uri.split(',')[1];
+            fileContent = atob(base64Content);
+          } else {
+            throw new Error('No file content available');
+          }
         } else {
-          const response = await fetch(res[0].uri); // On native, fetch the file content
+          const response = await fetch(res.uri);
           fileContent = await response.text();
         }
 
@@ -145,11 +157,7 @@ export const ImportForm: FC<ImportFormProps> = ({
         });
       }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User canceled file picker');
-      } else {
-        console.error('Error importing file:', err);
-      }
+      console.error('Error importing file:', err);
     }
   };
 
