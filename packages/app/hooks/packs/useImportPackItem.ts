@@ -22,11 +22,7 @@ export const useImportPackItem = () => {
             global: false,
             packs: [newItem.id],
             id: Date.now().toString(),
-            category: newItem.type
-              ? {
-                  name: newItem.type,
-                }
-              : null,
+            category: newItem.type ? { name: newItem.type } : null,
           },
         ],
       };

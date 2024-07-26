@@ -59,6 +59,7 @@ import {
 import {
   addGlobalItemToPackRoute,
   addItemGlobalRoute,
+  importItemsGlobalRoute,
   addItemRoute,
   importItemsRoute,
   deleteGlobalItemRoute,
@@ -154,6 +155,7 @@ export const appRouter = trpcRouter({
   editItem: editItemRoute(), // Done
   deleteItem: deleteItemRoute(), // Done
   addItemGlobal: addItemGlobalRoute(), // Done
+  importItemsGlobal: importItemsGlobalRoute(), // Done
   getItemsGlobally: getItemsGloballyRoute(), // Done
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented

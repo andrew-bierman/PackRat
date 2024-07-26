@@ -1,33 +1,32 @@
+import { type Context } from 'hono';
+import { addItemGlobalService } from '../../services/item/item.service';
 import { protectedProcedure } from '../../trpc';
-import { addItemService } from '../../services/item/item.service';
 import * as validator from '@packrat/validations';
 import Papa from 'papaparse';
 
-export const importItems = async (c) => {
+export const importItemsGlobal = async (c: Context) => {
   try {
-    const { name, weight, quantity, unit, packId, type, ownerId } =
-      await c.req.json();
+    const { name, weight, quantity, unit, type, ownerId } = await c.req.json();
 
-    const result = await addItemService(
+    const item = await addItemGlobalService(
       name,
       weight,
       quantity,
       unit,
-      packId,
       type,
       ownerId,
     );
-    return c.json({ result }, 200);
+    return c.json({ item }, 200);
   } catch (error) {
-    return c.json({ error: `${error.message}` }, 500);
+    return c.json({ error: `Failed to add item: ${error.message}` }, 500);
   }
 };
 
-export function importItemsRoute() {
+export function importItemsGlobalRoute() {
   return protectedProcedure
-    .input(validator.importItem)
+    .input(validator.importItemsGlobal)
     .mutation(async (opts) => {
-      const { content, packId, ownerId } = opts.input;
+      const { content, ownerId } = opts.input;
       return new Promise((resolve, reject) => {
         Papa.parse(content, {
           header: true,
@@ -60,26 +59,20 @@ export function importItemsRoute() {
                   continue;
                 }
 
-                await addItemService(
+                await addItemGlobalService(
                   item.Name,
                   item.Weight,
                   item.Quantity,
                   item.Unit,
-                  packId,
                   item.Category,
                   ownerId,
                   opts.ctx.executionCtx,
                 );
               }
-              resolve('result');
-            } catch (err) {
-              console.error('Error parsing CSV file:', err);
-              reject(err);
+              return resolve('items');
+            } catch (error) {
+              return reject(new Error(`Failed to add items: ${error.message}`));
             }
-          },
-          error: function (error) {
-            console.error('Error parsing CSV file:', error);
-            reject(error);
           },
         });
       });

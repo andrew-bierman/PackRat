@@ -70,6 +70,11 @@ export const addItemGlobal = z.object({
   ownerId: z.string(),
 });
 
+export const importItemsGlobal = z.object({
+  content: z.string(),
+  ownerId: z.string(),
+});
+
 export const getItemsGlobally = z.object({
   limit: z.number(),
   page: z.number(),

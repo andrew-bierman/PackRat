@@ -1,4 +1,5 @@
 export * from './addGlobalItemToPack';
+export * from './importItemsGlobal';
 export * from './addItem';
 export * from './importItems';
 export * from './addItemGlobal';

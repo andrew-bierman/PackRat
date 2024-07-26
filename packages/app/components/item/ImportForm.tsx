@@ -3,11 +3,10 @@ import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
-import Papa from 'papaparse';
-import { InformUser } from 'app/utils/ToastUtils';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 import { useAddItem } from 'app/hooks/items';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
+import { useImportItem } from 'app/hooks/items/useImportItem';
 
 interface ImportFormProps {
   showSubmitButton?: boolean;
@@ -43,6 +42,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { addPackItem } = useAddPackItem();
   const { handleAddNewItem } = useAddItem();
+  const { handleImportNewItems } = useImportItem();
   const { importPackItem } = useImportPackItem();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
@@ -83,98 +83,15 @@ export const ImportForm: FC<ImportFormProps> = ({
         }
 
         if (currentpage === 'items') {
-          // data.forEach((item, index) => {
-          //   if (index < data.length - 1) {
-          //     handleAddNewItem(item, () => {
-          //       InformUser({
-          //         title: 'Items imported successfully',
-          //         placement: 'bottom',
-          //         duration: 3000,
-          //         style: { backgroundColor: 'green' },
-          //       });
-          //     });
-          //   }
-          // });
+          handleImportNewItems({ content: fileContent, ownerId });
         } else {
           importPackItem({ content: fileContent, packId, ownerId });
         }
-
-        console.log('fileContent:', typeof fileContent);
-
-        // Papa.parse(fileContent, {
-        //   header: true,
-        //   complete: (result) => {
-        //     const expectedHeaders = [
-        //       'Name',
-        //       'Weight',
-        //       'Unit',
-        //       'Quantity',
-        //       'Category',
-        //     ];
-        //     // Get headers from the parsed result
-        //     const parsedHeaders = result.meta.fields;
-        //     try {
-        //       // Check if all expected headers are present
-        //       const allHeadersPresent = expectedHeaders.every((header) =>
-        //         parsedHeaders.includes(header),
-        //       );
-        //       if (!allHeadersPresent) {
-        //         throw new Error(
-        //           'CSV does not contain all the expected Item headers',
-        //         );
-        //       }
-        //       const data = result.data.map((item, index) => {
-        //         return {
-        //           id: `${Date.now().toString()}${index}`,
-        //           name: item.Name,
-        //           weight: Number(item.Weight),
-        //           unit: item.Unit,
-        //           quantity: Number(item.Quantity),
-        //           type: item.Category,
-        //           packId: packId,
-        //           ownerId: ownerId,
-        //         };
-        //       });
-
-        //       if (currentpage === 'items') {
-        //         data.forEach((item, index) => {
-        //           if (index < data.length - 1) {
-        //             handleAddNewItem(item, () => {
-        //               InformUser({
-        //                 title: 'Items imported successfully',
-        //                 placement: 'bottom',
-        //                 duration: 3000,
-        //                 style: { backgroundColor: 'green' },
-        //               });
-        //             });
-        //           }
-        //         });
-        //       } else {
-        //         data.forEach((item, index) => {
-        //           if (index < data.length - 1) {
-        //             addPackItem(item);
-        //           }
-        //         });
-        //       }
-        //     } catch (error) {
-        //       InformUser({
-        //         title:
-        //           'CSV does not contain the expected Item headers or data must be corrupt',
-        //         placement: 'bottom',
-        //         duration: 3000,
-        //         style: { backgroundColor: 'red' },
-        //       });
-        //     } finally {
-        //       closeModalHandler();
-        //     }
-        //   },
-        //   error: (error) => {
-        //     console.error('Error parsing CSV:', error);
-        //   },
-        // });
       }
     } catch (err) {
       console.error('Error importing file:', err);
+    } finally {
+      closeModalHandler();
     }
   };
 
