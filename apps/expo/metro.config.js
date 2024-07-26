@@ -15,7 +15,13 @@ config.transformer.minifierConfig.compress.drop_console = true;
 config.resolver.assetExts.push('cjs');
 
 // Include 'mjs' and 'cjs' in source extensions
-config.resolver.sourceExts.push('mjs', 'cjs', '.solito.js', 'native.ts', 'web.ts');
+config.resolver.sourceExts.push(
+  'mjs',
+  'cjs',
+  '.solito.js',
+  'native.ts',
+  'web.ts',
+);
 
 // Find the project and workspace directories
 const projectRoot = __dirname;
@@ -34,6 +40,7 @@ config.resolver.disableHierarchicalLookup = true;
 const customAliases = {
   '@crosspath-resolver': './resolver.solito.js',
   '@env': path.resolve(projectRoot, 'envResolver.ts'),
+  '@packrat/validations': path.resolve(projectRoot, 'packages/validations/src'),
 };
 
 config.resolver.extraNodeModules = new Proxy(
