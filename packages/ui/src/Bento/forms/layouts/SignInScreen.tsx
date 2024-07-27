@@ -17,6 +17,7 @@ import { userSignIn } from '@packrat/validations';
 import { FontAwesome } from '@expo/vector-icons';
 import { RIconButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function SignInScreen({
   promptAsync,
@@ -25,6 +26,7 @@ export function SignInScreen({
   isGoogleSignInReady,
 }) {
   const { currentTheme } = useTheme();
+  const { xxs, xs } = useResponsive();
   return (
     <FormCard
       style={{
@@ -53,7 +55,11 @@ export function SignInScreen({
           Sign in to your account
         </H1>
         <Form validationSchema={userSignIn}>
-          <View flexDirection="column" gap="$3">
+          <View
+            flexDirection="column"
+            gap="$3"
+            width={xxs ? '80%' : xs ? '80%' : '20%'}
+          >
             <FormInput
               label="Email ID"
               keyboardType="email-address"
@@ -100,10 +106,7 @@ export function SignInScreen({
                   </AnimatePresence>
                 }
               >
-                <Text
-                  right={Platform.OS === 'web' ? 0 : 60}
-                  style={{ color: currentTheme.colors.textPrimary }}
-                >
+                <Text style={{ color: currentTheme.colors.white }}>
                   Sign In
                 </Text>
               </SubmitButton>
