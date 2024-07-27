@@ -7,7 +7,6 @@ import Layout from 'app/components/layout/Layout';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import { usePackId } from 'app/hooks/packs/usePackId';
 import { useUserPacks } from 'app/hooks/packs/useUserPacks';
-import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 import { FlatList, Platform, View } from 'react-native';
 import { useFetchSinglePack } from '../../hooks/packs';
@@ -16,6 +15,7 @@ import ChatContainer from '../chat';
 import { DetailsComponent } from '../details';
 import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
+import { ImportItemModal } from './ImportItemModal';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -29,15 +29,12 @@ export function PackDetails() {
   const canCopy = false;
   const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
-  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [isImportItemModalOpen, setIsImportItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const { xxs, xxl, xs } = useResponsive();
 
-  const { data: userPacks, isLoading: isUserPacksLoading } =
-    useUserPacks(userId);
   const {
     data: currentPack,
     isLoading,
@@ -88,14 +85,32 @@ export function PackDetails() {
                         );
                       case SECTION.CTA:
                         return isAuthUserPack ? (
-                          <AddItemModal
-                            currentPackId={currentPackId || ''}
-                            currentPack={currentPack}
-                            isAddItemModalOpen={isAddItemModalOpen}
-                            setIsAddItemModalOpen={setIsAddItemModalOpen}
-                            // refetch={refetch}
-                            setRefetch={() => setRefetch((prev) => !prev)}
-                          />
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%',
+                              justifyContent: 'center',
+                              gap: 5,
+                            }}
+                          >
+                            <AddItemModal
+                              currentPackId={currentPackId || ''}
+                              currentPack={currentPack}
+                              isAddItemModalOpen={isAddItemModalOpen}
+                              setIsAddItemModalOpen={setIsAddItemModalOpen}
+                              // refetch={refetch}
+                              setRefetch={() => setRefetch((prev) => !prev)}
+                            />
+                            <ImportItemModal
+                              currentPackId={currentPackId || ''}
+                              currentPack={currentPack}
+                              isImportItemModalOpen={isImportItemModalOpen}
+                              setIsImportItemModalOpen={
+                                setIsImportItemModalOpen
+                              }
+                            />
+                          </View>
                         ) : null;
                       case SECTION.SCORECARD:
                         return (

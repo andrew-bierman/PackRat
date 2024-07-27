@@ -27,8 +27,8 @@ const dataValues = [
   'Most Recent',
   'Lightest',
   'Heaviest',
-  'Most Items',
-  'Fewest Items',
+  // 'Most Items',
+  // 'Fewest Items',
   'Oldest',
 ];
 
@@ -188,12 +188,14 @@ const FeedSearchFilter = ({
             >
               Sort By:
             </RText>
-            <DropdownComponent
-              value={queryString}
-              data={dataValues}
-              onValueChange={handleSortChange}
-              placeholder={queryString}
-            />
+            <View style={{ flex: 1 }}>
+              <DropdownComponent
+                value={queryString}
+                data={dataValues}
+                onValueChange={handleSortChange}
+                placeholder={queryString}
+              />
+            </View>
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
             <RButton onPress={handleCreateClick}>Create</RButton>
