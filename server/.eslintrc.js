@@ -101,6 +101,7 @@ module.exports = {
     'require-yield': 'off',
     'use-isnan': 'off',
     'valid-typeof': 'off',
+    '@typescript-eslint/consistent-type-imports': 'off',
   },
   overrides: [
     {

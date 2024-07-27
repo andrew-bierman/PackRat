@@ -15,12 +15,13 @@ const quickActionData: IQuickActionData[] = [
     text: 'Create a Pack',
     href: '/pack/create',
   },
-  {
-    action: 'createTrip',
-    iconName: 'navigation',
-    text: 'Create a Trip',
-    href: '/trip/create',
-  },
+  /* DISABLE TRIP TEMP */
+  // {
+  //   action: 'createTrip',
+  //   iconName: 'navigation',
+  //   text: 'Create a Trip',
+  //   href: '/trip/create',
+  // },
 ];
 
 export const useQuickActions = () => {

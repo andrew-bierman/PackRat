@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
@@ -27,8 +27,8 @@ const dataValues = [
   'Most Recent',
   'Lightest',
   'Heaviest',
-  'Most Items',
-  'Fewest Items',
+  // 'Most Items',
+  // 'Fewest Items',
   'Oldest',
 ];
 
@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { searchValue, setSearchValue } = useContext(SearchContext);
+  const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
@@ -188,12 +188,14 @@ const FeedSearchFilter = ({
             >
               Sort By:
             </RText>
-            <DropdownComponent
-              value={queryString}
-              data={dataValues}
-              onValueChange={handleSortChange}
-              placeholder={queryString}
-            />
+            <View style={{ flex: 1 }}>
+              <DropdownComponent
+                value={queryString}
+                data={dataValues}
+                onValueChange={handleSortChange}
+                placeholder={queryString}
+              />
+            </View>
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
             <RButton onPress={handleCreateClick}>Create</RButton>
