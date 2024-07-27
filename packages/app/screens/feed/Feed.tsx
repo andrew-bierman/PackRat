@@ -187,7 +187,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
+      ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
     },
     // filterContainer: {
     //   backgroundColor: currentTheme.colors.card,

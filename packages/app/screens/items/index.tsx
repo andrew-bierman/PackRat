@@ -73,21 +73,23 @@ export default function Items() {
             <RText style={{ fontWeight: 'bold', textWrap: 'nowrap' }}>
               Sort By:
             </RText>
-            <DropdownComponent
-              value={value}
-              data={optionValues}
-              onValueChange={handleSort}
-              placeholder={value}
-              width="80%"
-              native={true}
-              zeego={true}
-            />
+            <View style={{ flex: 1 }}>
+              <DropdownComponent
+                value={value}
+                data={optionValues}
+                onValueChange={handleSort}
+                placeholder={value}
+                native={true}
+                zeego={true}
+              />
+            </View>
           </RStack>
           <View
             style={{
               marginBottom: 10,
               display: 'flex',
               flexDirection: 'row',
+              justifyContent: 'flex-end',
               gap: 5,
             }}
           >
@@ -100,7 +102,7 @@ export default function Items() {
           </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (
-          <View style={{padding:10, width:'100%'}}>
+          <View style={{ padding: 10, width: '100%' }}>
             <ItemsTable
               limit={limit}
               setLimit={handleLimitChange}
@@ -110,7 +112,7 @@ export default function Items() {
               isLoading={isFetching}
               totalPages={data?.totalPages}
             />
-         </View>
+          </View>
         )}
       </RStack>
     </RScrollView>
@@ -137,14 +139,15 @@ const loadStyles = (theme) => {
     },
     container: {
       backgroundColor: currentTheme.colors.card,
-      flexDirection: 'row',
+      flexDirection: xs || xxs ? 'column' : 'row',
+      gap: xs || xxs ? 4 : 0,
       justifyContent: 'space-between',
       width: '100%',
       padding: 30,
       borderRadius: 10,
     },
     sortContainer: {
-      width: xxs ? '50%' : xs ? '50%' : '20%',
+      width: xxs ? '100%' : xs ? '100%' : '20%',
       justifyContent: 'space-between',
       flexDirection: 'row',
       alignItems: 'center',
