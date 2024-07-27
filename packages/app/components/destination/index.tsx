@@ -159,7 +159,7 @@ export const DestinationPage = () => {
                 ) : (
                   <RButton
                     style={{
-                      backgroundColor: currentTheme.colors.textPrimary,
+                      backgroundColor: currentTheme.colors.white,
                       minWidth: '100%',
                       height: 25,
                       flexDirection: 'row',
@@ -174,7 +174,7 @@ export const DestinationPage = () => {
                       color={currentTheme.colors.background}
                     />
                     <RText
-                      color={currentTheme.colors.textPrimaryDarkGrey}
+                      color={currentTheme.colors.whiteDarkGrey}
                       opacity={0.6}
                     >
                       Search by park, city, or trail
@@ -237,7 +237,7 @@ const loadStyles = (theme) => {
       fontWeight: 'bold',
     },
     headerSubText: {
-      color: isDark ? 'white' : currentTheme.colors.textPrimaryDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 16,
       marginTop: 5,
     },
@@ -246,7 +246,7 @@ const loadStyles = (theme) => {
       marginTop: 10,
     },
     languageText: {
-      color: isDark ? 'white' : currentTheme.colors.textPrimaryDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 14,
       marginRight: 10,
       marginBottom: 5, // Add margin to provide spacing between the language texts

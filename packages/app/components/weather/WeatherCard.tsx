@@ -309,7 +309,7 @@ const loadStyles = (theme) => {
       backgroundColor:
         currentTheme.colors.background === '#0284c7'
           ? '#eaeaea'
-          : currentTheme.colors.textPrimaryDarkGrey,
+          : currentTheme.colors.whiteDarkGrey,
     },
 
     cardContainer: {

@@ -63,7 +63,7 @@ export default function Search() {
     <RStack
       style={{
         paddingTop: 24,
-        backgroundColor: currentTheme.colors.textPrimary,
+        backgroundColor: currentTheme.colors.white,
       }}
     >
       {Platform.OS === 'web' && (

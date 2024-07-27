@@ -112,7 +112,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
             ) : (
               <RButton
                 style={{
-                  backgroundColor: currentTheme.colors.textPrimary,
+                  backgroundColor: currentTheme.colors.white,
                   minWidth: '100%',
                   flexDirection: 'row',
                 }}
@@ -125,10 +125,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
                   size={24}
                   color={currentTheme.colors.iconColor}
                 />
-                <RText
-                  color={currentTheme.colors.textPrimaryDarkGrey}
-                  opacity={0.6}
-                >
+                <RText color={currentTheme.colors.whiteDarkGrey} opacity={0.6}>
                   Search by park, city, or trail
                 </RText>
               </RButton>

@@ -16,7 +16,7 @@ export const theme = {
     textGreen: '#22c55e',
     textBlueGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
-    iconColor: '#003355',
+    iconColor: '#003064',
     weatherIcon: '#0284c7',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
@@ -49,7 +49,7 @@ export const lightTheme = {
     tertiaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#fafafa',
-    textPrimary: '#FFFFFF',
+    white: '#FFFFFF',
     tertiaryBlue: '#000',
     border: '#fafafa',
     notification: '#0A84FF',
@@ -88,7 +88,7 @@ export const darkTheme = {
     secondaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#2D2D2D',
-    textPrimary: '#C5C6C7',
+    white: '#C5C6C7',
     tertiaryBlue: '#C5C6C7',
     border: '#4E4E50',
     notification: '#0A84FF',
@@ -126,7 +126,7 @@ export const nativeBaseLightTheme = extendTheme({
       500: theme.colors.background,
     },
     amber: {
-      100: theme.colors.textPrimary,
+      100: theme.colors.white,
     },
   },
 });
@@ -136,7 +136,7 @@ export const nativeBaseDarkTheme = extendTheme({
       500: darkTheme.colors.background,
     },
     amber: {
-      100: darkTheme.colors.textPrimary,
+      100: darkTheme.colors.white,
     },
   },
 });
@@ -146,7 +146,7 @@ export const lightThemePaper = {
   colors: {
     ...DefaultTheme.colors,
     primary: theme.colors.primary,
-    onSurface: theme.colors.textPrimary,
+    onSurface: theme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: theme.colors.background,
@@ -159,7 +159,7 @@ export const darkPaperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: darkTheme.colors.primary,
-    onSurface: darkTheme.colors.textPrimary,
+    onSurface: darkTheme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: darkTheme.colors.background,

@@ -114,7 +114,7 @@ export default function DownloadedMaps() {
             fontSize: 20,
             fontWeight: 'bold',
             marginVertical: 20,
-            color: currentTheme.colors.textPrimary,
+            color: currentTheme.colors.white,
           }}
         >
           Downloaded Maps
@@ -145,7 +145,7 @@ export default function DownloadedMaps() {
                       fontWeight: 'bold',
                       marginTop: 5,
                       textAlign: 'center',
-                      color: currentTheme.colors.textPrimary,
+                      color: currentTheme.colors.white,
                     }}
                   >
                     {offlineMap.name}

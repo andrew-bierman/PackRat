@@ -67,14 +67,14 @@ const loadStyles = (theme) => {
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
       fontSize: 18,
       fontWeight: 'bold',
     },
     card: {
       marginBottom: 10,
       width: '100%',
-      backgroundColor: currentTheme.colors.tertiaryBlue,
+      backgroundColor: currentTheme.colors.border,
     },
     cardHeader: {
       flexDirection: 'row',
@@ -91,18 +91,18 @@ const loadStyles = (theme) => {
     },
     icon: {
       fontSize: 40,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.iconColor,
       marginRight: 10,
     },
     featureText: {
       fontSize: 22,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.text,
     },
     cardContent: {
       paddingHorizontal: 20,
       paddingVertical: 10,
       fontSize: 16,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.text,
     },
   };
 };

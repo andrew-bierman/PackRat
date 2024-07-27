@@ -28,7 +28,7 @@ const loadStyles = (theme: any) => {
     headerDark: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
       marginRight: 10,
     },
 
@@ -61,21 +61,21 @@ const loadStyles = (theme: any) => {
     },
     githubIcon: {
       fontSize: 24,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
       marginRight: 5,
     },
     githubIconDark: {
       fontSize: 24,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
       marginRight: 5,
     },
     githubText: {
       fontSize: 18,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
     },
     githubtertiaryBlue: {
       fontSize: 18,
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
     },
     textContainer: {
       marginBottom: 20,
@@ -94,7 +94,7 @@ const loadStyles = (theme: any) => {
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: "sans-serif",
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.white,
       textAlign: 'center',
       marginBottom: 20,
     },

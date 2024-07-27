@@ -47,7 +47,7 @@ const loadStyles = (theme) => {
       fontWeight: 'bold',
       color:
         currentTheme.colors.background === '#1A1A1D'
-          ? currentTheme.colors.textPrimary
+          ? currentTheme.colors.white
           : 'black',
       fontSize: Platform.OS === 'web' ? 14 : 12,
     },
@@ -55,7 +55,7 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       height: 60,
       alignItems: 'center',
-      // color: currentTheme.colors.textPrimary,
+      // color: currentTheme.colors.white,
       backgroundColor:
         currentTheme.colors.background === '#1A1A1D'
           ? currentTheme.colors.black

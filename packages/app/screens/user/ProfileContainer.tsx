@@ -320,7 +320,7 @@ const loadStyles = (theme) => {
     },
     userEmail: {
       fontSize: 16,
-      color: currentTheme.colors.textPrimaryDarkGrey,
+      color: currentTheme.colors.whiteDarkGrey,
       textAlign: 'center',
     },
     card: {

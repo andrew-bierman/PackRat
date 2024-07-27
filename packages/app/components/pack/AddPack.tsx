@@ -107,7 +107,7 @@ export const AddPack = ({
             </RSwitch>
           </RStack>
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
-            <RText style={{ color: currentTheme.colors.textPrimary }}>
+            <RText style={{ color: currentTheme.colors.white }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
             </RText>
           </SubmitButton>
