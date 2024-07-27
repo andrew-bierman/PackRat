@@ -3,8 +3,6 @@ import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
-import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
-import { useAddItem } from 'app/hooks/items';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
 import { useImportItem } from 'app/hooks/items/useImportItem';
 import useResponsive from 'app/hooks/useResponsive';
@@ -41,8 +39,6 @@ export const ImportForm: FC<ImportFormProps> = ({
   currentpage,
 }) => {
   const { currentTheme } = useTheme();
-  const { addPackItem } = useAddPackItem();
-  const { handleAddNewItem } = useAddItem();
   const { handleImportNewItems } = useImportItem();
   const { importPackItem } = useImportPackItem();
   const { xxs } = useResponsive();
@@ -64,7 +60,6 @@ export const ImportForm: FC<ImportFormProps> = ({
       });
 
       if (res.canceled) {
-        console.log('User canceled file picker');
         return;
       }
 
