@@ -5,7 +5,7 @@ import * as validator from '@packrat/validations';
 export const editPack = async (c) => {
   try {
     const packData = await c.req.json();
-    const pack = await editPackService(packData);
+    const pack = await editPackService(packData, c.ctx.executionCtx);
     return c.json({ pack }, 200);
   } catch (error) {
     return c.json({ error: `Failed to edit pack: ${error.message}` }, 500);

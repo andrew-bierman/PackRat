@@ -45,7 +45,7 @@ export const importItemsGlobal = async (c: Context) => {
                 item.Unit,
                 item.Category,
                 ownerId,
-                c.executionCtx,
+                c.ctx.executionCtx,
               );
             }
             resolve('items');

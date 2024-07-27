@@ -13,6 +13,7 @@ import {
   deleteGlobalItem,
   importItems,
   importItemsGlobal,
+  getSimilarItems,
 } from '../controllers/item/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -27,6 +28,13 @@ router.get(
   authTokenMiddleware,
   zodParser(validator.getItems, 'params'),
   tryCatchWrapper(getItems),
+);
+
+router.get(
+  '/similarItems',
+  authTokenMiddleware,
+  zodParser(validator.getSimilarItems, 'body'),
+  tryCatchWrapper(getSimilarItems),
 );
 
 router.get(

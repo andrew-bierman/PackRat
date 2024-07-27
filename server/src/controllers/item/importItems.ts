@@ -45,7 +45,7 @@ export const importItems = async (c) => {
                 packId,
                 item.Category,
                 ownerId,
-                c.executionCtx,
+                c.ctx.executionCtx,
               );
             }
             resolve('result');

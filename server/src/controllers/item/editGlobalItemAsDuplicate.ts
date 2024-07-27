@@ -16,6 +16,7 @@ export const editGlobalItemAsDuplicate = async (c) => {
       quantity,
       unit,
       type,
+      c.ctx.executionCtx,
     );
     return c.json({ item }, 200);
   } catch (error) {
