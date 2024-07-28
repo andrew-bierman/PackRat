@@ -108,6 +108,7 @@ export function PaginatedSortedTable({
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
+          gap: 10,
           marginBottom: 30,
         }}
       >
@@ -156,6 +157,7 @@ export function PaginatedSortedTable({
             style={{
               flexDirection: 'row',
               alignSelf: 'center',
+              padding: 8,
               fontSize: 15,
             }}
           >

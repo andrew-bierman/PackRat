@@ -94,7 +94,7 @@ export const ItemsTable = ({
   return (
     <View
       style={{
-        padding: 30,
+        padding: 10,
         backgroundColor: isDark ? '#1A1A1D' : 'white',
         borderRadius: 12,
         margin: 20,

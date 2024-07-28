@@ -102,15 +102,17 @@ export const ItemForm = ({
                   width="100"
                 />
               ) : (
-                <DropdownComponent
-                  value={selectedUnit}
-                  data={data}
-                  onValueChange={handleUnitChange}
-                  placeholder={selectedUnit}
-                  width="50%"
-                  native={true}
-                  zeego={true}
-                />
+                <View style={{ flex: 1 }}>
+                  <DropdownComponent
+                    value={selectedUnit}
+                    data={data}
+                    onValueChange={handleUnitChange}
+                    placeholder={selectedUnit}
+                    width="50%"
+                    native={true}
+                    zeego={true}
+                  />
+                </View>
               ))}
           </View>
           <FormInput
