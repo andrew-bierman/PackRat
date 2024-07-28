@@ -162,7 +162,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   },
   "overrides": {
     "metro": "0.73.7",

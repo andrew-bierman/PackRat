@@ -5475,7 +5475,7 @@ __metadata:
   resolution: "@packrat/crosspath@workspace:packages/crosspath"
   dependencies:
     "@tamagui/build": "npm:1.96.0"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
   peerDependencies:
     "@tanstack/react-query": ^4.36.1
     react: ^18.2.0
@@ -5562,7 +5562,7 @@ __metadata:
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:^20.14.2"
     express: "npm:^4.19.2"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     zod: "npm:^3.22.4"
   languageName: unknown
   linkType: soft
@@ -6843,17 +6843,6 @@ __metadata:
   peerDependencies:
     react-native: ^0.0.0-0 || >=0.60 <1.0
   checksum: 10/7860faaa0ddb849ba4019f48fba90cffea686fb8a29813379ff38af8d635d4d8e7841735c2ba53b7788fb54312f157338e5630a768e9b2339dc33c4f5b316ca7
-  languageName: node
-  linkType: hard
-
-"@react-native-async-storage/async-storage@npm:^1.23.1":
-  version: 1.23.1
-  resolution: "@react-native-async-storage/async-storage@npm:1.23.1"
-  dependencies:
-    merge-options: "npm:^3.0.4"
-  peerDependencies:
-    react-native: ^0.0.0-0 || >=0.60 <1.0
-  checksum: 10/9d0acc7edb0ba9ee414d6e62c656e5d571c9d9615e7e9f4748865b965178998f2e73786b8050387ada00ddb6faaca97b5cf2e010ceaeebe91571991364a0f515
   languageName: node
   linkType: hard
 
@@ -12800,7 +12789,7 @@ __metadata:
     superjson: "npm:^2.0.0"
     tamagui: "npm:1.96.0"
     togpx: "npm:^0.5.4"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
   languageName: unknown
@@ -14661,7 +14650,7 @@ __metadata:
     hono: "npm:^4.2.7"
     server: "npm:*"
     trpc-panel: "npm:^1.3.4"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft
 
@@ -19677,7 +19666,7 @@ __metadata:
     superjson: "npm:^2.0.0"
     tamagui: "npm:1.96.0"
     togpx: "npm:^0.5.4"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
     zeego: "npm:^1.7.2"
@@ -28623,8 +28612,6 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.21.0"
     "@manypkg/cli": "npm:^0.21.0"
-    "@prisma/extension-accelerate": "npm:^0.6.2"
-    "@react-native-async-storage/async-storage": "npm:^1.23.1"
     check-dependency-version-consistency: "npm:^4.1.0"
     cross-env: "npm:^7.0.3"
     dotenv-cli: "npm:^7.3.0"
@@ -28635,7 +28622,7 @@ __metadata:
     patch-package: "npm:^8.0.0"
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^3.2.5"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft
 
@@ -32468,7 +32455,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.1"
     tsx: "npm:^4.7.0"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     uuid: "npm:^9.0.0"
     validator: "npm:^13.9.0"
     vitest: "npm:1.3.0"
@@ -34098,7 +34085,7 @@ __metadata:
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     rollup-plugin-typescript2: "npm:^0.36.0"
     tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     vite: "npm:^5.1.0"
     vite-plugin-node-polyfills: "npm:^0.21.0"
   languageName: unknown
@@ -35776,7 +35763,7 @@ __metadata:
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     rollup-plugin-typescript2: "npm:^0.36.0"
     tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
+    typescript: "npm:^5.5.3"
     vite: "npm:^5.1.0"
     vite-plugin-node-polyfills: "npm:^0.21.0"
   languageName: unknown

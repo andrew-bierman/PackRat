@@ -81,7 +81,7 @@
     "upgrade:million": "yarn up 'million'@latest",
     "upgrade:tauri": "yarn up '@tauri-apps/*'@latest",
     "upgrade:tauri:canary": "yarn up '@tauri-apps/*'@next",
-    "web": "cd apps/next && yarn dev"
+    "web": "cd apps/vite && yarn dev"
   },
   "engines": {
     "node": ">=18.16.1",
@@ -91,8 +91,6 @@
   "dependencies": {
     "@babel/runtime": "^7.21.0",
     "@manypkg/cli": "^0.21.0",
-    "@prisma/extension-accelerate": "^0.6.2",
-    "@react-native-async-storage/async-storage": "^1.23.1",
     "check-dependency-version-consistency": "^4.1.0",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
@@ -103,7 +101,7 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   },
   "lint-staged": {
     "server/**/*.{js,ts}": [
