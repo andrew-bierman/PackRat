@@ -27,6 +27,7 @@ import {
 import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
 import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
+import { SettingsForm } from '../../components/settings';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -56,6 +57,7 @@ export default function Settings() {
         marginHorizontal="auto"
         marginVertical={40}
       >
+        
         <RStack
           style={{
             display: 'flex',
@@ -82,7 +84,8 @@ export default function Settings() {
           />
           <RH2>Profile</RH2>
         </RStack>
-        <Form
+        <SettingsForm/>
+        {/* <Form
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user, profileImage: user.profileImage || '' }}
         >
@@ -210,7 +213,7 @@ export default function Settings() {
               </SubmitButton>
             </RStack>
           </RStack>
-        </Form>
+        </Form> */}
       </RStack>
     </RScrollView>
   ) : null;
