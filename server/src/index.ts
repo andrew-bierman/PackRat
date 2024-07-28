@@ -38,10 +38,10 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  ref: https://hono.dev/middleware/builtin/compress
 
 // SETUP HTTPS Enforcement Middleware
-// app.use('*', enforceHttps()); // Apply to all routes
+app.use('*', enforceHttps()); // Apply to all routes
 
 // SETUP SECURITY HEADERS
-// app.use('*', securityHeaders()); // Apply to all routes
+app.use('*', securityHeaders()); // Apply to all routes
 
 // SETUP CORS
 app.use('*', async (c, next) => {
