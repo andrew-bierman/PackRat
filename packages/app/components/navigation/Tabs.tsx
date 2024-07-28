@@ -134,7 +134,7 @@ export const Tabs = () => {
         }}
       /> */}
       </ExpoTabs>
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
     </>
   );
 };

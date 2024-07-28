@@ -2,6 +2,8 @@ import { createContext, useEffect, useReducer, useState } from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { useColorScheme } from 'react-native';
+
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStorageState } from 'app/hooks/storage/useStorageState';
@@ -65,6 +67,7 @@ export const ThemeProvider = ({ children }) => {
   const [[, storedIsEnabled], setStoredIsEnabled] =
     useStorageState('isEnabled');
   const [loading, setLoading] = useState(true);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     const fetchTheme = async () => {
@@ -86,6 +89,13 @@ export const ThemeProvider = ({ children }) => {
     fetchTheme();
   }, [storedIsEnabled]);
 
+  useEffect(() => {
+    if (colorScheme === 'dark') {
+      dispatch({ type: 'ENABLE_DARK_MODE' });
+    } else {
+      dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    }
+  }, [colorScheme]);
   /**
    * Enable dark mode.
    *
