@@ -5,6 +5,7 @@ import useTheme from '../../hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
 import { useImportItem } from 'app/hooks/items/useImportItem';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ImportFormProps {
   showSubmitButton?: boolean;
@@ -40,6 +41,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { handleImportNewItems } = useImportItem();
   const { importPackItem } = useImportPackItem();
+  const { xxs } = useResponsive();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
@@ -91,7 +93,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   };
 
   return (
-    <View style={{ minWidth: 320 }}>
+    <View style={{ minWidth: xxs ? 250 : 320 }}>
       <View
         style={{
           flexDirection: 'row',

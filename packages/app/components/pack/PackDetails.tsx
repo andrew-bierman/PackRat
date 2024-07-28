@@ -10,7 +10,8 @@ import useResponsive from 'app/hooks/useResponsive';
 import { FlatList, View } from 'react-native';
 import { useFetchSinglePack } from '../../hooks/packs';
 import ScoreContainer from '../ScoreContainer';
-import ChatContainer from '../chat';
+// import ChatContainer from '../chat';
+import { TextLink } from '@packrat/crosspath';
 import { DetailsComponent } from '../details';
 import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
@@ -110,14 +111,29 @@ export function PackDetails() {
                               }
                             />
                           </View>
-                        ) : null;
+                        ) : (
+                          <RText
+                            style={{ textAlign: 'center', fontWeight: 600 }}
+                          >
+                            <RText style={{ marginRight: 2 }}>
+                              You don't have permission to edit this pack. You
+                              can create your own pack{' '}
+                            </RText>
+                            <TextLink href="/pack/create">
+                              <RText
+                                style={{
+                                  color: 'blue',
+                                  fontWeight: 700,
+                                }}
+                              >
+                                here
+                              </RText>
+                            </TextLink>
+                          </RText>
+                        );
                       case SECTION.SCORECARD:
                         return (
-                          <View
-                            style={{
-                              minHeight: xxs ? 800 : xs ? 800 : xxl ? 100 : 800,
-                            }}
-                          >
+                          <View>
                             <ScoreContainer
                               type="pack"
                               data={currentPack}
@@ -136,7 +152,8 @@ export function PackDetails() {
           />
         </View>
       )}
-      <View
+      {/* Disable Chat */}
+      {/* <View
         style={{
           position: 'absolute',
           right: -40,
@@ -151,7 +168,7 @@ export function PackDetails() {
           trigger="Open Chat"
           type="pack"
         />
-      </View>
+      </View> */}
     </Layout>
   );
 }

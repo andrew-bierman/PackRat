@@ -198,7 +198,12 @@ const FeedSearchFilter = ({
             </View>
           </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
-            <RButton onPress={handleCreateClick}>Create</RButton>
+            <RButton
+              style={{ marginLeft: 'auto', marginTop: 8 }}
+              onPress={handleCreateClick}
+            >
+              Create
+            </RButton>
           )}
         </RStack>
       )}
