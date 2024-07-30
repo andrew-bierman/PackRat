@@ -20,7 +20,6 @@ export const DetailsComponent = ({
   additionalComps,
   link,
 }: DetailsComponent) => {
-  console.log('type', type)
   const renderDetails = () => {
     switch (type) {
       case 'pack':

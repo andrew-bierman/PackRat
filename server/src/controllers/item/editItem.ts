@@ -6,7 +6,15 @@ export const editItem = async (c) => {
   try {
     const { id, name, weight, unit, quantity, type } = await c.req.json();
 
-    const item = await editItemService(id, name, weight, unit, quantity, type);
+    const item = await editItemService(
+      c.ctx.executionCtx,
+      id,
+      name,
+      weight,
+      unit,
+      quantity,
+      type,
+    );
     return c.json({ item }, 200);
   } catch (error) {
     return c.json({ error: `Failed to edit item: ${error.message}` }, 500);

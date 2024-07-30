@@ -4,5 +4,9 @@ export declare function Link(
   props: Parameters<LinkComponent>,
 ): ReturnType<LinkComponent>;
 
+export declare function TextLinks(
+  props: Parameters<LinkComponent>,
+): ReturnType<LinkComponent>;
+
 export declare const createParam: CreateParam;
 export declare function useRouter(): Router;

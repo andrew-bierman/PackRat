@@ -12742,6 +12742,7 @@ __metadata:
     "@types/jest": "npm:^29.5.11"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.14.2"
+    "@types/papaparse": "npm:^5"
     "@types/react": "npm:~18.2.55"
     "@types/react-native": "npm:^0.72.5"
     "@types/react-test-renderer": "npm:^18.0.0"
@@ -12767,7 +12768,7 @@ __metadata:
     expo-checkbox: "npm:~2.7.0"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.1"
-    expo-document-picker: "npm:~11.10.1"
+    expo-document-picker: "npm:^12.0.2"
     expo-file-system: "npm:~16.0.8"
     expo-font: "npm:~11.10.3"
     expo-image-picker: "npm:~14.7.1"
@@ -12793,6 +12794,7 @@ __metadata:
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
     osmtogeojson: "npm:^3.0.0-beta.5"
+    papaparse: "npm:^5.4.1"
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -19860,6 +19862,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/c40ac3a468f9fc2b10fcf50be00059fd42b8017486f6767a1df7a78178d81a0e4b0cc2dc0b8f9df7f2ecf12a6673e97bd65ab5e44316f2a4c54240c874f31957
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "expo-document-picker@npm:12.0.2"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/4eb929c6751ed6f82f2f521a4c8a9e10fdfe6f3e9fd44c4f18c6103db09a84697fb923993d3d658b6560ba20ffac276a166d59822575d70d4706057c0d0a291f
   languageName: node
   linkType: hard
 
