@@ -187,7 +187,7 @@ export const DestinationPage = () => {
                 geoJSON={geoJSON}
                 selectedSearchResult={currentDestination}
               />
-              <LargeCard
+              {/* <LargeCard
                 title="Map"
                 Icon={() => (
                   <Ionicons
@@ -199,7 +199,7 @@ export const DestinationPage = () => {
                 ContentComponent={map}
                 contentProps={{ shape }}
                 type="map"
-              />
+              /> */}
               <WeatherData latLng={latLng} />
             </>
           )}
