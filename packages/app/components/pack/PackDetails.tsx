@@ -6,16 +6,16 @@ import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import { usePackId } from 'app/hooks/packs/usePackId';
-import { useUserPacks } from 'app/hooks/packs/useUserPacks';
-import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
-import { FlatList, Platform, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { useFetchSinglePack } from '../../hooks/packs';
 import ScoreContainer from '../ScoreContainer';
-import ChatContainer from '../chat';
+// import ChatContainer from '../chat';
+import { TextLink } from '@packrat/crosspath';
 import { DetailsComponent } from '../details';
 import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
+import { ImportItemModal } from './ImportItemModal';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -29,15 +29,12 @@ export function PackDetails() {
   const canCopy = false;
   const [packId] = usePackId();
   const link = `${CLIENT_URL}/packs/${packId}`;
-  const [firstLoad, setFirstLoad] = useState(true);
   const user = useAuthUser();
-  const userId = user?.id;
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [isImportItemModalOpen, setIsImportItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const { xxs, xxl, xs } = useResponsive();
 
-  const { data: userPacks, isLoading: isUserPacksLoading } =
-    useUserPacks(userId);
   const {
     data: currentPack,
     isLoading,
@@ -88,22 +85,55 @@ export function PackDetails() {
                         );
                       case SECTION.CTA:
                         return isAuthUserPack ? (
-                          <AddItemModal
-                            currentPackId={currentPackId || ''}
-                            currentPack={currentPack}
-                            isAddItemModalOpen={isAddItemModalOpen}
-                            setIsAddItemModalOpen={setIsAddItemModalOpen}
-                            // refetch={refetch}
-                            setRefetch={() => setRefetch((prev) => !prev)}
-                          />
-                        ) : null;
-                      case SECTION.SCORECARD:
-                        return (
                           <View
                             style={{
-                              minHeight: xxs ? 800 : xs ? 800 : xxl ? 100 : 800,
+                              display: 'flex',
+                              flexDirection: 'row',
+                              width: '100%',
+                              justifyContent: 'center',
+                              gap: 5,
                             }}
                           >
+                            <AddItemModal
+                              currentPackId={currentPackId || ''}
+                              currentPack={currentPack}
+                              isAddItemModalOpen={isAddItemModalOpen}
+                              setIsAddItemModalOpen={setIsAddItemModalOpen}
+                              // refetch={refetch}
+                              setRefetch={() => setRefetch((prev) => !prev)}
+                            />
+                            <ImportItemModal
+                              currentPackId={currentPackId || ''}
+                              currentPack={currentPack}
+                              isImportItemModalOpen={isImportItemModalOpen}
+                              setIsImportItemModalOpen={
+                                setIsImportItemModalOpen
+                              }
+                            />
+                          </View>
+                        ) : (
+                          <RText
+                            style={{ textAlign: 'center', fontWeight: 600 }}
+                          >
+                            <RText style={{ marginRight: 2 }}>
+                              You don't have permission to edit this pack. You
+                              can create your own pack{' '}
+                            </RText>
+                            <TextLink href="/pack/create">
+                              <RText
+                                style={{
+                                  color: 'blue',
+                                  fontWeight: 700,
+                                }}
+                              >
+                                here
+                              </RText>
+                            </TextLink>
+                          </RText>
+                        );
+                      case SECTION.SCORECARD:
+                        return (
+                          <View>
                             <ScoreContainer
                               type="pack"
                               data={currentPack}
@@ -111,16 +141,6 @@ export function PackDetails() {
                             />
                           </View>
                         );
-                      // case SECTION.CHAT:
-                      //   return (
-                      //     <View style={styles.boxStyle}>
-                      //       <ChatContainer
-                      //         itemTypeId={currentPackId}
-                      //         title="Chat"
-                      //         trigger="Open Chat"
-                      //       />
-                      //     </View>
-                      //   );
                       default:
                         return null;
                     }
@@ -132,7 +152,8 @@ export function PackDetails() {
           />
         </View>
       )}
-      <View
+      {/* Disable Chat */}
+      {/* <View
         style={{
           position: 'absolute',
           right: -40,
@@ -147,29 +168,7 @@ export function PackDetails() {
           trigger="Open Chat"
           type="pack"
         />
-      </View>
+      </View> */}
     </Layout>
   );
 }
-
-// const loadStyles = (theme) => {
-//   const { currentTheme } = theme;
-//   console.log('currentTheme', currentTheme);
-//   return {
-//     packsContainer: {
-//       flexDirection: 'column',
-//       minHeight: Platform.OS === 'web' ? '100vh' : '100%',
-//       padding: 25,
-//       fontSize: 26,
-//     },
-//     dropdown: {
-//       backgroundColor: currentTheme.colors.white,
-//     },
-//     boxStyle: {
-//       padding: 5,
-//       borderRadius: 10,
-//       width: '100%',
-//       minHeight: 400,
-//     },
-//   };
-// };

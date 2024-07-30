@@ -8,6 +8,7 @@ import {
   getPublicPacks,
   scorePack,
   duplicatePublicPack,
+  getSimilarPacks,
 } from '../controllers/pack/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -22,6 +23,13 @@ router.get(
   authTokenMiddleware,
   checkRole(['user', 'admin']),
   tryCatchWrapper(getPublicPacks),
+);
+
+router.get(
+  '/similarPacks',
+  authTokenMiddleware,
+  zodParser(validator.getSimilarPacks, 'body'),
+  tryCatchWrapper(getSimilarPacks),
 );
 
 router.get(

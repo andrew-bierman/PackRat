@@ -9,7 +9,7 @@ import {
 import { Pack as PackClass } from '../../drizzle/methods/pack';
 import { User as UserClass } from '../../drizzle/methods/User';
 import type { Pack, User } from '../../db/schema';
-import { ExecutionContext } from 'hono';
+import { type ExecutionContext } from 'hono';
 
 const { mockSyncRecord, mockDeleteVector, mockSearchVector } = vi.hoisted(
   () => {

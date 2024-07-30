@@ -24,6 +24,12 @@ export const addItem = z.object({
   id: z.string().optional(),
 });
 
+export const importItem = z.object({
+  content: z.string(),
+  packId: z.string(),
+  ownerId: z.string(),
+});
+
 export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({
@@ -64,6 +70,11 @@ export const addItemGlobal = z.object({
   ownerId: z.string(),
 });
 
+export const importItemsGlobal = z.object({
+  content: z.string(),
+  ownerId: z.string(),
+});
+
 export const getItemsGlobally = z.object({
   limit: z.number(),
   page: z.number(),
@@ -76,3 +87,13 @@ export const getSimilarItems = z.object({
     .nativeEnum(PackAndItemVisibilityFilter)
     .default(PackAndItemVisibilityFilter.ALL),
 });
+
+export const importItemHeaders = z.object({
+  Name: z.string(),
+  Weight: z.string(),
+  Unit: z.string(),
+  Quantity: z.string(),
+  Category: z.string(),
+});
+
+export type ImportItemHeaders = z.infer<typeof importItemHeaders>;

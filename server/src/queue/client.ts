@@ -1,12 +1,10 @@
 import PQueue from 'p-queue';
 
-interface QueueTask<T> {
-  (): Promise<T>;
-}
+type QueueTask<T> = () => Promise<T>;
 
 export class Queue {
   private static instance: Queue;
-  private queue: PQueue;
+  private readonly queue: PQueue;
 
   private constructor(concurrency: number = 1) {
     this.queue = new PQueue({ concurrency });

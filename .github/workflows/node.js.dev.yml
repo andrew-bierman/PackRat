@@ -29,49 +29,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Debug Information
-      run: |
-        yarn -v
-        ls .yarn/releases
-        cat .yarnrc.yml
-        cat yarn.lock
-
-    - name: ⚙️ Enable Corepack
-      run: |
-        corepack enable
-        echo "corepack enabled"
-
-    - name: Set Yarn Version to Berry
-      run: yarn set version berry
-
-    #   run: yarn policies set-version
-
     - name: Install dependencies
       uses: ./.github/actions/install-deps
-
-    - name: Debug more
-      run: |
-        yarn -v
-        yarn info packrat-world@workspace:.
-        yarn workspaces list --json
-
-    - name: Run setup
-      run: |
-        yarn -v
-        which yarn
-        yarn set version stable
-        yarn install
-
-# cp client/.env.example client/.env
-# cp client/app.json.example client/app.json
-# cp server/.env.example server/.env
-
-# yarn setup
-
-    # - name: Clean Cache and Reinstall
-    #   run: |
-    #     yarn cache clean
-    #     yarn install --immutable
 
     - name: Start Server in Background
       run: |
@@ -83,8 +42,13 @@ jobs:
         cd apps/expo
         yarn web &
 
+    - name: Start Vite in Background
+      run: |
+        cd apps/vite
+        yarn dev &
+
     - name: Wait for a while
-      run: sleep 120  # wait for some time to let the server start
+      run: sleep 520  # wait for some time to let the server start
 
     - name: Kill Background Jobs (Unix)
       if: matrix.os != 'windows-latest'

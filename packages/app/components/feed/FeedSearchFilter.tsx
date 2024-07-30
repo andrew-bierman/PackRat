@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Switch } from 'tamagui';
 import { View } from 'react-native';
+import { SearchContext } from './SearchProvider';
 import {
   RIconButton,
   RSwitch,
@@ -12,9 +13,10 @@ import {
   RButton,
   Form,
   FormInput,
+  InputWithIcon,
   DropdownComponent,
 } from '@packrat/ui';
-import { AntDesign } from '@expo/vector-icons';
+import { Search, X } from '@tamagui/lucide-icons';
 import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
@@ -25,8 +27,8 @@ const dataValues = [
   'Most Recent',
   'Lightest',
   'Heaviest',
-  'Most Items',
-  'Fewest Items',
+  // 'Most Items',
+  // 'Fewest Items',
   'Oldest',
 ];
 
@@ -57,18 +59,42 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState();
+  const debounceTimerRef = useRef(null);
 
-  const onSearch = (search) => (setSearchQuery ? setSearchQuery(search) : null);
+  // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
+  const handleSetSearchValue = (v: string) => {
+    setSearchValue(v);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      setSearchQuery(v);
+    }, 600);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <Layout>
-      <View style={styles.filterContainer}>
-        <View style={styles.searchContainer}>
-          <Form>
-            <RStack style={{ flexDirection: 'row', marginLeft: 40 }}>
-              <FormInput
-                width="100%"
+    <View style={styles.filterContainer}>
+      <View style={styles.searchContainer}>
+        <Form>
+          <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+            <InputWithIcon
+              LeftIcon={<Search />}
+              RightIcon={<X />}
+              onChange={handleSetSearchValue}
+              placeholder={`Search ${feedType || 'Feed'}`}
+              value={searchValue}
+            />
+            {/* <FormInput
+                width='100%'
                 placeholder={`Search ${feedType || 'Feed'}`}
                 name="search"
                 value={searchValue}
@@ -84,34 +110,34 @@ const FeedSearchFilter = ({
                     color={currentTheme.colors.cardIconColor}
                   />
                 }
-              />
-            </RStack>
-          </Form>
-        </View>
-        <RSeparator />
-        {!isSortHidden && (
-          <RStack
-            // flex={1}
-            flexWrap="wrap"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            padding={2}
-            margin={2}
-          >
-            {feedType === 'public' && (
-              <RStack
-                style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+              /> */}
+          </RStack>
+        </Form>
+      </View>
+      <RSeparator />
+      {!isSortHidden && (
+        <RStack
+          // flex={1}
+          flexWrap="wrap"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={2}
+          margin={2}
+        >
+          {feedType === 'public' && (
+            <RStack
+              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            >
+              {/* DISABLE TRIP TEMP */}
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.textColor}
               >
-                {/* DISABLE TRIP TEMP */}
-                <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.textColor}
-                >
-                  Discover Other Users' Public Packs
-                </RText>
-                {/* <RText
+                Discover Other Users' Public Packs
+              </RText>
+              {/* <RText
                   fontSize={18}
                   fontWeight="bold"
                   color={currentTheme.colors.textColor}
@@ -142,44 +168,53 @@ const FeedSearchFilter = ({
                 >
                   <Switch.Thumb />
                 </RSwitch>*/}
-              </RStack>
-            )}
-            <RStack
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
+            </RStack>
+          )}
+          <RStack
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              display: 'flex',
+              gap: 10,
+              width: '100%',
+              marginTop: 15,
+              justifyContent: 'space-between',
+            }}
+          >
+            <RText
+              fontSize={17}
+              fontWeight="bold"
+              color={currentTheme.colors.textColor}
             >
-              <RText
-                fontSize={17}
-                fontWeight="bold"
-                color={currentTheme.colors.textColor}
-              >
-                Sort By:
-              </RText>
+              Sort By:
+            </RText>
+            <View style={{ flex: 1 }}>
               <DropdownComponent
                 value={queryString}
                 data={dataValues}
                 onValueChange={handleSortChange}
                 placeholder={queryString}
-                native={true}
               />
-            </RStack>
-            {(feedType === 'userPacks' || feedType === 'userTrips') && (
-              <RButton onPress={handleCreateClick}>Create</RButton>
-            )}
+            </View>
           </RStack>
-        )}
+          {(feedType === 'userPacks' || feedType === 'userTrips') && (
+            <RButton
+              style={{ marginLeft: 'auto', marginTop: 8 }}
+              onPress={handleCreateClick}
+            >
+              Create
+            </RButton>
+          )}
+        </RStack>
+      )}
 
-        <RSeparator
-          marginTop={10}
-          marginBottom={10}
-          marginRight={0}
-          marginLeft={0}
-        />
-      </View>
-    </Layout>
+      <RSeparator
+        marginTop={10}
+        marginBottom={10}
+        marginRight={0}
+        marginLeft={0}
+      />
+    </View>
   );
 };
 
@@ -209,6 +244,7 @@ const loadStyles = (theme: any) => {
       padding: 10,
       borderRadius: 5,
     },
+
     cardContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',

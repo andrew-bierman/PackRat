@@ -28,7 +28,7 @@ max_batch_size = 10
 max_batch_timeout = 5
 
 [[r2_buckets]]
-bucket_name = "etl-bucket"
+bucket_name = "packrat-etl-bucket"
 binding = "ETL_BUCKET"
 
 # Add vars below

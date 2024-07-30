@@ -10,6 +10,7 @@ import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 import { disableScreen } from '../../hoc/disableScreen';
+import { SearchProvider } from 'app/components/feed/SearchProvider';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -104,21 +105,18 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
    * @return {ReactNode} The rendered feed data.
    */
   const renderData = () => {
-    const feedSearchFilterComponent = (
-      <FeedSearchFilter
-        feedType={feedType}
-        handleSortChange={handleSortChange}
-        handleTogglePack={handleTogglePack}
-        handleToggleTrip={handleToggleTrip}
-        selectedTypes={selectedTypes}
-        queryString={queryString}
-        setSearchQuery={setSearchQuery}
-        handleCreateClick={handleCreateClick}
-      />
-    );
-
     return (
       <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
+        <FeedSearchFilter
+          feedType={feedType}
+          handleSortChange={handleSortChange}
+          handleTogglePack={handleTogglePack}
+          handleToggleTrip={handleToggleTrip}
+          selectedTypes={selectedTypes}
+          queryString={queryString}
+          setSearchQuery={setSearchQuery}
+          handleCreateClick={handleCreateClick}
+        />
         <FlatList
           data={filteredData}
           horizontal={false}
@@ -131,7 +129,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
               {...item}
             />
           )}
-          ListHeaderComponent={() => feedSearchFilterComponent}
           ListFooterComponent={() => <View style={{ height: 50 }} />}
           ListEmptyComponent={() => (
             <RText style={{ textAlign: 'center', marginTop: 20 }}>
@@ -175,7 +172,11 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     router.push(createUrlPath);
   };
 
-  return <View style={styles.mainContainer}>{renderData()}</View>;
+  return (
+    <View style={styles.mainContainer}>
+      <SearchProvider>{renderData()}</SearchProvider>
+    </View>
+  );
 };
 
 const loadStyles = (theme) => {
@@ -186,7 +187,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
+      ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
     },
     // filterContainer: {
     //   backgroundColor: currentTheme.colors.card,

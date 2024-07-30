@@ -18,7 +18,7 @@ export async function getSimilarPacksService(
   visibility: PackAndItemVisibilityFilter,
 ) {
   const packClass = new Pack();
-  let pack = await packClass.findPack({
+  const pack = await packClass.findPack({
     id,
   });
 
@@ -35,8 +35,7 @@ export async function getSimilarPacksService(
     visibility == PackAndItemVisibilityFilter.ALL
       ? undefined
       : {
-          isPublic:
-            visibility == PackAndItemVisibilityFilter.PUBLIC ? true : false,
+          isPublic: visibility == PackAndItemVisibilityFilter.PUBLIC,
         },
   );
 
