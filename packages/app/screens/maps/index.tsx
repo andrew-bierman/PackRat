@@ -10,7 +10,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Map } from 'app/components/map';
 import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
-import { ZStack } from 'tamagui';
+import { disableScreen } from 'app/hoc/disableScreen';
 
 interface OfflineMap {
   name: string;
@@ -53,7 +53,7 @@ function CircleCapComp() {
   );
 }
 
-export default function DownloadedMaps() {
+function DownloadedMaps() {
   const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -173,3 +173,5 @@ const loadStyles = ({ currentTheme }) => {
     },
   };
 };
+
+export default disableScreen(DownloadedMaps);
