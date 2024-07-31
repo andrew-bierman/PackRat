@@ -19,23 +19,26 @@ const SectionHeader = ({ iconName, text }: SectionHeaderProps) => {
   );
 };
 
-const loadStyles = () => ({
-  rStack: {
-    marginBottom: 10,
-    justifyContent: 'space-around', // Updated from "space-between"
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  text: {
-    color: theme.colors.tertiaryBlue,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  icon: {
-    fontSize: 40,
-    margin: 10,
-    color: theme.colors.iconColor,
-  },
-});
+const loadStyles = (theme: any) => {
+  const { currentTheme } = theme;
+  return {
+    rStack: {
+      marginBottom: 10,
+      justifyContent: 'space-around', // Updated from "space-between"
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    text: {
+      color: currentTheme.colors.tertiaryBlue,
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+    icon: {
+      fontSize: 40,
+      margin: 10,
+      color: currentTheme.colors.iconColor,
+    },
+  };
+};
 
 export default SectionHeader;

@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Platform } from 'react-native';
-import { RButton, Container } from '@packrat/ui';
-import { useIsMobileView } from 'app/hooks/common';
+import { RButton, Container, RIconButton } from '@packrat/ui';
 import { useNavigate } from 'app/hooks/navigation';
-import { NavigationList } from '../NavigationList';
 import { Drawer } from '../Drawer';
 import { useScrollTop } from 'app/hooks/common/useScrollTop';
 import { useScreenWidth } from 'app/hooks/common';
-import useTheme from 'app/hooks/useTheme';
 import { RImage } from '@packrat/ui';
+import Feather from '@expo/vector-icons/Feather';
+import ThemeContext from '../../../context/theme';
 
 export const Navbar = () => {
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark, enableDarkMode, enableLightMode } =
+    useContext(ThemeContext);
   const scrollTop = useScrollTop();
   const { screenWidth } = useScreenWidth();
   const isScrolled = !!scrollTop;
@@ -19,6 +19,16 @@ export const Navbar = () => {
     return StyleSheet.create(loadStyles(currentTheme, isScrolled, screenWidth));
   }, [isScrolled, currentTheme, screenWidth]);
   const navigate = useNavigate();
+
+  const iconName = isDark ? 'moon' : 'sun';
+  const iconColor = isDark ? 'white' : 'black';
+  const handlePress = () => {
+    if (isDark) {
+      enableLightMode();
+    } else {
+      enableDarkMode();
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -49,7 +59,20 @@ export const Navbar = () => {
               PackRat
             </Text>
           </View>
-          <Drawer />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              display: 'flex',
+            }}
+          >
+            <RIconButton
+              backgroundColor="transparent"
+              icon={<Feather name={iconName} size={24} color={iconColor} />}
+              onPress={handlePress}
+            />
+            <Drawer />
+          </View>
         </View>
       </Container>
     </SafeAreaView>
@@ -68,7 +91,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
   const isWeb = Platform.OS === 'web';
   const isFloating = isWeb && isScrolled;
   const backgroundColor = isFloating
-    ? NavbarStyles.floatingBg
+    ? currentTheme.colors.border
     : currentTheme.colors.background;
 
   return StyleSheet.create({

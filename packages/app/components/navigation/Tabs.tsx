@@ -27,24 +27,26 @@ export const Tabs = () => {
         screenOptions={{
           tabBarStyle: {
             position: 'absolute',
+            backgroundColor: currentTheme.colors.tertiaryBlueGrey,
+            borderTopWidth: 0,
           },
           headerShown: false,
           headerRight: () => (
             <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
           ),
-          tabBarBackground: () => (
-            <BlurView
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-              }}
-              intensity={80} // Adjust the blur intensity
-              tint="light" // TODO make this dynamic
-            />
-          ),
+          // tabBarBackground: () => (
+          //   <BlurView
+          //     style={{
+          //       position: 'absolute',
+          //       top: 0,
+          //       left: 0,
+          //       bottom: 0,
+          //       right: 0,
+          //     }}
+          //     intensity={100} // Adjust the blur intensity
+          //     tint="dark" // TODO make this dynamic
+          //   />
+          // ),
           headerTitleStyle: {
             fontSize: 24,
           },

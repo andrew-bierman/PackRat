@@ -1,7 +1,16 @@
-body {
-  background-color: #fdfbff!important;
-}
 
 *:focus {
   outline: none;
+}
+
+@media(prefers-color-scheme:dark){
+  body {
+    background-color:#1A1A1D !important;
+  }
+}
+
+@media(prefers-color-scheme:light){
+  body {
+    background-color: #fdfbff !important;
+  }
 }

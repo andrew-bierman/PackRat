@@ -23,12 +23,7 @@ const QuickActionButton = ({
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <RCard elevate style={styles.card}>
         <RCard.Header padded alignItems="center">
-          <MaterialIcons
-            name={iconName}
-            size={24}
-            color={theme.colors.iconColor}
-            style={styles.icon}
-          />
+          <MaterialIcons name={iconName} size={24} style={styles.icon} />
           <Text style={styles.text}>{text}</Text>
         </RCard.Header>
       </RCard>
@@ -54,6 +49,7 @@ const loadStyles = (theme: any) => {
     },
     icon: {
       marginBottom: 10,
+      color: currentTheme.colors.iconColor,
     },
     text: {
       fontSize: 13,

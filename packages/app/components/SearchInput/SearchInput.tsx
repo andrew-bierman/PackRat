@@ -77,6 +77,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               <MaterialIcons
                 name="search"
                 style={{
+                  color: currentTheme.colors.text,
                   position: 'absolute',
                   height: '100%',
                   alignSelf: 'center',
