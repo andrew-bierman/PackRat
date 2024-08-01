@@ -46,7 +46,7 @@ export const darkTheme = {
     primary: '#0A84FF',
     background: '#1A1A1D',
     secondaryBlue: '#0C66A1',
-    tertiaryBlue: '#cce5ff',
+    tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',
     card: '#2D2D2D',
     text: '#8e9099',

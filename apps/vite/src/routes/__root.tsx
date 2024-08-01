@@ -13,7 +13,7 @@ const ThemedMainContentWeb = () => {
   const backgroundColor = isDark ? '#1A1A1D' : '#fdfbff';
 
   return (
-    <MainContentWeb style={{ backgroundColor }}>
+    <MainContentWeb style={{ backgroundColor, paddingTop: 80 }}>
       <Navbar />
       <Outlet />
     </MainContentWeb>
