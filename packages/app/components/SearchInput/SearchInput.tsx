@@ -67,7 +67,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               }}
             >
               <RInput
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: currentTheme.colors.card }}
                 paddingLeft={35}
                 paddingRight={55}
                 placeholder={placeholder ?? 'Search'}

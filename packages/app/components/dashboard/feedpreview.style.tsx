@@ -33,7 +33,7 @@ const loadStyles = (theme: any, appTheme: any) => {
       fontWeight: 'bold',
       fontSize: 16,
       color: currentTheme.colors.white,
-      backgroundColor: currentTheme.colors.text,
+      backgroundColor: currentTheme.colors.border,
       marginBottom: 5,
     },
   };

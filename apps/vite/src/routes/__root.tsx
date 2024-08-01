@@ -10,7 +10,7 @@ import ThemeContext from '../../../../packages/app/context/theme';
 const ThemedMainContentWeb = () => {
   const { isDark } = useContext(ThemeContext);
 
-  const backgroundColor = isDark ? '#1A1A1D' : '#fdfbff';
+  const backgroundColor = isDark ? '#282828' : '#fdfbff';
 
   return (
     <MainContentWeb style={{ backgroundColor, paddingTop: 80 }}>
