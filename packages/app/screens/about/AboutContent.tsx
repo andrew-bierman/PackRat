@@ -60,7 +60,9 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
             </RStack>
           </RButton>
           <RText onPress={handlePrivacyLink}>
-            <Text>Privacy Policy</Text>
+            <Text style={{ color: currentTheme.colors.text }}>
+              Privacy Policy
+            </Text>
           </RText>
           {/* <Button
               style={styles.discordButton}

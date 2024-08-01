@@ -44,13 +44,13 @@ export const theme = {
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
-    background: '#282828',
+    background: '#050505',
     secondaryBlue: '#0C66A1',
     tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',
-    card: '#343434',
+    card: '#1c1a17',
     text: '#eaf6ff',
-    border: '#2e2e2e',
+    border: '#221f1c',
     notification: '#0A84FF',
     error: '#FF453A',
     textGreen: '#22c55e',

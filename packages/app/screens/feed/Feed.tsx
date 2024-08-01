@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
-import Card from '../../components/feed/FeedCard';
+import FeedCard from '../../components/feed/FeedCard';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from '../../utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -122,7 +122,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
           horizontal={false}
           keyExtractor={(item) => item?.id + item?.type}
           renderItem={({ item }) => (
-            <Card
+            <FeedCard
               key={item?.id}
               type={item?.type}
               favorited_by={item?.userFavoritePacks}
