@@ -8,6 +8,10 @@ test('test', async ({ page }) => {
   await page.getByLabel('Password').click();
   await page.getByLabel('Password').fill('12345678');
   await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByRole('button', { name: 'Menu' }).click();
-  await page.getByRole('button', { name: 'Profile' }).click();
+  await page.getByText('Create a Pack').click();
+  await page.getByPlaceholder('Name').click();
+  await page.getByPlaceholder('Name').fill('testing080');
+  await page.getByRole('switch').click();
+  await page.getByRole('button', { name: 'Add Pack' }).click();
+  await page.goto('https://packrat.world/pack/av2gz5lbqd4jj84gbva9n515');
 });
