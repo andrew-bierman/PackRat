@@ -4,13 +4,13 @@ import { DefaultTheme } from 'react-native-paper';
 export const theme = {
   colors: {
     primary: '#0A84FF',
-    background: '#fdfbff',
+    background: '#fcfcfc',
     secondaryBlue: '#cce5ff',
     tertiaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
-    card: '#fafafa',
-    text: '#526070',
-    border: '#e0e2ec',
+    card: '#f8f8f8',
+    text: '#333333',
+    border: '#f3f3f3',
     notification: '#0A84FF',
     error: '#FF453A',
     textGreen: '#22c55e',

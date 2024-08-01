@@ -32,7 +32,7 @@ const loadStyles = (theme: any, appTheme: any) => {
     feedItemType: {
       fontWeight: 'bold',
       fontSize: 16,
-      color: currentTheme.colors.white,
+      color: currentTheme.colors.text,
       backgroundColor: currentTheme.colors.border,
       marginBottom: 5,
     },
