@@ -7,11 +7,9 @@ const loadStyles = (theme: any, appTheme: any) => {
       marginBottom: 20,
     },
     cardStyles: {
-      height: 100,
-      width: '100%',
       backgroundColor: appTheme.colors.primary,
-      borderRadius: 5,
-      padding: 20,
+      borderRadius: 8,
+      overflow: 'hidden',
     },
     feedItem: {
       width: 250,
@@ -25,16 +23,12 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     feedItemTitle: {
       fontWeight: 'bold',
-      fontSize: 17,
+      fontSize: 18,
       color: currentTheme.colors.text,
-      marginBottom: 5,
-    },
-    feedItemType: {
-      fontWeight: 'bold',
-      fontSize: 16,
-      color: currentTheme.colors.text,
-      backgroundColor: currentTheme.colors.background,
-      marginBottom: 5,
+      marginBottom: 12,
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
     },
   };
 };
