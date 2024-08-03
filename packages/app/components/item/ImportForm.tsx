@@ -1,10 +1,16 @@
 import React, { useState, FC } from 'react';
 import { View, Platform } from 'react-native';
-import { DropdownComponent, RButton, RText } from '@packrat/ui';
+import {
+  DropdownComponent,
+  RButton,
+  RText,
+  CascadedDropdownComponent,
+} from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
 import { useImportItem } from 'app/hooks/items/useImportItem';
+import { useImportFromBucket } from 'app/hooks/items/useImportFromBucket';
 import useResponsive from 'app/hooks/useResponsive';
 
 interface ImportFormProps {
@@ -29,7 +35,11 @@ interface SelectedType {
 
 const data = [
   { label: 'CSV', value: '.csv', key: '.csv' },
-  { label: 'Other', value: '*', key: '*' },
+  { label: 'Rei', value: 'rei', key: 'Rei' },
+  { label: 'Sierra', value: 'sierra', key: 'Sierra' },
+  { label: 'Cabelas', value: 'cabelas', key: 'Cabelas' },
+  { label: 'Moosejaw', value: 'moosejaw', key: 'Moosejaw' },
+  { label: 'Backcountry', value: 'backcountry', key: 'Backcountry' },
 ];
 
 export const ImportForm: FC<ImportFormProps> = ({
@@ -41,6 +51,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const { currentTheme } = useTheme();
   const { handleImportNewItems } = useImportItem();
   const { importPackItem } = useImportPackItem();
+  const { handleImportFromBucket } = useImportFromBucket();
   const { xxs } = useResponsive();
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
@@ -55,17 +66,17 @@ export const ImportForm: FC<ImportFormProps> = ({
 
   const handleItemImport = async () => {
     try {
-      const res = await DocumentPicker.getDocumentAsync({
-        type: [selectedType.value],
-      });
-
-      if (res.canceled) {
-        return;
-      }
-
-      let fileContent;
-
       if (selectedType.value === '.csv') {
+        const res = await DocumentPicker.getDocumentAsync({
+          type: [selectedType.value],
+        });
+
+        if (res.canceled) {
+          return;
+        }
+
+        let fileContent;
+
         if (Platform.OS === 'web') {
           if (res.assets && res.assets.length > 0) {
             const file = res.assets[0];
@@ -84,6 +95,8 @@ export const ImportForm: FC<ImportFormProps> = ({
         } else {
           importPackItem({ content: fileContent, packId, ownerId });
         }
+      } else {
+        handleImportFromBucket({ directory: selectedType.value, ownerId });
       }
     } catch (err) {
       console.error('Error importing file:', err);
@@ -100,9 +113,10 @@ export const ImportForm: FC<ImportFormProps> = ({
           justifyContent: 'space-between',
           width: '100%',
           marginBottom: 10,
+          zIndex: 1,
         }}
       >
-        <DropdownComponent
+        <CascadedDropdownComponent
           value={selectedType}
           data={data}
           onValueChange={handleSelectChange}

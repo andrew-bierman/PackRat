@@ -18,23 +18,29 @@ export const useImportItem = () => {
       if (isConnected) {
         return mutate(newItem, {
           onSuccess: () => {
+            // Update items only on successful mutation
+            updateItems((prevState: State = {}) => {
+              const prevItems = Array.isArray(prevState.items)
+                ? prevState.items
+                : [];
+              return {
+                ...prevState,
+                items: [newItem, ...prevItems],
+              };
+            });
             utils.getItemsGlobally.invalidate();
+          },
+          onError: (error) => {
+            console.error('Error adding item:', error);
           },
         });
       }
 
       addOfflineRequest('addItemGlobal', newItem);
 
-      updateItems((prevState: State = {}) => {
-        const prevItems = Array.isArray(prevState.items) ? prevState.items : [];
-
-        return {
-          ...prevState,
-          items: [newItem, ...prevItems],
-        };
-      });
+      // Optionally, handle offline case here if needed
     },
-    [updateItems],
+    [updateItems, isConnected, mutate, utils, addOfflineRequest],
   );
 
   return { handleImportNewItems };
