@@ -3,7 +3,7 @@ import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
 import HeroBanner from '../../components/dashboard/HeroBanner';
 import QuickActionsSection from '../../components/dashboard/QuickActionSection';
-import FeedPreview from '../../components/dashboard/FeedPreview';
+import FeedPreview from '../../components/feedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -35,7 +35,7 @@ const Dashboard = () => {
             </Section>
             <Section>
               <SectionHeader iconName="newspaper-outline" text="Feed" />
-              <FeedPreview />
+              <FeedPreview feedType="public" />
             </Section>
           </View>
         </RStack>
