@@ -5,3 +5,4 @@ export * from './useDeletePack';
 export * from './useEditPack';
 export * from './usePackId';
 export * from './useUserPackById';
+export * from './useSimilarPacks';
