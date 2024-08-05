@@ -118,6 +118,8 @@ export const ImportForm: FC<ImportFormProps> = ({
           });
         } else {
           importPackItem({ content: fileContent, packId, ownerId });
+          setIsImporting(false);
+          closeModalHandler();
         }
       } else {
         handleImportFromBucket(

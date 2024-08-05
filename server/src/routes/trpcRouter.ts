@@ -72,7 +72,6 @@ import {
   searchItemsByNameRoute,
   getSimilarItemsRoute,
   importFromBucketRoute,
-  importFromBucket,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
