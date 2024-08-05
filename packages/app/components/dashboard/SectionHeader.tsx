@@ -1,6 +1,7 @@
 import React from 'react';
-import { RText, RStack } from '@packrat/ui';
+import { RText, RStack, RButton } from '@packrat/ui';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigate } from 'app/hooks/navigation';
 import { theme } from '../../theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
@@ -11,10 +12,14 @@ interface SectionHeaderProps {
 
 const SectionHeader = ({ iconName, text }: SectionHeaderProps) => {
   const styles = useCustomStyles(loadStyles);
+  const navigate = useNavigate();
+
   return (
     <RStack style={styles.rStack}>
-      <Ionicons name={iconName} style={styles.icon} />
       <RText style={styles.text}>{text}</RText>
+      <RButton style={styles.rbutton} onPress={() => navigate('/feed')}>
+        View all feeds
+      </RButton>
     </RStack>
   );
 };
@@ -24,19 +29,24 @@ const loadStyles = (theme: any) => {
   return {
     rStack: {
       marginBottom: 10,
-      justifyContent: 'space-around', // Updated from "space-between"
+      justifyContent: 'space-between',
       alignItems: 'center',
       flexDirection: 'row',
+      width: '100%',
     },
     text: {
       color: currentTheme.colors.tertiaryBlue,
-      fontSize: 20,
+      fontSize: 25,
       fontWeight: 'bold',
     },
     icon: {
       fontSize: 40,
       margin: 10,
       color: currentTheme.colors.iconColor,
+    },
+    rbutton: {
+      backgroundColor: currentTheme.colors.background,
+      color: currentTheme.colors.text,
     },
   };
 };

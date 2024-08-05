@@ -1,3 +1,4 @@
+import React from 'react';
 import { RStack } from '@packrat/ui';
 import QuickActionButton from './QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -12,9 +13,7 @@ const QuickActionsSection = () => {
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
-          onPress={() => {
-            handleActionSelect(action.action);
-          }}
+          onPress={() => handleActionSelect(action.action)}
           iconName={action.iconName}
           text={action.text}
         />
@@ -23,22 +22,14 @@ const QuickActionsSection = () => {
   );
 };
 
-const loadStyles = (theme) => {
+const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
     section: {
-      marginBottom: 20,
-      paddingHorizontal: 20,
       display: 'flex',
       justifyContent: 'center',
     },
-    card: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingHorizontal: 10,
-      paddingVertical: 20,
-      backgroundColor: currentTheme.colors.secondaryBlue,
-    },
   };
 };
+
 export default QuickActionsSection;

@@ -26,7 +26,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
   console.log('feedData', feedData);
 
   return (
-    <Carousel itemWidth={itemWidth}>
+    <Carousel>
       {feedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem, index: number) => {
@@ -37,7 +37,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
               key={`${linkStr}`}
               style={{ textDecoration: 'none' }}
             >
-              <View style={styles.cardStyles} key={index}>
+              <View style={[styles.cardStyles, { width: itemWidth }]}>
                 <RStack
                   style={{
                     flexDirection: 'column',
@@ -47,16 +47,16 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
                   <RText style={styles.feedItemTitle}>{item.name}</RText>
                   <RText
                     style={styles.feedItemType}
-                    fontSize="$1"
+                    fontSize="$4"
                     textTransform="capitalize"
                     paddingHorizontal={8}
-                    alignSelf="center"
+                    alignSelf="flex-end"
                     borderRadius={5}
                   >
                     {item.type}
                   </RText>
                 </RStack>
-                <RText style={{ color: styles.feedItemType.color }}>
+                <RText style={styles.feedItemDescription}>
                   {item.description}
                 </RText>
               </View>
@@ -68,6 +68,6 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({ itemWidth }) => {
 };
 
 const FeedPreview: React.FC = () => {
-  return <FeedPreviewScroll itemWidth={200} />;
+  return <FeedPreviewScroll itemWidth={300} />;
 };
 export default FeedPreview;

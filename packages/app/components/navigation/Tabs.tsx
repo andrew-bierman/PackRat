@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Tabs as ExpoTabs } from 'expo-router/tabs';
 import { TabList } from './TabList';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack, usePathname } from 'expo-router';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import useTheme from 'app/hooks/useTheme';
 import { StatusBar } from 'expo-status-bar';
+import { RIconButton } from '@packrat/ui';
+import ThemeContext from '../../context/theme';
+import { View } from 'react-native';
+import FAB from '../../components/Fab/Fab';
 
 export const Tabs = () => {
   const formatHeaderTitle = () => {
@@ -18,8 +22,19 @@ export const Tabs = () => {
 
     return title || 'Stack';
   };
+  const { isDark, enableDarkMode, enableLightMode } = useContext(ThemeContext);
 
   const { currentTheme } = useTheme();
+  const iconName = isDark ? 'moon' : 'sun';
+  const iconColor = isDark ? 'white' : 'black';
+  const statusBarColor = isDark ? 'light' : 'dark';
+  const handlePress = () => {
+    if (isDark) {
+      enableLightMode();
+    } else {
+      enableDarkMode();
+    }
+  };
 
   return (
     <>
@@ -27,26 +42,26 @@ export const Tabs = () => {
         screenOptions={{
           tabBarStyle: {
             position: 'absolute',
-            backgroundColor: currentTheme.colors.tertiaryBlueGrey,
+            backgroundColor: currentTheme.colors.background,
             borderTopWidth: 0,
           },
           headerShown: false,
           headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                display: 'flex',
+              }}
+            >
+              <RIconButton
+                backgroundColor="transparent"
+                icon={<Feather name={iconName} size={24} color={iconColor} />}
+                onPress={handlePress}
+              />
+              <DrawerToggleButton tintColor={currentTheme.colors.text} />
+            </View>
           ),
-          // tabBarBackground: () => (
-          //   <BlurView
-          //     style={{
-          //       position: 'absolute',
-          //       top: 0,
-          //       left: 0,
-          //       bottom: 0,
-          //       right: 0,
-          //     }}
-          //     intensity={100} // Adjust the blur intensity
-          //     tint="dark" // TODO make this dynamic
-          //   />
-          // ),
           headerTitleStyle: {
             fontSize: 24,
           },
@@ -69,6 +84,7 @@ export const Tabs = () => {
         <ExpoTabs.Screen
           name="feed/index"
           options={{
+            href: null,
             headerShown: true,
             tabBarLabel: 'Feed',
             tabBarIcon: ({ color, size }) => (
@@ -94,7 +110,6 @@ export const Tabs = () => {
             ),
           }}
         />
-
         <ExpoTabs.Screen
           name="(stack)"
           options={{
@@ -103,10 +118,10 @@ export const Tabs = () => {
             headerTitle: formatHeaderTitle(),
           }}
         />
-
         <ExpoTabs.Screen
           name="search"
           options={{
+            href: null,
             headerShown: false,
             tabBarLabel: 'Search',
             tabBarIcon: ({ color, size }) => (
@@ -116,27 +131,11 @@ export const Tabs = () => {
                 color={color}
               />
             ),
-            // TODO implement in the header
-            // header: () => (
-            //   <SafeAreaView>
-            //     <PlacesAutocomplete
-            //       style={{ width: '100%' }}
-            //       placeholder="Search for a place"
-            //     />
-            //   </SafeAreaView>
-            // ),
           }}
         />
-
-        {/* <Stack.Screen
-        name="modal"
-        options={{
-          headerShown: false,
-          presentation: 'modal',
-        }}
-      /> */}
       </ExpoTabs>
-      <StatusBar style="auto" />
+      <FAB />
+      <StatusBar style={statusBarColor} />
     </>
   );
 };

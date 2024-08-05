@@ -1,11 +1,7 @@
-import { TouchableOpacity, Text } from 'react-native';
-import { RCard as OriginalRCard } from '@packrat/ui';
-import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { theme } from '../../theme';
+import { TouchableOpacity, Text } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-
-const RCard: any = OriginalRCard;
 
 interface QuickActionButtonProps {
   onPress: () => void;
@@ -20,13 +16,9 @@ const QuickActionButton = ({
 }: QuickActionButtonProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <RCard elevate style={styles.card}>
-        <RCard.Header padded alignItems="center">
-          <MaterialIcons name={iconName} size={24} style={styles.icon} />
-          <Text style={styles.text}>{text}</Text>
-        </RCard.Header>
-      </RCard>
+    <TouchableOpacity onPress={onPress} style={styles.button}>
+      <MaterialIcons name={iconName} size={24} style={styles.icon} />
+      <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -34,27 +26,23 @@ const QuickActionButton = ({
 const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
   return {
-    container: {
-      margin: 10,
-      display: 'flex',
+    button: {
+      flexDirection: 'row',
       alignItems: 'center',
-    },
-    card: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: currentTheme.colors.card,
-      elevation: 0,
-      boxShadow: 'unset',
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      backgroundColor: currentTheme.colors.border,
+      borderRadius: 5,
+      margin: 5,
     },
     icon: {
-      marginBottom: 10,
-      color: currentTheme.colors.iconColor,
+      marginRight: 10,
+      color: currentTheme.colors.text,
     },
     text: {
       fontSize: 13,
       fontWeight: 'bold',
-      color: currentTheme.colors.tertiaryBlue,
+      color: currentTheme.colors.text,
     },
   };
 };

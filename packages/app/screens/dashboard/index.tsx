@@ -2,7 +2,6 @@ import React from 'react';
 import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
 import HeroBanner from '../../components/dashboard/HeroBanner';
-import QuickActionsSection from '../../components/dashboard/QuickActionSection';
 import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
@@ -10,6 +9,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import Layout from 'app/components/layout/Layout';
 import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 import { useScreenWidth } from 'app/hooks/common';
+import FAB from '../../components/Fab/Fab';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
@@ -23,20 +23,20 @@ const Dashboard = () => {
             Platform.OS === 'web' ? { minHeight: '100vh' } : null,
           ]}
         >
-          <View>
-            <HeroBanner style={styles.cardContainer} />
+          <HeroBanner style={styles.heroBanner} />
+          {Platform.OS === 'web' ? <FAB /> : null}
 
-            <Section>
-              <SectionHeader
-                iconName="add-circle-outline"
-                text="Quick Actions"
-              />
-              <QuickActionsSection />
-            </Section>
-            <Section>
-              <SectionHeader iconName="newspaper-outline" text="Feed" />
-              <FeedPreview />
-            </Section>
+          <View style={styles.gridContainer}>
+            <View style={styles.gridItem}>
+              <Section>
+                <SectionHeader
+                  iconName="newspaper-outline"
+                  text="Feed"
+                  textStyle={styles.sectionHeaderText}
+                />
+                <FeedPreview />
+              </Section>
+            </View>
           </View>
         </RStack>
       </RScrollView>
@@ -47,6 +47,7 @@ const Dashboard = () => {
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
   const { screenWidth } = useScreenWidth();
+
   return {
     container: {
       backgroundColor: currentTheme.colors.background,
@@ -65,11 +66,20 @@ const loadStyles = (theme) => {
             : '90vw'
           : '100%',
     },
-    cardContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      marginBottom: 20,
+    heroBanner: {
       width: '100%',
+    },
+    gridContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+    gridItem: {
+      flexBasis: '100%',
+      backgroundColor: currentTheme.colors.background,
+    },
+    sectionHeaderText: {
+      color: currentTheme.colors.text,
     },
   };
 };

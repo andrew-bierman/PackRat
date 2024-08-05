@@ -7,7 +7,7 @@ const loadStyles = (theme: any, appTheme: any) => {
       marginBottom: 20,
     },
     cardStyles: {
-      height: 100,
+      height: 200,
       width: '100%',
       backgroundColor: currentTheme.colors.card,
       borderRadius: 5,
@@ -25,13 +25,13 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     feedItemTitle: {
       fontWeight: 'bold',
-      fontSize: 17,
+      fontSize: 20,
       color: currentTheme.colors.text,
       marginBottom: 5,
     },
     feedItemType: {
       fontWeight: 'bold',
-      fontSize: 16,
+      fontSize: 20,
       color: currentTheme.colors.text,
       backgroundColor: currentTheme.colors.border,
       marginBottom: 5,
