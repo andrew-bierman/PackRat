@@ -2,7 +2,6 @@ import React from 'react';
 import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
 import HeroBanner from '../../components/dashboard/HeroBanner';
-import FeedPreview from '../../components/dashboard/FeedPreview';
 import Section from '../../components/dashboard/Section';
 import SectionHeader from '../../components/dashboard/SectionHeader';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -10,6 +9,7 @@ import Layout from 'app/components/layout/Layout';
 import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 import { useScreenWidth } from 'app/hooks/common';
 import FAB from '../../components/Fab/Fab';
+import FeedPreview from '../../components/feedPreview';
 
 const Dashboard = () => {
   const styles = useCustomStyles(loadStyles);
@@ -34,7 +34,7 @@ const Dashboard = () => {
                   text="Feed"
                   textStyle={styles.sectionHeaderText}
                 />
-                <FeedPreview />
+                <FeedPreview feedType={'Pack'} />
               </Section>
             </View>
           </View>
