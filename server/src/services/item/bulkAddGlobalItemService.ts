@@ -1,9 +1,8 @@
 import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
-import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { ItemCategory as categories } from '../../utils/itemCategory';
-import { VectorClient } from '../../vector/client';
+import { DbClient } from 'src/db/client';
+import { item as ItemTable } from '../../db/schema';
 
 export const bulkAddItemsGlobalService = async (
   items: Array<{
@@ -16,18 +15,18 @@ export const bulkAddItemsGlobalService = async (
   }>,
   executionCtx: ExecutionContext,
 ) => {
-  const itemClass = new Item();
+  const categories = ['Food', 'Water', 'Essentials'];
+
   const itemCategoryClass = new ItemCategory();
   const insertedItems = [];
 
   for (const itemData of items) {
     const { name, weight, quantity, unit, type, ownerId } = itemData;
-
-    let category: InsertItemCategory | null;
     if (!categories.includes(type)) {
       throw new Error(`Category must be one of: ${categories.join(', ')}`);
     }
 
+    let category: InsertItemCategory | null;
     category =
       (await itemCategoryClass.findItemCategory({ name: type })) || null;
     if (!category) {
@@ -44,23 +43,14 @@ export const bulkAddItemsGlobalService = async (
       ownerId,
     };
 
-    insertedItems.push(newItem);
+    const item = await DbClient.instance
+      .insert(ItemTable)
+      .values(newItem)
+      .returning()
+      .get();
+
+    insertedItems.push(item);
   }
 
-  const createdItems = await itemClass.createBulk(insertedItems);
-
-  for (const item of createdItems) {
-    executionCtx.waitUntil(
-      VectorClient.instance.syncRecord({
-        id: item.id,
-        content: item.name,
-        namespace: 'items',
-        metadata: {
-          isPublic: item.global,
-        },
-      }),
-    );
-  }
-
-  return createdItems;
+  return insertedItems;
 };

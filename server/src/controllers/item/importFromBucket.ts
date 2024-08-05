@@ -1,5 +1,5 @@
 import { protectedProcedure } from '../../trpc';
-import { addItemGlobalService } from '../../services/item/item.service';
+import { bulkAddItemsGlobalService } from '../../services/item/item.service';
 import * as CryptoJS from 'crypto-js';
 import { parseStringPromise } from 'xml2js';
 import Papa from 'papaparse';
@@ -248,7 +248,7 @@ export function importFromBucketRoute() {
             header: true,
             complete: async function (results) {
               try {
-                const insertedItems = [];
+                const itemsToInsert = [];
 
                 for (const [index, item] of results.data.entries()) {
                   if (
@@ -258,27 +258,30 @@ export function importFromBucketRoute() {
                     continue;
                   }
 
-                  const insertedItem = await addItemGlobalService(
-                    item.name,
-                    item.claimed_weight || 0,
-                    item.quantity || 1,
-                    item.claimed_weight_unit || 'g',
-                    // item.category || 'Essentials',
-                    'Essentials',
+                  itemsToInsert.push({
+                    name: item.name,
+                    weight: item.claimed_weight || 0,
+                    quantity: item.quantity || 1,
+                    unit: item.claimed_weight_unit || 'g',
+                    type: 'Essentials',
                     ownerId,
-                    executionCtx,
-                  );
-
-                  insertedItems.push(insertedItem);
+                  });
                 }
+
+                const insertedItems = await bulkAddItemsGlobalService(
+                  itemsToInsert,
+                  executionCtx,
+                );
+
                 return resolve(insertedItems);
               } catch (error) {
+                console.error('Error in bulkAddItemsGlobalService:', error);
+
                 return reject(
                   new Error(`Failed to add items: ${error.message}`),
                 );
               }
             },
-            // Failed to add items: Category must be one of: Food, Water, Essentials
             error: function (error) {
               console.error('Error parsing CSV file:', error);
               reject(error);

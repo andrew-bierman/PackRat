@@ -9,46 +9,56 @@ interface State {
 
 export const useImportFromBucket = () => {
   const utils = queryTrpc.useContext();
-  const { mutate } = queryTrpc.importFromBucket.useMutation();
+  const { mutateAsync } = queryTrpc.importFromBucket.useMutation();
   const { isConnected, addOfflineRequest } = useOfflineQueue();
   const updateItems = useItemsUpdater();
 
   const handleImportFromBucket = useCallback(
-    ({ directory, ownerId }) => {
+    async ({ directory, ownerId }, onSuccess) => {
       if (isConnected) {
-        return mutate(
-          { directory, ownerId },
-          {
-            onSuccess: (data) => {
-              console.log('ssssssssssssssssssssssssssssssss', data.items);
-              // Ensure data.items exists and is an array
-              const newItems = Array.isArray(data.items) ? data.items : [];
+        try {
+          const data = await mutateAsync({ directory, ownerId });
+          const newItems = Array.isArray(data) ? data : [];
+          updateItems((prevState: State = {}) => {
+            const prevItems = Array.isArray(prevState.items)
+              ? prevState.items
+              : [];
+            return {
+              ...prevState,
+              items: [...newItems, ...prevItems],
+            };
+          });
 
-              // Update local state with the returned data
-              updateItems((prevState: State = {}) => {
-                const prevItems = Array.isArray(prevState.items)
-                  ? prevState.items
-                  : [];
-                return {
-                  ...prevState,
-                  items: [...newItems, ...prevItems],
-                };
-              });
-
-              // Invalidate the cache to reflect the latest state
-              utils.getItemsGlobally.invalidate();
-            },
-            onError: (error) => {
-              console.error('Error fetching items:', error);
-            },
-          },
-        );
+          utils.getItemsGlobally.invalidate();
+          utils.getItemsGlobally.refetch();
+          onSuccess();
+        } catch (error) {
+          console.error('Error fetching items:', error);
+        }
       } else {
-        // Handle offline scenario
         addOfflineRequest('importFromBucket', { directory, ownerId });
+
+        updateItems((prevState: State = {}) => {
+          onSuccess();
+          const prevItems = Array.isArray(prevState.items)
+            ? prevState.items
+            : [];
+
+          return {
+            ...prevState,
+            items: [
+              {
+                directory,
+                ownerId,
+                global: true,
+              },
+              ...prevItems,
+            ],
+          };
+        });
       }
     },
-    [updateItems, isConnected, mutate, utils, addOfflineRequest],
+    [updateItems, isConnected, mutateAsync, utils, addOfflineRequest],
   );
 
   return { handleImportFromBucket };

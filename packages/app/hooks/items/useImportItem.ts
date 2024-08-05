@@ -14,21 +14,21 @@ export const useImportItem = () => {
   const updateItems = useItemsUpdater();
 
   const handleImportNewItems = useCallback(
-    (newItem) => {
+    (newItem, onSuccess) => {
       if (isConnected) {
         return mutate(newItem, {
           onSuccess: () => {
-            // Update items only on successful mutation
             updateItems((prevState: State = {}) => {
               const prevItems = Array.isArray(prevState.items)
                 ? prevState.items
                 : [];
               return {
                 ...prevState,
-                items: [newItem, ...prevItems],
+                items: [newItem, ...prevItems], // Use the data returned from the server
               };
             });
             utils.getItemsGlobally.invalidate();
+            onSuccess();
           },
           onError: (error) => {
             console.error('Error adding item:', error);
