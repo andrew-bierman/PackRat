@@ -30,6 +30,8 @@ function generateAWSHeaders(
   accessKey,
   secretKey,
   sessionToken,
+  algorithm,
+  x_amz_token,
 ) {
   const amzDate = new Date()
     .toISOString()
@@ -43,10 +45,9 @@ function generateAWSHeaders(
     `host:${new URL(url).hostname}\nx-amz-date:${amzDate}\n` +
     (sessionToken ? `x-amz-security-token:${sessionToken}\n` : '');
   const signedHeaders =
-    'host;x-amz-date' + (sessionToken ? ';x-amz-security-token' : '');
+    'host;x-amz-date' + (sessionToken ? `;${x_amz_token}` : '');
   const canonicalRequest = `${method}\n${canonicalUri}\n${canonicalQueryString}\n${canonicalHeaders}\n${signedHeaders}\n${payloadHash}`;
 
-  const algorithm = 'AWS4-HMAC-SHA256';
   const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
   const stringToSign = `${algorithm}\n${amzDate}\n${credentialScope}\n${CryptoJS.SHA256(canonicalRequest).toString(CryptoJS.enc.Hex)}`;
 
@@ -76,6 +77,8 @@ export const importFromBucket = async (c) => {
   const accessKeyId = c.env.BUCKET_ACCESS_KEY_ID;
   const secretKey = c.env.BUCKET_SECRET_KEY;
   const sessionToken = c.env.BUCKET_SESSION_TOKEN;
+  const algorithm = c.env.AWS_SIGN_ALGORITHM;
+  const x_amz_token = c.env.X_AMZ_SECURITY_TOKEN;
 
   // Generate AWS Headers for listing bucket contents
   const listHeaders = generateAWSHeaders(
@@ -86,6 +89,8 @@ export const importFromBucket = async (c) => {
     accessKeyId,
     secretKey,
     sessionToken,
+    algorithm,
+    x_amz_token,
   );
 
   try {
@@ -121,6 +126,8 @@ export const importFromBucket = async (c) => {
       accessKeyId,
       secretKey,
       sessionToken,
+      algorithm,
+      x_amz_token,
     );
 
     // Fetch the specific CSV file
@@ -205,6 +212,8 @@ export function importFromBucketRoute() {
       const accessKeyId = env.BUCKET_ACCESS_KEY_ID;
       const secretKey = env.BUCKET_SECRET_KEY;
       const sessionToken = env.BUCKET_SESSION_TOKEN;
+      const algorithm = env.AWS_SIGN_ALGORITHM;
+      const x_amz_token = env.X_AMZ_SECURITY_TOKEN;
 
       // Generate AWS Headers for listing bucket contents
       const listHeaders = generateAWSHeaders(
@@ -215,6 +224,8 @@ export function importFromBucketRoute() {
         accessKeyId,
         secretKey,
         sessionToken,
+        algorithm,
+        x_amz_token,
       );
 
       try {
@@ -254,6 +265,8 @@ export function importFromBucketRoute() {
           accessKeyId,
           secretKey,
           sessionToken,
+          algorithm,
+          x_amz_token,
         );
 
         // Fetch the specific CSV file
