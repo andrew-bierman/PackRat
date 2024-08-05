@@ -7,9 +7,11 @@ const loadStyles = (theme: any, appTheme: any) => {
       marginBottom: 20,
     },
     cardStyles: {
-      backgroundColor: appTheme.colors.primary,
-      borderRadius: 8,
-      overflow: 'hidden',
+      height: 200,
+      width: '100%',
+      backgroundColor: currentTheme.colors.card,
+      borderRadius: 5,
+      padding: 20,
     },
     feedItem: {
       width: 250,
@@ -23,12 +25,16 @@ const loadStyles = (theme: any, appTheme: any) => {
     },
     feedItemTitle: {
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: 20,
       color: currentTheme.colors.text,
-      marginBottom: 12,
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
+      marginBottom: 5,
+    },
+    feedItemType: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      color: currentTheme.colors.text,
+      backgroundColor: currentTheme.colors.border,
+      marginBottom: 5,
     },
   };
 };

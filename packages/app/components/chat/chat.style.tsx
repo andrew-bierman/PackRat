@@ -37,7 +37,7 @@ export const loadStyles = (theme: any) => {
       paddingHorizontal: 12,
     },
     sendButton: {
-      backgroundColor: currentTheme.colors.background,
+      backgroundColor: currentTheme.colors.tertiaryBlue,
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderRadius: 8,

@@ -238,7 +238,9 @@ const UserDataCard = ({
                   />
                 </TouchableOpacity>
                 <View>
-                  <RText>{favorites_count}</RText>
+                  <RText color={currentTheme.colors.text}>
+                    {favorites_count}
+                  </RText>
                 </View>
               </RStack>
             </View>

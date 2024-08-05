@@ -76,7 +76,12 @@ export function SelectItem(props) {
         extractOptionAttributes(item, index, textKey, valueKey),
       )
       .map(({ text, value, index }) => (
-        <Select.Item key={`${text} + ${value}`} index={index} value={value}>
+        <Select.Item
+          style={{ backgroundColor: '$color5' }}
+          key={`${text} + ${value}`}
+          index={index}
+          value={value}
+        >
           <Select.ItemText>
             {text.charAt(0).toUpperCase() + text.slice(1)}
           </Select.ItemText>
@@ -100,8 +105,10 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger>
-        <Select.Value>{placeholder}</Select.Value>
+      <Select.Trigger style={{ backgroundColor: '$color5' }}>
+        <Select.Value style={{ backgroundColor: '$color5' }}>
+          {placeholder}
+        </Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>

@@ -46,7 +46,7 @@ const LandingPage = () => {
           {Platform.OS === 'web' ? (
             <RH1
               style={{
-                color: 'white',
+                color: currentTheme.colors.tertiaryBlue,
                 fontSize: currentTheme.font.headerFont,
               }}
             >
@@ -56,7 +56,7 @@ const LandingPage = () => {
             <RText
               style={{
                 height: 40,
-                color: 'white',
+                color: currentTheme.colors.tertiaryBlue,
                 fontSize: 30,
                 fontWeight: 'bold',
                 paddingTop: 8,
@@ -65,7 +65,9 @@ const LandingPage = () => {
               PackRat
             </RText>
           )}
-          <RText style={{ color: 'white', fontSize: 20 }}>
+          <RText
+            style={{ color: currentTheme.colors.tertiaryBlue, fontSize: 20 }}
+          >
             The Ultimate Travel App
           </RText>
         </View>

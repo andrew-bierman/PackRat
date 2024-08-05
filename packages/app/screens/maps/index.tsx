@@ -114,7 +114,7 @@ function DownloadedMaps() {
             fontSize: 20,
             fontWeight: 'bold',
             marginVertical: 20,
-            color: currentTheme.colors.text,
+            color: currentTheme.colors.white,
           }}
         >
           Downloaded Maps
@@ -145,7 +145,7 @@ function DownloadedMaps() {
                       fontWeight: 'bold',
                       marginTop: 5,
                       textAlign: 'center',
-                      color: currentTheme.colors.text,
+                      color: currentTheme.colors.white,
                     }}
                   >
                     {offlineMap.name}

@@ -21,6 +21,7 @@ import {
   SuggestionList,
 } from '../../components/Suggestion';
 import useTheme from 'app/hooks/useTheme';
+import colors from 'native-base/lib/typescript/theme/base/colors';
 
 interface ChatComponentProps {
   showChatSelector?: boolean;
@@ -270,11 +271,7 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
             <Ionicons
               name="chatbubble-ellipses-sharp"
               size={50}
-              color={
-                Platform.OS === 'web'
-                  ? 'white'
-                  : currentTheme.colors.secondaryBlue
-              }
+              color={currentTheme.colors.iconColor}
             />
           }
           onPress={() => {

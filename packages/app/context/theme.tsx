@@ -2,6 +2,8 @@ import { createContext, useEffect, useReducer, useState } from 'react';
 import { theme, darkTheme } from '../theme';
 import ThirdPartyThemeProviders from './ThirdPartyThemeProviders';
 import React from 'react';
+import { useColorScheme } from 'react-native';
+
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStorageState } from 'app/hooks/storage/useStorageState';
@@ -65,27 +67,37 @@ export const ThemeProvider = ({ children }) => {
   const [[, storedIsEnabled], setStoredIsEnabled] =
     useStorageState('isEnabled');
   const [loading, setLoading] = useState(true);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
-    const fetchTheme = async () => {
-      try {
-        if (storedIsEnabled !== null) {
-          const isEnabled = JSON.parse(storedIsEnabled);
-          dispatch({
-            type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
-          });
-        } else {
-          dispatch({ type: 'ENABLE_LIGHT_MODE' });
-        }
-      } catch (e) {
-        console.error('Local storage is unavailable:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTheme();
+    // const fetchTheme = async () => {
+    //   try {
+    //     if (storedIsEnabled !== null) {
+    //       const isEnabled = JSON.parse(storedIsEnabled);
+    //       dispatch({
+    //         type: isEnabled ? 'ENABLE_DARK_MODE' : 'ENABLE_LIGHT_MODE',
+    //       });
+    //     } else {
+    //       dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    //     }
+    //   } catch (e) {
+    //     console.error('Local storage is unavailable:', e);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    // fetchTheme();
+    setLoading(false);
   }, [storedIsEnabled]);
 
+  useEffect(() => {
+    console.log(colorScheme);
+    if (colorScheme === 'dark') {
+      dispatch({ type: 'ENABLE_DARK_MODE' });
+    } else {
+      dispatch({ type: 'ENABLE_LIGHT_MODE' });
+    }
+  }, [colorScheme]);
   /**
    * Enable dark mode.
    *

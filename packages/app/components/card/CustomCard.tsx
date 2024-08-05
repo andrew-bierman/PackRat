@@ -110,7 +110,7 @@ const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: !isDark ? currentTheme.colors.card : '#1A1A1D',
+      backgroundColor: currentTheme.colors.border,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',

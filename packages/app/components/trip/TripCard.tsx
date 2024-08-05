@@ -86,7 +86,7 @@ export default function TripCard({
         <Icon />
         <RText
           style={{
-            color: currentTheme.colors.textPrimary,
+            color: currentTheme.colors.text,
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}

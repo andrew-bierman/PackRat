@@ -37,7 +37,10 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
           </View>
 
           {aboutSections.map((section, index) => (
-            <Text key={index} style={[isDark ? styles.textDark : styles.text]}>
+            <Text
+              key={index}
+              style={[isDark ? styles.tertiaryBlue : styles.text]}
+            >
               {section}
             </Text>
           ))}
@@ -50,14 +53,16 @@ const AboutContent = ({ desktopContainer, isMobile }: AboutContentProps) => {
                 style={[isDark ? styles.githubIconDark : styles.githubIcon]}
               />
               <Text
-                style={[isDark ? styles.githubTextDark : styles.githubText]}
+                style={[isDark ? styles.githubtertiaryBlue : styles.githubText]}
               >
                 View on GitHub
               </Text>
             </RStack>
           </RButton>
           <RText onPress={handlePrivacyLink}>
-            <Text>Privacy Policy</Text>
+            <Text style={{ color: currentTheme.colors.text }}>
+              Privacy Policy
+            </Text>
           </RText>
           {/* <Button
               style={styles.discordButton}

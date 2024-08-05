@@ -159,7 +159,7 @@ export const DestinationPage = () => {
                 ) : (
                   <RButton
                     style={{
-                      backgroundColor: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.white,
                       minWidth: '100%',
                       height: 25,
                       flexDirection: 'row',
@@ -174,7 +174,7 @@ export const DestinationPage = () => {
                       color={currentTheme.colors.background}
                     />
                     <RText
-                      color={currentTheme.colors.textDarkGrey}
+                      color={currentTheme.colors.whiteDarkGrey}
                       opacity={0.6}
                     >
                       Search by park, city, or trail
@@ -193,7 +193,7 @@ export const DestinationPage = () => {
                   <Ionicons
                     name="location"
                     size={24}
-                    color={currentTheme.colors.textPrimary}
+                    color={currentTheme.colors.text}
                   />
                 )}
                 ContentComponent={map}
@@ -232,12 +232,12 @@ const loadStyles = (theme) => {
       alignItems: 'flex-start',
     },
     headerText: {
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.text,
       fontSize: 22,
       fontWeight: 'bold',
     },
     headerSubText: {
-      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 16,
       marginTop: 5,
     },
@@ -246,7 +246,7 @@ const loadStyles = (theme) => {
       marginTop: 10,
     },
     languageText: {
-      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 14,
       marginRight: 10,
       marginBottom: 5, // Add margin to provide spacing between the language texts

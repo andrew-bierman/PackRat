@@ -20,7 +20,7 @@ export default function Footer() {
     >
       <Text
         style={{
-          color: currentTheme.colors.textColor,
+          color: currentTheme.colors.tertiaryBlue,
           fontSize: currentTheme.font.size,
           textAlign: 'center',
         }}
