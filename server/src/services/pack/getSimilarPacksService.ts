@@ -1,8 +1,5 @@
-import { DbClient } from '../../db/client';
 import { Pack } from '../../drizzle/methods/pack';
 import { VectorClient } from '../../vector/client';
-import { pack as PacksTable } from '../../db/schema';
-import { inArray } from 'drizzle-orm';
 import { PackAndItemVisibilityFilter } from '@packrat/shared-types';
 
 /**
@@ -44,15 +41,9 @@ export async function getSimilarPacksService(
     return [];
   }
 
-  const similarPacksResult = await DbClient.instance
-    .select()
-    .from(PacksTable)
-    .where(
-      inArray(
-        PacksTable.id,
-        matches.map((m) => m.id),
-      ),
-    );
+  const similarPacksResult = await packClass.findInArray({
+    array: matches.map((m) => m.id),
+  });
 
   // add similarity score to packs result
   const similarPacks = matches.map((match) => {
