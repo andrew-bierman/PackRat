@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { CLIENT_URL } from '@packrat/config';
-import { RText } from '@packrat/ui';
+import { RH3, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
 import Layout from 'app/components/layout/Layout';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
@@ -16,6 +16,9 @@ import { DetailsComponent } from '../details';
 import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
 import { ImportItemModal } from './ImportItemModal';
+import FeedPreview from 'app/components/feedPreview';
+import LargeCard from 'app/components/card/LargeCard';
+import useTheme from 'app/hooks/useTheme';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -25,6 +28,7 @@ const SECTION = {
 };
 
 export function PackDetails() {
+  const { currentTheme } = useTheme();
   // const [canCopy, setCanCopy] = useParam('canCopy')
   const canCopy = false;
   const [packId] = usePackId();
@@ -54,7 +58,7 @@ export function PackDetails() {
   if (isLoading) return <RText>Loading...</RText>;
 
   return (
-    <Layout>
+    <Layout customStyle={{ alignItems: 'stretch' }}>
       {!isError && (
         <View
           style={{
@@ -150,6 +154,29 @@ export function PackDetails() {
             }
             link={link}
           />
+
+          <LargeCard
+            customStyle={{
+              width: '80%',
+              backgroundColor: currentTheme.colors.secondaryBlue,
+              paddingBottom: 24,
+              paddingTop: 0,
+            }}
+          >
+            <RH3
+              style={{
+                // textTransform: 'capitalize',
+                color: currentTheme.colors.text,
+                fontSize: 24,
+                // fontWeight: 'bold',
+                alignSelf: 'center',
+                marginBottom: 20,
+              }}
+            >
+              Similar Packs
+            </RH3>
+            <FeedPreview feedType="similarPacks" id={currentPackId} />
+          </LargeCard>
         </View>
       )}
       {/* Disable Chat */}

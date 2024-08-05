@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { YStack, XStack, RText, RStack, RButton } from '@packrat/ui';
 import useTheme from '../hooks/useTheme';
-import { Svg, Circle, Path, G, Text as SvgText } from 'react-native-svg';
+import { Svg, Circle, Path, G, Text as SvgText, Line } from 'react-native-svg';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   useCalculateStore,
@@ -207,11 +207,15 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
-          <RText>{subheader}</RText>
-          <RText style={{ fontWeight: 300 }}>{description}</RText>
+          <RText style={{ fontWeight: 500, color: currentTheme.colors.white }}>
+            {subheader}
+          </RText>
+          <RText style={{ fontWeight: 300, color: currentTheme.colors.white }}>
+            {description}
+          </RText>
           {isOwner && (
             <RButton style={styles.button} onPress={handleScoreClick}>
-              <RText>Calculate Score</RText>
+              <RText style={styles.buttonText}>Calculate Score</RText>
             </RButton>
           )}
         </YStack>
@@ -220,7 +224,7 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
             style={{
               flex: 1,
               flexDirection: media.gtXs ? 'column' : 'row',
-              gap: 8,
+              gap: 15,
             }}
           >
             <ScoreProgressChart score={totalScore} />
@@ -238,12 +242,21 @@ const loadStyles = (theme: any) => {
       paddingHorizontal: 25,
       marginVertical: 15,
       padding: 26,
+      marginTop: 25,
       // borderColor: currentTheme.colors.border,
       // borderWidth: 2,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 1,
+      borderRadius: 10,
+      boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
+      backgroundColor: currentTheme.colors.background,
     },
     hStack: {
+      display: 'flex',
+      flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      gap: 10,
     },
     vStack: {
       justifyContent: 'center',
@@ -259,12 +272,19 @@ const loadStyles = (theme: any) => {
       color: currentTheme.colors.text,
       fontSize: 26,
       fontWeight: 'bold',
+      paddingBottom: 15,
     },
     button: {
       backgroundColor: currentTheme.colors.primary,
       marginTop: 15,
       height: 50,
       justifyContent: 'center',
+      boxShadow: '0px 2px 4px rgba(0,0,0,0.2)',
+    },
+    buttonText: {
+      color: currentTheme.colors.white,
+      fontSize: '1rem',
+      fontWeight: '500',
     },
     container: {
       flex: 1,
@@ -274,6 +294,7 @@ const loadStyles = (theme: any) => {
     graphWrapper: {
       alignItems: 'center',
       justifyContent: 'center',
+      padding: 10,
     },
     label: {
       position: 'absolute',
