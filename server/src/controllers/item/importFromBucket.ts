@@ -66,7 +66,7 @@ function generateAWSHeaders(
 }
 
 export const importFromBucket = async (c) => {
-  const { directory } = await c.req.query();
+  const { directory, ownerId } = await c.req.query();
 
   const endpoint = c.env.BUCKET_ENDPOINT;
   const bucket = c.env.BUCKET_NAME;
@@ -105,16 +105,12 @@ export const importFromBucket = async (c) => {
       .filter((item) => item.Key[0].startsWith(`${directory}/`))
       .map((item) => item.Key[0]);
 
-    // console.log('File names in backcountry directory:', fileNames);
-
     // Sort file names to get the latest one
     const latestFileName = fileNames.sort().reverse()[0];
 
     if (!latestFileName) {
       throw new Error('No files found in the backcountry directory');
     }
-
-    // console.log('Latest file name:', latestFileName);
 
     // Generate AWS Headers for fetching the latest file
     const fileHeaders = generateAWSHeaders(
@@ -143,19 +139,51 @@ export const importFromBucket = async (c) => {
       return c.json({ error: 'Error fetching file', details: fileData });
     }
 
-    let parsedCSVData = null;
+    const itemsToInsert = [];
 
-    Papa.parse(fileData, {
-      header: true,
-      complete: function (results) {
-        parsedCSVData = results.data;
-      },
-      error: function (error) {
-        console.error('Error parsing CSV file:', error);
-      },
+    await new Promise((resolve, reject) => {
+      Papa.parse(fileData, {
+        header: true,
+        complete: (results) => {
+          try {
+            for (const [index, item] of results.data.entries()) {
+              if (
+                index === results.data.length - 1 &&
+                Object.values(item).every((value) => value === '')
+              ) {
+                continue;
+              }
+
+              itemsToInsert.push({
+                name: item.name,
+                weight: item.claimed_weight || 0,
+                quantity: item.quantity || 1,
+                unit: item.claimed_weight_unit || 'g',
+                type: 'Essentials',
+                ownerId,
+              });
+            }
+            resolve(null);
+          } catch (error) {
+            console.error('Error processing CSV data:', error);
+            reject(error);
+          }
+        },
+        error: (error) => {
+          console.error('Error parsing CSV file:', error);
+          reject(error);
+        },
+      });
     });
 
-    return c.json({ message: 'File content logged', data: parsedCSVData });
+    const insertedItems = await bulkAddItemsGlobalService(
+      itemsToInsert,
+      c.executionCtx,
+    );
+    return c.json({
+      message: 'Items inserted successfully',
+      data: insertedItems,
+    });
   } catch (err) {
     console.error('Error:', err);
     return c.json({ error: 'An error occurred' });
