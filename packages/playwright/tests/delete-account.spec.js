@@ -10,4 +10,11 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Sign In' }).click();
   await page.getByRole('button', { name: 'Menu' }).hover();
   await page.getByRole('button', { name: ' Profile' }).click();
+  await page.goto('https://packrat.world/profile');
+  await page.getByRole('button', { name: '󰢻' }).click();
+  await page.getByLabel('To confirm this, type "delete"').click();
+  await page.getByLabel('To confirm this, type "delete"').fill('delete');
+  await page.getByRole('button', { name: 'Delete account' }).click();
+  await page.goto('https://packrat.world/sign-in');
+
 });
