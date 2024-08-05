@@ -34,7 +34,7 @@ const Dashboard = () => {
                   text="Feed"
                   textStyle={styles.sectionHeaderText}
                 />
-                <FeedPreview feedType={'Pack'} />
+                <FeedPreview />
               </Section>
             </View>
           </View>
