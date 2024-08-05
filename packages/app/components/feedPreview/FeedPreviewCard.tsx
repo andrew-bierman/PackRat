@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/react-in-jsx-scope */
 import { useState } from 'react';
 import { RText as OriginalRText, RStack } from '@packrat/ui';
 import { RLink } from '@packrat/ui';
-import { LayoutChangeEvent, View } from 'react-native';
+import { type LayoutChangeEvent, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './feedpreview.style';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
@@ -38,7 +40,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
       <View style={styles.cardStyles}>
         <View
           style={{
-            backgroundColor: currentTheme.colors.cardIconColor,
+            backgroundColor: currentTheme.colors.secondaryBlue,
             width: '100%',
             paddingLeft: 16,
             alignSelf: 'stretch',
@@ -46,7 +48,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
         >
           <View
             style={{
-              backgroundColor: currentTheme.colors.primary,
+              backgroundColor: currentTheme.colors.border,
               padding: 4,
               alignSelf: 'flex-start',
               borderRadius: 8,
@@ -57,7 +59,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
             <MaterialIcons
               name="backpack"
               size={24}
-              color={currentTheme.colors.cardIconColor}
+              color={currentTheme.colors.tertiaryBlue}
             />
           </View>
         </View>
@@ -76,7 +78,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
           >
             <RText
               color={hexToRGBA(currentTheme.colors.text, 0.8)}
-              style={{ fontWeight: 'bold', lineHeight: 'normal' }}
+              style={{ fontWeight: 'bold' }}
             >
               {formatNumber(formattedWeight)}
               {weightUnit}
@@ -95,7 +97,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
               />
               <RText
                 color={hexToRGBA(currentTheme.colors.text, 0.8)}
-                style={{ fontWeight: 'bold', lineHeight: 'normal' }}
+                style={{ fontWeight: 'bold' }}
               >
                 {item.favorites_count}
               </RText>
@@ -114,7 +116,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
               />
               <RText
                 color={hexToRGBA(currentTheme.colors.text, 0.8)}
-                style={{ fontWeight: 'bold', lineHeight: 'normal' }}
+                style={{ fontWeight: 'bold' }}
               >
                 {new Date(item.createdAt).toLocaleString('en-US', {
                   month: 'short',
@@ -128,7 +130,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({ linkStr, item }) => {
             </View>
             <RText
               color={hexToRGBA(currentTheme.colors.text, 0.8)}
-              style={{ fontWeight: 'bold', lineHeight: 'normal' }}
+              style={{ fontWeight: 'bold' }}
             >
               Ttl Score: {item.total_score}
             </RText>
