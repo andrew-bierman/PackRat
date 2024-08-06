@@ -78,7 +78,6 @@ export const ItemsTable = ({
 
   const filteredData = data.map((item) => {
     const {
-      id,
       categoryId,
       createdAt,
       updatedAt,
