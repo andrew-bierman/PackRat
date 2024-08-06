@@ -9,19 +9,22 @@ import useTheme from '../../hooks/useTheme';
 import { CopyPackModal } from 'app/components/pack/CopyPackModal';
 
 interface CustomCardHeaderProps {
+  ownerId: string;
   data: {
-    owner_id: string;
     owners?: Array<{ name: string }>;
     type: string;
   };
   title: string | JSX.Element;
   link?: string;
-  actionsComponent: boolean | JSX.Element | undefined;
+  actionsComponent?: boolean | JSX.Element | undefined;
 }
+
+const COPY_TYPES = ['pack'];
 
 const RText: any = OriginalRText;
 export const CustomCardHeader = ({
   data,
+  ownerId,
   title,
   link,
   actionsComponent,
@@ -31,20 +34,15 @@ export const CustomCardHeader = ({
   const { isDark } = useTheme();
   const [isCopyPackModalOpen, setIsCopyPackModalOpen] = useState(false);
 
-  console.log("dataaaaaaaaaaaaa", data.owners)
-
   return (
     <>
       <RStack style={{ flex: 1 }}>
         {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
       <View>
-        <RLink
-          href={`/profile/${data?.owner_id}`}
-          style={{ textDecoration: 'none' }}
-        >
+        <RLink href={`/profile/${ownerId}`} style={{ textDecoration: 'none' }}>
           <RText>
-            {user?.id === data.owner_id
+            {user?.id === ownerId
               ? 'Your Profile'
               : `View ${
                   data.owners && data.owners?.length
@@ -54,7 +52,7 @@ export const CustomCardHeader = ({
           </RText>
         </RLink>
       </View>
-      {user?.id !== data.owner_id && data.type !== 'trip' && (
+      {user?.id !== ownerId && COPY_TYPES.includes(data.type) && (
         <RButton
           onPress={() => {
             setIsCopyPackModalOpen(true);
