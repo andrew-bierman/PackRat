@@ -22,7 +22,7 @@ export const Navbar = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Container>
+      <Container >
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <RImage
@@ -57,11 +57,11 @@ export const Navbar = () => {
 };
 
 const NavbarStyles = {
-  floatingBg: '#0284c7',
+  floatingBg: '#0c66a1',
   floatingRadius: 25,
-  floatingBlur: 'blur(2px)',
-  transition: 'all 0.2s ease-in-out',
-  floatingSpacing: 4,
+  floatingBlur: 'blur(4px)',
+  transition: 'all 0.3s ease-in',
+  floatingSpacing: 2,
 };
 
 const loadStyles = (currentTheme, isScrolled, screenWidth) => {
@@ -78,7 +78,9 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     safeArea: {
       backgroundColor,
       width: '100%',
-      margin: 0,
+      margin: "0 auto",
+      justifyContent: 'center',
+      alignItems: 'center',
       transition: NavbarStyles.transition,
       ...Platform.select({
         web: {
@@ -93,12 +95,12 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
           position: 'fixed' as 'fixed' | 'relative',
           top: 0,
           zIndex: 100,
-          width: Platform.OS === 'web' ? '100vw' : "100%",
+          // width: Platform.OS === 'web' ? '100vw' : "100%",
         },
       }),
     },
     container: {
-      width: '100vw',
+      width: '100&',
       maxWidth: '100%', // Ensure container does not exceed the viewport width
       flex: 1, // Ensure container can grow to fit content
       backgroundColor,
