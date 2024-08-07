@@ -87,10 +87,9 @@ export const BaseModal = ({
     );
   }, [footerComponent]);
 
-  const dialogContentStyle =
-    Platform.OS !== 'web'
-      ? { maxWidth: Dimensions.get('screen').width - 36 }
-      : undefined;
+  const dialogContentStyle = {
+    maxWidth: Dimensions.get('screen').width - 36,
+  };
 
   return (
     <Dialog

@@ -10,6 +10,8 @@ import {
 import { useMedia } from 'tamagui';
 import { Text, View, Button, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
+import { BaseModal } from '@packrat/ui';
+import FeedPreview from 'app/components/feedPreview';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -56,6 +58,8 @@ export function PaginatedSortedTable({
 }: PaginatedSortedTableProps) {
   const columnHelper = createColumnHelper<Item>();
 
+  const { sm } = useMedia();
+
   const columns = [
     columnHelper.accessor('name', {
       cell: (info) => info.getValue(),
@@ -82,6 +86,21 @@ export function PaginatedSortedTable({
       cell: (info) => info.getValue(),
       footer: (info) => info.column.id,
     }),
+    columnHelper.display({
+      id: 'action',
+      header: sm ? '' : 'Action',
+      cell: ({ row }) => {
+        return (
+          <BaseModal
+            isOpen={false}
+            title="Similar items"
+            trigger="Show similar"
+          >
+            <FeedPreview feedType="similarItems" id={row.original.id} />
+          </BaseModal>
+        );
+      },
+    }),
   ];
 
   const data = useMemo(() => Object.values(groupedData).flat(), [groupedData]);
@@ -98,8 +117,6 @@ export function PaginatedSortedTable({
     manualPagination: true,
     pageCount: totalPages || 1,
   });
-
-  const { sm } = useMedia();
 
   if (sm) {
     return (
@@ -124,7 +141,6 @@ export function PaginatedSortedTable({
           >
             <View gap="$3" mx="$3" my="$3">
               {row.getVisibleCells().map((cell) => {
-                const value = cell.getContext().getValue();
                 return (
                   <View fd="row" justifyContent="space-between" key={cell.id}>
                     <Text>
@@ -133,7 +149,12 @@ export function PaginatedSortedTable({
                         cell.getContext(),
                       )}
                     </Text>
-                    <Text color="$gray10">{value}</Text>
+                    <Text color="$gray10">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Text>
                   </View>
                 );
               })}
@@ -182,7 +203,7 @@ export function PaginatedSortedTable({
       <Table
         alignCells={{ x: 'center', y: 'center' }}
         alignHeaderCells={{ y: 'center', x: 'center' }}
-        cellWidth="$18"
+        cellWidth="$15"
         cellHeight="$5"
         borderWidth={0.5}
         maxWidth={getTokenValue('$25') * columns.length}
