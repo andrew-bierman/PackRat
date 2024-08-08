@@ -36,6 +36,7 @@ const TripTripIdLazyImport = createFileRoute('/trip/$tripId')()
 const ProfileIdLazyImport = createFileRoute('/profile/$id')()
 const PackCreateLazyImport = createFileRoute('/pack/create')()
 const PackIdLazyImport = createFileRoute('/pack/$id')()
+const ItemItemIdLazyImport = createFileRoute('/item/$itemId')()
 const DestinationQueryLazyImport = createFileRoute('/destination/query')()
 const ProfileSettingsIndexLazyImport = createFileRoute('/profile/settings/')()
 
@@ -149,6 +150,11 @@ const PackIdLazyRoute = PackIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pack/$id.lazy').then((d) => d.Route))
 
+const ItemItemIdLazyRoute = ItemItemIdLazyImport.update({
+  path: '/item/$itemId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/item/$itemId.lazy').then((d) => d.Route))
+
 const DestinationQueryLazyRoute = DestinationQueryLazyImport.update({
   path: '/destination/query',
   getParentRoute: () => rootRoute,
@@ -179,6 +185,13 @@ declare module '@tanstack/react-router' {
       path: '/destination/query'
       fullPath: '/destination/query'
       preLoaderRoute: typeof DestinationQueryLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/item/$itemId': {
+      id: '/item/$itemId'
+      path: '/item/$itemId'
+      fullPath: '/item/$itemId'
+      preLoaderRoute: typeof ItemItemIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/$id': {
@@ -329,6 +342,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
   DestinationQueryLazyRoute,
+  ItemItemIdLazyRoute,
   PackIdLazyRoute,
   PackCreateLazyRoute,
   ProfileIdLazyRoute,
@@ -361,6 +375,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/destination/query",
+        "/item/$itemId",
         "/pack/$id",
         "/pack/create",
         "/profile/$id",
@@ -388,6 +403,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/destination/query": {
       "filePath": "destination/query.lazy.tsx"
+    },
+    "/item/$itemId": {
+      "filePath": "item/$itemId.lazy.tsx"
     },
     "/pack/$id": {
       "filePath": "pack/$id.lazy.tsx"
