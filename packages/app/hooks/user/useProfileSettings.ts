@@ -27,6 +27,7 @@ export const useProfileSettings = () => {
   };
 
   const handleEditUser = (data) => {
+    console.log('datadatadata', data)
     if (!user) return;
     const { id } = user;
 

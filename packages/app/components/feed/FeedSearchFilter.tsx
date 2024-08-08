@@ -59,7 +59,7 @@ const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState<string | null>();
   const debounceTimerRef = useRef(null);
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;

@@ -3,7 +3,7 @@ import WeatherCard from './WeatherCard';
 import { useFetchWeather } from 'app/hooks/weather';
 
 interface WeatherDataProps {
-  latLng?: { lat: number; lon: number };
+  latLng?: { lat: number; lon: number } | null;
   fallback?: JSX.Element;
 }
 

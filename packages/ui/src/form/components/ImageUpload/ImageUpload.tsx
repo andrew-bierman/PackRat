@@ -5,6 +5,8 @@ import OriginalRH5 from '../../../RH5';
 import OriginalRButton from '../../../RButton';
 import { useImageUpload } from './useImageUpload';
 import { cloneElement } from 'react';
+import { Button } from 'tamagui';
+import { Upload } from '@tamagui/lucide-icons';
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -14,9 +16,23 @@ export const ImageUpload = ({ previewElement, name, label }) => {
   const { pickImage, removeImage, src } = useImageUpload(name);
 
   return (
-    <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
-      {cloneElement(previewElement, { src })}
-      <RStack space="$2">
+    <RStack
+      bs="dashed"
+      width={400}
+      maxWidth="100%"
+      height={250}
+      borderWidth={1}
+      borderColor={'$gray9'}
+      padding="$4"
+      borderRadius="$3"
+      space
+      style={{ flexDirection: 'column', alignItems: "center", justifyContent: "center" }}
+    >
+      <RStack>{cloneElement(previewElement, { src })}</RStack>
+      <RStack style={{
+        alignItems: 'center',
+        justifyContent: "center"
+      }} >
         <RH5 fontWeight="medium">{label}</RH5>
         <RStack
           space="$2"
@@ -26,20 +42,25 @@ export const ImageUpload = ({ previewElement, name, label }) => {
           <RButton
             size="$3"
             type="button"
-            icon={<Ionicons name="cloud-upload-outline" size={24} />}
+            icon={
+              <Button.Icon>
+                <Upload y={-1} />
+              </Button.Icon>
+            }
             color="white"
-            style={{ backgroundColor: '#0284c7' }}
+            size="$3"
+            style={{ backgroundColor: '#F0F0F0', color:'black' }}
             onPress={pickImage}
           >
-            Upload
+            Update Profile Picture
           </RButton>
-          <RButton
+          {/* <RButton
             size="$3"
             onPress={removeImage}
             style={{ backgroundColor: 'transparent' }}
           >
             Remove
-          </RButton>
+          </RButton> */}
         </RStack>
       </RStack>
     </RStack>
