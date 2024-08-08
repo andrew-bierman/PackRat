@@ -29,6 +29,7 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
+      backgroundColor: currentTheme.colors.secondary,
       borderRadius: 8,
       backgroundColor: currentTheme.colors.secondaryBlue,
     },
