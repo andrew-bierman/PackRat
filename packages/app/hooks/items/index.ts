@@ -5,3 +5,4 @@ export { useItemsUpdater } from './useItemsUpdater';
 export { useItemWeightUnit } from './useItemWeightUnit';
 export { useItemId } from './useItemId';
 export { useItem } from './useItem';
+export { useSimilarItems } from './useSimilarItems';
