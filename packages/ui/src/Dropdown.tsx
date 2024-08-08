@@ -143,7 +143,7 @@ export const DropdownComponent: React.FC<DropdownComponentProps> = ({
       style={{
         flexDirection: 'row',
         justifyContent: 'center',
-        width: '70%',
+        width: '100%',
       }}
     >
       <RSelect

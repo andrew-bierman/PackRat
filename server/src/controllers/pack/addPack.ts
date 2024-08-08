@@ -5,7 +5,12 @@ import { protectedProcedure } from '../../trpc';
 export const addPack = async (c) => {
   try {
     const { name, owner_id, is_public } = await c.req.json();
-    const pack = await addPackService(name, owner_id, is_public);
+    const pack = await addPackService(
+      name,
+      owner_id,
+      is_public,
+      c.ctx.executionCtx,
+    );
     return c.json({ pack }, 200);
   } catch (error) {
     return c.json({ error: `Failed to add pack: ${error.message}` }, 500);

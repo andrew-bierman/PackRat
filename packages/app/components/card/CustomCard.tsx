@@ -5,6 +5,7 @@ import { SearchItem } from '../item/SearchItem';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
+import { ItemCardHeader } from './ItemCardHeader';
 import { useAuthUser } from 'app/auth/hooks/useUser';
 
 interface CustomCardProps {
@@ -12,13 +13,19 @@ interface CustomCardProps {
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip';
+  type: 'pack' | 'trip' | 'item';
   destination?: string;
   data: {
-    owner_id: string
+    owner_id?: string;
     owners?: Array<{ name: string }> | null;
   };
 }
+
+const HEADER_COMPONENTS = {
+  trip: TripCardHeader,
+  pack: PackCardHeader,
+  item: ItemCardHeader,
+};
 
 export const CustomCard = ({
   title,
@@ -35,7 +42,7 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
-  console.log('CustomCardProps ', data  )
+  const Header = HEADER_COMPONENTS[type] || PackCardHeader;
 
   return (
     <View
@@ -64,11 +71,7 @@ export const CustomCard = ({
             gap: 16,
           }}
         >
-          {type === 'trip' ? (
-            <TripCardHeader data={data} title={title} link={link} />
-          ) : (
-            <PackCardHeader data={data} title={title} link={link || ''} />
-          )}
+          <Header data={data} title={title} link={link} />
         </View>
         <RSeparator />
         {type === 'pack' && authUser?.id === data.owner_id ? (
@@ -94,12 +97,16 @@ export const CustomCard = ({
           style={{
             paddingRight: 16,
             paddingLeft: 16,
+            flex: 1,
+            paddingBottom: 20,
           }}
         >
           {content}
         </View>
         <RSeparator />
-        <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
+        {footer ? (
+          <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
+        ) : null}
       </RStack>
     </View>
   );

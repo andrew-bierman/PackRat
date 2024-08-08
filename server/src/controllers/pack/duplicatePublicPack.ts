@@ -5,7 +5,12 @@ import { protectedProcedure } from '../../trpc';
 export const duplicatePublicPack = async (c) => {
   try {
     const { packId, ownerId, items } = await c.req.json();
-    const result = await duplicatePublicPackService(packId, ownerId, items);
+    const result = await duplicatePublicPackService(
+      packId,
+      ownerId,
+      items,
+      c.ctx.executionCtx,
+    );
     return c.json({ result }, 200);
   } catch (error) {
     return c.json(

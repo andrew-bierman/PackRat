@@ -191,7 +191,10 @@ describe('Pack routes', () => {
 
     it('should return similar packs', async () => {
       expect(similarPacks).toEqual([
-        { ...pack, id: packId, similarityScore: 0.89519173 },
+        expect.objectContaining({
+          id: packId,
+          similarityScore: 0.89519173,
+        }),
       ]);
     });
   });

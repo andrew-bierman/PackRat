@@ -54,6 +54,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
       <CustomCardHeader
         link={''}
         data={data}
+        ownerId={data?.owner_id}
         title={
           <RStack
             style={{

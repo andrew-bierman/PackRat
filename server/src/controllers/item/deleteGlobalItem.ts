@@ -5,7 +5,10 @@ import { z } from 'zod';
 export const deleteGlobalItem = async (c) => {
   try {
     const { itemId } = await c.req.json();
-    const itemDeleted = await deleteGlobalItemService(itemId);
+    const itemDeleted = await deleteGlobalItemService(
+      itemId,
+      c.ctx.executionCtx,
+    );
     return c.json({ itemDeleted }, 200);
   } catch (error) {
     return c.json(

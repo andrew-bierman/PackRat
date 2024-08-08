@@ -63,12 +63,12 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   const ownerId = user?.id;
 
   const styles = useCustomStyles(loadStyles);
-  const { data, error, isLoading, refetch } = useFeed(
+  const { data, error, isLoading, refetch } = useFeed({
     queryString,
     ownerId,
     feedType,
     selectedTypes,
-  ) as UseFeedResult;
+  }) as UseFeedResult;
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -187,7 +187,7 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       fontSize: 18,
       padding: 15,
-      ...(Platform.OS !== 'web' && { paddingVertical: 0 }),
+      ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
     },
     // filterContainer: {
     //   backgroundColor: currentTheme.colors.card,

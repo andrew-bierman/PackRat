@@ -14,6 +14,7 @@ export const addItemGlobal = async (c: Context) => {
       unit,
       type,
       ownerId,
+      c.ctx.executionCtx,
     );
     return c.json({ item }, 200);
   } catch (error) {

@@ -13,6 +13,7 @@ export const TripCardHeader = ({ data, title, link }) => {
   return (
     <CustomCardHeader
       data={data}
+      ownerId={data?.owner_id}
       title={
         <RStack
           style={{

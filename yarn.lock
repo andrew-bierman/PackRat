@@ -11422,6 +11422,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/papaparse@npm:^5":
+  version: 5.3.14
+  resolution: "@types/papaparse@npm:5.3.14"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/9bd5cc0e6a2c02def6c8903dc4604e499907cb465186ed3532390468082a06f023adbac0216428d0d8e8fe017206780a03d20007041e9fed47c8d391cd69a536
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.12
   resolution: "@types/prop-types@npm:15.7.12"
@@ -12922,6 +12931,7 @@ __metadata:
     "@types/jest": "npm:^29.5.11"
     "@types/lodash": "npm:^4.14.202"
     "@types/node": "npm:^20.14.2"
+    "@types/papaparse": "npm:^5"
     "@types/react": "npm:~18.2.55"
     "@types/react-native": "npm:^0.72.5"
     "@types/react-test-renderer": "npm:^18.0.0"
@@ -12947,7 +12957,7 @@ __metadata:
     expo-checkbox: "npm:~2.7.0"
     expo-constants: "npm:~15.4.5"
     expo-crypto: "npm:~12.8.1"
-    expo-document-picker: "npm:~11.10.1"
+    expo-document-picker: "npm:^12.0.2"
     expo-file-system: "npm:~16.0.8"
     expo-font: "npm:~11.10.3"
     expo-image-picker: "npm:~14.7.1"
@@ -12973,6 +12983,7 @@ __metadata:
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
     osmtogeojson: "npm:^3.0.0-beta.5"
+    papaparse: "npm:^5.4.1"
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -20133,14 +20144,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-device@npm:~5.9.4":
-  version: 5.9.4
-  resolution: "expo-device@npm:5.9.4"
-  dependencies:
-    ua-parser-js: "npm:^0.7.33"
+"expo-document-picker@npm:^12.0.2":
+  version: 12.0.2
+  resolution: "expo-document-picker@npm:12.0.2"
   peerDependencies:
     expo: "*"
-  checksum: 10/2b163985f1d3bfb81ef5c0c566a586f107ca747e20ad52f6e42349bca7f96daf7f3903e9b6c92084eb9291671515b59438c5db2cdc783b161d20c6c7edeb95ac
+  checksum: 10/4eb929c6751ed6f82f2f521a4c8a9e10fdfe6f3e9fd44c4f18c6103db09a84697fb923993d3d658b6560ba20ffac276a166d59822575d70d4706057c0d0a291f
   languageName: node
   linkType: hard
 
@@ -29058,6 +29067,13 @@ __metadata:
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 10/1ad07210e894472685564c4d39a08717e84c2a68a70d3c1d9e657d32394ef1670e22972a433cbfe48976cb98b154ba06855dcd3fcfba77f60f1777634bec48c0
+  languageName: node
+  linkType: hard
+
+"papaparse@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "papaparse@npm:5.4.1"
+  checksum: 10/5e6dc978187182ad2efa1d264ffe73d2042cd23b8fb1dcb0b0f5c8c7c772c11e3eb4e166fb0893880ed24529a96abe9065d704cc5b4cb96abf037413cfe43788
   languageName: node
   linkType: hard
 

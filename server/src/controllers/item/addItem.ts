@@ -15,6 +15,7 @@ export const addItem = async (c) => {
       packId,
       type,
       ownerId,
+      c.ctx.executionCtx,
     );
     return c.json({ result }, 200);
   } catch (error) {
