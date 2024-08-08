@@ -7,7 +7,7 @@
     "build": "tsc"
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "@elysiajs/html": "^0.7.3",
