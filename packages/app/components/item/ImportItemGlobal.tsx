@@ -8,7 +8,7 @@ export const ImportItemGlobal = () => {
   const ownerId = authUser?.id;
 
   if (!authUser) {
-    return null; // or some fallback
+    return null;
   }
 
   const { setIsModalOpen } = useModal();

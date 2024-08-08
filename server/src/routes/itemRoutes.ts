@@ -14,6 +14,7 @@ import {
   importItems,
   importItemsGlobal,
   getSimilarItems,
+  importFromBucket,
 } from '../controllers/item/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -35,6 +36,13 @@ router.get(
   authTokenMiddleware,
   zodParser(validator.getSimilarItems, 'body'),
   tryCatchWrapper(getSimilarItems),
+);
+
+router.get(
+  '/importFromBucket',
+  authTokenMiddleware,
+  // zodParser(validator.importFromBucket, 'query'),
+  tryCatchWrapper(importFromBucket),
 );
 
 router.get(

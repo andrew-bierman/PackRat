@@ -7,7 +7,8 @@ export const useImportPackItem = () => {
       if (!newItem) {
         throw new Error('Item data is not available.');
       }
-
+    },
+    onSuccess: (data, newItem, context) => {
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });
@@ -32,13 +33,11 @@ export const useImportPackItem = () => {
         newQueryData as any,
       );
 
-      return {
-        previousPack,
-      };
-    },
-    onSuccess: () => {
       utils.getPackById.invalidate();
       utils.getPacks.invalidate();
+    },
+    onError: (error, newItem, context) => {
+      console.error('Error adding item:', error);
     },
   });
 

@@ -16,6 +16,23 @@ export class Item {
     }
   }
 
+  async createBulk(data: InsertItem[]) {
+    try {
+      const insertedItems = [];
+      for (const itemData of data) {
+        const item = await DbClient.instance
+          .insert(ItemTable)
+          .values(itemData)
+          .returning()
+          .get();
+        insertedItems.push(item);
+      }
+      return insertedItems;
+    } catch (error) {
+      throw new Error(`Failed to create items: ${error.message}`);
+    }
+  }
+
   async update(
     id: string,
     data: Partial<InsertItem>,

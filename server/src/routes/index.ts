@@ -1,5 +1,3 @@
-// import path from 'path';
-// import csrf from 'csurf';
 import packRoutes from './packRoutes';
 import itemRoutes from './itemRoutes';
 import tripRoutes from './tripRoutes';
@@ -16,32 +14,9 @@ import userRoutes from './userRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
 import healthRoutes from './healthRoutes';
 import { Hono } from 'hono';
+import querystring from 'querystring';
 
 const router = new Hono();
-
-// Create a CSRF middleware
-// const csrfProtection = csrf({ cookie: true });
-
-// /**
-//  * Logs the incoming request method and path, and logs the finished request method, path, status code, and request body.
-//  *
-//  * @param {Request} req - The incoming request object.
-//  * @param {Response} res - The response object.
-//  * @param {NextFunction} next - The next function to call in the middleware chain.
-//  */
-// const logger = (req: Request, res: Response, next: express.NextFunction) => {
-//   console.log(`Incoming ${req.method} ${req.path}`);
-//   res.on('finish', () => {
-//     console.log(`Finished ${req.method} ${req.path} ${res.statusCode}`);
-//     console.log(`Body ${req.body}`);
-//   });
-//   next();
-// };
-
-// // use logger middleware in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.use(logger);
-// }
 
 // use routes
 router.route('/user', userRoutes);
@@ -60,11 +35,55 @@ router.route('/favorite', favoriteRouters);
 router.route('/mapPreview', mapPreviewRouter);
 router.route('/health', healthRoutes);
 
-const helloRouter = new Hono();
-helloRouter.get('/', (c) => {
-  return c.text('Hello, world!');
+const testapi = new Hono();
+
+testapi.get('/', async (c) => {
+  const params = c.req.query();
+  console.log('Received data:', params);
+
+  return c.json({ message: 'Data received successfully!', data: params });
 });
-router.route('/hello', helloRouter);
+
+testapi.get('/test', async (c) => {
+  try {
+    const postData = querystring.stringify({
+      project: 'PackRat',
+      spider: 'backcountry',
+    });
+
+    const response = await fetch('http://localhost:6800/schedule.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: postData,
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status === 'ok') {
+      console.log('Scraping initiated', responseData);
+      return c.json({
+        message: 'Scraping initiated successfully!',
+        response: responseData,
+      });
+    } else {
+      console.error('Error from Scrapyd:', responseData);
+      return c.json({
+        message: 'Failed to initiate scraping',
+        error: responseData,
+      });
+    }
+  } catch (error) {
+    console.error('Error initiating scraping:', error);
+    return c.json({
+      message: 'Failed to initiate scraping',
+      error: error.toString(),
+    });
+  }
+});
+
+router.route('/testapi', testapi);
 
 // Also listen to /api for backwards compatibility
 router.route('/api/user', userRoutes);
@@ -82,39 +101,5 @@ router.route('/api/template', templateRoutes);
 router.route('/api/favorite', favoriteRouters);
 router.route('/api/openai', openAiRoutes);
 router.route('/api/mapPreview', mapPreviewRouter);
-
-// // Static routes for serving the React Native Web app
-// if (process.env.NODE_ENV === 'production') {
-//   const __dirname = path.resolve();
-//   const serverType = process.env.REACT_APP_SERVER_TYPE || 'vite';
-
-//   // Serve the client's index.html file at the root route
-//   router.get('/', (req, res) => {
-// // Attach the CSRF token cookie to the response
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
-//   });
-
-//   // Serve the static assets
-//   const staticPath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//   router.use(express.static(path.join(__dirname, staticPath)));
-
-//   // Serve the client's index.html file at all other routes NOT starting with /api
-//   router.get(/^(?!\/?api).*/, (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     const basePath = serverType === 'next' ? '../apps/next/out' : '../apps/vite/dist';
-//     res.sendFile(path.resolve(__dirname, basePath, 'index.html'));
-//   });
-// }
-
-// // Attach the CSRF token to a specific route in development
-// if (process.env.NODE_ENV !== 'production') {
-//   router.get('/api/csrf/restore', (req, res) => {
-//     // res.cookie("XSRF-TOKEN", req.csrfToken());
-//     res.status(201).json({});
-//   });
-// }
 
 export default router;
