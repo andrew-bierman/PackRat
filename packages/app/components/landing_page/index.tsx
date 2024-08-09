@@ -25,7 +25,7 @@ const RStack: any = OriginalRStack;
 const LandingPage = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { xxs, xs, xxl } = useResponsive();
+  const { xxs, xs, sm, xxl } = useResponsive();
 
   const handleGetStarted = () => {
     return <Redirect to="/sign-in" />;
@@ -38,7 +38,7 @@ const LandingPage = () => {
           style={
             {
               width: '100vw',
-              height: xs && xxs ? 'auto' : '70vh',
+              height: xs || sm || xxs ? 'auto' : '70vh',
               alignItems: 'center',
               textAlign: 'center',
               paddingVertical: 18,
@@ -47,40 +47,42 @@ const LandingPage = () => {
             } as any
           }
         >
-          {Platform.OS === 'web' ? (
-            <View
-              style={{
-                background:
-                  '-webkit-linear-gradient( 90deg, transparent, var(--purple12) 70% )',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
+          <View
+            style={{
+              background:
+                'radial-gradient(circle at center, #0d1e30, #0a2038, #02254a, #062240)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            {Platform.OS === 'web' ? (
               <RH1
                 style={{
-                  color: 'white',
-                  fontSize: xs ? currentTheme.font.headerFont : 90,
-                  margin: xs ? 0 : 20,
+                  color: 'transparent',
+                  fontSize: xs || sm ? currentTheme.font.headerFont : 90,
+                  margin: xs || sm ? 0 : 20,
                   fontWeight: 'bolder',
                   height: 'auto',
+
+                  whiteSpace: 'pre-wrap',
                 }}
               >
                 PackRat
               </RH1>
-            </View>
-          ) : (
-            <RText
-              style={{
-                height: 40,
-                color: 'white',
-                fontSize: 30,
-                fontWeight: 'bold',
-                paddingTop: 8,
-              }}
-            >
-              PackRat
-            </RText>
-          )}
+            ) : (
+              <RText
+                style={{
+                  height: 40,
+                  color: 'white',
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                  paddingTop: 8,
+                }}
+              >
+                PackRat
+              </RText>
+            )}
+          </View>
           <View
             style={{
               height: 'auto',
@@ -88,11 +90,10 @@ const LandingPage = () => {
           >
             <RH1
               style={{
-                display: 'inline-block',
-                color: '#45607d',
+                color: '#ab766d',
                 height: 'auto',
-                fontSize: xs ? 30 : 50,
-                fontWeight: xs ? 'bold' : 'bolder',
+                fontSize: xs || sm ? 28 : 40,
+                fontWeight: xs || sm ? 'bold' : 'bolder',
               }}
             >
               The Ultimate Travel App
@@ -134,8 +135,8 @@ const LandingPage = () => {
                       margin: 10,
                       padding: 32,
                       backgroundColor: '#fbfdff',
-                      width: xs ? '100%' : 'auto',
-                      
+                      width: xs || sm ? '100%' : 'auto',
+                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
                     }}
                   >
                     <RStack
@@ -145,6 +146,7 @@ const LandingPage = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: 8,
+                        width: '100%',
                       }}
                     >
                       <MaterialCommunityIcons
@@ -152,7 +154,14 @@ const LandingPage = () => {
                         size={44}
                         color="#315173"
                       />
-                      <RText style={{ color: '#315173', fontStyle: 'normal' }}>
+                      <RText
+                        style={{
+                          width: '100%',
+                          color: '#315173',
+                          fontStyle: 'normal',
+                          textAlign: 'left',
+                        }}
+                      >
                         Download on App Store
                       </RText>
                     </RStack>
@@ -163,7 +172,8 @@ const LandingPage = () => {
                       margin: 10,
                       padding: 32,
                       backgroundColor: '#fbfdff',
-                      width: xs ? '100%' : 'auto',
+                      width: xs || sm ? '100%' : 'auto',
+                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
                     }}
                   >
                     <RStack
@@ -172,6 +182,7 @@ const LandingPage = () => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
+                        width: '100%',
                         gap: 8,
                       }}
                     >
@@ -180,7 +191,14 @@ const LandingPage = () => {
                         size={44}
                         color="#315173"
                       />
-                      <RText style={{ color: '#315173', fontStyle: 'normal' }}>
+                      <RText
+                        style={{
+                          color: '#315173',
+                          fontStyle: 'normal',
+                          width: '100%',
+                          textAlign: 'left',
+                        }}
+                      >
                         Download on Google Play
                       </RText>
                     </RStack>
@@ -191,8 +209,9 @@ const LandingPage = () => {
                       margin: 10,
                       padding: 32,
                       backgroundColor: '#fbfdff',
-                      width: xs ? '100%' : "auto",
+                      width: xs || sm ? '100%' : 'auto',
                       justifyContent: 'center',
+                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
                     }}
                   >
                     <RStack
@@ -200,6 +219,7 @@ const LandingPage = () => {
                         flexDirection: 'row',
                         alignItems: 'center',
                         gap: 8,
+                        width: '100%',
                       }}
                     >
                       <MaterialCommunityIcons
@@ -207,7 +227,14 @@ const LandingPage = () => {
                         size={44}
                         color="#315173"
                       />
-                      <RText style={{ color: '#315173', fontStyle: 'normal' }}>
+                      <RText
+                        style={{
+                          color: '#315173',
+                          fontStyle: 'normal',
+                          width: '100%',
+                          textAlign: 'left',
+                        }}
+                      >
                         Use as Web App
                       </RText>
                     </RStack>

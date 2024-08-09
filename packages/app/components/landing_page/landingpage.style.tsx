@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const { xxs, xs, xxl } = useResponsive();
+  const { xxs, xs, xxl, sm, lg } = useResponsive();
 
   return {
     mutualStyles: {
@@ -49,7 +49,7 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: Platform.OS === 'web' ? 20 : 20,
+      fontSize: Platform.OS === 'web' ? ((xs || sm) ? 16: 20) : 20,
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
       textAlign: 'left',
       marginTop : xs ? 0 : 30,
@@ -84,6 +84,7 @@ const loadStyles = (theme) => {
       marginBottom: 10,
       // width: '100%',
       backgroundColor: "#fbfdff",
+      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)'
     },
     cardHeader: {
       flexDirection: 'row',
