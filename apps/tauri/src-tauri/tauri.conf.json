@@ -10,10 +10,9 @@
     "distDir": "../dist",
     "devPath": "http://localhost:4200"
   },
+  "identifier": "com.tauri.dev",
 
   "tauri": {
-    "identifier": "com.tauri.dev",
-
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
