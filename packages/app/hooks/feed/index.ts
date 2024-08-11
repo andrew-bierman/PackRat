@@ -1,7 +1,8 @@
 import { usePublicFeed } from './publicFeed';
 import { useUserPacks } from './../packs';
 import { useUserTrips } from '../singletrips';
-import { useSimilarPacks } from 'app/hooks/packs/useSimilarPacks';
+import { useSimilarPacks } from 'app/hooks/packs';
+import { useSimilarItems } from 'app/hooks/items';
 
 export const useFeed = ({
   queryString = 'Most Recent',
@@ -25,6 +26,8 @@ export const useFeed = ({
       return useUserTrips(ownerId || undefined);
     case 'similarPacks':
       return useSimilarPacks(id);
+    case 'similarItems':
+      return useSimilarItems(id);
     default:
       return { data: null, error: null, isLoading: true };
   }
