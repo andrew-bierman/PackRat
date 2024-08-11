@@ -12,8 +12,7 @@
   },
 
   "tauri": {
-    "bundleIdentifier": "com.andrewbierman.packrat",
-
+    "identifier": "com.tauri.dev",
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
