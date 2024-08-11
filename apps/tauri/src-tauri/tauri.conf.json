@@ -3,8 +3,8 @@
   "build": {
     "beforeBuildCommand": "yarn run build",
     "beforeDevCommand": "yarn run dev",
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:4200"
+    "distDir": "../dist",
+    "devPath": "http://localhost:4200"
   },
   "bundle": {
     "active": true,
