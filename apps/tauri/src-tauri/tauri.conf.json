@@ -8,7 +8,7 @@
     "beforeBuildCommand": "yarn run build",
     "beforeDevCommand": "yarn run dev",
     "distDir": "../dist",
-    "devPath": "http://localhost:4200"
+    "devUrl": "http://localhost:4200"
   },
 
   "tauri": {
