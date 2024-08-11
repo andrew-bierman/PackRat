@@ -4,8 +4,9 @@
     "productName": "PackRat",
     "version": "0.1.0"
   },
+  "identifier": "com.tauri.dev",
+
   "tauri": {
-    "identifier": "com.tauri.dev",
     "build": {
       "beforeBuildCommand": "yarn run build",
       "beforeDevCommand": "yarn run dev",
