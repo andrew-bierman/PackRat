@@ -1,15 +1,20 @@
 {
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
+  "productName": "PackRat",
+  "version": "0.1.0",
+  "identifier": "com.tauri.dev",
   "build": {
     "beforeBuildCommand": "yarn run build",
     "beforeDevCommand": "yarn run dev",
     "distDir": "../dist",
     "devPath": "http://localhost:4200"
   },
-  "package": {
-    "productName": "PackRat",
-    "version": "0.1.0"
+  "app": {
+    "security": {
+      "csp": null
+    }
   },
+
   "bundle": {
     "active": true,
     "category": "DeveloperTool",
@@ -45,8 +50,5 @@
     }
   },
 
-  "plugins": {},
-  "security": {
-    "csp": null
-  }
+  "plugins": {}
 }
