@@ -5,13 +5,6 @@
     "version": "0.1.0"
   },
   "tauri": {
-    "identifier": "com.tauri.dev",
-    "build": {
-      "beforeBuildCommand": "yarn run build",
-      "beforeDevCommand": "yarn run dev",
-      "distDir": "../dist",
-      "devPath": "http://localhost:4200"
-    },
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
@@ -24,14 +17,29 @@
         "icons/icon.ico"
       ],
       "windows": {
-        "digestAlgorithm": "sha256"
+        "digestAlgorithm": "sha256",
+        "certificateThumbprint": "",
+        "timestampUrl": ""
       },
-      "macOS": {},
+      "macOS": {
+        "entitlements": "",
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": "",
+        "signingIdentity": ""
+      },
       "linux": {
         "deb": {
           "depends": []
         }
       }
+    },
+    "identifier": "com.tauri.dev",
+    "build": {
+      "beforeBuildCommand": "yarn run build",
+      "beforeDevCommand": "yarn run dev",
+      "distDir": "../dist",
+      "devPath": "http://localhost:4200"
     },
     "security": {
       "csp": null
