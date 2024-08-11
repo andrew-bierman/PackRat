@@ -3,6 +3,7 @@ import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
 import { useImportItem } from 'app/hooks/items/useImportItem';
 import useResponsive from 'app/hooks/useResponsive';
@@ -28,8 +29,8 @@ interface SelectedType {
 }
 
 const data = [
-  { label: 'CSV', value: '.csv', key: '.csv' },
-  { label: 'Other', value: '*', key: '*' },
+  { label: 'CSV', value: 'text/csv', key: 'text/csv' },
+  { label: 'Other', value: '*/*', key: '*/*' },
 ];
 
 export const ImportForm: FC<ImportFormProps> = ({
@@ -45,7 +46,7 @@ export const ImportForm: FC<ImportFormProps> = ({
 
   const [selectedType, setSelectedType] = useState<SelectedType>({
     label: 'CSV',
-    value: '.csv',
+    value: 'text/csv',
   });
 
   const handleSelectChange = (selectedValue: string) => {
@@ -65,7 +66,7 @@ export const ImportForm: FC<ImportFormProps> = ({
 
       let fileContent;
 
-      if (selectedType.value === '.csv') {
+      if (selectedType.value === 'text/csv') {
         if (Platform.OS === 'web') {
           if (res.assets && res.assets.length > 0) {
             const file = res.assets[0];
@@ -75,10 +76,13 @@ export const ImportForm: FC<ImportFormProps> = ({
             throw new Error('No file content available');
           }
         } else {
-          const response = await fetch(res.uri);
-          fileContent = await response.text();
+          const document = res.assets[0];
+          const { name, size, mimeType, uri } = document;
+          if (mimeType === 'text/csv') {
+            fileContent = await FileSystem.readAsStringAsync(uri);
+            console.log('File content:', fileContent);
+          }
         }
-
         if (currentpage === 'items') {
           handleImportNewItems({ content: fileContent, ownerId });
         } else {
@@ -111,7 +115,7 @@ export const ImportForm: FC<ImportFormProps> = ({
           style={{ width: '100%' }}
         />
       </View>
-      <RButton onClick={handleItemImport}>
+      <RButton onPress={handleItemImport}>
         <RText style={{ color: currentTheme.colors.text }}>Import Item</RText>
       </RButton>
     </View>
