@@ -4,15 +4,16 @@
     "productName": "PackRat",
     "version": "0.1.0"
   },
-  "identifier": "com.tauri.dev",
+  "build": {
+    "beforeBuildCommand": "yarn run build",
+    "beforeDevCommand": "yarn run dev",
+    "distDir": "../dist",
+    "devPath": "http://localhost:4200"
+  },
 
   "tauri": {
-    "build": {
-      "beforeBuildCommand": "yarn run build",
-      "beforeDevCommand": "yarn run dev",
-      "distDir": "../dist",
-      "devPath": "http://localhost:4200"
-    },
+    "identifier": "com.tauri.dev",
+
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
@@ -35,11 +36,6 @@
         "frameworks": [],
         "providerShortName": "",
         "signingIdentity": ""
-      },
-      "linux": {
-        "deb": {
-          "depends": []
-        }
       }
     },
     "security": {
