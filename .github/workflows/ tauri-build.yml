@@ -32,10 +32,10 @@ jobs:
     steps:
       - name: Check for GITHUB_TOKEN
         run: |
-          if (-not $ENV:${{secrets.GITHUB_TOKEN}}) {
-             Write-Host "You must provide a GITHUB_TOKEN secret for this repository."
+          if (-not $ENV:${{secrets.GITHUB_TOKEN}}); then
+             echo "You must provide a GITHUB_TOKEN secret for this repository."
              exit 1
-          }
+          fi
 
       - name: Checkout repository
         uses: actions/checkout@v4
