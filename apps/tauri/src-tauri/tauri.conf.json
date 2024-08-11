@@ -12,7 +12,7 @@
   },
 
   "tauri": {
-    "identifier": "com.andrewbierman.packrat",
+    "bundleIdentifier": "com.andrewbierman.packrat",
 
     "bundle": {
       "active": true,
