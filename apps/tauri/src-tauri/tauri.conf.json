@@ -2,10 +2,10 @@
   "$schema": "../../../node_modules/@tauri-apps/cli/schema.json",
   "package": {
     "productName": "PackRat",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "identifier": "com.tauri.dev"
   },
   "tauri": {
-    "identifier": "com.tauri.dev",
     "build": {
       "beforeBuildCommand": "yarn run build",
       "beforeDevCommand": "yarn run dev",
