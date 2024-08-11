@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Check for GITHUB_TOKEN
         run: |
-          if (-not $Env:GITHUB_TOKEN) {
+          if (-not $Env:secrets.GITHUB_TOKEN) {
              Write-Host "You must provide a GITHUB_TOKEN secret for this repository."
              exit 1
           }
