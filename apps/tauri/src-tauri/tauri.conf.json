@@ -6,6 +6,10 @@
     "distDir": "../dist",
     "devPath": "http://localhost:4200"
   },
+  "package": {
+    "productName": "PackRat",
+    "version": "0.1.0"
+  },
   "bundle": {
     "active": true,
     "category": "DeveloperTool",
@@ -40,22 +44,9 @@
       }
     }
   },
-  "productName": "PackRat",
-  "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+
   "plugins": {},
-  "app": {
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "PackRat",
-        "width": 800
-      }
-    ],
-    "security": {
-      "csp": null
-    }
+  "security": {
+    "csp": null
   }
 }
