@@ -13,6 +13,7 @@
     "tauri:build": "yarn tauri build",
     "tauri:build:dev": "yarn tauri build --dev",
     "tauri:serve": "yarn tauri serve",
+    "tauri:migrate": "yarn run tauri migrate",
     "clean": "rm -rf dist node_modules .tamagui"
   },
   "dependencies": {
@@ -33,7 +34,7 @@
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.0.0-beta.17",
+    "@tauri-apps/cli": "^2.0.0-rc.2",
     "@types/react": "~18.2.55",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
