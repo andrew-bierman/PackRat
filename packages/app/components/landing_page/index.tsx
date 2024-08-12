@@ -38,12 +38,11 @@ const LandingPage = () => {
           style={
             {
               width: '100vw',
-              height: xs || sm || xxs ? 'auto' : '70vh',
               alignItems: 'center',
               textAlign: 'center',
               paddingVertical: 18,
               marginTop: Platform.OS !== 'web' ? 25 : 65,
-              // flex: 1,
+              flex: 1,
             } as any
           }
         >
@@ -133,7 +132,7 @@ const LandingPage = () => {
                     title="App Store"
                     style={{
                       margin: 10,
-                      padding: 32,
+                      padding: 40,
                       backgroundColor: '#fbfdff',
                       width: xs || sm ? '100%' : 'auto',
                       boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
@@ -142,7 +141,7 @@ const LandingPage = () => {
                     <RStack
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: 8,
@@ -151,8 +150,11 @@ const LandingPage = () => {
                     >
                       <MaterialCommunityIcons
                         name="apple"
-                        size={44}
+                        size={30}
                         color="#315173"
+                        style={{
+                          width: '100%',
+                        }}
                       />
                       <RText
                         style={{
@@ -160,6 +162,7 @@ const LandingPage = () => {
                           color: '#315173',
                           fontStyle: 'normal',
                           textAlign: 'left',
+                          fontSize: 18
                         }}
                       >
                         Download on App Store
@@ -170,7 +173,7 @@ const LandingPage = () => {
                     title="Google Play"
                     style={{
                       margin: 10,
-                      padding: 32,
+                      padding: 40,
                       backgroundColor: '#fbfdff',
                       width: xs || sm ? '100%' : 'auto',
                       boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
@@ -179,7 +182,7 @@ const LandingPage = () => {
                     <RStack
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         width: '100%',
@@ -188,8 +191,11 @@ const LandingPage = () => {
                     >
                       <MaterialCommunityIcons
                         name="google-play"
-                        size={44}
+                        size={30}
                         color="#315173"
+                        style={{
+                          width: '100%',
+                        }}
                       />
                       <RText
                         style={{
@@ -197,6 +203,7 @@ const LandingPage = () => {
                           fontStyle: 'normal',
                           width: '100%',
                           textAlign: 'left',
+                          fontSize: 18
                         }}
                       >
                         Download on Google Play
@@ -207,7 +214,7 @@ const LandingPage = () => {
                     title="Web"
                     style={{
                       margin: 10,
-                      padding: 32,
+                      padding: 40,
                       backgroundColor: '#fbfdff',
                       width: xs || sm ? '100%' : 'auto',
                       justifyContent: 'center',
@@ -216,7 +223,7 @@ const LandingPage = () => {
                   >
                     <RStack
                       style={{
-                        flexDirection: 'row',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         gap: 8,
                         width: '100%',
@@ -224,8 +231,11 @@ const LandingPage = () => {
                     >
                       <MaterialCommunityIcons
                         name="web"
-                        size={44}
+                        size={30}
                         color="#315173"
+                        style={{
+                          width: '100%',
+                        }}
                       />
                       <RText
                         style={{
@@ -233,6 +243,7 @@ const LandingPage = () => {
                           fontStyle: 'normal',
                           width: '100%',
                           textAlign: 'left',
+                          fontSize: 18
                         }}
                       >
                         Use as Web App
