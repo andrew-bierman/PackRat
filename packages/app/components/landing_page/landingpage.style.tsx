@@ -1,11 +1,9 @@
 import useResponsive from 'app/hooks/useResponsive';
 import { Platform } from 'react-native';
 
-
-
 const loadStyles = (theme) => {
   const { currentTheme } = theme;
-  const { xxs, xs, xxl, sm, lg } = useResponsive();
+  const { xxs, xs, xxl, sm, lg, md } = useResponsive();
 
   return {
     mutualStyles: {
@@ -49,30 +47,32 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: Platform.OS === 'web' ? ((xs || sm) ? 16: 20) : 20,
+      fontSize: (xs || sm ? 18 : 22),
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
-      textAlign: 'left',
-      marginTop : xs ? 0 : 30,
-      color: "#45607d",
+      textAlign: 'center',
+      marginTop: xs ? 0 : 30,
+      color: '#45607d',
       width: '58vw',
       marginBottom: 20, // Ensure spacing between text and next elements
       paddingHorizontal: 10, // Adjust text alignment on smaller screens
     },
     buttonContainer: {
-      // paddingHorizontal: 20,
-      // paddingBottom: 20,
-      // width: '100%', // Ensure buttons are well-spaced and aligned
       margin: 30,
       display: 'flex',
       alignItems: 'center',
+      
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
-      backgroundColor: '#f3e7fc',
+      backgroundColor: 'transparent',
       height: 50,
+      borderWidth: 1,
+      borderColor: '#315173',
+      flexDirection: 'row',
+      justifyContent: 'center',
       paddingVertical: 12, // Increase padding for better touch area
       paddingHorizontal: 30,
-      borderRadius: 30, // Rounded corners for modern look
+      borderRadius: 8, // Rounded corners for modern look
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
@@ -80,39 +80,39 @@ const loadStyles = (theme) => {
       fontSize: 18,
       fontWeight: 'bold',
     },
+    landingPageAccordion: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      // border: '10px solid black',
+      justifyContent: 'center',
+    },
     card: {
-      marginBottom: 10,
-      // width: '100%',
-      backgroundColor: "#fbfdff",
-      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)'
+      width: xs || sm || md ? '100%' : '30%',
+      margin: 8,
+      backgroundColor: 'transparent',
+      flexDirection: 'row',
     },
     cardHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
       paddingHorizontal: 20,
       paddingVertical: 10,
-      textWrap: 'wrap',
       width: '100%',
     },
-    transparentButton: {
-      backgroundColor: 'transparent',
-      height: 'auto',
-    },
     icon: {
-      fontSize: 40,
-      color: "#315173",
-      marginRight: 10,
+      fontSize: 26,
+      width: '100%',
+      color: '#315173',
     },
     featureText: {
-      fontSize: 22,
-      color: "#315173",
+      fontSize: 20,
+      color: '#315173',
+      marginTop: 10,
+      marginBottom: 10,
+      width: '100%',
     },
     cardContent: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      fontSize: 16,
-      color: "#315173",
+      fontSize: 18,
+      color: '#315173',
+      width: '100%',
     },
   };
 };

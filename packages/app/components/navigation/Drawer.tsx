@@ -9,7 +9,7 @@ import { NavigationList } from './NavigationList';
 const Popover: any = OriginalPopover;
 
 export function Drawer() {
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark, isLight } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
   return (
@@ -30,7 +30,6 @@ export function Drawer() {
             bg: 'transparent',
           }}
         >
-          Menu
         </Button>
       </Popover.Trigger>
       <Adapt when="sm" platform="touch">
@@ -50,7 +49,7 @@ export function Drawer() {
         borderWidth={1}
         borderColor="$borderColor"
         style={styles.popover}
-        bg={currentTheme.colors.background}
+        bg={isDark ? currentTheme.colors.background : '#f0f2f5'}
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
         elevate
@@ -66,7 +65,7 @@ export function Drawer() {
         <Popover.Arrow
           borderWidth={1}
           borderColor="$borderColor"
-          bg={currentTheme.colors.background}
+          bg={isDark ? currentTheme.colors.background : '#f0f2f5'}
         />
         <NavigationList
           itemStyle={styles.navigationItem}
@@ -106,6 +105,7 @@ const loadStyles = (theme) => {
     },
     popover: {
       alignItems: 'flex-start',
+      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.29)'
     },
   };
 };

@@ -62,7 +62,6 @@ const LandingPage = () => {
                   margin: xs || sm ? 0 : 20,
                   fontWeight: 'bolder',
                   height: 'auto',
-
                   whiteSpace: 'pre-wrap',
                 }}
               >
@@ -91,7 +90,7 @@ const LandingPage = () => {
               style={{
                 color: '#ab766d',
                 height: 'auto',
-                fontSize: xs || sm ? 28 : 40,
+                fontSize: xs || sm ? 34 : 44,
                 fontWeight: xs || sm ? 'bold' : 'bolder',
               }}
             >
@@ -108,6 +107,11 @@ const LandingPage = () => {
             <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
               <View style={styles.getStartedButton}>
                 <Text style={styles.footerText}> Get Started</Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={24}
+                  color="#315173"
+                />
               </View>
             </RLink>
           </View>
@@ -130,132 +134,205 @@ const LandingPage = () => {
                 >
                   <RButton
                     title="App Store"
+                    paddingVertical={30}
+                    paddingHorizontal={15}
                     style={{
                       margin: 10,
-                      padding: 40,
-                      backgroundColor: '#fbfdff',
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: '#315173',
                       width: xs || sm ? '100%' : 'auto',
-                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
+                      overflow: 'hidden',
                     }}
                   >
                     <RStack
                       style={{
                         display: 'flex',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         gap: 8,
                         width: '100%',
                       }}
                     >
-                      <MaterialCommunityIcons
-                        name="apple"
-                        size={30}
-                        color="#315173"
+                      <View>
+                        <MaterialCommunityIcons
+                          name="apple"
+                          size={55}
+                          color="#315173"
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View
                         style={{
-                          width: '100%',
-                        }}
-                      />
-                      <RText
-                        style={{
-                          width: '100%',
-                          color: '#315173',
-                          fontStyle: 'normal',
-                          textAlign: 'left',
-                          fontSize: 18
+                          width: xs || sm ? '100%' : 'auto',
                         }}
                       >
-                        Download on App Store
-                      </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Get it on
+                        </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 20,
+                            fontWeight: 'bolder',
+                          }}
+                        >
+                          App Store
+                        </RText>
+                      </View>
                     </RStack>
                   </RButton>
                   <RButton
                     title="Google Play"
+                    paddingVertical={30}
+                    paddingHorizontal={15}
                     style={{
                       margin: 10,
-                      padding: 40,
-                      backgroundColor: '#fbfdff',
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: '#315173',
                       width: xs || sm ? '100%' : 'auto',
-                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
+                      overflow: 'hidden',
                     }}
                   >
                     <RStack
                       style={{
                         display: 'flex',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        width: '100%',
                         gap: 8,
+                        width: '100%',
                       }}
                     >
-                      <MaterialCommunityIcons
-                        name="google-play"
-                        size={30}
-                        color="#315173"
+                      <View>
+                        <MaterialCommunityIcons
+                          name="google-play"
+                          size={55}
+                          color="#315173"
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View
                         style={{
-                          width: '100%',
-                        }}
-                      />
-                      <RText
-                        style={{
-                          color: '#315173',
-                          fontStyle: 'normal',
-                          width: '100%',
-                          textAlign: 'left',
-                          fontSize: 18
+                          width: xs || sm ? '100%' : 'auto',
                         }}
                       >
-                        Download on Google Play
-                      </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Get it on
+                        </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 20,
+                            fontWeight: 'bolder',
+                          }}
+                        >
+                          Google Play
+                        </RText>
+                      </View>
                     </RStack>
                   </RButton>
                   <RButton
                     title="Web"
+                    paddingVertical={30}
+                    paddingHorizontal={15}
                     style={{
                       margin: 10,
-                      padding: 40,
-                      backgroundColor: '#fbfdff',
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: '#315173',
                       width: xs || sm ? '100%' : 'auto',
-                      justifyContent: 'center',
-                      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
+                      overflow: 'hidden',
                     }}
                   >
                     <RStack
                       style={{
-                        flexDirection: 'column',
+                        display: 'flex',
+                        flexDirection: 'row',
                         alignItems: 'center',
+                        justifyContent: 'space-between',
                         gap: 8,
                         width: '100%',
                       }}
                     >
-                      <MaterialCommunityIcons
-                        name="web"
-                        size={30}
-                        color="#315173"
+                      <View>
+                        <MaterialCommunityIcons
+                          name="web"
+                          size={55}
+                          color="#315173"
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View
                         style={{
-                          width: '100%',
-                        }}
-                      />
-                      <RText
-                        style={{
-                          color: '#315173',
-                          fontStyle: 'normal',
-                          width: '100%',
-                          textAlign: 'left',
-                          fontSize: 18
+                          width: xs || sm ? '100%' : 'auto',
                         }}
                       >
-                        Use as Web App
-                      </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Use as
+                        </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: '#315173',
+                            fontStyle: 'normal',
+                            textAlign: 'left',
+                            fontSize: 20,
+                            fontWeight: 'bolder',
+                          }}
+                        >
+                          Web App
+                        </RText>
+                      </View>
                     </RStack>
                   </RButton>
                 </View>
               </View>
             )}
             <RStack
-              width="100%"
-              maxWidth={Platform.OS === 'web' ? 800 : '100%'}
+              style={styles.landingPageAccordion}
+              maxWidth={Platform.OS === 'web' ? 'auto' : '100%'}
             >
               {FAQ_ITEMS.map((item, index) => (
                 <LandingPageAccordion

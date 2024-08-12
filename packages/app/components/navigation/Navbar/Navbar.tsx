@@ -51,7 +51,7 @@ export const Navbar = () => {
               />
             </View>
             <View style={styles.logoContainer}>
-              {/* <RImage
+              <RImage
                 source={{
                   // TODO: Update this to use the PackRat logo from the assets folder
                   uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
@@ -65,15 +65,15 @@ export const Navbar = () => {
                 onClick={() => {
                   navigate('/');
                 }}
-              /> */}
-              <Text
+              />
+              {/* <Text
                 style={styles.logoText}
                 onPress={() => {
                   navigate('/');
                 }}
               >
                 PackRat
-              </Text>
+              </Text> */}
             </View>
             <Drawer />
           </View>
@@ -188,24 +188,18 @@ const loadStyles = (
       alignItems: 'center',
     },
     logo: {
-      marginRight: 10,
       cursor: 'pointer',
-      color: "#315173",
-    },
-    logoText: {
-      color: "#315173",
-      fontSize: 24,
-      fontWeight: '900',
-      cursor: 'pointer',
+      backgroundColor: 'transparent',
+      filter: 'drop-shadow(0 0 1px blue)',
     },
     menuBar: {
       color: "#315173",
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
-      paddingHorizontal: 16,
-      flex: 1, // Keep flexible but consider its behavior with wrapping,
-      flexWrap: 'wrap', // Allow items to wrap
+      // paddingHorizontal: 16,
+      // flex: 1, // Keep flexible but consider its behavior with wrapping,
+      // flexWrap: 'wrap', // Allow items to wrap
     },
     drawerTrigger: {},
     menuBarItemActive: {

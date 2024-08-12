@@ -29,7 +29,7 @@ export const NavigationItem = ({
   onSelect,
 }: NavigationItemProps) => {
   const styles = useCustomStyles(loadStyles);
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark, isLight } = useTheme();
   const { IconComponent, isCurrentPage, handleItemPress } = useNavigationItem(
     item,
     onSelect,
@@ -42,11 +42,7 @@ export const NavigationItem = ({
         <IconComponent
           name={icon}
           size={isMobileView ? 24 : 14}
-          color={
-            isCurrentPage
-              ? currentTheme.colors.iconColor
-              : currentTheme.colors.iconColor
-          }
+          color={isDark ? currentTheme.colors.iconColor : '#315173'}
         />
       )}
       label={text}
@@ -61,7 +57,7 @@ export const NavigationItem = ({
 };
 
 const loadStyles = (theme) => {
-  const { currentTheme } = theme;
+  const { currentTheme, isDark, isLight } = theme;
 
   return {
     menuBarItem: {
@@ -71,7 +67,7 @@ const loadStyles = (theme) => {
       paddingHorizontal: 12,
     },
     menuBarItemText: {
-      color: currentTheme.colors.text,
+      color: isDark ? currentTheme.colors.text : '#315173',
       fontSize: 15,
     },
     menuBarItemActive: {
