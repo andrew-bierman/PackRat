@@ -3,48 +3,14 @@
   "build": {
     "beforeBuildCommand": "yarn run build",
     "beforeDevCommand": "yarn run dev",
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:4200"
+    "devPath": "../dist",
+    "distDir": "../dist"
   },
-  "bundle": {
-    "active": true,
-    "category": "DeveloperTool",
-    "copyright": "",
-    "targets": "all",
-    "externalBin": [],
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "windows": {
-      "certificateThumbprint": null,
-      "digestAlgorithm": "sha256",
-      "timestampUrl": ""
-    },
-    "longDescription": "",
-    "macOS": {
-      "entitlements": null,
-      "exceptionDomain": "",
-      "frameworks": [],
-      "providerShortName": null,
-      "signingIdentity": null
-    },
-    "resources": [],
-    "shortDescription": "",
-    "linux": {
-      "deb": {
-        "depends": []
-      }
-    }
+  "package": {
+    "productName": "PackRat",
+    "version": "0.1.0"
   },
-  "productName": "PackRat",
-  "version": "0.1.0",
-  "identifier": "com.andrewbierman.packrat",
-  "plugins": {},
-  "app": {
+  "tauri": {
     "windows": [
       {
         "fullscreen": false,
@@ -54,6 +20,37 @@
         "width": 800
       }
     ],
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "identifier": "com.andrewbierman.packrat",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [],
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      },
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "linux": {
+        "deb": {
+          "depends": []
+        }
+      }
+    },
     "security": {
       "csp": null
     }
