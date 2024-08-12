@@ -44,11 +44,6 @@
         "frameworks": [],
         "providerShortName": null,
         "signingIdentity": null
-      },
-      "linux": {
-        "deb": {
-          "depends": []
-        }
       }
     },
     "security": {
