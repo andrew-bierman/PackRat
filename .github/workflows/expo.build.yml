@@ -75,4 +75,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ios-ipa
-          path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.ipa
+          path: /Users/runner/work/PackRat/PackRat/apps/expo/build-*.ipa
