@@ -283,7 +283,7 @@ const loadStyles = (theme: any) => {
     },
     buttonText: {
       color: currentTheme.colors.white,
-      fontSize: '1rem',
+      fontSize: 16,
       fontWeight: '500',
     },
     container: {
