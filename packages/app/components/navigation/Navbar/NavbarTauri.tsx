@@ -9,8 +9,9 @@ import { useScrollTop } from 'app/hooks/common/useScrollTop';
 import { useScreenWidth } from 'app/hooks/common';
 import useTheme from 'app/hooks/useTheme';
 import { RImage } from '@packrat/ui';
+import FullSideBar from '../Sidebar/SideBar';
 
-export const Navbar = () => {
+export const NavbarTauri = () => {
   const { currentTheme } = useTheme();
   const scrollTop = useScrollTop();
   const { screenWidth } = useScreenWidth();
@@ -49,7 +50,7 @@ export const Navbar = () => {
               PackRat
             </Text>
           </View>
-          <Drawer />
+          <FullSideBar />
         </View>
       </Container>
     </SafeAreaView>
