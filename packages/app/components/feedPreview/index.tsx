@@ -2,6 +2,7 @@ import React from 'react';
 import Carousel from '../carousel';
 import { useFeed } from 'app/hooks/feed';
 import { default as FeedPreviewCard, type FeedItem } from './FeedPreviewCard';
+import Loader from 'app/components/Loader';
 
 interface FeedPreviewScrollProps {
   itemWidth: number;
@@ -14,16 +15,18 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   feedType,
   id,
 }) => {
-  const { data: feedData } = useFeed({ feedType, id });
+  const { data: feedData, isLoading } = useFeed({ feedType, id });
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <Carousel itemWidth={itemWidth}>
       {feedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem) => {
           const linkStr = `/${item.type}/${item.id}`;
           return linkStr ? (
-            <FeedPreviewCard {...{ linkStr, item }} key={linkStr} />
+            <FeedPreviewCard {...{ linkStr, item, feedType }} key={linkStr} />
           ) : null;
         })}
     </Carousel>
