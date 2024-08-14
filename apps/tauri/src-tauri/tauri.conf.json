@@ -2,7 +2,6 @@
   "build": {
     "beforeBuildCommand": "yarn run build",
     "beforeDevCommand": "yarn dev",
-    "devUrl": "http://localhost:4200",
     "distDir": "../src/assets",
     "withGlobalTauri": false
   },
