@@ -1,47 +1,37 @@
 {
+  "productName": "Packrat",
+  "version": "0.1.0",
+  "identifier": "com.andrewbierman.packrat",
   "build": {
-    "beforeBuildCommand": "yarn run build",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:4200",
     "beforeDevCommand": "yarn dev",
-    "distDir": "../src/assets",
-    "withGlobalTauri": false
+    "beforeBuildCommand": "yarn run build"
   },
-  "package": {
-    "productName": "PackRat",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "identifier": "com.andrewbierman.packrat",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "resources": [],
-      "targets": ["deb", "appimage", "msi", "dmg"],
-      "windows": {
-        "certificateThumbprint": "",
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
-    },
-    "updater": {
-      "active": false
-    },
+  "app": {
     "windows": [
       {
-        "title": "PackRat",
+        "title": "Packrat",
         "width": 800,
         "height": 600,
         "resizable": true,
-        "fullscreen": false,
-        "transparent": false,
-        "decorations": true
+        "fullscreen": false
       }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
     ]
-  }
+  },
+  "$schema": "../../../node_modules/@tauri-apps/cli/schema.json"
 }
