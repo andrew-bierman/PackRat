@@ -1,10 +1,9 @@
 {
   "build": {
-    "beforeBuildCommand": "",
-    "beforeDevCommand": "",
-    "devPath": "http://localhost:4200",
-    "distDir": "../src/assets",
-    "withGlobalTauri": false
+    "beforeBuildCommand": "yarn dev",
+    "beforeDevCommand": "yarn run build",
+    "devUrl": "http://localhost:4200",
+    "distDir": "../src/assets"
   },
   "package": {
     "productName": "PackRat",
