@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import QuickActionsSection from '../../components/dashboard/QuickActionSection';
+import { QuickActionsSection } from '../../modules/dashboard';
 
 const FABNative = ({ showQuickActions, toggleQuickActions }) => {
   const styles = useCustomStyles(loadStyles);

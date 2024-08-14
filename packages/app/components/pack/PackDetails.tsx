@@ -16,7 +16,7 @@ import { DetailsComponent } from '../details';
 import { TableContainer } from '../pack_table/Table';
 import { AddItemModal } from './AddItemModal';
 import { ImportItemModal } from './ImportItemModal';
-import FeedPreview from 'app/components/feedPreview';
+import { FeedPreview } from 'app/modules/feed';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
 

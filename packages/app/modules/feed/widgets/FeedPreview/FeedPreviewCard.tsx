@@ -87,7 +87,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({
           >
             <RText
               color={hexToRGBA(currentTheme.colors.text, 0.8)}
-              style={{ fontWeight: 'bold' }}
+              style={{ fontWeight: 'bold', lineHeight: 'normal' }}
             >
               {formatNumber(formattedWeight)}
               {weightUnit}
@@ -95,7 +95,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({
 
             <RText
               color={hexToRGBA(currentTheme.colors.text, 0.8)}
-              style={{ fontWeight: 'bold' }}
+              style={{ fontWeight: 'bold', lineHeight: 'normal' }}
             >
               Qty: {item.quantity}
             </RText>
@@ -113,7 +113,7 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({
               />
               <RText
                 color={hexToRGBA(currentTheme.colors.text, 0.8)}
-                style={{ fontWeight: 'bold' }}
+                style={{ fontWeight: 'bold', lineHeight: 'normal' }}
               >
                 {new Date(item.createdAt).toLocaleString('en-US', {
                   month: 'short',
@@ -231,9 +231,6 @@ const FeedPreviewCard: React.FC<FeedPreviewCardProps> = ({
               Ttl Score: {item.total_score}
             </RText>
           </RStack>
-          {/* <RText style={{ color: styles.feedItemType.color }}>
-            {item.description}
-          </RText> */}
         </View>
       </View>
     </RLink>

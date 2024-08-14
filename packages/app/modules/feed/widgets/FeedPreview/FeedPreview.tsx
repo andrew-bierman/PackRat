@@ -1,5 +1,5 @@
 import React from 'react';
-import Carousel from '../carousel';
+import Carousel from 'app/components/carousel';
 import { useFeed } from 'app/hooks/feed';
 import { default as FeedPreviewCard, type FeedItem } from './FeedPreviewCard';
 import Loader from 'app/components/Loader';
@@ -33,10 +33,9 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   );
 };
 
-const FeedPreview: React.FC<{ feedType: string; id?: string }> = ({
+export const FeedPreview: React.FC<{ feedType: string; id?: string }> = ({
   feedType,
   id,
 }) => {
   return <FeedPreviewScroll itemWidth={200} feedType={feedType} id={id} />;
 };
-export default FeedPreview;

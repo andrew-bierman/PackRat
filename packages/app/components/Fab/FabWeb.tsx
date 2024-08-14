@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import QuickActionsSection from '../../components/dashboard/QuickActionSection';
+import { QuickActionsSection } from 'app//modules/dashboard';
 
 const FABWeb = ({ showQuickActions, toggleQuickActions }) => {
   const styles = useCustomStyles(loadStyles);

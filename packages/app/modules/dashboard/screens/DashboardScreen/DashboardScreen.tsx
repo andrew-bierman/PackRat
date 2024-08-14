@@ -1,17 +1,15 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
 import { RStack, RScrollView } from '@packrat/ui';
-import HeroBanner from '../../components/dashboard/HeroBanner';
-import Section from '../../components/dashboard/Section';
-import SectionHeader from '../../components/dashboard/SectionHeader';
+import { HeroSection, Section, SectionHeader } from '../../components';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Layout from 'app/components/layout/Layout';
 import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 import { useScreenWidth } from 'app/hooks/common';
-import FAB from '../../components/Fab/Fab';
-import FeedPreview from '../../components/feedPreview';
+import FAB from 'app/components/Fab/Fab';
+import { FeedPreview } from 'app/modules/feed';
 
-const Dashboard = () => {
+export const DashboardScreen = () => {
   const styles = useCustomStyles(loadStyles);
 
   return (
@@ -23,7 +21,7 @@ const Dashboard = () => {
             Platform.OS === 'web' ? { minHeight: '100vh' } : null,
           ]}
         >
-          <HeroBanner style={styles.heroBanner} />
+          <HeroSection style={styles.heroBanner} />
           {Platform.OS === 'web' ? <FAB /> : null}
 
           <View style={styles.gridContainer}>
@@ -34,7 +32,7 @@ const Dashboard = () => {
                   text="Feed"
                   textStyle={styles.sectionHeaderText}
                 />
-                <FeedPreview />
+                <FeedPreview feedType="public" />
               </Section>
             </View>
           </View>
@@ -83,5 +81,3 @@ const loadStyles = (theme) => {
     },
   };
 };
-
-export default Dashboard;

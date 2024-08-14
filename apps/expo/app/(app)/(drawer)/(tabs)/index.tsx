@@ -3,7 +3,7 @@ import { Platform, StyleSheet, View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { darkTheme, theme } from 'app/theme';
 import LandingPage from 'app/components/landing_page';
-import Dashboard from 'app/screens/dashboard';
+import { DashboardScreen } from 'app/modules/dashboard';
 import useTheme from 'app/hooks/useTheme';
 import { useAuthUser } from 'app/auth/hooks';
 import { current } from '@reduxjs/toolkit';
@@ -38,7 +38,9 @@ export default function HomeScreen() {
           title: 'Home',
         }}
       />
-      <View style={mutualStyles}>{!user ? <Login /> : <Dashboard />}</View>
+      <View style={mutualStyles}>
+        {!user ? <Login /> : <DashboardScreen />}
+      </View>
     </>
   );
 }

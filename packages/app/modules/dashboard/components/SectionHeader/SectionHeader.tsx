@@ -1,8 +1,8 @@
 import React from 'react';
 import { RText, RStack, RButton } from '@packrat/ui';
-import { Ionicons } from '@expo/vector-icons';
+import { type Ionicons } from '@expo/vector-icons';
 import { useNavigate } from 'app/hooks/navigation';
-import { theme } from '../../theme';
+import { theme } from 'app/theme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface SectionHeaderProps {
@@ -11,7 +11,11 @@ interface SectionHeaderProps {
   textStyle: any;
 }
 
-const SectionHeader = ({ iconName, text, textStyle }: SectionHeaderProps) => {
+export const SectionHeader = ({
+  iconName,
+  text,
+  textStyle,
+}: SectionHeaderProps) => {
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
 
@@ -19,7 +23,7 @@ const SectionHeader = ({ iconName, text, textStyle }: SectionHeaderProps) => {
     <RStack style={styles.rStack}>
       <RText style={styles.text}>{text}</RText>
       <RButton style={styles.rbutton} onPress={() => navigate('/feed')}>
-        View all feeds
+        0 View all feeds
       </RButton>
     </RStack>
   );
@@ -51,5 +55,3 @@ const loadStyles = (theme: any) => {
     },
   };
 };
-
-export default SectionHeader;

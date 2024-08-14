@@ -9,7 +9,7 @@ interface QuickActionButtonProps {
   text: string;
 }
 
-const QuickActionButton = ({
+export const QuickActionButton = ({
   onPress,
   iconName,
   text,
@@ -46,5 +46,3 @@ const loadStyles = (theme: any) => {
     },
   };
 };
-
-export default QuickActionButton;

@@ -20,7 +20,7 @@ import {
 import useResponsive from 'app/hooks/useResponsive';
 import { CustomCard } from 'app/components/card';
 import LargeCard from 'app/components/card/LargeCard';
-import FeedPreview from 'app/components/feedPreview';
+import { FeedPreview } from 'app/modules/feed';
 
 export default function ItemDetails() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();

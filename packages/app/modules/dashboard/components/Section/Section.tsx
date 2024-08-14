@@ -8,7 +8,7 @@ interface SectionProps {
   children: React.ReactNode;
   onPress?: (event: GestureResponderEvent) => void;
 }
-const Section: React.FC<SectionProps> = ({ children, onPress }) => {
+export const Section: React.FC<SectionProps> = ({ children, onPress }) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.section}>
@@ -34,4 +34,3 @@ const loadStyles = (theme: any) => {
     },
   };
 };
-export default Section;

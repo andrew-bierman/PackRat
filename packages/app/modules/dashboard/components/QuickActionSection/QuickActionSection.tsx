@@ -1,10 +1,10 @@
 import React from 'react';
 import { RStack } from '@packrat/ui';
-import QuickActionButton from './QuickActionButton';
+import { QuickActionButton } from '../QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/hooks/dashboard';
 
-const QuickActionsSection = () => {
+export const QuickActionsSection = () => {
   const styles = useCustomStyles(loadStyles);
   const { handleActionSelect, quickActionData } = useQuickActions();
 
@@ -31,5 +31,3 @@ const loadStyles = (theme: any) => {
     },
   };
 };
-
-export default QuickActionsSection;

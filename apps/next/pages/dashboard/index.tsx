@@ -1,4 +1,4 @@
-import Dashboard from 'app/screens/dashboard';
+import { DashboardScreen } from 'app/modules/dashboard';
 
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 
@@ -7,7 +7,7 @@ import { AuthWrapper } from 'app/auth/AuthWrapper';
 export default function DashboardPage() {
   return (
     <>
-      <Dashboard />
+      <DashboardScreen />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from 'app/screens/dashboard';
+import { DashboardScreen } from 'app/modules/dashboard/screens';
 
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { createLazyFileRoute } from '@tanstack/react-router';
@@ -11,7 +11,7 @@ export const Route = createLazyFileRoute('/dashboard/')({
 export default function DashboardPage() {
   return (
     <AuthWrapper>
-      <Dashboard />
+      <DashboardScreen />
     </AuthWrapper>
   );
 }
