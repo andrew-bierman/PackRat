@@ -180,7 +180,7 @@ const LandingPage = () => {
                             fontWeight: 'bold',
                           }}
                         >
-                          Get it on
+                          Get it on the
                         </RText>
                         <RText
                           style={{

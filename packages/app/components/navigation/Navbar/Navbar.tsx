@@ -190,7 +190,7 @@ const loadStyles = (
     logo: {
       cursor: 'pointer',
       backgroundColor: 'transparent',
-      filter: 'drop-shadow(0 0 1px blue)',
+      filter: 'drop-shadow(0 0 1px #45607d)',
     },
     menuBar: {
       color: "#315173",

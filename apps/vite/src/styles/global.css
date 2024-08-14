@@ -1,5 +1,6 @@
 body {
-  background-color: #f6f6f6 !important;
+  background: hsla(0, 0%, 96%, 1) !important;
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 );
 }
 
 *:focus {
