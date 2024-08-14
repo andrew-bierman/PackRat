@@ -30,4 +30,5 @@ jobs:
           expo-token: ${{ secrets.EXPO_TOKEN }}
         
       - name: Build on EAS
+        working-directory: ./apps/expo
         run: eas build --platform all --profile production --non-interactive
