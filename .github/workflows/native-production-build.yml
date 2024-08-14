@@ -31,4 +31,4 @@ jobs:
         
       - name: Build on EAS
         working-directory: ./apps/expo
-        run: eas build --platform all --profile production --non-interactive
+        run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
