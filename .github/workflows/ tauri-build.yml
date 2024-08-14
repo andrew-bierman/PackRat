@@ -16,11 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest' # for Arm based Macs (M1 and above).
+          - platform: 'macos-latest'
+            arch: 'arm64'
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel based Macs.
+          - platform: 'macos-latest'
+            arch: 'x64'
             args: '--target x86_64-apple-darwin'
-          - platform: 'ubuntu-22.04' # Tauri v1 users can replace this with ubuntu-20.04.
+          - platform: 'ubuntu-22.04'
             args: ''
           - platform: 'windows-latest'
             args: ''
@@ -49,9 +51,10 @@ jobs:
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        with:
-          # These targets are used only on macOS runners.
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Add macOS-specific Rust targets
+        if: matrix.platform == 'macos-latest'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
       - name: Install dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
@@ -67,8 +70,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: app-v__VERSION__ # The action automatically replaces __VERSION__ with the app version.
-          releaseName: 'App v__VERSION__'
+          tagName: Packrat-1.0.0
+          releaseName: 'Packrat'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: false
