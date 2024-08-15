@@ -29,11 +29,11 @@ interface SelectedType {
 }
 
 const options = [
-  { label: 'Rei', value: 'rei', key: 'Rei' },
-  { label: 'Sierra', value: 'sierra', key: 'Sierra' },
-  { label: 'Cabelas', value: 'cabelas', key: 'Cabelas' },
-  { label: 'Moosejaw', value: 'moosejaw', key: 'Moosejaw' },
-  { label: 'Backcountry', value: 'backcountry', key: 'Backcountry' },
+  { label: 'bucket 1', value: 'bucket 1', key: 'bucket 1' },
+  { label: 'bucket 2', value: 'bucket 2', key: 'bucket 1' },
+  { label: 'bucket 3', value: 'bucket 3', key: 'bucket 1' },
+  { label: 'bucket 4', value: 'bucket 4', key: 'bucket 1' },
+  { label: 'bucket 5', value: 'bucket 5', key: 'bucket 1' },
 ];
 
 const csvOption = [{ label: 'CSV', value: '.csv', key: '.csv' }];
@@ -79,7 +79,9 @@ export const ImportForm: FC<ImportFormProps> = ({
   }, [isImporting]);
 
   const handleSelectChange = (selectedValue: string) => {
-    const newValue = data.find((item) => item.value === selectedValue);
+    const newValue = [...csvOption, ...options].find(
+      (item) => item.value === selectedValue,
+    );
     if (newValue) setSelectedType(newValue);
   };
 

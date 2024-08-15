@@ -4,10 +4,10 @@ import Papa from 'papaparse';
 
 interface CSVType {
   name: string;
-  claimed_weight: number;
+  weight: number;
   quantity: number;
-  claimed_weight_unit: string;
-  type: string;
+  unit: string;
+  type: 'Essentials' | 'Food' | 'Water';
   ownerId: string;
 }
 
@@ -129,6 +129,17 @@ export async function listBucketContents(
     x_amz_token,
   );
 
+  const bucketOptions = [
+    { label: 'bucket 1', value: 'rei' },
+    { label: 'bucket 2', value: 'sierra' },
+    { label: 'bucket 3', value: 'cabelas' },
+    { label: 'bucket 4', value: 'moosejaw' },
+    { label: 'bucket 5', value: 'backcountry' },
+  ];
+
+  directory =
+    bucketOptions.find((item) => item.label === directory)?.value || '';
+
   const parsedListData = await parseStringPromise(listData);
   const contents = parsedListData.ListBucketResult.Contents;
 
@@ -141,7 +152,7 @@ export async function listBucketContents(
 
 export async function parseCSVData(fileData: string, ownerId: string) {
   return new Promise<CSVType[]>((resolve, reject) => {
-    const itemsToInsert: CSVType[] = [];
+    const itemsToInsert = [];
 
     Papa.parse(fileData, {
       header: true,
@@ -157,9 +168,9 @@ export async function parseCSVData(fileData: string, ownerId: string) {
 
             itemsToInsert.push({
               name: item.name,
-              claimed_weight: item.claimed_weight || 0,
+              weight: item.claimed_weight || 0,
               quantity: item.quantity || 1,
-              claimed_weight_unit: item.claimed_weight_unit || 'g',
+              unit: item.claimed_weight_unit || 'g',
               type: 'Essentials',
               ownerId,
             });
