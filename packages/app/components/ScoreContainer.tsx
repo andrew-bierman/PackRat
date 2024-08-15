@@ -238,7 +238,7 @@ const loadStyles = (theme: any) => {
       paddingHorizontal: 25,
       marginVertical: 15,
       padding: 26,
-      marginTop:25,
+      marginTop: 25,
       // borderColor: currentTheme.colors.border,
       // borderWidth: 2,
       borderColor: currentTheme.colors.border,
@@ -258,7 +258,6 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       alignItems: 'flex-start',
       width: '60%',
-      
     },
     vStackXS: {
       justifyContent: 'center',
@@ -280,7 +279,7 @@ const loadStyles = (theme: any) => {
     },
     buttonText: {
       color: currentTheme.colors.white,
-      fontSize: '1rem',
+      fontSize: 16,
       fontWeight: '500',
     },
     container: {
