@@ -1,8 +1,8 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 
-export const useSimilarItems = (id: string) => {
+export const useSimilarPacks = (id: string) => {
   const { data, error, isLoading, refetch } =
-    queryTrpc.getSimilarItems.useQuery(
+    queryTrpc.getSimilarPacks.useQuery(
       { id, limit: 10 },
       {
         refetchOnWindowFocus: true,

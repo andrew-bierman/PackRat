@@ -10,7 +10,7 @@ import { View } from 'react-native';
 import { useAuthUser } from 'app/auth/hooks';
 import DataList from './UserDetailList';
 import Layout from 'app/components/layout/Layout';
-import { SearchProvider } from 'app/components/feed/SearchProvider';
+import { SearchProvider } from 'app/modules/feed';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {

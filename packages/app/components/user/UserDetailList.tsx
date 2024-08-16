@@ -1,7 +1,6 @@
 import React, { useRef, useMemo, useState } from 'react';
 import { View, FlatList, Platform } from 'react-native';
-import Card from '../../components/feed/FeedCard';
-import SearchFilter from '../../components/feed/FeedSearchFilter';
+import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from '../../utils/fuseSearch';
 import { BaseDialog as OriginalBaseDialog, BaseModal } from '@packrat/ui';
 // import BottomSheet from '@gorhom/bottom-sheet';
@@ -55,7 +54,7 @@ const DataList = ({ data }: DataListProps) => {
           footerComponent={undefined}
         >
           <View style={{ width: 'auto%', paddingBottom: 10 } as any}>
-            <SearchFilter
+            <FeedSearchFilter
               isSortHidden={true}
               queryString={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -65,7 +64,7 @@ const DataList = ({ data }: DataListProps) => {
               horizontal={false}
               keyExtractor={(item) => item?.id}
               renderItem={({ item }) => (
-                <Card key={item?._id} type={item?.type} {...item} />
+                <FeedCard key={item?._id} type={item?.type} {...item} />
               )}
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}
@@ -86,7 +85,7 @@ const DataList = ({ data }: DataListProps) => {
             ]}
             footerComponent={undefined}
           >
-            <SearchFilter
+            <FeedSearchFilter
               isSortHidden={true}
               queryString={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -97,7 +96,7 @@ const DataList = ({ data }: DataListProps) => {
               horizontal={false}
               keyExtractor={(item) => item?._id}
               renderItem={({ item }) => (
-                <Card key={item?._id} type={item?.type} {...item} />
+                <FeedCard key={item?._id} type={item?.type} {...item} />
               )}
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}

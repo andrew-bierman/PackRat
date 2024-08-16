@@ -1,17 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
-import useTheme from '../../hooks/useTheme';
+import useTheme from 'app/hooks/useTheme';
 import { TouchableOpacity } from 'react-native';
-import { DuplicateIcon } from '../DuplicateIcon/index';
-import { truncateString } from '../../utils/truncateString';
-import {
-  RLink,
-  RText as OriginalRText,
-  RStack,
-  RHeading,
-  ContextMenu,
-} from '@packrat/ui';
+import { DuplicateIcon } from 'app/assets/icons';
+import { truncateString } from 'app/utils/truncateString';
+import { RLink, RText as OriginalRText, ContextMenu } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/auth/hooks';
@@ -49,7 +43,7 @@ interface User {
   id: string;
 }
 
-export default function FeedCard({
+export function FeedCard({
   type,
   id,
   owner,
@@ -101,14 +95,14 @@ export default function FeedCard({
 
   return (
     <Layout>
-      <XStack flexWrap="wrap" space="$4" padding="$4">
+      <XStack flexWrap="wrap" space="$4" padding="$4" style={{ width: '100%' }}>
         <Card
           elevate
           size="$4"
           backgroundColor={currentTheme.colors.card}
           borderWidth={0} // Remove border
           padding="$4"
-          width={250}
+          width="100%"
           height={300}
         >
           <ContextMenu.Root>

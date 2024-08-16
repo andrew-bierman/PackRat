@@ -1,5 +1,5 @@
 import React from 'react';
-import Feed from 'app/screens/feed/Feed';
+import { FeedScreen } from 'app/modules/feed';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -37,7 +37,7 @@ export default function Packs() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Feed feedType="userPacks" />
+      <FeedScreen feedType="userPacks" />
     </>
   );
 }

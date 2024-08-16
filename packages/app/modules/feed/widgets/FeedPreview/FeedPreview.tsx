@@ -1,6 +1,6 @@
 import React from 'react';
 import Carousel from 'app/components/carousel';
-import { useFeed } from 'app/hooks/feed';
+import { useFeed } from '../../hooks';
 import { default as FeedPreviewCard, type FeedItem } from './FeedPreviewCard';
 import Loader from 'app/components/Loader';
 

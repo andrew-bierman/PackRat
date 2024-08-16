@@ -1,8 +1,7 @@
-import { usePublicFeed } from './publicFeed';
-import { useUserPacks } from './../packs';
-import { useUserTrips } from '../singletrips';
-import { useSimilarPacks } from 'app/hooks/packs';
-import { useSimilarItems } from 'app/hooks/items';
+import { usePublicFeed } from './usePublicFeed';
+import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
+import { useUserTrips } from 'app/modules/trip';
+import { useSimilarItems } from 'app/modules/item';
 
 export const useFeed = ({
   queryString = 'Most Recent',

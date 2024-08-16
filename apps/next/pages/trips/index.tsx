@@ -1,4 +1,4 @@
-import Feed from 'app/screens/feed/Feed';
+import { FeedScreen } from 'app/modules/feed';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 
 // export const runtime = 'experimental-edge'
@@ -6,7 +6,7 @@ import { AuthWrapper } from 'app/auth/AuthWrapper';
 export default function FeedNav() {
   return (
     <>
-      <Feed feedType="userTrips" />
+      <FeedScreen feedType="userTrips" />
     </>
   );
 }

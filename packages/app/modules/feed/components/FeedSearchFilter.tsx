@@ -1,23 +1,17 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
-import useTheme from '../../hooks/useTheme';
+import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Switch } from 'tamagui';
 import { View } from 'react-native';
-import { SearchContext } from './SearchProvider';
 import {
-  RIconButton,
-  RSwitch,
   RText as OriginalRText,
   RStack as OriginalRStack,
   RSeparator as OriginalRSeparator,
   RButton,
   Form,
-  FormInput,
   InputWithIcon,
   DropdownComponent,
 } from '@packrat/ui';
 import { Search, X } from '@tamagui/lucide-icons';
-import Layout from 'app/components/layout/Layout';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -46,7 +40,7 @@ interface FeedSearchFilterProps {
   onChange?: (value: string) => void;
 }
 
-const FeedSearchFilter = ({
+export const FeedSearchFilter = ({
   feedType,
   isSortHidden,
   handleSortChange,
@@ -253,5 +247,3 @@ const loadStyles = (theme: any) => {
     },
   };
 };
-
-export default FeedSearchFilter;

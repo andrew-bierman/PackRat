@@ -1,5 +1,5 @@
 import React from 'react';
-import Feed from 'app/screens/feed/Feed';
+import { FeedScreen } from 'app/modules/feed';
 import { AuthWrapper } from 'app/auth/AuthWrapper';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/packs/')({
 function Packs() {
   return (
     <AuthWrapper>
-      <Feed feedType="userPacks" />
+      <FeedScreen feedType="userPacks" />
     </AuthWrapper>
   );
 }

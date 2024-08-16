@@ -1,16 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { FlatList, View, Platform } from 'react-native';
-import FeedCard from '../../components/feed/FeedCard';
+import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
 import { useRouter } from 'app/hooks/router';
-import { fuseSearch } from '../../utils/fuseSearch';
+import { fuseSearch } from 'app/utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import FeedSearchFilter from 'app/components/feed/FeedSearchFilter';
-import { useFeed } from 'app/hooks/feed';
+import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/auth/hooks';
-import { disableScreen } from '../../hoc/disableScreen';
-import { SearchProvider } from 'app/components/feed/SearchProvider';
+import { disableScreen } from 'app/hoc/disableScreen';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -104,46 +102,6 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
    *
    * @return {ReactNode} The rendered feed data.
    */
-  const renderData = () => {
-    return (
-      <View style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}>
-        <FeedSearchFilter
-          feedType={feedType}
-          handleSortChange={handleSortChange}
-          handleTogglePack={handleTogglePack}
-          handleToggleTrip={handleToggleTrip}
-          selectedTypes={selectedTypes}
-          queryString={queryString}
-          setSearchQuery={setSearchQuery}
-          handleCreateClick={handleCreateClick}
-        />
-        <FlatList
-          data={filteredData}
-          horizontal={false}
-          keyExtractor={(item) => item?.id + item?.type}
-          renderItem={({ item }) => (
-            <FeedCard
-              key={item?.id}
-              type={item?.type}
-              favorited_by={item?.userFavoritePacks}
-              {...item}
-            />
-          )}
-          ListFooterComponent={() => <View style={{ height: 50 }} />}
-          ListEmptyComponent={() => (
-            <RText style={{ textAlign: 'center', marginTop: 20 }}>
-              {ERROR_MESSAGES[feedType]}
-            </RText>
-          )}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          maxToRenderPerBatch={2}
-        />
-      </View>
-    );
-  };
 
   const handleTogglePack = () => {
     setSelectedTypes((prevState) => ({
@@ -174,7 +132,46 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
 
   return (
     <View style={styles.mainContainer}>
-      <SearchProvider>{renderData()}</SearchProvider>
+      <SearchProvider>
+        <View
+          style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}
+        >
+          <FeedSearchFilter
+            feedType={feedType}
+            handleSortChange={handleSortChange}
+            handleTogglePack={handleTogglePack}
+            handleToggleTrip={handleToggleTrip}
+            selectedTypes={selectedTypes}
+            queryString={queryString}
+            setSearchQuery={setSearchQuery}
+            handleCreateClick={handleCreateClick}
+          />
+          <FlatList
+            data={filteredData}
+            horizontal={false}
+            keyExtractor={(item) => item?.id + item?.type}
+            renderItem={({ item }) => (
+              <FeedCard
+                key={item?.id}
+                type={item?.type}
+                favorited_by={item?.userFavoritePacks}
+                {...item}
+              />
+            )}
+            ListFooterComponent={() => <View style={{ height: 50 }} />}
+            ListEmptyComponent={() => (
+              <RText style={{ textAlign: 'center', marginTop: 20 }}>
+                {ERROR_MESSAGES[feedType]}
+              </RText>
+            )}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            maxToRenderPerBatch={2}
+          />
+        </View>
+      </SearchProvider>
     </View>
   );
 };

@@ -1,0 +1,1 @@
+export { useSimilarItems } from './hooks';
