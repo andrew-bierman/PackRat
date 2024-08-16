@@ -1,15 +1,23 @@
 {
-  "productName": "Packrat",
-  "version": "1.0.0",
-  "identifier": "com.andrewbierman.packrat",
-
-  "build": {
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:4200",
-    "beforeDevCommand": "yarn dev",
-    "beforeBuildCommand": "yarn run build"
+  "package": {
+    "productName": "Packrat",
+    "version": "1.0.0",
+    "identifier": "com.andrewbierman.packrat"
   },
-  "app": {
+  "build": {
+    "distDir": "../dist",
+    "devPath": "http://localhost:4200",
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn run build",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "tauri": {
     "windows": [
       {
         "title": "Packrat",
@@ -19,20 +27,12 @@
         "fullscreen": false
       }
     ],
-
     "security": {
       "csp": null
+    },
+    "bundle": {
+      "active": true,
+      "targets": ["all"]
     }
-  },
-  "bundle": {
-    "active": true,
-    "targets": "all",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
   }
 }
