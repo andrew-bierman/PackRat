@@ -1,6 +1,7 @@
 name: EAS Local Build
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "**" ]
     paths:
