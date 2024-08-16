@@ -4,8 +4,8 @@
     "version": "1.0.0"
   },
   "build": {
-    "distDir": "../dist",
-    "devPath": "http://localhost:4200",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:4200",
     "beforeDevCommand": "yarn dev",
     "beforeBuildCommand": "yarn run build"
   },
