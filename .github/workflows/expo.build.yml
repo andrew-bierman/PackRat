@@ -3,8 +3,22 @@ name: EAS Local Build
 on:
   push:
     branches: [ "**" ]
+    paths:
+      - 'packages/app/**'
+      - 'apps/expo/**'
+      - 'packages/ui/**'
+      - 'packages/shared-types/**'
+      - 'packages/config/**'
+      - 'packages/crosspath/**'
   pull_request:
     branches: [ "**" ]
+    paths:
+      - 'packages/app/**'
+      - 'apps/expo/**'
+      - 'packages/ui/**'
+      - 'packages/shared-types/**'
+      - 'packages/config/**'
+      - 'packages/crosspath/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
