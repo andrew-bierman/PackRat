@@ -1,4 +1,6 @@
-name: EAS Build
+# Native production pipeline 
+# Builds on EAS Cloud with auto submission
+name: EAS Build & Submit
 
 on:
   workflow_dispatch: 
