@@ -1,7 +1,8 @@
 {
-  "productName": "Packrat",
-  "version": "1.0.0",
-
+  "package": {
+    "productName": "Packrat",
+    "version": "1.0.0"
+  },
   "build": {
     "distDir": "../dist",
     "devPath": "http://localhost:4200",
