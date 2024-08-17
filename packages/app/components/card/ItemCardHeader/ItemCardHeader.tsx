@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { RStack, RIconButton, DropdownComponent, RText } from '@packrat/ui';
 import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
 import { useItemTitleInput } from './useItemTitleInput';

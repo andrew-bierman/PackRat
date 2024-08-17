@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { RStack, RScrollView } from '@packrat/ui';
-import useTheme from '../hooks/useTheme';
-import { useGoogleAuth, useLogin } from 'app/auth/hooks';
+import useTheme from '../../../hooks/useTheme';
+import { useGoogleAuth, useLogin } from 'app/modules/auth';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 
 const demoUser = {
@@ -10,7 +8,7 @@ const demoUser = {
   password: '12345678',
 };
 
-export default function Login() {
+export function LoginScreen() {
   const { enableGoogleLogin, isGoogleSignInReady, promptAsync } =
     useGoogleAuth();
 

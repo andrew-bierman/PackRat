@@ -8,7 +8,7 @@ import { truncateString } from 'app/utils/truncateString';
 import { RLink, RText as OriginalRText, ContextMenu } from '@packrat/ui';
 import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite } from 'app/hooks/favorites';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useRouter } from 'app/hooks/router';
 import { useItemWeightUnit } from 'app/hooks/items';
 import { convertWeight } from 'app/utils/convertWeight';

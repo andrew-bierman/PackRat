@@ -1,4 +1,4 @@
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { queryTrpc } from '../../trpc';
 
 export const useFetchSinglePack = (packId) => {

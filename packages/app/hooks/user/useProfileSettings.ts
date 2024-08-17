@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useUpdateUser } from './useUpdateUser';
-import { useAuthUser, useUserQuery } from '../../auth/hooks';
+import { useUserQuery } from 'app/modules/auth';
 import { useUpdateUserPassword } from './useUpdateUserPassword';
 
 const PROFILE_SETTINGS_DEFAULTS = {

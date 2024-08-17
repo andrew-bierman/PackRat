@@ -1,6 +1,6 @@
 import React from 'react';
 import { PackDetails } from 'app/components/pack/PackDetails';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 

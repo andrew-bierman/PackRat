@@ -1,5 +1,5 @@
 import { queryTrpc } from '../../trpc';
-import { useAuthUser } from '../../auth/hooks/useUser';
+import { useAuthUser } from 'app/modules/auth';
 import { logoutAuthUser } from 'app/utils/userUtils';
 
 export const useDeleteProfile = () => {

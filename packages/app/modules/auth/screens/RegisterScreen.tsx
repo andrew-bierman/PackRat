@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 import { RScrollView } from '@packrat/ui';
-import useTheme from '../hooks/useTheme';
-import { useRegisterUser, useGoogleAuth } from 'app/auth/hooks';
+import useTheme from 'app/hooks/useTheme';
+import { useRegisterUser, useGoogleAuth } from 'app/modules/auth';
 import { SignUpScreen } from '@packrat/ui/src/Bento/forms/layouts';
 import { useState } from 'react';
 
-export default function Register() {
+export function RegisterScreen() {
   const { currentTheme } = useTheme();
   const { promptAsync, isGoogleSignInReady } = useGoogleAuth();
 

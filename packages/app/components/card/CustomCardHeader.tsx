@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
 import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import useTheme from '../../hooks/useTheme';
 import { CopyPackModal } from 'app/components/pack/CopyPackModal';
 

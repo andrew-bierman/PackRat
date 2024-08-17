@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useItems } from 'app/hooks/items';
 import { queryTrpc } from 'app/trpc';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useFetchSinglePack, usePackId } from 'app/hooks/packs';
 
 export const useSearchItem = () => {

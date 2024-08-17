@@ -2,7 +2,7 @@ import { useFetchUserFavorites } from '../favorites';
 import { useUserPacks } from '../packs';
 import { useUserTrips } from '../singletrips';
 import { useMatchesCurrentUser } from '../useMatchesCurrentUser';
-import { useAuthUser } from '../../auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {

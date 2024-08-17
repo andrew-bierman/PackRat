@@ -9,7 +9,7 @@ import {
   type Item,
 } from '@packrat/validations';
 import { useMemo } from 'react';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 interface AddItemProps {
   id?: string;

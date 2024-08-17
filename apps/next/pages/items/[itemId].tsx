@@ -1,6 +1,6 @@
 import React from 'react';
 import ItemDetails from 'app/screens/items/item-details';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 

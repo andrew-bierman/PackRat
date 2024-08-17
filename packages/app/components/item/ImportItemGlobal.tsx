@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { useModal } from '@packrat/ui';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { ImportForm } from './ImportForm';
 
 export const ImportItemGlobal = () => {

@@ -8,7 +8,7 @@ import { api } from 'app/constants/api';
 import { RButton, RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Map } from 'app/components/map';
-import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
+import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
 import { disableScreen } from 'app/hoc/disableScreen';
 

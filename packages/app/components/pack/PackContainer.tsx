@@ -5,7 +5,7 @@ import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import { View } from 'react-native';
 import { AddItemModal } from './AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { usePackId } from 'app/hooks/packs';
 import { createParam } from '@packrat/crosspath';
 import { DropdownComponent } from '@packrat/ui';

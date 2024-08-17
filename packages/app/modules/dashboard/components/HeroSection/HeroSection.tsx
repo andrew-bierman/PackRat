@@ -3,7 +3,7 @@ import { RStack, RText as OriginalRText, RButton } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Platform, View } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
 import useCustomStyles from 'app/hooks/useCustomStyles';

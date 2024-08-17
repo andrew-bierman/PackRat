@@ -38,7 +38,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 import { MapProps } from './models';
-import { useUserQuery } from 'app/auth/hooks';
+import { useUserQuery } from 'app/modules/auth';
 import { useUpdateUser } from 'app/hooks/user/useUpdateUser';
 
 interface GeoJsonProperties {

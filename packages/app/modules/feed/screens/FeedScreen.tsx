@@ -7,7 +7,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { disableScreen } from 'app/hoc/disableScreen';
 
 const URL_PATHS = {

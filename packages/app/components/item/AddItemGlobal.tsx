@@ -8,7 +8,7 @@ import {
   addItemGlobal as addItemSchema,
   type Item,
 } from '@packrat/validations';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 export const AddItemGlobal = () => {
   const { limit, page } = usePagination();

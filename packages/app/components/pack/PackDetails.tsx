@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { CLIENT_URL } from '@packrat/config';
 import { RH3, RText } from '@packrat/ui';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import { usePackId } from 'app/hooks/packs/usePackId';

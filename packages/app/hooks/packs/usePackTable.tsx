@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useDuplicatePackItem } from './useDuplicatePackItem';
 import { useItemWeightUnit } from 'app/hooks/items';
 

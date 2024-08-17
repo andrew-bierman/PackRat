@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 

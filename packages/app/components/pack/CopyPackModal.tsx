@@ -1,5 +1,5 @@
 import { BaseModal, RButton, RInput } from '@packrat/ui';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { useRouter } from 'app/hooks/router';
 import { useAddNewPack, usePackId } from 'app/hooks/packs';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';

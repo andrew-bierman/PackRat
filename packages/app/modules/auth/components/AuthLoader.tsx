@@ -1,4 +1,4 @@
-import { useUserQuery } from './hooks';
+import { useUserQuery } from '../hooks';
 
 export const AuthLoader = ({
   children,

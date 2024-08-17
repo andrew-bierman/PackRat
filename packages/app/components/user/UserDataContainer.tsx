@@ -7,7 +7,7 @@ import LargeCard from '../card/LargeCard';
 import useTheme from '../../hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View } from 'react-native';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import DataList from './UserDetailList';
 import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';

@@ -6,7 +6,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
-import { useAuthUser } from 'app/auth/hooks/useUser';
+import { useAuthUser } from 'app/modules/auth';
 
 interface CustomCardProps {
   title: string;

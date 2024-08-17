@@ -1,5 +1,5 @@
 import React from 'react';
-import { AuthLoader } from 'app/auth/AuthLoader';
+import { AuthLoader } from './AuthLoader';
 import { Redirect } from 'app/components/Redirect';
 import { RSpinner, RText } from '@packrat/ui';
 import { Platform, View } from 'react-native';

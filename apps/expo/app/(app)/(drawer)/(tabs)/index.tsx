@@ -1,14 +1,11 @@
 import React from 'react';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Stack } from 'expo-router';
-import { darkTheme, theme } from 'app/theme';
-import LandingPage from 'app/components/landing_page';
+import { theme } from 'app/theme';
 import { DashboardScreen } from 'app/modules/dashboard';
 import useTheme from 'app/hooks/useTheme';
-import { useAuthUser } from 'app/auth/hooks';
-import { current } from '@reduxjs/toolkit';
+import { useAuthUser, LoginScreen } from 'app/modules/auth';
 import Head from 'expo-router/head';
-import Login from 'app/screens/LoginScreen';
 
 export default function HomeScreen() {
   const {
@@ -39,7 +36,7 @@ export default function HomeScreen() {
         }}
       />
       <View style={mutualStyles}>
-        {!user ? <Login /> : <DashboardScreen />}
+        {!user ? <LoginScreen /> : <DashboardScreen />}
       </View>
     </>
   );

@@ -1,4 +1,4 @@
-import { useUserSetter } from 'app/auth/hooks';
+import { useUserSetter } from 'app/modules/auth';
 import { queryTrpc } from 'app/trpc';
 
 export const useUpdateUser = () => {

@@ -1,5 +1,5 @@
 // useMatchesCurrentUser.ts
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 export const useMatchesCurrentUser = (ownerId: string): boolean => {
   const currentUser = useAuthUser();

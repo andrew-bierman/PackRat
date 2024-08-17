@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { ImportForm } from './ImportForm';
 import { type Item } from '@packrat/validations';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 interface ImportItemProps {
   packId: string;

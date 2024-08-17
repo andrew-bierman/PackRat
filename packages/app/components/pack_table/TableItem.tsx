@@ -9,7 +9,7 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from '../item/AddItem';
 import loadStyles from './packtable.style';
 import { RText, ZDropdown } from '@packrat/ui';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 type ModalName = 'edit' | 'delete' | null;
 
@@ -25,9 +25,9 @@ interface TableItemProps {
   setRefetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface DropDownItems{
-  label: string,
-  onSelect: () => void,
+interface DropDownItems {
+  label: string;
+  onSelect: () => void;
 }
 
 const TableItem = ({
