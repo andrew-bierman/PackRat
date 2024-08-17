@@ -10,6 +10,7 @@ import { usePagination } from 'app/hooks/common';
 import {
   BaseModal,
   DropdownComponent,
+  RH3,
   RImage,
   RScrollView,
   RStack,
@@ -18,16 +19,20 @@ import {
 } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import { CustomCard } from 'app/components/card';
+import LargeCard from 'app/components/card/LargeCard';
+import FeedPreview from 'app/components/feedPreview';
 
 export default function ItemDetails() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const [itemId] = useItemId();
   const { data: item, isError } = useItem(itemId);
   const styles = useCustomStyles(loadStyles);
+  const { currentTheme } = useTheme();
+
   console.log({ item, itemId });
 
   return (
-    <RScrollView>
+    <RScrollView style={{ marginBottom: 50 }}>
       <RStack style={styles.mainContainer}>
         {!isError && item && (
           <View style={{ padding: 10, width: '100%' }}>
@@ -55,6 +60,26 @@ export default function ItemDetails() {
               }
               type="item"
             />
+            <LargeCard
+              customStyle={{
+                width: '80%',
+                backgroundColor: currentTheme.colors.secondaryBlue,
+                paddingBottom: 24,
+                paddingTop: 0,
+              }}
+            >
+              <RH3
+                style={{
+                  color: currentTheme.colors.text,
+                  fontSize: 24,
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                }}
+              >
+                Similar Items
+              </RH3>
+              <FeedPreview feedType="similarItems" id={itemId} />
+            </LargeCard>
           </View>
         )}
       </RStack>
