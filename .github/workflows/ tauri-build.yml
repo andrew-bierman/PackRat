@@ -3,6 +3,8 @@ name: tauri-build
 on:
   push:
     branches: ['**']
+  pull_request:
+    branches: ['**']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -114,7 +116,7 @@ jobs:
           script: |
             const commentIdentifier = '<!-- build_results -->';
             const commentId = '${{ steps.find_or_create_comment.outputs.comment_id }}';
-            const buildOutcome = '${{ steps.publish-tauri.outcome }}';
+            const buildOutcome = '${{ job.status }}';
             const buildStatus = buildOutcome == 'success' ? 'completed' : 'failed';
             const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
