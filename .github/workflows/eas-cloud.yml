@@ -1,0 +1,36 @@
+# Native production pipeline 
+# Builds on EAS Cloud with auto submission
+name: EAS Build & Submit
+
+on:
+  workflow_dispatch: 
+  push:
+    branches: 
+      - main
+    paths:
+      - 'packages/app/**'
+      - 'apps/expo/**'
+      - 'packages/ui/**'
+      - 'packages/shared-types/**'
+      - 'packages/config/**'
+      - 'packages/crosspath/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup EAS
+        uses: ./.github/actions/setup-eas
+        with:
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+        
+      - name: Build on EAS
+        working-directory: ./apps/expo
+        run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
