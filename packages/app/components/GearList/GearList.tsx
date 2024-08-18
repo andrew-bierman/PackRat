@@ -1,7 +1,7 @@
 import React from 'react';
 import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { AddPackContainer } from '../../modules/pack/screens/AddPackScreen';
+import { AddPackContainer } from '../../modules/pack/widgets/AddPackContainer';
 import useTheme from '../../hooks/useTheme';
 import PackContainer from '../../modules/pack/widgets/PackContainer';
 
