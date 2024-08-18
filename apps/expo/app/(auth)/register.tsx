@@ -1,5 +1,5 @@
 import React from 'react';
-import Register from 'app/screens/RegisterScreen';
+import { RegisterScreen } from 'app/modules/auth';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -27,7 +27,7 @@ export default function RegisterContainer() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Register />
+      <RegisterScreen />
     </>
   );
 }

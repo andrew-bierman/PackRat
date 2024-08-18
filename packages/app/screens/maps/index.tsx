@@ -8,7 +8,7 @@ import { api } from 'app/constants/api';
 import { RButton, RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Map } from 'app/components/map';
-import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
+import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
 import { disableScreen } from 'app/hoc/disableScreen';
 
@@ -114,7 +114,7 @@ function DownloadedMaps() {
             fontSize: 20,
             fontWeight: 'bold',
             marginVertical: 20,
-            color: currentTheme.colors.text,
+            color: currentTheme.colors.white,
           }}
         >
           Downloaded Maps
@@ -145,7 +145,7 @@ function DownloadedMaps() {
                       fontWeight: 'bold',
                       marginTop: 5,
                       textAlign: 'center',
-                      color: currentTheme.colors.text,
+                      color: currentTheme.colors.white,
                     }}
                   >
                     {offlineMap.name}

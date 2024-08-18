@@ -1,11 +1,11 @@
 import React from 'react';
-import { AddPack } from 'app/components/pack/AddPack';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AddPackScreen } from 'app/modules/pack';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 
 function CreatePack() {
-  return <AddPack />;
+  return <AddPackScreen />;
 }
 
 export default CreatePack;

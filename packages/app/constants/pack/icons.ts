@@ -1,4 +1,4 @@
-import { ItemCategoryEnum } from '../itemCategory';
+import { ItemCategoryEnum } from '../../modules/item/constants';
 
 export const categoryIcons = {
   [ItemCategoryEnum.ESSENTIALS]: 'check-square',
