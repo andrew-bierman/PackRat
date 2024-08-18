@@ -4,18 +4,19 @@ import { CLIENT_URL } from '@packrat/config';
 import { RH3, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
-import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
-import { usePackId } from 'app/hooks/packs/usePackId';
+import {
+  useIsAuthUserPack,
+  usePackId,
+  useFetchSinglePack,
+  TableContainer,
+} from 'app/modules/pack';
 import useResponsive from 'app/hooks/useResponsive';
 import { FlatList, View } from 'react-native';
-import { useFetchSinglePack } from '../../hooks/packs';
-import ScoreContainer from '../ScoreContainer';
+import ScoreContainer from '../../../components/ScoreContainer';
 // import ChatContainer from '../chat';
 import { TextLink } from '@packrat/crosspath';
-import { DetailsComponent } from '../details';
-import { TableContainer } from '../pack_table/Table';
-import { AddItemModal } from '../../modules/item/components/AddItemModal';
-import { ImportItemModal } from 'app/modules/item';
+import { DetailsComponent } from '../../../components/details';
+import { ImportItemModal, AddItemModal } from 'app/modules/item';
 import { FeedPreview } from 'app/modules/feed';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
@@ -25,9 +26,10 @@ const SECTION = {
   CTA: 'CTA',
   SCORECARD: 'SCORECARD',
   CHAT: 'CHAT',
+  SIMILAR_ITEMS: 'SIMILAR_ITEMS',
 };
 
-export function PackDetails() {
+export function PackDetailsScreen() {
   const { currentTheme } = useTheme();
   // const [canCopy, setCanCopy] = useParam('canCopy')
   const canCopy = false;
@@ -63,7 +65,7 @@ export function PackDetails() {
         <View
           style={{
             minHeight: '100%',
-            marginBottom: 50,
+            paddingBottom: 80,
           }}
         >
           <DetailsComponent
@@ -75,7 +77,7 @@ export function PackDetails() {
               <>
                 <FlatList
                   data={Object.entries(SECTION)}
-                  contentContainerStyle={{ paddingBottom: 50 }}
+                  contentContainerStyle={{ paddingBottom: 80 }}
                   keyExtractor={([key, val]) => val}
                   renderItem={({ item }) => {
                     switch (item[1]) {
@@ -145,6 +147,35 @@ export function PackDetails() {
                             />
                           </View>
                         );
+                      case SECTION.SIMILAR_ITEMS:
+                        return (
+                          <LargeCard
+                            customStyle={{
+                              width: '100%',
+                              backgroundColor:
+                                currentTheme.colors.secondaryBlue,
+                              paddingBottom: 24,
+                              marginTop: 20,
+                              paddingTop: 0,
+                            }}
+                          >
+                            <RH3
+                              style={{
+                                // textTransform: 'capitalize',
+                                color: currentTheme.colors.text,
+                                fontSize: 24,
+                                // fontWeight: 'bold',
+                                alignSelf: 'center',
+                              }}
+                            >
+                              Similar Packs
+                            </RH3>
+                            <FeedPreview
+                              feedType="similarPacks"
+                              id={currentPackId}
+                            />
+                          </LargeCard>
+                        );
                       default:
                         return null;
                     }
@@ -154,29 +185,6 @@ export function PackDetails() {
             }
             link={link}
           />
-
-          <LargeCard
-            customStyle={{
-              width: '80%',
-              backgroundColor: currentTheme.colors.secondaryBlue,
-              paddingBottom: 24,
-              paddingTop: 0,
-            }}
-          >
-            <RH3
-              style={{
-                // textTransform: 'capitalize',
-                color: currentTheme.colors.text,
-                fontSize: 24,
-                // fontWeight: 'bold',
-                alignSelf: 'center',
-                marginBottom: 20,
-              }}
-            >
-              Similar Packs
-            </RH3>
-            <FeedPreview feedType="similarPacks" id={currentPackId} />
-          </LargeCard>
         </View>
       )}
       {/* Disable Chat */}

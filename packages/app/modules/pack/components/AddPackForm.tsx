@@ -1,28 +1,22 @@
+import React from 'react';
 import {
-  BaseModal,
-  DropdownComponent,
   Form,
   FormInput,
-  FormSelect as OriginalFormSelect,
   RStack,
   RSwitch,
   RText,
   SubmitButton,
-  useModal,
 } from '@packrat/ui';
 import { addPackSchema } from '@packrat/validations';
-import { useAddNewPack } from 'app/hooks/packs';
+import { useAddNewPack } from '../hooks';
 import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
-import React, { useState } from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 import { Switch } from 'tamagui';
-import useTheme from '../../hooks/useTheme';
+import useTheme from '../../../hooks/useTheme';
 
-const FormSelect: any = OriginalFormSelect;
-
-export const AddPack = ({
+export const AddPackForm = ({
   isCreatingTrip = false,
   onSuccess = () => {},
 }: {
@@ -116,28 +110,6 @@ export const AddPack = ({
         {isError && <RText>Pack already exists</RText>}
       </View>
     </View>
-  );
-};
-
-export const AddPackContainer = ({
-  isCreatingTrip,
-}: {
-  isCreatingTrip: boolean;
-}) => {
-  return (
-    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
-      <PackModalContent isCreatingTrip={isCreatingTrip} />
-    </BaseModal>
-  );
-};
-
-const PackModalContent = ({ isCreatingTrip }: { isCreatingTrip?: boolean }) => {
-  const { setIsModalOpen } = useModal();
-  return (
-    <AddPack
-      isCreatingTrip={isCreatingTrip}
-      onSuccess={() => setIsModalOpen(false)}
-    />
   );
 };
 

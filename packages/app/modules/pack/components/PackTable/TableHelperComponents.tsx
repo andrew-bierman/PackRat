@@ -13,7 +13,7 @@ import { formatNumber } from 'app/utils/formatNumber';
 import React from 'react';
 import { View } from 'react-native';
 import { Row } from 'react-native-table-component';
-import loadStyles from './packtable.style';
+import { loadStyles } from './packtable.style';
 
 const RText: any = OriginalRText;
 const Feather: any = OriginalFeather;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { AddPackContainer } from '../pack/AddPack';
+import { AddPackContainer } from '../../modules/pack/screens/AddPackScreen';
 import useTheme from '../../hooks/useTheme';
-import PackContainer from '../pack/PackContainer';
+import PackContainer from '../../modules/pack/widgets/PackContainer';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;

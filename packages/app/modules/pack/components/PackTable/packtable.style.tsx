@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 const isWeb = Platform.OS === 'web';
-const loadStyles = (theme) => {
+
+export const loadStyles = (theme) => {
   const { currentTheme } = theme;
 
   return {
@@ -84,5 +85,3 @@ const loadStyles = (theme) => {
     },
   };
 };
-
-export default loadStyles;

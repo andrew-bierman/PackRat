@@ -1,5 +1,5 @@
 import React from 'react';
-import { PackDetails } from 'app/components/pack/PackDetails';
+import { PackDetailsScreen } from 'app/modules/pack';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/pack/$id')({
 function PackScreen() {
   return (
     <AuthWrapper>
-      <PackDetails />
+      <PackDetailsScreen />
     </AuthWrapper>
   );
 }

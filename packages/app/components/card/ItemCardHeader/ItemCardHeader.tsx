@@ -4,7 +4,7 @@ import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/modules/auth';
 import { RStack, RIconButton, DropdownComponent, RText } from '@packrat/ui';
-import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
+import { useFetchSinglePack, useDeletePack } from 'app/modules/pack';
 import { useItemTitleInput } from './useItemTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { Platform, View } from 'react-native';

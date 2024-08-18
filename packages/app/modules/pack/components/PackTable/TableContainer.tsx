@@ -1,19 +1,17 @@
-import { RButton, RCheckbox, RSkeleton, RStack, RText } from '@packrat/ui';
-import { FlatList, Platform, View } from 'react-native';
-import { Cell, Row, Table } from 'react-native-table-component';
-import { usePackTable } from 'app/hooks/packs/usePackTable';
+import { RButton, RSkeleton, RText } from '@packrat/ui';
+import { View } from 'react-native';
+import {
+  usePackTable,
+  useDeletePackItem,
+  useIsAuthUserPack,
+} from 'app/modules/pack';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import loadStyles from './packtable.style';
+import { loadStyles } from './packtable.style';
 import {
   TotalWeightBox,
   WeightUnitDropdown,
   ErrorMessage,
-  CategoryRow,
-  TitleRow,
 } from './TableHelperComponents';
-import TableItem from './TableItem';
-import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
-import { useIsAuthUserPack } from 'app/hooks/packs/useIsAuthUserPack';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
 interface TableContainerProps {
@@ -149,5 +147,3 @@ export const TableContainer = ({
     </View>
   );
 };
-
-export default TableContainer;

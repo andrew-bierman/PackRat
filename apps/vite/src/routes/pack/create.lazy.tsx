@@ -1,5 +1,4 @@
-import React from 'react';
-import { AddPack } from 'app/components/pack/AddPack';
+import { AddPackScreen } from 'app/modules/pack';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +9,7 @@ export const Route = createLazyFileRoute('/pack/create')({
 function CreatePack() {
   return (
     <AuthWrapper>
-      <AddPack />
+      <AddPackScreen />
     </AuthWrapper>
   );
 }

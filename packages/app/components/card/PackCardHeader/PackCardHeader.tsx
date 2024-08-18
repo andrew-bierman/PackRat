@@ -9,7 +9,7 @@ import {
   EditableText,
   DropdownComponent,
 } from '@packrat/ui';
-import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
+import { useFetchSinglePack, useDeletePack } from 'app/modules/pack';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { Platform, View } from 'react-native';

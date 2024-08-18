@@ -98,7 +98,7 @@ export const CustomCard = ({
             paddingRight: 16,
             paddingLeft: 16,
             flex: 1,
-            paddingBottom: 20,
+            paddingBottom: 100,
           }}
         >
           {content}

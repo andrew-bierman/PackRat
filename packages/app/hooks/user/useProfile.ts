@@ -1,5 +1,5 @@
 import { useFetchUserFavorites } from '../favorites';
-import { useUserPacks } from '../packs';
+import { useUserPacks } from 'app/modules/pack';
 import { useUserTrips } from '../singletrips';
 import { useMatchesCurrentUser } from '../useMatchesCurrentUser';
 import { useAuthUser } from 'app/modules/auth';

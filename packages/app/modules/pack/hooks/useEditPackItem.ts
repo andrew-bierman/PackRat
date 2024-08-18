@@ -1,4 +1,4 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 import { useItemsUpdater } from 'app/modules/item';
 import { useOfflineQueue } from 'app/hooks/offline';
 

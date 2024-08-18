@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/modules/auth';
 
 interface Pack {

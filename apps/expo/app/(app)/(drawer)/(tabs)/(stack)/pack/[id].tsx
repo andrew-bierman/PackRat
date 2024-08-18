@@ -1,6 +1,6 @@
 import React from 'react';
 import PackContainer from 'app/components/pack/PackContainer';
-import { PackDetails } from 'app/components/pack/PackDetails';
+import { PackDetailsScreen } from 'app/modules/pack';
 import { DetailsComponent } from 'app/components/details';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
@@ -40,7 +40,7 @@ export default function Pack() {
         }}
       />
       {/* <DetailsComponent type='pack'/> */}
-      <PackDetails />
+      <PackDetailsScreen />
     </>
   );
 }

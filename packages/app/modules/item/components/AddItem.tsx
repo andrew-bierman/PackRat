@@ -1,8 +1,6 @@
 import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
-import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
-import { useEditPackItem } from 'app/hooks/packs/useEditPackItem';
-// import { usePackId } from 'app/hooks/packs/usePackId';
+import { useAddPackItem, useEditPackItem } from 'app/modules/pack';
 import {
   addItem as addItemSchema,
   editItem as editItemSchema,

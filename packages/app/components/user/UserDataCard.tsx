@@ -11,7 +11,7 @@ import {
   RSkeleton,
 } from '@packrat/ui';
 import { truncateString } from '../../utils/truncateString';
-import { useEditPack } from 'app/hooks/packs';
+import { useEditPack } from 'app/modules/pack';
 import { Platform } from 'react-native';
 import { useEditTrips } from 'app/hooks/trips';
 import { useAddFavorite } from 'app/hooks/favorites';

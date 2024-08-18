@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
 import { View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
-import { useCopyClipboard, useScreenWidth } from 'app/hooks/common';
+import { useCopyClipboard } from 'app/hooks/common';
 import { useAuthUser } from 'app/modules/auth';
 import useTheme from '../../hooks/useTheme';
-import { CopyPackModal } from 'app/components/pack/CopyPackModal';
+import { CopyPackModal } from 'app/modules/pack';
 
 interface CustomCardHeaderProps {
   ownerId: string;

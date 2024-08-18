@@ -1,4 +1,4 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 
 export const useDeletePackItem = () => {
   const utils = queryTrpc.useContext();

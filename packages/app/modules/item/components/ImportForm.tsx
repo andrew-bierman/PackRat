@@ -3,7 +3,7 @@ import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
-import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
+import { useImportPackItem } from 'app/modules/pack';
 import { useImportItem } from '../hooks';
 import useResponsive from 'app/hooks/useResponsive';
 

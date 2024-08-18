@@ -1,5 +1,5 @@
 import React from 'react';
-import { PackDetails } from 'app/components/pack/PackDetails';
+import { PackDetailsScreen } from 'app/modules/pack';
 import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
@@ -7,7 +7,7 @@ import { AuthWrapper } from 'app/modules/auth';
 function PackScreen() {
   return (
     <>
-      <PackDetails />
+      <PackDetailsScreen />
     </>
   );
 }
