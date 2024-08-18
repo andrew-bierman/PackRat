@@ -5,3 +5,4 @@ export { useGoogleAuth } from './useGoogleAuth';
 export { useLogout } from './useLogout';
 export { useUserSetter } from './useUserSetter';
 export { usePasswordResetToken } from './usePasswordResetToken';
+export { useMatchesCurrentUser } from './useMatchesCurrentUser';

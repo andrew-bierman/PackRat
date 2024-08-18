@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import ProfileContainer from 'app/screens/user/ProfileContainer';
-import { useProfileId } from 'app/hooks/user';
+import { useProfileId } from 'app/modules/user';
 import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'

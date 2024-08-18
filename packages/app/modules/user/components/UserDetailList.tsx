@@ -1,11 +1,9 @@
 import React, { useRef, useMemo, useState } from 'react';
 import { View, FlatList, Platform } from 'react-native';
 import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
-import { fuseSearch } from '../../utils/fuseSearch';
-import { BaseDialog as OriginalBaseDialog, BaseModal } from '@packrat/ui';
+import { fuseSearch } from 'app/utils/fuseSearch';
+import { BaseDialog, BaseModal } from '@packrat/ui';
 // import BottomSheet from '@gorhom/bottom-sheet';
-
-const BaseDialog: any = OriginalBaseDialog;
 
 interface DataItem {
   _id: string;
@@ -16,7 +14,7 @@ interface DataListProps {
   data: DataItem[];
 }
 
-const DataList = ({ data }: DataListProps) => {
+export const UserDataList = ({ data }: DataListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const keys = ['name', 'items.name', 'items.category'];
   const options = {
@@ -107,5 +105,3 @@ const DataList = ({ data }: DataListProps) => {
     </>
   );
 };
-
-export default DataList;

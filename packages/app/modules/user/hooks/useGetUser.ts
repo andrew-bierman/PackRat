@@ -1,4 +1,4 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 
 export const useGetUser = (userId: string) => {
   // If userId is not provided, don’t run the query.

@@ -7,14 +7,14 @@ import {
   RSkeleton,
 } from '@packrat/ui';
 import { ScrollView } from 'react-native-gesture-handler';
-import UserDataContainer from '../../components/user/UserDataContainer';
-import useTheme from '../../hooks/useTheme';
+import { UserDataContainer } from './UserDataContainer';
+import useTheme from '../../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import useGetPacks from "../../hooks/useGetPacks";
 import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import Avatar from '../../components/Avatar/Avatar';
-import { useProfile } from 'app/hooks/user';
+import Avatar from '../../../components/Avatar/Avatar';
+import { useProfile } from '../hooks';
 import Layout from 'app/components/layout/Layout';
 
 const RText: any = OriginalRText;
@@ -186,7 +186,7 @@ const SkeletonUserDataCard = () => {
   );
 };
 
-export default function ProfileContainer({ id = null }) {
+export function ProfileContainer({ id = null }) {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const {

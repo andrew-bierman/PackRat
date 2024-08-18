@@ -1,14 +1,13 @@
 import { RLink } from '@packrat/ui';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
-import UserDataCard from './UserDataCard';
+import { UserDataCard, UserDataList } from '../components';
 import React, { useEffect, useState } from 'react';
-import LargeCard from '../card/LargeCard';
-import useTheme from '../../hooks/useTheme';
+import LargeCard from 'app/components/card/LargeCard';
+import useTheme from 'app/hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View } from 'react-native';
 import { useAuthUser } from 'app/modules/auth';
-import DataList from './UserDetailList';
 import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';
 
@@ -34,7 +33,7 @@ interface UserDataContainerProps {
   SkeletonComponent?: React.ReactElement;
 }
 
-export default function UserDataContainer({
+export function UserDataContainer({
   data = [],
   type,
   userId,
@@ -144,7 +143,7 @@ export default function UserDataContainer({
                 />
 
                 <SearchProvider>
-                  <DataList data={data} />
+                  <UserDataList data={data} />
                 </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (

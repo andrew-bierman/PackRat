@@ -1,4 +1,4 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/modules/auth';
 import { logoutAuthUser } from 'app/utils/userUtils';
 

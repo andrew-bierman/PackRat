@@ -17,7 +17,7 @@ import {
   RSpinner,
 } from '@packrat/ui';
 import Avatar from 'app/components/Avatar/Avatar';
-import { useProfileSettings } from 'app/hooks/user';
+import { useProfileSettings, useDeleteProfile } from '../hooks';
 import useTheme from 'app/hooks/useTheme';
 import {
   userSettingsSchema,
@@ -26,7 +26,6 @@ import {
 } from '@packrat/validations';
 import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
-import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -38,7 +37,7 @@ const weightOptions = ['lb', 'oz', 'kg', 'g'].map((key) => ({
   value: key,
 }));
 
-export default function Settings() {
+export function SettingsScreen() {
   const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
 

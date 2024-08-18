@@ -39,7 +39,7 @@ import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
 import { MapProps } from './models';
 import { useUserQuery } from 'app/modules/auth';
-import { useUpdateUser } from 'app/hooks/user/useUpdateUser';
+import { useUpdateUser } from 'app/modules/user';
 
 interface GeoJsonProperties {
   name?: string;

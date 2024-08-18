@@ -1,5 +1,5 @@
 import React from 'react';
-import Settings from 'app/screens/user/Settings';
+import { SettingsScreen } from 'app/modules/user';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/profile/settings/')({
 export default function SettingsPage() {
   return (
     <AuthWrapper>
-      <Settings />
+      <SettingsScreen />
     </AuthWrapper>
   );
 }

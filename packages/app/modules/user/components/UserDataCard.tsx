@@ -10,7 +10,7 @@ import {
   RLink,
   RSkeleton,
 } from '@packrat/ui';
-import { truncateString } from '../../utils/truncateString';
+import { truncateString } from 'app/utils/truncateString';
 import { useEditPack } from 'app/modules/pack';
 import { Platform } from 'react-native';
 import { useEditTrips } from 'app/hooks/trips';
@@ -35,7 +35,7 @@ interface UserDataCardProps {
   isFavorite: boolean;
 }
 
-const UserDataCard = ({
+export const UserDataCard = ({
   type, // "pack" or "trip"
   destination,
   id,
@@ -257,5 +257,3 @@ const UserDataCard = ({
     </View>
   );
 };
-
-export default UserDataCard;

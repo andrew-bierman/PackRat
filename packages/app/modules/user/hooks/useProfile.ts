@@ -1,8 +1,7 @@
-import { useFetchUserFavorites } from '../favorites';
+import { useFetchUserFavorites } from 'app/hooks/favorites';
 import { useUserPacks } from 'app/modules/pack';
-import { useUserTrips } from '../singletrips';
-import { useMatchesCurrentUser } from '../useMatchesCurrentUser';
-import { useAuthUser } from 'app/modules/auth';
+import { useUserTrips } from 'app/hooks/singletrips';
+import { useAuthUser, useMatchesCurrentUser } from 'app/modules/auth';
 import { useGetUser } from './useGetUser';
 
 export const useProfile = (id = null) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileContainer from 'app/screens/user/ProfileContainer';
+import { ProfileScreen } from 'app/modules/user';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/profile/')({
 export default function Profile() {
   return (
     <AuthWrapper>
-      <ProfileContainer />
+      <ProfileScreen />
     </AuthWrapper>
   );
 }
