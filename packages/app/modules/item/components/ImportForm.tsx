@@ -1,10 +1,10 @@
 import React, { useState, FC } from 'react';
 import { View, Platform } from 'react-native';
 import { DropdownComponent, RButton, RText } from '@packrat/ui';
-import useTheme from '../../hooks/useTheme';
+import useTheme from 'app/hooks/useTheme';
 import * as DocumentPicker from 'expo-document-picker';
 import { useImportPackItem } from 'app/hooks/packs/useImportPackItem';
-import { useImportItem } from 'app/hooks/items/useImportItem';
+import { useImportItem } from '../hooks';
 import useResponsive from 'app/hooks/useResponsive';
 
 interface ImportFormProps {

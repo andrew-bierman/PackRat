@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { ItemCategoryEnum } from 'app/constants/itemCategory';
 import { convertWeight } from 'app/utils/convertWeight';
 import { useAuthUser } from 'app/modules/auth';
 import { useDuplicatePackItem } from './useDuplicatePackItem';
-import { useItemWeightUnit } from 'app/hooks/items';
+import { useItemWeightUnit, ItemCategoryEnum } from 'app/modules/item';
 
 export const usePackTable = ({
   currentPack,

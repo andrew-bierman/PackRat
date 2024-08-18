@@ -1,7 +1,5 @@
 import React from 'react';
-import { useDeletePackItem } from 'app/hooks/packs/useDeletePackItem';
 import { BaseModal, CloseModalHandler, RText } from '@packrat/ui';
-import { useDeleteItem } from 'app/hooks/items';
 
 interface DeletePackItemModalProps {
   onConfirm: (closeModal: CloseModalHandler) => void;

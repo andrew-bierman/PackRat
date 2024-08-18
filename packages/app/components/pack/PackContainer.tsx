@@ -3,7 +3,7 @@ import { AddItem } from '../item/AddItem';
 import { TableContainer } from '../pack_table/Table';
 import { useUserPacks } from '../../hooks/packs/useUserPacks';
 import { View } from 'react-native';
-import { AddItemModal } from './AddItemModal';
+import { AddItemModal } from '../../modules/item/components/AddItemModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/modules/auth';
 import { usePackId } from 'app/hooks/packs';

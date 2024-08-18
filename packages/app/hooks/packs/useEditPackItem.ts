@@ -1,5 +1,5 @@
 import { queryTrpc } from '../../trpc';
-import { useItemsUpdater } from 'app/hooks/items';
+import { useItemsUpdater } from 'app/modules/item';
 import { useOfflineQueue } from 'app/hooks/offline';
 
 interface EditedItem {

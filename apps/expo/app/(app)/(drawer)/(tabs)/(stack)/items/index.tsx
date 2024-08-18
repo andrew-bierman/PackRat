@@ -1,12 +1,12 @@
 import React from 'react';
-import Items from 'app/screens/items';
+import { ItemsScreen } from 'app/modules/item';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import useTheme from 'app/hooks/useTheme';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 
-export default function ItemsScreen() {
+export default function ItemsPage() {
   const { currentTheme } = useTheme();
 
   return (
@@ -36,7 +36,7 @@ export default function ItemsScreen() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Items />
+      <ItemsScreen />
     </>
   );
 }

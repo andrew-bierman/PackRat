@@ -1,5 +1,5 @@
 import { useAuthUser } from 'app/modules/auth';
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 
 export const useItem = (itemId?: string) => {
   const user = useAuthUser();

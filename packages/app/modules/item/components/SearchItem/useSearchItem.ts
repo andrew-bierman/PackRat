@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useItems } from 'app/hooks/items';
+import { useItems } from 'app/modules/item';
 import { queryTrpc } from 'app/trpc';
 import { useAuthUser } from 'app/modules/auth';
 import { useFetchSinglePack, usePackId } from 'app/hooks/packs';

@@ -1,4 +1,4 @@
-import { ImportItem } from '../item/ImportItem';
+import { ImportItem } from './ImportItem';
 import { BaseModal } from '@packrat/ui';
 
 interface ImportItemModalProps {

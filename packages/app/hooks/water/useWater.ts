@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ItemCategoryEnum } from 'app/constants/itemCategory';
+import { ItemCategoryEnum } from 'app/modules/item/constants';
 import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
 
 export const useWater = ({ currentPack, setWaterItem }) => {

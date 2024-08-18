@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useModal } from '@packrat/ui';
-import { useAddItem, useItems } from 'app/hooks/items';
+import { useAddItem, useItems } from '../hooks';
 import { usePagination } from 'app/hooks/common';
 import {
   addItemGlobal as addItemSchema,

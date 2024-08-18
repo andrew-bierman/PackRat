@@ -1,11 +1,9 @@
 import { View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import useTheme from 'app/hooks/useTheme';
-import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
-import { ImportItemGlobal } from 'app/components/item/ImportItemGlobal';
-import { ItemsTable } from 'app/components/itemtable/itemTable';
+import { AddItemGlobal, ImportItemGlobal } from '../components';
+import { ItemsTable } from 'app/modules/item/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useItems } from 'app/hooks/items/useItems';
+import { useItems } from 'app/modules/item';
 import { usePagination } from 'app/hooks/common';
 import {
   BaseModal,
@@ -16,7 +14,7 @@ import {
 } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 
-export default function Items() {
+export function ItemsScreen() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);

@@ -10,7 +10,7 @@ import { formatNumber } from 'app/utils/formatNumber';
 import { useAddFavorite } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/modules/auth';
 import { useRouter } from 'app/hooks/router';
-import { useItemWeightUnit } from 'app/hooks/items';
+import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import Layout from 'app/components/layout/Layout';
 import { Button, Card, H2, Paragraph, XStack, YStack } from 'tamagui';

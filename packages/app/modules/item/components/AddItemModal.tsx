@@ -1,4 +1,4 @@
-import { AddItem } from '../item/AddItem';
+import { AddItem } from './AddItem';
 import useTheme from 'app/hooks/useTheme';
 import { BaseModal } from '@packrat/ui';
 

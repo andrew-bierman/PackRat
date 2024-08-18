@@ -1,4 +1,4 @@
-import { theme } from './../../theme';
+import { theme } from '../../../../theme';
 export const loadStyles = () => {
   const currentTheme = theme;
   return {

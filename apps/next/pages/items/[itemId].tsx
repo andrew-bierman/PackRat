@@ -1,5 +1,5 @@
 import React from 'react';
-import ItemDetails from 'app/screens/items/item-details';
+import { ItemDetailsScreen } from 'app/modules/item';
 import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
@@ -7,7 +7,7 @@ import { AuthWrapper } from 'app/modules/auth';
 function ItemScreen() {
   return (
     <>
-      <ItemDetails />
+      <ItemDetailsScreen />
     </>
   );
 }

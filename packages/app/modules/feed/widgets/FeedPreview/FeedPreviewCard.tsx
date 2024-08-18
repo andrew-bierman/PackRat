@@ -8,7 +8,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import loadStyles from './feedpreview.style';
 import { AntDesign, Fontisto, MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
-import { useItemWeightUnit } from 'app/hooks/items';
+import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import { formatNumber } from 'app/utils/formatNumber';
 import { hexToRGBA } from 'app/utils/colorFunctions';

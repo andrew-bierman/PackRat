@@ -1,7 +1,7 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View, Dimensions, Platform } from 'react-native';
-import { SearchItem } from '../item/SearchItem';
+import { SearchItem } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';

@@ -11,8 +11,8 @@ import {
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 
-import { ItemCategoryEnum } from '../../constants/itemCategory';
-import useTheme from '../../hooks/useTheme';
+import { ItemCategoryEnum } from '../constants';
+import useTheme from 'app/hooks/useTheme';
 import { type Item } from '@packrat/validations';
 
 const Form: any = OriginalForm;

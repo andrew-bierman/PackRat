@@ -1,11 +1,11 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import useResponsive from 'app/hooks/useResponsive';
-import Loader from '../Loader';
-import useTheme from '../../hooks/useTheme';
+import Loader from '../../../../components/Loader';
+import useTheme from '../../../../hooks/useTheme';
 import Layout from 'app/components/layout/Layout';
 import { PaginatedSortedTable } from '@packrat/ui/src/Bento/elements/tables';
-import { PaginationLimit } from '../paginationChooseLimit';
+import { PaginationLimit } from '../../../../components/paginationChooseLimit';
 
 interface Category {
   id: string;

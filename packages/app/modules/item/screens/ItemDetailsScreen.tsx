@@ -1,35 +1,21 @@
 import { View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useTheme from 'app/hooks/useTheme';
-import { AddItemGlobal } from 'app/components/item/AddItemGlobal';
-import { ImportItemGlobal } from 'app/components/item/ImportItemGlobal';
-import { ItemsTable } from 'app/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useItem, useItemId } from 'app/hooks/items';
+import { useItem, useItemId } from 'app/modules/item';
 import { usePagination } from 'app/hooks/common';
-import {
-  BaseModal,
-  DropdownComponent,
-  RH3,
-  RImage,
-  RScrollView,
-  RStack,
-  RText,
-  XStack,
-} from '@packrat/ui';
+import { RH3, RImage, RScrollView, RStack, RText, XStack } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import { CustomCard } from 'app/components/card';
 import LargeCard from 'app/components/card/LargeCard';
 import { FeedPreview } from 'app/modules/feed';
 
-export default function ItemDetails() {
+export function ItemDetailsScreen() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const [itemId] = useItemId();
   const { data: item, isError } = useItem(itemId);
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
-
-  console.log({ item, itemId });
 
   return (
     <RScrollView style={{ marginBottom: 50 }}>
