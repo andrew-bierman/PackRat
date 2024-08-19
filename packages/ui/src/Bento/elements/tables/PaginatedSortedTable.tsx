@@ -10,6 +10,8 @@ import {
 import { useMedia } from 'tamagui';
 import { Text, View, Button, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
+import { Pressable } from 'react-native';
+import { useRouter } from '@packrat/crosspath';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -55,6 +57,7 @@ export function PaginatedSortedTable({
   setPage,
 }: PaginatedSortedTableProps) {
   const columnHelper = createColumnHelper<Item>();
+  const router = useRouter();
 
   const columns = [
     columnHelper.accessor('name', {
@@ -99,6 +102,10 @@ export function PaginatedSortedTable({
     pageCount: totalPages || 1,
   });
 
+  const onPress = (id: string | number) => {
+    router.push(`/item/${id}`);
+  };
+
   const { sm } = useMedia();
 
   if (sm) {
@@ -122,22 +129,24 @@ export function PaginatedSortedTable({
             alignSelf="stretch"
             gap="$3"
           >
-            <View gap="$3" mx="$3" my="$3">
-              {row.getVisibleCells().map((cell) => {
-                const value = cell.getContext().getValue();
-                return (
-                  <View fd="row" justifyContent="space-between" key={cell.id}>
-                    <Text>
-                      {flexRender(
-                        cell.column.columnDef.header,
-                        cell.getContext(),
-                      )}
-                    </Text>
-                    <Text color="$gray10">{value}</Text>
-                  </View>
-                );
-              })}
-            </View>
+            <Pressable onPress={() => onPress(row?.original?.id)}>
+              <View gap="$3" mx="$3" my="$3">
+                {row.getVisibleCells().map((cell) => {
+                  const value = cell.getContext().getValue();
+                  return (
+                    <View fd="row" justifyContent="space-between" key={cell.id}>
+                      <Text>
+                        {flexRender(
+                          cell.column.columnDef.header,
+                          cell.getContext(),
+                        )}
+                      </Text>
+                      <Text color="$gray10">{value}</Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </Pressable>
           </View>
         ))}
         <View
@@ -209,7 +218,7 @@ export function PaginatedSortedTable({
         </Table.Head>
         <Table.Body>
           {table.getRowModel().rows.map((row) => (
-            <Table.Row key={row.id}>
+            <Table.Row key={row.id} onPress={() => onPress(row?.original?.id)}>
               {row.getVisibleCells().map((cell) => (
                 <Table.Cell key={cell.id}>
                   <Text color="$gray11">

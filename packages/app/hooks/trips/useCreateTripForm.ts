@@ -3,8 +3,8 @@ import { useValidateSchema } from 'app/hooks/common';
 import { addTripDetails } from '@packrat/validations';
 import { useEffect, useMemo } from 'react';
 import { type addTripKey } from 'app/screens/trip/createTripStore/store';
-import { useAuthUser } from 'app/auth/hooks';
-import { usePackId } from 'app/hooks/packs';
+import { useAuthUser } from 'app/modules/auth';
+import { usePackId } from 'app/modules/pack';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
 export const useCreateTripForm = (currentDestination, photonDetails) => {

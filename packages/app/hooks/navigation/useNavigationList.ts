@@ -6,7 +6,7 @@ import {
   Entypo,
   Fontisto,
 } from '@expo/vector-icons';
-import { useAuthUser } from '../../auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { Platform } from 'react-native';
 import { Separator } from 'tamagui';
 

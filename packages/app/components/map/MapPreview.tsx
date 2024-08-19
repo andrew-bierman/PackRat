@@ -1,6 +1,6 @@
 import { RImage } from '@packrat/ui';
 import { useProcessedShape, useMapPreviewData } from './useMapPreview';
-import { useAuthUserToken } from 'app/auth/hooks';
+import { useAuthUserToken } from 'app/modules/auth';
 export default function MapPreview({ shape }) {
   const processedShape = useProcessedShape(shape);
   const { token } = useAuthUserToken();

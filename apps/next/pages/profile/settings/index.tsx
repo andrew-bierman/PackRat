@@ -1,12 +1,12 @@
-import Settings from 'app/screens/user/Settings';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { SettingsScreen } from 'app/modules/user';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 
 export default function SettingsPage() {
   return (
     <>
-      <Settings />
+      <SettingsScreen />
     </>
   );
 }

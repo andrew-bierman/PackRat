@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { EvilIcons } from '@expo/vector-icons';
-import { useLogout } from '../../auth/hooks';
+import { useLogout } from 'app/modules/auth';
 import { useNavigate } from './useNavigate';
 
 export const useNavigationItem = (item, onSelect) => {
