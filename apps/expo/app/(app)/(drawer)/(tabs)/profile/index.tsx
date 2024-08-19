@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileContainer from 'app/screens/user/ProfileContainer';
+import { ProfileScreen } from 'app/modules/user';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -21,7 +21,7 @@ export default function Profile() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <ProfileContainer />
+      <ProfileScreen />
     </>
   );
 }

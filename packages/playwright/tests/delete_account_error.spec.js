@@ -15,8 +15,9 @@ test('delete account error', async ({ page }) => {
   await page.getByRole('button', { name: '󰢻' }).click();
   await page.getByRole('button', { name: 'Delete account' }).click();
 
-
-   // Verify the error message for invalid email format
-   const emailErrorMessage = page.locator('text= Invalid literal value, expected "delete"');
-   await expect(emailErrorMessage).toBeVisible({ timeout: 50000 }); // Adjust the timeout as needed
- });
+  // Verify the error message for invalid email format
+  const emailErrorMessage = page.locator(
+    'text= Invalid literal value, expected "delete"',
+  );
+  await expect(emailErrorMessage).toBeVisible({ timeout: 50000 }); // Adjust the timeout as needed
+});

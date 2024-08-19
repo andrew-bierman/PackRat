@@ -21,10 +21,8 @@ test('Add Item without item name shows required error', async ({ page }) => {
   await page.getByPlaceholder('Quantity').fill('1');
   await page.getByLabel('Essentials').click();
   await page.getByRole('button', { name: 'Add Item' }).click();
-  
+
   // Verify the error message for the empty item name
   const itemNameErrorMessage = page.locator('text=Required');
   await expect(itemNameErrorMessage).toBeVisible({ timeout: 10000 }); // Adjust the timeout as needed
 });
-
- 

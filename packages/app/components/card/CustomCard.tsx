@@ -1,12 +1,12 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View, Dimensions, Platform } from 'react-native';
-import { SearchItem } from '../item/SearchItem';
+import { SearchItem } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
-import { useAuthUser } from 'app/auth/hooks/useUser';
+import { useAuthUser } from 'app/modules/auth';
 
 interface CustomCardProps {
   title: string;
@@ -98,7 +98,7 @@ export const CustomCard = ({
             paddingRight: 16,
             paddingLeft: 16,
             flex: 1,
-            paddingBottom: 20,
+            paddingBottom: 100,
           }}
         >
           {content}
@@ -116,7 +116,7 @@ const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: !isDark ? currentTheme.colors.card : '#1A1A1D',
+      backgroundColor: currentTheme.colors.border,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
