@@ -25,7 +25,10 @@ const PrivacyContent = () => {
           </View>
 
           {privacySections.map((section, index) => (
-            <Text key={index} style={[isDark ? styles.textDark : styles.text]}>
+            <Text
+              key={index}
+              style={[isDark ? styles.tertiaryBlue : styles.text]}
+            >
               {section}
             </Text>
           ))}
