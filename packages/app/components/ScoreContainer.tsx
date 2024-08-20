@@ -207,8 +207,12 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
-          <RText style={{ fontWeight: 500, color:currentTheme.colors.white }}>{subheader}</RText>
-          <RText style={{ fontWeight: 300, color:currentTheme.colors.white }}>{description}</RText>
+          <RText style={{ fontWeight: 500, color: currentTheme.colors.white }}>
+            {subheader}
+          </RText>
+          <RText style={{ fontWeight: 300, color: currentTheme.colors.white }}>
+            {description}
+          </RText>
           {isOwner && (
             <RButton style={styles.button} onPress={handleScoreClick}>
               <RText style={styles.buttonText}>Calculate Score</RText>
@@ -265,7 +269,7 @@ const loadStyles = (theme: any) => {
       width: '100%',
     },
     scoreText: {
-      color: currentTheme.colors.white,
+      color: currentTheme.colors.text,
       fontSize: 26,
       fontWeight: 'bold',
       paddingBottom: 15,

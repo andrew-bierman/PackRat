@@ -1,5 +1,5 @@
 import React from 'react';
-import RegisterScreen from 'app/screens/RegisterScreen';
+import { RegisterScreen } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 

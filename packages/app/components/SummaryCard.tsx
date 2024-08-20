@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import useSummaryCardLogic from 'app/hooks/card/useSummaryCardLogic';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
-import { ItemRow } from './ItemRow/ItemRow';
+import { ItemRow } from '../modules/item/components/ItemRow/ItemRow';
 
 export default function SummaryCard() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =

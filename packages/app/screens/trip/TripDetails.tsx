@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { createParam } from 'app/hooks/params';
 import { format } from 'date-fns';
-import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
 import { RText, RStack } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
-import { Platform, StyleSheet, FlatList, Dimensions, Text } from 'react-native';
+import { Platform, FlatList, Dimensions, Text } from 'react-native';
 import { CLIENT_URL } from '@packrat/config';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';

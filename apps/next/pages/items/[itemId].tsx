@@ -1,13 +1,13 @@
 import React from 'react';
-import ItemDetails from 'app/screens/items/item-details';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { ItemDetailsScreen } from 'app/modules/item';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 
 function ItemScreen() {
   return (
     <>
-      <ItemDetails />
+      <ItemDetailsScreen />
     </>
   );
 }

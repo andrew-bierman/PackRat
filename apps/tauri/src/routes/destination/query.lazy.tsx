@@ -1,6 +1,6 @@
 import React from 'react';
 import { DestinationPage } from 'app/components/destination';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AuthWrapper } from 'app/modules/auth';
 // import DestinationPage from "../../components/destination";
 import { createLazyFileRoute } from '@tanstack/react-router';
 
