@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddPack } from 'app/components/pack/AddPack';
+import { AddPackScreen } from 'app/modules/pack';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -22,7 +22,7 @@ export default function Pack() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <AddPack />
+      <AddPackScreen />
     </>
   );
 }

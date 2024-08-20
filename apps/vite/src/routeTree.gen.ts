@@ -36,6 +36,7 @@ const TripTripIdLazyImport = createFileRoute('/trip/$tripId')()
 const ProfileIdLazyImport = createFileRoute('/profile/$id')()
 const PackCreateLazyImport = createFileRoute('/pack/create')()
 const PackIdLazyImport = createFileRoute('/pack/$id')()
+const ItemItemIdLazyImport = createFileRoute('/item/$itemId')()
 const DestinationQueryLazyImport = createFileRoute('/destination/query')()
 const ProfileSettingsIndexLazyImport = createFileRoute('/profile/settings/')()
 
@@ -149,6 +150,11 @@ const PackIdLazyRoute = PackIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pack/$id.lazy').then((d) => d.Route))
 
+const ItemItemIdLazyRoute = ItemItemIdLazyImport.update({
+  path: '/item/$itemId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/item/$itemId.lazy').then((d) => d.Route))
+
 const DestinationQueryLazyRoute = DestinationQueryLazyImport.update({
   path: '/destination/query',
   getParentRoute: () => rootRoute,
@@ -173,6 +179,10 @@ declare module '@tanstack/react-router' {
     }
     '/destination/query': {
       preLoaderRoute: typeof DestinationQueryLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/item/$itemId': {
+      preLoaderRoute: typeof ItemItemIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/$id': {
@@ -263,6 +273,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   DestinationQueryLazyRoute,
+  ItemItemIdLazyRoute,
   PackIdLazyRoute,
   PackCreateLazyRoute,
   ProfileIdLazyRoute,

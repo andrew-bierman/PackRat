@@ -1,5 +1,4 @@
-import { useEditPack } from 'app/hooks/packs';
-import { useDeletePack } from 'app/hooks/packs';
+import { useEditPack, useDeletePack } from 'app/modules/pack';
 import { useRef, useState } from 'react';
 
 export const usePackTitleInput = (data) => {

@@ -11,7 +11,7 @@ import { useRouter } from 'app/hooks/router';
 import { useAddTrip } from 'app/hooks/trips';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { useFormSubmitTrigger } from '@packrat/ui/src/form';
-import { useUserPackById } from 'app/hooks/packs';
+import { useUserPackById } from 'app/modules/pack';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
 const Form: any = OriginalForm;

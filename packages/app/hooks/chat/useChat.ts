@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useGetUserChats } from './useGetUserChats';
 import { useGetAIResponse, useGetAISuggestions } from './useGetAIResponse';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Reasoning {
@@ -30,7 +30,7 @@ interface TypeId {
 export const useChat = (itemTypeId: TypeId | null = null) => {
   const user = useAuthUser();
 
-  console.log('user', user)
+  console.log('user', user);
   const [typeId, setTypeId] = useState<TypeId | null>(itemTypeId);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
