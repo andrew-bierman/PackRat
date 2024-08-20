@@ -10,7 +10,7 @@ const { helperLogin } = require('./helper-login');
   if (!fs.existsSync(screenshotsDir)) {
     fs.mkdirSync(screenshotsDir);
   }
-
+  
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -32,7 +32,6 @@ const { helperLogin } = require('./helper-login');
   ];
 
   const pages = [
-    { url: 'https://packrat.world/', name: 'dashboard' },
     {
       url: 'https://packrat.world/',
       name: 'landing-page',
@@ -46,13 +45,10 @@ const { helperLogin } = require('./helper-login');
       height: resolution.height,
     });
 
-    for (const { url, name, identify } of pages) {
+    for (const { url, name } of pages) {
       try {
         console.log(`Navigating to ${url} at ${resolution.name} resolution...`);
         await page.goto(url, { waitUntil: 'networkidle' });
-        if (identify) {
-          await identify(page);
-        }
         console.log(
           `Taking full-page screenshot of ${url} at ${resolution.name} resolution...`,
         );
