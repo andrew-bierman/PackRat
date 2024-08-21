@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('Open pack', async ({ page }) => {
   await page.goto('https://packrat.world/');
   await page.getByRole('link', { name: 'Get Started' }).click();
   await page.getByLabel('Email').click();
