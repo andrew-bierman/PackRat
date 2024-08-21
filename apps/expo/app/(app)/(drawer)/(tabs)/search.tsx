@@ -61,7 +61,10 @@ export default function Search() {
 
   return (
     <RStack
-      style={{ paddingTop: 24, backgroundColor: currentTheme.colors.text }}
+      style={{
+        paddingTop: 24,
+        backgroundColor: currentTheme.colors.background,
+      }}
     >
       {Platform.OS === 'web' && (
         <Head>
@@ -77,7 +80,7 @@ export default function Search() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <View style={{ width: '100%' }}>
+      <View style={{ width: '100%', height: '100%' }}>
         <PlacesAutocomplete
           onSelect={handleSearchSelect}
           placeholder="Search for a place"

@@ -13,7 +13,7 @@ import {
 } from 'tamagui';
 
 import useTheme from 'app/hooks/useTheme';
-import { useProfileSettings } from 'app/hooks/user';
+import { useProfileSettings } from 'app/modules/user';
 
 const List = styled(FlatList<Message>, {
   backgroundColor: '$background',

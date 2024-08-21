@@ -16,10 +16,9 @@ test('Add Pack without name shows error message', async ({ page }) => {
   await page.getByRole('switch').click();
   await page.getByRole('button', { name: 'Add Pack' }).click();
 
-
   // Verify the error message for the empty name field
-  const nameErrorMessage = page.locator('text=String must contain at least 1 character(s)');
+  const nameErrorMessage = page.locator(
+    'text=String must contain at least 1 character(s)',
+  );
   await expect(nameErrorMessage).toBeVisible({ timeout: 10000 }); // Adjust the timeout as needed
 });
-
-
