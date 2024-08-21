@@ -33,49 +33,94 @@ const LandingPage = () => {
     <ScrollView>
       <RStack style={styles.container}>
         <View
-          style={
-            {
-              alignItems: 'center',
-              textAlign: 'center',
-              paddingVertical: 18,
-              marginTop: Platform.OS !== 'web' ? 25 : 1,
-              flex: 1,
-            } as any
-          }
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            backgroundColor: currentTheme.colors.secondaryBlue,
+            borderRadius: 15,
+            padding: 50,
+            marginBottom: 20,
+            // boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+          }}
         >
-          {Platform.OS === 'web' ? (
-            <RH1
-              style={{
-                color: 'white',
-                fontSize: currentTheme.font.headerFont,
-              }}
-            >
-              PackRat
-            </RH1>
-          ) : (
-            <RText
-              style={{
-                height: 40,
-                color: 'white',
-                fontSize: 30,
-                fontWeight: 'bold',
-                paddingTop: 8,
-              }}
-            >
-              PackRat
+          <View
+            style={
+              {
+                alignItems: 'center',
+                textAlign: 'center',
+                paddingVertical: 18,
+                marginTop: Platform.OS !== 'web' ? 25 : 1,
+                flex: 1,
+              } as any
+            }
+          >
+            {Platform.OS === 'web' ? (
+              <RH1
+                style={{
+                  color: 'white',
+                  fontSize: currentTheme.font.headerFont,
+                }}
+              >
+                PackRat
+              </RH1>
+            ) : (
+              <RText
+                style={{
+                  height: 40,
+                  color: 'white',
+                  fontSize: 30,
+                  fontWeight: 'bold',
+                  paddingTop: 8,
+                }}
+              >
+                PackRat
+              </RText>
+            )}
+            <RText style={{ color: 'white', fontSize: 20,  marginBottom:30, marginTop:20 }}>
+              The Ultimate Travel App
             </RText>
-          )}
-          <RText style={{ color: 'white', fontSize: 20 }}>
-            The Ultimate Travel App
-          </RText>
-        </View>
-        <View style={styles.secondaryContentContainer}>
-          {/* <ImageBackground
-            source={require("../../assets/background-image.png")}
-            style={styles.backgroundImage}
-          > */}
-          {/* <View style={styles.overlay} /> */}
-          <View style={styles.contentContainer}>
+            <RButton
+              title="Web"
+              style={{
+                margin: 10,
+                padding: 32,
+                width: Platform.OS === 'web'?'70%':'100%',
+                backgroundColor: currentTheme.colors.secondaryBlue,
+                borderColor: currentTheme.colors.white,  // Set the border color
+                borderWidth: 2,  // Set the border width
+                borderRadius: 100,
+              }}
+            >
+              <RStack
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="web"
+                  size={34}
+                  style={{ color: currentTheme.colors.white }}
+                />
+                <RText
+                  style={{
+                    color: currentTheme.colors.white,
+                    fontSize: 13,
+                  }}
+                >
+                  Continue on Web
+                </RText>
+              </RStack>
+            </RButton>
+          </View>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
             <RText style={styles.introText}>
               PackRat is the ultimate adventure planner designed for those who
               love to explore the great outdoors. Plan and organize your trips
@@ -93,7 +138,11 @@ const LandingPage = () => {
                 >
                   <RButton
                     title="App Store"
-                    style={{ margin: 10, padding: 32 }}
+                    style={{
+                      margin: 10,
+                      padding: 32,
+                      backgroundColor: currentTheme.colors.white,
+                    }}
                   >
                     <RStack
                       style={{
@@ -104,17 +153,26 @@ const LandingPage = () => {
                     >
                       <MaterialCommunityIcons
                         name="apple"
-                        size={44}
-                        color="white"
+                        size={34}
+                        style={{ color: currentTheme.colors.secondaryBlue }}
                       />
-                      <RText style={{ color: 'white' }}>
+                      <RText
+                        style={{
+                          fontSize: 13,
+                          color: currentTheme.colors.secondaryBlue,
+                        }}
+                      >
                         Download on the App Store
                       </RText>
                     </RStack>
                   </RButton>
                   <RButton
                     title="Google Play"
-                    style={{ margin: 10, padding: 32 }}
+                    style={{
+                      margin: 10,
+                      padding: 32,
+                      backgroundColor: currentTheme.colors.white,
+                    }}
                   >
                     <RStack
                       style={{
@@ -125,36 +183,31 @@ const LandingPage = () => {
                     >
                       <MaterialCommunityIcons
                         name="google-play"
-                        size={44}
-                        color="white"
+                        size={34}
+                        style={{ color: currentTheme.colors.secondaryBlue }}
                       />
-                      <RText style={{ color: 'white' }}>
+                      <RText
+                        style={{
+                          color: currentTheme.colors.secondaryBlue,
+                          fontSize: 13,
+                        }}
+                      >
                         Download on Google Play
                       </RText>
                     </RStack>
                   </RButton>
                 </View>
-                <RButton
-                  title="Web"
-                  style={{ margin: 10, padding: 32, width: '100%' }}
-                >
-                  <RStack
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 8,
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      name="web"
-                      size={44}
-                      color="white"
-                    />
-                    <RText style={{ color: 'white' }}>Use on Web</RText>
-                  </RStack>
-                </RButton>
               </View>
             )}
+          </View>
+        </View>
+        <View style={styles.secondaryContentContainer}>
+          {/* <ImageBackground
+            source={require("../../assets/background-image.png")}
+            style={styles.backgroundImage}
+          > */}
+          {/* <View style={styles.overlay} /> */}
+          {/* <View style={styles.contentContainer}>
             <RStack
               width="100%"
               maxWidth={Platform.OS === 'web' ? 800 : '100%'}
@@ -176,8 +229,8 @@ const LandingPage = () => {
               </View>
             </RLink>
           </View>
-          <StatusBar style="auto" />
-          {/* </ImageBackground> */}
+          <StatusBar style="auto" /> */}
+          </ImageBackground>
         </View>
       </RStack>
     </ScrollView>

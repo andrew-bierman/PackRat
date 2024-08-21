@@ -44,8 +44,8 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: Platform.OS === 'web' ? 24 : 20,
-      fontWeight: Platform.OS === 'web' ? 'bold' : 'normal',
+      fontSize: Platform.OS === 'web' ? 20 : 20,
+      fontWeight: Platform.OS === 'web' ? '300' : 'normal',
       textAlign: 'center',
       color: currentTheme.colors.text,
       marginBottom: 20, // Ensure spacing between text and next elements
