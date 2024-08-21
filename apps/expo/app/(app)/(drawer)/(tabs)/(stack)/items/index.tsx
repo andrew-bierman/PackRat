@@ -1,10 +1,14 @@
 import React from 'react';
-import Items from 'app/screens/items';
+import { ItemsScreen } from 'app/modules/item';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import useTheme from 'app/hooks/useTheme';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 
-export default function ItemsScreen() {
+export default function ItemsPage() {
+  const { currentTheme } = useTheme();
+
   return (
     <>
       {Platform.OS === 'web' && (
@@ -16,12 +20,23 @@ export default function ItemsScreen() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Items',
+          headerRight: () => (
+            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          ),
+
+          headerStyle: {
+            backgroundColor: currentTheme.colors.background,
+          },
+          headerTitleStyle: {
+            fontSize: 24,
+          },
+          headerTintColor: currentTheme.colors.tertiaryBlue,
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Items />
+      <ItemsScreen />
     </>
   );
 }

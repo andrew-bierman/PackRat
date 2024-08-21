@@ -49,7 +49,7 @@ export const defaultInputGroupStyles = {
       }),
 
   borderColor: '$borderColor',
-  backgroundColor: '$color2',
+  backgroundColor: '$color6',
 
   // this fixes a flex bug where it overflows container
   minWidth: 0,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
-import Settings from 'app/screens/user/Settings';
+import { SettingsScreen } from 'app/modules/user';
 import Head from 'expo-router/head';
 
 export default function SettingsPage() {
@@ -21,7 +21,7 @@ export default function SettingsPage() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Settings />
+      <SettingsScreen />
     </>
   );
 }

@@ -67,7 +67,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               }}
             >
               <RInput
-                style={{ flex: 1 }}
+                style={{ flex: 1, backgroundColor: currentTheme.colors.card }}
                 paddingLeft={35}
                 paddingRight={55}
                 placeholder={placeholder ?? 'Search'}
@@ -77,6 +77,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               <MaterialIcons
                 name="search"
                 style={{
+                  color: currentTheme.colors.text,
                   position: 'absolute',
                   height: '100%',
                   alignSelf: 'center',
@@ -168,20 +169,20 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
           minWidth="100%"
           alignSelf="center"
           position="relative"
-          backgroundColor={currentTheme.colors.text}
+          backgroundColor={currentTheme.colors.background}
           borderRadius={8}
         >
           <RStack
             flexDirection="row"
             alignItems="center"
             borderBottomWidth={1}
-            borderColor={currentTheme.colors.background}
+            borderColor={currentTheme.colors.border}
             padding={4}
           >
             <MaterialCommunityIcons
               name="magnify"
               size={24}
-              color={currentTheme.colors.background}
+              color={currentTheme.colors.text}
               style={{ marginLeft: 10 }}
             />
             <RInput
@@ -215,7 +216,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 <MaterialIcons
                   name="close"
                   size={24}
-                  color={currentTheme.colors.background}
+                  color={currentTheme.colors.text}
                 />
               </RIconButton>
             )}

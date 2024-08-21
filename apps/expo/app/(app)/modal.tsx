@@ -37,7 +37,7 @@ export default function Modal() {
         {/* Use `../` as a simple way to navigate to the root. This is not analogous to "goBack". */}
         {!isPresented && <Link href="../">Dismiss</Link>}
         {/* Native modals have dark backgrounds on iOS, set the status bar to light content. */}
-        <StatusBar style="light" />
+        <StatusBar style="dark" />
         <RText>modal</RText>
 
         <RText>isPresented: {isPresented ? 'true' : 'false'}</RText>
