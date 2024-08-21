@@ -8,7 +8,9 @@ test('Pack name already exists', async ({ page }) => {
   await page.getByLabel('Password').click();
   await page.getByLabel('Password').fill('12345678');
   await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByText('Create a Pack').click();
+  await page.getByText('Create').click();
+  await page.getByText('Create a Pack').hover();
+  await page.goto('https://packrat.world/pack/create');
   await page.getByPlaceholder('Name').click();
   await page.getByPlaceholder('Name').fill('hit');
   await page.getByRole('button', { name: 'Add Pack' }).click();
