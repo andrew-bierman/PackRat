@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import {
   RStack,
   RIconButton,
   EditableText,
   DropdownComponent,
 } from '@packrat/ui';
-import { useFetchSinglePack, useDeletePack } from 'app/hooks/packs';
+import { useFetchSinglePack, useDeletePack } from 'app/modules/pack';
 import { usePackTitleInput } from './usePackTitleInput';
 import { useRouter } from 'app/hooks/router';
 import { Platform, View } from 'react-native';
@@ -54,6 +54,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
       <CustomCardHeader
         link={''}
         data={data}
+        ownerId={data?.owner_id}
         title={
           <RStack
             style={{

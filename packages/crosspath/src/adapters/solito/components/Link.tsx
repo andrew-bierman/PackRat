@@ -1,1 +1,1 @@
-export { Link } from 'solito/link';
+export { Link, TextLink } from 'solito/link';

@@ -1,24 +1,31 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View, Dimensions, Platform } from 'react-native';
-import { SearchItem } from '../item/SearchItem';
+import { SearchItem } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
-import { useAuthUser } from 'app/auth/hooks/useUser';
+import { ItemCardHeader } from './ItemCardHeader';
+import { useAuthUser } from 'app/modules/auth';
 
 interface CustomCardProps {
   title: string;
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip';
+  type: 'pack' | 'trip' | 'item';
   destination?: string;
   data: {
-    owner_id: string
+    owner_id?: string;
     owners?: Array<{ name: string }> | null;
   };
 }
+
+const HEADER_COMPONENTS = {
+  trip: TripCardHeader,
+  pack: PackCardHeader,
+  item: ItemCardHeader,
+};
 
 export const CustomCard = ({
   title,
@@ -35,7 +42,7 @@ export const CustomCard = ({
   if (!data) return null;
 
   const isWeb = Platform.OS === 'web';
-  console.log('CustomCardProps ', data  )
+  const Header = HEADER_COMPONENTS[type] || PackCardHeader;
 
   return (
     <View
@@ -64,11 +71,7 @@ export const CustomCard = ({
             gap: 16,
           }}
         >
-          {type === 'trip' ? (
-            <TripCardHeader data={data} title={title} link={link} />
-          ) : (
-            <PackCardHeader data={data} title={title} link={link || ''} />
-          )}
+          <Header data={data} title={title} link={link} />
         </View>
         <RSeparator />
         {type === 'pack' && authUser?.id === data.owner_id ? (
@@ -94,12 +97,16 @@ export const CustomCard = ({
           style={{
             paddingRight: 16,
             paddingLeft: 16,
+            flex: 1,
+            paddingBottom: 100,
           }}
         >
           {content}
         </View>
         <RSeparator />
-        <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
+        {footer ? (
+          <View style={{ padding: 16, paddingTop: 0 }}>{footer}</View>
+        ) : null}
       </RStack>
     </View>
   );
@@ -109,7 +116,7 @@ const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: !isDark ? currentTheme.colors.card : '#1A1A1D',
+      backgroundColor: currentTheme.colors.border,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',

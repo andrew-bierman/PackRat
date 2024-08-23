@@ -6,7 +6,7 @@ import {
   Entypo,
   Fontisto,
 } from '@expo/vector-icons';
-import { useAuthUser } from '../../auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { Platform } from 'react-native';
 import { Separator } from 'tamagui';
 
@@ -100,17 +100,17 @@ const logedInMenuItems: NavigationItem[] = [
     text: 'Packs',
     iconSource: MaterialIcons,
   },
-  ...((Platform.OS != 'web'
-    ? [
-        {
-          type: NavigationItemTypeEnum.LINK,
-          href: '/maps',
-          icon: 'map',
-          text: 'Downloaded Maps',
-          iconSource: Entypo,
-        },
-      ]
-    : []) as NavigationItem[]),
+  // ...((Platform.OS != 'web'
+  //   ? [
+  //       {
+  //         type: NavigationItemTypeEnum.LINK,
+  //         href: '/maps',
+  //         icon: 'map',
+  //         text: 'Downloaded Maps',
+  //         iconSource: Entypo,
+  //       },
+  //     ]
+  //   : []) as NavigationItem[]),
   {
     type: NavigationItemTypeEnum.LINK,
     href: '/items',

@@ -5,7 +5,11 @@ import { protectedProcedure } from '../../trpc';
 export const deleteItem = async (c) => {
   try {
     const { itemId, packId } = await c.req.parseBody();
-    const itemDeleted = await deleteItemService(itemId, packId);
+    const itemDeleted = await deleteItemService(
+      itemId,
+      c.ctx.executionCtx,
+      packId,
+    );
     return c.json({ itemDeleted }, 200);
   } catch (error) {
     return c.json({ error: `Failed to delete item: ${error.message}` }, 500);

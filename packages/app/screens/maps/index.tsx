@@ -8,9 +8,9 @@ import { api } from 'app/constants/api';
 import { RButton, RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Map } from 'app/components/map';
-import { useAuthUserToken, useUserQuery } from 'app/auth/hooks';
+import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
-import { ZStack } from 'tamagui';
+import { disableScreen } from 'app/hoc/disableScreen';
 
 interface OfflineMap {
   name: string;
@@ -53,7 +53,7 @@ function CircleCapComp() {
   );
 }
 
-export default function DownloadedMaps() {
+function DownloadedMaps() {
   const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -114,7 +114,7 @@ export default function DownloadedMaps() {
             fontSize: 20,
             fontWeight: 'bold',
             marginVertical: 20,
-            color: currentTheme.colors.text,
+            color: currentTheme.colors.white,
           }}
         >
           Downloaded Maps
@@ -145,7 +145,7 @@ export default function DownloadedMaps() {
                       fontWeight: 'bold',
                       marginTop: 5,
                       textAlign: 'center',
-                      color: currentTheme.colors.text,
+                      color: currentTheme.colors.white,
                     }}
                   >
                     {offlineMap.name}
@@ -173,3 +173,5 @@ const loadStyles = ({ currentTheme }) => {
     },
   };
 };
+
+export default disableScreen(DownloadedMaps);

@@ -8,9 +8,8 @@ import { useMedia } from 'tamagui';
 import * as React from 'react';
 import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
-import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
-import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
-import { AddItem } from 'app/components/item/AddItem';
+import { AddItem } from 'app/modules/item';
+import { DeletePackItemModal, EditPackItemModal } from 'app/modules/pack';
 import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
 
 import { Platform } from 'react-native';

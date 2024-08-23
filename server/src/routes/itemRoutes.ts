@@ -11,6 +11,9 @@ import {
   addGlobalItemToPack,
   editGlobalItemAsDuplicate,
   deleteGlobalItem,
+  importItems,
+  importItemsGlobal,
+  getSimilarItems,
 } from '../controllers/item/index';
 import * as validator from '@packrat/validations';
 import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
@@ -25,6 +28,13 @@ router.get(
   authTokenMiddleware,
   zodParser(validator.getItems, 'params'),
   tryCatchWrapper(getItems),
+);
+
+router.get(
+  '/similarItems',
+  authTokenMiddleware,
+  zodParser(validator.getSimilarItems, 'body'),
+  tryCatchWrapper(getSimilarItems),
 );
 
 router.get(
@@ -46,6 +56,20 @@ router.post(
   authTokenMiddleware,
   zodParser(validator.addItem, 'body'),
   tryCatchWrapper(addItem),
+);
+
+router.post(
+  '/import',
+  authTokenMiddleware,
+  zodParser(validator.importItem, 'body'),
+  tryCatchWrapper(importItems),
+);
+
+router.post(
+  '/importGlobal',
+  authTokenMiddleware,
+  zodParser(validator.importItemsGlobal, 'body'),
+  tryCatchWrapper(importItemsGlobal),
 );
 
 router.put(
