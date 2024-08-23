@@ -34755,9 +34755,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tauri@workspace:apps/tauri":
+"tauri-app@workspace:apps/tauri":
   version: 0.0.0-use.local
-  resolution: "tauri@workspace:apps/tauri"
+  resolution: "tauri-app@workspace:apps/tauri"
   dependencies:
     "@originjs/vite-plugin-commonjs": "npm:^1.0.3"
     "@packrat/ui": "npm:*"
