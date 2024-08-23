@@ -1,18 +1,16 @@
 import React from 'react';
 import { SessionProvider } from '../context/Auth/SessionProvider';
 import { ThemeProvider } from '../context/theme';
-import { TrpcTanstackProvider } from './TrpcTanstackProvider';
+import { BugsnagErrorBoundary } from './BugsnagProvider';
 import { JotaiProvider } from './JotaiProvider';
+import { TrpcTanstackProvider } from './TrpcTanstackProvider';
 import { useAttachListeners } from './useAttachListeners';
-import Bugsnag from './Bugsnag';
-
-const ErrorBoundary = Bugsnag.getPlugin('react')?.createErrorBoundary(React);
 
 export function CombinedProvider({ children }: { children: React.ReactNode }) {
   useAttachListeners();
 
   return (
-    <ErrorBoundary>
+    <BugsnagErrorBoundary>
       <JotaiProvider>
         <TrpcTanstackProvider>
           <SessionProvider>
@@ -20,6 +18,6 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
           </SessionProvider>
         </TrpcTanstackProvider>
       </JotaiProvider>
-    </ErrorBoundary>
+    </BugsnagErrorBoundary>
   );
 }
