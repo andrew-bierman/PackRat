@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Separator, Text, View, YGroup } from 'tamagui';
 import { RButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
-import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
+import { useAddPackItem } from 'app/modules/pack';
 
 interface Category {
   id: string;

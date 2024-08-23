@@ -1,11 +1,11 @@
-import Items from 'app/screens/items';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { ItemsScreen } from 'app/modules/item';
+import { AuthWrapper } from 'app/modules/auth';
 // export const runtime = 'experimental-edge';
 
 export default function ItemsPage() {
   return (
     <>
-      <Items />
+      <ItemsScreen />
     </>
   );
 }

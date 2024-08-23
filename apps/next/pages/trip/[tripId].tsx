@@ -1,5 +1,5 @@
 import { TripDetails } from 'app/screens/trip/TripDetails';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
 

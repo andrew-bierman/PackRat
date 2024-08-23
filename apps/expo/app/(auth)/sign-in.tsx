@@ -1,8 +1,6 @@
 import React from 'react';
-import Login from 'app/screens/LoginScreen';
-import { Platform } from 'react-native';
+import { LoginScreen } from 'app/modules/auth';
 import { Stack } from 'expo-router';
-import Head from 'expo-router/head';
 
 /**
  * Renders the SignIn component.
@@ -21,7 +19,7 @@ export default function SignIn() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Login />
+      <LoginScreen />
     </>
   );
 }

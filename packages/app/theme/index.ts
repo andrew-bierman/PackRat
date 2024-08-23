@@ -7,10 +7,9 @@ export const theme = {
     background: 'black',
     secondaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
-    card: '#fafafa',
-    text: '#FFFFFF',
-    textColor: '#000',
-    border: '#fafafa',
+    card: '#f8f8f8',
+    text: '#333333',
+    border: '#f3f3f3',
     notification: '#0A84FF',
     error: '#FF453A',
     textPrimary: 'black',
@@ -42,16 +41,17 @@ export const theme = {
     widthDesktop: '85%',
   },
 };
+
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
-    background: '#1A1A1D',
+    background: '#050505',
     secondaryBlue: '#0C66A1',
+    tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',
-    card: '#2D2D2D',
-    text: '#C5C6C7',
-    textColor: '#C5C6C7',
-    border: '#4E4E50',
+    card: '#1c1a17',
+    text: '#eaf6ff',
+    border: '#221f1c',
     notification: '#0A84FF',
     error: '#FF453A',
     textPrimary: 'white',
@@ -90,7 +90,7 @@ export const nativeBaseLightTheme = extendTheme({
       500: theme.colors.background,
     },
     amber: {
-      100: theme.colors.text,
+      100: theme.colors.white,
     },
   },
 });
@@ -100,7 +100,7 @@ export const nativeBaseDarkTheme = extendTheme({
       500: darkTheme.colors.background,
     },
     amber: {
-      100: darkTheme.colors.text,
+      100: darkTheme.colors.white,
     },
   },
 });
@@ -110,7 +110,7 @@ export const lightThemePaper = {
   colors: {
     ...DefaultTheme.colors,
     primary: theme.colors.primary,
-    onSurface: theme.colors.text,
+    onSurface: theme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: theme.colors.background,
@@ -123,7 +123,7 @@ export const darkPaperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: darkTheme.colors.primary,
-    onSurface: darkTheme.colors.text,
+    onSurface: darkTheme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: darkTheme.colors.background,

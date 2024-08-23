@@ -1,9 +1,9 @@
 import React from 'react';
 import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { AddPackContainer } from '../pack/AddPack';
+import { AddPackContainer } from '../../modules/pack/widgets/AddPackContainer';
 import useTheme from '../../hooks/useTheme';
-import PackContainer from '../pack/PackContainer';
+import PackContainer from '../../modules/pack/widgets/PackContainer';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
@@ -45,7 +45,7 @@ export const GearList = () => {
           />
           <RText
             style={{
-              color: currentTheme.colors.textPrimary,
+              color: currentTheme.colors.text,
               fontSize: currentTheme.font.size,
               paddingTop: 12,
               paddingBottom: 12,

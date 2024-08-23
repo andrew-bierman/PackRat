@@ -2,9 +2,8 @@ import React from 'react';
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
-import ProfileContainer from 'app/screens/user/ProfileContainer';
+import { ProfileScreen, useProfile, useProfileId } from 'app/modules/user';
 import Head from 'expo-router/head';
-import { useProfile, useProfileId } from 'app/hooks/user';
 
 const Profile = () => {
   const [id] = useProfileId();
@@ -24,7 +23,7 @@ const Profile = () => {
           title: userRealName ? `${userRealName}'s Profile` : '',
         }}
       />
-      <ProfileContainer id={id} />
+      <ProfileScreen userId={id} />
     </>
   );
 };
