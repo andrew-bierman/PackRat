@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('create a pack', async ({ page }) => {
-  await page.goto('https://packrat.world/')
+  await page.goto('https://packrat.world/');
   await page.getByRole('link', { name: 'Get Started' }).click();
   await page.getByLabel('Email').click();
   await page.getByLabel('Email').fill('zoot3@email.com');
