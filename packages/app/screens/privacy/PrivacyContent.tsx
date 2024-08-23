@@ -19,16 +19,11 @@ const PrivacyContent = () => {
       <ScrollView>
         <View style={styles.textContainer}>
           <View style={styles.headerContainer}>
-            <Text style={[isDark ? styles.headerDark : styles.header]}>
-              Privacy Policy
-            </Text>
+            <Text style={styles.header}>Privacy Policy</Text>
           </View>
 
           {privacySections.map((section, index) => (
-            <Text
-              key={index}
-              style={[isDark ? styles.tertiaryBlue : styles.text]}
-            >
+            <Text key={index} style={styles.text}>
               {section}
             </Text>
           ))}
