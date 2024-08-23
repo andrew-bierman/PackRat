@@ -16,10 +16,11 @@ test('Pack name already exists', async ({ page }) => {
   await page.getByRole('button', { name: 'Add Pack' }).click();
 
   // Verify the error message for invalid email format
-  const nameErrorMessage = page.locator('text=A pack with the same name already exists');
+  const nameErrorMessage = page.locator(
+    'text=A pack with the same name already exists',
+  );
   await expect(nameErrorMessage).toBeVisible({ timeout: 50000 }); // Adjust the timeout as needed
 
   const packnameErrorMessage = page.locator('text=Pack already exists');
   await expect(packnameErrorMessage).toBeVisible({ timeout: 50000 }); // Adjust the timeout as needed
-
 });

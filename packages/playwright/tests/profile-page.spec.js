@@ -11,5 +11,4 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Menu' }).hover();
   await page.getByRole('button', { name: 'Profile' }).click();
   await page.goto('https://packrat.world/profile');
-
 });
