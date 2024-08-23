@@ -18,7 +18,6 @@ export const LandingPageAccordion = ({ title, content, iconName }) => {
         <RText style={styles.featureText}>{title}</RText>
         <RText style={styles.cardContent}>{content}</RText>
       </View>
-      
     </RCard>
   );
 };

@@ -54,7 +54,7 @@ const loadStyles = (theme) => {
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
       textAlign: 'center',
       marginTop: xs ? 0 : 30,
-      color: '#45607d',
+      color: currentTheme.colors.textDarkGrey,
       width: '58vw',
       marginBottom: 20, // Ensure spacing between text and next elements
       paddingHorizontal: 10, // Adjust text alignment on smaller screens
@@ -63,7 +63,6 @@ const loadStyles = (theme) => {
       margin: 30,
       display: 'flex',
       alignItems: 'center',
-      
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
@@ -79,9 +78,9 @@ const loadStyles = (theme) => {
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
-      color: '#315173',
+      color: currentTheme.colors.textDarkGrey,
       fontSize: 18,
-      fontWeight: 'bold',
+      // fontWeight: 'bold',
     },
     landingPageAccordion: {
       flexDirection: 'row',
@@ -95,6 +94,9 @@ const loadStyles = (theme) => {
       margin: 8,
       backgroundColor: 'transparent',
       flexDirection: 'row',
+      borderWidth: 1,
+      borderColor: 'rgba(0, 0, 0, 0.3)',
+      borderRadius: 16
     },
     cardHeader: {
       paddingHorizontal: 20,
@@ -104,11 +106,11 @@ const loadStyles = (theme) => {
     icon: {
       fontSize: 26,
       width: '100%',
-      color: '#315173',
+      color: currentTheme.colors.icon,
     },
     featureText: {
       fontSize: 20,
-      color: '#315173',
+      color: currentTheme.colors.textPrimary,
       marginTop: 10,
       fontWeight: 'bold',
       marginBottom: 10,
@@ -116,7 +118,7 @@ const loadStyles = (theme) => {
     },
     cardContent: {
       fontSize: 18,
-      color: '#315173',
+      color: currentTheme.colors.textPrimary,
       width: '100%',
     },
   };

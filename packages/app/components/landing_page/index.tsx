@@ -8,6 +8,7 @@ import {
   RH1,
   RCard,
   RH3,
+  YStack,
 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -25,15 +26,13 @@ const RStack: any = OriginalRStack;
 const LandingPage = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const { xxs, xs, sm, xxl } = useResponsive();
-
-  const handleGetStarted = () => {
-    return <Redirect to="/sign-in" />;
-  };
+  const { xs, sm, md, lg, xl, xxl } = useResponsive();
 
   return (
     <ScrollView>
+      
       <RStack style={styles.container}>
+        
         <View
           style={
             {
@@ -46,18 +45,18 @@ const LandingPage = () => {
             } as any
           }
         >
-          <View
+          <View 
             style={{
-              background:
-                'radial-gradient(circle at center, #0d1e30, #0a2038, #02254a, #062240)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              // background:
+              //   'radial-gradient(circle at center, #0d1e30, #0a2038, #02254a, #062240)',
+              // WebkitBackgroundClip: 'text',
+              // WebkitTextFillColor: 'transparent',
             }}
           >
             {Platform.OS === 'web' ? (
               <RH1
                 style={{
-                  color: 'transparent',
+                  color: currentTheme.colors.textPrimary,
                   fontSize: xs || sm ? currentTheme.font.headerFont : 90,
                   margin: xs || sm ? 0 : 20,
                   fontWeight: 'bolder',
@@ -88,7 +87,7 @@ const LandingPage = () => {
           >
             <RH1
               style={{
-                color: '#ab766d',
+                color: currentTheme.colors.textPrimary,
                 height: 'auto',
                 fontSize: xs || sm ? 34 : 44,
                 fontWeight: xs || sm ? 'bold' : 'bolder',
@@ -108,9 +107,9 @@ const LandingPage = () => {
               <View style={styles.getStartedButton}>
                 <Text style={styles.footerText}> Get Started</Text>
                 <MaterialCommunityIcons
-                  name="arrow-right"
+                  name="source-commit-start"
                   size={24}
-                  color="#315173"
+                  color={currentTheme.colors.buttonBackgroundPrimary}
                 />
               </View>
             </RLink>
@@ -140,7 +139,7 @@ const LandingPage = () => {
                       margin: 10,
                       backgroundColor: 'transparent',
                       borderWidth: 1,
-                      borderColor: '#315173',
+                      borderColor: currentTheme.colors.textPrimary,
                       width: xs || sm ? '100%' : 'auto',
                       overflow: 'hidden',
                     }}
@@ -159,7 +158,7 @@ const LandingPage = () => {
                         <MaterialCommunityIcons
                           name="apple"
                           size={55}
-                          color="#315173"
+                          color={currentTheme.colors.icon}
                           style={{
                             width: '100%',
                           }}
@@ -173,7 +172,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 14,
@@ -185,7 +184,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 20,
@@ -205,7 +204,7 @@ const LandingPage = () => {
                       margin: 10,
                       backgroundColor: 'transparent',
                       borderWidth: 1,
-                      borderColor: '#315173',
+                      borderColor: currentTheme.colors.textPrimary,
                       width: xs || sm ? '100%' : 'auto',
                       overflow: 'hidden',
                     }}
@@ -224,7 +223,7 @@ const LandingPage = () => {
                         <MaterialCommunityIcons
                           name="google-play"
                           size={55}
-                          color="#315173"
+                          color={currentTheme.colors.icon}
                           style={{
                             width: '100%',
                           }}
@@ -238,7 +237,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 14,
@@ -250,7 +249,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 20,
@@ -270,7 +269,7 @@ const LandingPage = () => {
                       margin: 10,
                       backgroundColor: 'transparent',
                       borderWidth: 1,
-                      borderColor: '#315173',
+                      borderColor: currentTheme.colors.textPrimary,
                       width: xs || sm ? '100%' : 'auto',
                       overflow: 'hidden',
                     }}
@@ -289,7 +288,7 @@ const LandingPage = () => {
                         <MaterialCommunityIcons
                           name="web"
                           size={55}
-                          color="#315173"
+                          color={currentTheme.colors.icon}
                           style={{
                             width: '100%',
                           }}
@@ -303,7 +302,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 14,
@@ -315,7 +314,7 @@ const LandingPage = () => {
                         <RText
                           style={{
                             width: '100%',
-                            color: '#315173',
+                            color: currentTheme.colors.textPrimary,
                             fontStyle: 'normal',
                             textAlign: 'left',
                             fontSize: 20,
