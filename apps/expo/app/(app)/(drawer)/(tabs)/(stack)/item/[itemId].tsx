@@ -1,5 +1,5 @@
 import React from 'react';
-import ItemDetails from 'app/screens/items/item-details';
+import { ItemDetailsScreen } from 'app/modules/item';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -23,7 +23,7 @@ export default function Item() {
         }}
       />
       {/* <DetailsComponent type='pack'/> */}
-      <ItemDetails />
+      <ItemDetailsScreen />
     </>
   );
 }

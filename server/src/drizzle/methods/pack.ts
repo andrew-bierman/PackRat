@@ -1,8 +1,7 @@
-import { eq, sql, asc, desc, and, inArray } from 'drizzle-orm';
+import { eq, sql, asc, desc, and } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
 import { convertWeight } from '../../utils/convertWeight';
-import { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 
 export class Pack {
   getRelations({ includeRelated, ownerId = true, completeItems = false }) {
@@ -177,31 +176,16 @@ export class Pack {
       });
       return (await packs).map((pack: any) => ({
         ...pack,
-        ...this.computeDerivedProperties(pack),
+        scores: JSON.parse(pack.scores as string),
+        grades: JSON.parse(pack.grades as string),
+        total_weight: this.computeTotalWeight(pack),
+        favorites_count: this.computeFavouritesCount(pack),
+        total_score: this.computeTotalScores(pack),
+        items: pack.itemPacks.map((itemPack) => itemPack.item),
       }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
-  }
-
-  async findInArray({
-    column = PackTable.id,
-    array,
-  }: {
-    column?: SQLiteColumn;
-    array: string[];
-  }) {
-    const packs = await DbClient.instance.query.pack.findMany({
-      where: inArray(column, array),
-      ...this.getRelations({
-        includeRelated: true,
-        completeItems: true,
-      }),
-    });
-    return packs.map((pack) => ({
-      ...pack,
-      ...this.computeDerivedProperties(pack),
-    }));
   }
 
   async sortPacksByItems(options: any) {
@@ -269,17 +253,6 @@ export class Pack {
   //     throw new Error(`Failed to sort packs by owners: ${error.message}`);
   //   }
   // }
-
-  computeDerivedProperties(pack) {
-    return {
-      scores: JSON.parse(pack.scores as string),
-      grades: JSON.parse(pack.grades as string),
-      total_weight: this.computeTotalWeight(pack),
-      favorites_count: this.computeFavouritesCount(pack),
-      total_score: this.computeTotalScores(pack),
-      items: pack.itemPacks?.map((itemPack) => itemPack.item) ?? [],
-    };
-  }
 
   computeTotalWeight(pack) {
     if (pack.itemPacks && pack.itemPacks.length > 0) {
