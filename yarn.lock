@@ -15997,7 +15997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^2.0.1, chalk@npm:^2.1.0, chalk@npm:^2.4.1, chalk@npm:^2.4.2":
+"chalk@npm:^2.0.1, chalk@npm:^2.1.0, chalk@npm:^2.3.0, chalk@npm:^2.4.1, chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
   dependencies:
@@ -22755,7 +22755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:7.2.3, glob@npm:^7.0.3, glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.7, glob@npm:^7.2.3":
+"glob@npm:7.2.3, glob@npm:^7.0.3, glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.1.7, glob@npm:^7.2.3":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -35158,6 +35158,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"strip-indent@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "strip-indent@npm:3.0.0"
+  dependencies:
+    min-indent: "npm:^1.0.0"
+  checksum: 10/18f045d57d9d0d90cd16f72b2313d6364fd2cb4bf85b9f593523ad431c8720011a4d5f08b6591c9d580f446e78855c5334a30fb91aa1560f5d9f95ed1b4a0530
+  languageName: node
+  linkType: hard
+
 "strip-json-comments@npm:^3.1.0, strip-json-comments@npm:^3.1.1":
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
@@ -36475,6 +36484,13 @@ __metadata:
   version: 4.1.0
   resolution: "type-detect@npm:4.1.0"
   checksum: 10/e363bf0352427a79301f26a7795a27718624c49c576965076624eb5495d87515030b207217845f7018093adcbe169b2d119bb9b7f1a31a92bfbb1ab9639ca8dd
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^0.13.1":
+  version: 0.13.1
+  resolution: "type-fest@npm:0.13.1"
+  checksum: 10/11e9476dc85bf97a71f6844fb67ba8e64a4c7e445724c0f3bd37eb2ddf4bc97c1dc9337bd880b28bce158de1c0cb275c2d03259815a5bf64986727197126ab56
   languageName: node
   linkType: hard
 
