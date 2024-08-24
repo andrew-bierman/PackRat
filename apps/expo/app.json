@@ -2,7 +2,7 @@
   "expo": {
     "name": "packrat",
     "slug": "packrat",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "automatic",
@@ -46,7 +46,11 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "13.4"
+            "deploymentTarget": "13.4",
+            "buildNumber": "3",
+            "infoPlist": {
+              "ITSAppUsesNonExemptEncryption": false
+            }
           }
         }
       ]

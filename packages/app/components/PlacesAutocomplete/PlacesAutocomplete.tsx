@@ -47,7 +47,9 @@ const PlaceItem = ({ item }: any) => {
   const { currentTheme } = useTheme();
   return (
     <RStack style={{ flexDirection: 'row' }}>
-      <RText fontWeight="400">{item.properties.name}</RText>
+      <RText fontWeight="400" color="red">
+        {item.properties.name}
+      </RText>
       <RText opacity={100} textTransform={'capitalize'}>
         {item.properties.osm_value}
       </RText>

@@ -12,7 +12,7 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: ' Packs' }).click();
   await page.goto('https://packrat.world/packs');
   await page.getByRole('link', { name: 'Quantity field' }).click();
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('networkidle');
   const itemButton = await page.getByRole('button', { name: 'Add Item' });
   await itemButton.isVisible();
   await itemButton.click();
@@ -24,6 +24,6 @@ test('test', async ({ page }) => {
   await page.getByLabel('Essentials').click();
   const submitButton = await page.getByRole('button', { name: 'Add Item' });
   await submitButton.isVisible();
-  await submitButton.click();
+  await submitButton.hover();
   await page.goto('https://packrat.world/pack/jfxuhkd3zflt4ddavnyhh3so');
 });
