@@ -9,6 +9,7 @@ import {
   RCard,
   RH3,
   YStack,
+  RImage,
 } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -30,89 +31,71 @@ const LandingPage = () => {
 
   return (
     <ScrollView>
-      
       <RStack style={styles.container}>
-        
         <View
           style={
             {
-              width: '100vw',
+              width: '100%',
               alignItems: 'center',
               textAlign: 'center',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
               paddingVertical: 18,
               marginTop: Platform.OS !== 'web' ? 25 : 65,
               flex: 1,
             } as any
           }
         >
-          <View 
-            style={{
-              // background:
-              //   'radial-gradient(circle at center, #0d1e30, #0a2038, #02254a, #062240)',
-              // WebkitBackgroundClip: 'text',
-              // WebkitTextFillColor: 'transparent',
-            }}
-          >
-            {Platform.OS === 'web' ? (
+          <View>
+            <View
+              style={{
+                height: 'auto',
+              }}
+            >
               <RH1
                 style={{
                   color: currentTheme.colors.textPrimary,
-                  fontSize: xs || sm ? currentTheme.font.headerFont : 90,
-                  margin: xs || sm ? 0 : 20,
-                  fontWeight: 'bolder',
                   height: 'auto',
-                  whiteSpace: 'pre-wrap',
+                  fontSize: xs || sm ? 34 : 34,
+                  fontWeight: xs || sm ? 'bold' : 'bold',
+                  textAlign: 'left',
                 }}
               >
-                PackRat
+                The Ultimate Travel App
               </RH1>
-            ) : (
-              <RText
-                style={{
-                  height: 40,
-                  color: 'white',
-                  fontSize: 30,
-                  fontWeight: 'bold',
-                  paddingTop: 8,
-                }}
-              >
-                PackRat
-              </RText>
-            )}
+            </View>
+            <RText style={styles.introText}>
+              PackRat is the ultimate adventure planner designed for those who
+              love to explore the great outdoors. Plan and organize your trips
+              with ease, whether it's a weekend camping trip, a day hike, or a
+              cross-country road trip.
+            </RText>
+            <View style={styles.buttonContainer}>
+              <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
+                <View style={styles.getStartedButton}>
+                  <Text style={styles.footerText}> Get Started</Text>
+                  <MaterialCommunityIcons
+                    name="source-commit-start"
+                    size={24}
+                    color={currentTheme.colors.buttonBackgroundPrimary}
+                  />
+                </View>
+              </RLink>
+            </View>
           </View>
-          <View
-            style={{
-              height: 'auto',
-            }}
-          >
-            <RH1
-              style={{
-                color: currentTheme.colors.textPrimary,
-                height: 'auto',
-                fontSize: xs || sm ? 34 : 44,
-                fontWeight: xs || sm ? 'bold' : 'bolder',
+          <View style={{border: '1px solid black'}}>
+            <RImage
+              source={{
+                // TODO: Update this to use the PackRat logo from the assets folder
+                uri: 'https://github.com/andrew-bierman/PackRat/blob/packages/app/assets/packrat_icon.png?raw=true',
+                width: 40,
+                height: 40,
               }}
-            >
-              The Ultimate Travel App
-            </RH1>
-          </View>
-          <RText style={styles.introText}>
-            PackRat is the ultimate adventure planner designed for those who
-            love to explore the great outdoors. Plan and organize your trips
-            with ease, whether it's a weekend camping trip, a day hike, or a
-            cross-country road trip.
-          </RText>
-          <View style={styles.buttonContainer}>
-            <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
-              <View style={styles.getStartedButton}>
-                <Text style={styles.footerText}> Get Started</Text>
-                <MaterialCommunityIcons
-                  name="source-commit-start"
-                  size={24}
-                  color={currentTheme.colors.buttonBackgroundPrimary}
-                />
-              </View>
-            </RLink>
+              width={40}
+              height={40}
+              // style={styles.logo}
+              alt="PackRat Logo"
+            />
           </View>
         </View>
         <View style={styles.secondaryContentContainer}>
@@ -146,7 +129,7 @@ const LandingPage = () => {
                   >
                     <RStack
                       style={{
-                        display: 'flex',
+                        // display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',

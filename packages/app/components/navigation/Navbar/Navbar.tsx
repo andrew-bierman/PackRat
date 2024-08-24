@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Platform } from 'react-native';
-import { RButton, Container } from '@packrat/ui';
+import { RButton, Container, RLink } from '@packrat/ui';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
 import { NavigationList } from '../NavigationList';
@@ -75,20 +75,17 @@ export const Navbar = () => {
                 PackRat
               </Text> */}
             </View>
-            <Drawer />
+            <View style={styles.navbarThird}>
+              <RLink href="/sign-in">
+                <RButton style={styles.loginButton}>Login</RButton>
+              </RLink>
+              <Drawer />
+            </View>
           </View>
         </Container>
       </SafeAreaView>
     </View>
   );
-};
-
-const NavbarStyles = {
-  floatingBg: '#f0f2f5',
-  floatingRadius: 30,
-  floatingBlur: 'blur(10px)',
-  transition: 'all 0.2s ease-in-out',
-  floatingSpacing: 1,
 };
 
 const loadStyles = (
@@ -101,13 +98,27 @@ const loadStyles = (
   md,
   lg,
 ) => {
+  const NavbarStyles = {
+    floatingBg: currentTheme.colors.floatingBg,
+    floatingRadius: 30,
+    floatingBlur: 'blur(10px)',
+    transition: 'all 0.2s ease-in-out',
+    floatingSpacing: 1,
+  };
+
   const isWeb = Platform.OS === 'web';
   const isFloating = isWeb && isScrolled;
   const backgroundColor = isFloating
     ? NavbarStyles.floatingBg
-    : "#f6f6f6";
+    : currentTheme.colors.navbarPrimaryBackground;
 
   return StyleSheet.create({
+    navbarThird: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
     mainContainer: {
       backgroundColor: '#f6f6f6',
       display: 'flex',
@@ -140,7 +151,7 @@ const loadStyles = (
                 padding: NavbarStyles.floatingSpacing,
                 paddingTop: 6,
                 paddingBottom: 6,
-                boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.29)'
+                boxShadow: currentTheme.colors.navbarBoxShadow,
               }
             : {}),
           position: 'fixed' as 'fixed' | 'relative',
@@ -193,7 +204,7 @@ const loadStyles = (
       filter: 'drop-shadow(0 0 1px #45607d)',
     },
     menuBar: {
-      color: "#315173",
+      color: '#315173',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
@@ -202,6 +213,13 @@ const loadStyles = (
       // flexWrap: 'wrap', // Allow items to wrap
     },
     drawerTrigger: {},
+    loginButton: {
+      backgroundColor: 'transparent',
+      color: currentTheme.colors.textPrimary,
+      borderWidth: 1,
+      borderColor: currentTheme.colors.textPrimary,
+      overflow: 'hidden',
+    },
     menuBarItemActive: {
       // Apply styles for the active item
       // ...

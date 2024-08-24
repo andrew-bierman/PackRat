@@ -50,19 +50,19 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: (xs || sm ? 18 : 22),
+      fontSize: (xs || sm ? 18 : 20),
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
       textAlign: 'center',
       marginTop: xs ? 0 : 30,
-      color: currentTheme.colors.textDarkGrey,
-      width: '58vw',
+      color: currentTheme.colors.textPrimary,
+      textAlign: 'left',
+      width: '50vw',
       marginBottom: 20, // Ensure spacing between text and next elements
       paddingHorizontal: 10, // Adjust text alignment on smaller screens
     },
     buttonContainer: {
-      margin: 30,
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'start',
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
@@ -78,7 +78,7 @@ const loadStyles = (theme) => {
       alignItems: 'center', // Ensure text is centered within button
     },
     footerText: {
-      color: currentTheme.colors.textDarkGrey,
+      color: currentTheme.colors.textPrimary,
       fontSize: 18,
       // fontWeight: 'bold',
     },
@@ -95,7 +95,7 @@ const loadStyles = (theme) => {
       backgroundColor: 'transparent',
       flexDirection: 'row',
       borderWidth: 1,
-      borderColor: 'rgba(0, 0, 0, 0.3)',
+      borderColor: currentTheme.colors.cardBorderPrimary,
       borderRadius: 16
     },
     cardHeader: {
