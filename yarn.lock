@@ -7400,6 +7400,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:1.21.0":
+  version: 1.21.0
+  resolution: "@react-native-async-storage/async-storage@npm:1.21.0"
+  dependencies:
+    merge-options: "npm:^3.0.4"
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.60 <1.0
+  checksum: 10/7860faaa0ddb849ba4019f48fba90cffea686fb8a29813379ff38af8d635d4d8e7841735c2ba53b7788fb54312f157338e5630a768e9b2339dc33c4f5b316ca7
+  languageName: node
+  linkType: hard
+
 "@react-native-async-storage/async-storage@npm:^1.23.1":
   version: 1.24.0
   resolution: "@react-native-async-storage/async-storage@npm:1.24.0"
@@ -20457,7 +20468,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.3.0"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@hookform/resolvers": "npm:^3.3.4"
-    "@react-native-async-storage/async-storage": "npm:^1.23.1"
+    "@react-native-async-storage/async-storage": "npm:1.21.0"
     "@react-native-community/geolocation": "npm:^3.0.6"
     "@react-native-community/netinfo": "npm:11.1.0"
     "@react-native-google-signin/google-signin": "npm:^9.0.2"
@@ -20527,7 +20538,7 @@ __metadata:
     expo-crypto: "npm:~12.8.1"
     expo-dev-client: "npm:~3.3.11"
     expo-device: "npm:~5.9.4"
-    expo-document-picker: "npm:^12.0.2"
+    expo-document-picker: "npm:~11.10.1"
     expo-file-system: "npm:~16.0.9"
     expo-font: "npm:~11.10.3"
     expo-haptics: "npm:~12.8.1"
@@ -20754,6 +20765,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/4eb929c6751ed6f82f2f521a4c8a9e10fdfe6f3e9fd44c4f18c6103db09a84697fb923993d3d658b6560ba20ffac276a166d59822575d70d4706057c0d0a291f
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:~11.10.1":
+  version: 11.10.1
+  resolution: "expo-document-picker@npm:11.10.1"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/0ecb48424df27838ecdb42e9ffea5ded8c65983ff6ff7a4b6d4a962278bffc8ea617f0257be0e5041a597242d14c00ef38557997d83adada4c55b5dc03362c69
   languageName: node
   linkType: hard
 
