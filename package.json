@@ -103,7 +103,7 @@
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   },
   "lint-staged": {
     "server/**/*.{js,ts}": [
