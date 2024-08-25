@@ -14,8 +14,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/packrat-app-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#026A9F"
       },
       "package": "com.andrewbierman.packrat"
     },
