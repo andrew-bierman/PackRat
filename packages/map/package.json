@@ -6,21 +6,21 @@
   "main": "src/index.tsx",
   "module:jsx": "src",
   "name": "@packrat/map",
-  "peerDependencies": {
-    "@expo/vector-icons": "*",
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.0",
     "@packrat/config": "*",
     "@packrat/ui": "*",
-    "@react-native-community/geolocation": "*",
-    "@rnmapbox/maps": "*",
-    "@tmcw/togeojson": "*",
-    "expo-document-picker": "*",
-    "expo-file-system": "*",
-    "file-saver": "*",
-    "mapbox-gl": "*",
+    "@react-native-community/geolocation": "^3.0.6",
+    "@rnmapbox/maps": "^10.1.29",
+    "@tmcw/togeojson": "^5.7.0",
+    "expo-document-picker": "~11.10.1",
+    "expo-file-system": "~16.0.9",
+    "file-saver": "^2.0.5",
+    "mapbox-gl": "1.13.3",
     "react": "*",
     "react-native": "*",
-    "togpx": "*",
-    "xmldom": "*"
+    "togpx": "^0.5.4",
+    "xmldom": "^0.6.0"
   },
   "private": true,
   "sideEffects": [
