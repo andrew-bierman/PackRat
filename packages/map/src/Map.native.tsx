@@ -32,7 +32,7 @@ import {
 import MapButtonsOverlay from './MapButtonsOverlay';
 
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
-import { useNativeMap } from 'app/hooks/map/useNativeMap';
+import { useNativeMap } from './hooks/useNativeMap';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';

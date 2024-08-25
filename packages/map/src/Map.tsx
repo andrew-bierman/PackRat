@@ -32,7 +32,7 @@ const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
   const handleGpxUpload = useGpxUpload(setShape);
 
   const element = (
-    <View style={[styles.container, { height: showModal ? '100%' : 400 }]}>
+    <View style={[styles.container, { height: '100%' }]}>
       {showModal || isPolygonOrMultiPolygon(shape) ? (
         <View
           key="map"

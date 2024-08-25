@@ -20,6 +20,7 @@ export const Map: React.FC<MapProps> = ({
     <View
       style={{
         width: '100%',
+        flex: 1,
         paddingHorizontal: 5,
         marginBottom: 20,
       }}
