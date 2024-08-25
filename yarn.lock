@@ -6080,6 +6080,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@packrat/map@npm:*, @packrat/map@workspace:packages/map":
+  version: 0.0.0-use.local
+  resolution: "@packrat/map@workspace:packages/map"
+  peerDependencies:
+    "@expo/vector-icons": "*"
+    "@packrat/config": "*"
+    "@packrat/ui": "*"
+    "@rnmapbox/maps": "*"
+    "@tmcw/togeojson": "*"
+    expo-document-picker: "*"
+    expo-file-system: "*"
+    mapbox-gl: "*"
+    react: "*"
+    react-native: "*"
+    xmldom: "*"
+  languageName: unknown
+  linkType: soft
+
 "@packrat/playwright@workspace:packages/playwright":
   version: 0.0.0-use.local
   resolution: "@packrat/playwright@workspace:packages/playwright"
@@ -13387,6 +13405,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@hookform/resolvers": "npm:^3.3.4"
     "@packrat/crosspath": "npm:*"
+    "@packrat/map": "npm:*"
     "@packrat/ui": "npm:*"
     "@packrat/validations": "npm:*"
     "@react-native-async-storage/async-storage": "npm:^1.23.1"

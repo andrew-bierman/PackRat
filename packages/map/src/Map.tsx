@@ -1,22 +1,19 @@
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
-import { useWebMap } from 'app/hooks/map/useWebMap';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useWebMap } from './hooks/useWebMap';
 import mapboxgl from 'mapbox-gl';
-import React, { FC, useState } from 'react';
-import { Modal, View } from 'react-native';
-import { isPolygonOrMultiPolygon } from '../../utils/mapFunctions';
+import React, { type FC, useState } from 'react';
+import { Modal, View, StyleSheet } from 'react-native';
+import { isPolygonOrMultiPolygon } from './utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
 import useGpxUpload from './useGpxUpload';
-import { MapProps } from './models';
+import { type MapProps } from './models';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-const DESTINATION = 'destination';
-const TRIP = 'trip';
 const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
   const [downloadable, setDownloadable] = useState(false);
-  const styles = useCustomStyles(loadStyles);
+  const styles = StyleSheet.create(loadStyles);
   const {
     shape,
     setShape,
@@ -36,18 +33,18 @@ const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
 
   const element = (
     <View style={[styles.container, { height: showModal ? '100%' : 400 }]}>
-      {showModal || isPolygonOrMultiPolygon(shape) ? (
-        <View
-          key="map"
-          ref={mapContainer}
-          style={{
-            ...styles.map,
-            height: isPolygonOrMultiPolygon(shape) ? 200 : '100vh',
-          }}
-        />
-      ) : (
+      {/* {showModal || isPolygonOrMultiPolygon(shape) ? ( */}
+      <View
+        key="map"
+        ref={mapContainer}
+        style={{
+          ...styles.map,
+          height: isPolygonOrMultiPolygon(shape) ? 200 : '100%',
+        }}
+      />
+      {/* ) : (
         <MapPreview shape={shape} />
-      )}
+      )} */}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}
@@ -86,7 +83,7 @@ const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
   // );
 };
 
-const loadStyles = () => ({
+const loadStyles = {
   container: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -95,11 +92,12 @@ const loadStyles = () => ({
   },
   map: {
     width: '100%',
-    minHeight: '100vh', // Adjust the height to your needs
+    minHeight: '100%',
+    // minHeight: '100vh', // Adjust the height to your needs
   },
   modal: {
     alignItems: 'center',
   },
-});
+} as const;
 
 export default WebMap;

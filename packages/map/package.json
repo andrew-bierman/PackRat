@@ -1,0 +1,30 @@
+{
+  "files": [
+    "types",
+    "dist"
+  ],
+  "main": "src/index.tsx",
+  "module:jsx": "src",
+  "name": "@packrat/map",
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "@packrat/config": "*",
+    "@packrat/ui": "*",
+    "@react-native-community/geolocation": "*",
+    "@rnmapbox/maps": "*",
+    "@tmcw/togeojson": "*",
+    "expo-document-picker": "*",
+    "expo-file-system": "*",
+    "file-saver": "*",
+    "mapbox-gl": "*",
+    "react": "*",
+    "react-native": "*",
+    "togpx": "*",
+    "xmldom": "*"
+  },
+  "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
+  "version": "0.0.1"
+}

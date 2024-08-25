@@ -6,10 +6,7 @@ import { viteSource } from './sources/vite';
  */
 
 // Simplifying environment variable access using logical OR
-const API_URL =
-  viteSource.VITE_PUBLIC_API_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.EXPO_PUBLIC_API_URL;
+const API_URL = 'http://192.168.100.12:8787/api';
 const WEB_CLIENT_ID =
   viteSource.VITE_PUBLIC_WEB_CLIENT_ID ||
   process.env.NEXT_PUBLIC_WEB_CLIENT_ID ||
