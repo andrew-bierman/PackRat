@@ -6087,13 +6087,16 @@ __metadata:
     "@expo/vector-icons": "*"
     "@packrat/config": "*"
     "@packrat/ui": "*"
+    "@react-native-community/geolocation": "*"
     "@rnmapbox/maps": "*"
     "@tmcw/togeojson": "*"
     expo-document-picker: "*"
     expo-file-system: "*"
+    file-saver: "*"
     mapbox-gl: "*"
     react: "*"
     react-native: "*"
+    togpx: "*"
     xmldom: "*"
   languageName: unknown
   linkType: soft

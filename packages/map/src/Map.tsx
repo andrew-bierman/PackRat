@@ -6,7 +6,7 @@ import { Modal, View, StyleSheet } from 'react-native';
 import { isPolygonOrMultiPolygon } from './utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 import MapPreview from './MapPreview';
-import useGpxUpload from './useGpxUpload';
+import useGpxUpload from './hooks/useGpxUpload';
 import { type MapProps } from './models';
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -33,18 +33,18 @@ const WebMap: FC<MapProps> = ({ shape: shapeProp }) => {
 
   const element = (
     <View style={[styles.container, { height: showModal ? '100%' : 400 }]}>
-      {/* {showModal || isPolygonOrMultiPolygon(shape) ? ( */}
-      <View
-        key="map"
-        ref={mapContainer}
-        style={{
-          ...styles.map,
-          height: isPolygonOrMultiPolygon(shape) ? 200 : '100%',
-        }}
-      />
-      {/* ) : (
+      {showModal || isPolygonOrMultiPolygon(shape) ? (
+        <View
+          key="map"
+          ref={mapContainer}
+          style={{
+            ...styles.map,
+            height: isPolygonOrMultiPolygon(shape) ? 200 : '100%',
+          }}
+        />
+      ) : (
         <MapPreview shape={shape} />
-      )} */}
+      )}
       <MapButtonsOverlay
         mapFullscreen={mapFullscreen}
         enableFullScreen={enableFullScreen}

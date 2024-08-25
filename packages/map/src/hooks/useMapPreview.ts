@@ -4,7 +4,7 @@ import {
   isPolygonOrMultiPolygon,
   processShapeData,
   isPoint,
-} from './utils/mapFunctions';
+} from '../utils/mapFunctions';
 import { API_URL } from '@packrat/config';
 import { useState, useEffect } from 'react';
 
