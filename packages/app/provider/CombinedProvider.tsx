@@ -9,12 +9,12 @@ export function CombinedProvider({ children }: { children: React.ReactNode }) {
   useAttachListeners();
 
   return (
-    <JotaiProvider>
-      <TrpcTanstackProvider>
-        <SessionProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </SessionProvider>
-      </TrpcTanstackProvider>
-    </JotaiProvider>
+    // <JotaiProvider>
+    //   <TrpcTanstackProvider>
+    //     <SessionProvider>
+    <ThemeProvider>{children}</ThemeProvider>
+    //     </SessionProvider>
+    //   </TrpcTanstackProvider>
+    // </JotaiProvider>
   );
 }
