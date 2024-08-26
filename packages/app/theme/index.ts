@@ -22,7 +22,7 @@ export const theme = {
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
     black: '#000000',
-    cardBorderPrimary: 'rgba(0, 0, 0, 0.3)',
+    cardBorderPrimary: 'rgba(0, 0, 0, 0.2)',
     buttonBackgroundPrimary: '#404040',
     floatingBg: '#f0f2f5',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',

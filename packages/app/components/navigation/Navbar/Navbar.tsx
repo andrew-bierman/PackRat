@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Platform } from 'react-native';
-import { RButton, Container, RLink } from '@packrat/ui';
+import { RButton, Container, RLink, RText } from '@packrat/ui';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
 import { NavigationList } from '../NavigationList';
@@ -38,7 +38,7 @@ export const Navbar = () => {
       <SafeAreaView style={styles.safeArea}>
         <Container>
           <View style={styles.container}>
-            <View style={styles.logoContainer}>
+            {/* <View style={styles.logoContainer}>
               <MaterialCommunityIcons
                 onPress={toggleTheme}
                 name="theme-light-dark"
@@ -49,23 +49,37 @@ export const Navbar = () => {
                   cursor: 'pointer',
                 }}
               />
-            </View>
+            </View> */}
             <View style={styles.logoContainer}>
-              <RImage
-                source={{
-                  // TODO: Update this to use the PackRat logo from the assets folder
-                  uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
-                  width: 40,
-                  height: 40,
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 4
                 }}
-                width={40}
-                height={40}
-                style={styles.logo}
-                alt="PackRat Logo"
-                onClick={() => {
-                  navigate('/');
-                }}
-              />
+              >
+                <RImage
+                  source={{
+                    // TODO: Update this to use the PackRat logo from the assets folder
+                    uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
+                    width: 40,
+                    height: 40,
+                  }}
+                  width={40}
+                  height={40}
+                  style={styles.logo}
+                  alt="PackRat Logo"
+                  onClick={() => {
+                    navigate('/');
+                  }}
+                />
+                <RText style={{ fontSize: 38, fontWeight: 'bolder', cursor: 'pointer' }} onPress={() => {
+                    navigate('/');
+                  }}>
+                  PackRat
+                </RText>
+              </View>
               {/* <Text
                 style={styles.logoText}
                 onPress={() => {
@@ -77,7 +91,7 @@ export const Navbar = () => {
             </View>
             <View style={styles.navbarThird}>
               <RLink href="/sign-in">
-                <RButton style={styles.loginButton}>Login</RButton>
+                <RText style={styles.loginButton}>Login</RText>
               </RLink>
               <Drawer />
             </View>
@@ -200,8 +214,9 @@ const loadStyles = (
     },
     logo: {
       cursor: 'pointer',
-      backgroundColor: 'transparent',
-      filter: 'drop-shadow(0 0 1px #45607d)',
+      backgroundColor: 'black',
+      borderRadius: 8,
+      // filter: 'drop-shadow(0 0 1px #45607d)',
     },
     menuBar: {
       color: '#315173',
@@ -217,8 +232,12 @@ const loadStyles = (
       backgroundColor: 'transparent',
       color: currentTheme.colors.textPrimary,
       borderWidth: 1,
-      borderColor: currentTheme.colors.textPrimary,
+      borderColor: currentTheme.colors.cardBorderPrimary,
       overflow: 'hidden',
+      padding: 8,
+      borderRadius: 4,
+      fontSize: 16,
+      fontWeight: 'normal'
     },
     menuBarItemActive: {
       // Apply styles for the active item

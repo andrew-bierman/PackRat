@@ -11,6 +11,7 @@ import {
   YStack,
   RImage,
 } from '@packrat/ui';
+
 import useTheme from '../../hooks/useTheme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { RLink } from '@packrat/ui';
@@ -20,6 +21,7 @@ import { LandingPageAccordion } from './LandingPageAccordion';
 import loadStyles from './landingpage.style';
 import { Redirect } from 'app/components/Redirect';
 import useResponsive from 'app/hooks/useResponsive';
+import Footer from 'app/components/footer/Footer';
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -36,11 +38,11 @@ const LandingPage = () => {
           style={
             {
               width: '100%',
-              alignItems: 'center',
+              // alignItems: 'center',
               textAlign: 'center',
               flexDirection: 'row',
               justifyContent: 'space-around',
-              paddingVertical: 18,
+              // paddingVertical: 18,
               marginTop: Platform.OS !== 'web' ? 25 : 65,
               flex: 1,
             } as any
@@ -50,6 +52,7 @@ const LandingPage = () => {
             <View
               style={{
                 height: 'auto',
+                marginTop: 40,
               }}
             >
               <RH1
@@ -71,7 +74,7 @@ const LandingPage = () => {
               cross-country road trip.
             </RText>
             <View style={styles.buttonContainer}>
-              <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
+              {/* <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
                 <View style={styles.getStartedButton}>
                   <Text style={styles.footerText}> Get Started</Text>
                   <MaterialCommunityIcons
@@ -80,32 +83,7 @@ const LandingPage = () => {
                     color={currentTheme.colors.buttonBackgroundPrimary}
                   />
                 </View>
-              </RLink>
-            </View>
-          </View>
-          <View style={{border: '1px solid black'}}>
-            <RImage
-              source={{
-                // TODO: Update this to use the PackRat logo from the assets folder
-                uri: 'https://github.com/andrew-bierman/PackRat/blob/packages/app/assets/packrat_icon.png?raw=true',
-                width: 40,
-                height: 40,
-              }}
-              width={40}
-              height={40}
-              // style={styles.logo}
-              alt="PackRat Logo"
-            />
-          </View>
-        </View>
-        <View style={styles.secondaryContentContainer}>
-          {/* <ImageBackground
-            source={require("../../assets/background-image.png")}
-            style={styles.backgroundImage}
-          > */}
-          {/* <View style={styles.overlay} /> */}
-          <View style={styles.contentContainer}>
-            {Platform.OS === 'web' && (
+              </RLink> */}
               <View style={styles.appBadges}>
                 <View
                   style={{
@@ -244,74 +222,44 @@ const LandingPage = () => {
                       </View>
                     </RStack>
                   </RButton>
-                  <RButton
-                    title="Web"
-                    paddingVertical={30}
-                    paddingHorizontal={15}
-                    style={{
-                      margin: 10,
-                      backgroundColor: 'transparent',
-                      borderWidth: 1,
-                      borderColor: currentTheme.colors.textPrimary,
-                      width: xs || sm ? '100%' : 'auto',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <RStack
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 8,
-                        width: '100%',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="web"
-                          size={55}
-                          color={currentTheme.colors.icon}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          width: xs || sm ? '100%' : 'auto',
-                        }}
-                      >
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          Use as
-                        </RText>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 20,
-                            fontWeight: 'bolder',
-                          }}
-                        >
-                          Web App
-                        </RText>
-                      </View>
-                    </RStack>
-                  </RButton>
                 </View>
               </View>
-            )}
+            </View>
+          </View>
+          <View>
+              <RImage
+                source={{
+                  uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/feat/tamagui_landing_page/packages/app/assets/PackRat%20Preview.jpg',
+                  width: 259,
+                  height: 530,
+                }}
+                style={styles.featureImage}
+                alt="PackRat Logo"
+              />
+              
+          </View>
+        </View>
+        <View style={styles.secondaryContentContainer}>
+          {/* <ImageBackground
+            source={require("../../assets/background-image.png")}
+            style={styles.backgroundImage}
+          > */}
+          {/* <View style={styles.overlay} /> */}
+          <View style={styles.secondaryContainerIntroDiv}>
+            <RText style={styles.secondaryContainerIntroText}>
+              Discover how the PackRat app is designed to make your adventures
+              easier and more enjoyable.
+            </RText>
+            <RText style={styles.secondaryContainerDescriptionText}>
+              With a suite of powerful features tailored specifically for
+              backpackers, you'll have everything you need right at your
+              fingertips. From seamless route planning to real-time weather
+              updates, PackRat ensures you're prepared for every step of your
+              journey. Dive into the key features below to see how we can help
+              you elevate your backpacking experience:
+            </RText>
+          </View>
+          <View style={styles.contentContainer}>
             <RStack
               style={styles.landingPageAccordion}
               maxWidth={Platform.OS === 'web' ? 'auto' : '100%'}
@@ -329,6 +277,9 @@ const LandingPage = () => {
 
           {/* <StatusBar style="auto" /> */}
           {/* </ImageBackground> */}
+        </View>
+        <View>
+          <Footer/>
         </View>
       </RStack>
     </ScrollView>

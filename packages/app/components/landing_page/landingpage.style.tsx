@@ -18,8 +18,9 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       width: '100%',
       background: 'hsla(0, 0%, 96%, 1)',
-      filter: 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
-      padding: 20,
+      filter:
+        'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+      // padding: 20,
     },
     secondaryContentContainer: {
       // flex: 1,
@@ -28,7 +29,21 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       // backgroundColor: 'rgb(248, 248, 248)',
       background: 'hsla(0, 0%, 96%, 1)',
-      filter: 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+      filter:
+        'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+    },
+    featureImage: {
+      zIndex: 100,
+      mixBlendMode: 'multiply',
+      // width: 259,
+      // height: 530,
+    },
+    overlay: {
+      border: '1px solid black',
+      width: '100%',
+      height: '100%',
+      background:
+        'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
     },
     appBadges: {
       flexDirection: 'column',
@@ -50,7 +65,7 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     introText: {
-      fontSize: (xs || sm ? 18 : 20),
+      fontSize: xs || sm ? 18 : 20,
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
       textAlign: 'center',
       marginTop: xs ? 0 : 30,
@@ -85,7 +100,7 @@ const loadStyles = (theme) => {
     landingPageAccordion: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      width: xs || sm ? 'auto' : '80%' ,
+      width: xs || sm ? 'auto' : '80%',
       // border: '10px solid black',
       justifyContent: 'center',
     },
@@ -96,7 +111,8 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       borderWidth: 1,
       borderColor: currentTheme.colors.cardBorderPrimary,
-      borderRadius: 16
+      borderOpacity: '1',
+      borderRadius: 16,
     },
     cardHeader: {
       paddingHorizontal: 20,
@@ -104,12 +120,12 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     icon: {
-      fontSize: 26,
+      fontSize: 35,
       width: '100%',
       color: currentTheme.colors.icon,
     },
     featureText: {
-      fontSize: 20,
+      fontSize: 16,
       color: currentTheme.colors.textPrimary,
       marginTop: 10,
       fontWeight: 'bold',
@@ -117,9 +133,30 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     cardContent: {
-      fontSize: 18,
+      fontSize: 14,
       color: currentTheme.colors.textPrimary,
       width: '100%',
+    },
+    secondaryContainerIntroDiv: {
+      width: '80%',
+      marginTop: 50,
+      marginBottom: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    secondaryContainerIntroText: {
+      fontSize: 28,
+      width: '80%',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      margin: 40,
+    },
+    secondaryContainerDescriptionText: {
+      fontSize: 16,
+      width: '70%',
+      fontWeight: 'normal',
+      textAlign: 'center',
+      marginBottom: 30,
     },
   };
 };
