@@ -2,8 +2,7 @@ name: Changeset Release Workflow
 
 on:
   push:
-    branches: ['**'],
-      
+    branches: ['**']
 
 jobs:
   release:
@@ -26,11 +25,11 @@ jobs:
         uses: changesets/action@v1
         with:
           version: yarn changeset version
-          commit: "🔖 chore: version bump and changelog"
+          commit: '🔖 chore: version bump and changelog'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-       - name: Bump version and generate changelog
+      - name: 📝 Bump version and generate changelog
         run: |
           git fetch --all
           git checkout main
@@ -39,7 +38,7 @@ jobs:
           git commit -m "Version packages and generate changelog"
           git push --follow-tags
 
-      - name: Create GitHub Release
+      - name: 📦 Create GitHub Release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -47,4 +46,3 @@ jobs:
           body_path: ./CHANGELOG.md
           draft: false
           prerelease: false
-
