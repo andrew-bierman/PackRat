@@ -1,7 +1,7 @@
 {
   "name": "@packrat/crosspath",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.1",
   "main": "dist/index.js",
   "module:jsx": "src",
   "types": "./types/lib-interface.d.ts",
@@ -32,6 +32,6 @@
   },
   "devDependencies": {
     "@tamagui/build": "1.96.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   }
 }
