@@ -1,5 +1,11 @@
 # tauri-app
 
+## 2.0.0
+
+### Major Changes
+
+- 45a4a9b: test versioning
+
 ## 1.1.1
 
 ### Patch Changes
