@@ -36,23 +36,3 @@ jobs:
           body_path: ./CHANGELOG.md
           draft: false
           prerelease: false
-
-  tauri-build:
-    - name: Build Tauri App
-      run: npm run tauri build
-
-    - name: Upload Tauri Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: Tauri-Build-${{ github.ref_name }}
-        path:
-          /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/deb/packrat_0.1.0_amd64,
-          /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/rpm/packrat-0.1.0-1.x86_64
-
-    - name: Attach Tauri Build to Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files:
-          /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/deb/packrat_0.1.0_amd64.deb,
-          /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/rpm/packrat-0.1.0-1.x86_64.rpm
-        token: ${{ secrets.GITHUB_TOKEN }}
