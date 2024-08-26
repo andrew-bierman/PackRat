@@ -1,0 +1,72 @@
+name: Version Packages and Create Release
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bump version and generate changelog
+        run: |
+          git fetch --all
+          git checkout main
+          npx changeset version
+          git add .
+          git commit -m "Version packages and generate changelog"
+          git push --follow-tags
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body_path: ./CHANGELOG.md
+          draft: false
+          prerelease: false
+
+  tauri-build:
+    needs: version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tauri App
+        run: npm run tauri build
+
+      - name: Upload Tauri Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: Tauri-Build-${{ github.ref_name }}
+          path:
+            /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/deb/packrat_0.1.0_amd64,
+            /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/rpm/packrat-0.1.0-1.x86_64
+
+      - name: Attach Tauri Build to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files:
+            /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/deb/packrat_0.1.0_amd64.deb,
+            /home/anmol/Documents/PackRat/apps/tauri/src-tauri/target/release/bundle/rpm/packrat-0.1.0-1.x86_64.rpm
+          token: ${{ secrets.GITHUB_TOKEN }}
