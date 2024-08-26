@@ -1,5 +1,13 @@
 # next-app
 
+## 1.1.2
+
+### Patch Changes
+
+- 95992db: test yml for updating changlog
+- Updated dependencies [95992db]
+  - app@1.1.2
+
 ## 1.1.1
 
 ### Patch Changes

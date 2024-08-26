@@ -1,5 +1,11 @@
 # @packrat/config
 
+## 1.1.2
+
+### Patch Changes
+
+- 95992db: test yml for updating changlog
+
 ## 1.1.1
 
 ### Patch Changes
