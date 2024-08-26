@@ -2,13 +2,13 @@ name: 'Backend Deployment'
 
 on:
   workflow_dispatch:
-  workflow_call:
   pull_request:
     branches:
       - master
     types: [closed]
   push:
     branches:
+      - feat/preview-version-of-api
       - master
       - andrew_testing
     paths:

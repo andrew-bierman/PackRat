@@ -9,10 +9,10 @@ on:
   push:
     branches:
       - feat/preview-version-of-api
-    paths:
-      - 'packages/validations/**'
-      - 'packages/shared-types/**'
-      - 'server/**'
+    # paths:
+    #   - 'packages/validations/**'
+    #   - 'packages/shared-types/**'
+    #   - 'server/**'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -65,13 +65,19 @@ jobs:
 
       - name: Migrate database
         # run: cd packages/api && bun run migrate
-        run: cd server && yarn run migrate:preview
+        run: |
+          cd server;
+          cat wrangler.toml;
+          yarn run migrate:preview
         env:
           NO_D1_WARNING: true
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_LOG: debug
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3.3.2
+        if: always()
         with:
           wranglerVersion: '3.15.0'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
