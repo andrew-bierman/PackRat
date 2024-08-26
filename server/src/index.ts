@@ -66,6 +66,7 @@ app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
 
 // SETUP TRPC PLAYGROUND
 app.use(TRPC_PLAYGROUND_ENDPOINT, async (c, next) => {
+  console.log('RUN WORKFLOW');
   const handler = await fetchHandler({
     router: appRouter,
     trpcApiEndpoint: TRPC_API_ENDPOINT,
