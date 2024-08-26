@@ -24,7 +24,7 @@ export const LandingPageAccordion = ({ title, content, iconName }) => {
           onPress={toggleExpanded}
         >
           <MaterialIcons
-            name={expanded ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
+            name={expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
             style={styles.icon}
           />
         </RButton>
