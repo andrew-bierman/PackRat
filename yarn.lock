@@ -15394,7 +15394,7 @@ __metadata:
     "@elysiajs/html": "npm:^0.7.3"
     "@hono/node-server": "npm:^1.11.0"
     elysia: "npm:^0.7.21"
-    hono: "npm:^4.2.7"
+    hono: "npm:^4.5.8"
     server: "npm:*"
     trpc-panel: "npm:^1.3.4"
     typescript: "npm:^5.3.3"
@@ -23059,10 +23059,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^4.1.4, hono@npm:^4.2.7":
+"hono@npm:^4.1.4":
   version: 4.5.7
   resolution: "hono@npm:4.5.7"
   checksum: 10/e7cc63e1a35963eba3802108cfd8daf2fe097667d075ab924b9383b1f43251260772a84bf71ea95e22986fc3e2d09200f1f69d286e2038e47fda5d23ad07794a
+  languageName: node
+  linkType: hard
+
+"hono@npm:^4.5.8":
+  version: 4.5.8
+  resolution: "hono@npm:4.5.8"
+  checksum: 10/1d071a827fb9562a008955dd24bdde8cd6575890120b8cf7276cdda2a58735487666807927a99f57d0e43304202c2c493daefb5eaf4683fcb3eed9d4190a0ccc
   languageName: node
   linkType: hard
 
@@ -33456,7 +33463,7 @@ __metadata:
     google-auth-library: "npm:^8.8.0"
     googleapis: "npm:^118.0.0"
     helmet: "npm:^7.0.0"
-    hono: "npm:^4.2.7"
+    hono: "npm:^4.5.8"
     i: "npm:^0.3.7"
     jest: "npm:^29.7.0"
     joi: "npm:^17.9.2"
