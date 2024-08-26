@@ -1,5 +1,11 @@
 # app
 
+## 2.0.1
+
+### Patch Changes
+
+- 262aab7: test log
+
 ## 1.1.1
 
 ### Patch Changes
