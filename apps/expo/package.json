@@ -55,7 +55,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
-    "@rnmapbox/maps": "^10.1.21",
+    "@rnmapbox/maps": "^10.1.29",
     "@tamagui/animations-react-native": "1.96.0",
     "@tamagui/babel-plugin": "1.96.0",
     "@tamagui/config": "1.96.0",
@@ -176,7 +176,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.3"
   },
   "overrides": {
     "metro": "0.73.7",
