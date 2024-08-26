@@ -2,8 +2,7 @@ name: Changeset Release Workflow
 
 on:
   push:
-    branches:
-      - main
+    branches: ['**']
 
 jobs:
   release:

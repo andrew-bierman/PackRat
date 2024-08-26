@@ -1,9 +1,7 @@
-name: tauri-build
+name: Tauri Build and Publish
 
 on:
   push:
-    branches: ['**']
-  pull_request:
     branches: ['**']
 
 concurrency:
@@ -108,29 +106,28 @@ jobs:
               core.setOutput('comment_id', commentId);
             }
 
-      - name: Update PR comment
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const commentIdentifier = '<!-- build_results -->';
-            const commentId = '${{ steps.find_or_create_comment.outputs.comment_id }}';
-            const buildOutcome = '${{ job.status }}';
-            const buildStatus = buildOutcome == 'success' ? 'completed' : 'failed';
-            const workflowUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+  upload-tauri-build:
+  name: Upload Tauri Build to Release
+  runs-on: ubuntu-latest
+  needs: publish-tauri
 
-            let commentBody = `${commentIdentifier}\nTauri build ${buildStatus}!`;
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-            if (buildOutcome == 'success') {
-              commentBody += `\nYou can download the build artifacts from the following link:\n${workflowUrl}#artifacts`;
-            } else {
-              commentBody += '\nPlease check the workflow logs for more details on the build failure.';
-            }
+    - name: Upload Tauri Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: tauri-build-artifacts
+        path: |
+          apps/tauri/src-tauri/target/release/bundle/deb
+          apps/tauri/src-tauri/target/release/bundle/rpm
 
-            await github.rest.issues.updateComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              comment_id: commentId,
-              body: commentBody
-            });
+    - name: Create GitHub Release (with Tauri Artifacts)
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          apps/tauri/src-tauri/target/release/bundle/deb
+          apps/tauri/src-tauri/target/release/bundle/rpm
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
