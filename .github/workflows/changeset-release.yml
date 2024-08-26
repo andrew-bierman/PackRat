@@ -1,0 +1,31 @@
+name: Changeset Release Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: 🚀 Release Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛠 Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: 📦 Install Dependencies
+        run: yarn
+
+      - name: ✏️ Create Release Pull Request
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset version
+          commit: "🔖 chore: version bump and changelog"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

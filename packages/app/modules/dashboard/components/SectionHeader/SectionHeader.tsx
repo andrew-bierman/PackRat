@@ -23,7 +23,7 @@ export const SectionHeader = ({
     <RStack style={styles.rStack}>
       <RText style={styles.text}>{text}</RText>
       <RButton style={styles.rbutton} onPress={() => navigate('/feed')}>
-        0 View all feeds
+        View all feeds
       </RButton>
     </RStack>
   );

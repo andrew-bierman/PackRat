@@ -305,11 +305,8 @@ const loadStyles = (theme) => {
     },
 
     tempColor: {
-      color: currentTheme.colors.background === '#0284c7' ? 'black' : 'white',
-      backgroundColor:
-        currentTheme.colors.background === '#0284c7'
-          ? '#eaeaea'
-          : currentTheme.colors.whiteDarkGrey,
+      color: currentTheme.colors.text,
+      backgroundColor: currentTheme.colors.card,
     },
 
     cardContainer: {
