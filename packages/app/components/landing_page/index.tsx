@@ -38,12 +38,10 @@ const LandingPage = () => {
           style={
             {
               width: '100%',
-              // alignItems: 'center',
               textAlign: 'center',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              // paddingVertical: 18,
-              marginTop: Platform.OS !== 'web' ? 25 : 65,
+              flexDirection: xs || sm ? 'column' : 'row',
+              justifyContent: xs || sm ? 'center' : 'space-around',
+              marginTop: Platform.OS !== 'web' ? 25 : 20,
               flex: 1,
             } as any
           }
@@ -53,6 +51,7 @@ const LandingPage = () => {
               style={{
                 height: 'auto',
                 marginTop: 40,
+                justifyContent: 'center',
               }}
             >
               <RH1
@@ -61,7 +60,7 @@ const LandingPage = () => {
                   height: 'auto',
                   fontSize: xs || sm ? 34 : 34,
                   fontWeight: xs || sm ? 'bold' : 'bold',
-                  textAlign: 'left',
+                  textAlign: xs || sm ? 'center' : 'left',
                 }}
               >
                 The Ultimate Travel App
@@ -74,16 +73,6 @@ const LandingPage = () => {
               cross-country road trip.
             </RText>
             <View style={styles.buttonContainer}>
-              {/* <RLink href="/sign-in" style={{ textDecoration: 'none' }}>
-                <View style={styles.getStartedButton}>
-                  <Text style={styles.footerText}> Get Started</Text>
-                  <MaterialCommunityIcons
-                    name="source-commit-start"
-                    size={24}
-                    color={currentTheme.colors.buttonBackgroundPrimary}
-                  />
-                </View>
-              </RLink> */}
               <View style={styles.appBadges}>
                 <View
                   style={{
@@ -101,7 +90,7 @@ const LandingPage = () => {
                       backgroundColor: 'transparent',
                       borderWidth: 1,
                       borderColor: currentTheme.colors.textPrimary,
-                      width: xs || sm ? '100%' : 'auto',
+                      width: xs || sm ? '95%' : 'auto',
                       overflow: 'hidden',
                     }}
                   >
@@ -166,7 +155,7 @@ const LandingPage = () => {
                       backgroundColor: 'transparent',
                       borderWidth: 1,
                       borderColor: currentTheme.colors.textPrimary,
-                      width: xs || sm ? '100%' : 'auto',
+                      width: xs || sm ? '95%' : 'auto',
                       overflow: 'hidden',
                     }}
                   >
@@ -226,25 +215,20 @@ const LandingPage = () => {
               </View>
             </View>
           </View>
-          <View>
+          <View style={styles.featureImage}>
               <RImage
                 source={{
                   uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/feat/tamagui_landing_page/packages/app/assets/PackRat%20Preview.jpg',
                   width: 259,
                   height: 530,
                 }}
-                style={styles.featureImage}
+                
                 alt="PackRat Logo"
               />
               
           </View>
         </View>
         <View style={styles.secondaryContentContainer}>
-          {/* <ImageBackground
-            source={require("../../assets/background-image.png")}
-            style={styles.backgroundImage}
-          > */}
-          {/* <View style={styles.overlay} /> */}
           <View style={styles.secondaryContainerIntroDiv}>
             <RText style={styles.secondaryContainerIntroText}>
               Discover how the PackRat app is designed to make your adventures
@@ -274,9 +258,6 @@ const LandingPage = () => {
               ))}
             </RStack>
           </View>
-
-          {/* <StatusBar style="auto" /> */}
-          {/* </ImageBackground> */}
         </View>
         <View>
           <Footer/>

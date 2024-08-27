@@ -6,12 +6,14 @@ import { useNavigate } from 'app/hooks/navigation';
 import { useMemo } from 'react';
 import { footorLinks } from 'app/constants/footorLinks';
 import { NewsLetter } from 'app/components/newsLetter';
+import useResponsive from 'app/hooks/useResponsive';
 
 export default function Footer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
+    const {xs , sm} = useResponsive();
   const styles = useMemo(() => {
-    return StyleSheet.create(loadStyles(currentTheme));
+    return StyleSheet.create(loadStyles(currentTheme, xs , sm));
   }, [currentTheme]);
   const year = new Date().getFullYear();
   const navigate = useNavigate();
@@ -63,14 +65,15 @@ export default function Footer() {
   );
 }
 
-const loadStyles = (currentTheme) => {
+const loadStyles = (currentTheme, xs , sm) => {
+
   {
     return StyleSheet.create({
       mainContainer: {
         width: '100vw',
         paddingTop: 80,
         paddingBottom: 40,
-        backgroundColor: '#f6f6f6',
+        // backgroundColor: '#f6f6f6',
 
         // border: '1px solid red',
         alignSelf: 'center',
@@ -106,13 +109,15 @@ const loadStyles = (currentTheme) => {
       credit: {
         color: currentTheme.colors.textPrimary,
         fontSize: 13,
-        textAlign: 'left',
+        textAlign: xs ? 'center' : 'left',
         fontWeight: 'normal',
       },
       lastContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between', 
+        border: '1px solid red',
+        width: xs ? '100%' : 'auto',
       }
     });
   }

@@ -34,7 +34,11 @@ const loadStyles = (theme) => {
     },
     featureImage: {
       zIndex: 100,
+      width: xs ? '100vw' : 'auto',
       mixBlendMode: 'multiply',
+      justifyContent: 'center',
+      alignItems: 'center',
+      // filter: "brightness(100) invert(0)",
       // width: 259,
       // height: 530,
     },
@@ -46,7 +50,7 @@ const loadStyles = (theme) => {
         'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
     },
     appBadges: {
-      flexDirection: 'column',
+      flexDirection: xs  ? 'column' : 'row',
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 20,
@@ -58,26 +62,22 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
     },
     contentContainer: {
-      // flex: 1,
       justifyContent: 'start',
       alignItems: 'center',
-      // paddingHorizontal: 20,
       width: '100%',
     },
     introText: {
       fontSize: xs || sm ? 18 : 20,
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
-      textAlign: 'center',
+      textAlign: xs || sm ? 'center' : 'left',
       marginTop: xs ? 0 : 30,
       color: currentTheme.colors.textPrimary,
-      textAlign: 'left',
-      width: '50vw',
-      marginBottom: 20, // Ensure spacing between text and next elements
-      paddingHorizontal: 10, // Adjust text alignment on smaller screens
+      width: xs || sm ? '100vw' : '50vw',
+      marginBottom: 20,
     },
     buttonContainer: {
       display: 'flex',
-      alignItems: 'start',
+      alignItems: xs || sm ? 'center' : 'start',
       justifyContent: 'center', // Center buttons horizontally
     },
     getStartedButton: {
@@ -101,11 +101,10 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       width: xs || sm ? 'auto' : '80%',
-      // border: '10px solid black',
       justifyContent: 'center',
     },
     card: {
-      width: xs || sm || md ? '100%' : '30%',
+      width: xs || sm || md ? '95%' : '30%',
       margin: 8,
       backgroundColor: 'transparent',
       flexDirection: 'row',
@@ -138,7 +137,7 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     secondaryContainerIntroDiv: {
-      width: '80%',
+      width: xs ? '100%' : '80%',
       marginTop: 50,
       marginBottom: 50,
       justifyContent: 'center',
@@ -146,14 +145,14 @@ const loadStyles = (theme) => {
     },
     secondaryContainerIntroText: {
       fontSize: 28,
-      width: '80%',
+      width: xs ? '95%' : '80%',
       fontWeight: 'bold',
       textAlign: 'center',
       margin: 40,
     },
     secondaryContainerDescriptionText: {
       fontSize: 16,
-      width: '70%',
+      width: xs ? '95%' : '70%',
       fontWeight: 'normal',
       textAlign: 'center',
       marginBottom: 30,
