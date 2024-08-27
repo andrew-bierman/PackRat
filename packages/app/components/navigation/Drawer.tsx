@@ -19,7 +19,7 @@ export function Drawer() {
           icon={<Menu strokeWidth={3} />}
           bg="transparent"
           outlineColor="transparent"
-          color="#315173"
+          color={currentTheme.colors.textPrimary}
           fontWeight="bold"
           focusStyle={{
             bg: 'transparent',
@@ -49,7 +49,7 @@ export function Drawer() {
         borderWidth={1}
         borderColor="$borderColor"
         style={styles.popover}
-        bg={isDark ? currentTheme.colors.background : '#f0f2f5'}
+        bg={currentTheme.colors.background}
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
         elevate
@@ -65,7 +65,7 @@ export function Drawer() {
         <Popover.Arrow
           borderWidth={1}
           borderColor="$borderColor"
-          bg={isDark ? currentTheme.colors.background : '#f0f2f5'}
+          bg={currentTheme.colors.background}
         />
         <NavigationList
           itemStyle={styles.navigationItem}
@@ -83,7 +83,7 @@ const loadStyles = (theme) => {
     modalOverlay: {
       flex: 1,
       flexDirection: 'row',
-      backgroundColor: 'rgba(0,0,0,0.5)',
+      backgroundColor: currentTheme.colors.background,
     },
     fullScreenTouchable: {
       flex: 1,

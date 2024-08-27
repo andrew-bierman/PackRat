@@ -13,9 +13,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useResponsive from 'app/hooks/useResponsive';
 
 export const Navbar = () => {
-  const { currentTheme, enableDarkMode, enableLightMode, isDark, isLight } =
-    useTheme();
-  const toggleTheme = () => {
+  const { currentTheme, enableDarkMode, enableLightMode, isLight } = useTheme();
+  const toggleTheme = async () => {
     console.log(isLight);
     if (isLight) {
       return enableDarkMode();
@@ -38,25 +37,13 @@ export const Navbar = () => {
       <SafeAreaView style={styles.safeArea}>
         <Container>
           <View style={styles.container}>
-            {/* <View style={styles.logoContainer}>
-              <MaterialCommunityIcons
-                onPress={toggleTheme}
-                name="theme-light-dark"
-                size={24}
-                color="black"
-                style={{
-                  color: '#315173',
-                  cursor: 'pointer',
-                }}
-              />
-            </View> */}
             <View style={styles.logoContainer}>
               <View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: 4
+                  gap: 4,
                 }}
               >
                 <RImage
@@ -74,9 +61,16 @@ export const Navbar = () => {
                     navigate('/');
                   }}
                 />
-                <RText style={{ fontSize: 38, fontWeight: 'bolder', cursor: 'pointer' }} onPress={() => {
+                <RText
+                  style={{
+                    fontSize: 38,
+                    fontWeight: 'bolder',
+                    cursor: 'pointer',
+                  }}
+                  onPress={() => {
                     navigate('/');
-                  }}>
+                  }}
+                >
                   PackRat
                 </RText>
               </View>
@@ -90,6 +84,15 @@ export const Navbar = () => {
               </Text> */}
             </View>
             <View style={styles.navbarThird}>
+              <MaterialCommunityIcons
+                onPress={toggleTheme}
+                name="theme-light-dark"
+                size={24}
+                style={{
+                  color: currentTheme.colors.textPrimary,
+                  cursor: 'pointer',
+                }}
+              />
               <RLink href="/sign-in">
                 <RText style={styles.loginButton}>Login</RText>
               </RLink>
@@ -237,7 +240,7 @@ const loadStyles = (
       padding: 8,
       borderRadius: 4,
       fontSize: 16,
-      fontWeight: 'normal'
+      fontWeight: 'normal',
     },
     menuBarItemActive: {
       // Apply styles for the active item

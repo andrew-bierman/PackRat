@@ -7,20 +7,16 @@ const loadStyles = (theme) => {
 
   return {
     mutualStyles: {
-      backgroundColor: currentTheme.colors.background,
-      flex: 1,
+      // flex: 1,
       flexDirection: 'column',
       height: '100%',
     },
     container: {
-      flex: 1,
+      // flex: 1,
+      // backgroundColor: currentTheme.colors.background,
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
-      background: 'hsla(0, 0%, 96%, 1)',
-      filter:
-        'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
-      // padding: 20,
     },
     secondaryContentContainer: {
       // flex: 1,
@@ -28,9 +24,9 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       // backgroundColor: 'rgb(248, 248, 248)',
-      background: 'hsla(0, 0%, 96%, 1)',
-      filter:
-        'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+      // background: 'hsla(0, 0%, 96%, 1)',
+      // filter:
+        // 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
     },
     featureImage: {
       zIndex: 100,
@@ -46,8 +42,8 @@ const loadStyles = (theme) => {
       border: '1px solid black',
       width: '100%',
       height: '100%',
-      background:
-        'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
+      // background:
+        // 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
     },
     appBadges: {
       flexDirection: xs  ? 'column' : 'row',

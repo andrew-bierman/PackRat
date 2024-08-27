@@ -4,7 +4,7 @@ import { DefaultTheme } from 'react-native-paper';
 export const theme = {
   colors: {
     primary: '#0A84FF',
-    background: 'black',
+    background: 'hsla(0, 0%, 96%, 1)',
     secondaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
     card: '#f8f8f8',
@@ -50,7 +50,7 @@ export const theme = {
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
-    background: '#050505',
+    background: 'black',
     secondaryBlue: '#0C66A1',
     tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',

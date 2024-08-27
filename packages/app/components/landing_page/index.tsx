@@ -32,7 +32,7 @@ const LandingPage = () => {
   const { xs, sm, md, lg, xl, xxl } = useResponsive();
 
   return (
-    <ScrollView>
+    <ScrollView >
       <RStack style={styles.container}>
         <View
           style={
@@ -258,9 +258,6 @@ const LandingPage = () => {
               ))}
             </RStack>
           </View>
-        </View>
-        <View>
-          <Footer/>
         </View>
       </RStack>
     </ScrollView>
