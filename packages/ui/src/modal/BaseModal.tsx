@@ -158,6 +158,25 @@ export const BaseModal = ({
           </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
+
+      <Adapt when="sm" platform="touch">
+        <Dialog.Sheet
+          snapPointsMode="fit"
+          animation="medium"
+          zIndex={200000}
+          modal
+          dismissOnSnapToBottom
+        >
+          <Dialog.Sheet.Frame padding="$4" gap="$4">
+            <Adapt.Contents />
+          </Dialog.Sheet.Frame>
+          <Dialog.Sheet.Overlay
+            animation="lazy"
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
+        </Dialog.Sheet>
+      </Adapt>
     </Dialog>
   );
 };
