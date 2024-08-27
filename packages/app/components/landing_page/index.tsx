@@ -1,6 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, ScrollView, View, Text } from 'react-native';
+import PackRatPreview from 'app/assets/PackRat Preview.jpg';
+import AppleLink from 'app/assets/applelink.svg'
 import {
   RButton as OriginalRButton,
   RText,
@@ -32,7 +34,7 @@ const LandingPage = () => {
   const { xs, sm, md, lg, xl, xxl } = useResponsive();
 
   return (
-    <ScrollView >
+    <ScrollView>
       <RStack style={styles.container}>
         <View
           style={
@@ -79,9 +81,128 @@ const LandingPage = () => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                     flexWrap: 'wrap',
+                    gap: 8,
                   }}
                 >
-                  <RButton
+                  <RLink>
+                    <View
+                      style={{
+                        width: 150, height: 45,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        backgroundColor: currentTheme.colors.textPrimary,
+                        color: currentTheme.colors.textPrimary,
+                        borderWidth: 1,
+                        borderColor: currentTheme.colors.cardBorderPrimary,
+                        overflow: 'hidden',
+                        paddingHorizontal: 8,
+                        borderRadius: 8,
+                        fontSize: 16,
+                        fontWeight: 'normal',
+                      }}
+                    >
+                      <View>
+                        <MaterialCommunityIcons
+                          name="apple"
+                          size={30}
+                          color={currentTheme.colors.background}
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View style={{flexDirection: 'column', gap: 0,}}>
+                        <RText
+                          style={{
+                            width: '100%',
+                            position: 'relative',
+                            top: '0.4rem',
+                            color: currentTheme.colors.background,
+                            textAlign: 'left',
+                            fontSize: 14,
+                            fontWeight: 'normal',
+                          }}
+                        >
+                          Get it on the
+                        </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: currentTheme.colors.background,
+                            textAlign: 'left',
+                            fontSize: 19,
+                            position: 'relative',
+                            bottom: '0.3rem',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          App Store
+                        </RText>
+                      </View>
+                    </View>
+                  </RLink>
+                  <RLink>
+                    <View
+                      style={{
+                        width: 160, height: 45,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        backgroundColor: currentTheme.colors.textPrimary,
+                        color: currentTheme.colors.textPrimary,
+                        borderWidth: 1,
+                        borderColor: currentTheme.colors.cardBorderPrimary,
+                        overflow: 'hidden',
+                        paddingHorizontal: 8,
+                        borderRadius: 8,
+                        fontSize: 16,
+                        fontWeight: 'normal',
+                      }}
+                    >
+                      <View>
+                        <MaterialCommunityIcons
+                          name="google-play"
+                          size={30}
+                          color={currentTheme.colors.background}
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View style={{flexDirection: 'column', gap: 0,}}>
+                        <RText
+                          style={{
+                            width: '100%',
+                            position: 'relative',
+                            top: '0.4rem',
+                            color: currentTheme.colors.background,
+                            textAlign: 'left',
+                            fontSize: 14,
+                            fontWeight: 'normal',
+                          }}
+                        >
+                          Get it on the
+                        </RText>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: currentTheme.colors.background,
+                            textAlign: 'left',
+                            fontSize: 19,
+                            position: 'relative',
+                            bottom: '0.3rem',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Google Play
+                        </RText>
+                      </View>
+                    </View>
+                  </RLink>
+                  {/* <RButton
                     title="App Store"
                     paddingVertical={30}
                     paddingHorizontal={15}
@@ -210,22 +331,26 @@ const LandingPage = () => {
                         </RText>
                       </View>
                     </RStack>
-                  </RButton>
+                  </RButton> */}
                 </View>
               </View>
             </View>
           </View>
           <View style={styles.featureImage}>
-              <RImage
-                source={{
-                  uri: 'https://raw.githubusercontent.com/andrew-bierman/PackRat/feat/tamagui_landing_page/packages/app/assets/PackRat%20Preview.jpg',
-                  width: 259,
-                  height: 530,
-                }}
-                
-                alt="PackRat Logo"
-              />
-              
+            <RImage
+              src={PackRatPreview}
+              // source={{
+              //   uri: ,
+              //   width: 259,
+              //   height: 530,
+              // }}
+              style={{
+                backgroundColor: 'transparent',
+                width: 259,
+                height: 530,
+              }}
+              alt="PackRat Logo"
+            />
           </View>
         </View>
         <View style={styles.secondaryContentContainer}>

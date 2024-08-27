@@ -70,7 +70,7 @@ export const darkTheme = {
     white: '#FFFFFF',
     cardBorderPrimary: 'rgba(255, 255, 255, 0.3)',
     buttonBackgroundPrimary: '#B0B0B0',
-    floatingBg: '#1C1C1E',
+    floatingBg: '#232323',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
     navbarPrimaryBackground: 'black',
   },

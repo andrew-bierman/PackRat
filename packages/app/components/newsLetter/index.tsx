@@ -1,30 +1,28 @@
-import { RText, SubmitButton } from '@packrat/ui';
-import { FormInput } from '@tamagui/lucide-icons';
+import { Form, FormInput, RText, SubmitButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
-import { Form, View } from 'tamagui';
+import { View } from 'tamagui';
 
 export const NewsLetter = () => {
-    const {currentTheme} = useTheme();
+  const { currentTheme } = useTheme();
   return (
-    <View>
-      <Form>
+    <Form>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10,}}>
         <FormInput
-          label="Email ID"
-          //   keyboardType="email-address"
+          // label="Email ID"
+          keyboardType="email-address"
+          placeholder='Email Address'
           name="email"
           aria-label="Email"
         />
         <SubmitButton
           style={{
-            marginTop: 16,
-            backgroundColor: currentTheme.colors.tertiaryBlue,
+            backgroundColor: '#232323',
             color: 'white',
           }}
-          width="100%"
         >
-          <RText style={{ color: currentTheme.colors.white }}>Sign In</RText>
+          <RText style={{ color: currentTheme.colors.white }}>Join Newsletter</RText>
         </SubmitButton>
-      </Form>
-    </View>
+      </View>
+    </Form>
   );
 };

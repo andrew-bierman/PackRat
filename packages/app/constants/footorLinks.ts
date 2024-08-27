@@ -5,18 +5,18 @@ export const footorLinks = [
     },
     {
         label: 'About the App',
-        link: '',
+        link: '/about',
     },
     {
-        label: 'Github Links',
-        link: '',
+        label: 'Github',
+        link: 'https://github.com/andrew-bierman/PackRat',
     },
     {
         label: 'Privacy Policy ',
         link: '',
     },
     {
-        label: 'Contacts?',
+        label: 'Contact',
         link: '',
     },
 ]

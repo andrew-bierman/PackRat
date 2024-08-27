@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '../../theme';
 import useTheme from '../../hooks/useTheme';
-import { RImage, RLink, RText } from '@packrat/ui';
+import { RImage, RLink, RSeparator, RText } from '@packrat/ui';
 import { useNavigate } from 'app/hooks/navigation';
 import { useMemo } from 'react';
 import { footorLinks } from 'app/constants/footorLinks';
@@ -11,9 +11,9 @@ import useResponsive from 'app/hooks/useResponsive';
 export default function Footer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-    const {xs , sm} = useResponsive();
+  const { xs, sm } = useResponsive();
   const styles = useMemo(() => {
-    return StyleSheet.create(loadStyles(currentTheme, xs , sm));
+    return StyleSheet.create(loadStyles(currentTheme, xs, sm));
   }, [currentTheme]);
   const year = new Date().getFullYear();
   const navigate = useNavigate();
@@ -54,28 +54,34 @@ export default function Footer() {
             );
           })}
         </View>
+        <View style={{paddingBottom: 30,}}>
+        <RSeparator
+          style={{
+            backgroundColor: currentTheme.colors.textPrimary,
+            borderWidth: '0.4',
+            borderColor: currentTheme.colors.textPrimary,
+            opacity: '0.1',
+          }}
+        />
+        </View>
         <View style={styles.lastContainer}>
           <Text style={styles.credit}>
             © 2024 Bierman Collective. All rights reserved.
           </Text>
-          {/* <NewsLetter /> */}
+          <NewsLetter />
         </View>
       </View>
     </View>
   );
 }
 
-const loadStyles = (currentTheme, xs , sm) => {
-
+const loadStyles = (currentTheme, xs, sm) => {
   {
     return StyleSheet.create({
       mainContainer: {
         width: '100vw',
         paddingTop: 80,
         paddingBottom: 40,
-        // backgroundColor: '#f6f6f6',
-
-        // border: '1px solid red',
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -84,7 +90,6 @@ const loadStyles = (currentTheme, xs , sm) => {
       },
       firstMainContainer: {
         width: '95%',
-        // border: '1px solid black',
       },
       firstContainer: {
         width: '100%',
@@ -111,14 +116,14 @@ const loadStyles = (currentTheme, xs , sm) => {
         fontSize: 13,
         textAlign: xs ? 'center' : 'left',
         fontWeight: 'normal',
+        paddingTop : sm ? 10 : 'auto',
       },
       lastContainer: {
-        flexDirection: 'row',
+        flexDirection: sm ? 'column-reverse' : 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
-        border: '1px solid red',
+        justifyContent: 'space-between',
         width: xs ? '100%' : 'auto',
-      }
+      },
     });
   }
 };
