@@ -18,6 +18,14 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       width: '100%',
     },
+    firstMainContainer: {
+      width: '100%',
+      textAlign: 'center',
+      flexDirection: xs || sm ? 'column' : 'row',
+      justifyContent: xs || sm ? 'center' : 'space-around',
+      marginTop: Platform.OS !== 'web' ? 25 : 20,
+      flex: 1,
+    },
     secondaryContentContainer: {
       // flex: 1,
       width: '100%',
@@ -26,7 +34,7 @@ const loadStyles = (theme) => {
       // backgroundColor: 'rgb(248, 248, 248)',
       // background: 'hsla(0, 0%, 96%, 1)',
       // filter:
-        // 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+      // 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
     },
     featureImage: {
       zIndex: 100,
@@ -43,10 +51,10 @@ const loadStyles = (theme) => {
       width: '100%',
       height: '100%',
       // background:
-        // 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
+      // 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
     },
     appBadges: {
-      flexDirection: xs  ? 'column' : 'row',
+      flexDirection: xs ? 'column' : 'row',
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 20,

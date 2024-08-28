@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, ScrollView, View, Text } from 'react-native';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
-import AppleLink from 'app/assets/applelink.svg'
+import AppleLink from 'app/assets/applelink.svg';
 import {
   RButton as OriginalRButton,
   RText,
@@ -36,18 +36,7 @@ const LandingPage = () => {
   return (
     <ScrollView>
       <RStack style={styles.container}>
-        <View
-          style={
-            {
-              width: '100%',
-              textAlign: 'center',
-              flexDirection: xs || sm ? 'column' : 'row',
-              justifyContent: xs || sm ? 'center' : 'space-around',
-              marginTop: Platform.OS !== 'web' ? 25 : 20,
-              flex: 1,
-            } as any
-          }
-        >
+        <View style={styles.firstMainContainer as any}>
           <View>
             <View
               style={{
@@ -87,7 +76,8 @@ const LandingPage = () => {
                   <RLink>
                     <View
                       style={{
-                        width: 150, height: 45,
+                        width: 150,
+                        height: 45,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -113,7 +103,7 @@ const LandingPage = () => {
                           }}
                         />
                       </View>
-                      <View style={{flexDirection: 'column', gap: 0,}}>
+                      <View style={{ flexDirection: 'column', gap: 0 }}>
                         <RText
                           style={{
                             width: '100%',
@@ -146,7 +136,8 @@ const LandingPage = () => {
                   <RLink>
                     <View
                       style={{
-                        width: 160, height: 45,
+                        width: 160,
+                        height: 45,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -172,7 +163,7 @@ const LandingPage = () => {
                           }}
                         />
                       </View>
-                      <View style={{flexDirection: 'column', gap: 0,}}>
+                      <View style={{ flexDirection: 'column', gap: 0 }}>
                         <RText
                           style={{
                             width: '100%',
@@ -202,6 +193,56 @@ const LandingPage = () => {
                       </View>
                     </View>
                   </RLink>
+                  <RLink href='/register'>
+                    <View
+                      style={{
+                        width: 130,
+                        height: 45,
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        backgroundColor: 'transparent',
+                        color: currentTheme.colors.textPrimary,
+                        borderWidth: 1,
+                        borderColor: currentTheme.colors.cardBorderPrimary,
+                        overflow: 'hidden',
+                        padding: 8,
+                        borderRadius: 4,
+                        fontSize: 16,
+                        fontWeight: 'normal',
+                        paddingHorizontal: 8,
+                        borderRadius: 8,
+                        fontSize: 16,
+                        fontWeight: 'normal',
+                      }}
+                    >
+                      <View>
+                        <MaterialCommunityIcons
+                          name="forwardburger"
+                          size={30}
+                          color={currentTheme.colors.textPrimary}
+                          style={{
+                            width: '100%',
+                          }}
+                        />
+                      </View>
+                      <View style={{ flexDirection: 'column', gap: 0 }}>
+                        <RText
+                          style={{
+                            width: '100%',
+                            color: currentTheme.colors.textPrimary,
+                            textAlign: 'left',
+                            fontSize: 19,
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          Signup
+                        </RText>
+                      </View>
+                    </View>
+                  </RLink>
+
                   {/* <RButton
                     title="App Store"
                     paddingVertical={30}

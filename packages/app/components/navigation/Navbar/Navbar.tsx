@@ -11,8 +11,10 @@ import useTheme from 'app/hooks/useTheme';
 import { RImage } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import useResponsive from 'app/hooks/useResponsive';
+import { useAuthUser } from 'app/modules/auth';
 
 export const Navbar = () => {
+  const user = useAuthUser();
   const { currentTheme, enableDarkMode, enableLightMode, isLight } = useTheme();
   const toggleTheme = async () => {
     console.log(isLight);
@@ -22,6 +24,7 @@ export const Navbar = () => {
     enableLightMode();
   };
   const scrollTop = useScrollTop();
+
   const { screenWidth } = useScreenWidth();
   const isScrolled = !!scrollTop;
   const { xxs, xs, sm, md, lg } = useResponsive();
@@ -84,7 +87,7 @@ export const Navbar = () => {
               </Text> */}
             </View>
             <View style={styles.navbarThird}>
-              <MaterialCommunityIcons
+              {/* <MaterialCommunityIcons
                 onPress={toggleTheme}
                 name="theme-light-dark"
                 size={24}
@@ -92,11 +95,15 @@ export const Navbar = () => {
                   color: currentTheme.colors.textPrimary,
                   cursor: 'pointer',
                 }}
-              />
-              <RLink href="/sign-in">
-                <RText style={styles.loginButton}>Login</RText>
-              </RLink>
-              <Drawer />
+              /> */}
+
+              {user ? (
+                <Drawer />
+              ) : (
+                <RLink href="/sign-in">
+                  <RText style={styles.loginButton}>Login</RText>
+                </RLink>
+              )}
             </View>
           </View>
         </Container>

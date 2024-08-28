@@ -11,10 +11,8 @@ import useResponsive from 'app/hooks/useResponsive';
 export default function Footer() {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const { xs, sm } = useResponsive();
-  const styles = useMemo(() => {
-    return StyleSheet.create(loadStyles(currentTheme, xs, sm));
-  }, [currentTheme]);
+  const { xs, sm, md } = useResponsive();
+  const styles = StyleSheet.create(loadStyles(currentTheme, xs, sm, md));
   const year = new Date().getFullYear();
   const navigate = useNavigate();
   return (
@@ -75,7 +73,7 @@ export default function Footer() {
   );
 }
 
-const loadStyles = (currentTheme, xs, sm) => {
+const loadStyles = (currentTheme, xs, sm, md) => {
   {
     return StyleSheet.create({
       mainContainer: {
@@ -90,6 +88,8 @@ const loadStyles = (currentTheme, xs, sm) => {
       },
       firstMainContainer: {
         width: '95%',
+        // justifyContent: 'center',
+        // alignItems: 'center',
       },
       firstContainer: {
         width: '100%',
@@ -105,7 +105,9 @@ const loadStyles = (currentTheme, xs, sm) => {
       },
       navLinks: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         gap: 16,
+        margin: 10,
         fontSize: 14,
         color: currentTheme.colors.textPrimary,
         paddingBottom: 40,
@@ -116,13 +118,16 @@ const loadStyles = (currentTheme, xs, sm) => {
         fontSize: 13,
         textAlign: xs ? 'center' : 'left',
         fontWeight: 'normal',
-        paddingTop : sm ? 10 : 'auto',
+        paddingTop : sm || md ? 10 : 'auto',
       },
       lastContainer: {
-        flexDirection: sm ? 'column-reverse' : 'row',
+        display: 'flex',
+        flexWrap: 'wrap-reverse',
+        flexDirection: sm  ? 'column-reverse': 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: xs ? '100%' : 'auto',
+        width: sm || md ? 'auto' : '95%',
+        
       },
     });
   }
