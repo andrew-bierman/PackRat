@@ -1,9 +1,7 @@
 name: Tauri Build and Publish
 
 on:
-  push:
-    tags:
-      - 'v*'
+  push: ['**']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
