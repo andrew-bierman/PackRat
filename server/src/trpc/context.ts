@@ -24,7 +24,7 @@ export const createContext = (honoContext: Context) => async () => {
     accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
   });
   await AiClient.init({
-    apiKey: honoContext.env.AI_API_KEY,
+    apiKey: honoContext.env.WORKERS_AI_API_KEY,
     accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
     // honoContext.env.AI
   });
