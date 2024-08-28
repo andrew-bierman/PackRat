@@ -26,7 +26,7 @@ const SECTION = {
   CTA: 'CTA',
   SCORECARD: 'SCORECARD',
   CHAT: 'CHAT',
-  SIMILAR_ITEMS: 'SIMILAR_ITEMS',
+  SIMILAR_PACKS: 'SIMILAR_PACKS',
 };
 
 export function PackDetailsScreen() {
@@ -147,7 +147,7 @@ export function PackDetailsScreen() {
                             />
                           </View>
                         );
-                      case SECTION.SIMILAR_ITEMS:
+                      case SECTION.SIMILAR_PACKS:
                         return (
                           <LargeCard
                             customStyle={{

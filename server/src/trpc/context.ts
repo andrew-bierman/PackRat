@@ -20,11 +20,11 @@ export const createContext = (honoContext: Context) => async () => {
   await VectorClient.init({
     apiKey: honoContext.env.VECTORIZE_API_KEY,
     // indexName: honoContext.env.VECTOR_INDEX,
-    indexName: 'vector-index', // TODO: Change to 'VECTOR_INDEX
+    indexName: honoContext.env.VECTOR_INDEX,
     accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
   });
   await AiClient.init({
-    apiKey: honoContext.env.AI_API_KEY,
+    apiKey: honoContext.env.WORKERS_AI_API_KEY,
     accountId: honoContext.env.CLOUDFLARE_ACCOUNT_ID,
     // honoContext.env.AI
   });
