@@ -14,9 +14,9 @@ database_id = ""
 [env.preview.ai]
 binding = "AI"
 
-[[env.preview.vectorize]]
-binding = "VECTOR_INDEX"
-index_name = "vector-index-preview"
+#[[env.preview.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index-preview"
 
 [env.preview.vars]
 NODE_ENV="preview"
@@ -57,9 +57,9 @@ database_id = ""
 [env.production.ai]
 binding = "AI"
 
-[[env.production.vectorize]]
-binding = "VECTOR_INDEX"
-index_name = "vector-index"
+#[[env.production.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index"
 
 [env.production.vars]
 NODE_ENV="production"
