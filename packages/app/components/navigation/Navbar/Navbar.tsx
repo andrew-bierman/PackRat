@@ -69,6 +69,7 @@ export const Navbar = () => {
                     fontSize: 38,
                     fontWeight: 'bolder',
                     cursor: 'pointer',
+                    color: 'blue'
                   }}
                   onPress={() => {
                     navigate('/');
@@ -87,7 +88,7 @@ export const Navbar = () => {
               </Text> */}
             </View>
             <View style={styles.navbarThird}>
-              {/* <MaterialCommunityIcons
+              <MaterialCommunityIcons
                 onPress={toggleTheme}
                 name="theme-light-dark"
                 size={24}
@@ -95,7 +96,7 @@ export const Navbar = () => {
                   color: currentTheme.colors.textPrimary,
                   cursor: 'pointer',
                 }}
-              /> */}
+              />
 
               {user ? (
                 <Drawer />
@@ -224,7 +225,7 @@ const loadStyles = (
     },
     logo: {
       cursor: 'pointer',
-      backgroundColor: 'black',
+      backgroundColor: 'blue',
       borderRadius: 8,
       // filter: 'drop-shadow(0 0 1px #45607d)',
     },

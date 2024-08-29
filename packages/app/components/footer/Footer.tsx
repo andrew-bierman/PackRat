@@ -100,7 +100,7 @@ const loadStyles = (currentTheme, xs, sm, md) => {
         paddingVertical: 18,
       },
       logo: {
-        backgroundColor: 'black',
+        backgroundColor: 'blue',
         borderRadius: 8,
       },
       navLinks: {

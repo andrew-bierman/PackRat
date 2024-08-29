@@ -2,6 +2,8 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, ScrollView, View, Text } from 'react-native';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
+import PackRatPreviewLeft from 'app/assets/PackRat Preview_Left.jpg';
+import PackRatPreviewRight from 'app/assets/PackRat Preview_Right.jpg';
 import AppleLink from 'app/assets/applelink.svg';
 import {
   RButton as OriginalRButton,
@@ -24,6 +26,7 @@ import loadStyles from './landingpage.style';
 import { Redirect } from 'app/components/Redirect';
 import useResponsive from 'app/hooks/useResponsive';
 import Footer from 'app/components/footer/Footer';
+import { FAQS } from './FAQS';
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -193,205 +196,102 @@ const LandingPage = () => {
                       </View>
                     </View>
                   </RLink>
-                  <RLink href='/register'>
-                    <View
-                      style={{
-                        width: 130,
-                        height: 45,
-                        flexDirection: 'row-reverse',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8,
-                        backgroundColor: 'transparent',
-                        color: currentTheme.colors.textPrimary,
-                        borderWidth: 1,
-                        borderColor: currentTheme.colors.cardBorderPrimary,
-                        overflow: 'hidden',
-                        padding: 8,
-                        borderRadius: 4,
-                        fontSize: 16,
-                        fontWeight: 'normal',
-                        paddingHorizontal: 8,
-                        borderRadius: 8,
-                        fontSize: 16,
-                        fontWeight: 'normal',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="forwardburger"
-                          size={30}
-                          color={currentTheme.colors.textPrimary}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
-                      </View>
-                      <View style={{ flexDirection: 'column', gap: 0 }}>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            textAlign: 'left',
-                            fontSize: 19,
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          Signup
-                        </RText>
-                      </View>
-                    </View>
-                  </RLink>
-
-                  {/* <RButton
-                    title="App Store"
-                    paddingVertical={30}
-                    paddingHorizontal={15}
-                    style={{
-                      margin: 10,
-                      backgroundColor: 'transparent',
-                      borderWidth: 1,
-                      borderColor: currentTheme.colors.textPrimary,
-                      width: xs || sm ? '95%' : 'auto',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <RStack
-                      style={{
-                        // display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 8,
-                        width: '100%',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="apple"
-                          size={55}
-                          color={currentTheme.colors.icon}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          width: xs || sm ? '100%' : 'auto',
-                        }}
-                      >
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          Get it on the
-                        </RText>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 20,
-                            fontWeight: 'bolder',
-                          }}
-                        >
-                          App Store
-                        </RText>
-                      </View>
-                    </RStack>
-                  </RButton>
-                  <RButton
-                    title="Google Play"
-                    paddingVertical={30}
-                    paddingHorizontal={15}
-                    style={{
-                      margin: 10,
-                      backgroundColor: 'transparent',
-                      borderWidth: 1,
-                      borderColor: currentTheme.colors.textPrimary,
-                      width: xs || sm ? '95%' : 'auto',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <RStack
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 8,
-                        width: '100%',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="google-play"
-                          size={55}
-                          color={currentTheme.colors.icon}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          width: xs || sm ? '100%' : 'auto',
-                        }}
-                      >
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 14,
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          Get it on
-                        </RText>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.textPrimary,
-                            fontStyle: 'normal',
-                            textAlign: 'left',
-                            fontSize: 20,
-                            fontWeight: 'bolder',
-                          }}
-                        >
-                          Google Play
-                        </RText>
-                      </View>
-                    </RStack>
-                  </RButton> */}
                 </View>
               </View>
             </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                flexWrap: 'wrap',
+              }}
+            >
+              <RLink href="/register">
+                <View
+                  style={{
+                    width: 130,
+                    height: 45,
+                    flexDirection: 'row-reverse',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    backgroundColor: 'transparent',
+                    color: currentTheme.colors.textPrimary,
+                    borderWidth: 1,
+                    borderColor: currentTheme.colors.cardBorderPrimary,
+                    overflow: 'hidden',
+                    borderRadius: 4,
+                    fontSize: 16,
+                    fontWeight: 'normal',
+                    paddingHorizontal: 8,
+                    borderRadius: 8,
+                    fontSize: 16,
+                    fontWeight: 'normal',
+                  }}
+                >
+                  <View>
+                    <MaterialCommunityIcons
+                      name="forwardburger"
+                      size={30}
+                      color={currentTheme.colors.textPrimary}
+                      style={{
+                        width: '100%',
+                      }}
+                    />
+                  </View>
+                  <View style={{ flexDirection: 'column', gap: 0 }}>
+                    <RText
+                      style={{
+                        width: '100%',
+                        color: currentTheme.colors.textPrimary,
+                        textAlign: 'left',
+                        fontSize: 19,
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      Signup
+                    </RText>
+                  </View>
+                </View>
+              </RLink>
+            </View>
           </View>
           <View style={styles.featureImage}>
-            <RImage
-              src={PackRatPreview}
-              // source={{
-              //   uri: ,
-              //   width: 259,
-              //   height: 530,
-              // }}
-              style={{
-                backgroundColor: 'transparent',
-                width: 259,
-                height: 530,
-              }}
-              alt="PackRat Logo"
-            />
+            <View style={styles.featureImageContainer}>
+              <RImage
+                src={PackRatPreviewLeft}
+                style={{
+                  backgroundColor: 'transparent',
+                  width: 215,
+                  height: 410,
+                  position: 'absolute',
+                  zIndex: '-1',
+                  right: 120,
+                }}
+                alt="PackRat Logo"
+              />
+              <RImage
+                src={PackRatPreview}
+                style={{
+                  backgroundColor: 'transparent',
+                  width: 259,
+                  height: 530,
+                }}
+                alt="PackRat Logo"
+              />
+              <RImage
+                src={PackRatPreviewRight}
+                style={{
+                  backgroundColor: 'transparent',
+                  width: 215,
+                  height: 410,
+                  position: 'absolute',
+                  zIndex: '-1',
+                  left: 120,
+                }}
+                alt="PackRat Logo"
+              />
+            </View>
           </View>
         </View>
         <View style={styles.secondaryContentContainer}>
@@ -409,20 +309,11 @@ const LandingPage = () => {
               you elevate your backpacking experience:
             </RText>
           </View>
-          <View style={styles.contentContainer}>
-            <RStack
-              style={styles.landingPageAccordion}
-              maxWidth={Platform.OS === 'web' ? 'auto' : '100%'}
-            >
-              {FAQ_ITEMS.map((item, index) => (
-                <LandingPageAccordion
-                  key={index}
-                  title={item.title}
-                  content={item.content}
-                  iconName={item.iconName}
-                />
-              ))}
-            </RStack>
+          <View style={{width: '100%'}}>
+            <LandingPageAccordion />
+          </View>
+          <View style={{width: '100%', paddingTop: 50,}}>
+            <FAQS/>
           </View>
         </View>
       </RStack>

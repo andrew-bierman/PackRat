@@ -12,7 +12,7 @@ const loadStyles = (theme) => {
       height: '100%',
     },
     container: {
-      // flex: 1,
+      flex: 1,
       // backgroundColor: currentTheme.colors.background,
       justifyContent: 'center',
       alignItems: 'center',
@@ -22,7 +22,7 @@ const loadStyles = (theme) => {
       width: '100%',
       textAlign: 'center',
       flexDirection: xs || sm ? 'column' : 'row',
-      justifyContent: xs || sm ? 'center' : 'space-around',
+      justifyContent: xs || sm ? 'center' : 'space-evenly',
       marginTop: Platform.OS !== 'web' ? 25 : 20,
       flex: 1,
     },
@@ -35,6 +35,11 @@ const loadStyles = (theme) => {
       // background: 'hsla(0, 0%, 96%, 1)',
       // filter:
       // 'progid: DXImageTransform.Microsoft.gradient( startColorstr="#F6F6F6", endColorstr="#E1DAE6", GradientType=1 )',
+    },
+    featureImageContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     featureImage: {
       zIndex: 100,
@@ -58,7 +63,6 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 20,
-      marginBottom: 40,
     },
     backgroundImage: {
       flex: 1,
@@ -102,15 +106,45 @@ const loadStyles = (theme) => {
       // fontWeight: 'bold',
     },
     landingPageAccordion: {
-      flexDirection: 'row',
+      flexDirection: 'column',
       flexWrap: 'wrap',
       width: xs || sm ? 'auto' : '80%',
       justifyContent: 'center',
+      alignItems: 'center',
+    },
+    landingPageAccordionContainer: {
+      flexDirection: 'row',
+      flexWrap: 'no-wrap',
+      width: xs || sm ? '100%' : 'auto',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 50,
+    },
+    landingPageAccordionFirstContainer: {
+      width: 'auto',
+      flexDirection: 'column',
+      alignItems: 'center',
+      textAlign: 'left',
+      justifyContent: 'space-evenly',
+      gap: 10,
+    },
+    landingPageAccordationSecondContainer: {
+      // width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 10,
+      transition: '0.3s ease-in-out'
+    },
+    panButton: {
+      backgroundColor: '#232323',
+      color: 'white',
+      width: '100%',
     },
     card: {
       width: xs || sm || md ? '95%' : '30%',
       margin: 8,
-      backgroundColor: 'transparent',
+      // backgroundColor: 'transparent',
       flexDirection: 'row',
       borderWidth: 1,
       borderColor: currentTheme.colors.cardBorderPrimary,
@@ -136,31 +170,34 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     cardContent: {
-      fontSize: 14,
+      fontSize: 18,
       color: currentTheme.colors.textPrimary,
-      width: '100%',
+      width: '30vw',
+      textAlign: 'left',
+      // border: '1px solid black'
     },
     secondaryContainerIntroDiv: {
       width: xs ? '100%' : '80%',
       marginTop: 50,
       marginBottom: 50,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     secondaryContainerIntroText: {
       fontSize: 28,
       width: xs ? '95%' : '80%',
       fontWeight: 'bold',
-      textAlign: 'center',
-      margin: 40,
+      textAlign: 'left',
+      marginBottom: 40,
     },
     secondaryContainerDescriptionText: {
       fontSize: 16,
       width: xs ? '95%' : '70%',
       fontWeight: 'normal',
-      textAlign: 'center',
+      textAlign: 'left',
       marginBottom: 30,
     },
+    
   };
 };
 
