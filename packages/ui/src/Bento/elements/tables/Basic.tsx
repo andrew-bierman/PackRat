@@ -206,7 +206,7 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <View alignItems="center" justifyContent="center" width="100%" gap="$8">
+      <View alignItems="center" justifyContent="center" width="100%" gap="$5">
         {tableData.map((row, i) => (
           <View
             key={i}
