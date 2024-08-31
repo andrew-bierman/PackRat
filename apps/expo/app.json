@@ -7,6 +7,9 @@
     "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "packrat",
+    "splash": {
+      "image": "./assets/splash.png"
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
