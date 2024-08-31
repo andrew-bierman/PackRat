@@ -14,9 +14,9 @@ database_id = ""
 [env.preview.ai]
 binding = "AI"
 
-[[env.preview.vectorize]]
-binding = "VECTOR_INDEX"
-index_name = "vector-index-preview"
+#[[env.preview.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index-preview"
 
 [env.preview.vars]
 NODE_ENV="preview"
@@ -57,9 +57,9 @@ database_id = ""
 [env.production.ai]
 binding = "AI"
 
-[[env.production.vectorize]]
-binding = "VECTOR_INDEX"
-index_name = "vector-index"
+#[[env.production.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index-production"
 
 [env.production.vars]
 NODE_ENV="production"
@@ -74,7 +74,7 @@ OSM_URI=""
 WEATHER_URL=""
 OPENWEATHER_KEY=""
 VECTORIZE_API_KEY=""
-VECTOR_INDEX="vector-index"
+VECTOR_INDEX="vector-index-production"
 WORKERS_AI_API_KEY=""
 CLOUDFLARE_ACCOUNT_ID=""
 
