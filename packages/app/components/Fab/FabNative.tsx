@@ -4,14 +4,18 @@ import { MaterialIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { QuickActionsSection } from '../../modules/dashboard';
 
-const FABNative = ({ showQuickActions, toggleQuickActions }) => {
+const FABNative = ({
+  showQuickActions,
+  toggleQuickActions,
+  closeQuickActions,
+}) => {
   const styles = useCustomStyles(loadStyles);
 
   return (
     <>
       {showQuickActions && (
         <View style={styles.quickActionsContainer}>
-          <QuickActionsSection />
+          <QuickActionsSection closeQuickActions={closeQuickActions} />
         </View>
       )}
       <TouchableOpacity style={styles.fab} onPress={toggleQuickActions}>
