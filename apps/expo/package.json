@@ -102,6 +102,7 @@
     "expo-image-picker": "~14.7.1",
     "expo-linear-gradient": "~12.7.2",
     "expo-linking": "~6.2.2",
+    "expo-local-authentication": "~13.8.0",
     "expo-location": "~16.5.5",
     "expo-random": "~13.6.0",
     "expo-router": "~3.4.10",
