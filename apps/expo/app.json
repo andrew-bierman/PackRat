@@ -53,7 +53,8 @@
             }
           }
         }
-      ]
+      ],
+      ["./translucent-default-splash-screen-config"]
     ],
     "extra": {
       "eas": {
