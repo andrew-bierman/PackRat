@@ -10,6 +10,10 @@ const FAB = () => {
     setShowQuickActions((prev) => !prev);
   };
 
+  const closeQuickActions = () => {
+    setShowQuickActions(false);
+  };
+
   return Platform.OS === 'web' ? (
     <FABWeb
       showQuickActions={showQuickActions}
@@ -19,6 +23,7 @@ const FAB = () => {
     <FABNative
       showQuickActions={showQuickActions}
       toggleQuickActions={toggleQuickActions}
+      closeQuickActions={closeQuickActions}
     />
   );
 };
