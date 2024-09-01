@@ -22,7 +22,15 @@ export const importNotifiedETL = async (c) => {
 
   const userClass = new User();
   const users = await userClass.getAdminId();
-  const ownerId = users[0].id;
+
+  let ownerId = '';
+
+  if (users && users.length > 0) {
+    ownerId = users[0].id;
+    console.log('User ID:', ownerId);
+  } else {
+    console.log('No users found.');
+  }
 
   try {
     const fileData = await fetchFromS3(
