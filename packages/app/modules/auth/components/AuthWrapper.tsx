@@ -20,6 +20,11 @@ export const AuthWrapper = ({
   const { currentTheme } = useTheme();
 
   const authenticate = async () => {
+    if (Platform.OS === 'web') {
+      setIsAuthenticated(true);
+      return;
+    }
+
     const hasHardware = await LocalAuthentication.hasHardwareAsync();
     if (!hasHardware) {
       Alert.alert(
