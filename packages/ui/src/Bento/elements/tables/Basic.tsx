@@ -228,13 +228,7 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-        }}
-      >
+      <View alignItems="center" justifyContent="center" width="100%" gap="$5">
         {tableData.map((row, i) => (
           <View
             key={i}
@@ -280,7 +274,11 @@ export function BasicTable({
 
   return (
     <View
-      style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+      }}
     >
       <Table
         alignCells={{ x: 'center', y: 'center' }}

@@ -4,7 +4,7 @@ import { QuickActionButton } from '../QuickActionButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useQuickActions } from 'app/modules/dashboard';
 
-export const QuickActionsSection = () => {
+export const QuickActionsSection = ({ closeQuickActions }) => {
   const styles = useCustomStyles(loadStyles);
   const { handleActionSelect, quickActionData } = useQuickActions();
 
@@ -13,7 +13,10 @@ export const QuickActionsSection = () => {
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
-          onPress={() => handleActionSelect(action.action)}
+          onPress={() => {
+            handleActionSelect(action.action);
+            closeQuickActions();
+          }}
           iconName={action.iconName}
           text={action.text}
         />
