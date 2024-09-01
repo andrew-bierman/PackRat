@@ -10,12 +10,13 @@ import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 import { AddItem } from 'app/modules/item';
 import { DeletePackItemModal, EditPackItemModal } from 'app/modules/pack';
-import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { ThreeDotsMenu, YStack, RButton, RText } from '@packrat/ui';
 
 import { Platform } from 'react-native';
 import { RDropdownMenu } from '../../../ZDropdown';
 import RIconButton from '../../../RIconButton';
 import { ChevronDown } from '@tamagui/lucide-icons';
+import { BaseAlert } from '@packrat/ui';
 
 type ModalName = 'edit' | 'delete';
 
@@ -100,13 +101,34 @@ export function BasicTable({
             />
           )}
         </EditPackItemModal>
-        <DeletePackItemModal
+        <BaseAlert
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
-          onConfirm={() =>
-            onDelete({ itemId: item.id, packId: currentPack.id })
-          }
-        />
+          hideIcon={true}
+          title={'Delete Item'}
+          footerButtons={[
+            {
+              label: 'Cancel',
+              onClick: () => {
+                closeModal();
+              },
+              color: 'gray',
+              disabled: false,
+            },
+            {
+              label: 'Delete',
+              onClick: () => {
+                closeModal();
+                onDelete({ itemId: item.id, packId: currentPack.id });
+              },
+              color: '#B22222',
+              disabled: false,
+            },
+          ]}
+        >
+          <RText> Are you sure you want to delete this item?</RText>
+        </BaseAlert>
+        
         {hasPermissions ? (
           Platform.OS === 'android' ||
           Platform.OS === 'ios' ||
