@@ -37,7 +37,7 @@ export const importFromBucket = async (c) => {
     );
 
     if (!latestFileName) {
-      throw new Error('No files found in the backcountry directory');
+      throw new Error('No files found in the supposed directory');
     }
 
     const fileData = await fetchFromS3(
