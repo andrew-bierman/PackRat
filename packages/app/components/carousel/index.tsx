@@ -69,7 +69,7 @@ const Carousel: React.FC<CarouselProps> = ({
       <ScrollView
         ref={scrollViewRef}
         horizontal
-        scrollEnabled={Platform.OS === 'web'}
+        scrollEnabled
         // gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
