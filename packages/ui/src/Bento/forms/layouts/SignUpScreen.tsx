@@ -15,6 +15,7 @@ import { Form, FormInput, SubmitButton } from '@packrat/ui';
 import { userSignUp } from '@packrat/validations';
 import { FontAwesome } from '@expo/vector-icons';
 import { RIconButton } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
 
 export function SignUpScreen({
   promptAsync,
@@ -22,6 +23,7 @@ export function SignUpScreen({
   signUpStatus,
   isGoogleSignInReady,
 }) {
+  const { currentTheme } = useTheme();
   return (
     <FormCard>
       <View
@@ -37,7 +39,12 @@ export function SignUpScreen({
           width: 400,
         }}
       >
-        <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
+        <H1
+          alignSelf="center"
+          size="$8"
+          $group-window-xs={{ size: '$7' }}
+          color={currentTheme.colors.tertiaryBlue}
+        >
           Create an account
         </H1>
         <Form validationSchema={userSignUp}>
@@ -56,7 +63,7 @@ export function SignUpScreen({
                 onSubmit={(data) => signup(data)}
                 style={{
                   marginTop: 16,
-                  backgroundColor: '#232323',
+                  backgroundColor: currentTheme.colors.tertiaryBlue,
                   color: 'white',
                 }}
                 width="100%"

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useTheme from '../../../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/modules/auth';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
+import { View } from 'react-native';
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -31,11 +32,28 @@ export function LoginScreen() {
   const { currentTheme } = useTheme();
 
   return (
-    <SignInScreen
-      promptAsync={promptAsync}
-      signIn={signIn}
-      signInStatus={signInStatus}
-      isGoogleSignInReady={isGoogleSignInReady}
-    />
+    <View
+      style={{
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: currentTheme.colors.background,
+      }}
+    >
+      <View
+        style={{
+          paddingTop: 32,
+          paddingBottom: 32,
+          width: '90%',
+          maxWidth: 400,
+        }}
+      >
+        <SignInScreen
+          promptAsync={promptAsync}
+          signIn={signIn}
+          signInStatus={signInStatus}
+          isGoogleSignInReady={isGoogleSignInReady}
+        />
+      </View>
+    </View>
   );
 }

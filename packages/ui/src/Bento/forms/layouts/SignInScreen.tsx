@@ -28,23 +28,19 @@ export function SignInScreen({
   const { currentTheme } = useTheme();
   const { xxs, xs } = useResponsive();
   return (
-    <FormCard
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <FormCard>
       <View
         flexDirection="column"
-        maxWidth="100%"
+        alignItems="stretch"
         minWidth="100%"
-        maxHeight="100%"
-        minHeight="100%"
-        alignItems="center"
-        justifyContent="center"
+        maxWidth="100%"
         gap="$4"
         padding="$4"
-        paddingVertical="$6"
+        paddingVertical="$14"
+        $group-window-gtSm={{
+          paddingVertical: '$4',
+          width: 400,
+        }}
       >
         <H1
           alignSelf="center"
@@ -55,11 +51,7 @@ export function SignInScreen({
           Sign in to your account
         </H1>
         <Form validationSchema={userSignIn}>
-          <View
-            flexDirection="column"
-            gap="$3"
-            width={xxs ? '80%' : xs ? '80%' : '20%'}
-          >
+          <View flexDirection="column" gap="$3">
             <FormInput
               label="Email ID"
               keyboardType="email-address"

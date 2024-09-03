@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import { RScrollView } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useRegisterUser, useGoogleAuth } from 'app/modules/auth';
 import { SignUpScreen } from '@packrat/ui/src/Bento/forms/layouts';
@@ -27,33 +26,29 @@ export function RegisterScreen() {
   const { signup, signUpStatus } = useSignup();
 
   return (
-    <RScrollView contentContainerStyle={{ paddingBottom: 20 } as any}>
+    <View
+      style={{
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: currentTheme.colors.background,
+      }}
+    >
       <View
         style={{
-          width: '100%',
-          alignItems: 'center',
-          backgroundColor:
-            currentTheme.colors.background === '#0284c7'
-              ? 'white'
-              : currentTheme.colors.background,
+          paddingTop: 32,
+          paddingBottom: 32,
+          height: '100%',
+          width: '90%',
+          maxWidth: 400,
         }}
       >
-        <View
-          style={{
-            paddingTop: 32,
-            paddingBottom: 32,
-            width: '90%',
-            maxWidth: 400,
-          }}
-        >
-          <SignUpScreen
-            promptAsync={promptAsync}
-            signup={signup}
-            signUpStatus={signUpStatus}
-            isGoogleSignInReady={isGoogleSignInReady}
-          />
-        </View>
+        <SignUpScreen
+          promptAsync={promptAsync}
+          signup={signup}
+          signUpStatus={signUpStatus}
+          isGoogleSignInReady={isGoogleSignInReady}
+        />
       </View>
-    </RScrollView>
+    </View>
   );
 }
