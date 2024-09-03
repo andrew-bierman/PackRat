@@ -200,10 +200,10 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
-          <RText style={{ fontWeight: 500, color: currentTheme.colors.white }}>
+          <RText style={{ fontWeight: 500, color: currentTheme.colors.text }}>
             {subheader}
           </RText>
-          <RText style={{ fontWeight: 300, color: currentTheme.colors.white }}>
+          <RText style={{ fontWeight: 300, color: currentTheme.colors.text }}>
             {description}
           </RText>
           {isOwner && (
