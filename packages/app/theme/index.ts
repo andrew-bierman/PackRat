@@ -27,6 +27,7 @@ export const theme = {
     floatingBg: '#f0f2f5',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
     navbarPrimaryBackground: '#f6f6f6',
+    logo: 'rgb(12, 102, 161)'
   },
   font: {
     headerFont: 56,
@@ -73,6 +74,7 @@ export const darkTheme = {
     floatingBg: '#232323',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
     navbarPrimaryBackground: 'black',
+    logo: 'rgb(150, 199, 242)'
   },
   font: {
     headerFont: 56,

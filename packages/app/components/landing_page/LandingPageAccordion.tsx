@@ -47,16 +47,29 @@ export const LandingPageAccordion = () => {
     //   </View>
     // </RCard>
     <View style={styles.landingPageAccordionContainer}>
+      <View style={styles.landingPageAccordationSecondContainer}>
+        <RText style={styles.cardContent}>{data.content}</RText>
+        <RImage
+          src={data.frameLink}
+          style={{
+            backgroundColor: 'transparent',
+            width: 330,
+            height: 600,
+          }}
+          alt="PackRat Logo"
+        />
+
+      </View>
       <View style={styles.landingPageAccordionFirstContainer}>
         <RButton onClick={panUp} style={styles.panButton}>
           <MaterialCommunityIcons
-            name="pan-up"
+            name="pan-left"
             size={30}
-            color={currentTheme.colors.background}
+            color={currentTheme.colors.textPrimary}
           />
         </RButton>
-        <View style={{ width: '100%', padding: 8 }}>
-          {FAQ_ITEMS.map((item) => {
+        <View>
+          {/* {FAQ_ITEMS.map((item) => {
             return (
               <RText
                 onClick={() => {
@@ -67,13 +80,21 @@ export const LandingPageAccordion = () => {
                 {item.title}
               </RText>
             );
-          })}
+          })} */}
+          <RText
+            onClick={() => {
+              handleTextClick(FAQ_ITEMS[index]);
+            }}
+            style={{ textAlign: 'center', cursor: 'pointer', width: 'auto' }}
+          >
+            {FAQ_ITEMS[index].title}
+          </RText>
         </View>
         <RButton onClick={panDown} style={styles.panButton}>
           <MaterialCommunityIcons
-            name="pan-down"
+            name="pan-right"
             size={30}
-            color={currentTheme.colors.background}
+            color={currentTheme.colors.textPrimary}
             style={
               {
                 // width: '100%',
@@ -81,18 +102,6 @@ export const LandingPageAccordion = () => {
             }
           />
         </RButton>
-      </View>
-      <View style={styles.landingPageAccordationSecondContainer}>
-        <RImage
-          src={data.frameLink}
-          style={{
-            backgroundColor: 'transparent',
-            width: 259,
-            height: 530,
-          }}
-          alt="PackRat Logo"
-        />
-        <RText style={styles.cardContent}>{data.content}</RText>
       </View>
     </View>
   );

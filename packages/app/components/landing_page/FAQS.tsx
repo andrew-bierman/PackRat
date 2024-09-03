@@ -51,7 +51,7 @@ export const FAQS = () => {
           })}
         </View>
       </View>
-      <View style={styles.faqSecondContainer}>
+      {/* <View style={styles.faqSecondContainer}>
         <RImage
           src={PackRatPreview}
           style={{
@@ -61,7 +61,7 @@ export const FAQS = () => {
           }}
           alt="PackRat Logo"
         />
-      </View>
+      </View> */}
     </View>
   );
 };

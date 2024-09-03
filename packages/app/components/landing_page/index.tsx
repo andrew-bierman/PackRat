@@ -54,7 +54,7 @@ const LandingPage = () => {
                   height: 'auto',
                   fontSize: xs || sm ? 34 : 34,
                   fontWeight: xs || sm ? 'bold' : 'bold',
-                  textAlign: xs || sm ? 'center' : 'left',
+                  textAlign: xs || sm || md ? 'center' : 'left',
                 }}
               >
                 The Ultimate Travel App
@@ -178,7 +178,7 @@ const LandingPage = () => {
                             fontWeight: 'normal',
                           }}
                         >
-                          Get it on the
+                          Get it on
                         </RText>
                         <RText
                           style={{
@@ -201,16 +201,17 @@ const LandingPage = () => {
             </View>
             <View
               style={{
+                // width: xs || sm || md ? '100%' : 'auto',
                 flexDirection: 'row',
-                justifyContent: 'flex-start',
+                justifyContent: xs || sm || md ? 'center' : 'flex-start',
                 flexWrap: 'wrap',
               }}
             >
               <RLink href="/register">
                 <View
                   style={{
-                    width: 130,
-                    height: 45,
+                    width: 150,
+                    height: 65,
                     flexDirection: 'row-reverse',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -232,7 +233,7 @@ const LandingPage = () => {
                   <View>
                     <MaterialCommunityIcons
                       name="forwardburger"
-                      size={30}
+                      size={40}
                       color={currentTheme.colors.textPrimary}
                       style={{
                         width: '100%',
@@ -245,7 +246,7 @@ const LandingPage = () => {
                         width: '100%',
                         color: currentTheme.colors.textPrimary,
                         textAlign: 'left',
-                        fontSize: 19,
+                        fontSize: 22,
                         fontWeight: 'bold',
                       }}
                     >
@@ -260,35 +261,17 @@ const LandingPage = () => {
             <View style={styles.featureImageContainer}>
               <RImage
                 src={PackRatPreviewLeft}
-                style={{
-                  backgroundColor: 'transparent',
-                  width: 215,
-                  height: 410,
-                  position: 'absolute',
-                  zIndex: '-1',
-                  right: 120,
-                }}
+                style={styles.featureLeftImage}
                 alt="PackRat Logo"
               />
               <RImage
                 src={PackRatPreview}
-                style={{
-                  backgroundColor: 'transparent',
-                  width: 259,
-                  height: 530,
-                }}
+                style={styles.featureCenterImage}
                 alt="PackRat Logo"
               />
               <RImage
                 src={PackRatPreviewRight}
-                style={{
-                  backgroundColor: 'transparent',
-                  width: 215,
-                  height: 410,
-                  position: 'absolute',
-                  zIndex: '-1',
-                  left: 120,
-                }}
+                style={styles.featureRightImage}
                 alt="PackRat Logo"
               />
             </View>

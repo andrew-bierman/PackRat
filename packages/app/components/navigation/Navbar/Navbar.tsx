@@ -225,7 +225,7 @@ const loadStyles = (
     },
     logo: {
       cursor: 'pointer',
-      backgroundColor: 'blue',
+      backgroundColor: currentTheme.colors.logo,
       borderRadius: 8,
       // filter: 'drop-shadow(0 0 1px #45607d)',
     },

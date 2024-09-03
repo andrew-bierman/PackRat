@@ -21,10 +21,12 @@ const loadStyles = (theme) => {
     firstMainContainer: {
       width: '100%',
       textAlign: 'center',
-      flexDirection: xs || sm ? 'column' : 'row',
-      justifyContent: xs || sm ? 'center' : 'space-evenly',
+      flexDirection: xs || sm || md ? 'column' : 'row',
+      justifyContent: xs || sm || md ? 'center' : 'space-evenly',
       marginTop: Platform.OS !== 'web' ? 25 : 20,
       flex: 1,
+      paddingTop: 50,
+      paddingBottom: 50,
     },
     secondaryContentContainer: {
       // flex: 1,
@@ -43,13 +45,34 @@ const loadStyles = (theme) => {
     },
     featureImage: {
       zIndex: 100,
-      width: xs ? '100vw' : 'auto',
+      width: xs ? '100%' : 'auto',
       mixBlendMode: 'multiply',
       justifyContent: 'center',
       alignItems: 'center',
       // filter: "brightness(100) invert(0)",
       // width: 259,
       // height: 530,
+    },
+    featureLeftImage: {
+      backgroundColor: 'transparent',
+      width: xs || sm || md ? 162 : 215,
+      height: xs || sm || md ? 340 : 410,
+      position: 'absolute',
+      zIndex: '-1',
+      right: 120,
+    },
+    featureCenterImage: {
+      backgroundColor: 'transparent',
+      width: xs || sm || md ? 220 : 259,
+      height: xs || sm || md ? 450 : 530,
+    },
+    featureRightImage: {
+      backgroundColor: 'transparent',
+      width: xs || sm || md ?  162 : 215,
+      height: xs || sm || md ? 340 : 410,
+      position: 'absolute',
+      zIndex: '-1',
+      left: 120,
     },
     overlay: {
       border: '1px solid black',
@@ -59,7 +82,8 @@ const loadStyles = (theme) => {
       // 'linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%)',
     },
     appBadges: {
-      flexDirection: xs ? 'column' : 'row',
+      width: xs || sm || md ? '100%' : 'auto',
+      flexDirection: xs || sm || md ? 'column' : 'row',
       justifyContent: 'center',
       alignItems: 'center',
       marginVertical: 20,
@@ -77,10 +101,10 @@ const loadStyles = (theme) => {
     introText: {
       fontSize: xs || sm ? 18 : 20,
       fontWeight: Platform.OS === 'web' ? 'normal' : 'normal',
-      textAlign: xs || sm ? 'center' : 'left',
+      textAlign: xs || sm || md  ? 'center' : 'left',
       marginTop: xs ? 0 : 30,
       color: currentTheme.colors.textPrimary,
-      width: xs || sm ? '100vw' : '50vw',
+      width: xs || sm || md ? '100vw' : '50vw',
       marginBottom: 20,
     },
     buttonContainer: {
@@ -113,16 +137,18 @@ const loadStyles = (theme) => {
       alignItems: 'center',
     },
     landingPageAccordionContainer: {
-      flexDirection: 'row',
+      flexDirection: 'column',
       flexWrap: 'no-wrap',
       width: xs || sm ? '100%' : 'auto',
+      paddingTop: 100,
+      paddingBottom: 100,
       justifyContent: 'center',
       alignItems: 'center',
       gap: 50,
     },
     landingPageAccordionFirstContainer: {
       width: 'auto',
-      flexDirection: 'column',
+      flexDirection: 'row',
       alignItems: 'center',
       textAlign: 'left',
       justifyContent: 'space-evenly',
@@ -133,13 +159,13 @@ const loadStyles = (theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 10,
+      gap: 50,
       transition: '0.3s ease-in-out'
     },
     panButton: {
       backgroundColor: '#232323',
       color: 'white',
-      width: '100%',
+      // width: '100%',
     },
     card: {
       width: xs || sm || md ? '95%' : '30%',
@@ -170,34 +196,37 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     cardContent: {
-      fontSize: 18,
+      fontSize: 35,
       color: currentTheme.colors.textPrimary,
       width: '30vw',
       textAlign: 'left',
       // border: '1px solid black'
     },
     secondaryContainerIntroDiv: {
-      width: xs ? '100%' : '80%',
-      marginTop: 50,
-      marginBottom: 50,
+      width: xs ? '100%' : '100%',
+      paddingTop: 100,
+      paddingBottom: 100,
       justifyContent: 'center',
-      alignItems: 'flex-start',
+      backgroundColor: currentTheme.colors.textPrimary,
+      alignItems: 'center',
     },
     secondaryContainerIntroText: {
       fontSize: 28,
       width: xs ? '95%' : '80%',
       fontWeight: 'bold',
-      textAlign: 'left',
+      textAlign: 'center',
       marginBottom: 40,
+      color: currentTheme.colors.background,
     },
     secondaryContainerDescriptionText: {
       fontSize: 16,
       width: xs ? '95%' : '70%',
       fontWeight: 'normal',
-      textAlign: 'left',
+      textAlign: 'center',
       marginBottom: 30,
+      color: currentTheme.colors.background,
     },
-    
+
   };
 };
 
