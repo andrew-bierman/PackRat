@@ -27,6 +27,7 @@ import { Redirect } from 'app/components/Redirect';
 import useResponsive from 'app/hooks/useResponsive';
 import Footer from 'app/components/footer/Footer';
 import { FAQS } from './FAQS';
+import { Pricing } from './Pricing';
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -294,6 +295,9 @@ const LandingPage = () => {
           </View>
           <View style={{width: '100%'}}>
             <LandingPageAccordion />
+          </View>
+          <View style={{width: '100%', paddingTop: 50,}}>
+            <Pricing/>
           </View>
           <View style={{width: '100%', paddingTop: 50,}}>
             <FAQS/>

@@ -1,6 +1,6 @@
 import { RImage, RText } from '@packrat/ui';
 import { View } from 'tamagui';
-import PackRatPreview from 'app/assets/PackRat Preview.jpg';
+import PakRat_FAQS from 'app/assets/PakRat_FAQS.png';
 import { StyleSheet } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
@@ -33,35 +33,35 @@ export const FAQS = () => {
                 <View onPress={() => toggleAnswer(index)} style={styles.faqQuestion}>
                   <RText>{faq.question}</RText>
                   <MaterialCommunityIcons
-                  name={visibleAnswers[index] ? 'minus' : 'plus'}
-                  size={20}
-                  color={currentTheme.colors.textPrimary}
-                />
+                    name={visibleAnswers[index] ? 'minus' : 'plus'}
+                    size={20}
+                    color={currentTheme.colors.textPrimary}
+                  />
                 </View>
                 {/* <View style={styles.faqAnswer}>
                     <RText>{faq.answer}</RText>
                 </View> */}
                 {visibleAnswers[index] && (
-                <View style={styles.faqAnswer}>
-                  <RText>{faq.answer}</RText>
-                </View>
-              )}
+                  <View style={styles.faqAnswer}>
+                    <RText>{faq.answer}</RText>
+                  </View>
+                )}
               </View>
             );
           })}
         </View>
       </View>
-      {/* <View style={styles.faqSecondContainer}>
+      <View style={styles.faqSecondContainer}>
         <RImage
-          src={PackRatPreview}
+          src={PakRat_FAQS}
           style={{
             backgroundColor: 'transparent',
-            width: 259,
-            height: 530,
+            width: 659,
+            height: 550,
           }}
           alt="PackRat Logo"
         />
-      </View> */}
+      </View>
     </View>
   );
 };
@@ -70,8 +70,8 @@ const loadStyles = (currentTheme, xs, sm, md) => {
   return StyleSheet.create({
     faqMainContainer: {
       flexDirection: 'row',
-    //   alignItems: 'center',
-      justifyContent: 'space-around',
+        alignItems: 'center',
+      justifyContent: 'space-evenly',
       gap: 10,
       width: '100vw',
       maxWidth: '100vw',
@@ -98,8 +98,8 @@ const loadStyles = (currentTheme, xs, sm, md) => {
 
     },
     faqAnswer: {
-        marginLeft: 0, 
-        width: '30vw',
+      marginLeft: 0,
+      width: '24vw',
     },
     faqSecondContainer: {
     },
