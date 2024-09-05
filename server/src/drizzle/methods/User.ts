@@ -106,7 +106,6 @@ export class User {
       await DbClient.instance
         .insert(refreshTokens)
         .values({ token, userId: id });
-      // TODO(current)
       return token;
     } catch (error) {
       throw new Error(`Failed to generate refresh token: ${error.message}`);

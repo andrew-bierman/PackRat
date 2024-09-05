@@ -487,7 +487,7 @@ export const refreshTokens = sqliteTable('refresh_tokens', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  useId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
+  userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
   token: text('token').notNull(),
 });
 
