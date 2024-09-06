@@ -41,8 +41,8 @@
     "rollup-plugin-polyfill-node": "^0.13.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
-    "vite": "^5.1.0",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.1",
     "vite-plugin-node-polyfills": "^0.21.0"
   }
 }
