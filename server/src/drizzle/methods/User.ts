@@ -112,6 +112,12 @@ export class User {
     }
   }
 
+  async deleteRefreshToken(token: string) {
+    await DbClient.instance
+      .delete(refreshTokens)
+      .where(eq(refreshTokens.token, token));
+  }
+
   async generateResetToken(
     jwtSecret: string,
     clientUrl: string,
