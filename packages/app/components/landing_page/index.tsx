@@ -68,137 +68,139 @@ const LandingPage = () => {
               cross-country road trip.
             </RText>
             <View style={styles.buttonContainer}>
-              <View style={styles.appBadges}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                    gap: 8,
-                  }}
-                >
-                  <RLink>
-                    <View
-                      style={{
-                        width: 150,
-                        height: 45,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8,
-                        backgroundColor: currentTheme.colors.textPrimary,
-                        color: currentTheme.colors.textPrimary,
-                        borderWidth: 1,
-                        borderColor: currentTheme.colors.cardBorderPrimary,
-                        overflow: 'hidden',
-                        paddingHorizontal: 8,
-                        borderRadius: 8,
-                        fontSize: 16,
-                        fontWeight: 'normal',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="apple"
-                          size={30}
-                          color={currentTheme.colors.background}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
+              {Platform.OS === 'web' && (
+                <View style={styles.appBadges}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      flexWrap: 'wrap',
+                      gap: 8,
+                    }}
+                  >
+                    <RLink>
+                      <View
+                        style={{
+                          width: 150,
+                          height: 45,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 8,
+                          backgroundColor: currentTheme.colors.textPrimary,
+                          color: currentTheme.colors.textPrimary,
+                          borderWidth: 1,
+                          borderColor: currentTheme.colors.cardBorderPrimary,
+                          overflow: 'hidden',
+                          paddingHorizontal: 8,
+                          borderRadius: 8,
+                          fontSize: 16,
+                          fontWeight: 'normal',
+                        }}
+                      >
+                        <View>
+                          <MaterialCommunityIcons
+                            name="apple"
+                            size={30}
+                            color={currentTheme.colors.background}
+                            style={{
+                              width: '100%',
+                            }}
+                          />
+                        </View>
+                        <View style={{ flexDirection: 'column', gap: 0 }}>
+                          <RText
+                            style={{
+                              width: '100%',
+                              position: 'relative',
+                              top: '0.4rem',
+                              color: currentTheme.colors.background,
+                              textAlign: 'left',
+                              fontSize: 14,
+                              fontWeight: 'normal',
+                            }}
+                          >
+                            Get it on the
+                          </RText>
+                          <RText
+                            style={{
+                              width: '100%',
+                              color: currentTheme.colors.background,
+                              textAlign: 'left',
+                              fontSize: 19,
+                              position: 'relative',
+                              bottom: '0.3rem',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            App Store
+                          </RText>
+                        </View>
                       </View>
-                      <View style={{ flexDirection: 'column', gap: 0 }}>
-                        <RText
-                          style={{
-                            width: '100%',
-                            position: 'relative',
-                            top: '0.4rem',
-                            color: currentTheme.colors.background,
-                            textAlign: 'left',
-                            fontSize: 14,
-                            fontWeight: 'normal',
-                          }}
-                        >
-                          Get it on the
-                        </RText>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.background,
-                            textAlign: 'left',
-                            fontSize: 19,
-                            position: 'relative',
-                            bottom: '0.3rem',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          App Store
-                        </RText>
+                    </RLink>
+                    <RLink>
+                      <View
+                        style={{
+                          width: 160,
+                          height: 45,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 8,
+                          backgroundColor: currentTheme.colors.textPrimary,
+                          color: currentTheme.colors.textPrimary,
+                          borderWidth: 1,
+                          borderColor: currentTheme.colors.cardBorderPrimary,
+                          overflow: 'hidden',
+                          paddingHorizontal: 8,
+                          borderRadius: 8,
+                          fontSize: 16,
+                          fontWeight: 'normal',
+                        }}
+                      >
+                        <View>
+                          <MaterialCommunityIcons
+                            name="google-play"
+                            size={30}
+                            color={currentTheme.colors.background}
+                            style={{
+                              width: '100%',
+                            }}
+                          />
+                        </View>
+                        <View style={{ flexDirection: 'column', gap: 0 }}>
+                          <RText
+                            style={{
+                              width: '100%',
+                              position: 'relative',
+                              top: '0.4rem',
+                              color: currentTheme.colors.background,
+                              textAlign: 'left',
+                              fontSize: 14,
+                              fontWeight: 'normal',
+                            }}
+                          >
+                            Get it on
+                          </RText>
+                          <RText
+                            style={{
+                              width: '100%',
+                              color: currentTheme.colors.background,
+                              textAlign: 'left',
+                              fontSize: 19,
+                              position: 'relative',
+                              bottom: '0.3rem',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            Google Play
+                          </RText>
+                        </View>
                       </View>
-                    </View>
-                  </RLink>
-                  <RLink>
-                    <View
-                      style={{
-                        width: 160,
-                        height: 45,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8,
-                        backgroundColor: currentTheme.colors.textPrimary,
-                        color: currentTheme.colors.textPrimary,
-                        borderWidth: 1,
-                        borderColor: currentTheme.colors.cardBorderPrimary,
-                        overflow: 'hidden',
-                        paddingHorizontal: 8,
-                        borderRadius: 8,
-                        fontSize: 16,
-                        fontWeight: 'normal',
-                      }}
-                    >
-                      <View>
-                        <MaterialCommunityIcons
-                          name="google-play"
-                          size={30}
-                          color={currentTheme.colors.background}
-                          style={{
-                            width: '100%',
-                          }}
-                        />
-                      </View>
-                      <View style={{ flexDirection: 'column', gap: 0 }}>
-                        <RText
-                          style={{
-                            width: '100%',
-                            position: 'relative',
-                            top: '0.4rem',
-                            color: currentTheme.colors.background,
-                            textAlign: 'left',
-                            fontSize: 14,
-                            fontWeight: 'normal',
-                          }}
-                        >
-                          Get it on
-                        </RText>
-                        <RText
-                          style={{
-                            width: '100%',
-                            color: currentTheme.colors.background,
-                            textAlign: 'left',
-                            fontSize: 19,
-                            position: 'relative',
-                            bottom: '0.3rem',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          Google Play
-                        </RText>
-                      </View>
-                    </View>
-                  </RLink>
+                    </RLink>
+                  </View>
                 </View>
-              </View>
+              )}
             </View>
             <View
               style={{
@@ -293,14 +295,14 @@ const LandingPage = () => {
               you elevate your backpacking experience:
             </RText>
           </View>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             <LandingPageAccordion />
           </View>
-          <View style={{width: '100%', paddingTop: 50,}}>
-            <Pricing/>
+          <View style={{ width: '100%', paddingTop: 50 }}>
+            <Pricing />
           </View>
-          <View style={{width: '100%', paddingTop: 50,}}>
-            <FAQS/>
+          <View style={{ width: '100%', paddingTop: 50 }}>
+            <FAQS />
           </View>
         </View>
       </RStack>

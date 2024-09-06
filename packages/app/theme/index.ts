@@ -14,6 +14,7 @@ export const theme = {
     error: '#FF453A',
     textPrimary: 'black',
     textSecondary: '#EBEBF599',
+    tertiaryBlue: '#0C66A1',
     textDarkGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
     iconColor: '#FFFFFF',

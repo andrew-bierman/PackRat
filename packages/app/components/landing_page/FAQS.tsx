@@ -30,7 +30,10 @@ export const FAQS = () => {
           {FaqList.map((faq, index) => {
             return (
               <View>
-                <View onPress={() => toggleAnswer(index)} style={styles.faqQuestion}>
+                <View
+                  onPress={() => toggleAnswer(index)}
+                  style={styles.faqQuestion}
+                >
                   <RText>{faq.question}</RText>
                   <MaterialCommunityIcons
                     name={visibleAnswers[index] ? 'minus' : 'plus'}
@@ -56,8 +59,8 @@ export const FAQS = () => {
           src={PakRat_FAQS}
           style={{
             backgroundColor: 'transparent',
-            width: 659,
-            height: 550,
+            width: xs || sm || md ?  359 : 659,
+            height: xs || sm || md ?  250 : 550,
           }}
           alt="PackRat Logo"
         />
@@ -69,8 +72,8 @@ export const FAQS = () => {
 const loadStyles = (currentTheme, xs, sm, md) => {
   return StyleSheet.create({
     faqMainContainer: {
-      flexDirection: 'row',
-        alignItems: 'center',
+      flexDirection: xs || sm || md ? 'column' : 'row',
+      alignItems: 'center',
       justifyContent: 'space-evenly',
       gap: 10,
       width: '100vw',
@@ -78,10 +81,10 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       paddingTop: 20,
       paddingBottom: 20,
     },
-    faqFirstContainer: {
-    },
+    faqFirstContainer: {},
     faqMainTitle: {
-      fontSize: 26,
+      fontSize: xs || sm || md ?  20 : 26,
+      textAlign : xs || sm || md ? 'center' : 'auto',
       fontWeight: 'bold',
       color: currentTheme.colors.textPrimary,
       marginBottom: 30,
@@ -94,14 +97,16 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       justifyContent: 'space-between',
       marginTop: 4,
       marginBottom: 4,
-      gap: 10,
-
+      marginLeft: xs || sm || md ? 10 : 0,
+      marginRight: xs || sm || md ? 10 : 0,
+      gap: xs || sm || md ? 2 : 10,
     },
     faqAnswer: {
-      marginLeft: 0,
-      width: '24vw',
+      // marginLeft: 0,
+      width: xs || sm || md ? '100%' : '24vw',
+      marginLeft: xs || sm || md ? 10 : 0,
+      marginRight: xs || sm || md ? 10 : 0,
     },
-    faqSecondContainer: {
-    },
+    faqSecondContainer: {},
   });
 };

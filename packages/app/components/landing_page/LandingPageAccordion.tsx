@@ -8,6 +8,7 @@ import { FAQ_ITEMS } from './constants';
 import useTheme from 'app/hooks/useTheme';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
 import { useEffect, useState } from 'react';
+import useResponsive from 'app/hooks/useResponsive';
 
 const RButton: any = OriginalRButton;
 
@@ -16,7 +17,7 @@ export const LandingPageAccordion = () => {
   const { currentTheme } = useTheme();
   const [index, setIndex] = useState(0);
   const [data, setData] = useState(FAQ_ITEMS[index]);
-  // const [expanded, toggleExpanded] = useAccordionState();
+  const { xxs, xs, xxl, sm, lg, md } = useResponsive();
 
   useEffect(() => {
     setData(FAQ_ITEMS[index]);
@@ -39,69 +40,42 @@ export const LandingPageAccordion = () => {
     setIndex(item.index);
   };
   return (
-    // <RCard style={styles.card}>
-    //   <View style={styles.cardHeader}>
-    //     <MaterialIcons name={iconName} style={styles.icon} />
-    //     <RText style={styles.featureText}>{title}</RText>
-    //     <RText style={styles.cardContent}>{content}</RText>
-    //   </View>
-    // </RCard>
     <View style={styles.landingPageAccordionContainer}>
       <View style={styles.landingPageAccordationSecondContainer}>
-        <RText style={styles.cardContent}>{data.content}</RText>
-        <RImage
-          src={data.frameLink}
-          style={{
-            backgroundColor: 'transparent',
-            width: 330,
-            height: 600,
-          }}
-          alt="PackRat Logo"
-        />
-
-      </View>
-      <View style={styles.landingPageAccordionFirstContainer}>
-        <RButton onClick={panUp} style={styles.panButton}>
-          <MaterialCommunityIcons
-            name="pan-left"
-            size={30}
-            color={currentTheme.colors.textPrimary}
-          />
-        </RButton>
         <View>
-          {/* {FAQ_ITEMS.map((item) => {
-            return (
-              <RText
-                onClick={() => {
-                  handleTextClick(item);
-                }}
-                style={{ textAlign: 'left', cursor: 'pointer', width: 'auto' }}
-              >
-                {item.title}
-              </RText>
-            );
-          })} */}
-          <RText
-            onClick={() => {
-              handleTextClick(FAQ_ITEMS[index]);
-            }}
-            style={{ textAlign: 'center', cursor: 'pointer', width: 'auto' }}
-          >
-            {FAQ_ITEMS[index].title}
-          </RText>
+          <RButton onClick={panUp} style={styles.panButton}>
+            <MaterialCommunityIcons
+              name="arrow-left-thin"
+              size={30}
+              color={currentTheme.colors.textPrimary}
+            />
+          </RButton>
         </View>
-        <RButton onClick={panDown} style={styles.panButton}>
-          <MaterialCommunityIcons
-            name="pan-right"
-            size={30}
-            color={currentTheme.colors.textPrimary}
-            style={
-              {
-                // width: '100%',
-              }
-            }
+        <View style={{flexDirection: xs || sm || md ? 'column' : 'row', alignItems: 'center', justifyContent: 'center', gap: 50,}}>
+          <RText style={styles.cardContent}>{data.content}</RText>
+          <RImage
+            src={data.frameLink}
+            style={{
+              backgroundColor: 'transparent',
+              width: 330,
+              height: 600,
+            }}
           />
-        </RButton>
+        </View>
+        <View>
+          <RButton onClick={panDown} style={styles.panButton}>
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={30}
+              color={currentTheme.colors.textPrimary}
+              style={
+                {
+                  // width: '100%',
+                }
+              }
+            />
+          </RButton>
+        </View>
       </View>
     </View>
   );

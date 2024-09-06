@@ -137,9 +137,9 @@ const loadStyles = (theme) => {
       alignItems: 'center',
     },
     landingPageAccordionContainer: {
-      flexDirection: 'column',
+      flexDirection: xs || sm || md  ? 'row' : 'column',
       flexWrap: 'no-wrap',
-      width: xs || sm ? '100%' : 'auto',
+      width: xs || sm || md ? '100%' : 'auto',
       paddingTop: 100,
       paddingBottom: 100,
       justifyContent: 'center',
@@ -156,15 +156,17 @@ const loadStyles = (theme) => {
     },
     landingPageAccordationSecondContainer: {
       // width: '100%',
-      flexDirection: 'row',
+      flexDirection: xs || sm || md ? 'column' : 'row',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-evenly',
       gap: 50,
       transition: '0.3s ease-in-out'
     },
     panButton: {
-      backgroundColor: '#232323',
-      color: 'white',
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderRadius: 0,
+      borderColor: currentTheme.colors.textPrimary,
       // width: '100%',
     },
     card: {
@@ -196,10 +198,12 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     cardContent: {
-      fontSize: 35,
+      fontSize: xs || sm || md ? 20 : 35,
       color: currentTheme.colors.textPrimary,
-      width: '30vw',
-      textAlign: 'left',
+      width: xs || sm ? '100vw' : '30vw',
+      textAlign: 'center',
+      marginLeft: xs || sm || md ? 10 : 0,
+      marginRight: xs || sm || md ? 10 : 0,
       // border: '1px solid black'
     },
     secondaryContainerIntroDiv: {

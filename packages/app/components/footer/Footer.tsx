@@ -58,7 +58,7 @@ export default function Footer() {
             );
           })}</View>
         </View>
-        <View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+        <View style={{ flexDirection: xs || sm || md ? 'row' : 'column', alignItems: 'flex-start', justifyContent: 'center', gap: xs || sm || md  ? 10 : 0 }}>
           <RLink >
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
               <MaterialCommunityIcons
@@ -99,71 +99,6 @@ export default function Footer() {
               <RText>Github</RText>
             </View>
           </RLink>
-          {/* <RLink>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 }}>
-            <MaterialCommunityIcons
-              name="facebook"
-              size={30}
-              color={currentTheme.colors.textPrimary}
-              style={{
-                width: '100%',
-              }}
-            />
-            <RText>Facebook</RText>
-          </View>
-        </RLink>
-        <RLink>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5 }}>
-            <MaterialCommunityIcons
-              name="instagram"
-              size={30}
-              color={currentTheme.colors.textPrimary}
-              style={{
-                width: '100%',
-              }}
-            />
-            <RText>Instagram</RText>
-          </View>
-        </RLink>
-        <RLink>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <MaterialCommunityIcons
-              name="instagram"
-              size={30}
-              color={currentTheme.colors.textPrimary}
-              style={{
-                width: '100%',
-              }}
-            />
-            <RText>Instagram</RText>
-          </View>
-        </RLink>
-        <RLink>
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <MaterialCommunityIcons
-              name="twitter"
-              size={30}
-              color={currentTheme.colors.textPrimary}
-              style={{
-                width: '100%',
-              }}
-            />
-            <RText>X</RText>
-          </View>
-        </RLink>
-        <RLink >
-          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <MaterialCommunityIcons
-              name="github"
-              size={30}
-              color={currentTheme.colors.textPrimary}
-              style={{
-                width: '100%',
-              }}
-            />
-            <RText>Github</RText>
-          </View>
-        </RLink> */}
         </View>
         <View>
           <RText style={styles.credit}>
@@ -171,58 +106,6 @@ export default function Footer() {
           </RText>
         </View>
       </View>
-      {/* <View style={styles.firstMainContainer}>
-        <View style={styles.firstContainer}>
-          <RImage
-            source={{
-              // TODO: Update this to use the PackRat logo from the assets folder
-              uri: 'https://github.com/andrew-bierman/PackRat/blob/main/packages/app/assets/packrat_icon.png?raw=true',
-              width: 40,
-              height: 40,
-            }}
-            width={40}
-            height={40}
-            style={styles.logo}
-            alt="PackRat Logo"
-            onClick={() => {
-              navigate('/');
-            }}
-          />
-          <RText
-            style={{ fontSize: 18, fontWeight: 'normal', cursor: 'pointer' }}
-            onPress={() => {
-              navigate('/');
-            }}
-          >
-            The Ultimate Travel App
-          </RText>
-        </View>
-        <View style={styles.navLinks}>
-          {footorLinks.map((item) => {
-            return (
-              <RLink src={item.link}>
-                <RText style={styles.navItem}>{item.label}</RText>
-              </RLink>
-            );
-          })}
-        </View>
-        <View style={{paddingBottom: 30,}}>
-        <RSeparator
-          style={{
-            backgroundColor: currentTheme.colors.textPrimary,
-            borderWidth: '0.4',
-            borderColor: currentTheme.colors.textPrimary,
-            opacity: '0.1',
-          }}
-        />
-        </View>
-        <View style={styles.lastContainer}>
-          <Text style={styles.credit}>
-            © 2024 Bierman Collective. All rights reserved.
-          </Text>
-          <NewsLetter />
-        </View>
-      </View> */}
     </View>
   );
 }
@@ -243,7 +126,8 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       },
       mainFirstContainer: {
         width: '100%',
-        flexDirection: 'row',
+        flexDirection: xs || sm || md ? 'column' : 'row',
+        flexWrap: 'wrap',
         paddingTop: 80,
         paddingBottom: 40,
         alignSelf: 'center',
@@ -251,6 +135,7 @@ const loadStyles = (currentTheme, xs, sm, md) => {
         justifyContent: 'space-evenly',
         position: 'relative',
         bottom: 0,
+        gap: xs || sm || md ? 10 : 0
       },
       firstMainContainer: {
         width: '95%',
