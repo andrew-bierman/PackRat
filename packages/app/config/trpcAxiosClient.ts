@@ -41,11 +41,6 @@ const responseInterceptor = (response: AxiosResponse) => {
 const responseErrorInterceptor = async (
   error: AxiosError<TRPCErrorResponse>,
 ) => {
-  console.log('error!!!');
-  console.log(
-    'response?.response?.data?.error[0]?.data?.httpStatus',
-    error?.response?.data?.error?.data?.httpStatus,
-  );
   if (error?.response?.data[0]?.error?.data?.httpStatus === 401) {
     // TODO: handle non batch links
     const refreshToken = await Storage.getItem('refreshToken');
@@ -61,9 +56,10 @@ const responseErrorInterceptor = async (
       // rety request
       error.config.headers.Authorization = 'Bearer ' + tokens.accessToken;
       return await axios.request(error.config);
-    } catch {
+    } catch (error) {
       // refreshToken has probably also expired. logout user.
       logoutAuthUser();
+      return error;
     }
   }
 

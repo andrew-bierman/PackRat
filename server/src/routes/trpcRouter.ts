@@ -19,6 +19,7 @@ import {
   emailExistsRoute,
   updatePasswordRoute,
   refreshTokenRoute,
+  logoutRoute,
 } from '../controllers/auth';
 import { getWeatherRoute } from '../controllers/weather';
 import {
@@ -97,6 +98,7 @@ export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
   signUp: signUpRoute(),
+  logout: logoutRoute(),
   refreshToken: refreshTokenRoute(),
   resetPassword: resetPasswordRoute(),
   getGoogleAuthURL: getGoogleAuthURLRoute(),

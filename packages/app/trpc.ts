@@ -54,7 +54,12 @@ const trpcClientOpts = {
 
 export const trpc = queryTrpc.createClient(trpcClientOpts);
 
-export const vanillaTrpcClient =
-  createTRPCProxyClient<AppRouter>(trpcClientOpts); // For calling procedures imperatively (outside of a component)
+export const vanillaTrpcClient = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: `${api}/trpc`,
+    }),
+  ],
+}); // For calling procedures imperatively (outside of a component)
 
 export const queryClient = new QueryClient();
