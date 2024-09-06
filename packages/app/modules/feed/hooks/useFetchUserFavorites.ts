@@ -1,4 +1,4 @@
-import { queryTrpc } from '../../trpc';
+import { queryTrpc } from 'app/trpc';
 
 export const useFetchUserFavorites = (userId: string) => {
   const enabled = !!userId;

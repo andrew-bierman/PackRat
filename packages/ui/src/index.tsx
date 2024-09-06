@@ -78,7 +78,9 @@ export {
 
 export * from './InputText';
 export * from './form';
-
+export * from './card';
+export * from './Details';
+export { View } from 'tamagui';
 export { config } from './tamagui.config';
 // export * from 'tamagui';
 export * from '@tamagui/toast';
