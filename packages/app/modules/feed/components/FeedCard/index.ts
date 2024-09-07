@@ -1,0 +1,1 @@
+export { FeedCard } from './FeedCard';
