@@ -67,11 +67,13 @@ jobs:
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2
         with:
-          wranglerVersion: '3.15.0'
+          wranglerVersion: '3.75.0'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: server
-          command: yarn run migrate:preview
+          command: d1 migrations apply preview --remote --env preview
           packageManager: yarn
+          secrets: |
+            CI
         env:
           NO_D1_WARNING: true
           CI: true
@@ -81,12 +83,10 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         if: always()
         with:
-          wranglerVersion: '3.15.0'
+          wranglerVersion: '3.75.0'
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          #   workingDirectory: packages/api
           workingDirectory: server
-          command: yarn run deploy:preview
-          # packageManager: bun
+          command: deploy src/index.ts --env preview
           packageManager: yarn
           secrets: |
             APP_URL
@@ -97,3 +97,4 @@ jobs:
           JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
           CI: true
           NO_D1_WARNING: true
+          WRANGLER_LOG: debug
