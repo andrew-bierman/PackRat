@@ -9,10 +9,11 @@ on:
   push:
     branches:
       - feat/preview-version-of-api
-    # paths:
-    #   - 'packages/validations/**'
-    #   - 'packages/shared-types/**'
-    #   - 'server/**'
+    paths:
+      - '.github/workflows/backend-preview.yml'
+      - 'packages/validations/**'
+      - 'packages/shared-types/**'
+      - 'server/**'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -64,15 +65,16 @@ jobs:
           PREVIEW_OPENAI_API_KEY: ${{ secrets.PREVIEW_OPENAI_API_KEY }}
 
       - name: Migrate database
-        # run: cd packages/api && bun run migrate
-        run: |
-          cd server;
-          cat wrangler.toml;
-          yarn run migrate:preview
+        uses: cloudflare/wrangler-action@v3.3.2
+        with:
+          wranglerVersion: '3.15.0'
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: server
+          command: yarn run migrate:preview
+          packageManager: yarn
         env:
           NO_D1_WARNING: true
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CI: true
           WRANGLER_LOG: debug
 
       - name: Deploy
