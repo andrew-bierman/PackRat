@@ -32,6 +32,7 @@ const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
     size,
     strokeWidth,
   );
+  const { currentTheme } = useTheme();
 
   return (
     <RStack style={styles.container}>
@@ -41,7 +42,7 @@ const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#EEE"
+            stroke={currentTheme.colors.text}
             strokeWidth={strokeWidth / 2}
             fill="transparent"
           />
@@ -49,10 +50,10 @@ const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#3F51B5"
+            stroke={currentTheme.colors.secondaryBlue}
             strokeWidth={strokeWidth}
-            strokeDasharray={`${circumference} ${circumference}`}
-            strokeDashoffset={circumference - progressPath}
+            strokeDasharray={`${progressPath} ${circumference - progressPath}`}
+            strokeDashoffset={0.25 * circumference}
             strokeLinecap="round"
             fill="transparent"
           />
@@ -93,74 +94,66 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
     radius,
     circleCircumference,
     total,
+    weightPath,
+    essentialItemsPath,
+    redundancyAndVersatilityPath,
     weightStrokeDashoffset,
-    essentialItemsStrokeDashoffset,
+    essentailItemsStrokeDashoffset,
     redundancyAndVersatilityStrokeDashoffset,
-    essentialItemsAngle,
-    redundancyAndVersatilityAngle,
   } = useGradingPie(scores);
+
+  const { currentTheme } = useTheme();
 
   return (
     <RStack style={styles.container}>
       <RStack style={styles.graphWrapper}>
         <Svg height="150" width="150" viewBox="0 0 180 180">
-          <G rotation={-90} originX="90" originY="90">
-            {total === 0 ? (
+          {total === 0 ? (
+            <Circle
+              cx="50%"
+              cy="50%"
+              r={radius}
+              stroke="#F1F6F9"
+              fill="transparent"
+              strokeWidth="10"
+            />
+          ) : (
+            <>
               <Circle
                 cx="50%"
                 cy="50%"
                 r={radius}
-                stroke="#F1F6F9"
+                stroke={currentTheme.colors.text}
                 fill="transparent"
-                strokeWidth="40"
+                strokeWidth="10"
+                strokeDasharray={`${weightPath} ${circleCircumference - weightPath}`}
+                strokeDashoffset={weightStrokeDashoffset}
+                strokeLinecap="round"
               />
-            ) : (
-              <>
-                <Circle
-                  cx="50%"
-                  cy="50%"
-                  r={radius}
-                  stroke="#F05454"
-                  fill="transparent"
-                  strokeWidth="40"
-                  strokeDasharray={circleCircumference}
-                  strokeDashoffset={weightStrokeDashoffset}
-                  rotation={0}
-                  originX="90"
-                  originY="90"
-                  strokeLinecap="round"
-                />
-                <Circle
-                  cx="50%"
-                  cy="50%"
-                  r={radius}
-                  stroke="#30475E"
-                  fill="transparent"
-                  strokeWidth="40"
-                  strokeDasharray={circleCircumference}
-                  strokeDashoffset={essentialItemsStrokeDashoffset}
-                  rotation={essentialItemsAngle}
-                  originX="90"
-                  originY="90"
-                  strokeLinecap="round"
-                />
-                <Circle
-                  cx="50%"
-                  cy="50%"
-                  r={radius}
-                  stroke="#222831"
-                  fill="transparent"
-                  strokeWidth="40"
-                  strokeDasharray={circleCircumference}
-                  strokeDashoffset={redundancyAndVersatilityStrokeDashoffset}
-                  rotation={redundancyAndVersatilityAngle}
-                  originX="90"
-                  originY="90"
-                  strokeLinecap="round"
-                />
-              </>
-            )}
-          </G>
+              <Circle
+                cx="50%"
+                cy="50%"
+                r={radius}
+                stroke={currentTheme.colors.secondaryBlue}
+                fill="transparent"
+                strokeWidth="10"
+                strokeDasharray={`${essentialItemsPath} ${circleCircumference - essentialItemsPath}`}
+                strokeDashoffset={essentailItemsStrokeDashoffset}
+                strokeLinecap="round"
+              />
+              <Circle
+                cx="50%"
+                cy="50%"
+                r={radius}
+                stroke={currentTheme.colors.tertiaryBlue}
+                fill="transparent"
+                strokeWidth="10"
+                strokeDasharray={`${redundancyAndVersatilityPath} ${circleCircumference - redundancyAndVersatilityPath}`}
+                strokeDashoffset={redundancyAndVersatilityStrokeDashoffset}
+                strokeLinecap="round"
+              />
+            </>
+          )}
         </Svg>
         <RText style={styles.label}>{total.toFixed(2)}</RText>
       </RStack>
@@ -207,10 +200,10 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={styles.scoreText}>
             {isAlreadyScored ? title : 'Score this pack!'}
           </RText>
-          <RText style={{ fontWeight: 500, color: currentTheme.colors.white }}>
+          <RText style={{ fontWeight: 500, color: currentTheme.colors.text }}>
             {subheader}
           </RText>
-          <RText style={{ fontWeight: 300, color: currentTheme.colors.white }}>
+          <RText style={{ fontWeight: 300, color: currentTheme.colors.text }}>
             {description}
           </RText>
           {isOwner && (

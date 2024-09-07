@@ -1,0 +1,1 @@
+export { CreatedAtLabel } from './CreatedAtLabel';
