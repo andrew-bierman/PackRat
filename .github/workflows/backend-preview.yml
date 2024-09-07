@@ -72,8 +72,7 @@ jobs:
           workingDirectory: server
           command: d1 migrations apply preview --remote --env preview
           packageManager: yarn
-          secrets: |
-            CI
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         env:
           NO_D1_WARNING: true
           CI: true
@@ -88,6 +87,7 @@ jobs:
           workingDirectory: server
           command: deploy src/index.ts --env preview
           packageManager: yarn
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           secrets: |
             APP_URL
             JWT_VERIFICATION_KEY
