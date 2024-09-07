@@ -12,6 +12,7 @@ import {
 } from '../theme';
 import FontLoader from './FontLoader';
 import { setupDev } from 'tamagui';
+import { Toaster } from 'burnt/web';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   setupDev({
@@ -34,6 +35,7 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
             <ToastProvider>
               <RNPaperThemeProvider theme={darkPaperTheme}>
                 {children}
+                <Toaster />
               </RNPaperThemeProvider>
             </ToastProvider>
           </TamaguiTheme>
