@@ -64,15 +64,24 @@ jobs:
           PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
           PREVIEW_OPENAI_API_KEY: ${{ secrets.PREVIEW_OPENAI_API_KEY }}
 
+      - name: cat wrangler
+        run: | 
+          ls -a;
+          echo '';
+          cat wrangler.toml;
+          echo '';
+          cat wrangler.toml;
+        working-directory: ./server
       - name: Migrate database
+        if: always()
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           command: d1 migrations apply preview --remote --env preview
           packageManager: yarn
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         env:
           NO_D1_WARNING: true
           CI: true
@@ -84,10 +93,10 @@ jobs:
         with:
           wranglerVersion: '3.75.0'
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           command: deploy src/index.ts --env preview
           packageManager: yarn
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           secrets: |
             APP_URL
             JWT_VERIFICATION_KEY
