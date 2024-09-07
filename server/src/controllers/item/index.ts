@@ -13,3 +13,4 @@ export * from './getItemsGlobally';
 export * from './searchItemsByName';
 export * from './getSimilarItems';
 export * from './importFromBucket';
+export * from './importNotifiedETL';

@@ -17,6 +17,8 @@ export const useUserQuery = () => {
     isLoading: isRequestLoading,
   } = queryTrpc.getMe.useQuery(undefined, {
     enabled: isRequestEnabled,
+    staleTime: Infinity,
+    cacheTime: Infinity,
   });
 
   // Sometimes the isLoading state don't work as expected so we have this solution here

@@ -20846,6 +20846,7 @@ __metadata:
     expo-image-picker: "npm:~14.7.1"
     expo-linear-gradient: "npm:~12.7.2"
     expo-linking: "npm:~6.2.2"
+    expo-local-authentication: "npm:~13.8.0"
     expo-location: "npm:~16.5.5"
     expo-random: "npm:~13.6.0"
     expo-router: "npm:~3.4.10"
@@ -21159,6 +21160,17 @@ __metadata:
     expo-constants: "npm:~15.4.3"
     invariant: "npm:^2.2.4"
   checksum: 10/30d750881b1003fabff17929e1b6062ed6cd243ca35cedd41082df5fd775d0c457f50e4a9e696dedc53459caac4f26d493a2819cef692633822d893c788e0f06
+  languageName: node
+  linkType: hard
+
+"expo-local-authentication@npm:~13.8.0":
+  version: 13.8.0
+  resolution: "expo-local-authentication@npm:13.8.0"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/06ad68d96831058e51115fa398479faba9b4059564ecc44ee7eef739be7c5df1c632ec0138e008549dc2e7cd4a8eed9830d30ffb8ae97431e17f7ab8b2d55f87
   languageName: node
   linkType: hard
 
