@@ -68,7 +68,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           workingDirectory: server
           command: d1 migrations apply preview --remote --env preview
           packageManager: yarn
@@ -84,7 +84,7 @@ jobs:
         if: always()
         with:
           wranglerVersion: '3.75.0'
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           workingDirectory: server
           command: deploy src/index.ts --env preview
           packageManager: yarn
