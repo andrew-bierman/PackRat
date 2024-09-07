@@ -8,7 +8,7 @@ import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
 import { RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
-import { disableScreen } from 'app/hoc/disableScreen';
+import { type FeedType } from '../model';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -23,18 +23,8 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-interface FeedItem {
-  id: string;
-  type: string;
-}
-
-interface SelectedTypes {
-  pack: boolean;
-  trip: boolean;
-}
-
 interface FeedProps {
-  feedType?: string;
+  feedType?: FeedType;
 }
 
 interface UseFeedResult {
@@ -67,6 +57,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     feedType,
     selectedTypes,
   }) as UseFeedResult;
+  console.log({ data });
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -214,4 +205,4 @@ const loadStyles = (theme) => {
   };
 };
 
-export default disableScreen(Feed, (props) => props.feedType === 'userTrips');
+export default Feed;

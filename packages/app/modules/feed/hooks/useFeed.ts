@@ -2,6 +2,7 @@ import { usePublicFeed } from './usePublicFeed';
 import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
+import { type FeedType } from '../model';
 
 export const useFeed = ({
   queryString = 'Most Recent',
@@ -12,7 +13,7 @@ export const useFeed = ({
 }: Partial<{
   queryString: string;
   ownerId: string;
-  feedType: string;
+  feedType: FeedType;
   selectedTypes: Object;
   id: string;
 }> = {}) => {

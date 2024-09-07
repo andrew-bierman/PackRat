@@ -18,7 +18,6 @@ import {
   TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 import { WeatherData } from 'app/components/weather/WeatherData';
-import { disableScreen } from 'app/hoc/disableScreen';
 
 function Trips() {
   const styles = useCustomStyles(loadStyles);
@@ -96,4 +95,4 @@ const loadStyles = () => ({
   },
 });
 
-export default disableScreen(Trips);
+export default Trips;
