@@ -81,14 +81,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               router.push('/search');
             }}
           >
-            <MaterialCommunityIcons
-              name="magnify"
-              size={24}
-              color={currentTheme.colors.iconColor}
-            />
-            <RText color={currentTheme.colors.text} opacity={0.6}>
-              Search by park, city, or trail
-            </RText>
+            <RStack
+              style={{
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              <MaterialCommunityIcons
+                name="magnify"
+                size={24}
+                color={currentTheme.colors.iconColor}
+              />
+              <RText color={currentTheme.colors.text} opacity={0.6}>
+                Search by park, city, or trail
+              </RText>
+            </RStack>
           </RButton>
         )}
       </RStack>
@@ -138,7 +145,7 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.border,
       minWidth: '100%',
       flexDirection: 'row',
-      alignItems: 'center',
+      justifyContent: 'flex-start',
       padding: 10,
       borderRadius: 5,
     },

@@ -210,7 +210,7 @@ export function ProfileContainer({ id = null }) {
             styles.mainContainer,
             Platform.OS == 'web'
               ? { minHeight: '100vh' }
-              : { minHeight: '100%', paddingBottom: 40 },
+              : { minHeight: '100%', paddingBottom: 100 },
           ]}
         >
           <Header
@@ -292,7 +292,7 @@ const loadStyles = (theme) => {
     infoSection: {
       flexDirection: 'column',
       alignSelf: 'center',
-      backgroundColor: currentTheme.colors.white,
+      backgroundColor: currentTheme.colors.background,
       alignItems: 'center',
       borderRadius: 12,
       marginBottom: 25,
@@ -320,7 +320,7 @@ const loadStyles = (theme) => {
     },
     userEmail: {
       fontSize: 16,
-      color: currentTheme.colors.whiteDarkGrey,
+      color: currentTheme.colors.text,
       textAlign: 'center',
     },
     card: {
