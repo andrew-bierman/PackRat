@@ -51,6 +51,11 @@ export const TripPrimaryCard: FC<TripCardProps> = (props) => {
                 label: 'End Date',
                 value: props.details.endDate,
               },
+              {
+                key: 'activity',
+                label: 'Activity',
+                value: props.details.activity,
+              },
             ]}
           />
         </YStack>

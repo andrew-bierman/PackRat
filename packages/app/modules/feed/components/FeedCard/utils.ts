@@ -67,6 +67,7 @@ export const feedItemTripCardConverter: Converter<
       description: truncateString(input.description, 100),
       startDate: input.start_date,
       endDate: input.end_date,
+      activity: input.activity,
     },
     favoriteCount: input.favorites_count,
   };

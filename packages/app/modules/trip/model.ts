@@ -3,4 +3,5 @@ export interface TripDetails {
   endDate: string;
   description: string;
   destination: string;
+  activity: string;
 }
