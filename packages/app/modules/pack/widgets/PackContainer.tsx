@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View } from 'react-native';
 import { AddItemModal } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -25,10 +25,19 @@ export default function PackContainer({ isCreatingTrip = false }) {
     refetch: refetchQuery,
   } = useUserPacks(user?.id);
 
+  const oldPacks = useRef([]).current;
+
   useEffect(() => {
     refetchQuery();
   }, [refetch]);
 
+  useEffect(() => {
+    if (packs.length > oldPacks.length) {
+      const newPack = packs.find((pack) => !oldPacks.includes(pack.id));
+      setCurrentPackId(newPack?.id);
+      oldPacks.push(newPack?.id);
+    }
+  }, packs);
   /**
    * Handles the packing based on the given value.
    *
