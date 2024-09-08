@@ -16,7 +16,7 @@ const RParagraph: any = OriginalRParagraph;
 
 interface TripPlaceCardProps {
   data: Array<{ id: string; name: string }>;
-  onToggle: (place: string) => void;
+  onToggle: (place: { id: string; name: string }) => void;
   selectedValue: string[];
   icon: React.FC;
   title: string;
@@ -45,7 +45,7 @@ const TripPlaceCard = ({
                     : null
                 }
                 onPress={() => {
-                  onToggle(item.id);
+                  onToggle(item);
                 }}
                 elevate
                 bordered

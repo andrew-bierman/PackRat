@@ -18,7 +18,15 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
   );
 
   const togglePlace = (name: 'trails' | 'parks', value: any) => {
-    setTripValue(name, store[name] !== value ? value : '');
+    const currentPlaces = store[name] || [];
+
+    const placeExists = currentPlaces.some((place) => place.id === value.id);
+
+    const updatedPlaces = placeExists
+      ? currentPlaces.filter((place) => place.id !== value.id)
+      : [...currentPlaces, value];
+
+    setTripValue(name, updatedPlaces);
   };
 
   const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(

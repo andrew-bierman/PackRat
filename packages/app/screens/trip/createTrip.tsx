@@ -51,12 +51,12 @@ function Trips() {
           <TripTrailCard
             data={filteredTrails || []}
             onToggle={(trail) => togglePlace('trails', trail)}
-            selectedValue={tripStore.trails}
+            selectedValue={tripStore.trails?.map?.(({ id }) => id) || []}
           />
           <TripParkCard
             data={parksData || []}
             onToggle={(park) => togglePlace('parks', park)}
-            selectedValue={tripStore.parks}
+            selectedValue={tripStore.parks?.map?.(({ id }) => id) || []}
           />
           <GearList />
           <TripActivityCard

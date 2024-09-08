@@ -9,7 +9,11 @@ export const addTripService = async (tripData: any) => {
     console.log({ tripData });
     const tripClass = new Trip();
     // Create Trip
-    const newTrip = await tripClass.create(otherTripData);
+    const newTrip = await tripClass.create({
+      ...otherTripData,
+      trails: otherTripData.trails ? JSON.parse(otherTripData.trails) : null,
+      parks: otherTripData.parks ? JSON.parse(otherTripData.parks) : null,
+    });
     const geojsonClass = new GeoJson();
     const tripGeoJsonClass = new TripGeoJson();
     if (!geoJSON) {

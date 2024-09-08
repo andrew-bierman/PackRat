@@ -9,7 +9,8 @@ export const formatCreateTripValuesForAPI = (values: any) => {
     end_date: format(values?.end_date, 'MM/dd/yyyy'),
     duration: JSON.stringify(values.duration),
     geoJSON: JSON.stringify(values.geoJSON),
-    weather: JSON.stringify(values.weather),
+    trails: JSON.stringify(values.trails),
+    parks: JSON.stringify(values.parks),
   };
 };
 
