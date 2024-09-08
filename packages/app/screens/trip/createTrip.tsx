@@ -50,18 +50,18 @@ function Trips() {
           {latLng ? <WeatherData latLng={latLng} /> : null}
           <TripTrailCard
             data={filteredTrails || []}
-            onToggle={(trail) => togglePlace('trail', trail)}
-            selectedValue={tripStore.trail}
+            onToggle={(trail) => togglePlace('trails', trail)}
+            selectedValue={tripStore.trails}
           />
           <TripParkCard
             data={parksData || []}
-            onToggle={(park) => togglePlace('park', park)}
-            selectedValue={tripStore.park}
+            onToggle={(park) => togglePlace('parks', park)}
+            selectedValue={tripStore.parks}
           />
           <GearList />
           <TripActivityCard
-            selectedValue={tripStore.type}
-            onChange={(activity) => setTripValue('type', activity)}
+            selectedValue={tripStore.activity}
+            onChange={(activity) => setTripValue('activity', activity)}
           />
           <TripDateRangeCard
             dateRange={dateRange}

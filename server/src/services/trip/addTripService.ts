@@ -6,29 +6,20 @@ import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
 export const addTripService = async (tripData: any) => {
   try {
     const { geoJSON, ...otherTripData } = tripData;
+    console.log({ tripData });
     const tripClass = new Trip();
     // Create Trip
-    const newTrip = await tripClass.create({ ...otherTripData, weather: 'w' }); // TODO remove not null from db
+    const newTrip = await tripClass.create(otherTripData);
     const geojsonClass = new GeoJson();
     const tripGeoJsonClass = new TripGeoJson();
     if (!geoJSON) {
       throw new Error("Geojson data doesn't exist");
     }
-    geoJSON.features.map(async (feature) => {
-      const { id, type, properties, geometry } = feature;
-      if (!validateGeojsonId(id) || !validateGeojsonType(type)) {
-        throw new Error('Invalid geojson Id or geojson type');
-      }
-      const insertedGeoJson = await geojsonClass.create({
-        properties,
-        type,
-        geojsonId: id,
-        geometry,
-      });
-      await tripGeoJsonClass.create({
-        tripId: newTrip.id,
-        geojsonId: insertedGeoJson.id,
-      });
+
+    const insertedGeoJson = await geojsonClass.create(geoJSON);
+    await tripGeoJsonClass.create({
+      tripId: newTrip.id,
+      geojsonId: insertedGeoJson.id,
     });
 
     return newTrip;

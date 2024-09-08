@@ -1,3 +1,4 @@
+import React from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { theme } from 'app/theme';
 import { TripCardBase } from './TripCardBase';
@@ -13,20 +14,20 @@ import Carousel from 'app/components/carousel';
 const RCard: any = OrirginalRCard;
 const RParagraph: any = OriginalRParagraph;
 
-type TripPlaceCardProps = {
-  data: string[];
+interface TripPlaceCardProps {
+  data: Array<{ id: string; name: string }>;
   onToggle: (place: string) => void;
-  selectedValue: string;
+  selectedValue: string[];
   icon: React.FC;
   title: string;
-};
+}
 
 const TripPlaceCard = ({
   data,
   onToggle,
   icon,
   title,
-  selectedValue,
+  selectedValue = [],
 }: TripPlaceCardProps) => {
   const { isDark } = useTheme();
 
@@ -37,11 +38,14 @@ const TripPlaceCard = ({
           {data?.map((item) => {
             return (
               <RCard
+                key={item.id}
                 backgroundColor={
-                  item === selectedValue ? theme.colors.background : null
+                  selectedValue.includes(item.id)
+                    ? theme.colors.background
+                    : null
                 }
                 onPress={() => {
-                  onToggle(item);
+                  onToggle(item.id);
                 }}
                 elevate
                 bordered
@@ -49,9 +53,9 @@ const TripPlaceCard = ({
               >
                 <RCard.Header padded>
                   <RParagraph
-                    color={item === selectedValue ? 'white' : 'black'}
+                    color={selectedValue.includes(item.id) ? 'white' : 'black'}
                   >
-                    {item}
+                    {item.name}
                   </RParagraph>
                 </RCard.Header>
               </RCard>

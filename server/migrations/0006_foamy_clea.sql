@@ -1,0 +1,1 @@
+ALTER TABLE trip ADD `activity` text DEFAULT 'trip';

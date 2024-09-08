@@ -30,7 +30,6 @@ export const FeedCard: FC<FeedCardProps> = ({ item, cardType, feedType }) => {
     typeof convertersByType[feedType] === 'function'
       ? convertersByType[feedType](item, user?.id)
       : null;
-
   const handleAddToFavorite = () => {
     if (!user) return;
     const data = {

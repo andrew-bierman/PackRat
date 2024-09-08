@@ -17,12 +17,12 @@ export const getTripByIdService = async (tripId: string): Promise<object> => {
       ...trip.packs,
       items: trip.packs?.itemPacks?.map((itemPack) => itemPack.item),
     };
-    const geojsonData = trip.tripGeojsons?.map(
+    const geoJSON = trip.tripGeojsons?.map(
       (tripGeojson) => tripGeojson.geojson,
-    );
+    )[0];
     return {
       ...trip,
-      geojson: { type: 'FeatureCollection', features: geojsonData },
+      geoJSON: geoJSON?.geoJSON ? JSON.parse(geoJSON?.geoJSON) : null,
       packs,
     };
   } catch (error) {

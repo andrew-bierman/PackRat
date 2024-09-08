@@ -17,7 +17,7 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
     formatCreateTripValuesForAPI,
   );
 
-  const togglePlace = (name: 'trail' | 'park', value: any) => {
+  const togglePlace = (name: 'trails' | 'parks', value: any) => {
     setTripValue(name, store[name] !== value ? value : '');
   };
 
