@@ -5,6 +5,7 @@ import { getErrorMessageFromError } from 'app/utils/apiUtils';
 import { Storage } from 'app/utils/storage';
 import { vanillaTrpcClient } from 'app/trpc';
 import { TRPCErrorResponse } from '@trpc/server/rpc';
+import { TRPCClientError } from '@trpc/client';
 
 const REQUESTS_TO_SKIP_SUCCESS_MESSAGE = [
   'getMe',
@@ -41,8 +42,14 @@ const responseInterceptor = (response: AxiosResponse) => {
 const responseErrorInterceptor = async (
   error: AxiosError<TRPCErrorResponse>,
 ) => {
-  if (error?.response?.data[0]?.error?.data?.httpStatus === 401) {
-    // TODO: handle non batch links
+  const data = error?.response?.data;
+  const isUnauthorized = (item) => item?.error?.data?.httpStatus === 401;
+  // check auth error in both single or multiple objects response
+  const hasUnauthorizedError = Array.isArray(data)
+    ? data.some(isUnauthorized)
+    : isUnauthorized(data);
+
+  if (data && hasUnauthorizedError) {
     const refreshToken = await Storage.getItem('refreshToken');
 
     if (!refreshToken) return; // user is logged out if refreshToken isn't present
@@ -57,8 +64,9 @@ const responseErrorInterceptor = async (
       error.config.headers.Authorization = 'Bearer ' + tokens.accessToken;
       return await axios.request(error.config);
     } catch (error) {
-      // refreshToken has probably also expired. logout user.
-      logoutAuthUser();
+      // refreshToken has also expired. Logout user.
+      if (error instanceof TRPCClientError && error.data.code == 'UNAUTHORIZED')
+        logoutAuthUser();
       return error;
     }
   }
