@@ -32,9 +32,10 @@ export default function PackContainer({ isCreatingTrip = false }) {
   }, [refetch]);
 
   useEffect(() => {
-    if (packs.length > oldPacks.length) {
+    if (packs.length > oldPacks.length && isCreatingTrip) {
       const newPack = packs.find((pack) => !oldPacks.includes(pack.id));
       setCurrentPackId(newPack?.id);
+      setPackIdParam(newPack?.id);
       oldPacks.push(newPack?.id);
     }
   }, packs);
@@ -59,12 +60,12 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
-  useEffect(() => {
-    const firstPack = packs.find(({ id }) => !!id);
-    if (!packIdParam && firstPack?.id && isCreatingTrip) {
-      setPackIdParam(firstPack.id);
-    }
-  }, [packIdParam, packs, isCreatingTrip]);
+  // useEffect(() => {
+  //   const firstPack = packs.find(({ id }) => !!id);
+  //   if (!packIdParam && firstPack?.id && isCreatingTrip) {
+  //     setPackIdParam(firstPack.id);
+  //   }
+  // }, [packIdParam, packs, isCreatingTrip]);
 
   return dataValues?.length > 0 ? (
     <View style={styles.mainContainer}>
