@@ -33,9 +33,6 @@ jobs:
       - name: Setup JS Runtime environment
         uses: ./.github/actions/setup-js-runtime
 
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
-
       - name: Generate wrangler.toml
         uses: ./.github/actions/setup-wrangler-toml
         with:
@@ -71,7 +68,13 @@ jobs:
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
+          preCommands: |
+            echo '---Clear previous wrangler logs---'
+            rm /home/runner/.config/.wrangler/logs/* || true
           command: d1 migrations apply preview --remote --env preview
+          postCommands: |
+            echo '---Print wrangler logs---'
+            cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
           packageManager: yarn
         env:
           NO_D1_WARNING: true
@@ -79,10 +82,9 @@ jobs:
           WRANGLER_LOG: debug
           WRANGLER_LOG_SANITIZE: false
 
-      - name: Print the last Wrangler log 
+      - name: Print wrangler extra logs on failure 
         if: failure()
         run: | 
-          pwd;
           cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
 
       - name: Deploy
@@ -92,21 +94,29 @@ jobs:
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
+          preCommands: | # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
+            echo '---Clear previous wrangler logs file---'
+            rm /home/runner/.config/.wrangler/logs/* || true
+            echo '---Generate and upload secrets---'
+            echo '>> Generate secrets file'
+            echo '{}' | jq '.GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"' > secrets.json
+            echo '<< Secrets file generated'
+            echo '>> Generated additional environment variables'
+            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.preview
+            echo '<< Additional environment variables generated'
+            echo '>> Upload secrets'
+            wrangler secret bulk --env preview secrets.json
+            echo '<< Secrets uploaded'
           command: deploy src/index.ts --env preview
           packageManager: yarn
-          secrets: |
-            APP_URL
-            JWT_VERIFICATION_KEY
-            CI
         env:
-          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
-          JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
           CI: true
           NO_D1_WARNING: true
           WRANGLER_LOG: debug
           WRANGLER_LOG_SANITIZE: false
 
-      - name: Print the last Wrangler log 
+      - name: Print wrangler extra logs on failure 
         if: failure()
         run: | 
-          cat "$(ls -t ~/.config/.wrangler/logs/* | head -n 1)" || true;
+          cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
+
