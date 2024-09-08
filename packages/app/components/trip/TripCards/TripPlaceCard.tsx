@@ -10,6 +10,7 @@ import {
   RStack,
 } from '@packrat/ui';
 import Carousel from 'app/components/carousel';
+import { current } from 'immer';
 
 const RCard: any = OrirginalRCard;
 const RParagraph: any = OriginalRParagraph;
@@ -29,19 +30,19 @@ const TripPlaceCard = ({
   title,
   selectedValue = [],
 }: TripPlaceCardProps) => {
-  const { isDark } = useTheme();
+  const { currentTheme } = useTheme();
 
   return (
     <TripCardBase icon={icon} title={title}>
       <RStack style={{ flex: 1, maxWidth: '100%' }}>
-        <Carousel iconColor={isDark ? '#fff' : '#000'}>
+        <Carousel iconColor={currentTheme.colors.text}>
           {data?.map((item) => {
             return (
               <RCard
                 key={item.id}
                 backgroundColor={
                   selectedValue.includes(item.id)
-                    ? theme.colors.background
+                    ? currentTheme.colors.background
                     : null
                 }
                 onPress={() => {
@@ -53,7 +54,11 @@ const TripPlaceCard = ({
               >
                 <RCard.Header padded>
                   <RParagraph
-                    color={selectedValue.includes(item.id) ? 'white' : 'black'}
+                    color={
+                      selectedValue.includes(item.id)
+                        ? currentTheme.colors.secondaryBlue
+                        : currentTheme.colors.text
+                    }
                   >
                     {item.name}
                   </RParagraph>

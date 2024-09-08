@@ -81,18 +81,22 @@ function Trips() {
   );
 }
 
-const loadStyles = () => ({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-    paddingBottom: 30,
-  },
-  container: {
-    gap: 50,
-    padding: 20,
-  },
-});
+const loadStyles = () => {
+  const { currentTheme } = useTheme();
+
+  return {
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+      paddingBottom: 30,
+    },
+    container: {
+      gap: 50,
+      padding: 20,
+    },
+  };
+};
 
 export default Trips;
