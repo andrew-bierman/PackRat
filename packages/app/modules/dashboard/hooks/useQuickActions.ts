@@ -1,5 +1,5 @@
 import { useRouter } from 'app/hooks/router';
-import { MaterialIcons } from '@expo/vector-icons';
+import { type MaterialIcons } from '@expo/vector-icons';
 
 interface IQuickActionData {
   action: string;
@@ -15,13 +15,12 @@ const quickActionData: IQuickActionData[] = [
     text: 'Create a Pack',
     href: '/pack/create',
   },
-  /* DISABLE TRIP TEMP */
-  // {
-  //   action: 'createTrip',
-  //   iconName: 'navigation',
-  //   text: 'Create a Trip',
-  //   href: '/trip/create',
-  // },
+  {
+    action: 'createTrip',
+    iconName: 'navigation',
+    text: 'Create a Trip',
+    href: '/trip/create',
+  },
 ];
 
 export const useQuickActions = () => {

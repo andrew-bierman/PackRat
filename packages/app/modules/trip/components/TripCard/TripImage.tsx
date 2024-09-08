@@ -2,6 +2,7 @@ import React, { type FC } from 'react';
 import { View } from '@packrat/ui';
 import { Package } from '@tamagui/lucide-icons';
 import { type ViewProps } from 'tamagui';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 interface TripImageProps {
   style?: ViewProps['style'];
@@ -22,7 +23,7 @@ export const TripImage: FC<TripImageProps> = ({ style = {} }) => {
       ]}
     >
       <View>
-        <Package />
+        <MaterialCommunityIcons name="routes" size={24} />
       </View>
     </View>
   );
