@@ -20,7 +20,7 @@ export const usePublicFeed = (
   queryString: string,
   selectedTypes,
   initialPage = 1,
-  initialLimit = 15
+  initialLimit = 2
 ) => {
   const [page, setPage] = useState(initialPage);
   const [data, setData] = useState<OptionalDataType>([]);

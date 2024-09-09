@@ -107,35 +107,43 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             queryString={queryString}
             setSearchQuery={setSearchQuery}
           />
-          <FlatList
-            data={filteredData}
-            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
-            renderItem={({ item }) => (
-              <FeedCard
-                key={`${item?.id}_${item?.type}`}
-                type={item?.type}
-                favorited_by={item?.userFavoritePacks}
-                {...item}
-              />
-            )}
-            ListFooterComponent={() =>
-              isFetchingNextPage ? (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : (
-                <View style={{ height: 50 }} />
-              )
-            }
-            ListEmptyComponent={() => (
-              <RText style={{ textAlign: 'center', marginTop: 20 }}>
-                No data available
-              </RText>
-            )}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            onEndReached={fetchMoreData} // Trigger next page fetch
-            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
-            showsVerticalScrollIndicator={false}
-            maxToRenderPerBatch={2}
-          />
+
+          {/* Show initial loading indicator */}
+          {isLoading && data?.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <FlatList
+              data={filteredData}
+              keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
+              renderItem={({ item }) => (
+                <FeedCard
+                  key={`${item?.id}_${item?.type}`}
+                  type={item?.type}
+                  favorited_by={item?.userFavoritePacks}
+                  {...item}
+                />
+              )}
+              ListFooterComponent={() =>
+                isFetchingNextPage ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                  <View style={{ height: 50 }} />
+                )
+              }
+              ListEmptyComponent={() => (
+                <RText style={{ textAlign: 'center', marginTop: 20 }}>
+                  No data available
+                </RText>
+              )}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+              onEndReached={fetchMoreData} // Trigger next page fetch
+              onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+              showsVerticalScrollIndicator={false}
+              maxToRenderPerBatch={2}
+            />
+          )}
         </View>
       </SearchProvider>
     </View>
