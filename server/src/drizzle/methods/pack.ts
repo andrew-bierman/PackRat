@@ -151,6 +151,8 @@ export class Pack {
         sortOption,
         ownerId,
         is_public,
+        page ,
+        limit ,
       } = options;
       const filterConditions = [];
 
@@ -169,11 +171,17 @@ export class Pack {
         includeRelated,
         completeItems: true,
       });
+
+      const offset = (page - 1) * limit;
+
       const packs = await DbClient.instance.query.pack.findMany({
-        ...(modifiedFilter && { where: modifiedFilter }),
-        orderBy: orderByFunction,
-        ...(includeRelated ? relations : {}),
-      });
+      ...(modifiedFilter && { where: modifiedFilter }),
+      orderBy: orderByFunction,
+      ...(includeRelated ? relations : {}),
+      offset: offset,
+      limit: limit,
+    });
+    
       return (await packs).map((pack: any) => ({
         ...pack,
         scores: JSON.parse(pack.scores as string),
