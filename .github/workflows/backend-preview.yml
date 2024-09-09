@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - feat/preview-version-of-api
       - andrew_testing
     paths:
       - '.github/workflows/backend-preview.yml'
@@ -41,7 +40,7 @@ jobs:
           BUCKET_REGION: ${{ secrets.PREVIEW_BUCKET_REGION }}
           BUCKET_SERVICE: ${{ secrets.PREVIEW_BUCKET_SERVICE }}
           BUCKET_SESSION_TOKEN: ${{ secrets.PREVIEW_BUCKET_SESSION_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           DB_ID: ${{ secrets.PREVIEW_DB_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
           STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
@@ -51,7 +50,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
-          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           preCommands:  |
@@ -74,7 +73,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
-          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.

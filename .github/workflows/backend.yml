@@ -51,7 +51,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
-          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           preCommands: |
@@ -74,7 +74,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
-          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
           # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
