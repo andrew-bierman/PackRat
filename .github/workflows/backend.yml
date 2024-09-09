@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - andrew_testing
     paths:
       - '.github/workflows/backend.yml'
       - 'packages/validations/**'
