@@ -26,10 +26,10 @@ export const FAQS = () => {
     <View style={styles.faqMainContainer}>
       <View style={styles.faqFirstContainer}>
         <RText style={styles.faqMainTitle}>Frequently Asked Questions</RText>
-        <View>
+        <View style={{width: '100%'}}>
           {FaqList.map((faq, index) => {
             return (
-              <View>
+              <View style={styles.faqBox}>
                 <View
                   onPress={() => toggleAnswer(index)}
                   style={styles.faqQuestion}
@@ -59,54 +59,57 @@ export const FAQS = () => {
           src={PakRat_FAQS}
           style={{
             backgroundColor: 'transparent',
-            width: xs || sm || md ?  359 : 659,
-            height: xs || sm || md ?  250 : 550,
+            width: xs || sm || md ?  359 : 650,
+            height: xs || sm || md ?  250 : 541,
           }}
-          alt="PackRat Logo"
+          alt="PackRat Frequently Asked Questions"
         />
       </View>
     </View>
   );
 };
 
-const loadStyles = (currentTheme, xs, sm, md) => {
-  return StyleSheet.create({
-    faqMainContainer: {
-      flexDirection: xs || sm || md ? 'column' : 'row',
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
-      gap: 10,
-      width: '100vw',
-      maxWidth: '100vw',
-      paddingTop: 20,
-      paddingBottom: 20,
-    },
-    faqFirstContainer: {},
-    faqMainTitle: {
-      fontSize: xs || sm || md ?  20 : 26,
-      textAlign : xs || sm || md ? 'center' : 'auto',
-      fontWeight: 'bold',
-      color: currentTheme.colors.textPrimary,
-      marginBottom: 30,
-    },
-    faqQuestion: {
-      borderBottomWidth: 1,
-      borderBottomColor: currentTheme.colors.textPrimary,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginTop: 4,
-      marginBottom: 4,
-      marginLeft: xs || sm || md ? 10 : 0,
-      marginRight: xs || sm || md ? 10 : 0,
-      gap: xs || sm || md ? 2 : 10,
-    },
-    faqAnswer: {
-      // marginLeft: 0,
-      width: xs || sm || md ? '100%' : '24vw',
-      marginLeft: xs || sm || md ? 10 : 0,
-      marginRight: xs || sm || md ? 10 : 0,
-    },
-    faqSecondContainer: {},
-  });
-};
+const loadStyles = (currentTheme, xs, sm, md) => StyleSheet.create({
+  faqMainContainer: {
+    flexDirection: xs || sm || md ? 'column' : 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    gap: 10,
+    width: '100vw',
+    maxWidth: '100vw',
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  faqFirstContainer: {
+    alignItems: 'center',
+  },
+  faqBox: {
+    width: xs || sm  ? '100%' : '24%',
+  },
+  faqMainTitle: {
+    fontSize: xs || sm || md ?  20 : 26,
+    textAlign : xs || sm || md ? 'center' : 'auto',
+    fontWeight: 'bold',
+    color: currentTheme.colors.textPrimary,
+    marginBottom: 30,
+  },
+  faqQuestion: {
+    borderBottomWidth: 1,
+    borderBottomColor: currentTheme.colors.textPrimary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 4,
+    marginBottom: 4,
+    marginLeft: xs || sm || md ? 10 : 0,
+    marginRight: xs || sm || md ? 10 : 0,
+    gap: xs || sm || md ? 2 : 10,
+  },
+  faqAnswer: {
+    marginLeft: 0,
+    width: xs || sm || md ? '100%' : '24vw',
+    marginLeft: xs || sm || md ? 10 : 0,
+    marginRight: xs || sm || md ? 10 : 0,
+  },
+  faqSecondContainer: {},
+});
