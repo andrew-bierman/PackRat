@@ -9,6 +9,7 @@ export interface FeedItem {
     username: string;
   };
   name: string;
+  similarityScore?: number;
   total_weight: number;
   total_score: number;
   is_public: boolean;
