@@ -21,6 +21,7 @@ import {
   SuggestionList,
 } from '../../components/Suggestion';
 import useTheme from 'app/hooks/useTheme';
+import colors from 'native-base/lib/typescript/theme/base/colors';
 
 interface ChatComponentProps {
   showChatSelector?: boolean;

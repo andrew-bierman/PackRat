@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Progress } from 'native-base';
 import useTheme from 'app/hooks/useTheme';
 import { useProgressStore } from 'app/atoms/progressStore';
-import { View } from '@packrat/ui';
 
 const ProgressBarComponent = () => {
   const { currentTheme } = useTheme();
@@ -35,23 +35,14 @@ const ProgressBarComponent = () => {
   }, [localCurrentValue, targetValue, operationId]);
 
   return (
-    <View
-      style={{
-        width: '100%',
-        height: 4,
-        backgroundColor: currentTheme.colors.background,
-        borderRadius: 2,
-        overflow: 'hidden',
-      }}
-    >
-      <View
-        style={{
-          width: `${(localCurrentValue / targetValue) * 100}%`,
-          height: '100%',
-          backgroundColor: currentTheme.colors.primary,
-        }}
-      />
-    </View>
+    <Progress
+      value={localCurrentValue}
+      colorScheme="success"
+      size="sm"
+      w="100%"
+      borderRadius={0}
+      bg={currentTheme.colors.background}
+    />
   );
 };
 

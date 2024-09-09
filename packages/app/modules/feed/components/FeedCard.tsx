@@ -1,60 +1,49 @@
-import React, { type FC } from 'react';
-import { type FeedItem, type FeedType } from 'app/modules/feed/model';
-import { feedItemPackCardConverter } from './utils';
-import { PackCard } from 'app/modules/pack';
-import { type CardType } from '@packrat/ui';
-import { useAddFavorite } from 'app/modules/feed';
+import { AntDesign } from '@expo/vector-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { MaterialIcons, Entypo } from '@expo/vector-icons';
+import useTheme from 'app/hooks/useTheme';
+import { TouchableOpacity } from 'react-native';
+import { DuplicateIcon } from 'app/assets/icons';
+import { truncateString } from 'app/utils/truncateString';
+import { RLink, RText as OriginalRText, ContextMenu } from '@packrat/ui';
+import { formatNumber } from 'app/utils/formatNumber';
+import { useAddFavorite } from 'app/hooks/favorites';
 import { useAuthUser } from 'app/modules/auth';
+import { useRouter } from 'app/hooks/router';
+import { useItemWeightUnit } from 'app/modules/item';
+import { convertWeight } from 'app/utils/convertWeight';
+import Layout from 'app/components/layout/Layout';
+import { Button, Card, H2, Paragraph, XStack, YStack } from 'tamagui';
 
-const convertersByType = {
-  pack: feedItemPackCardConverter,
-};
+const RText: any = OriginalRText;
 
-const cardComponentsByType = {
-  pack: PackCard,
-};
-
-interface FeedCardProps {
-  feedType: FeedType;
-  cardType: CardType;
-  item: FeedItem;
+interface CardProps {
+  type: string;
+  id: string;
+  owner: {
+    id: string;
+    username: string;
+  };
+  name: string;
+  total_weight: number;
+  is_public: boolean;
+  favorited_by: Array<{
+    id: string;
+  }>;
+  favorites_count: number;
+  owner_id: string | { id: string };
+  destination: string;
+  createdAt: string;
+  owners: Array<{ any: any }>;
+  duration: string;
+  itemPacks?: any[];
 }
 
-export const FeedCard: FC<FeedCardProps> = ({ item, cardType, feedType }) => {
-  const { addFavorite } = useAddFavorite();
-  const user = useAuthUser();
-  const cardProps =
-    typeof convertersByType[feedType] === 'function'
-      ? convertersByType[feedType](item, user?.id)
-      : null;
+interface User {
+  id: string;
+}
 
-  const handleAddToFavorite = () => {
-    if (!user) return;
-    const data = {
-      packId: item.id,
-      userId: user.id,
-    };
-
-    addFavorite(data);
-  };
-
-  if (!cardProps) {
-    return null;
-  }
-
-  const CardComponent = cardComponentsByType[feedType];
-
-  return (
-    <CardComponent
-      {...cardProps}
-      cardType={cardType}
-      toggleFavorite={handleAddToFavorite}
-    />
-  );
-};
-
-/*
-export function FeedCardOld({
+export function FeedCard({
   type,
   id,
   owner,
@@ -69,7 +58,7 @@ export function FeedCardOld({
   owners,
   duration,
   itemPacks,
-}: FeedCardProps) {
+}: CardProps) {
   console.log('CardProps:', favorited_by);
   const user = useAuthUser();
   const { currentTheme } = useTheme();
@@ -257,4 +246,3 @@ export function FeedCardOld({
     </Layout>
   );
 }
-*/

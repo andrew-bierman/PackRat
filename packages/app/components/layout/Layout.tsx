@@ -16,7 +16,6 @@ const Layout = ({
           flex: 1,
           justifyContent: 'center',
           marginTop: 20,
-          marginBottom: 20,
           alignItems: 'center',
           backgroundColor: 'transparent',
           width: '100%',

@@ -1,4 +1,4 @@
-import { queryTrpc } from 'app/trpc';
+import { queryTrpc } from '../../trpc';
 
 export function useAddFavorite() {
   const utils = queryTrpc.useContext();

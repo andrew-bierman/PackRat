@@ -1,5 +1,5 @@
 import useTheme from 'app/hooks/useTheme';
-import { toast } from 'app/utils/ToastUtils';
+import { InformUser } from 'app/utils/ToastUtils';
 import { queryTrpc } from 'app/trpc';
 
 export const useRequestEmailModal = () => {
@@ -21,11 +21,11 @@ export const useRequestEmailModal = () => {
       // TODO - switch to RTK query
       // await axios.post(`${api}/password-reset`, { email });
       closeModal();
-
-      toast({
+      InformUser({
         title: 'Password reset email sent',
-        duration: 3,
-        preset: 'done',
+        style: { backgroundColor: currentTheme.colors.text },
+        placement: 'bottom',
+        duration: 5000,
       });
     } catch (error) {}
   };

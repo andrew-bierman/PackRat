@@ -15,7 +15,7 @@ interface CarouselProps {
   iconColor?: string;
 }
 
-const { width: screenWidth } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const Carousel: React.FC<CarouselProps> = ({
   children = [],
@@ -37,7 +37,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const scrollToIndex = (index: number) => {
     if (index >= 0 && index < children.length && scrollViewRef.current) {
       scrollViewRef.current.scrollTo({
-        x: index * (itemWidth || 220), // Use itemWidth if passed
+        x: index * 220,
         y: 0,
         animated: true,
       });
@@ -49,14 +49,13 @@ const Carousel: React.FC<CarouselProps> = ({
     <RStack
       style={{
         alignSelf: 'center',
-        width: Platform.OS === 'web' ? '90%' : screenWidth, // Full width on native
+        width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,
       }}
     >
-      {/* Show buttons only on web */}
       {Platform.OS === 'web' && (
         <ScrollButton
           direction="left"
@@ -71,6 +70,7 @@ const Carousel: React.FC<CarouselProps> = ({
         ref={scrollViewRef}
         horizontal
         scrollEnabled
+        // gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row' }}
@@ -82,7 +82,6 @@ const Carousel: React.FC<CarouselProps> = ({
             <RStack
               key={index}
               style={{
-                ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
                 marginRight: 10,
                 marginTop: 10,
                 flexDirection: 'row',
@@ -93,7 +92,6 @@ const Carousel: React.FC<CarouselProps> = ({
           ))}
       </ScrollView>
 
-      {/* Show buttons only on web */}
       {Platform.OS === 'web' && (
         <ScrollButton
           direction="right"

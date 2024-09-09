@@ -70,7 +70,7 @@
     "@trpc/server": "^10.45.1",
     "axios": "^1.4.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
-    "burnt": "^0.12.2",
+    "burnt": "^0.12.1",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "eslint-plugin-react-native": "^4.0.0",

@@ -1,11 +1,13 @@
-import { RStack, View } from '@packrat/ui';
-import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
-import { useRouter } from 'app/hooks/router';
-import useTheme from 'app/hooks/useTheme';
+import React from 'react';
+import { Platform, type TextInput } from 'react-native';
+import { useCallback, useRef } from 'react';
 import { Stack, useFocusEffect } from 'expo-router';
 import Head from 'expo-router/head';
-import React, { useCallback, useRef } from 'react';
-import { Platform, type TextInput } from 'react-native';
+import { useRouter } from 'app/hooks/router';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
+import { RStack } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
+import { View } from 'native-base';
 
 interface SearchResult {
   properties: {

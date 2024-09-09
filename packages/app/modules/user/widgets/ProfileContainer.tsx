@@ -210,7 +210,7 @@ export function ProfileContainer({ id = null }) {
             styles.mainContainer,
             Platform.OS == 'web'
               ? { minHeight: '100vh' }
-              : { minHeight: '100%', paddingBottom: 100 },
+              : { minHeight: '100%', paddingBottom: 40 },
           ]}
         >
           <Header

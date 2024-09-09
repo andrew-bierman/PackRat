@@ -1,8 +1,9 @@
+import { Container } from 'native-base';
 import { RText, RStack } from '@packrat/ui';
 import Checkbox from 'expo-checkbox';
 import { FontAwesome } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useItemRow } from 'app/modules/item';
+import { useItemRow } from 'app/hooks/itemrow';
 
 interface ItemRowProps {
   packName: string;
@@ -13,7 +14,7 @@ export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
   const styles = useCustomStyles(loadStyles);
 
   return (
-    <RStack style={styles.mainContainer}>
+    <Container style={styles.mainContainer}>
       <Checkbox
         style={styles.checkbox}
         value={isChecked}
@@ -33,7 +34,7 @@ export const ItemRow: React.FC<ItemRowProps> = ({ packName }) => {
         <FontAwesome name="pencil" size={24} color="black" />
         <FontAwesome name="trash" size={24} color="black" />
       </RStack>
-    </RStack>
+    </Container>
   );
 };
 

@@ -51,9 +51,7 @@ export const UserDataList = ({ data }: DataListProps) => {
           ]}
           footerComponent={undefined}
         >
-          <View
-            style={{ width: '100vw', paddingBottom: 10, maxWidth: 992 } as any}
-          >
+          <View style={{ width: 'auto%', paddingBottom: 10 } as any}>
             <FeedSearchFilter
               isSortHidden={true}
               queryString={searchQuery}
@@ -63,14 +61,8 @@ export const UserDataList = ({ data }: DataListProps) => {
               data={filteredData.slice(0, 2)}
               horizontal={false}
               keyExtractor={(item) => item?.id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
               renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
+                <FeedCard key={item?._id} type={item?.type} {...item} />
               )}
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}
@@ -101,14 +93,8 @@ export const UserDataList = ({ data }: DataListProps) => {
               data={filteredData}
               horizontal={false}
               keyExtractor={(item) => item?._id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
               renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
+                <FeedCard key={item?._id} type={item?.type} {...item} />
               )}
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}

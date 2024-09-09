@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { api } from 'app/constants/api';
 // import { store } from '../store/store';
-import { toast } from 'app/utils/ToastUtils';
+import { InformUser } from 'app/utils/ToastUtils';
 import { dispatchProgress, progressActions } from '../atoms/progressStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -70,10 +70,11 @@ const responseInterceptor = (response) => {
   const responseMessage = response.headers['x-response-message'];
 
   if (responseMessage) {
-    toast({
+    InformUser({
       title: responseMessage,
-      duration: 3,
-      preset: response.status === 200 ? 'done' : 'error',
+      placement: 'bottom',
+      duration: 3000,
+      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
     });
   }
 
@@ -85,10 +86,11 @@ const responseInterceptor2 = (response) => {
   const responseMessage = response.headers['x-response-message'];
 
   if (responseMessage) {
-    toast({
+    InformUser({
       title: responseMessage,
-      duration: 3,
-      preset: response.status === 200 ? 'done' : 'error',
+      placement: 'bottom',
+      duration: 3000,
+      style: { backgroundColor: response.status === 200 ? 'green' : 'red' },
     });
   }
 
@@ -114,11 +116,11 @@ const responseErrorInterceptor = (error) => {
 
   const errorMessage =
     'message' in error ? error.message : 'Something went wrong';
-
-  toast({
+  InformUser({
     title: errorMessage,
-    duration: 3,
-    preset: 'error',
+    placement: 'bottom',
+    duration: 3000,
+    style: { backgroundColor: 'red' },
   });
 
   return Promise.reject(error);
@@ -131,10 +133,11 @@ const responseErrorInterceptor2 = (error) => {
 
   const errorMessage =
     'message' in error ? error.message : 'Something went wrong';
-  toast({
+  InformUser({
     title: errorMessage,
-    duration: 3,
-    preset: 'error',
+    placement: 'bottom',
+    duration: 3000,
+    style: { backgroundColor: 'red' },
   });
 
   setTimeout(() => {

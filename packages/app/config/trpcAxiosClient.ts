@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { toast } from 'app/utils/ToastUtils';
+import { InformUser } from 'app/utils/ToastUtils';
 import { logoutAuthUser } from 'app/utils/userUtils';
 import { getErrorMessageFromError } from 'app/utils/apiUtils';
 
@@ -25,10 +25,11 @@ const responseInterceptor = (response: AxiosResponse) => {
     return response;
   }
 
-  toast({
+  InformUser({
     title: 'Confirmed! Your submission was successful.',
-    duration: 3,
-    preset: 'done',
+    placement: 'bottom',
+    duration: 3000,
+    style: { backgroundColor: 'green' },
   });
 
   return response;
@@ -51,10 +52,11 @@ const responseErrorInterceptor = (response: AxiosResponse) => {
   const responseMessage = getErrorMessageFromError(response);
 
   if (responseMessage) {
-    toast({
+    InformUser({
       title: responseMessage,
-      duration: 3,
-      preset: 'error',
+      placement: 'bottom',
+      duration: 3000,
+      style: { backgroundColor: 'red' },
     });
   }
 

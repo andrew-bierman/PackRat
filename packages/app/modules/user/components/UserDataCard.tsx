@@ -14,7 +14,7 @@ import { truncateString } from 'app/utils/truncateString';
 import { useEditPack } from 'app/modules/pack';
 import { Platform } from 'react-native';
 import { useEditTrips } from 'app/hooks/trips';
-import { useAddFavorite } from 'app/modules/feed';
+import { useAddFavorite } from 'app/hooks/favorites';
 import useTheme from 'app/hooks/useTheme';
 
 const RText: any = OriginalRText;

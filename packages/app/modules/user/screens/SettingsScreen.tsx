@@ -50,12 +50,8 @@ export function SettingsScreen() {
         gap={8}
         width="fit-content"
         maw="100%"
-        style={{
-          paddingTop: 20,
-          paddingBottom: 100,
-          paddingLeft: 20,
-          paddingRight: 20,
-        }}
+        paddingVertical={20}
+        paddingHorizontal={8}
         marginHorizontal="auto"
         marginVertical={40}
       >
