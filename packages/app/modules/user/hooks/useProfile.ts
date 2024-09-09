@@ -1,4 +1,4 @@
-import { useFetchUserFavorites } from 'app/hooks/favorites';
+import { useFetchUserFavorites } from 'app/modules/feed';
 import { useUserPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/hooks/singletrips';
 import { useAuthUser, useMatchesCurrentUser } from 'app/modules/auth';
