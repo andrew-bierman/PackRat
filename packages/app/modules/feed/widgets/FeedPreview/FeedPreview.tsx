@@ -1,8 +1,9 @@
 import React from 'react';
 import Carousel from 'app/components/carousel';
 import { useFeed } from '../../hooks';
-import { default as FeedPreviewCard, type FeedItem } from './FeedPreviewCard';
 import Loader from 'app/components/Loader';
+import { FeedCard, type FeedItem } from 'app/modules/feed';
+import { View } from 'tamagui';
 
 interface FeedPreviewScrollProps {
   itemWidth: number;
@@ -24,9 +25,11 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
       {feedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem) => {
-          const linkStr = `/${item.type}/${item.id}`;
+          const linkStr = `/pack/${item.id}`;
           return linkStr ? (
-            <FeedPreviewCard {...{ linkStr, item, feedType }} key={linkStr} />
+            <View style={{ marginBottom: 10 }}>
+              <FeedCard item={item} cardType="secondary" feedType="pack" />
+            </View>
           ) : null;
         })}
     </Carousel>

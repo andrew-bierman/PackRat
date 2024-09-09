@@ -149,13 +149,16 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
           <FlatList
             data={filteredData}
             horizontal={false}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 12, width: '100%' }} />
+            )}
             keyExtractor={(item) => item?.id + item?.type}
             renderItem={({ item }) => (
               <FeedCard
                 key={item?.id}
-                type={item?.type}
-                favorited_by={item?.userFavoritePacks}
-                {...item}
+                item={item}
+                cardType="primary"
+                feedType={item.type}
               />
             )}
             ListFooterComponent={() => <View style={{ height: 50 }} />}

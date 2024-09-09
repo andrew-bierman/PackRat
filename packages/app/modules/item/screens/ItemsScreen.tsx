@@ -13,12 +13,16 @@ import {
   RText,
 } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
+import { useAuthUser } from 'app/modules/auth';
 
 export function ItemsScreen() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
   const [value, setValue] = useState('Food');
+
+  const authUser = useAuthUser();
+  const role = authUser?.role;
 
   // for zeego = {false} options will be:
   // const optionValues = ['Food', 'Water', 'Essentials'];
@@ -94,9 +98,9 @@ export function ItemsScreen() {
             <BaseModal title="Add a global Item" trigger="Add Item">
               <AddItemGlobal />
             </BaseModal>
-            <BaseModal title="Import global Item" trigger="Import Item">
+            { role === 'admin' && <BaseModal title="Import global Item" trigger="Import Item">
               <ImportItemGlobal />
-            </BaseModal>
+            </BaseModal>}
           </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (

@@ -31,6 +31,15 @@ export class User {
       .get();
   }
 
+  async getAdminId() {
+    return DbClient.instance
+      .select()
+      .from(UserTable)
+      .where(eq(UserTable.role, "admin"))
+      .limit(1)
+      .get();
+  }
+
   generateUsernameFromEmail(email) {
     return email ? email.split('@')[0] : 'defaultuser';
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { CLIENT_URL } from '@packrat/config';
-import { RH3, RText } from '@packrat/ui';
+import { RH3, RSpinner, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import {
@@ -26,7 +26,7 @@ const SECTION = {
   CTA: 'CTA',
   SCORECARD: 'SCORECARD',
   CHAT: 'CHAT',
-  SIMILAR_ITEMS: 'SIMILAR_ITEMS',
+  SIMILAR_PACKS: 'SIMILAR_PACKS',
 };
 
 export function PackDetailsScreen() {
@@ -57,7 +57,12 @@ export function PackDetailsScreen() {
 
   const isError = error !== null;
 
-  if (isLoading) return <RText>Loading...</RText>;
+  if (isLoading)
+    return (
+      <Layout>
+        <RSpinner />
+      </Layout>
+    );
 
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
@@ -147,7 +152,7 @@ export function PackDetailsScreen() {
                             />
                           </View>
                         );
-                      case SECTION.SIMILAR_ITEMS:
+                      case SECTION.SIMILAR_PACKS:
                         return (
                           <LargeCard
                             customStyle={{
