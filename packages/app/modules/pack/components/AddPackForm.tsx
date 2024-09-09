@@ -122,12 +122,11 @@ const loadStyles = (theme, appTheme) => {
       textAlign: 'center',
       justifyContent: 'center',
       width: '100%',
+      flex: 1,
       paddingHorizontal: 18,
       gap: 20,
       paddingTop: 20,
-      backgroundColor: isDark
-        ? currentTheme.colors.background
-        : currentTheme.colors.white,
+      backgroundColor: currentTheme.colors.background,
     },
     desktopStyle: {
       flex: 1,

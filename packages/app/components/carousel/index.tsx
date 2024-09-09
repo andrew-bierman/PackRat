@@ -56,18 +56,20 @@ const Carousel: React.FC<CarouselProps> = ({
         flex: 1,
       }}
     >
-      <ScrollButton
-        direction="left"
-        onPress={() => {
-          scrollToIndex(currentIndex - 1);
-        }}
-        disabled={currentIndex === 0}
-      />
+      {Platform.OS === 'web' && (
+        <ScrollButton
+          direction="left"
+          onPress={() => {
+            scrollToIndex(currentIndex - 1);
+          }}
+          disabled={currentIndex === 0}
+        />
+      )}
 
       <ScrollView
         ref={scrollViewRef}
         horizontal
-        scrollEnabled={Platform.OS === 'web'}
+        scrollEnabled
         // gestureEnabled={false} // Add this prop
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
@@ -89,13 +91,16 @@ const Carousel: React.FC<CarouselProps> = ({
             </RStack>
           ))}
       </ScrollView>
-      <ScrollButton
-        direction="right"
-        onPress={() => {
-          scrollToIndex(currentIndex + 1);
-        }}
-        disabled={currentIndex === children?.length - 1}
-      />
+
+      {Platform.OS === 'web' && (
+        <ScrollButton
+          direction="right"
+          onPress={() => {
+            scrollToIndex(currentIndex + 1);
+          }}
+          disabled={currentIndex === children?.length - 1}
+        />
+      )}
     </RStack>
   );
 };

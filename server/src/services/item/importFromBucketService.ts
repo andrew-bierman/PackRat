@@ -166,11 +166,15 @@ export async function parseCSVData(fileData: string, ownerId: string) {
               continue;
             }
 
+            if (isNaN(Number(item.weight)) || Number(item.weight) <= 0) {
+              continue;
+            }
+
             itemsToInsert.push({
               name: item.name,
-              weight: item.claimed_weight || 0,
+              weight: item.weight || 0,
               quantity: item.quantity || 1,
-              unit: item.claimed_weight_unit || 'g',
+              unit: item.weight_unit || 'g',
               type: 'Essentials',
               ownerId,
             });
