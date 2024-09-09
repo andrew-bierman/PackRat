@@ -84,7 +84,7 @@ const loadStyles = (currentTheme, xs, sm, md) => StyleSheet.create({
     alignItems: 'center',
   },
   faqBox: {
-    width: xs || sm  ? '100%' : '24vw',
+    width: xs || sm || md  ? '100%' : '24vw',
   },
   faqMainTitle: {
     fontSize: xs || sm || md ?  20 : 26,

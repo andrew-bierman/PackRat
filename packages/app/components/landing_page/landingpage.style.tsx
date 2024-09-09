@@ -198,12 +198,13 @@ const loadStyles = (theme) => {
       width: '100%',
     },
     cardContent: {
-      fontSize: xs || sm || md ? 20 : 35,
+      fontSize: xs || sm || md ? 20 : 25,
       color: currentTheme.colors.textPrimary,
-      width: xs || sm ? '100vw' : '30vw',
-      textAlign: 'center',
+      width: xs || sm ? '100%' : '30vw',
+      textAlign: xs || sm || md ? 'center' : 'left',
       marginLeft: xs || sm || md ? 10 : 0,
       marginRight: xs || sm || md ? 10 : 0,
+      fontWeight: 'normal',
       // border: '1px solid black'
     },
     secondaryContainerIntroDiv: {

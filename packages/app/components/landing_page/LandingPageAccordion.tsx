@@ -51,7 +51,7 @@ export const LandingPageAccordion = () => {
             />
           </RButton>
         </View>
-        <View style={{flexDirection: xs || sm || md ? 'column' : 'row', alignItems: 'center', justifyContent: 'center', gap: 50,}}>
+        <View style={{flexDirection: xs || sm || md ? 'column' : 'row', alignItems: 'center', justifyContent: 'center', gap: 10,}}>
           <RText style={styles.cardContent}>{data.content}</RText>
           <RImage
             src={data.frameLink}

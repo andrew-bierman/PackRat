@@ -151,8 +151,9 @@ const loadStyles = (currentTheme, xs, sm, md) => {
         paddingVertical: 18,
       },
       logo: {
-        backgroundColor: 'blue',
-        borderRadius: 8,
+        backgroundColor: currentTheme.colors.tertiaryBlue,
+        borderRadius: 10,
+        cursor: 'pointer',
       },
       navLinks: {
         flexDirection: 'row',
