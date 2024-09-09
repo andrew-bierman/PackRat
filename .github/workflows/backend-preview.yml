@@ -33,14 +33,18 @@ jobs:
       - name: Generate wrangler.toml
         uses: ./.github/actions/setup-wrangler-toml
         with:
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          PREVIEW_DB_ID: ${{ secrets.PREVIEW_DB_ID }}
-          PRODUCTION_DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
-          PREVIEW_GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
-          PREVIEW_STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-          PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
+          environment: preview
+          AWS_SIGN_ALGORITHM: ${{ secrets.PREVIEW_AWS_SIGN_ALGORITHM }}
+          BUCKET_ENDPOINT: ${{ secrets.PREVIEW_BUCKET_ENDPOINT }}
+          BUCKET_NAME: ${{ secrets.PREVIEW_BUCKET_NAME }}
+          BUCKET_REGION: ${{ secrets.PREVIEW_BUCKET_REGION }}
+          BUCKET_SERVICE: ${{ secrets.PREVIEW_BUCKET_SERVICE }}
+          BUCKET_SESSION_TOKEN: ${{ secrets.PREVIEW_BUCKET_SESSION_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
+          DB_ID: ${{ secrets.PREVIEW_DB_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
+          STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
+          VECTOR_INDEX: ${{ secrets.PREVIEW_VECTOR_INDEX }}
 
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2
@@ -54,7 +58,9 @@ jobs:
             rm /home/runner/.config/.wrangler/logs/* || true
           command: d1 migrations apply preview --remote --env preview
           postCommands: |
-            echo '---Print wrangler logs---'
+            echo '\
+              ---Print wrangler logs---\
+              '
             cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
           packageManager: yarn
         env:
@@ -69,6 +75,7 @@ jobs:
           cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
 
       - name: Deploy
+        if: always()
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
@@ -80,7 +87,7 @@ jobs:
             rm /home/runner/.config/.wrangler/logs/* || true
             echo '---Generate and upload secrets---'
             echo '>> Generate secrets file'
-            echo '{}' | jq '.GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"' > secrets.json
+            echo '{}' | jq '.WORKERS_AI_API_KEY="${{ secrets.PREVIEW_WORKERS_AI_API_KEY }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.BUCKET_ACCESS_KEY_ID="${{ secrets.PREVIEW_BUCKET_ACCESS_KEY_ID }}"|.GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"' > secrets.json
             echo '<< Secrets file generated'
             echo '>> Generated additional environment variables'
             echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.preview

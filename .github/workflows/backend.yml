@@ -33,14 +33,18 @@ jobs:
       - name: Generate wrangler.toml
         uses: ./.github/actions/setup-wrangler-toml
         with:
+          environment: production
+          AWS_SIGN_ALGORITHM: ${{ secrets.AWS_SIGN_ALGORITHM }}
+          BUCKET_ENDPOINT: ${{ secrets.BUCKET_ENDPOINT }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+          BUCKET_SERVICE: ${{ secrets.BUCKET_SERVICE }}
+          BUCKET_SESSION_TOKEN: ${{ secrets.BUCKET_SESSION_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          PREVIEW_DB_ID: ${{ secrets.PREVIEW_DB_ID }}
-          PRODUCTION_DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
-          PREVIEW_GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
-          PREVIEW_STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-          PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
+          VECTOR_INDEX: ${{ secrets.VECTOR_INDEX }}
 
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2
@@ -53,9 +57,6 @@ jobs:
             echo '---Clear previous wrangler logs---'
             rm /home/runner/.config/.wrangler/logs/* || true
           command: d1 migrations apply production --remote --env production
-          postCommands: |
-            echo '---Print wrangler logs---'
-            cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
           packageManager: yarn
         env:
           NO_D1_WARNING: true
@@ -80,10 +81,10 @@ jobs:
             rm /home/runner/.config/.wrangler/logs/* || true
             echo '---Generate and upload secrets---'
             echo '>> Generate secrets file'
-            echo '{}' | jq '.GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.JWT_SECRET }}"' > secrets.json
+            echo '{}' | jq '.WORKERS_AI_API_KEY="${{ secrets.WORKERS_AI_API_KEY }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.BUCKET_ACCESS_KEY_ID="${{ secrets.BUCKET_ACCESS_KEY_ID }}"|.GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.JWT_SECRET }}"' > secrets.json
             echo '<< Secrets file generated'
             echo '>> Generated additional environment variables'
-            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.preview
+            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.production
             echo '<< Additional environment variables generated'
             echo '>> Upload secrets'
             wrangler secret bulk --env production secrets.json
@@ -100,5 +101,4 @@ jobs:
         if: failure()
         run: | 
           cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
-
 
