@@ -34,6 +34,7 @@ jobs:
         uses: ./.github/actions/setup-wrangler-toml
         with:
           environment: preview
+          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
           AWS_SIGN_ALGORITHM: ${{ secrets.PREVIEW_AWS_SIGN_ALGORITHM }}
           BUCKET_ENDPOINT: ${{ secrets.PREVIEW_BUCKET_ENDPOINT }}
           BUCKET_NAME: ${{ secrets.PREVIEW_BUCKET_NAME }}
@@ -44,7 +45,7 @@ jobs:
           DB_ID: ${{ secrets.PREVIEW_DB_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
           STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-          VECTOR_INDEX: ${{ secrets.PREVIEW_VECTOR_INDEX }}
+          VECTOR_INDEX_NAME: ${{ secrets.PREVIEW_VECTOR_INDEX || 'vector-index-preview' }}
 
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2
@@ -53,15 +54,10 @@ jobs:
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
-          preCommands: |
+          preCommands:  |
             echo '---Clear previous wrangler logs---'
             rm /home/runner/.config/.wrangler/logs/* || true
           command: d1 migrations apply preview --remote --env preview
-          postCommands: |
-            echo '\
-              ---Print wrangler logs---\
-              '
-            cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
           packageManager: yarn
         env:
           NO_D1_WARNING: true
@@ -75,25 +71,36 @@ jobs:
           cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
 
       - name: Deploy
-        if: always()
         uses: cloudflare/wrangler-action@v3.3.2
         with:
           wranglerVersion: '3.75.0'
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
-          preCommands: | # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
-            echo '---Clear previous wrangler logs file---'
-            rm /home/runner/.config/.wrangler/logs/* || true
-            echo '---Generate and upload secrets---'
-            echo '>> Generate secrets file'
-            echo '{}' | jq '.WORKERS_AI_API_KEY="${{ secrets.PREVIEW_WORKERS_AI_API_KEY }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.BUCKET_ACCESS_KEY_ID="${{ secrets.PREVIEW_BUCKET_ACCESS_KEY_ID }}"|.GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"' > secrets.json
-            echo '<< Secrets file generated'
-            echo '>> Generated additional environment variables'
-            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.preview
-            echo '<< Additional environment variables generated'
-            echo '>> Upload secrets'
-            wrangler secret bulk --env preview secrets.json
+          # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
+          preCommands: > 
+            echo '---Clear previous wrangler logs file---' &&
+            rm /home/runner/.config/.wrangler/logs/* || true &&
+            echo '---Generate and upload secrets---' &&
+            echo '>> Generate secrets file' &&
+            echo '{}' | jq '
+            .WORKERS_AI_API_KEY="${{ secrets.PREVIEW_WORKERS_AI_API_KEY }}" |
+            .VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}" |
+            .BUCKET_ACCESS_KEY_ID="${{ secrets.PREVIEW_BUCKET_ACCESS_KEY_ID }}" |
+            .GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}" |
+            .JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}" |
+            .MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}" |
+            .OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}" |
+            .OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}" |
+            .SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}" |
+            .STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}" |
+            .VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}" |
+            .X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}" |
+            .JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"
+            ' > secrets.json &&
+            echo '<< Secrets file generated' &&
+            echo '>> Upload secrets' &&
+            yarn wrangler secret bulk --env preview secrets.json &&
             echo '<< Secrets uploaded'
           command: deploy src/index.ts --env preview
           packageManager: yarn

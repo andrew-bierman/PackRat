@@ -1,6 +1,9 @@
 name: 'Generate Wrangler TOML'
 description: 'Generates the wrangler.toml file for Cloudflare Workers'
 inputs:
+  APP_URL:
+    description: 'The Application URL'
+    required: true
   AWS_SIGN_ALGORITHM:
     description: 'The AWS sign algorithm'
     required: true
@@ -34,7 +37,7 @@ inputs:
   STMP_EMAIL:
     description: 'SMTP Email'
     required: true
-  VECTOR_INDEX:
+  VECTOR_INDEX_NAME:
     description: 'The vector index'
     required: true
 runs:
@@ -56,8 +59,9 @@ runs:
         echo 'binding = "AI"' >> ${{ github.workspace }}/server/wrangler.toml
         echo '[[env.${{ inputs.environment }}.vectorize]]' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'binding = "VECTOR_INDEX"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'index_name = "vector-index-${{ inputs.environment }}"' >> ${{ github.workspace }}/server/wrangler.toml
+        echo 'index_name = "${{ inputs.VECTOR_INDEX_NAME }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo '[env.${{ inputs.environment }}.vars]' >> ${{ github.workspace }}/server/wrangler.toml
+        echo 'APP_URL = "${{ inputs.APP_URL }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'AWS_SIGN_ALGORITHM = "${{ inputs.AWS_SIGN_ALGORITHM }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'BUCKET_ENDPOINT = "${{ inputs.BUCKET_ENDPOINT }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'BUCKET_NAME = "${{ inputs.BUCKET_NAME }}"' >> ${{ github.workspace }}/server/wrangler.toml
@@ -69,5 +73,4 @@ runs:
         echo 'NODE_ENV = "${{ inputs.environment }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'OSM_URI = "https://overpass-api.de/api/interpreter"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'STMP_EMAIL = "${{ inputs.STMP_EMAIL }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'VECTOR_INDEX = "${{ inputs.VECTOR_INDEX }}"' >> ${{ github.workspace }}/server/wrangler.toml
         echo 'WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast"' >> ${{ github.workspace }}/server/wrangler.toml

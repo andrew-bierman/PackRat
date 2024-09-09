@@ -1,4 +1,4 @@
-name: 'Backend Deployment'
+name: 'Backend Production Deployment'
 
 on:
   workflow_dispatch:
@@ -34,6 +34,7 @@ jobs:
         uses: ./.github/actions/setup-wrangler-toml
         with:
           environment: production
+          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
           AWS_SIGN_ALGORITHM: ${{ secrets.AWS_SIGN_ALGORITHM }}
           BUCKET_ENDPOINT: ${{ secrets.BUCKET_ENDPOINT }}
           BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
@@ -44,7 +45,7 @@ jobs:
           DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          VECTOR_INDEX: ${{ secrets.VECTOR_INDEX }}
+          VECTOR_INDEX_NAME: ${{ secrets.VECTOR_INDEX }}
 
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2
@@ -76,18 +77,30 @@ jobs:
           apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
-          preCommands: | # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
-            echo '---Clear previous wrangler logs file---'
-            rm /home/runner/.config/.wrangler/logs/* || true
-            echo '---Generate and upload secrets---'
-            echo '>> Generate secrets file'
-            echo '{}' | jq '.WORKERS_AI_API_KEY="${{ secrets.WORKERS_AI_API_KEY }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.BUCKET_ACCESS_KEY_ID="${{ secrets.BUCKET_ACCESS_KEY_ID }}"|.GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.JWT_SECRET }}"' > secrets.json
-            echo '<< Secrets file generated'
-            echo '>> Generated additional environment variables'
-            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.production
-            echo '<< Additional environment variables generated'
-            echo '>> Upload secrets'
-            wrangler secret bulk --env production secrets.json
+          # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
+          preCommands: > 
+            echo '---Clear previous wrangler logs file---' &&
+            rm /home/runner/.config/.wrangler/logs/* || true &&
+            echo '---Generate and upload secrets---' &&
+            echo '>> Generate secrets file' &&
+            echo '{}' | jq '
+            .WORKERS_AI_API_KEY="${{ secrets.WORKERS_AI_API_KEY }}" |
+            .VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}" |
+            .BUCKET_ACCESS_KEY_ID="${{ secrets.BUCKET_ACCESS_KEY_ID }}" |
+            .GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" |
+            .JWT_SECRET="${{ secrets.JWT_SECRET }}" |
+            .MAPBOX_ACCESS_TOKEN="${{ secrets.MAPBOX_ACCESS_TOKEN }}" |
+            .OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" |
+            .OPENWEATHER_KEY="${{ secrets.OPENWEATHER_KEY }}" |
+            .SEND_GRID_API_KEY="${{ secrets.SEND_GRID_API_KEY }}" |
+            .STMP_PASSWORD="${{ secrets.STMP_PASSWORD }}" |
+            .VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}" |
+            .X_AMZ_SECURITY_TOKEN="${{ secrets.X_AMZ_SECURITY_TOKEN }}" |
+            .JWT_VERIFICATION_KEY="${{ secrets.JWT_SECRET }}"
+            ' > secrets.json &&
+            echo '<< Secrets file generated' &&
+            echo '>> Upload secrets' &&
+            yarn wrangler secret bulk --env production secrets.json &&
             echo '<< Secrets uploaded'
           command: deploy src/index.ts --env production
           packageManager: yarn
@@ -101,4 +114,6 @@ jobs:
         if: failure()
         run: | 
           cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
+
+
 
