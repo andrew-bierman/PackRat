@@ -13641,7 +13641,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     axios: "npm:^1.4.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
-    burnt: "npm:^0.12.1"
+    burnt: "npm:^0.12.2"
     date-fns: "npm:^2.29.3"
     dotenv: "npm:^16.0.3"
     eslint: "npm:^8.56.0"
@@ -15640,7 +15640,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"burnt@npm:^0.12.1":
+"burnt@npm:^0.12.1, burnt@npm:^0.12.2":
   version: 0.12.2
   resolution: "burnt@npm:0.12.2"
   dependencies:
