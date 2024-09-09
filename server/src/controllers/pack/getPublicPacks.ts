@@ -21,10 +21,14 @@ export const getPublicPacks = async (c: Context) => {
 
 export function getPublicPacksRoute() {
   return protectedProcedure
-    .input(z.object({ queryBy: z.string() }))
+    .input(z.object({
+      queryBy: z.string(),
+      page: z.number().optional(),
+      limit: z.number().optional(),
+    }))
     .query(async (opts) => {
-      const { queryBy } = opts.input;
-      const packs = await getPublicPacksService(queryBy);
+      const { queryBy, page, limit } = opts.input;
+      const packs = await getPublicPacksService(queryBy, page, limit);
       return packs;
     });
 }

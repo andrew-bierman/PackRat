@@ -1,4 +1,5 @@
 import { queryTrpc } from 'app/trpc';
+import { useState, useEffect } from 'react';
 
 type DataType = {
   type: string;
@@ -11,66 +12,79 @@ type DataType = {
   pack_id: string | null;
   owner_id: string | null;
   is_public: boolean | null;
-  //  ... rest
 }[];
 
-type OptionalDataType = {
-  [K in keyof DataType]?: DataType[K];
-}[];
+type OptionalDataType = DataType[];
 
-export const usePublicFeed = (queryString, selectedTypes) => {
-  let data: OptionalDataType = [];
-  let isLoading = true;
-  let refetch = () => {};
-  try {
-    const queryOptions = {
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      staleTime: 1000 * 60, // 1 min
-      cacheTime: 1000 * 60 * 5, // 5 min
-    };
-    const publicPacks = queryTrpc.getPublicPacks.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        onSuccess: (data) =>
-          console.log('Successfully fetched public packs!', data),
-        onError: (error) =>
-          console.error('Error fetching public packs:', error),
-      },
-    );
+export const usePublicFeed = (
+  queryString: string,
+  selectedTypes,
+  initialPage = 1,
+  initialLimit = 4
+) => {
+  const [page, setPage] = useState(initialPage);
+  const [data, setData] = useState<OptionalDataType>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
-    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        enabled: publicPacks?.status === 'success',
-      },
-    );
+  // Fetch packs using the useQuery hook
+  const {
+    data: publicPacksData,
+    isLoading: isPacksLoading,
+    refetch: refetchPacks,
+  } = queryTrpc.getPublicPacks.useQuery(
+    { queryBy: queryString ?? 'Favorite', page, limit: initialLimit },
+    { keepPreviousData: true, enabled: selectedTypes.pack }
+  );
 
-    isLoading =
-      publicPacks?.status !== 'success' && publicTrips?.status !== 'success';
+  // Fetch trips only if the public packs have been successfully loaded
+  const {
+    data: publicTripsData,
+    isLoading: isTripsLoading,
+    refetch: refetchTrips,
+  } = queryTrpc.getPublicTripsRoute.useQuery(
+    { queryBy: queryString ?? 'Favorite' },
+    { enabled: selectedTypes.trip && publicPacksData?.length > 0 }
+  );
 
-    if (selectedTypes.pack && publicPacks?.status === 'success')
-      data = [
-        ...data,
-        ...publicPacks.data.map((item) => ({ ...item, type: 'pack' })),
-      ];
+  useEffect(() => {
+    if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) {
+      let newData: OptionalDataType = [];
 
-    if (selectedTypes.trip && publicTrips?.status === 'success')
-      data = [
-        ...data,
-        ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
-      ];
+      if (selectedTypes.pack && publicPacksData) {
+        newData = [...newData, ...publicPacksData.map((item) => ({ ...item, type: 'pack' }))];
+      }
 
-    refetch = () => {
-      publicPacks.refetch();
-      publicTrips.refetch();
-    };
-  } catch (error) {
-    console.error(error);
-    return { data: null, error, isLoading, refetch };
-  }
+      if (selectedTypes.trip && publicTripsData) {
+        newData = [...newData, ...publicTripsData.map((item) => ({ ...item, type: 'trip' }))] as any;
+      }
 
-  return { data, error: null, isLoading, refetch };
+      if (newData.length > 0) {
+        // Only update if it's the first fetch or new data is fetched
+        setData((prevData) => (isFetchingNextPage ? [...prevData, ...newData] : newData));
+
+        if (newData.length < initialLimit) {
+          setHasMore(false); // No more data to fetch
+        }
+      } else {
+        setHasMore(false); // No more data available
+      }
+
+      setIsFetchingNextPage(false);
+      setIsLoading(false);
+    }
+  }, [publicPacksData, publicTripsData, selectedTypes]);
+
+  const fetchNextPage = async () => {
+    if (hasMore && !isLoading && !isFetchingNextPage) {
+      setIsFetchingNextPage(true);
+      setIsLoading(true);
+      refetchPacks();
+      refetchTrips();
+      setPage((prevPage) => prevPage + 1); // Increment page here
+    }
+  };
+
+  return { data, isLoading, hasMore, fetchNextPage };
 };
