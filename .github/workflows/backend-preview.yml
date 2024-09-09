@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - andrew_testing
+      - development
     paths:
       - '.github/workflows/backend-preview.yml'
       - 'packages/validations/**'
