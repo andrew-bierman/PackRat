@@ -42,6 +42,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   const ownerId = user?.id;
   const styles = useCustomStyles(loadStyles);
 
+  // Fetch feed data using the useFeed hook
   const { data, isLoading, hasMore, fetchNextPage } = useFeed({
     queryString,
     ownerId,
@@ -49,20 +50,23 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     selectedTypes,
   });
 
+  // Refresh data
   const onRefresh = () => {
     setRefreshing(true);
+    // Optional: Add a manual refetch to reload data
     setRefreshing(false);
   };
 
+  // Fetch more data when reaching the end
   const fetchMoreData = async () => {
-    if (!isFetchingNextPage && hasMore) {
+    if (!isFetchingNextPage && hasMore && !isLoading) {
       setIsFetchingNextPage(true);
       await fetchNextPage(); // Call to fetch the next page
       setIsFetchingNextPage(false);
     }
   };
 
-  // Web-specific scroll detection (similar to the jQuery approach)
+  // Web-specific scroll detection
   useEffect(() => {
     if (Platform.OS === 'web') {
       const handleScroll = () => {
@@ -80,6 +84,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     }
   }, [isFetchingNextPage, hasMore, isLoading]);
 
+  // Filter data based on search query
   const filteredData = useMemo(() => {
     if (!data) return [];
     const keys = ['name', 'items.name', 'items.category'];
@@ -107,43 +112,35 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             queryString={queryString}
             setSearchQuery={setSearchQuery}
           />
-
-          {/* Show initial loading indicator */}
-          {isLoading && data?.length === 0 ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
-            <FlatList
-              data={filteredData}
-              keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
-              renderItem={({ item }) => (
-                <FeedCard
-                  key={`${item?.id}_${item?.type}`}
-                  type={item?.type}
-                  favorited_by={item?.userFavoritePacks}
-                  {...item}
-                />
-              )}
-              ListFooterComponent={() =>
-                isFetchingNextPage ? (
-                  <ActivityIndicator size="small" color="#0000ff" />
-                ) : (
-                  <View style={{ height: 50 }} />
-                )
-              }
-              ListEmptyComponent={() => (
-                <RText style={{ textAlign: 'center', marginTop: 20 }}>
-                  No data available
-                </RText>
-              )}
-              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-              onEndReached={fetchMoreData} // Trigger next page fetch
-              onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
-            />
-          )}
+          <FlatList
+            data={filteredData}
+            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
+            renderItem={({ item }) => (
+              <FeedCard
+                key={`${item?.id}_${item?.type}`}
+                type={item?.type}
+                favorited_by={item?.userFavoritePacks}
+                {...item}
+              />
+            )}
+            ListFooterComponent={() =>
+              isFetchingNextPage || isLoading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <View style={{ height: 50 }} />
+              )
+            }
+            ListEmptyComponent={() => (
+              <RText style={{ textAlign: 'center', marginTop: 20 }}>
+                No data available
+              </RText>
+            )}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            onEndReached={fetchMoreData} // Trigger next page fetch
+            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+            showsVerticalScrollIndicator={false}
+            maxToRenderPerBatch={2}
+          />
         </View>
       </SearchProvider>
     </View>
