@@ -2,13 +2,10 @@ name: 'Backend Preview Deployment'
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - feat/preview-version-of-api
-    types: [closed]
   push:
     branches:
       - feat/preview-version-of-api
+      - andrew_testing
     paths:
       - '.github/workflows/backend-preview.yml'
       - 'packages/validations/**'
@@ -37,29 +34,13 @@ jobs:
         uses: ./.github/actions/setup-wrangler-toml
         with:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-          OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
-          VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PREVIEW_DB_ID: ${{ secrets.PREVIEW_DB_ID }}
           PRODUCTION_DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
           PREVIEW_GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
-          PREVIEW_GOOGLE_CLIENT_SECRET: ${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}
           PREVIEW_STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-          PREVIEW_STMP_PASSWORD: ${{ secrets.PREVIEW_STMP_PASSWORD }}
-          PREVIEW_JWT_SECRET: ${{ secrets.PREVIEW_JWT_SECRET }}
-          PREVIEW_SEND_GRID_API_KEY: ${{ secrets.PREVIEW_SEND_GRID_API_KEY }}
-          PREVIEW_MAPBOX_ACCESS_TOKEN: ${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}
-          PREVIEW_OPENWEATHER_KEY: ${{ secrets.PREVIEW_OPENWEATHER_KEY }}
-          PREVIEW_VECTORIZE_API_KEY: ${{ secrets.PREVIEW_VECTORIZE_API_KEY }}
           PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
-          PREVIEW_OPENAI_API_KEY: ${{ secrets.PREVIEW_OPENAI_API_KEY }}
 
       - name: Migrate database
         uses: cloudflare/wrangler-action@v3.3.2

@@ -2,16 +2,11 @@ name: 'Backend Deployment'
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
-    types: [closed]
   push:
     branches:
-      - feat/preview-version-of-api
-      - master
-      - andrew_testing
+      - main
     paths:
+      - '.github/workflows/backend.yml'
       - 'packages/validations/**'
       - 'packages/shared-types/**'
       - 'server/**'
@@ -35,84 +30,75 @@ jobs:
       - name: Setup JS Runtime environment
         uses: ./.github/actions/setup-js-runtime
 
-      - name: Install dependencies
-        uses: ./.github/actions/install-deps
-
       - name: Generate wrangler.toml
         uses: ./.github/actions/setup-wrangler-toml
         with:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-          OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
-          VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PREVIEW_DB_ID: ${{ secrets.PREVIEW_DB_ID }}
           PRODUCTION_DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
           PREVIEW_GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
-          PREVIEW_GOOGLE_CLIENT_SECRET: ${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}
           PREVIEW_STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-          PREVIEW_STMP_PASSWORD: ${{ secrets.PREVIEW_STMP_PASSWORD }}
-          PREVIEW_JWT_SECRET: ${{ secrets.PREVIEW_JWT_SECRET }}
-          PREVIEW_SEND_GRID_API_KEY: ${{ secrets.PREVIEW_SEND_GRID_API_KEY }}
-          PREVIEW_MAPBOX_ACCESS_TOKEN: ${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}
-          PREVIEW_OPENWEATHER_KEY: ${{ secrets.PREVIEW_OPENWEATHER_KEY }}
-          PREVIEW_VECTORIZE_API_KEY: ${{ secrets.PREVIEW_VECTORIZE_API_KEY }}
           PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
-          PREVIEW_OPENAI_API_KEY: ${{ secrets.PREVIEW_OPENAI_API_KEY }}
 
       - name: Migrate database
-        # run: cd packages/api && bun run migrate
-        run: cd server && yarn run migrate:prod
+        uses: cloudflare/wrangler-action@v3.3.2
+        with:
+          wranglerVersion: '3.75.0'
+          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
+          workingDirectory: server
+          preCommands: |
+            echo '---Clear previous wrangler logs---'
+            rm /home/runner/.config/.wrangler/logs/* || true
+          command: d1 migrations apply production --remote --env production
+          postCommands: |
+            echo '---Print wrangler logs---'
+            cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
+          packageManager: yarn
         env:
           NO_D1_WARNING: true
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CI: true
+          WRANGLER_LOG: debug
+          WRANGLER_LOG_SANITIZE: false
+
+      - name: Print wrangler extra logs on failure 
+        if: failure()
+        run: | 
+          cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
 
       - name: Deploy
         uses: cloudflare/wrangler-action@v3.3.2
         with:
-          wranglerVersion: '3.15.0'
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: '3.75.0'
+          apiToken: skMQc0GKuojvn5rnaaAcabffiGTaypSKLnm-qVEs
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID}}
           workingDirectory: server
-          command: yarn run deploy:prod
-          # packageManager: bun
+          preCommands: | # INFO: We need to upload secret manually because the default secrets input of this action `cloudflare/wrangler-action@v3.3.2` use the `wrangler secret put` command to upload secrets but this command will do not work non-interactive context.
+            echo '---Clear previous wrangler logs file---'
+            rm /home/runner/.config/.wrangler/logs/* || true
+            echo '---Generate and upload secrets---'
+            echo '>> Generate secrets file'
+            echo '{}' | jq '.GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"|.JWT_SECRET="${{ secrets.JWT_SECRET }}"|.MAPBOX_ACCESS_TOKEN="${{ secrets.MAPBOX_ACCESS_TOKEN }}"|.OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"|.OPENWEATHER_KEY="${{ secrets.OPENWEATHER_KEY }}"|.SEND_GRID_API_KEY="${{ secrets.SEND_GRID_API_KEY }}"|.STMP_PASSWORD="${{ secrets.STMP_PASSWORD }}"|.VECTORIZE_API_KEY="${{ secrets.VECTORIZE_API_KEY }}"|.X_AMZ_SECURITY_TOKEN="${{ secrets.X_AMZ_SECURITY_TOKEN }}"|.JWT_VERIFICATION_KEY="${{ secrets.JWT_SECRET }}"' > secrets.json
+            echo '<< Secrets file generated'
+            echo '>> Generated additional environment variables'
+            echo 'APP_URL=${{ secrets.VITE_PUBLIC_APP_URL }}' > .env.preview
+            echo '<< Additional environment variables generated'
+            echo '>> Upload secrets'
+            wrangler secret bulk --env production secrets.json
+            echo '<< Secrets uploaded'
+          command: deploy src/index.ts --env production
           packageManager: yarn
-          secrets: |
-            CI
-            GOOGLE_CLIENT_ID
-            GOOGLE_CLIENT_SECRET
-            STMP_EMAIL
-            STMP_PASSWORD
-            JWT_SECRET
-            SEND_GRID_API_KEY
-            MAPBOX_ACCESS_TOKEN
-            OSM_URI
-            WEATHER_URL
-            WEATHER_WEEK_URL
-            OPENWEATHER_KEY
-            VECTORIZE_API_KEY
-            CLOUDFLARE_ACCOUNT_ID
-            VITE_PUBLIC_APP_URL
         env:
-          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
-          JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-          STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-          OSM_URI: ${{ secrets.OSM_URI }}
-          WEATHER_URL: ${{ secrets.WEATHER_URL }}
-          WEATHER_WEEK_URL: ${{ secrets.WEATHER_WEEK_URL }}
-          OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
-          VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CI: true
           NO_D1_WARNING: true
+          WRANGLER_LOG: debug
+          WRANGLER_LOG_SANITIZE: false
+
+      - name: Print wrangler extra logs on failure 
+        if: failure()
+        run: | 
+          cat "$(ls -t /home/runner/.config/.wrangler/logs/* | head -n 1)" || true;
+
+
