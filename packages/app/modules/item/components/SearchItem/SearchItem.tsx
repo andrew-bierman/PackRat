@@ -13,7 +13,7 @@ export const SearchItem = () => {
       searchString={searchString}
       onChange={setSearchString}
       resultItemComponent={<ResultItem />}
-      placeholder="Search Item"
+      placeholder="Search Global Item"
       results={results}
       onSelect={handleSearchResultClick}
     />
