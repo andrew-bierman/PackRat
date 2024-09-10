@@ -7,14 +7,12 @@ export const useSessionSignIn = () => {
   const setUser = useUserSetter();
   const router = useRouter();
 
-  const sessionSignIn = useCallback((user) => {
-    if (user?.token) {
-      (async () => {
-        setUser(user);
-        await Storage.setItem('token', user.token);
-        router.push('/');
-      })();
-    }
+  const sessionSignIn = useCallback((tokens) => {
+    (async () => {
+      await Storage.setItem('token', tokens.accessToken);
+      await Storage.setItem('refreshToken', tokens.refreshToken);
+      router.push('/');
+    })();
   }, []);
 
   return sessionSignIn;
