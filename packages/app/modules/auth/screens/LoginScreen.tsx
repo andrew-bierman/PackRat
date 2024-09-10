@@ -3,6 +3,7 @@ import useTheme from '../../../hooks/useTheme';
 import { useGoogleAuth, useLogin } from 'app/modules/auth';
 import { SignInScreen } from '@packrat/ui/src/Bento/forms/layouts';
 import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 
 const demoUser = {
   email: 'zoot3@email.com',
@@ -35,25 +36,30 @@ export function LoginScreen() {
     <View
       style={{
         width: '100%',
-        alignItems: 'center',
+        height: '100%',
         backgroundColor: currentTheme.colors.background,
       }}
     >
-      <View
-        style={{
-          paddingTop: 32,
-          paddingBottom: 32,
-          width: '90%',
-          maxWidth: 400,
-        }}
-      >
-        <SignInScreen
-          promptAsync={promptAsync}
-          signIn={signIn}
-          signInStatus={signInStatus}
-          isGoogleSignInReady={isGoogleSignInReady}
-        />
-      </View>
+      <ScrollView>
+        <View
+          style={{
+            paddingTop: 32,
+            paddingBottom: 32,
+            justifyContent: 'center',
+            alignSelf: 'center',
+            alignItems: 'center',
+            width: '90%',
+            maxWidth: 400,
+          }}
+        >
+          <SignInScreen
+            promptAsync={promptAsync}
+            signIn={signIn}
+            signInStatus={signInStatus}
+            isGoogleSignInReady={isGoogleSignInReady}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }

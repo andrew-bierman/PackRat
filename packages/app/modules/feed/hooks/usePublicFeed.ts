@@ -1,4 +1,5 @@
 import { queryTrpc } from 'app/trpc';
+import { useState, useEffect } from 'react';
 
 type DataType = {
   type: string;
@@ -11,66 +12,90 @@ type DataType = {
   pack_id: string | null;
   owner_id: string | null;
   is_public: boolean | null;
-  //  ... rest
 }[];
 
-type OptionalDataType = {
-  [K in keyof DataType]?: DataType[K];
-}[];
+type OptionalDataType = DataType[];
 
-export const usePublicFeed = (queryString, selectedTypes) => {
-  let data: OptionalDataType = [];
-  let isLoading = true;
-  let refetch = () => {};
-  try {
-    const queryOptions = {
-      refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      staleTime: 1000 * 60, // 1 min
-      cacheTime: 1000 * 60 * 5, // 5 min
+export const usePublicFeed = (
+  queryString: string,
+  selectedTypes,
+  initialPage = 1,
+  initialLimit = 4
+) => {
+  const [page, setPage] = useState(initialPage);
+  const [data, setData] = useState<OptionalDataType>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+
+  // Fetch public packs using the useQuery hook
+  const {
+    data: publicPacksData,
+    isLoading: isPacksLoading,
+    refetch: refetchPacks,
+  } = queryTrpc.getPublicPacks.useQuery(
+    { queryBy: queryString ?? 'Favorite', page, limit: initialLimit },
+    { keepPreviousData: true, enabled: selectedTypes.pack }
+  );
+
+  // Fetch public trips using the useQuery hook
+  const {
+    data: publicTripsData,
+    isLoading: isTripsLoading,
+    refetch: refetchTrips,
+  } = queryTrpc.getPublicTripsRoute.useQuery(
+    { queryBy: queryString ?? 'Favorite' },
+    { enabled: selectedTypes.trip && publicPacksData?.length > 0 }
+  );
+
+  // Ensure that fetching logic behaves consistently
+  useEffect(() => {
+    const processFetchedData = () => {
+      if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) {
+        let newData: OptionalDataType = [];
+
+        // Fetch and append packs
+        if (selectedTypes.pack && publicPacksData) {
+          newData = [...newData, ...publicPacksData.map((item) => ({ ...item, type: 'pack' }))];
+        }
+
+        // Fetch and append trips
+        if (selectedTypes.trip && publicTripsData) {
+          newData = [...newData, ...publicTripsData.map((item) => ({ ...item, type: 'trip' }))];
+        }
+
+        // Update data in state
+        setData((prevData) => {
+          return page === initialPage ? newData : [...prevData, ...newData];  // Append for subsequent pages
+        });
+
+        // Set `hasMore` based on the data fetched
+        setHasMore(newData.length === initialLimit);
+
+        // Reset loading states
+        setIsLoading(false);
+        setIsFetchingNextPage(false);
+      }
     };
-    const publicPacks = queryTrpc.getPublicPacks.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        onSuccess: (data) =>
-          console.log('Successfully fetched public packs!', data),
-        onError: (error) =>
-          console.error('Error fetching public packs:', error),
-      },
-    );
 
-    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        enabled: publicPacks?.status === 'success',
-      },
-    );
+    processFetchedData();
+  }, [publicPacksData, publicTripsData, page, selectedTypes]);
 
-    isLoading =
-      publicPacks?.status !== 'success' && publicTrips?.status !== 'success';
+  // Fetch the next page of data
+  const fetchNextPage = async () => {
+    if (hasMore && !isLoading && !isFetchingNextPage) {
+      setIsFetchingNextPage(true);
+      setPage((prevPage) => prevPage + 1);  // Increment the page before fetching new data
 
-    if (selectedTypes.pack && publicPacks?.status === 'success')
-      data = [
-        ...data,
-        ...publicPacks.data.map((item) => ({ ...item, type: 'pack' })),
-      ];
+      // Fetch packs and trips for the next page
+      await refetchPacks();
+      if (selectedTypes.trip) {
+        await refetchTrips();
+      }
 
-    if (selectedTypes.trip && publicTrips?.status === 'success')
-      data = [
-        ...data,
-        ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
-      ];
+      setIsFetchingNextPage(false);  // Reset fetching state after data fetch
+    }
+  };
 
-    refetch = () => {
-      publicPacks.refetch();
-      publicTrips.refetch();
-    };
-  } catch (error) {
-    console.error(error);
-    return { data: null, error, isLoading, refetch };
-  }
-
-  return { data, error: null, isLoading, refetch };
+  return { data, isLoading, hasMore, fetchNextPage, refetch: refetchPacks };
 };
