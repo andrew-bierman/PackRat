@@ -229,6 +229,7 @@ const loadStyles = (theme: any) => {
       width: '100%',
       borderRadius: 10,
       marginTop: 20,
+      marginBottom: 8,
     },
     searchContainer: {
       flexDirection: 'row',
