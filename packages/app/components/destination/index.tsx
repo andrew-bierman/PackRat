@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { RButton, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import { Map } from '@packrat/map';
 import LargeCard from '../card/LargeCard';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
@@ -14,6 +13,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
 import { WeatherData } from 'app/components/weather/WeatherData';
+import { Map } from 'app/modules/map';
 
 const RText: any = OriginalRText;
 

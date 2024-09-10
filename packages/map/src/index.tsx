@@ -3,9 +3,9 @@ import { View } from 'react-native';
 import { isObjectEmpty } from './utils/isObjectEmpty';
 import { defaultShape } from './utils/mapFunctions';
 import PlatformMap from './Map';
-import type { MapProps } from './models';
+import type { MapPropsLegacy } from './models';
 
-export const Map: React.FC<MapProps> = ({
+export const Map: React.FC<MapPropsLegacy> = ({
   shape, // : shapeProp,
   onExitFullScreen,
   mapName: predefinedMapName,
@@ -17,24 +17,15 @@ export const Map: React.FC<MapProps> = ({
   }
 
   return (
-    <View
-      style={{
-        width: '100%',
-        flex: 1,
-        paddingHorizontal: 5,
-        marginBottom: 20,
+    <PlatformMap
+      {...{
+        shape,
+        onExitFullScreen,
+        predefinedMapName,
+        forceFullScreen,
+        shouldEnableDownload,
       }}
-    >
-      <PlatformMap
-        {...{
-          shape,
-          onExitFullScreen,
-          predefinedMapName,
-          forceFullScreen,
-          shouldEnableDownload,
-        }}
-      />
-    </View>
+    />
   );
 };
 

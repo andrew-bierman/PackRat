@@ -36,7 +36,7 @@ import { useNativeMap } from './hooks/useNativeMap';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
-import { type MapProps } from './models';
+import { type MapPropsLegacy } from './models';
 import { useUserQuery } from 'app/modules/auth';
 import { useUpdateUser } from 'app/modules/user';
 
@@ -65,7 +65,7 @@ const RInput: any = OriginalRInput;
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-const NativeMap: React.FC<MapProps> = ({
+const NativeMap: React.FC<MapPropsLegacy> = ({
   shape: shapeProp,
   onExitFullScreen,
   mapName: predefinedMapName,
