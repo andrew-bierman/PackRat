@@ -3,6 +3,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { type PackDetails } from 'app/modules/pack';
 import { truncateString } from 'app/utils/truncateString';
 import { roundNumber } from 'app/utils';
+import { RouterOutput } from 'app/trpc';
 
 type Converter<Input, Result> = (
   input: Input,
@@ -40,5 +41,13 @@ export const feedItemPackCardConverter: Converter<
       (obj) => obj?.userId === currentUserId,
     ),
     favoriteCount: input.favorites_count,
+    isTemplate: input.is_template ?? false, // TODO migration
   };
+};
+
+export const feedItemPackTemplateCardConverter: Converter<
+  FeedItem,
+  RouterOutput['getPackTemplates'][0]
+> = (input, currentUserId) => {
+  return input;
 };

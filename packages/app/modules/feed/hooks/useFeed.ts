@@ -2,6 +2,7 @@ import { usePublicFeed } from './usePublicFeed';
 import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
+import { usePackTemplates } from 'app/modules/pack-templates';
 
 interface UseFeedResult {
   data: any[] | null;
@@ -36,6 +37,8 @@ export const useFeed = ({
       return useSimilarPacks(id);
     case 'similarItems':
       return useSimilarItems(id);
+    case 'packTemplates':
+      return usePackTemplates();
     default:
       return { data: null, isLoading: true };
   }

@@ -38,15 +38,14 @@ const loadStyles = (theme) => {
       borderRadius: 5,
     },
     fab: {
-      position: 'absolute',
       flexDirection: 'row',
       width: 100,
-      height: 50,
+      // height: 50,
       backgroundColor: currentTheme.colors.card,
-      borderRadius: 28,
+      borderRadius: 9,
       justifyContent: 'center',
       alignItems: 'center',
-      alignSelf: 'flex-end',
+      alignSelf: 'stretch',
       zIndex: 2,
     },
     fabIcon: {

@@ -164,6 +164,19 @@ export const FeedSearchFilter = ({
                 </RSwitch>*/}
             </RStack>
           )}
+          {feedType === 'packTemplatess' && (
+            <RStack
+              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+            >
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.text}
+              >
+                Discover pack templates to help you get started.
+              </RText>
+            </RStack>
+          )}
           <RStack
             style={{
               flexDirection: 'row',

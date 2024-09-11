@@ -1,4 +1,5 @@
 export * from './addPack';
+export * from './createPackFromTemplate';
 export * from './deletePack';
 export * from './getPacks';
 export * from './editPack';

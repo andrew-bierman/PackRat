@@ -8,6 +8,7 @@ import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 import { useScreenWidth } from 'app/hooks/common';
 import FAB from 'app/components/Fab/Fab';
 import { FeedPreview } from 'app/modules/feed';
+import { Button, Stack } from 'tamagui';
 
 export const DashboardScreen = () => {
   const styles = useCustomStyles(loadStyles);
@@ -22,7 +23,19 @@ export const DashboardScreen = () => {
           ]}
         >
           <HeroSection style={styles.heroBanner} />
-          {Platform.OS === 'web' ? <FAB /> : null}
+          {Platform.OS === 'web' ? (
+            <Stack
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                alignSelf: 'end',
+                gap: 8,
+              }}
+            >
+              <FAB />
+              <Button style={{ alignSelf: 'end' }}>Templates</Button>
+            </Stack>
+          ) : null}
 
           <View style={styles.gridContainer}>
             <View style={styles.gridItem}>

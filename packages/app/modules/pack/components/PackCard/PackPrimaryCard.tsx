@@ -15,6 +15,7 @@ interface PackCardProps extends FeedCardProps<PackDetails> {}
 
 export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   const [weightUnit] = useItemWeightUnit();
+  delete props.details.similarityScore;
   const packDetails = Object.entries(props.details).map(([key, value]) => ({
     key,
     label: key,
@@ -24,10 +25,13 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
         : value,
   }));
 
+  console.log('props.isTemplate', props.isTemplate);
+  console.log('props.cardType', props.cardType);
+
   return (
     <Card
       title={props.title}
-      link={`/pack/${props.id}`}
+      link={`/${props.isTemplate ? 'pack-templates' : 'pack'}/${props.id}`}
       image={<PackImage />}
       subtitle={<CreatedAtLabel date={props.createdAt} />}
       actions={
@@ -41,15 +45,22 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
               props.toggleFavorite();
             }}
           />
-          <RStack alignItems="center" style={{ flexDirection: 'row', gap: 8 }}>
-            <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
-          </RStack>
-          <RLink
-            href={`/profile/${props.ownerId}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <RText style={{ marginLeft: 'auto' }}>View owner</RText>
-          </RLink>
+          {!props.isTemplate && (
+            <>
+              <RStack
+                alignItems="center"
+                style={{ flexDirection: 'row', gap: 8 }}
+              >
+                <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
+              </RStack>
+              <RLink
+                href={`/profile/${props.ownerId}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <RText style={{ marginLeft: 'auto' }}>View owner</RText>
+              </RLink>
+            </>
+          )}
         </RStack>
       }
       content={<Details items={packDetails} />}

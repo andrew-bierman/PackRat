@@ -1,6 +1,6 @@
 import { type CardType } from '@packrat/ui';
 
-export type FeedType = 'pack';
+export type FeedType = 'pack' | 'packTemplate';
 
 export interface FeedItem {
   id: string;
@@ -32,6 +32,7 @@ export interface FeedCardProps<Details> {
   title: string;
   cardType: CardType;
   createdAt: string;
+  isTemplate: boolean;
   details: Details;
   ownerId: string;
   favoriteCount: number;

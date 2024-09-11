@@ -24,6 +24,7 @@ const ProfileIndexLazyImport = createFileRoute('/profile/')()
 const PrivacyIndexLazyImport = createFileRoute('/privacy/')()
 const PasswordResetIndexLazyImport = createFileRoute('/password-reset/')()
 const PacksIndexLazyImport = createFileRoute('/packs/')()
+const PackTemplatesIndexLazyImport = createFileRoute('/pack-templates/')()
 const MapsIndexLazyImport = createFileRoute('/maps/')()
 const MapIndexLazyImport = createFileRoute('/map/')()
 const ItemsIndexLazyImport = createFileRoute('/items/')()
@@ -36,6 +37,7 @@ const TripTripIdLazyImport = createFileRoute('/trip/$tripId')()
 const ProfileIdLazyImport = createFileRoute('/profile/$id')()
 const PackCreateLazyImport = createFileRoute('/pack/create')()
 const PackIdLazyImport = createFileRoute('/pack/$id')()
+const PackTemplatesIdLazyImport = createFileRoute('/pack-templates/$id')()
 const ItemItemIdLazyImport = createFileRoute('/item/$itemId')()
 const DestinationQueryLazyImport = createFileRoute('/destination/query')()
 const ProfileSettingsIndexLazyImport = createFileRoute('/profile/settings/')()
@@ -85,6 +87,13 @@ const PacksIndexLazyRoute = PacksIndexLazyImport.update({
   path: '/packs/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/packs/index.lazy').then((d) => d.Route))
+
+const PackTemplatesIndexLazyRoute = PackTemplatesIndexLazyImport.update({
+  path: '/pack-templates/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/pack-templates/index.lazy').then((d) => d.Route),
+)
 
 const MapsIndexLazyRoute = MapsIndexLazyImport.update({
   path: '/maps/',
@@ -150,6 +159,13 @@ const PackIdLazyRoute = PackIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pack/$id.lazy').then((d) => d.Route))
 
+const PackTemplatesIdLazyRoute = PackTemplatesIdLazyImport.update({
+  path: '/pack-templates/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/pack-templates/$id.lazy').then((d) => d.Route),
+)
+
 const ItemItemIdLazyRoute = ItemItemIdLazyImport.update({
   path: '/item/$itemId',
   getParentRoute: () => rootRoute,
@@ -192,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/item/$itemId'
       fullPath: '/item/$itemId'
       preLoaderRoute: typeof ItemItemIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/pack-templates/$id': {
+      id: '/pack-templates/$id'
+      path: '/pack-templates/$id'
+      fullPath: '/pack-templates/$id'
+      preLoaderRoute: typeof PackTemplatesIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/$id': {
@@ -278,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapsIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/pack-templates/': {
+      id: '/pack-templates/'
+      path: '/pack-templates'
+      fullPath: '/pack-templates'
+      preLoaderRoute: typeof PackTemplatesIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/packs/': {
       id: '/packs/'
       path: '/packs'
@@ -343,6 +373,7 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   DestinationQueryLazyRoute,
   ItemItemIdLazyRoute,
+  PackTemplatesIdLazyRoute,
   PackIdLazyRoute,
   PackCreateLazyRoute,
   ProfileIdLazyRoute,
@@ -355,6 +386,7 @@ export const routeTree = rootRoute.addChildren({
   ItemsIndexLazyRoute,
   MapIndexLazyRoute,
   MapsIndexLazyRoute,
+  PackTemplatesIndexLazyRoute,
   PacksIndexLazyRoute,
   PasswordResetIndexLazyRoute,
   PrivacyIndexLazyRoute,
@@ -376,6 +408,7 @@ export const routeTree = rootRoute.addChildren({
         "/",
         "/destination/query",
         "/item/$itemId",
+        "/pack-templates/$id",
         "/pack/$id",
         "/pack/create",
         "/profile/$id",
@@ -388,6 +421,7 @@ export const routeTree = rootRoute.addChildren({
         "/items/",
         "/map/",
         "/maps/",
+        "/pack-templates/",
         "/packs/",
         "/password-reset/",
         "/privacy/",
@@ -406,6 +440,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/item/$itemId": {
       "filePath": "item/$itemId.lazy.tsx"
+    },
+    "/pack-templates/$id": {
+      "filePath": "pack-templates/$id.lazy.tsx"
     },
     "/pack/$id": {
       "filePath": "pack/$id.lazy.tsx"
@@ -442,6 +479,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/maps/": {
       "filePath": "maps/index.lazy.tsx"
+    },
+    "/pack-templates/": {
+      "filePath": "pack-templates/index.lazy.tsx"
     },
     "/packs/": {
       "filePath": "packs/index.lazy.tsx"

@@ -43,6 +43,7 @@ import {
 } from '../controllers/passwordReset';
 import {
   addPackRoute,
+  createPackFromTemplateRoute,
   deletePackRoute,
   duplicatePublicPackRoute,
   editPackRoute,
@@ -93,6 +94,7 @@ import {
 } from '../controllers/getOsm';
 
 import { router as trpcRouter } from '../trpc';
+import getPackTemplatesRoute from 'src/controllers/packTemplates/getPackTemplates';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -121,6 +123,7 @@ export const appRouter = trpcRouter({
   editTrip: editTripRoute(),
   deleteTrip: deleteTripRoute(),
   // templates routes
+  getPackTemplates: getPackTemplatesRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),
@@ -134,6 +137,7 @@ export const appRouter = trpcRouter({
   getPacks: getPacksRoute(), // Done (Sorting by Items is left)
   getPackById: getPackByIdRoute(), // Done
   addPack: addPackRoute(), // Done
+  createPackFromTemplate: createPackFromTemplateRoute(),
   editPack: editPackRoute(), // Done
   deletePack: deletePackRoute(), // Done
   scorePack: scorePackRoute(), // Done
