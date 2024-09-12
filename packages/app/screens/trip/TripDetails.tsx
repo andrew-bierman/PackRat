@@ -76,12 +76,10 @@ export function TripDetails() {
   return (
     <Layout>
       <View
-        style={[
-          styles.mainContainer,
-          Platform.OS == 'web'
-            ? { minHeight: '100vh' }
-            : { minHeight: Dimensions.get('screen').height },
-        ]}
+        style={{
+          minHeight:
+            Platform.OS == 'web' ? '100vh' : Dimensions.get('screen').height,
+        }}
       >
         <DetailsComponent
           type="trip"

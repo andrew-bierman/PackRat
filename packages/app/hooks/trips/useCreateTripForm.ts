@@ -1,6 +1,6 @@
 import { useCreateTripStore } from 'app/screens/trip/createTripStore';
 import { useValidateSchema } from 'app/hooks/common';
-import { addTripDetails } from '@packrat/validations';
+import { addTripDetails } from '@packrat/validations/src/validations/';
 import { useEffect, useMemo } from 'react';
 import { type addTripKey } from 'app/screens/trip/createTripStore/store';
 import { useAuthUser } from 'app/modules/auth';
