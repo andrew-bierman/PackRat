@@ -159,7 +159,7 @@ export const BaseModal = ({
         </Dialog.Content>
       </Dialog.Portal>
 
-      <Adapt when="sm" platform="touch">
+      {/* <Adapt when="sm" platform="touch">
         <Dialog.Sheet
           snapPointsMode="fit"
           animation="medium"
@@ -176,7 +176,7 @@ export const BaseModal = ({
             exitStyle={{ opacity: 0 }}
           />
         </Dialog.Sheet>
-      </Adapt>
+      </Adapt> */}
     </Dialog>
   );
 };
