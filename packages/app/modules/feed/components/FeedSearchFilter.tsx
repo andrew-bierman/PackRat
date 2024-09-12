@@ -164,7 +164,8 @@ export const FeedSearchFilter = ({
                 </RSwitch>*/}
             </RStack>
           )}
-          <RStack
+          {/* DISABLE SORTS */}
+          {/* <RStack
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -190,7 +191,7 @@ export const FeedSearchFilter = ({
                 placeholder={queryString}
               />
             </View>
-          </RStack>
+          </RStack> */}
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
             <RButton
               style={{ marginLeft: 'auto', marginTop: 8 }}
