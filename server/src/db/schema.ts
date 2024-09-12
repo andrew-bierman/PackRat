@@ -32,7 +32,6 @@ export const user = sqliteTable('user', {
   name: text('name').notNull(),
   password: text('password').notNull(), // Trim + MinLength(7) + Validation
   email: text('email').notNull().unique(), // Lowercase + Trim + Validation
-  token: text('token'), // Trim
   googleId: text('google_id'),
   code: text('code'),
   is_certified_guide: integer('is_certified_guide', {
@@ -483,6 +482,14 @@ export const tripGeojsonsRelations = relations(tripGeojsons, ({ one }) => ({
     references: [geojson.id],
   }),
 }));
+
+export const refreshTokens = sqliteTable('refresh_tokens', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
+  token: text('token').notNull(),
+});
 
 export type User = InferSelectModel<typeof user>;
 export type InsertUser = InferInsertModel<typeof user>;
