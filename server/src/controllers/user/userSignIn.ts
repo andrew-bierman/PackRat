@@ -7,7 +7,7 @@ export const userSignIn = async (c) => {
     const { email, password } = await c.req.json();
     const userClass = new User();
     const user = await userClass.findByCredentials(email, password);
-    await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);
+    await userClass.generateAccessToken(c.env.JWT_SECRET, user.id);
     return c.json({ user }, 200);
   } catch (error) {
     return c.json({ error: `Failed to sign in: ${error.message}` }, 500);
@@ -21,9 +21,18 @@ export function userSignInRoute() {
     const userClass = new User();
     const user = await userClass.findByCredentials(input.email, input.password);
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('Wrong email or password');
     }
-    await userClass.generateAuthToken(env.JWT_SECRET, user.id);
-    return user;
+
+    const accessToken = await userClass.generateAccessToken(
+      env.JWT_SECRET,
+      user.id,
+    );
+    const refreshToken = await userClass.generateRefreshToken(
+      env.REFRESH_TOKEN_SECRET,
+      user.id,
+    );
+
+    return { accessToken, refreshToken };
   });
 }
