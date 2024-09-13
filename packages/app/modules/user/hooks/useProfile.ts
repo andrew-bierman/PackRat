@@ -14,7 +14,7 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
-  } = useUserPacks(userId); // TODO: Add enabled as parameter
+  } = useUserPacks(userId, { isPublic: true }, '', true); // TODO: Add enabled as parameter
 
   const {
     data: allTrips,
