@@ -10,23 +10,22 @@ import { type PackDetails } from 'app/modules/pack/model';
 import { DuplicateIcon } from 'app/assets/icons';
 import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
+import { roundNumber } from 'app/utils';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
 export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   const [weightUnit] = useItemWeightUnit();
-  delete props.details.similarityScore;
-  const packDetails = Object.entries(props.details).map(([key, value]) => ({
-    key,
-    label: key,
-    value:
-      key === 'weight'
-        ? `${convertWeight(value, 'g', weightUnit)} ${weightUnit}`
-        : value,
-  }));
-
-  console.log('props.isTemplate', props.isTemplate);
-  console.log('props.cardType', props.cardType);
+  const packDetails = Object.entries(props.details)
+    .filter(([key]) => key !== 'similarityScore')
+    .map(([key, value]) => ({
+      key,
+      label: key,
+      value:
+        key === 'weight'
+          ? `${roundNumber(convertWeight(value, 'kg', weightUnit))} ${weightUnit}`
+          : value,
+    }));
 
   return (
     <Card

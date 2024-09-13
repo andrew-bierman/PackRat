@@ -30,15 +30,10 @@ export const feedItemPackCardConverter: Converter<
         ? roundNumber(input.similarityScore)
         : undefined,
       weight: input.total_weight,
-      quantity:
-        input?.itemPacks?.reduce(
-          (accumulator, currentValue) =>
-            accumulator + currentValue?.item?.quantity,
-          0,
-        ) ?? 0,
+      quantity: input.quantity,
     },
-    isUserFavorite: input?.userFavoritePacks?.some(
-      (obj) => obj?.userId === currentUserId,
+    isUserFavorite: input?.userFavoritePacks?.some?.(
+      (userId) => userId === currentUserId,
     ),
     favoriteCount: input.favorites_count,
     isTemplate: input.is_template ?? false, // TODO migration

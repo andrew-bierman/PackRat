@@ -16,7 +16,8 @@ export interface FeedItem {
   favorited_by: Array<{
     id: string;
   }>;
-  userFavoritePacks?: Array<{ userId: string }>;
+  quantity?: number;
+  userFavoritePacks?: string[];
   favorites_count: number;
   owner_id: string | { id: string };
   destination: string;

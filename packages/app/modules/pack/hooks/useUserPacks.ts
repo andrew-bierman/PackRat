@@ -1,26 +1,69 @@
 import { queryTrpc } from 'app/trpc';
+import {
+  getPaginationInitialParams,
+  useInfinitePagination,
+  type PaginationParams,
+} from 'app/hooks/pagination';
+import { useState } from 'react';
 
-export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
-  const utils = queryTrpc.useContext();
-  // If ownerId is not provided, don’t run the query.
-  const enabled = !!ownerId;
-  // Leverage the query hook provided by tRPC
-  // ...
-  const { data, error, isLoading, refetch } = queryTrpc.getPacks.useQuery(
-    { ownerId: ownerId || '', queryBy: queryString },
-    {
-      enabled, // This query will run only if 'enabled' is true.
-      refetchOnWindowFocus: true,
-      keepPreviousData: true,
-    },
+interface QueryOptions {
+  isPublic?: boolean;
+  searchTerm?: string;
+}
+
+export const useUserPacks = (
+  ownerId: string,
+  options: QueryOptions = {},
+  queryString = '',
+  queryEnabled = false,
+) => {
+  const { isPublic, searchTerm } = options;
+  const [allData, setAllData] = useState([]);
+  const [pagination, setPagination] = useState<PaginationParams>(
+    getPaginationInitialParams(),
   );
+  const utils = queryTrpc.useContext();
+  const enabled = queryEnabled && !!ownerId;
+  const { data, error, isLoading, refetch } =
+    queryTrpc.getUserPacksFeed.useQuery(
+      { ownerId, isPublic, queryBy: queryString, pagination, searchTerm },
+      {
+        enabled,
+        refetchOnWindowFocus: true,
+        keepPreviousData: true,
+        onSuccess: (newData) => {
+          if (newData?.data) {
+            setAllData((prevData) => {
+              if (pagination.offset === 0) {
+                return newData.data;
+              }
+
+              return [...prevData, ...newData.data];
+            });
+          }
+        },
+      },
+    );
   utils.getPacks.setData({
     ownerId: ownerId || '',
     queryBy: queryString,
   });
 
-  // Extract packs or set an empty array if data is undefined.
-  const packs = data?.packs || [];
+  const { fetchNextPage } = useInfinitePagination(
+    refetch,
+    pagination,
+    setPagination,
+    { nextPage: data?.nextOffset, enabled },
+  );
 
-  return { data: packs, error, isLoading, refetch };
+  // Extract packs or set an empty array if data is undefined.
+
+  return {
+    data: allData,
+    error,
+    isLoading,
+    refetch,
+    fetchNextPage,
+    nextPage: data?.nextOffset || false,
+  };
 };

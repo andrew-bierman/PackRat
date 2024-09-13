@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import { offlineManager, MapView  } from '@rnmapbox/maps';
+import { offlineManager, type MapView } from '@rnmapbox/maps';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions } from 'react-native';
 import {
@@ -8,7 +8,7 @@ import {
   getShapeSourceBounds,
   mapboxStyles,
   validateShape,
-} from '../../utils/mapFunctions';
+} from '../utils/mapFunctions';
 
 interface Location {
   longitude: number;

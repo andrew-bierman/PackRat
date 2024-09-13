@@ -94,6 +94,7 @@ import {
 } from '../controllers/getOsm';
 
 import { router as trpcRouter } from '../trpc';
+import { getPublicFeedRoute, getUserPacksFeedRoute } from '../modules/feed';
 import getPackTemplatesRoute from 'src/controllers/packTemplates/getPackTemplates';
 
 export const appRouter = trpcRouter({
@@ -115,6 +116,9 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
+  // feed routes
+  getPublicFeed: getPublicFeedRoute(),
+  getUserPacksFeed: getUserPacksFeedRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),
