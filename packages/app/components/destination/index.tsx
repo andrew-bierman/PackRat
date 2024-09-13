@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
+import { RButton, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import { MapContainer } from 'app/components/map';
-import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
-import WeatherCard from '../weather/WeatherCard';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
@@ -16,6 +13,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
 import { WeatherData } from 'app/components/weather/WeatherData';
+import { Map } from 'app/modules/map';
 
 const RText: any = OriginalRText;
 
@@ -91,7 +89,7 @@ export const DestinationPage = () => {
     } as any,
   });
 
-  const shape = geoJSON ?? defaultShape;
+  const shape = geoJSON;
 
   interface SearchResult {
     properties: {
@@ -129,7 +127,7 @@ export const DestinationPage = () => {
     }
   };
 
-  const map = () => <MapContainer shape={shape} />;
+  const map = () => <Map shape={shape} />;
 
   return (
     <View style={styles.container}>
@@ -187,7 +185,7 @@ export const DestinationPage = () => {
                 geoJSON={geoJSON}
                 selectedSearchResult={currentDestination}
               />
-              {/* <LargeCard
+              <LargeCard
                 title="Map"
                 Icon={() => (
                   <Ionicons
@@ -199,7 +197,7 @@ export const DestinationPage = () => {
                 ContentComponent={map}
                 contentProps={{ shape }}
                 type="map"
-              /> */}
+              />
               <WeatherData latLng={latLng} />
             </>
           )}
