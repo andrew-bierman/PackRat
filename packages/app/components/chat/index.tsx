@@ -195,9 +195,16 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
             Allow me to analyze your pack and help!
           </Text>
         ) : (
-          <View style={{ maxHeight: 450, width: '100%', borderRadius: 10 }}>
+          <View
+            style={{
+              maxHeight: 450,
+              width: '100%',
+              borderRadius: 10,
+            }}
+          >
             <SuggestionDescription data={suggestions.reasoning} />
             <SuggestionList
+              style={{ maxHeight: 100 }}
               suggestion={suggestions.suggestion}
               onAddItem={removeItem}
             />
