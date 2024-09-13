@@ -37,7 +37,7 @@ export interface PackData {
 export const getPackByIdService = async (packId: string): Promise<PackData> => {
   // return {
   //   id: 'p16zkvg7uvfo4ouwd07qmhli',
-  //   name: 'Day Hike Must-Haves',
+  //   name: 'Day Hike Template',
   //   owner_id: 'knihcxig5b6murix7xr4jyph',
   //   is_public: true,
   //   grades: {

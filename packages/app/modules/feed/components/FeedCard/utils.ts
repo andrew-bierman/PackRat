@@ -36,13 +36,12 @@ export const feedItemPackCardConverter: Converter<
       (userId) => userId === currentUserId,
     ),
     favoriteCount: input.favorites_count,
-    isTemplate: input.is_template ?? false, // TODO migration
   };
 };
 
 export const feedItemPackTemplateCardConverter: Converter<
   FeedItem,
   RouterOutput['getPackTemplates'][0]
-> = (input, currentUserId) => {
+> = (input) => {
   return input;
 };

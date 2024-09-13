@@ -95,7 +95,10 @@ import {
 
 import { router as trpcRouter } from '../trpc';
 import { getPublicFeedRoute, getUserPacksFeedRoute } from '../modules/feed';
-import getPackTemplatesRoute from 'src/controllers/packTemplates/getPackTemplates';
+import {
+  getPackTemplatesRoute,
+  getPackTemplateRoute,
+} from '../controllers/packTemplates';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -128,6 +131,7 @@ export const appRouter = trpcRouter({
   deleteTrip: deleteTripRoute(),
   // templates routes
   getPackTemplates: getPackTemplatesRoute(),
+  getPackTemplate: getPackTemplateRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),

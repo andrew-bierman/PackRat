@@ -46,6 +46,8 @@ export const DetailsComponent = ({
             />
           </>
         );
+      case 'packTemplate':
+        return additionalComps;
       case 'trip':
         // Add trip-specific logic here
         return (

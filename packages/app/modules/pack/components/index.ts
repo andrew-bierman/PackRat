@@ -5,4 +5,4 @@ export {
   EditPackItemModal,
 } from './PackTable';
 export { CopyPackModal } from './CopyPackModal';
-export { PackCard } from './PackCard';
+export * from './PackCard';

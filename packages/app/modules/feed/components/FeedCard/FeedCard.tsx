@@ -8,11 +8,11 @@ import { PackCard } from 'app/modules/pack';
 import { type CardType } from '@packrat/ui';
 import { useAddFavorite } from 'app/modules/feed';
 import { useAuthUser } from 'app/modules/auth';
-import PackTemplateCard from 'app/modules/pack-templates/components/PackTemplateCard';
+import { PackTemplateCard } from 'app/modules/pack-templates';
 
 const convertersByType = {
   pack: feedItemPackCardConverter,
-  packTemplate: feedItemPackCardConverter,
+  packTemplate: feedItemPackTemplateCardConverter,
 };
 
 const cardComponentsByType = {
@@ -27,15 +27,12 @@ interface FeedCardProps {
 }
 
 export const FeedCard: FC<FeedCardProps> = ({ item, cardType, feedType }) => {
-  console.log('feeditem', item);
   const { addFavorite } = useAddFavorite();
   const user = useAuthUser();
   const cardProps =
     typeof convertersByType[feedType] === 'function'
       ? convertersByType[feedType](item, user?.id)
       : null;
-
-  console.log('cardProps', cardProps);
 
   const handleAddToFavorite = () => {
     if (!user) return;

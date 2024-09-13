@@ -36,6 +36,13 @@
       "when": 1725521686790,
       "tag": "0004_misty_gorilla_man",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1726218610772,
+      "tag": "0005_parallel_sentinel",
+      "breakpoints": true
     }
   ]
 }

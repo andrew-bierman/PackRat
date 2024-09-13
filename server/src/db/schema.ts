@@ -121,6 +121,7 @@ export const pack = sqliteTable('pack', {
       }),
     ),
   type: text('type').default('pack'),
+  is_template: integer('is_template', { mode: 'boolean' }).default(false),
   // total_weight: real('total_weight'),
   // total_score: integer('total_score').default(0),
   // favorites_count: integer('favorites_count').default(0),
@@ -170,6 +171,51 @@ export const packRelations = relations(pack, ({ one, many }) => ({
   itemPacks: many(itemPacks),
   trips: many(trip),
 }));
+
+export const packTemplate = sqliteTable('pack_template', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  type: text('type').default('packTemplate'),
+});
+
+export const packTemplateRelations = relations(packTemplate, ({ many }) => ({
+  itemPackTemplates: many(itemPackTemplates),
+}));
+
+export const itemPackTemplates = sqliteTable(
+  'item_pack_templates',
+  {
+    itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
+    packTemplateId: text('pack_template_id').references(() => packTemplate.id, {
+      onDelete: 'cascade',
+    }),
+  },
+  (table) => {
+    return {
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.itemId, table.packTemplateId],
+      }),
+    };
+  },
+);
+
+export const itemPackTemplatesRelations = relations(
+  itemPackTemplates,
+  ({ one }) => ({
+    packTemplate: one(packTemplate, {
+      fields: [itemPackTemplates.packTemplateId],
+      references: [packTemplate.id],
+    }),
+    item: one(item, {
+      fields: [itemPackTemplates.itemId],
+      references: [item.id],
+    }),
+  }),
+);
 
 export const itemCategory = sqliteTable('item_category', {
   id: text('id')
@@ -510,6 +556,9 @@ export type Template = InferSelectModel<typeof template>;
 export type InsertTemplate = InferInsertModel<typeof template>;
 export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
+
+export type PackTemplate = InferSelectModel<typeof packTemplate>;
+export const selectPackTemplateSchema = createSelectSchema(packTemplate);
 
 export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;

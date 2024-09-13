@@ -1,4 +1,4 @@
-type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+export type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
 const units: Record<WeightUnit, number> = {
   g: 1,

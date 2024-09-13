@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { AuthWrapper } from 'app/modules/auth';
-import { PackDetailsScreen } from 'app/modules/pack';
+import { PackTemplateDetailsScreen } from 'app/modules/pack-templates';
 
 export const Route = createLazyFileRoute('/pack-templates/$id')({
   component: PackTemplateScreen,
@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute('/pack-templates/$id')({
 function PackTemplateScreen() {
   return (
     <AuthWrapper>
-      <PackDetailsScreen />
+      <PackTemplateDetailsScreen />
     </AuthWrapper>
   );
 }
