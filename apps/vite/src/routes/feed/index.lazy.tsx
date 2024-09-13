@@ -9,8 +9,8 @@ export const Route = createLazyFileRoute('/feed/')({
 
 export default function FeedNav() {
   return (
-    <AuthWrapper>
+    <>
       <FeedScreen />
-    </AuthWrapper>
+    </>
   );
 }
