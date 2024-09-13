@@ -44,11 +44,12 @@ const loadStyles = (theme) => {
       justifyContent: 'center',
     },
     featureImage: {
-      zIndex: 100,
+      zIndex: 2,
       width: xs ? '100%' : 'auto',
       mixBlendMode: 'multiply',
       justifyContent: 'center',
       alignItems: 'center',
+      
       // filter: "brightness(100) invert(0)",
       // width: 259,
       // height: 530,
@@ -58,20 +59,21 @@ const loadStyles = (theme) => {
       width: xs || sm || md ? 162 : 215,
       height: xs || sm || md ? 340 : 410,
       position: 'absolute',
-      zIndex: '-1',
+      zIndex: 0,
       right: 120,
     },
     featureCenterImage: {
       backgroundColor: 'transparent',
       width: xs || sm || md ? 220 : 259,
       height: xs || sm || md ? 450 : 530,
+      zIndex: 1,
     },
     featureRightImage: {
       backgroundColor: 'transparent',
       width: xs || sm || md ?  162 : 215,
       height: xs || sm || md ? 340 : 410,
       position: 'absolute',
-      zIndex: '-1',
+      zIndex: 0,
       left: 120,
     },
     overlay: {

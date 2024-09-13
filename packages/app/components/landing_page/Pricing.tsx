@@ -29,12 +29,12 @@ export const Pricing = () => {
           </RText>
         </View>
         <View style={styles.card}>
-          <View style={{ width: '100%', fontSize: 18, textAlign: 'left' }}>
+          <RText style={{ width: '100%', fontSize: 18, textAlign: 'left', borderWidth: 1, borderColor: 'white', color: currentTheme.colors.background }}>
             Free Access
-          </View>
-          <View style={{ width: '100%', fontSize: 25, textAlign: 'left' }}>
+          </RText>
+          <RText style={{ width: '100%', fontSize: 25, textAlign: 'left', borderWidth: 1, borderColor: 'white', color: currentTheme.colors.background }}>
             $0
-          </View>
+          </RText>
           <View style={{ width: '100%' }}>
             <RButton
               style={{
@@ -100,6 +100,7 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       
     },
     card: {
+      flex: 1,
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
