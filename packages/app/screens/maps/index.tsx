@@ -1,13 +1,13 @@
 import { Modal, Text, View, Image } from 'react-native';
 import { offlineManager } from '@rnmapbox/maps';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import useTheme from 'app/hooks/useTheme';
 import { api } from 'app/constants/api';
 import { RButton, RScrollView, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Map } from 'app/components/map';
+import { Map } from '@packrat/map';
 import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
 import { disableScreen } from 'app/hoc/disableScreen';

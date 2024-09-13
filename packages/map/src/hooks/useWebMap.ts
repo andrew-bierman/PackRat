@@ -13,8 +13,8 @@ import {
   mapboxStyles,
   multiPolygonBounds,
   processShapeData,
-} from 'app/utils/mapFunctions';
-import { saveFile } from 'app/utils/fileSaver/fileSaver.web';
+} from '../utils/mapFunctions';
+import { saveFile } from '../utils/fileSaver/fileSaver.web';
 
 // Hook to handle state management
 const useMapState = (shapeProp) => {
