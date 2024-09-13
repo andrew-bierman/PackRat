@@ -113,7 +113,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           />
           <RButton
             disabled={!userInput}
-            onClick={() => {
+            onPress={() => {
               setMessages((prevMessages) => [
                 ...prevMessages,
                 { role: 'user', content: userInput },
