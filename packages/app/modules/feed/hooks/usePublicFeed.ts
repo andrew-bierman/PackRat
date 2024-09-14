@@ -51,7 +51,8 @@ export const usePublicFeed = (
   // Process fetched data when packs/trips are loaded
   useEffect(() => {
     const processFetchedData = () => {
-      if (!isPacksLoading && isTripsLoading && (publicPacksData || publicTripsData)) {
+      // if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) { //will update once trip is done
+        if (!isPacksLoading  && (publicPacksData || publicTripsData)) {
         let newData: OptionalDataType = [];
 
         // Add packs to the data

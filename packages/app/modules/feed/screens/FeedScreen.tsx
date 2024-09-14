@@ -37,6 +37,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false); // Controls multiple fetches
+  const debouncedFetchMoreTimeout = useRef(null); // To prevent rapid fetchMore triggers
 
   const user = useAuthUser();
   const ownerId = user?.id;
@@ -56,13 +57,24 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     setRefreshing(false);
   };
 
-  // Fetch more data when reaching the end, but strictly ensure only one fetch at a time
+  // Fetch more data with debounce to prevent repeated calls
   const fetchMoreData = useCallback(async () => {
-    if (!loadingMore && hasMore && !isLoading) {
-      setLoadingMore(true); // Set loadingMore state
+    if (!loadingMore && hasMore && !isLoading && !isFetchingNextPage) {
+      setLoadingMore(true); // Prevent further calls until data is fetched
       await fetchNextPage();
     }
-  }, [loadingMore, hasMore, isLoading, fetchNextPage]);
+  }, [loadingMore, hasMore, isLoading, isFetchingNextPage, fetchNextPage]);
+
+  // Debounced version of fetchMoreData to prevent duplicate fetches
+  const handleEndReached = () => {
+    if (!debouncedFetchMoreTimeout.current) {
+      debouncedFetchMoreTimeout.current = setTimeout(() => {
+        fetchMoreData();
+        clearTimeout(debouncedFetchMoreTimeout.current);
+        debouncedFetchMoreTimeout.current = null;
+      }, 300); // Adjust debounce time as necessary
+    }
+  };
 
   // Trigger when items are fully rendered
   const onViewableItemsChanged = useCallback(({ viewableItems }) => {
@@ -146,20 +158,13 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             handleCreateClick={handleCreateClick}
           />
           <FlatList
-          style={{marginTop: 5}}
+            style={{ marginTop: 5 }}
             data={filteredData}
             horizontal={false}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: 12, width: '100%' }} />
-            )}
+            ItemSeparatorComponent={() => <View style={{ height: 12, width: '100%' }} />}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => (
-              <FeedCard
-                key={item?.id}
-                item={item}
-                cardType="primary"
-                feedType={item.type}
-              />
+              <FeedCard key={item?.id} item={item} cardType="primary" feedType={item.type} />
             )}
             ListFooterComponent={() =>
               isFetchingNextPage || isLoading ? (
@@ -174,7 +179,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
               </RText>
             )}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            onEndReached={fetchMoreData} // Trigger next page fetch
+            onEndReached={handleEndReached} // Debounced fetch next page
             onEndReachedThreshold={0.1} // Trigger earlier when close to the bottom
             initialNumToRender={6} // Render more items initially to ensure scrolling
             maxToRenderPerBatch={3} // Ensure more items are rendered in a batch to avoid stopping scroll
