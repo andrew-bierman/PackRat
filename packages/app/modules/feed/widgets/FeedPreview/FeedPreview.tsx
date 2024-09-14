@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Carousel from 'app/components/carousel';
 import { useFeed } from '../../hooks';
 import Loader from 'app/components/Loader';
@@ -35,9 +35,18 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   );
 };
 
-export const FeedPreview: React.FC<{ feedType: string; id?: string }> = ({
+interface FeedPreviewProps {
+  feedType: string;
+  id?: string;
+}
+
+export const FeedPreview = memo(function FeedPreview({
   feedType,
   id,
-}) => {
+}: FeedPreviewProps) {
+  console.log({
+    feedType,
+    id,
+  });
   return <FeedPreviewScroll itemWidth={200} feedType={feedType} id={id} />;
-};
+});

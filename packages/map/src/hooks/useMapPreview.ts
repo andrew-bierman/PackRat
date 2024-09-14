@@ -4,13 +4,11 @@ import {
   isPolygonOrMultiPolygon,
   processShapeData,
   isPoint,
-} from '../../utils/mapFunctions';
-import { api } from '../../constants/api';
+} from '../utils/mapFunctions';
+import { API_URL } from '@packrat/config';
 import { useState, useEffect } from 'react';
 
-interface Feature {
-  [key: string]: any;
-}
+type Feature = Record<string, any>;
 
 interface MapPreviewData {
   isPoint: boolean;
@@ -90,7 +88,7 @@ const useMapPreviewData = (shape, processedShape) => {
       coordinates: [lng, lat],
     } = shape.features[0].geometry;
 
-    const mapPreviewEndpoint = `${api}/mapPreview`;
+    const mapPreviewEndpoint = `${API_URL}/mapPreview`;
 
     const data = {
       isPoint: isPoint(shape),

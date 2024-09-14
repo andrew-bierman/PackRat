@@ -1,8 +1,10 @@
+import React from 'react';
 import { View } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
 import { useRegisterUser, useGoogleAuth } from 'app/modules/auth';
 import { SignUpScreen } from '@packrat/ui/src/Bento/forms/layouts';
 import { useState } from 'react';
+import { ScrollView } from 'react-native';
 
 export function RegisterScreen() {
   const { currentTheme } = useTheme();
@@ -29,26 +31,29 @@ export function RegisterScreen() {
     <View
       style={{
         width: '100%',
-        alignItems: 'center',
         backgroundColor: currentTheme.colors.background,
       }}
     >
-      <View
-        style={{
-          paddingTop: 32,
-          paddingBottom: 32,
-          height: '100%',
-          width: '90%',
-          maxWidth: 400,
-        }}
-      >
-        <SignUpScreen
-          promptAsync={promptAsync}
-          signup={signup}
-          signUpStatus={signUpStatus}
-          isGoogleSignInReady={isGoogleSignInReady}
-        />
-      </View>
+      <ScrollView>
+        <View
+          style={{
+            paddingTop: 32,
+            paddingBottom: 32,
+            alignItems: 'center',
+            alignSelf: 'center',
+            height: '100%',
+            width: '90%',
+            maxWidth: 400,
+          }}
+        >
+          <SignUpScreen
+            promptAsync={promptAsync}
+            signup={signup}
+            signUpStatus={signUpStatus}
+            isGoogleSignInReady={isGoogleSignInReady}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }

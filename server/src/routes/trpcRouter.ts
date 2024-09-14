@@ -18,6 +18,8 @@ import {
   checkCodeRoute,
   emailExistsRoute,
   updatePasswordRoute,
+  refreshTokenRoute,
+  logoutRoute,
 } from '../controllers/auth';
 import { getWeatherRoute } from '../controllers/weather';
 import {
@@ -91,11 +93,14 @@ import {
 } from '../controllers/getOsm';
 
 import { router as trpcRouter } from '../trpc';
+import { getPublicFeedRoute, getUserPacksFeedRoute } from '../modules/feed';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
   signUp: signUpRoute(),
+  logout: logoutRoute(),
+  refreshToken: refreshTokenRoute(),
   resetPassword: resetPasswordRoute(),
   getGoogleAuthURL: getGoogleAuthURLRoute(),
   googleSignin: googleSigninRoute(),
@@ -109,6 +114,9 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
+  // feed routes
+  getPublicFeed: getPublicFeedRoute(),
+  getUserPacksFeed: getUserPacksFeedRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),

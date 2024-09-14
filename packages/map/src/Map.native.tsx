@@ -6,6 +6,7 @@ import {
   Modal,
   Alert,
   Linking,
+  StyleSheet,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox from '@rnmapbox/maps';
@@ -19,7 +20,6 @@ import {
 
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 
-import { theme } from '../../theme';
 import {
   isLineString,
   isPoint,
@@ -28,16 +28,15 @@ import {
   multiPolygonBounds,
   validateCoordinates,
   validateShape,
-} from '../../utils/mapFunctions';
+} from './utils/mapFunctions';
 import MapButtonsOverlay from './MapButtonsOverlay';
 
 import { gpx as toGeoJSON } from '@tmcw/togeojson';
-import { useNativeMap } from 'app/hooks/map/useNativeMap';
-import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useNativeMap } from './hooks/useNativeMap';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { DOMParser } from 'xmldom';
-import { MapProps } from './models';
+import { type MapPropsLegacy } from './models';
 import { useUserQuery } from 'app/modules/auth';
 import { useUpdateUser } from 'app/modules/user';
 
@@ -66,7 +65,7 @@ const RInput: any = OriginalRInput;
 Mapbox.setWellKnownTileServer(Platform.OS === 'android' ? 'Mapbox' : 'mapbox');
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-const NativeMap: React.FC<MapProps> = ({
+const NativeMap: React.FC<MapPropsLegacy> = ({
   shape: shapeProp,
   onExitFullScreen,
   mapName: predefinedMapName,
@@ -76,7 +75,7 @@ const NativeMap: React.FC<MapProps> = ({
   const { user, refetch } = useUserQuery();
   console.log({ user });
   const updateUser = useUpdateUser();
-  const styles = useCustomStyles(loadStyles);
+  const styles = StyleSheet.create(loadStyles);
   const {
     camera,
     mapViewRef,
@@ -153,7 +152,7 @@ const NativeMap: React.FC<MapProps> = ({
         [mapName.toLowerCase()]: downloadOptions,
       },
     })
-      .then(() => refetch())
+      .then(async () => refetch())
       .then(() => {
         onDownload(downloadOptions);
       })
@@ -429,7 +428,7 @@ const NativeMap: React.FC<MapProps> = ({
   );
 };
 
-const loadStyles = () => ({
+const loadStyles = {
   page: {
     flex: 1,
     flexDirection: 'column',
@@ -469,7 +468,7 @@ const loadStyles = () => ({
     position: 'absolute',
     bottom: 10,
     right: 10,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'blue', // theme.colors.primary,
     borderRadius: 50,
     width: 45,
     height: 45,
@@ -477,10 +476,10 @@ const loadStyles = () => ({
     alignItems: 'center',
   },
   mapNameFieldErrorMessage: {
-    color: theme.colors.error,
+    color: 'red', // theme.colors.error,
     fontStyle: 'italic',
     fontSize: 12,
   },
-});
+};
 
 export default NativeMap;

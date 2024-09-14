@@ -1,8 +1,11 @@
 import { queryTrpc } from 'app/trpc';
 
-export const useUserTrips = (ownerId: string | undefined) => {
+export const useUserTrips = (
+  ownerId: string | undefined,
+  queryEnabled: boolean = true,
+) => {
   // If ownerId is not provided, don’t run the query.
-  const enabled = !!ownerId;
+  const enabled = queryEnabled && !!ownerId;
 
   // Leverage the query hook provided by tRPC
   const { data, error, isLoading, refetch } = queryTrpc.getTrips.useQuery(

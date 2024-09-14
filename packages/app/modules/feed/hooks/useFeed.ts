@@ -4,31 +4,61 @@ import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
 import { type FeedType } from '../model';
 
+interface UseFeedResult {
+  data: any[] | null;
+  isLoading: boolean;
+  refetch?: () => void;
+  setPage?: (page: number) => void;
+  nextPage?: number | boolean;
+  fetchNextPage?: () => void;
+}
+
 export const useFeed = ({
   queryString = 'Most Recent',
   ownerId,
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
   id,
+  searchQuery,
 }: Partial<{
   queryString: string;
   ownerId: string;
   feedType: FeedType;
   selectedTypes: Object;
+  searchQuery?: string;
   id: string;
-}> = {}) => {
+}> = {}): UseFeedResult => {
+  const publicFeed = usePublicFeed(
+    queryString,
+    searchQuery,
+    selectedTypes,
+    feedType === 'public',
+  );
+  const userPacks = useUserPacks(
+    ownerId || undefined,
+    { searchTerm: searchQuery },
+    queryString,
+    feedType === 'userPacks',
+  );
+  const userTrips = useUserTrips(
+    ownerId || undefined,
+    feedType === 'userTrips',
+  );
+  const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
+  const similarItems = useSimilarItems(id, feedType === 'similarItems');
+
   switch (feedType) {
     case 'public':
-      return usePublicFeed(queryString, selectedTypes);
+      return publicFeed;
     case 'userPacks':
-      return useUserPacks(ownerId || undefined, queryString);
+      return userPacks;
     case 'userTrips':
-      return useUserTrips(ownerId || undefined);
+      return userTrips;
     case 'similarPacks':
-      return useSimilarPacks(id);
+      return similarPacks;
     case 'similarItems':
-      return useSimilarItems(id);
+      return similarItems;
     default:
-      return { data: null, error: null, isLoading: true };
+      return { data: null, isLoading: true };
   }
 };

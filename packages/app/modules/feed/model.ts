@@ -29,6 +29,7 @@ export interface BaseFeedItem {
 interface PackFeedItem extends BaseFeedItem {
   type: 'pack';
   similarityScore?: number;
+  quantity?: number;
   total_weight: number;
   total_score: number;
   userFavoritePacks?: Array<{ userId: string }>;
