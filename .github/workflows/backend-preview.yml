@@ -33,7 +33,6 @@ jobs:
         uses: ./.github/actions/setup-wrangler-toml
         with:
           environment: preview
-          APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
           AWS_SIGN_ALGORITHM: ${{ secrets.PREVIEW_AWS_SIGN_ALGORITHM }}
           BUCKET_ENDPOINT: ${{ secrets.PREVIEW_BUCKET_ENDPOINT }}
           BUCKET_NAME: ${{ secrets.PREVIEW_BUCKET_NAME }}
@@ -83,17 +82,18 @@ jobs:
             echo '---Generate and upload secrets---' &&
             echo '>> Generate secrets file' &&
             echo '{}' | jq '
-            .WORKERS_AI_API_KEY="${{ secrets.PREVIEW_WORKERS_AI_API_KEY }}" |
-            .VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}" |
-            .BUCKET_ACCESS_KEY_ID="${{ secrets.PREVIEW_BUCKET_ACCESS_KEY_ID }}" |
             .GOOGLE_CLIENT_SECRET="${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}" |
-            .JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}" |
-            .MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}" |
-            .OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}" |
-            .OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}" |
-            .SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}" |
             .STMP_PASSWORD="${{ secrets.PREVIEW_STMP_PASSWORD }}" |
+            .JWT_SECRET="${{ secrets.PREVIEW_JWT_SECRET }}" |
+            .REFRESH_TOKEN_SECRET="${{ secrets.PREVIEW_REFRESH_TOKEN_SECRET }}" |
+            .SEND_GRID_API_KEY="${{ secrets.PREVIEW_SEND_GRID_API_KEY }}" |
+            .MAPBOX_ACCESS_TOKEN="${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}" |
+            .OPENWEATHER_KEY="${{ secrets.PREVIEW_OPENWEATHER_KEY }}" |
             .VECTORIZE_API_KEY="${{ secrets.PREVIEW_VECTORIZE_API_KEY }}" |
+            .WORKERS_AI_API_KEY="${{ secrets.PREVIEW_WORKERS_AI_API_KEY }}" |
+            .OPENAI_API_KEY="${{ secrets.PREVIEW_OPENAI_API_KEY }}" |
+            .BUCKET_ACCESS_KEY_ID="${{ secrets.PREVIEW_BUCKET_ACCESS_KEY_ID }}" |
+            .BUCKET_SECRET_KEY="${{ secrets.PREVIEW_BUCKET_SECRET_KEY }}" |
             .X_AMZ_SECURITY_TOKEN="${{ secrets.PREVIEW_X_AMZ_SECURITY_TOKEN }}" |
             .JWT_VERIFICATION_KEY="${{ secrets.PREVIEW_JWT_SECRET }}"
             ' > secrets.json &&
