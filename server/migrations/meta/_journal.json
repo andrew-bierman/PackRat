@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1709105161010,
-      "tag": "0000_previous_radioactive_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1712780313472,
-      "tag": "0001_same_iron_patriot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1713116052484,
-      "tag": "0002_numerous_tyger_tiger",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1721509132975,
-      "tag": "0003_reflective_mimic",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1725739824948,
-      "tag": "0004_strange_king_bedlam",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1725747366707,
-      "tag": "0005_old_venom",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1725521686790,
-      "tag": "0004_misty_gorilla_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1726322652319,
-      "tag": "0007_conscious_thunderball",
+      "when": 1726322827560,
+      "tag": "0000_nasty_taskmaster",
       "breakpoints": true
     }
   ]
