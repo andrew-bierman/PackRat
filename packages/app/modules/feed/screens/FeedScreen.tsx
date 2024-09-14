@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
 import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
 import { useRouter } from 'app/hooks/router';
@@ -36,12 +36,12 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false); // Controls multiple fetches
 
   const user = useAuthUser();
   const ownerId = user?.id;
   const styles = useCustomStyles(loadStyles);
 
-  // Fetch feed data using the useFeed hook
   const { data, isLoading, hasMore, fetchNextPage, refetch, isFetchingNextPage } = useFeed({
     queryString,
     ownerId,
@@ -58,10 +58,22 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
 
   // Fetch more data when reaching the end, but strictly ensure only one fetch at a time
   const fetchMoreData = useCallback(async () => {
-    if (!isFetchingNextPage && hasMore && !isLoading) {
-      await fetchNextPage(); // Call to fetch the next page
+    if (!loadingMore && hasMore && !isLoading) {
+      setLoadingMore(true); // Set loadingMore state
+      await fetchNextPage();
     }
-  }, [isFetchingNextPage, hasMore, isLoading, fetchNextPage]);
+  }, [loadingMore, hasMore, isLoading, fetchNextPage]);
+
+  // Trigger when items are fully rendered
+  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setLoadingMore(false); // Allow fetching more once items are rendered
+    }
+  }, []);
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50, // Trigger when at least 50% of item is visible
+  });
 
   // Web-specific scroll detection
   useEffect(() => {
@@ -71,7 +83,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
 
-        if (scrollTop + windowHeight >= documentHeight - 50 && !isFetchingNextPage && hasMore) {
+        if (scrollTop + windowHeight >= documentHeight - 50 && !loadingMore && hasMore) {
           fetchMoreData();
         }
       };
@@ -79,7 +91,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll); // Cleanup
     }
-  }, [isFetchingNextPage, hasMore, isLoading, fetchMoreData]);
+  }, [loadingMore, hasMore, isLoading, fetchMoreData]);
 
   // Filter data based on search query
   const filteredData = useMemo(() => {
@@ -134,6 +146,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             handleCreateClick={handleCreateClick}
           />
           <FlatList
+          style={{marginTop: 5}}
             data={filteredData}
             horizontal={false}
             ItemSeparatorComponent={() => (
@@ -166,6 +179,8 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             initialNumToRender={6} // Render more items initially to ensure scrolling
             maxToRenderPerBatch={3} // Ensure more items are rendered in a batch to avoid stopping scroll
             showsVerticalScrollIndicator={false}
+            onViewableItemsChanged={onViewableItemsChanged} // Trigger when items are fully rendered
+            viewabilityConfig={viewabilityConfig.current} // Use viewability config for better control
           />
         </View>
       </SearchProvider>
