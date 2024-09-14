@@ -113,7 +113,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
           />
           <RButton
             disabled={!userInput}
-            onClick={() => {
+            onPress={() => {
               setMessages((prevMessages) => [
                 ...prevMessages,
                 { role: 'user', content: userInput },
@@ -197,17 +197,23 @@ const SuggestionComponent = ({ itemTypeId = null, type = null }) => {
         ) : (
           <View
             style={{
-              maxHeight: 450,
+              maxHeight: 500,
               width: '100%',
               borderRadius: 10,
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: 450,
             }}
           >
-            <SuggestionDescription data={suggestions.reasoning} />
-            <SuggestionList
-              style={{ maxHeight: 100 }}
-              suggestion={suggestions.suggestion}
-              onAddItem={removeItem}
-            />
+            <View style={{ flex: 1 }}>
+              <SuggestionDescription data={suggestions.reasoning} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <SuggestionList
+                suggestion={suggestions.suggestion}
+                onAddItem={removeItem}
+              />
+            </View>
           </View>
         )}
         <RStack
