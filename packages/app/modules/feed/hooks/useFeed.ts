@@ -13,6 +13,15 @@ interface UseFeedResult {
   fetchNextPage?: () => void;
 }
 
+interface UseFeedResult {
+  data: any[] | null;
+  isLoading: boolean;
+  refetch?: () => void;
+  setPage?: (page: number) => void;
+  nextPage?: number | boolean;
+  fetchNextPage?: () => void;
+}
+
 export const useFeed = ({
   queryString = 'Most Recent',
   ownerId,

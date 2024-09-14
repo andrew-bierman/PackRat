@@ -32,7 +32,7 @@ interface PackFeedItem extends BaseFeedItem {
   quantity?: number;
   total_weight: number;
   total_score: number;
-  userFavoritePacks?: Array<{ userId: string }>;
+  userFavoritePacks?: string[];
   itemPacks?: any[];
 }
 
