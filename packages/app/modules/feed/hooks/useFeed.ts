@@ -8,8 +8,8 @@ interface UseFeedResult {
   isLoading: boolean;
   refetch?: () => void;
   setPage?: (page: number) => void;
-  nextPage?: number | boolean;
-  fetchNextPage?: () => void;
+  hasMore?: boolean;
+  fetchNextPage?: (isInitialFetch?: boolean) => Promise<void>;
 }
 
 export const useFeed = ({
@@ -18,45 +18,24 @@ export const useFeed = ({
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
   id,
-  searchQuery,
 }: Partial<{
   queryString: string;
   ownerId: string;
   feedType: string;
   selectedTypes: Object;
-  searchQuery?: string;
   id: string;
 }> = {}): UseFeedResult => {
-  const publicFeed = usePublicFeed(
-    queryString,
-    searchQuery,
-    selectedTypes,
-    feedType === 'public',
-  );
-  const userPacks = useUserPacks(
-    ownerId || undefined,
-    { searchTerm: searchQuery },
-    queryString,
-    feedType === 'userPacks',
-  );
-  const userTrips = useUserTrips(
-    ownerId || undefined,
-    feedType === 'userTrips',
-  );
-  const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
-  const similarItems = useSimilarItems(id, feedType === 'similarItems');
-
   switch (feedType) {
     case 'public':
-      return publicFeed;
+      return usePublicFeed(queryString, selectedTypes); // Use the typed return from usePublicFeed
     case 'userPacks':
-      return userPacks;
+      return useUserPacks(ownerId || undefined, queryString);
     case 'userTrips':
-      return userTrips;
+      return useUserTrips(ownerId || undefined);
     case 'similarPacks':
-      return similarPacks;
+      return useSimilarPacks(id);
     case 'similarItems':
-      return similarItems;
+      return useSimilarItems(id);
     default:
       return { data: null, isLoading: true };
   }
