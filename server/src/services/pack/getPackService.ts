@@ -17,8 +17,8 @@ export const getPacksService = async (
       includeRelated: true,
       ownerId,
       is_public: excludePrivatePacks ? 1 : undefined,
-      page, // Use page for pagination
-      limit, // Use limit for pagination
+      page, 
+      limit, 
     });
 
     packs = await sortFunction({

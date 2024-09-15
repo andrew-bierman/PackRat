@@ -20,13 +20,13 @@ export const usePublicFeed = (
   queryString: string,
   selectedTypes,
   initialPage = 1,
-  initialLimit = 4
+  initialLimit = 10 
 ) => {
   const [page, setPage] = useState(initialPage);
   const [data, setData] = useState<OptionalDataType>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false); // Lock next fetches
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   // Fetch public packs using the useQuery hook
   const {
@@ -48,13 +48,10 @@ export const usePublicFeed = (
     { enabled: selectedTypes.trip }
   );
 
-  // Process fetched data when packs/trips are loaded
   useEffect(() => {
     const processFetchedData = () => {
-
-      console.log('publicPacksData', page);
-      // if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) { //will update once trip is done
-        if (!isPacksLoading  && (publicPacksData || publicTripsData)) {
+      // if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) {
+      if (!isPacksLoading && (publicPacksData || publicTripsData)) {
         let newData: OptionalDataType = [];
 
         // Add packs to the data
@@ -76,7 +73,6 @@ export const usePublicFeed = (
 
         setHasMore(hasMorePacks || hasMoreTrips); // Properly set `hasMore`
 
-        // Mark the next page fetch as complete only after the data is rendered
         setIsFetchingNextPage(false);
         setIsLoading(false);
       }
@@ -88,10 +84,9 @@ export const usePublicFeed = (
   // Fetch next page of data
   const fetchNextPage = useCallback(async () => {
     if (hasMore && !isFetchingNextPage && !isLoading) {
-      setIsFetchingNextPage(true); // Prevent additional fetches while fetching
-      setPage((prevPage) => prevPage + 1); // Increment the page to load next data
+      setIsFetchingNextPage(true);
+      setPage((prevPage) => prevPage + 1);
 
-      // Fetch packs for the next page
       await refetchPacks();
       if (selectedTypes.trip) {
         await refetchTrips();
