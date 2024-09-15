@@ -69,6 +69,7 @@ jobs:
           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
+          REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
           STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
           VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}

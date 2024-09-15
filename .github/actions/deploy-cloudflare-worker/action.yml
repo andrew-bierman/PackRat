@@ -28,6 +28,9 @@ inputs:
   OPENWEATHER_KEY:
     description: 'The OpenWeather API Key'
     required: true
+  REFRESH_TOKEN_SECRET:
+    description: 'The refresh token secret'
+    required: true
   SEND_GRID_API_KEY:
     description: 'The sendgrid API Key'
     required: true
@@ -76,6 +79,7 @@ runs:
           .MAPBOX_ACCESS_TOKEN="${{ inputs.MAPBOX_ACCESS_TOKEN }}" |
           .OPENAI_API_KEY="${{ inputs.OPENAI_API_KEY }}" |
           .OPENWEATHER_KEY="${{ inputs.OPENWEATHER_KEY }}" |
+          .REFRESH_TOKEN_SECRET="${{ inputs.REFRESH_TOKEN_SECRET }}" |
           .SEND_GRID_API_KEY="${{ inputs.SEND_GRID_API_KEY }}" |
           .STMP_PASSWORD="${{ inputs.STMP_PASSWORD }}" |
           .VECTORIZE_API_KEY="${{ inputs.VECTORIZE_API_KEY }}" |
