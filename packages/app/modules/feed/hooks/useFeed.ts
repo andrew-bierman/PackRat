@@ -29,7 +29,7 @@ export const useFeed = ({
     case 'public':
       return usePublicFeed(queryString, selectedTypes); // Use the typed return from usePublicFeed
     case 'userPacks':
-      return useUserPacks(ownerId || undefined, queryString);
+      return useUserPacks(ownerId || undefined, {}, queryString, false);
     case 'userTrips':
       return useUserTrips(ownerId || undefined);
     case 'similarPacks':

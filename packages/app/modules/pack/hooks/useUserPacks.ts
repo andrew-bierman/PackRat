@@ -32,6 +32,7 @@ export const useUserPacks = (
         refetchOnWindowFocus: true,
         keepPreviousData: true,
         onSuccess: (newData) => {
+          console.log('newData', newData);
           if (newData?.data) {
             setAllData((prevData) => {
               if (pagination.offset === 0) {
