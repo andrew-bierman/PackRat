@@ -28,8 +28,6 @@ export const useUserPacks = (
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
-  console.log('page', page);
-
   const utils = queryTrpc.useContext();
   const enabled = !!ownerId;
 
