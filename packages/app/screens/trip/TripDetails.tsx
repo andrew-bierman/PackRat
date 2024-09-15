@@ -8,9 +8,20 @@ import { Platform, FlatList, Dimensions, Text } from 'react-native';
 import { CLIENT_URL } from '@packrat/config';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
 import ScoreContainer from 'app/components/ScoreContainer';
-// import useWeather from './useWeather';
+import {
+  TableContainerComponent,
+  WeatherCardComponent,
+  TripCardComponent,
+  ScoreContainerComponent,
+  loadStyles,
+} from './TripDetailsComponents';
+import { useTripId } from 'app/hooks/trips';
+
+import { formatTripActivityLabel } from 'app/utils/tripUtils';
+import Layout from 'app/components/layout/Layout';
 
 interface TripData {
   packs?: any;
@@ -20,17 +31,6 @@ interface TripData {
   description?: string;
   [key: string]: any;
 }
-
-import {
-  TableContainerComponent,
-  WeatherCardComponent,
-  TripCardComponent,
-  ScoreContainerComponent,
-  loadStyles,
-} from './TripDetailsComponents';
-import { useTripId } from 'app/hooks/trips';
-import { formatTripActivityLabel } from 'app/utils/tripUtils';
-import Layout from 'app/components/layout/Layout';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -59,6 +59,7 @@ export function TripDetails() {
   const data = rawData as TripData;
 
   const { weatherObject } = useTripWeather(data);
+  const { xxs, xs } = useResponsive();
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -99,7 +100,7 @@ export function TripDetails() {
                     switch (item[1]) {
                       case SECTION.DESCRIPTION:
                         return (
-                          <RStack style={{ width: '20%' }}>
+                          <RStack style={{ width: xxs ? '20%' : '100%' }}>
                             <RText>{data?.description}</RText>
                             <Details
                               items={[

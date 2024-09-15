@@ -5,12 +5,15 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useAuthUser } from 'app/modules/auth';
 import { usePackId, useUserPacks, TableContainer } from 'app/modules/pack';
 import { DropdownComponent } from '@packrat/ui';
+import { Spinner } from 'tamagui';
+import useTheme from 'app/hooks/useTheme';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [packIdParam, setPackIdParam] = usePackId();
   const [currentPackId, setCurrentPackId] = useState(packIdParam);
   const user = useAuthUser();
+  const { currentTheme } = useTheme();
 
   const [refetch, setRefetch] = useState(false);
   const styles = useCustomStyles(loadStyles);
@@ -38,15 +41,8 @@ export default function PackContainer({ isCreatingTrip = false }) {
       setPackIdParam(newPack?.id);
       oldPacks.push(newPack?.id);
     }
-  }, packs);
-  /**
-   * Handles the packing based on the given value.
-   *
-   * @param {type} val - the value used to select the pack
-   * @return {type} none
-   */
+  }, [packs]);
   const handlePack = (val) => {
-    // const selectedPack = packs.find((pack) => pack.name == val);
     const selectedPack = packs.find((pack) => pack.id == val);
 
     setCurrentPackId(selectedPack?.id);
@@ -60,44 +56,44 @@ export default function PackContainer({ isCreatingTrip = false }) {
 
   const dataValues = packs?.map((item) => item?.name) ?? [];
 
-  // useEffect(() => {
-  //   const firstPack = packs.find(({ id }) => !!id);
-  //   if (!packIdParam && firstPack?.id && isCreatingTrip) {
-  //     setPackIdParam(firstPack.id);
-  //   }
-  // }, [packIdParam, packs, isCreatingTrip]);
-
-  return dataValues?.length > 0 ? (
+  return (
     <View style={styles.mainContainer}>
-      <DropdownComponent
-        data={packs ?? []}
-        textKey={'name'}
-        valueKey={'id'}
-        value={currentPackId}
-        onValueChange={handlePack}
-        placeholder={'Select a Pack'}
-        width={200}
-      />
-      {currentPackId && (
-        <>
-          <AddItemModal
-            currentPackId={currentPackId}
-            currentPack={currentPack}
-            isAddItemModalOpen={isAddItemModalOpen}
-            setIsAddItemModalOpen={setIsAddItemModalOpen}
-          />
-
-          <TableContainer
-            key={`table - ${currentPackId}`}
-            currentPack={currentPack}
-            selectedPack={currentPackId}
-            refetch={refetch}
-            setRefetch={setRefetch}
-          />
-        </>
+      {dataValues?.length === 0 ? (
+        <Spinner size="large" color={currentTheme.colors.primary} />
+      ) : (
+        dataValues?.length > 0 && (
+          <>
+            <DropdownComponent
+              data={packs ?? []}
+              textKey={'name'}
+              valueKey={'id'}
+              value={currentPackId}
+              onValueChange={handlePack}
+              placeholder={'Select a Pack'}
+              width={200}
+            />
+            {currentPackId && (
+              <>
+                <AddItemModal
+                  currentPackId={currentPackId}
+                  currentPack={currentPack}
+                  isAddItemModalOpen={isAddItemModalOpen}
+                  setIsAddItemModalOpen={setIsAddItemModalOpen}
+                />
+                <TableContainer
+                  key={`table - ${currentPackId}`}
+                  currentPack={currentPack}
+                  selectedPack={currentPackId}
+                  refetch={refetch}
+                  setRefetch={setRefetch}
+                />
+              </>
+            )}
+          </>
+        )
       )}
     </View>
-  ) : null;
+  );
 }
 
 const loadStyles = () => ({
