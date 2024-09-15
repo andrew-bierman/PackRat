@@ -1,6 +1,6 @@
 import { getPacksService } from '../../services/pack/pack.service';
 import { protectedProcedure } from '../../trpc';
-import * as validator from '@packrat/validations';
+import { z } from 'zod';
 
 export const getPacks = async (c) => {
   try {
@@ -13,17 +13,29 @@ export const getPacks = async (c) => {
 };
 
 export function getPacksRoute() {
-  return protectedProcedure.input(validator.getPacks).query(async (opts) => {
-    const { ownerId, queryBy } = opts.input;
+  return protectedProcedure
+    .input(
+      z.object({
+        ownerId: z.string(),
+        queryBy: z.string().optional(),
+        page: z.number().optional(),
+        limit: z.number().optional(),
+      })
+    )
+    .query(async (opts) => {
+      const { ownerId, queryBy, page, limit } = opts.input;
 
-    const packs = await getPacksService(
-      ownerId,
-      queryBy,
-      opts?.ctx?.user?.id !== ownerId,
-    );
-    return {
-      packs,
-      message: 'Packs retrieved successfully',
-    };
-  });
+      const packs = await getPacksService(
+        ownerId,
+        queryBy,
+        page,
+        limit,
+        opts?.ctx?.user?.id !== ownerId
+      );
+      return {
+        packs,
+        message: 'Packs retrieved successfully',
+      };
+    });
 }
+

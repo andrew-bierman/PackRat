@@ -151,38 +151,38 @@ export class Pack {
         sortOption,
         ownerId,
         is_public,
-        page ,
-        limit ,
+        page = 1,
+        limit = 10,
       } = options;
+  
       const filterConditions = [];
-
+  
       if (ownerId) {
         filterConditions.push(eq(PackTable.owner_id, ownerId));
       }
-
+  
       if (is_public !== undefined) {
         filterConditions.push(eq(PackTable.is_public, is_public));
       }
-
-      const modifiedFilter =
-        filterConditions.length > 0 ? and(...filterConditions) : null;
+  
+      const modifiedFilter = filterConditions.length > 0 ? and(...filterConditions) : null;
       const orderByFunction = this.getOrderBy({ sortOption });
       const relations = this.getRelations({
         includeRelated,
         completeItems: true,
       });
-
-      const offset = (page - 1) * limit;
-
+  
+      const offset = (page - 1) * limit; // Calculate the offset based on the page and limit
+  
       const packs = await DbClient.instance.query.pack.findMany({
-      ...(modifiedFilter && { where: modifiedFilter }),
-      orderBy: orderByFunction,
-      ...(includeRelated ? relations : {}),
-      offset: offset,
-      limit: limit,
-    });
-    
-      return (await packs).map((pack: any) => ({
+        ...(modifiedFilter && { where: modifiedFilter }),
+        orderBy: orderByFunction,
+        ...(includeRelated ? relations : {}),
+        offset: offset, // Apply offset for pagination
+        limit: limit,   // Apply limit for pagination
+      });
+  
+      return packs.map((pack: any) => ({
         ...pack,
         scores: JSON.parse(pack.scores as string),
         grades: JSON.parse(pack.grades as string),
@@ -195,6 +195,7 @@ export class Pack {
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
   }
+  
 
   async sortPacksByItems(options: any) {
     try {

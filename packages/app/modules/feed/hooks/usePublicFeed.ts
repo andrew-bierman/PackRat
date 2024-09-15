@@ -1,5 +1,5 @@
 import { queryTrpc } from 'app/trpc';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 type DataType = {
   type: string;
@@ -25,8 +25,8 @@ export const usePublicFeed = (
   const [page, setPage] = useState(initialPage);
   const [data, setData] = useState<OptionalDataType>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false); // Lock next fetches
 
   // Fetch public packs using the useQuery hook
   const {
@@ -34,7 +34,7 @@ export const usePublicFeed = (
     isLoading: isPacksLoading,
     refetch: refetchPacks,
   } = queryTrpc.getPublicPacks.useQuery(
-    { queryBy: queryString ?? 'Favorite', page, limit: initialLimit },
+    { queryBy: queryString, page, limit: initialLimit },
     { keepPreviousData: true, enabled: selectedTypes.pack }
   );
 
@@ -44,58 +44,60 @@ export const usePublicFeed = (
     isLoading: isTripsLoading,
     refetch: refetchTrips,
   } = queryTrpc.getPublicTripsRoute.useQuery(
-    { queryBy: queryString ?? 'Favorite' },
-    { enabled: selectedTypes.trip && publicPacksData?.length > 0 }
+    { queryBy: queryString },
+    { enabled: selectedTypes.trip }
   );
 
-  // Ensure that fetching logic behaves consistently
+  // Process fetched data when packs/trips are loaded
   useEffect(() => {
     const processFetchedData = () => {
-      if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) {
+
+      console.log('publicPacksData', page);
+      // if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) { //will update once trip is done
+        if (!isPacksLoading  && (publicPacksData || publicTripsData)) {
         let newData: OptionalDataType = [];
 
-        // Fetch and append packs
+        // Add packs to the data
         if (selectedTypes.pack && publicPacksData) {
           newData = [...newData, ...publicPacksData.map((item) => ({ ...item, type: 'pack' }))];
         }
 
-        // Fetch and append trips
+        // Add trips to the data
         if (selectedTypes.trip && publicTripsData) {
           newData = [...newData, ...publicTripsData.map((item) => ({ ...item, type: 'trip' }))];
         }
 
-        // Update data in state
-        setData((prevData) => {
-          return page === initialPage ? newData : [...prevData, ...newData];  // Append for subsequent pages
-        });
+        // Append or reset data based on the current page
+        setData((prevData) => (page === initialPage ? newData : [...prevData, ...newData]));
 
-        // Set `hasMore` based on the data fetched
-        setHasMore(newData.length === initialLimit);
+        // Check if there is more data to fetch (if the fetched data length is less than the limit, there's no more data)
+        const hasMorePacks = publicPacksData && publicPacksData.length === initialLimit;
+        const hasMoreTrips = publicTripsData && publicTripsData.length === initialLimit;
 
-        // Reset loading states
-        setIsLoading(false);
+        setHasMore(hasMorePacks || hasMoreTrips); // Properly set `hasMore`
+
+        // Mark the next page fetch as complete only after the data is rendered
         setIsFetchingNextPage(false);
+        setIsLoading(false);
       }
     };
 
     processFetchedData();
-  }, [publicPacksData, publicTripsData, page, selectedTypes]);
+  }, [publicPacksData, publicTripsData, isPacksLoading, isTripsLoading, page, selectedTypes]);
 
-  // Fetch the next page of data
-  const fetchNextPage = async () => {
-    if (hasMore && !isLoading && !isFetchingNextPage) {
-      setIsFetchingNextPage(true);
-      setPage((prevPage) => prevPage + 1);  // Increment the page before fetching new data
+  // Fetch next page of data
+  const fetchNextPage = useCallback(async () => {
+    if (hasMore && !isFetchingNextPage && !isLoading) {
+      setIsFetchingNextPage(true); // Prevent additional fetches while fetching
+      setPage((prevPage) => prevPage + 1); // Increment the page to load next data
 
-      // Fetch packs and trips for the next page
+      // Fetch packs for the next page
       await refetchPacks();
       if (selectedTypes.trip) {
         await refetchTrips();
       }
-
-      setIsFetchingNextPage(false);  // Reset fetching state after data fetch
     }
-  };
+  }, [hasMore, isFetchingNextPage, isLoading, refetchPacks, refetchTrips, selectedTypes]);
 
-  return { data, isLoading, hasMore, fetchNextPage, refetch: refetchPacks };
+  return { data, isLoading, hasMore, fetchNextPage, refetch: refetchPacks, isFetchingNextPage };
 };

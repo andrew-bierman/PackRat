@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
 import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
 import { useRouter } from 'app/hooks/router';
@@ -36,14 +36,14 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false); // Controls multiple fetches
+  const debouncedFetchMoreTimeout = useRef(null); // To prevent rapid fetchMore triggers
 
   const user = useAuthUser();
   const ownerId = user?.id;
   const styles = useCustomStyles(loadStyles);
 
-  // Fetch feed data using the useFeed hook
-  const { data, isLoading, hasMore, fetchNextPage, refetch } = useFeed({
+  const { data, isLoading, hasMore, fetchNextPage, refetch, isFetchingNextPage } = useFeed({
     queryString,
     ownerId,
     feedType,
@@ -51,21 +51,41 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
   });
 
   // Refresh data
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
-    refetch && refetch(); // Ensure refetch is defined
+    refetch && refetch();
     setRefreshing(false);
-  };
+  }, [refetch]);
 
-  // Fetch more data when reaching the end
-  const fetchMoreData = async () => {
-    // Ensure we are not already fetching and that there is more data to fetch
-    if (!isFetchingNextPage && hasMore && !isLoading) {
-      setIsFetchingNextPage(true);
-      await fetchNextPage(); // Call to fetch the next page
-      setIsFetchingNextPage(false);
+  // Fetch more data with debounce to prevent repeated calls
+  const fetchMoreData = useCallback(async () => {
+    if (!loadingMore && hasMore && !isLoading && !isFetchingNextPage) {
+      setLoadingMore(true); // Prevent further calls until data is fetched
+      await fetchNextPage();
+      setLoadingMore(false);
     }
-  };
+  }, [loadingMore, hasMore, isLoading, isFetchingNextPage, fetchNextPage]);
+
+  // Debounced version of fetchMoreData to prevent duplicate fetches
+  const handleEndReached = useCallback(() => {
+    if (!debouncedFetchMoreTimeout.current && hasMore && !loadingMore && !isFetchingNextPage) {
+      debouncedFetchMoreTimeout.current = setTimeout(() => {
+        fetchMoreData();
+        debouncedFetchMoreTimeout.current = null;
+      }, 1000); // Adjust debounce time as necessary
+    }
+  }, [fetchMoreData, hasMore, loadingMore, isFetchingNextPage]);
+
+  // Trigger when items are fully rendered
+  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      setLoadingMore(false); // Allow fetching more once items are rendered
+    }
+  }, []);
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50, // Trigger when at least 50% of item is visible
+  });
 
   // Web-specific scroll detection
   useEffect(() => {
@@ -75,7 +95,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
         const windowHeight = window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
 
-        if (scrollTop + windowHeight >= documentHeight - 50 && !isFetchingNextPage && hasMore) {
+        if (scrollTop + windowHeight >= documentHeight - 50 && !loadingMore && hasMore) {
           fetchMoreData();
         }
       };
@@ -83,7 +103,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll); // Cleanup
     }
-  }, [isFetchingNextPage, hasMore, isLoading]);
+  }, [loadingMore, hasMore, isLoading, fetchMoreData]);
 
   // Filter data based on search query
   const filteredData = useMemo(() => {
@@ -138,19 +158,13 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             handleCreateClick={handleCreateClick}
           />
           <FlatList
+            style={{ marginTop: 5 }}
             data={filteredData}
             horizontal={false}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: 12, width: '100%' }} />
-            )}
+            ItemSeparatorComponent={() => <View style={{ height: 12, width: '100%' }} />}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => (
-              <FeedCard
-                key={item?.id}
-                item={item}
-                cardType="primary"
-                feedType={item.type}
-              />
+              <FeedCard key={item?.id} item={item} cardType="primary" feedType={item.type} />
             )}
             ListFooterComponent={() =>
               isFetchingNextPage || isLoading ? (
@@ -165,10 +179,13 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
               </RText>
             )}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            onEndReached={fetchMoreData} // Trigger next page fetch
-            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+            onEndReached={handleEndReached} // Debounced fetch next page
+            onEndReachedThreshold={0.1} // Trigger closer to the bottom
+            initialNumToRender={6} // Render more items initially to ensure scrolling
+            maxToRenderPerBatch={3} // Ensure more items are rendered in a batch to avoid stopping scroll
             showsVerticalScrollIndicator={false}
-            maxToRenderPerBatch={2}
+            onViewableItemsChanged={onViewableItemsChanged} // Trigger when items are fully rendered
+            viewabilityConfig={viewabilityConfig.current} // Use viewability config for better control
           />
         </View>
       </SearchProvider>

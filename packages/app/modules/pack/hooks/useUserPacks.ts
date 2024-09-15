@@ -1,26 +1,89 @@
 import { queryTrpc } from 'app/trpc';
+import { useState, useEffect, useCallback } from 'react';
 
-export const useUserPacks = (ownerId: string | undefined, queryString = '') => {
+type DataType = {
+  type: string;
+  id: string;
+  duration: string;
+  name: string;
+  description: string;
+  createdAt: string | null;
+  updatedAt: string | null;
+  pack_id: string | null;
+  owner_id: string | null;
+  is_public: boolean | null;
+}[];
+
+type OptionalDataType = DataType[];
+
+export const useUserPacks = (
+  ownerId: string | undefined,
+  queryString = '',
+  initialPage = 1,
+  initialLimit = 10
+) => {
+  const [page, setPage] = useState(initialPage);
+  const [data, setData] = useState<OptionalDataType>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+
+  console.log('page', page);
+
   const utils = queryTrpc.useContext();
-  // If ownerId is not provided, don’t run the query.
   const enabled = !!ownerId;
-  // Leverage the query hook provided by tRPC
-  // ...
-  const { data, error, isLoading, refetch } = queryTrpc.getPacks.useQuery(
-    { ownerId: ownerId || '', queryBy: queryString },
+
+  const {
+    data: fetchedData,
+    error,
+    refetch,
+  } = queryTrpc.getPacks.useQuery(
+    { ownerId: ownerId || '', queryBy: queryString, page, limit: initialLimit },
     {
-      enabled, // This query will run only if 'enabled' is true.
+      enabled,
       refetchOnWindowFocus: true,
       keepPreviousData: true,
-    },
+    }
   );
-  utils.getPacks.setData({
-    ownerId: ownerId || '',
-    queryBy: queryString,
-  });
 
-  // Extract packs or set an empty array if data is undefined.
-  const packs = data?.packs || [];
+  useEffect(() => {
+    const processFetchedData = () => {
+      if (fetchedData?.packs) {
+        const newPacks = fetchedData.packs.map((item) => ({ ...item, type: 'pack' }));
 
-  return { data: packs, error, isLoading, refetch };
+        // If the fetched data is less than the limit, assume there is no more data
+        if (newPacks.length < initialLimit) {
+          setHasMore(false);
+        }
+
+        // Append the new data or reset if it's the first page
+        setData((prevData) => (page === initialPage ? newPacks : [...prevData, ...newPacks]));
+        
+        setIsLoading(false);
+        setIsFetchingNextPage(false);
+      }
+    };
+
+    processFetchedData();
+  }, [fetchedData, page, initialLimit]);
+
+  // Prevent fetching more data if a request is already in progress or there is no more data
+  const fetchNextPage = useCallback(async () => {
+    if (hasMore && !isFetchingNextPage && !isLoading) {
+      setIsFetchingNextPage(true);
+      setPage((prevPage) => prevPage + 1); // Update the page
+      await refetch(); // Refetch data for the new page
+    }
+  }, [hasMore, isFetchingNextPage, isLoading, refetch]);
+
+  return {
+    data,
+    error,
+    isLoading,
+    hasMore,
+    fetchNextPage,
+    isFetchingNextPage,
+    refetch,
+    setPage,
+  };
 };
