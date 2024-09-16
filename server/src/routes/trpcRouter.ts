@@ -93,6 +93,11 @@ import {
 } from '../controllers/getOsm';
 
 import { router as trpcRouter } from '../trpc';
+import {
+  getPublicFeedRoute,
+  getUserPacksFeedRoute,
+  getUserTripsFeedRoute,
+} from '../modules/feed';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -113,6 +118,10 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
+  // feed routes
+  getPublicFeed: getPublicFeedRoute(),
+  getUserPacksFeed: getUserPacksFeedRoute(),
+  getUserTripsFeed: getUserTripsFeedRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),

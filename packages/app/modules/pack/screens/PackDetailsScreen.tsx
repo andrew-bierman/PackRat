@@ -13,13 +13,13 @@ import {
 import useResponsive from 'app/hooks/useResponsive';
 import { FlatList, View } from 'react-native';
 import ScoreContainer from '../../../components/ScoreContainer';
-// import ChatContainer from '../chat';
 import { TextLink } from '@packrat/crosspath';
 import { DetailsComponent } from '../../../components/details';
 import { ImportItemModal, AddItemModal } from 'app/modules/item';
 import { FeedPreview } from 'app/modules/feed';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
+import ChatModalTrigger from 'app/components/chat';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -193,7 +193,7 @@ export function PackDetailsScreen() {
         </View>
       )}
       {/* Disable Chat */}
-      {/* <View
+      <View
         style={{
           position: 'absolute',
           right: -40,
@@ -202,13 +202,13 @@ export function PackDetailsScreen() {
           alignSelf: 'flex-end',
         }}
       >
-        <ChatContainer
+        <ChatModalTrigger
           itemTypeId={currentPackId}
           title="Chat"
           trigger="Open Chat"
           type="pack"
         />
-      </View> */}
+      </View>
     </Layout>
   );
 }

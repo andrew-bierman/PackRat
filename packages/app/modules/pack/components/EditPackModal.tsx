@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BaseModal } from '../../../../ui/src/modal/BaseModal';
 import RButton from '@packrat/ui/src/RButton';
 import RInput from '@packrat/ui/src/RInput';
-
-import { View, Text } from 'react-native';
 import { useEditPack } from '../hooks/useEditPack';
 import RStack from '@packrat/ui/src/RStack';
 import RText from '@packrat/ui/src/RText';
@@ -23,7 +21,6 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
   currentPack,
   refetch,
 }) => {
-  console.log({ currentPack });
   const [packName, setPackName] = useState(currentPack?.name ?? '');
   const [isPublic, setIsPublic] = useState(currentPack?.is_public ?? true);
   const { editPack, isLoading, isError } = useEditPack();

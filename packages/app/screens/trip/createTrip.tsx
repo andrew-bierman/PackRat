@@ -18,7 +18,6 @@ import {
   TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 import { WeatherData } from 'app/components/weather/WeatherData';
-import { disableScreen } from 'app/hoc/disableScreen';
 
 function Trips() {
   const styles = useCustomStyles(loadStyles);
@@ -51,18 +50,18 @@ function Trips() {
           {latLng ? <WeatherData latLng={latLng} /> : null}
           <TripTrailCard
             data={filteredTrails || []}
-            onToggle={(trail) => togglePlace('trail', trail)}
-            selectedValue={tripStore.trail}
+            onToggle={(trail) => togglePlace('trails', trail)}
+            selectedValue={tripStore.trails?.map?.(({ id }) => id) || []}
           />
           <TripParkCard
             data={parksData || []}
-            onToggle={(park) => togglePlace('park', park)}
-            selectedValue={tripStore.park}
+            onToggle={(park) => togglePlace('parks', park)}
+            selectedValue={tripStore.parks?.map?.(({ id }) => id) || []}
           />
           <GearList />
           <TripActivityCard
-            selectedValue={tripStore.type}
-            onChange={(activity) => setTripValue('type', activity)}
+            selectedValue={tripStore.activity}
+            onChange={(activity) => setTripValue('activity', activity)}
           />
           <TripDateRangeCard
             dateRange={dateRange}
@@ -82,18 +81,22 @@ function Trips() {
   );
 }
 
-const loadStyles = () => ({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-    paddingBottom: 30,
-  },
-  container: {
-    gap: 50,
-    padding: 20,
-  },
-});
+const loadStyles = () => {
+  const { currentTheme } = useTheme();
 
-export default disableScreen(Trips);
+  return {
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+      paddingBottom: 30,
+    },
+    container: {
+      gap: 50,
+      padding: 20,
+    },
+  };
+};
+
+export default Trips;

@@ -1,117 +1,78 @@
-# name: 'Backend Deployment'
+name: 'Backend Production Deployment'
 
-# on:
-#   workflow_dispatch:
-#   pull_request:
-#     branches:
-#       - master
-#     types: [closed]
-#   push:
-#     branches:
-#       - master
-#       - andrew_testing
-#     paths:
-#       - 'packages/validations/**'
-#       - 'packages/shared-types/**'
-#       - 'server/**'
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - andrew_testing
+    paths:
+      - '.github/workflows/backend.yml'
+      - 'packages/validations/**'
+      - 'packages/shared-types/**'
+      - 'server/**'
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-# jobs:
-#   deploy:
-#     name: Deploy to Cloudflare Workers
-#     runs-on: ubuntu-latest
-#     timeout-minutes: 10
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
-#       - name: Setup JS Runtime environment
-#         uses: ./.github/actions/setup-js-runtime
+      - name: Setup JS Runtime environment
+        uses: ./.github/actions/setup-js-runtime
 
-#       - name: Install dependencies
-#         uses: ./.github/actions/install-deps
+      - name: Generate wrangler.toml
+        uses: ./.github/actions/setup-wrangler-toml
+        with:
+          environment: production
+          APP_URL: ${{ secrets.APP_URL }}
+          AWS_SIGN_ALGORITHM: ${{ secrets.AWS_SIGN_ALGORITHM }}
+          BUCKET_ENDPOINT: ${{ secrets.BUCKET_ENDPOINT }}
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+          BUCKET_REGION: ${{ secrets.BUCKET_REGION }}
+          BUCKET_SERVICE: ${{ secrets.BUCKET_SERVICE }}
+          BUCKET_SESSION_TOKEN: ${{ secrets.BUCKET_SESSION_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
+          VECTOR_INDEX_NAME: ${{ secrets.VECTOR_INDEX }}
 
-#       - name: Generate wrangler.toml
-#         uses: ./.github/actions/setup-wrangler-toml
-#         with:
-#           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-#           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-#           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-#           STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
-#           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-#           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
-#           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-#           OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
-#           VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
-#           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-#           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-#           PREVIEW_DB_ID: ${{ secrets.PREVIEW_DB_ID }}
-#           PRODUCTION_DB_ID: ${{ secrets.PRODUCTION_DB_ID }}
-#           PREVIEW_GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
-#           PREVIEW_GOOGLE_CLIENT_SECRET: ${{ secrets.PREVIEW_GOOGLE_CLIENT_SECRET }}
-#           PREVIEW_STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
-#           PREVIEW_STMP_PASSWORD: ${{ secrets.PREVIEW_STMP_PASSWORD }}
-#           PREVIEW_JWT_SECRET: ${{ secrets.PREVIEW_JWT_SECRET }}
-#           PREVIEW_SEND_GRID_API_KEY: ${{ secrets.PREVIEW_SEND_GRID_API_KEY }}
-#           PREVIEW_MAPBOX_ACCESS_TOKEN: ${{ secrets.PREVIEW_MAPBOX_ACCESS_TOKEN }}
-#           PREVIEW_OPENWEATHER_KEY: ${{ secrets.PREVIEW_OPENWEATHER_KEY }}
-#           PREVIEW_VECTORIZE_API_KEY: ${{ secrets.PREVIEW_VECTORIZE_API_KEY }}
-#           PREVIEW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
-#           PREVIEW_OPENAI_API_KEY: ${{ secrets.PREVIEW_OPENAI_API_KEY }}
+      - name: Migrate database
+        uses: ./.github/actions/migrate-d1-database
+        with:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ENVIRONMENT: production
 
-#       - name: Migrate database
-#         # run: cd packages/api && bun run migrate
-#         run: cd server && yarn run migrate:prod
-#         env:
-#           NO_D1_WARNING: true
-#           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: Deploy
+        uses: ./.github/actions/deploy-cloudflare-worker
+        with:
+          BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
+          BUCKET_SECRET_KEY: ${{ secrets.BUCKET_SECRET_KEY }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ENVIRONMENT: production
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
+          REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+          SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
+          STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
+          VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
+          WORKERS_AI_API_KEY: ${{ secrets.WORKERS_AI_API_KEY }}
+          X_AMZ_SECURITY_TOKEN: ${{ secrets.X_AMZ_SECURITY_TOKEN }}
 
-#       - name: Deploy
-#         uses: cloudflare/wrangler-action@v3.3.2
-#         with:
-#           wranglerVersion: '3.15.0'
-#           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-#           workingDirectory: server
-#           command: yarn run deploy:prod
-#           # packageManager: bun
-#           packageManager: yarn
-#           secrets: |
-#             CI
-#             GOOGLE_CLIENT_ID
-#             GOOGLE_CLIENT_SECRET
-#             STMP_EMAIL
-#             STMP_PASSWORD
-#             JWT_SECRET
-#             SEND_GRID_API_KEY
-#             MAPBOX_ACCESS_TOKEN
-#             OSM_URI
-#             WEATHER_URL
-#             WEATHER_WEEK_URL
-#             OPENWEATHER_KEY
-#             VECTORIZE_API_KEY
-#             CLOUDFLARE_ACCOUNT_ID
-#             VITE_PUBLIC_APP_URL
-#         env:
-#           APP_URL: ${{ secrets.VITE_PUBLIC_APP_URL }}
-#           JWT_VERIFICATION_KEY: ${{ secrets.JWT_SECRET }}
-#           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-#           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-#           STMP_EMAIL: ${{ secrets.STMP_EMAIL }}
-#           STMP_PASSWORD: ${{ secrets.STMP_PASSWORD }}
-#           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-#           SEND_GRID_API_KEY: ${{ secrets.SEND_GRID_API_KEY }}
-#           MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
-#           OSM_URI: ${{ secrets.OSM_URI }}
-#           WEATHER_URL: ${{ secrets.WEATHER_URL }}
-#           WEATHER_WEEK_URL: ${{ secrets.WEATHER_WEEK_URL }}
-#           OPENWEATHER_KEY: ${{ secrets.OPENWEATHER_KEY }}
-#           VECTORIZE_API_KEY: ${{ secrets.VECTORIZE_API_KEY }}
-#           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-#           CI: true
-#           NO_D1_WARNING: true

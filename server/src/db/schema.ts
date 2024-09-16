@@ -306,8 +306,12 @@ export const trip = sqliteTable('trip', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   description: text('description').notNull(),
-  duration: text('duration').notNull(),
-  weather: text('weather').notNull(),
+  parks: text('parks', { mode: 'json' }).$type<
+    Array<{ id: string; name: string }>
+  >(),
+  trails: text('parks', { mode: 'json' }).$type<
+    Array<{ id: string; name: string }>
+  >(),
   start_date: text('start_date').notNull(),
   end_date: text('end_date').notNull(),
   destination: text('destination').notNull(),
@@ -318,6 +322,7 @@ export const trip = sqliteTable('trip', {
     onDelete: 'set null',
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
+  activity: text('activity').default('trip'),
   type: text('type').default('trip'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
@@ -448,28 +453,16 @@ export const geojson = sqliteTable('geojson', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  type: text('type').notNull(), // Regex
-  geojsonId: text('geo_json_id').notNull(), // Regex
-  properties: text('properties', { mode: 'json' }).$type<Object>(),
-  geometry: text('geometry', { mode: 'json' })
-    .$type<{
-      type:
-        | 'Point'
-        | 'LineString'
-        | 'Polygon'
-        | 'MultiPoint'
-        | 'MultiPolygon'
-        | 'MultiLineString';
-      coordinates: Array<number | number[]>;
-    }>()
-    .notNull(),
+  geoJSON: text('geoJSON').$type<string>(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const geojsonRelations = relations(geojson, ({ many }) => ({
-  trips: many(tripGeojsons),
-  tripGeojsons: many(tripGeojsons),
+export const geojsonRelations = relations(geojson, ({ one }) => ({
+  tripGeojson: one(tripGeojsons, {
+    fields: [geojson.id],
+    references: [tripGeojsons.geojsonId],
+  }),
 }));
 
 export const tripGeojsonsRelations = relations(tripGeojsons, ({ one }) => ({

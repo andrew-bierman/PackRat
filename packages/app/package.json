@@ -32,6 +32,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@packrat/crosspath": "*",
+    "@packrat/map": "*",
     "@packrat/ui": "*",
     "@packrat/validations": "*",
     "@react-native-async-storage/async-storage": "^1.23.1",

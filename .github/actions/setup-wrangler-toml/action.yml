@@ -1,135 +1,78 @@
-name: 'Generate Wrangler TOML'
-description: 'Generates the wrangler.toml file for Cloudflare Workers'
+name: "Generate Wrangler TOML"
+description: "Generates the wrangler.toml file for Cloudflare Workers"
 inputs:
-  GOOGLE_CLIENT_ID:
-    description: 'Google Client ID'
+  APP_URL:
+    description: "The Application URL"
     required: true
-  GOOGLE_CLIENT_SECRET:
-    description: 'Google Client Secret'
+  AWS_SIGN_ALGORITHM:
+    description: "The AWS sign algorithm"
     required: true
-  STMP_EMAIL:
-    description: 'SMTP Email'
+  BUCKET_ENDPOINT:
+    description: "The bucket endpoint"
     required: true
-  STMP_PASSWORD:
-    description: 'SMTP Password'
+  BUCKET_NAME:
+    description: "The bucket name"
     required: true
-  JWT_SECRET:
-    description: 'JWT Secret'
+  BUCKET_REGION:
+    description: "The bucket region"
     required: true
-  SEND_GRID_API_KEY:
-    description: 'Send Grid API Key'
+  BUCKET_SERVICE:
+    description: "The bucket service"
     required: true
-  MAPBOX_ACCESS_TOKEN:
-    description: 'Mapbox Access Token'
+  BUCKET_SESSION_TOKEN:
+    description: "The bucket session token"
     required: true
-  OPENWEATHER_KEY:
-    description: 'OpenWeather Key'
-    required: true
-  VECTORIZE_API_KEY:
-    description: 'Vectorize API Key'
+  environment:
+    description: "The current environment"
     required: true
   CLOUDFLARE_ACCOUNT_ID:
-    description: 'Cloudflare Account ID'
+    description: "Cloudflare Account ID"
     required: true
-  OPENAI_API_KEY:
-    description: 'OpenAI API Key'
+  DB_ID:
+    description: "The database ID"
     required: true
-  PREVIEW_DB_ID:
-    description: 'Preview DB ID'
+  GOOGLE_CLIENT_ID:
+    description: "Google Client ID"
     required: true
-  PRODUCTION_DB_ID:
-    description: 'Production DB ID'
+  STMP_EMAIL:
+    description: "SMTP Email"
     required: true
-  PREVIEW_GOOGLE_CLIENT_ID:
-    description: 'Preview Google Client ID'
-    required: true
-  PREVIEW_GOOGLE_CLIENT_SECRET:
-    description: 'Preview Google Client Secret'
-    required: true
-  PREVIEW_STMP_EMAIL:
-    description: 'Preview SMTP Email'
-    required: true
-  PREVIEW_STMP_PASSWORD:
-    description: 'Preview SMTP Password'
-    required: true
-  PREVIEW_JWT_SECRET:
-    description: 'Preview JWT Secret'
-    required: true
-  PREVIEW_SEND_GRID_API_KEY:
-    description: 'Preview Send Grid API Key'
-    required: true
-  PREVIEW_MAPBOX_ACCESS_TOKEN:
-    description: 'Preview Mapbox Access Token'
-    required: true
-  PREVIEW_OPENWEATHER_KEY:
-    description: 'Preview OpenWeather Key'
-    required: true
-  PREVIEW_VECTORIZE_API_KEY:
-    description: 'Preview Vectorize API Key'
-    required: true
-  PREVIEW_CLOUDFLARE_ACCOUNT_ID:
-    description: 'Preview Cloudflare Account ID'
-    required: true
-  PREVIEW_OPENAI_API_KEY:
-    description: 'Preview OpenAI API Key'
+  VECTOR_INDEX_NAME:
+    description: "The vector index"
     required: true
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Generate wrangler.toml
       shell: bash
+      working-directory: ${{ github.workspace }}/server
       run: |
-        echo 'name = "packrat-api"' > ${{ github.workspace }}/server/wrangler.toml
-        echo 'main = "src/index.ts"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'compatibility_date = "2024-03-14"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'node_compat = true' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.preview]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[[env.preview.d1_databases]]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "DB"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'database_name = "preview"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'database_id = "${{ inputs.PREVIEW_DB_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.preview.ai]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "AI"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[[env.preview.vectorize]]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "VECTOR_INDEX"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'index_name = "vector-index-preview"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.preview.vars]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'NODE_ENV = "preview"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'GOOGLE_CLIENT_ID = "${{ inputs.GOOGLE_CLIENT_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'GOOGLE_CLIENT_SECRET = "${{ inputs.GOOGLE_CLIENT_SECRET }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'STMP_EMAIL = "${{ inputs.STMP_EMAIL }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'STMP_PASSWORD = "${{ inputs.STMP_PASSWORD }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'JWT_SECRET = "${{ inputs.JWT_SECRET }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'SEND_GRID_API_KEY = "${{ inputs.SEND_GRID_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'MAPBOX_ACCESS_TOKEN = "${{ inputs.MAPBOX_ACCESS_TOKEN }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OSM_URI = "https://overpass-api.de/api/interpreter"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OPENWEATHER_KEY = "${{ inputs.OPENWEATHER_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'VECTORIZE_API_KEY = "${{ inputs.VECTORIZE_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'CLOUDFLARE_ACCOUNT_ID = "${{ inputs.CLOUDFLARE_ACCOUNT_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OPENAI_API_KEY = "${{ inputs.OPENAI_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.production]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[[env.production.d1_databases]]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "DB"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'database_name = "production"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'database_id = "${{ inputs.PRODUCTION_DB_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.production.ai]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "AI"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[[env.production.vectorize]]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'binding = "VECTOR_INDEX"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'index_name = "vector-index"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo '[env.production.vars]' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'NODE_ENV = "production"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'GOOGLE_CLIENT_ID = "${{ inputs.GOOGLE_CLIENT_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'GOOGLE_CLIENT_SECRET = "${{ inputs.GOOGLE_CLIENT_SECRET }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'STMP_EMAIL = "${{ inputs.STMP_EMAIL }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'STMP_PASSWORD = "${{ inputs.STMP_PASSWORD }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'JWT_SECRET = "${{ inputs.JWT_SECRET }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'SEND_GRID_API_KEY = "${{ inputs.SEND_GRID_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'MAPBOX_ACCESS_TOKEN = "${{ inputs.MAPBOX_ACCESS_TOKEN }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OSM_URI = "https://overpass-api.de/api/interpreter"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OPENWEATHER_KEY = "${{ inputs.OPENWEATHER_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'VECTORIZE_API_KEY = "${{ inputs.VECTORIZE_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'CLOUDFLARE_ACCOUNT_ID = "${{ inputs.CLOUDFLARE_ACCOUNT_ID }}"' >> ${{ github.workspace }}/server/wrangler.toml
-        echo 'OPENAI_API_KEY = "${{ inputs.OPENAI_API_KEY }}"' >> ${{ github.workspace }}/server/wrangler.toml
+        echo 'name = "packrat-api"' > wrangler.toml
+        echo 'main = "src/index.ts"' >> wrangler.toml
+        echo 'compatibility_date = "2024-03-14"' >> wrangler.toml
+        echo 'node_compat = true' >> wrangler.toml
+        echo '[env.${{ inputs.environment }}]' >> wrangler.toml
+        echo '[[env.${{ inputs.environment }}.d1_databases]]' >> wrangler.toml
+        echo 'binding = "DB"' >> wrangler.toml
+        echo 'database_name = "${{ inputs.environment }}"' >> wrangler.toml
+        echo 'database_id = "${{ inputs.DB_ID }}"' >> wrangler.toml
+        echo '[env.${{ inputs.environment }}.ai]' >> wrangler.toml
+        echo 'binding = "AI"' >> wrangler.toml
+        echo '[[env.${{ inputs.environment }}.vectorize]]' >> wrangler.toml
+        echo 'binding = "VECTOR_INDEX"' >> wrangler.toml
+        echo 'index_name = "${{ inputs.VECTOR_INDEX_NAME }}"' >> wrangler.toml
+        echo '[env.${{ inputs.environment }}.vars]' >> wrangler.toml
+        echo 'APP_URL = "${{ inputs.APP_URL }}"' >> wrangler.toml
+        echo 'AWS_SIGN_ALGORITHM = "${{ inputs.AWS_SIGN_ALGORITHM }}"' >> wrangler.toml
+        echo 'BUCKET_ENDPOINT = "${{ inputs.BUCKET_ENDPOINT }}"' >> wrangler.toml
+        echo 'BUCKET_NAME = "${{ inputs.BUCKET_NAME }}"' >> wrangler.toml
+        echo 'BUCKET_REGION = "${{ inputs.BUCKET_REGION }}"' >> wrangler.toml
+        echo 'BUCKET_SERVICE = "${{ inputs.BUCKET_SERVICE }}"' >> wrangler.toml
+        echo 'BUCKET_SESSION_TOKEN = ${{ inputs.BUCKET_SESSION_TOKEN }}' >> wrangler.toml
+        echo 'CLOUDFLARE_ACCOUNT_ID = "${{ inputs.CLOUDFLARE_ACCOUNT_ID }}"' >> wrangler.toml
+        echo 'GOOGLE_CLIENT_ID = "${{ inputs.GOOGLE_CLIENT_ID }}"' >> wrangler.toml
+        echo 'NODE_ENV = "${{ inputs.environment }}"' >> wrangler.toml
+        echo 'OSM_URI = "https://overpass-api.de/api/interpreter"' >> wrangler.toml
+        echo 'STMP_EMAIL = "${{ inputs.STMP_EMAIL }}"' >> wrangler.toml
+        echo 'VECTOR_INDEX = "${{ inputs.VECTOR_INDEX_NAME }}"' >> wrangler.toml
+        echo 'WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast"' >> wrangler.toml

@@ -156,6 +156,8 @@ export class Pack {
         limit = 10,
       } = options;
   
+      console.log('options', options); // Log the entire options object
+  
       const filterConditions = [];
   
       if (ownerId) {
@@ -184,6 +186,9 @@ export class Pack {
   
       const offset = (page - 1) * limit; // Calculate the offset based on the page and limit
   
+      console.log('filterConditions', filterConditions); // Log the filter conditions
+      console.log('modifiedFilter', modifiedFilter); // Log the modified filter
+  
       const packs = await DbClient.instance.query.pack.findMany({
         ...(modifiedFilter && { where: modifiedFilter }),
         orderBy: orderByFunction,
@@ -202,7 +207,7 @@ export class Pack {
         items: pack.itemPacks.map((itemPack) => itemPack.item),
       }));
     } catch (error) {
-      console.error('Error in findMany:', error); 
+      console.error('Error in findMany:', error); // Log the error
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
   }

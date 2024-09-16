@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "6d79a1bb-4374-4457-9aa7-88fccb14e9db",
+  "id": "1835ff6c-2094-41b6-9877-e6d31c92f32c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "conversation": {
@@ -16,6 +16,13 @@
         },
         "user_id": {
           "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "itemTypeId": {
+          "name": "itemTypeId",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -60,32 +67,11 @@
           "notNull": true,
           "autoincrement": false
         },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "geo_json_id": {
-          "name": "geo_json_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "properties": {
-          "name": "properties",
+        "geoJSON": {
+          "name": "geoJSON",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
-        },
-        "geometry": {
-          "name": "geometry",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
           "autoincrement": false
         },
         "created_at": {
@@ -155,6 +141,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "owner_id": {
+          "name": "owner_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "global": {
           "name": "global",
           "type": "integer",
@@ -193,6 +186,19 @@
             "id"
           ],
           "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "item_owner_id_user_id_fk": {
+          "name": "item_owner_id_user_id_fk",
+          "tableFrom": "item",
+          "tableTo": "user",
+          "columnsFrom": [
+            "owner_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -506,6 +512,50 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "refresh_tokens": {
+      "name": "refresh_tokens",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "refresh_tokens_user_id_user_id_fk": {
+          "name": "refresh_tokens_user_id_user_id_fk",
+          "tableFrom": "refresh_tokens",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "relation": {
       "name": "relation",
       "columns": {
@@ -674,18 +724,11 @@
           "notNull": true,
           "autoincrement": false
         },
-        "duration": {
-          "name": "duration",
+        "parks": {
+          "name": "parks",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "weather": {
-          "name": "weather",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "start_date": {
@@ -729,6 +772,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "activity": {
+          "name": "activity",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'trip'"
         },
         "type": {
           "name": "type",
@@ -876,13 +927,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "token": {
-          "name": "token",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "google_id": {
           "name": "google_id",
           "type": "text",
@@ -918,6 +962,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "offline_maps": {
+          "name": "offline_maps",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "role": {
           "name": "role",
           "type": "text",
@@ -945,14 +996,16 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'celsius'"
         },
         "preferred_weight": {
           "name": "preferred_weight",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'lb'"
         },
         "created_at": {
           "name": "created_at",

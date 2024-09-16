@@ -20,7 +20,7 @@ export function getUserPacksFeedRoute() {
       const { queryBy, searchTerm, ownerId, pagination, isPublic } = opts.input;
       const { data, totalCount } = await getFeedService(
         queryBy,
-        { searchTerm, ownerId },
+        { searchTerm, ownerId, isPublic },
         'trips',
         pagination,
       );
