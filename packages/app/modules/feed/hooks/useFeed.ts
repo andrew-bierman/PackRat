@@ -18,16 +18,18 @@ export const useFeed = ({
   feedType = 'public',
   selectedTypes = { pack: true, trip: true },
   id,
+  searchQuery,
 }: Partial<{
   queryString: string;
   ownerId: string;
   feedType: string;
   selectedTypes: Object;
   id: string;
+  searchQuery: string;
 }> = {}): UseFeedResult => {
   switch (feedType) {
     case 'public':
-      return usePublicFeed(queryString, selectedTypes); 
+      return usePublicFeed(queryString, selectedTypes, searchQuery); 
     case 'userPacks':
       return useUserPacks(ownerId || undefined, queryString);
     case 'userTrips':

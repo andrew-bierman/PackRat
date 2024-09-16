@@ -45,7 +45,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     refreshing, 
     onRefresh, 
     isFetchingNextPage 
-  } = useFeedData({ queryString, feedType, selectedTypes });
+  } = useFeedData({ queryString, feedType, selectedTypes, searchQuery });
 
   const filteredData = useFilteredData(data, searchQuery);
 

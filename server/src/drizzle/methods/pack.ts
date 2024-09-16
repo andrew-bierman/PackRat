@@ -151,6 +151,7 @@ export class Pack {
         sortOption,
         ownerId,
         is_public,
+        searchQuery,
         page = 1,
         limit = 10,
       } = options;

@@ -25,12 +25,13 @@ export function getPublicPacksRoute() {
   return protectedProcedure
     .input(z.object({
       queryBy: z.string(),
+      searchQuery: z.string().optional(),
       page: z.number().optional(),
       limit: z.number().optional(),
     }))
     .query(async (opts) => {
-      const { queryBy, page, limit } = opts.input;
-      const packs = await getPublicPacksService(queryBy, page, limit);
+      const { queryBy, searchQuery, page, limit } = opts.input;
+      const packs = await getPublicPacksService(queryBy, searchQuery, page, limit);
       return packs;
     });
 }

@@ -20,6 +20,7 @@ type OptionalDataType = DataType[];
 export const usePublicFeed = (
   queryString: string,
   selectedTypes,
+  searchQuery: string,
   initialPage = 1,
   initialLimit = 10
 ) => {
@@ -35,7 +36,7 @@ export const usePublicFeed = (
     isLoading: isPacksLoading,
     refetch: refetchPacks,
   } = queryTrpc.getPublicPacks.useQuery(
-    { queryBy: queryString, page, limit: initialLimit },
+    { queryBy: queryString, searchQuery, page, limit: initialLimit },
     { keepPreviousData: true, enabled: selectedTypes.pack }
   );
 

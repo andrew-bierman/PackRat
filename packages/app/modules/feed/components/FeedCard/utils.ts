@@ -13,6 +13,7 @@ export const feedItemPackCardConverter: Converter<
   FeedItem,
   Omit<FeedCardProps<PackDetails>, 'cardType' | 'toggleFavorite'>
 > = (input, currentUserId) => {
+
   return {
     id: input.id,
     createdAt: formatDistanceToNowStrict(new Date(input.createdAt), {
@@ -32,7 +33,7 @@ export const feedItemPackCardConverter: Converter<
       quantity: input.quantity,
     },
     isUserFavorite: input?.userFavoritePacks?.some?.(
-      (userId) => userId === currentUserId,
+      (userFavorite) => userFavorite.userId === currentUserId,
     ),
     favoriteCount: input.favorites_count,
   };
