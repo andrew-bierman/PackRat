@@ -51,6 +51,7 @@ export const useFeed = ({
   );
   const userTrips = useUserTrips(
     ownerId || undefined,
+    { searchTerm: searchQuery },
     feedType === 'userTrips',
   );
   const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
