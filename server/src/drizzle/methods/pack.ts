@@ -1,4 +1,4 @@
-import { eq, sql, asc, desc, and } from 'drizzle-orm';
+import { eq, sql, asc, desc, and, like, or } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
 import { convertWeight } from '../../utils/convertWeight';
@@ -156,6 +156,8 @@ export class Pack {
         limit = 10,
       } = options;
   
+      console.log('options', options); // Log the entire options object
+  
       const filterConditions = [];
   
       if (ownerId) {
@@ -166,7 +168,16 @@ export class Pack {
         filterConditions.push(eq(PackTable.is_public, is_public));
       }
   
+      if (searchQuery) {
+        filterConditions.push(
+          or(
+            like(PackTable.name, `%${searchQuery.toLowerCase()}%`)
+          )
+        );
+      }
+  
       const modifiedFilter = filterConditions.length > 0 ? and(...filterConditions) : null;
+  
       const orderByFunction = this.getOrderBy({ sortOption });
       const relations = this.getRelations({
         includeRelated,
@@ -174,6 +185,9 @@ export class Pack {
       });
   
       const offset = (page - 1) * limit; // Calculate the offset based on the page and limit
+  
+      console.log('filterConditions', filterConditions); // Log the filter conditions
+      console.log('modifiedFilter', modifiedFilter); // Log the modified filter
   
       const packs = await DbClient.instance.query.pack.findMany({
         ...(modifiedFilter && { where: modifiedFilter }),
@@ -193,6 +207,7 @@ export class Pack {
         items: pack.itemPacks.map((itemPack) => itemPack.item),
       }));
     } catch (error) {
+      console.error('Error in findMany:', error); // Log the error
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
   }

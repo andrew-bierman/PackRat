@@ -27,7 +27,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
         .map((item: FeedItem) => {
           const linkStr = `/pack/${item.id}`;
           return linkStr ? (
-            <View style={{ marginBottom: 10 }}>
+            <View key={item.id} style={{ marginBottom: 10 }}>
               <FeedCard item={item} cardType="secondary" feedType="pack" />
             </View>
           ) : null;

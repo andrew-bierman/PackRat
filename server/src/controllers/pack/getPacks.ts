@@ -18,16 +18,18 @@ export function getPacksRoute() {
       z.object({
         ownerId: z.string(),
         queryBy: z.string().optional(),
+        searchQuery: z.string().optional(),
         page: z.number().optional(),
         limit: z.number().optional(),
       })
     )
     .query(async (opts) => {
-      const { ownerId, queryBy, page, limit } = opts.input;
+      const { ownerId, queryBy, searchQuery, page, limit } = opts.input;
 
       const packs = await getPacksService(
         ownerId,
         queryBy,
+        searchQuery,
         page,
         limit,
         opts?.ctx?.user?.id !== ownerId

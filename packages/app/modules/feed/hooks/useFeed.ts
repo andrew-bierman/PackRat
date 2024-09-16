@@ -31,7 +31,7 @@ export const useFeed = ({
     case 'public':
       return usePublicFeed(queryString, selectedTypes, searchQuery); 
     case 'userPacks':
-      return useUserPacks(ownerId || undefined, queryString);
+      return useUserPacks(ownerId || undefined, queryString, searchQuery);
     case 'userTrips':
       return useUserTrips(ownerId || undefined);
     case 'similarPacks':

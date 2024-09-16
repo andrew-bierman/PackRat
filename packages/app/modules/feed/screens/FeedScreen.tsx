@@ -47,7 +47,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     isFetchingNextPage 
   } = useFeedData({ queryString, feedType, selectedTypes, searchQuery });
 
-  const filteredData = useFilteredData(data, searchQuery);
+  // const filteredData = useFilteredData(data, searchQuery);
 
   const handleTogglePack = () => {
     setSelectedTypes((prevState) => ({
@@ -88,7 +88,7 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
           />
           <FlatList
             style={{ marginTop: 5 }}
-            data={filteredData}
+            data={data}
             horizontal={false}
             ItemSeparatorComponent={() => <View style={{ height: 12, width: '100%' }} />}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys

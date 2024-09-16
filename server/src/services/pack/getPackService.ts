@@ -4,6 +4,7 @@ import { SORT_OPTIONS, DEFAULT_SORT, sortFunction } from '../../utils/pack';
 export const getPacksService = async (
   ownerId: string,
   queryBy: string = 'createdAt',
+  searchQuery: string,
   page: number,
   limit: number,
   excludePrivatePacks?: boolean,
@@ -17,6 +18,7 @@ export const getPacksService = async (
       includeRelated: true,
       ownerId,
       is_public: excludePrivatePacks ? 1 : undefined,
+      searchQuery,
       page, 
       limit, 
     });

@@ -19,6 +19,7 @@ type OptionalDataType = DataType[];
 export const useUserPacks = (
   ownerId: string | undefined,
   queryString = '',
+  searchQuery: string | undefined,
   initialPage = 1,
   initialLimit = 10
 ) => {
@@ -36,7 +37,7 @@ export const useUserPacks = (
     error,
     refetch,
   } = queryTrpc.getPacks.useQuery(
-    { ownerId: ownerId || '', queryBy: queryString, page, limit: initialLimit },
+    { ownerId: ownerId || '', queryBy: queryString, searchQuery, page, limit: initialLimit },
     {
       enabled,
       refetchOnWindowFocus: true,
