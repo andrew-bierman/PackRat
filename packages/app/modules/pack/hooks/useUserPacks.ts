@@ -19,7 +19,7 @@ type OptionalDataType = DataType[];
 export const useUserPacks = (
   ownerId: string | undefined,
   queryString = '',
-  searchQuery: string | undefined,
+  searchQuery: string,
   initialPage = 1,
   initialLimit = 10
 ) => {
