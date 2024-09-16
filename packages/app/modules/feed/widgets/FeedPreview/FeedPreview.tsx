@@ -16,19 +16,26 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   feedType,
   id,
 }) => {
-  const { data: feedData, isLoading, refetch } = useFeed({ feedType, id });
+  const { data: feedData, isLoading, refetch, fetchNextPage, nextPage } = useFeed({ feedType, id });
   const [refreshing, setRefreshing] = useState(false);
   console.log('feedData', feedData)
+  
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   }, [refetch]);
 
+  const onEndReached = useCallback(async () => {
+    if (!isLoading && nextPage) {
+      fetchNextPage();
+    }
+  }, [isLoading, nextPage, fetchNextPage]);
+
   return isLoading ? (
     <Loader />
   ) : (
-    <Carousel itemWidth={itemWidth} refreshing={refreshing} onRefresh={onRefresh}>
+    <Carousel itemWidth={itemWidth} refreshing={refreshing} onRefresh={onRefresh} onEndReached={onEndReached}>
       {feedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem) => {

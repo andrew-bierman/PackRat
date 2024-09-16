@@ -5,6 +5,7 @@ import {
   Dimensions,
   NativeScrollEvent,
   RefreshControl,
+  FlatList,
 } from 'react-native';
 import { RStack, RText } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
@@ -15,6 +16,7 @@ interface CarouselProps {
   itemWidth?: number;
   iconColor?: string;
   refreshing?: boolean;
+  onEndReached: () => void;
   onRefresh? : () => void;
 }
 
@@ -25,9 +27,10 @@ const Carousel: React.FC<CarouselProps> = ({
   itemWidth,
   refreshing,
   onRefresh,
+  onEndReached,
   iconColor,
 }) => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
 
@@ -72,37 +75,39 @@ const Carousel: React.FC<CarouselProps> = ({
         />
       )}
 
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        scrollEnabled
-        style={styles.carousel}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ flexDirection: 'row' }}
-        pagingEnabled
-        onMomentumScrollEnd={handleScroll}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-        {children &&
-          children.map((child, index) => (
-            <RStack
-              key={index}
-              style={{
-                ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
-                marginRight: 10,
-                marginTop: 10,
-                flexDirection: 'row',
-              }}
-            >
-              {child}
-            </RStack>
-          ))}
-      </ScrollView>
+<FlatList
+      ref={scrollViewRef}
+      horizontal
+      scrollEnabled
+      style={styles.carousel}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ flexDirection: 'row' }}
+      pagingEnabled
+      onMomentumScrollEnd={handleScroll}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+      // keyExtractor={keyExtractor}
+      data={children} // Pass the children as data to FlatList
+      renderItem={({ item, index }) => (
+        <RStack
+          key={index}
+          style={{
+            ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
+            marginRight: 10,
+            marginTop: 10,
+            flexDirection: 'row',
+          }}
+        >
+          {item}
+        </RStack>
+      )}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+    />
 
       {/* Show buttons only on web */}
       {Platform.OS === 'web' && (
