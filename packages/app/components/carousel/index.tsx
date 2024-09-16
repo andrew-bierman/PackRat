@@ -4,8 +4,9 @@ import {
   Platform,
   Dimensions,
   NativeScrollEvent,
+  RefreshControl,
 } from 'react-native';
-import { RStack } from '@packrat/ui';
+import { RStack, RText } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
@@ -13,6 +14,8 @@ interface CarouselProps {
   children?: ReactNode[];
   itemWidth?: number;
   iconColor?: string;
+  refreshing?: boolean;
+  onRefresh? : () => void;
 }
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -20,6 +23,8 @@ const { width: screenWidth } = Dimensions.get('window');
 const Carousel: React.FC<CarouselProps> = ({
   children = [],
   itemWidth,
+  refreshing,
+  onRefresh,
   iconColor,
 }) => {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -76,6 +81,12 @@ const Carousel: React.FC<CarouselProps> = ({
         contentContainerStyle={{ flexDirection: 'row' }}
         pagingEnabled
         onMomentumScrollEnd={handleScroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         {children &&
           children.map((child, index) => (
