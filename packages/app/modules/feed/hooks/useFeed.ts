@@ -25,10 +25,9 @@ export const useFeed = ({
   selectedTypes: Object;
   id: string;
 }> = {}): UseFeedResult => {
-  console.log("querystring", queryString)
   switch (feedType) {
     case 'public':
-      return usePublicFeed(queryString, selectedTypes); // Use the typed return from usePublicFeed
+      return usePublicFeed(queryString, selectedTypes); 
     case 'userPacks':
       return useUserPacks(ownerId || undefined, queryString);
     case 'userTrips':

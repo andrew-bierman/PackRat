@@ -1,5 +1,6 @@
 import { queryTrpc } from 'app/trpc';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { debounce } from 'lodash';
 
 type DataType = {
   type: string;
@@ -20,7 +21,7 @@ export const usePublicFeed = (
   queryString: string,
   selectedTypes,
   initialPage = 1,
-  initialLimit = 10 
+  initialLimit = 10
 ) => {
   const [page, setPage] = useState(initialPage);
   const [data, setData] = useState<OptionalDataType>([]);
@@ -48,51 +49,69 @@ export const usePublicFeed = (
     { enabled: selectedTypes.trip }
   );
 
+  // Process fetched data
+  const processedData = useMemo(() => {
+    let newData: OptionalDataType = [];
+
+    if (selectedTypes.pack && publicPacksData) {
+      newData = [...newData, ...publicPacksData.map((item) => ({ ...item, type: 'pack' }))];
+    }
+
+    if (selectedTypes.trip && publicTripsData) {
+      newData = [...newData, ...publicTripsData.map((item) => ({ ...item, type: 'trip' }))];
+    }
+
+    return newData;
+  }, [publicPacksData, publicTripsData, selectedTypes]);
+
+  // Use effect to update data and loading states
   useEffect(() => {
     const processFetchedData = () => {
-      // if (!isPacksLoading && !isTripsLoading && (publicPacksData || publicTripsData)) {
-      if (!isPacksLoading && (publicPacksData || publicTripsData)) {
-        let newData: OptionalDataType = [];
+      // if (!isPacksLoading && !isTripsLoading && processedData.length > 0) {
+      if (!isPacksLoading && processedData.length > 0) {
+        // Only update if data is different to avoid unnecessary re-renders
+        setData((prevData) => {
+          const newData = page === initialPage ? processedData : [...prevData, ...processedData];
+          return JSON.stringify(newData) !== JSON.stringify(prevData) ? newData : prevData;
+        });
 
-        // Add packs to the data
-        if (selectedTypes.pack && publicPacksData) {
-          newData = [...newData, ...publicPacksData.map((item) => ({ ...item, type: 'pack' }))];
-        }
-
-        // Add trips to the data
-        if (selectedTypes.trip && publicTripsData) {
-          newData = [...newData, ...publicTripsData.map((item) => ({ ...item, type: 'trip' }))];
-        }
-
-        // Append or reset data based on the current page
-        setData((prevData) => (page === initialPage ? newData : [...prevData, ...newData]));
-
-        // Check if there is more data to fetch (if the fetched data length is less than the limit, there's no more data)
+        // Check if there is more data to fetch
         const hasMorePacks = publicPacksData && publicPacksData.length === initialLimit;
         const hasMoreTrips = publicTripsData && publicTripsData.length === initialLimit;
-
-        setHasMore(hasMorePacks || hasMoreTrips); // Properly set `hasMore`
-
-        setIsFetchingNextPage(false);
-        setIsLoading(false);
+        setHasMore(hasMorePacks || hasMoreTrips);
       }
+
+      setIsFetchingNextPage(false);
+      setIsLoading(false);
     };
 
     processFetchedData();
-  }, [publicPacksData, publicTripsData, isPacksLoading, isTripsLoading, page, selectedTypes]);
+  }, [
+    publicPacksData,
+    publicTripsData,
+    isPacksLoading,
+    isTripsLoading,
+    page,
+    processedData,
+    initialPage,
+    initialLimit,
+  ]);
 
-  // Fetch next page of data
-  const fetchNextPage = useCallback(async () => {
-    if (hasMore && !isFetchingNextPage && !isLoading) {
-      setIsFetchingNextPage(true);
-      setPage((prevPage) => prevPage + 1);
+  // Debounced fetchNextPage to prevent rapid triggers
+  const fetchNextPage = useCallback(
+    debounce(async () => {
+      if (hasMore && !isFetchingNextPage && !isLoading) {
+        setIsFetchingNextPage(true);
+        setPage((prevPage) => prevPage + 1);
 
-      await refetchPacks();
-      if (selectedTypes.trip) {
-        await refetchTrips();
+        await refetchPacks();
+        if (selectedTypes.trip) {
+          await refetchTrips();
+        }
       }
-    }
-  }, [hasMore, isFetchingNextPage, isLoading, refetchPacks, refetchTrips, selectedTypes]);
+    }, 300), // Debounce with a delay of 300ms
+    [hasMore, isFetchingNextPage, isLoading, refetchPacks, refetchTrips, selectedTypes]
+  );
 
   return { data, isLoading, hasMore, fetchNextPage, refetch: refetchPacks, isFetchingNextPage };
 };

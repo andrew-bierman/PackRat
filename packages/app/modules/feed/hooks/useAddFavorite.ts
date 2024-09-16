@@ -11,7 +11,8 @@ export function useAddFavorite() {
       onSuccess: () => {
         // Invalidate and refetch. Update to be more specific
         utils.getUserFavorites.invalidate();
-        utils.getPublicPacks.invalidate();
+        utils.getUserPacksFeed.invalidate();
+        utils.getPublicFeed.invalidate();
         utils.getPacks.invalidate(userId ? { ownerId: userId } : undefined);
       },
     });
