@@ -22,7 +22,7 @@ class VectorClient {
     this.apiKey = apiKey;
     this.indexName = indexName;
     this.accountId = accountId;
-    this.VECTORIZE_INDEX_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/v2/indexes/${this.indexName}`;
+    this.VECTORIZE_INDEX_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/indexes/${this.indexName}`;
   }
 
   public static get instance(): VectorClient {
