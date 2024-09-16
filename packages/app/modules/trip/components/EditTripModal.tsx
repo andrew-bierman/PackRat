@@ -2,33 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { BaseModal } from '../../../../ui/src/modal/BaseModal';
 import RButton from '@packrat/ui/src/RButton';
 import RInput from '@packrat/ui/src/RInput';
-import { useEditPack } from '../hooks/useEditPack';
 import RStack from '@packrat/ui/src/RStack';
 import RText from '@packrat/ui/src/RText';
 import { Switch } from 'tamagui';
-import RSwitch from '@packrat/ui/src/RSwitch';
+import { useEditTrips } from 'app/hooks/trips/useEditTrips';
 
-interface EditPackModalProps {
+interface EditTripModalProps {
   isOpen?: boolean;
   onClose?: () => void;
-  currentPack: any;
+  currentTrip: any;
   refetch?: () => void;
 }
 
-export const EditPackModal: React.FC<EditPackModalProps> = ({
+export const EditTripModal: React.FC<EditTripModalProps> = ({
   isOpen,
   onClose,
-  currentPack,
+  currentTrip,
   refetch,
 }) => {
-  const [packName, setPackName] = useState(currentPack?.name ?? '');
-  const [isPublic, setIsPublic] = useState(currentPack?.is_public ?? true);
-  const { editPack, isLoading, isError } = useEditPack();
+  const [tripName, setTripName] = useState(currentTrip?.name ?? '');
+  const { editTrips, isLoading, isError } = useEditTrips();
 
-  const handleEditPack = async () => {
+  const handleEditTrip = async () => {
     try {
-      editPack(
-        { id: currentPack.id, name: packName, is_public: isPublic },
+      editTrips(
+        { id: currentTrip.id, name: tripName },
         {
           onSuccess: () => {
             onClose?.();
@@ -43,15 +41,14 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setPackName(currentPack?.name ?? '');
-      setIsPublic(currentPack?.is_public ?? true);
+      setTripName(currentTrip?.name ?? '');
     }
   }, [isOpen]);
 
   return (
     <BaseModal
       showTrigger={false}
-      title="Edit Pack"
+      title="Edit Trip"
       footerButtons={[
         {
           label: 'Cancel',
@@ -66,28 +63,12 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
       onClose={onClose}
     >
       <RInput
-        placeholder="Pack Name"
-        value={packName}
-        onChangeText={(t) => setPackName(t)}
+        placeholder="Trip Name"
+        value={tripName}
+        onChangeText={(t) => setTripName(t)}
         style={{ width: 200 }}
       />
-      <RStack
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <RText>Public </RText>
-        <RSwitch
-          checked={isPublic}
-          onCheckedChange={() => setIsPublic((prev) => !prev)}
-          size="$1.5"
-        >
-          <Switch.Thumb />
-        </RSwitch>
-      </RStack>
-      <RButton onPress={handleEditPack} disabled={isLoading}>
+      <RButton onPress={handleEditTrip} disabled={isLoading}>
         {isLoading ? 'Saving...' : 'Save'}
       </RButton>
       {isError && (

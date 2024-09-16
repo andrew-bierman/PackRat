@@ -3,7 +3,7 @@ import { protectedProcedure } from '../../../trpc';
 import { getFeedService } from '../services';
 import { z } from 'zod';
 
-export function getUserPacksFeedRoute() {
+export function getUserTripsFeedRoute() {
   return protectedProcedure
     .input(
       z.object({
@@ -21,7 +21,7 @@ export function getUserPacksFeedRoute() {
       const { data, totalCount } = await getFeedService(
         queryBy,
         { searchTerm, ownerId, isPublic },
-        'trips',
+        'packs',
         pagination,
       );
       return { data, nextOffset: getNextOffset(pagination, totalCount) };
