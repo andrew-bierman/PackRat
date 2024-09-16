@@ -22,7 +22,6 @@ export async function getPublicPacksService(queryBy: string = 'createdAt', page:
       limit,
     });
 
-    // Apply sorting if necessary
     packs = await sortFunction({
       packs,
       queryBy,

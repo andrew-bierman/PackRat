@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useFeed } from 'app/modules/feed';
 import { useAuthUser } from 'app/modules/auth';
 
-export const useFeedData = ({ queryString, feedType, selectedTypes }) => {
+export const useFeedData = ({ queryString, feedType, selectedTypes, searchQuery }) => { 
   const [refreshing, setRefreshing] = useState(false);
   const user = useAuthUser();
   const ownerId = user?.id;
@@ -12,6 +12,7 @@ export const useFeedData = ({ queryString, feedType, selectedTypes }) => {
     ownerId,
     feedType,
     selectedTypes,
+    searchQuery, 
   });
 
   // Refresh data
