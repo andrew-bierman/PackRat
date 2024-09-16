@@ -35,7 +35,6 @@ export const feedItemPackCardConverter: Converter<
         : undefined,
       weight: input.total_weight,
       quantity: input.quantity,
-      quantity: input.quantity,
     },
     isUserFavorite: input?.userFavoritePacks?.some?.(
       (userFavorite) => userFavorite.userId === currentUserId,
