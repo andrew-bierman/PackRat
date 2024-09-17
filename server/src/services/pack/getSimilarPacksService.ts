@@ -55,12 +55,10 @@ export async function getSimilarPacksService(
     );
 
   // add similarity score to packs result
-  const similarPacks = matches.map((match) => {
-    return {
-      ...similarPacksResult.find((p) => p.id == match.id),
-      similarityScore: match.score,
-    };
-  });
+  const similarPacks = similarPacksResult.map((similarPack) => ({
+    ...similarPack,
+    similarityScore: matches.find((m) => m.id == similarPack.id).score,
+  }));
 
   return similarPacks;
 }

@@ -55,12 +55,10 @@ export async function getSimilarItemsService(
     );
 
   // add similarity score to items result
-  const similarItems = matches.map((match) => {
-    return {
-      ...similarItemsResult.find((item) => item.id == match.id),
-      similarityScore: match.score,
-    };
-  });
+  const similarItems = similarItemsResult.map((similarItem) => ({
+    ...similarItem,
+    similarityScore: matches.find((m) => m.id == similarItem.id).score,
+  }));
 
   return similarItems;
 }
