@@ -1,33 +1,53 @@
 import { type CardType } from '@packrat/ui';
 
-export type FeedType = 'pack' | 'packTemplate';
+export type FeedType =
+  | 'public'
+  | 'userPacks'
+  | 'userTrips'
+  | 'similarPacks'
+  | 'similarItems'
+  | 'packTemplates';
+export type FeedResource = 'pack' | 'trip' | 'packTemplate';
 
-export interface FeedItem {
+export interface BaseFeedItem {
   id: string;
+  type: FeedResource;
+  name: string;
   owner: {
     id: string;
     username: string;
   };
-  name: string;
-  similarityScore?: number;
-  total_weight: number;
-  total_score: number;
   is_public: boolean;
   favorited_by: Array<{
     id: string;
   }>;
-  quantity?: number;
-  userFavoritePacks?: string[];
   favorites_count: number;
   owner_id: string | { id: string };
-  destination: string;
   createdAt: string;
   owners: Array<{ any: any }>;
-  duration: string;
-  type: FeedType;
+}
+
+interface PackFeedItem extends BaseFeedItem {
+  type: 'pack';
+  similarityScore?: number;
+  quantity?: number;
+  total_weight: number;
+  total_score: number;
+  userFavoritePacks?: string[];
   itemPacks?: any[];
 }
 
+export interface TripFeedItem extends BaseFeedItem {
+  type: 'trip';
+  description: string;
+  destination: string;
+  duration: string;
+  start_date: string;
+  end_date: string;
+  activity: string;
+}
+
+export type FeedItem = PackFeedItem | TripFeedItem;
 export interface FeedCardProps<Details> {
   id: string;
   title: string;
@@ -36,6 +56,6 @@ export interface FeedCardProps<Details> {
   details: Details;
   ownerId: string;
   favoriteCount: number;
-  isUserFavorite: boolean;
-  toggleFavorite: () => void;
+  isUserFavorite?: boolean;
+  toggleFavorite?: () => void;
 }

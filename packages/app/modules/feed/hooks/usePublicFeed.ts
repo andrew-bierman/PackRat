@@ -17,7 +17,12 @@ export const usePublicFeed = (
     getPaginationInitialParams(),
   );
   const { data, isLoading, refetch } = queryTrpc.getPublicFeed.useQuery(
-    { queryBy: queryBy ?? 'Favorites', pagination, searchTerm: searchQuery },
+    {
+      queryBy: queryBy ?? 'Favorites',
+      pagination,
+      searchTerm: searchQuery,
+      excludeType: getExcludeType(selectedTypes),
+    },
     {
       enabled,
       refetchOnWindowFocus: false,
@@ -50,4 +55,19 @@ export const usePublicFeed = (
     nextPage: data?.nextOffset || false,
     error: null,
   };
+};
+
+const getExcludeType = (selectedTypes: { pack?: boolean; trip?: boolean }) => {
+  const { pack, trip } = selectedTypes || {};
+  if (pack && trip) {
+    return undefined;
+  }
+
+  if (!pack) {
+    return 'packs';
+  }
+
+  if (!trip) {
+    return 'trips';
+  }
 };

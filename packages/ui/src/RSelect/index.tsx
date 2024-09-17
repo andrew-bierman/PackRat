@@ -98,6 +98,11 @@ export function SelectItem(props) {
 
   const [position, setPosition] = useState(0);
 
+  const selectedItemLabel = useMemo(() => {
+    const label = data.find((i) => i[valueKey] === value)?.[textKey];
+    return label || value;
+  }, [value]);
+
   return (
     <Select
       value={value}
@@ -107,7 +112,7 @@ export function SelectItem(props) {
     >
       <Select.Trigger style={{ backgroundColor: '$color5' }}>
         <Select.Value style={{ backgroundColor: '$color5' }}>
-          {placeholder}
+          {selectedItemLabel ?? placeholder}
         </Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>

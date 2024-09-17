@@ -3,6 +3,16 @@ import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
 import { usePackTemplates } from 'app/modules/pack-templates';
+import { type FeedType } from '../model';
+
+interface UseFeedResult {
+  data: any[] | null;
+  isLoading: boolean;
+  refetch?: () => void;
+  setPage?: (page: number) => void;
+  nextPage?: number | boolean;
+  fetchNextPage?: () => void;
+}
 
 interface UseFeedResult {
   data: any[] | null;
@@ -23,7 +33,7 @@ export const useFeed = ({
 }: Partial<{
   queryString: string;
   ownerId: string;
-  feedType: string;
+  feedType: FeedType;
   selectedTypes: Object;
   searchQuery?: string;
   id: string;
@@ -42,6 +52,7 @@ export const useFeed = ({
   );
   const userTrips = useUserTrips(
     ownerId || undefined,
+    { searchTerm: searchQuery },
     feedType === 'userTrips',
   );
   const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');

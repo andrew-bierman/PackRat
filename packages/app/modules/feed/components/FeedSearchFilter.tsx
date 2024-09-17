@@ -10,8 +10,10 @@ import {
   Form,
   InputWithIcon,
   DropdownComponent,
+  RSwitch,
 } from '@packrat/ui';
 import { Search, X } from '@tamagui/lucide-icons';
+import { Switch } from 'tamagui';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
@@ -87,24 +89,6 @@ export const FeedSearchFilter = ({
               placeholder={`Search ${feedType || 'Feed'}`}
               value={searchValue}
             />
-            {/* <FormInput
-                width='100%'
-                placeholder={`Search ${feedType || 'Feed'}`}
-                name="search"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.nativeEvent.text)}
-              />
-              <RIconButton
-                backgroundColor="transparent"
-                onPress={() => onSearch(searchValue)}
-                icon={
-                  <AntDesign
-                    name="search1"
-                    size={24}
-                    color={currentTheme.colors.cardIconColor}
-                  />
-                }
-              /> */}
           </RStack>
         </Form>
       </View>
@@ -123,45 +107,37 @@ export const FeedSearchFilter = ({
             <RStack
               style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
             >
-              {/* DISABLE TRIP TEMP */}
               <RText
                 fontSize={18}
                 fontWeight="bold"
-                color={currentTheme.colors.text}
+                color={currentTheme.colors.tertiaryBlue}
               >
-                Discover Other Users' Public Packs
+                Packs
               </RText>
-              {/* <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.tertiaryBlue}
-                >
-                  Packs
-                </RText>
 
-                <RSwitch
-                  id="single-switch"
-                  size="$1.5"
-                  checked={selectedTypes?.pack ?? false}
-                  onCheckedChange={handleTogglePack}
-                >
-                  <Switch.Thumb />
-                </RSwitch>
-                <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.tertiaryBlue}
-                >
-                  Trips
-                </RText> 
-                <RSwitch
-                  id="two-switch"
-                  size="$1.5"
-                  checked={selectedTypes?.trip ?? false}
-                  onCheckedChange={handleToggleTrip}
-                >
-                  <Switch.Thumb />
-                </RSwitch>*/}
+              <RSwitch
+                id="single-switch"
+                size="$1.5"
+                checked={selectedTypes?.pack ?? false}
+                onCheckedChange={handleTogglePack}
+              >
+                <Switch.Thumb />
+              </RSwitch>
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.tertiaryBlue}
+              >
+                Trips
+              </RText>
+              <RSwitch
+                id="two-switch"
+                size="$1.5"
+                checked={selectedTypes?.trip ?? false}
+                onCheckedChange={handleToggleTrip}
+              >
+                <Switch.Thumb />
+              </RSwitch>
             </RStack>
           )}
           {feedType === 'packTemplates' && (

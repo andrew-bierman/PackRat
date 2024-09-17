@@ -57,15 +57,15 @@ export class Feed {
           createdAt: trip.createdAt,
           name: trip.name,
           owner_id: trip.owner_id,
-          grades: literal(''),
-          scores: literal(''),
+          grades: literal('{}'),
+          scores: literal('{}'),
           type: literal('trip'),
           description: trip.description,
           destination: trip.destination,
-          favorites_count: literal(null),
+          favorites_count: literal('0'),
           quantity: literal(null),
-          userFavorites: literal(null),
-          total_weight: literal(null),
+          userFavorites: literal('[]'),
+          total_weight: literal('0'),
         })
         .from(trip);
 
@@ -104,7 +104,6 @@ export class Feed {
         .from(feedQuery.as('feed'))
         .all();
       const { limit, offset } = getPaginationParams(pagination);
-
       if (queryBy === 'Oldest' || queryBy === 'Most Recent') {
         const orderDirection = queryBy === 'Most Recent' ? 'desc' : 'asc';
         feedQuery = feedQuery.orderBy((row) => row.createdAt, orderDirection);
@@ -113,8 +112,8 @@ export class Feed {
       const feedData = await feedQuery.limit(limit).offset(offset).all();
       const data = (await feedData).map((data) => ({
         ...data,
-        scores: JSON.parse(data.scores as string),
-        grades: JSON.parse(data.grades as string),
+        scores: this.parseJSON(data.scores as string),
+        grades: this.parseJSON(data.grades as string),
         total_score: this.computeTotalScores(data),
         userFavoritePacks: this.computeUserFavoritePacks(data),
       }));
@@ -125,6 +124,16 @@ export class Feed {
       };
     } catch (error) {
       throw new Error(`Error finding public feed: ${error.message}`);
+    }
+  }
+
+  parseJSON(JSONString: string) {
+    try {
+      const parsedData = JSON.parse(JSONString);
+      return parsedData;
+    } catch {
+      console.error(`Error: ${JSONString}`);
+      return {};
     }
   }
 
@@ -157,7 +166,7 @@ export class Feed {
 
   computeTotalScores(pack) {
     if (!pack.scores) return 0;
-    const scores = JSON.parse(pack.scores);
+    const scores = this.parseJSON(pack.scores);
     const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,
