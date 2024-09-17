@@ -164,18 +164,14 @@ export const FeedSearchFilter = ({
                 </RSwitch>*/}
             </RStack>
           )}
-          {feedType === 'packTemplatess' && (
-            <RStack
-              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+          {feedType === 'packTemplates' && (
+            <RText
+              fontSize={18}
+              fontWeight="bold"
+              color={currentTheme.colors.text}
             >
-              <RText
-                fontSize={18}
-                fontWeight="bold"
-                color={currentTheme.colors.text}
-              >
-                Discover pack templates to help you get started.
-              </RText>
-            </RStack>
+              Discover our curated pack templates to help you get started.
+            </RText>
           )}
           {/* DISABLE SORTS */}
           {/* <RStack

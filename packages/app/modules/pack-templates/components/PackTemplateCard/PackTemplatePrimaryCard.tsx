@@ -1,11 +1,14 @@
-import { Card, Details, RLink, RStack, RText } from '@packrat/ui';
-import React, { type FC } from 'react';
+import { Card, Details, RText } from '@packrat/ui';
+import React, { FC } from 'react';
 import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import { roundNumber } from 'app/utils';
 import { PackImage } from 'app/modules/pack';
+import { RouterOutput } from 'trpc';
 
-export default function PackTemplatePrimaryCard(props) {
+export const PackTemplatePrimaryCard: FC<RouterOutput['getPackTemplate']> = (
+  props,
+) => {
   const [weightUnit] = useItemWeightUnit();
 
   return (
@@ -34,4 +37,4 @@ export default function PackTemplatePrimaryCard(props) {
       type={props.cardType}
     />
   );
-}
+};

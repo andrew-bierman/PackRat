@@ -64,14 +64,6 @@ export function PackDetailsScreen() {
       </Layout>
     );
 
-  if (currentPack.is_template) {
-    // TODO (current) elegant and resilient way
-    delete SECTION.CHAT;
-    delete SECTION.CTA;
-    delete SECTION.SCORECARD;
-    delete SECTION.SIMILAR_PACKS;
-  }
-
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
       {!isError && (

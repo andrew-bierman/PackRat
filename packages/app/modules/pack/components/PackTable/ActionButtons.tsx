@@ -100,7 +100,6 @@ export default function ActionButtons({
         <RText> Are you sure you want to delete this item?</RText>
       </BaseAlert>
 
-      {/* {hasPermissions ? ( */}
       {Platform.OS === 'android' ||
       Platform.OS === 'ios' ||
       window.innerWidth < 900 ? (
@@ -121,7 +120,7 @@ export default function ActionButtons({
         </View>
       ) : (
         <View>
-          <ThreeDotsMenu open={true}>
+          <ThreeDotsMenu>
             <YStack space="$1">
               <RButton onPress={handleEditClick}>Edit</RButton>
               <RButton onPress={handleDeleteClick}>Delete</RButton>
@@ -129,7 +128,6 @@ export default function ActionButtons({
           </ThreeDotsMenu>
         </View>
       )}
-      {/* ) : null} */}
     </>
   );
 }

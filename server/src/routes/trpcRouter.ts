@@ -43,7 +43,6 @@ import {
 } from '../controllers/passwordReset';
 import {
   addPackRoute,
-  createPackFromTemplateRoute,
   deletePackRoute,
   duplicatePublicPackRoute,
   editPackRoute,
@@ -98,6 +97,7 @@ import { getPublicFeedRoute, getUserPacksFeedRoute } from '../modules/feed';
 import {
   getPackTemplatesRoute,
   getPackTemplateRoute,
+  createPackFromTemplateRoute,
 } from '../controllers/packTemplates';
 
 export const appRouter = trpcRouter({
@@ -132,6 +132,7 @@ export const appRouter = trpcRouter({
   // templates routes
   getPackTemplates: getPackTemplatesRoute(),
   getPackTemplate: getPackTemplateRoute(),
+  createPackFromTemplate: createPackFromTemplateRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),
@@ -145,7 +146,6 @@ export const appRouter = trpcRouter({
   getPacks: getPacksRoute(), // Done (Sorting by Items is left)
   getPackById: getPackByIdRoute(), // Done
   addPack: addPackRoute(), // Done
-  createPackFromTemplate: createPackFromTemplateRoute(),
   editPack: editPackRoute(), // Done
   deletePack: deletePackRoute(), // Done
   scorePack: scorePackRoute(), // Done

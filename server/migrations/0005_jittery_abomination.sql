@@ -12,5 +12,3 @@ CREATE TABLE `pack_template` (
 	`description` text NOT NULL,
 	`type` text DEFAULT 'packTemplate'
 );
---> statement-breakpoint
-ALTER TABLE pack ADD `is_template` integer DEFAULT false;

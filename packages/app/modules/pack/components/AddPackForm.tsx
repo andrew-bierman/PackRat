@@ -122,7 +122,6 @@ const loadStyles = (theme, appTheme) => {
       textAlign: 'center',
       justifyContent: 'center',
       width: '100%',
-      flex: 1,
       paddingHorizontal: 18,
       gap: 20,
       paddingTop: 20,

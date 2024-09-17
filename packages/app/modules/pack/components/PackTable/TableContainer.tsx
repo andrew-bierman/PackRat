@@ -22,7 +22,7 @@ import {
 
 import ActionButtons from './ActionButtons';
 import React from 'react';
-import { type Item } from '../../model';
+import { type Item } from 'app/modules/item';
 
 interface TableContainerProps {
   currentPack: any;

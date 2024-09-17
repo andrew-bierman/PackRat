@@ -30,7 +30,7 @@ const loadStyles = (theme) => {
     quickActionsContainer: {
       position: 'absolute',
       top: 50,
-      right: 10,
+      left: 10,
       zIndex: 1,
       backgroundColor: currentTheme.colors.background,
       height: 54,
@@ -40,7 +40,6 @@ const loadStyles = (theme) => {
     fab: {
       flexDirection: 'row',
       width: 100,
-      // height: 50,
       backgroundColor: currentTheme.colors.card,
       borderRadius: 9,
       justifyContent: 'center',

@@ -7,13 +7,14 @@ import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
 import { useAuthUser } from 'app/modules/auth';
+import { PackTemplateHeader } from 'app/modules/pack-templates';
 
 interface CustomCardProps {
   title: string;
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip' | 'item';
+  type: 'pack' | 'trip' | 'item' | 'packTemplate';
   destination?: string;
   data: {
     owner_id?: string;
@@ -25,6 +26,7 @@ const HEADER_COMPONENTS = {
   trip: TripCardHeader,
   pack: PackCardHeader,
   item: ItemCardHeader,
+  packTemplate: PackTemplateHeader,
 };
 
 export const CustomCard = ({

@@ -34,7 +34,6 @@ export function BasicTable<T extends object>({
               borderRadius="$4"
               borderWidth="$1"
               borderColor="$borderColor"
-              flex={1}
               alignSelf="stretch"
               gap="$3"
               p="$3"
@@ -95,8 +94,8 @@ export function BasicTable<T extends object>({
           {tableRows.map((row) => (
             <Table.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <Table.Cell key={cell.id}>
-                  <Text color="$gray11">
+                <Table.Cell key={cell.id} px="$1">
+                  <Text color="$gray11" ta="center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Text>
                 </Table.Cell>

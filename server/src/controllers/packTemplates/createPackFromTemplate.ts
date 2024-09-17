@@ -1,5 +1,5 @@
 import * as validator from '@packrat/validations';
-import { createPackFromTemplateService } from 'src/services/packTemplate/createPackFromTemplateService';
+import { createPackFromTemplateService } from 'src/services/packTemplate/packTemplate.service';
 import { protectedProcedure } from 'src/trpc';
 
 export function createPackFromTemplateRoute() {
@@ -8,7 +8,8 @@ export function createPackFromTemplateRoute() {
     .mutation(async (opts) => {
       const pack = await createPackFromTemplateService(
         opts.ctx.user.id,
-        opts.input.packId,
+        opts.input.id,
+        opts.ctx.executionCtx,
       );
       return pack;
     });

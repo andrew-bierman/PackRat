@@ -33,7 +33,6 @@ export interface FeedCardProps<Details> {
   title: string;
   cardType: CardType;
   createdAt: string;
-  isTemplate: boolean;
   details: Details;
   ownerId: string;
   favoriteCount: number;

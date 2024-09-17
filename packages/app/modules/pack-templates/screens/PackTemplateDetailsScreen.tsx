@@ -1,29 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { CLIENT_URL } from '@packrat/config';
-import { RH3, RSpinner, RText } from '@packrat/ui';
-import { useAuthUser } from 'app/modules/auth';
+import { RSeparator, RSpinner, RStack, RText } from '@packrat/ui';
 import Layout from 'app/components/layout/Layout';
-import {
-  useIsAuthUserPack,
-  usePackId,
-  useFetchSinglePack,
-  TableContainer,
-} from 'app/modules/pack';
-import useResponsive from 'app/hooks/useResponsive';
-import { FlatList, View } from 'react-native';
-import ScoreContainer from '../../../components/ScoreContainer';
-import { TextLink } from '@packrat/crosspath';
+import { Platform, View } from 'react-native';
 import { DetailsComponent } from '../../../components/details';
-import { ImportItemModal, AddItemModal } from 'app/modules/item';
-import { FeedPreview } from 'app/modules/feed';
-import LargeCard from 'app/components/card/LargeCard';
-import useTheme from 'app/hooks/useTheme';
 import { usePackTemplateId } from '../hooks';
 import { useGetPackTemplate } from '../hooks/useGetPackTemplate';
+import { PackTemplateTable } from '../components';
 
 export const PackTemplateDetailsScreen = () => {
-  // const { currentTheme } = useTheme();
   const [packTemplateId] = usePackTemplateId();
   const link = `${CLIENT_URL}/packs/${packTemplateId}`;
 
@@ -42,8 +28,6 @@ export const PackTemplateDetailsScreen = () => {
       </Layout>
     );
 
-  console.log('packTemplate', packTemplate);
-
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
       {!isError && (
@@ -59,9 +43,17 @@ export const PackTemplateDetailsScreen = () => {
             isLoading={isLoading}
             error={error as any}
             additionalComps={
-              <RText style={{ color: 'white', paddingTop: 150, zIndex: 1000 }}>
-                {JSON.stringify(packTemplate, null, 2)}
-              </RText>
+              <RStack style={{ gap: Platform.OS === 'web' ? 30 : 10 }}>
+                <RText
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                >
+                  {packTemplate.description}
+                </RText>
+                <RSeparator style={{ marginRight: -16, marginLeft: -16 }} />
+                <PackTemplateTable items={packTemplate.items} />
+              </RStack>
             }
             link={link}
           />

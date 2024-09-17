@@ -1,7 +1,11 @@
-import PackTemplatePrimaryCard from './PackTemplatePrimaryCard';
+import { FC } from 'react';
+import { PackTemplatePrimaryCard } from './PackTemplatePrimaryCard';
+import { RouterOutput } from 'trpc';
 
-export function PackTemplateCard({ children, ...rest }) {
-  // No usecase or need for packtemplate preview card currently
-  // Implement PackTemplateSecondaryCard whenever needed and add the logic for rendering it
-  return <PackTemplatePrimaryCard {...rest} />;
-}
+export const PackTemplateCard: FC<RouterOutput['getPackTemplate']> = (
+  props,
+) => {
+  // No usecase or need for packtemplate preview (aka secondary) card currently
+  // Implement PackTemplateSecondaryCard whenever needed and add the logic for rendering it based on `cardType` prop
+  return <PackTemplatePrimaryCard {...props} />;
+};

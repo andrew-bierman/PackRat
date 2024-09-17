@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "676a46fa-401d-4f42-b982-39d6e90d6825",
+  "id": "deeea848-5b19-4a44-a0d3-59c99ae33bca",
   "prevId": "25256b91-d058-4509-ab3a-a877c2ce278a",
   "tables": {
     "conversation": {
@@ -554,14 +554,6 @@
           "notNull": false,
           "autoincrement": false,
           "default": "'pack'"
-        },
-        "is_template": {
-          "name": "is_template",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": false
         },
         "created_at": {
           "name": "created_at",

@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { DbClient } from 'src/db/client';
+import { DbClient } from '../../db/client';
 import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
 import { packTemplate as packTemplateTable } from 'src/db/schema';
 
@@ -16,7 +16,6 @@ export class PackTemplate {
     });
 
     return packTemplates.map((packTemplate) => {
-      // ...packTemplate,
       const items = packTemplate.itemPackTemplates.map(
         (itemPack) => itemPack.item,
       );
@@ -44,12 +43,13 @@ export class PackTemplate {
   async findPackTemplate(id: string) {
     const packTemplate = await DbClient.instance.query.packTemplate.findFirst({
       where: eq(packTemplateTable.id, id),
-      with: { itemPackTemplates: { with: { item: {} } } },
+      with: {
+        itemPackTemplates: { with: { item: { with: { category: {} } } } },
+      },
     });
 
-    // TODO (pack-templates) - tackle duplication?
     const items = packTemplate.itemPackTemplates.map(
-      (itemPack) => itemPack.item,
+      (itemPackTemplate) => itemPackTemplate.item,
     );
     const total_weight = items.reduce((sum, item) => {
       const weightInGrams = convertWeight(

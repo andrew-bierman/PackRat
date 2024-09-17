@@ -16,10 +16,6 @@ export const addPack = z.object({
   is_public: z.boolean(),
 });
 
-export const createPackFromTemplate = z.object({
-  packId: z.string(),
-});
-
 export const editPack = z.object({
   id: z.string(),
   name: z.string(),

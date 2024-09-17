@@ -121,7 +121,6 @@ export const pack = sqliteTable('pack', {
       }),
     ),
   type: text('type').default('pack'),
-  is_template: integer('is_template', { mode: 'boolean' }).default(false),
   // total_weight: real('total_weight'),
   // total_score: integer('total_score').default(0),
   // favorites_count: integer('favorites_count').default(0),

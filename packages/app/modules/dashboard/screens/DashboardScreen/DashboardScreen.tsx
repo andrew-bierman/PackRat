@@ -9,9 +9,11 @@ import { useScreenWidth } from 'app/hooks/common';
 import FAB from 'app/components/Fab/Fab';
 import { FeedPreview } from 'app/modules/feed';
 import { Button, Stack } from 'tamagui';
+import { useRouter } from '@packrat/crosspath';
 
 export const DashboardScreen = () => {
   const styles = useCustomStyles(loadStyles);
+  const router = useRouter();
 
   return (
     <Layout>
@@ -28,12 +30,18 @@ export const DashboardScreen = () => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                alignSelf: 'end',
+                alignSelf: 'flex-end',
+                paddingRight: 16,
                 gap: 8,
               }}
             >
               <FAB />
-              <Button style={{ alignSelf: 'end' }}>Templates</Button>
+              <Button
+                style={{ alignSelf: 'flex-end' }}
+                onPress={() => router.push('/pack-templates')}
+              >
+                Templates
+              </Button>
             </Stack>
           ) : null}
 
