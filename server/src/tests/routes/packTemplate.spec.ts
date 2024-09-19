@@ -65,7 +65,7 @@ describe('Pack template routes', () => {
       weight: 1.5,
       quantity: 1,
       unit: 'kg',
-      category_id: essentialsCategoryId,
+      categoryId: essentialsCategoryId,
       owner_id: null,
     };
     const waterBottle = {
@@ -73,7 +73,7 @@ describe('Pack template routes', () => {
       weight: 0.5,
       quantity: 2,
       unit: 'kg',
-      category_id: waterCategoryId,
+      categoryId: waterCategoryId,
       owner_id: null,
     };
     const tailMix = {
@@ -81,8 +81,8 @@ describe('Pack template routes', () => {
       weight: 0.3,
       quantity: 5,
       unit: 'kg',
-      category_id: foodCategoryId,
-      owner_id: null,
+      categoryId: foodCategoryId,
+      ownerId: null,
     };
 
     packTemplateItems = await itemRepository.createBulk([
@@ -128,8 +128,12 @@ describe('Pack template routes', () => {
 
   describe('createPackFromTemplate', () => {
     it('should create a pack from pack template', async () => {
-      const pack = await caller.createPackFromTemplate({ id: packTemplate.id });
-      expect(pack.name).toEqual(packTemplate.name);
+      const newPackName = 'My new duplicated pack';
+      const pack = await caller.createPackFromTemplate({
+        packTemplateId: packTemplate.id,
+        newPackName,
+      });
+      expect(pack.name).toEqual(newPackName);
     });
   });
 });

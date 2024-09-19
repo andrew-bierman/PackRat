@@ -9,9 +9,13 @@ export const useCreatePackFromTemplate = () => {
     },
   });
 
-  const createPackFromTemplate = (id: string) => {
+  const createPackFromTemplate = (
+    packTemplateId: string,
+    newPackName: string,
+  ) => {
     mutation.mutate({
-      id,
+      packTemplateId,
+      newPackName,
     });
   };
 

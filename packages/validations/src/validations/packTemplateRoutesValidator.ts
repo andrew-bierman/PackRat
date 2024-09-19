@@ -5,5 +5,6 @@ export const getPackTemplate = z.object({
 });
 
 export const createPackFromTemplate = z.object({
-  id: z.string().min(1),
+  packTemplateId: z.string().min(1),
+  newPackName: z.string().min(1),
 });
