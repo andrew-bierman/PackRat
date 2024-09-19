@@ -23,10 +23,16 @@ export const createPackFromTemplateService = async (
   );
 
   for (const item of packTemplate.items) {
-    await itemPacksRepository.create({
-      packId: createdPack.id,
-      itemId: item.id,
-    });
+    await addItemService(
+      item.name,
+      item.weight,
+      item.quantity,
+      item.unit,
+      createdPack.id,
+      item.category.name,
+      userId,
+      executionCtx,
+    );
   }
 
   return createdPack;
