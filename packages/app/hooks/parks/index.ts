@@ -2,7 +2,13 @@
 import { queryTrpc } from '../../trpc';
 
 interface Park {
+  id: string;
   properties: Record<string | number, any>;
+}
+
+interface ParkDetails {
+  id: string;
+  name: string;
 }
 
 function useParks({ latLng, radius = 5000 }) {
@@ -32,7 +38,7 @@ function useParks({ latLng, radius = 5000 }) {
         (park) => park.properties && park.properties?.name,
         // && park.properties.name !== selectedSearch,
       )
-      .map((park) => park.properties && park.properties?.name)
+      .map((park) => ({ id: park.id, name: park.properties?.name }))
       .filter(Boolean)
       .slice(0, 25);
 

@@ -8,7 +8,7 @@ import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
 import { RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
-import { disableScreen } from 'app/hoc/disableScreen';
+import { type FeedType } from '../model';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -24,7 +24,7 @@ const ERROR_MESSAGES = {
 };
 
 interface FeedProps {
-  feedType?: string;
+  feedType?: FeedType;
 }
 
 const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {

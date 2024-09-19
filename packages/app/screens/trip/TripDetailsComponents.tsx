@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import ScoreContainer from '../../components/ScoreContainer';
 import WeatherCard from '../../components/weather/WeatherCard';
 import { TripMapCard } from 'app/components/trip/TripCards';
 import { useFetchSinglePack, TableContainer } from 'app/modules/pack';
 import { RSkeleton, RText } from '@packrat/ui';
+import { AddItemModal } from 'app/modules/item';
 
 const TableContainerComponent = ({ currentPack }) => {
   const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack);
+  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+  const [refetch, setRefetch] = useState(false);
 
   if (isLoading) return <RSkeleton style={{}} />;
 
   if (data === null) return <RText>Pack Not Found</RText>;
+  console.log({ currentPack }, 'currentPack');
 
   return (
     <View>
       <TableContainer currentPack={data} />
+      <AddItemModal
+        currentPackId={currentPack.id || ''}
+        currentPack={currentPack}
+        isAddItemModalOpen={isAddItemModalOpen}
+        setIsAddItemModalOpen={setIsAddItemModalOpen}
+        // refetch={refetch}
+        setRefetch={() => setRefetch((prev) => !prev)}
+      />
     </View>
   );
 };
