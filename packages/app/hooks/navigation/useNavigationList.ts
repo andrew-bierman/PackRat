@@ -85,14 +85,13 @@ const logedInMenuItems: NavigationItem[] = [
     text: 'Feed',
     iconSource: MaterialCommunityIcons,
   },
-  // DISABLE TROP TEMP
-  // {
-  //   type: NavigationItemTypeEnum.LINK,
-  //   href: '/trips',
-  //   icon: 'routes',
-  //   text: 'Trips',
-  //   iconSource: MaterialCommunityIcons,
-  // },
+  {
+    type: NavigationItemTypeEnum.LINK,
+    href: '/trips',
+    icon: 'routes',
+    text: 'Trips',
+    iconSource: MaterialCommunityIcons,
+  },
   {
     type: NavigationItemTypeEnum.LINK,
     href: '/packs',

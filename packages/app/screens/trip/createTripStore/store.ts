@@ -33,7 +33,7 @@ export const setDateRange = (
 });
 
 export const createTripInitialState: Partial<Record<addTripKey, any>> = {
-  type: 'trip',
+  activity: 'trip',
 };
 
 export const createTripReducer = (

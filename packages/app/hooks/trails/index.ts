@@ -2,7 +2,12 @@ import { queryTrpc } from '../../trpc';
 
 interface Trail {
   properties: Record<string | number, any>;
-  // other properties if needed
+  id: string;
+}
+
+interface TrailDetails {
+  id: string;
+  name: string;
 }
 
 function useTrails({ latLng, selectedSearch, radius = 1000 }) {
@@ -28,7 +33,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
   );
 
   // React.useEffect(() => {
-  let filteredTrails: string[] = [];
+  let filteredTrails: TrailDetails[] = [];
   if (data) {
     const trails = data.features as Trail[];
     filteredTrails = trails
@@ -36,7 +41,7 @@ function useTrails({ latLng, selectedSearch, radius = 1000 }) {
         (trail) =>
           trail.properties?.name && trail.properties.name !== selectedSearch,
       )
-      .map((trail) => trail.properties?.name)
+      .map((trail) => ({ id: trail.id, name: trail.properties?.name }))
       .slice(0, 25);
 
     // Dispatching directly using the imported store

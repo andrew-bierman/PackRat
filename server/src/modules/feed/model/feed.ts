@@ -19,7 +19,7 @@ export class Feed {
   async findFeed(
     queryBy: FeedQueryBy,
     modifiers?: Modifiers,
-    excludeType: 'trips' | 'packs' = 'trips',
+    excludeType?: 'trips' | 'packs',
     pagination?: PaginationParams,
   ) {
     try {
@@ -57,15 +57,15 @@ export class Feed {
           createdAt: trip.createdAt,
           name: trip.name,
           owner_id: trip.owner_id,
-          grades: literal(''),
-          scores: literal(''),
+          grades: literal('{}'),
+          scores: literal('{}'),
           type: literal('trip'),
           description: trip.description,
           destination: trip.destination,
-          favorites_count: literal(null),
+          favorites_count: literal('0'),
           quantity: literal(null),
-          userFavorites: literal(null),
-          total_weight: literal(null),
+          userFavorites: literal('[]'),
+          total_weight: literal('0'),
         })
         .from(trip);
 
