@@ -17,7 +17,7 @@ interface CarouselProps {
   iconColor?: string;
   refreshing?: boolean;
   onEndReached: () => void;
-  onRefresh? : () => void;
+  onRefresh?: () => void;
 }
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -75,39 +75,39 @@ const Carousel: React.FC<CarouselProps> = ({
         />
       )}
 
-<FlatList
-      ref={scrollViewRef}
-      horizontal
-      scrollEnabled
-      style={styles.carousel}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ flexDirection: 'row' }}
-      pagingEnabled
-      onMomentumScrollEnd={handleScroll}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-        />
-      }
-      // keyExtractor={keyExtractor}
-      data={children} // Pass the children as data to FlatList
-      renderItem={({ item, index }) => (
-        <RStack
-          key={index}
-          style={{
-            ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
-            marginRight: 10,
-            marginTop: 10,
-            flexDirection: 'row',
-          }}
-        >
-          {item}
-        </RStack>
-      )}
-      onEndReached={onEndReached}
-      onEndReachedThreshold={0.5}
-    />
+      <FlatList
+        ref={scrollViewRef}
+        horizontal
+        scrollEnabled
+        style={styles.carousel}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ flexDirection: 'row' }}
+        // pagingEnabled
+        onMomentumScrollEnd={handleScroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        // keyExtractor={keyExtractor}
+        data={children} // Pass the children as data to FlatList
+        renderItem={({ item, index }) => (
+          <RStack
+            key={index}
+            style={{
+              ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
+              marginRight: 10,
+              marginTop: 10,    
+              flexDirection: 'row',
+            }}
+          >
+            {item}
+          </RStack>
+        )}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={1}
+      />
 
       {/* Show buttons only on web */}
       {Platform.OS === 'web' && (
