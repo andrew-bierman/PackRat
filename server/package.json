@@ -75,7 +75,7 @@
     "drizzle-orm": "^0.30.10",
     "drizzle-zod": "^0.5.1",
     "eslint-plugin-drizzle": "^0.2.3",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "express-rate-limit": "^6.9.0",
     "firebase": "^9.19.1",
     "firebase-admin": "^11.5.0",
