@@ -1,5 +1,5 @@
 import { ErrorBoundary, RStack, RText } from '@packrat/ui';
-import { Map } from '@packrat/map';
+import { Map } from 'app/modules/map';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ interface TripMapCardProps {
 
 export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
   const { currentTheme } = useTheme();
+  console.log({ shape });
 
   return (
     <TripCardBase
@@ -31,7 +32,7 @@ export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
         </RStack>
       ) : (
         <ErrorBoundary>
-          <Map shape={shape} />
+          <Map style={{ width: '100%', height: 320 }} shape={shape} />
         </ErrorBoundary>
       )}
     </TripCardBase>

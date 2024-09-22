@@ -2,12 +2,11 @@ import { Modal, Text, View, Image } from 'react-native';
 import { offlineManager } from '@rnmapbox/maps';
 import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import useTheme from 'app/hooks/useTheme';
 import { api } from 'app/constants/api';
-import { RButton, RScrollView, RStack } from '@packrat/ui';
+import { RButton, RScrollView, RStack, RText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Map } from '@packrat/map';
+import { Map } from 'app/modules/map';
 import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
 import { disableScreen } from 'app/hoc/disableScreen';
@@ -53,49 +52,49 @@ function CircleCapComp() {
   );
 }
 
-function DownloadedMaps() {
+export const OfflineMapsScreen = () => {
   const styles = useCustomStyles(loadStyles);
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const { user } = useUserQuery();
   const { token } = useAuthUserToken();
   const [offlineMaps, setOfflineMaps] = useState<OfflineMap[]>();
-  const refreshOfflineMapList = async () => {
-    const offlineMaps = Object.values(user.offlineMaps || {});
-    const offlineMapboxPacks: OfflineMap[] = [];
-    for (const map of offlineMaps) {
-      const offlineMap: OfflineMap = {
-        styleURL: `${map.styleURL}`,
-        name: `${map.name}`,
-        minZoom: map.minZoom,
-        maxZoom: map.maxZoom,
-        bounds: map.bounds,
-        metadata: {
-          shape: JSON.parse(map.metadata.shape),
-        },
-        downloaded: false,
-      };
-
-      let offlineMapboxPack: OfflinePack | null;
-      try {
-        offlineMapboxPack = await offlineManager.getPack(map.name);
-      } catch (error) {
-        console.error(error);
-        offlineMapboxPack = null;
-      }
-
-      if (offlineMapboxPack) {
-        offlineMap.downloaded = true;
-      }
-
-      offlineMapboxPacks.push(offlineMap);
-    }
-
-    setOfflineMaps(offlineMapboxPacks);
-  };
-
   useFocusEffect(
     useCallback(() => {
+      const refreshOfflineMapList = async () => {
+        const offlineMaps = Object.values(user.offlineMaps || {});
+        const offlineMapboxPacks: OfflineMap[] = [];
+        for (const map of offlineMaps) {
+          const offlineMap: OfflineMap = {
+            styleURL: `${map.styleURL}`,
+            name: `${map.name}`,
+            minZoom: map.minZoom,
+            maxZoom: map.maxZoom,
+            bounds: map.bounds,
+            metadata: {
+              shape: JSON.parse(map.metadata.shape),
+            },
+            downloaded: false,
+          };
+
+          let offlineMapboxPack: OfflinePack | null;
+          try {
+            offlineMapboxPack = await offlineManager.getPack(map.name);
+          } catch (error) {
+            console.error(error);
+            offlineMapboxPack = null;
+          }
+
+          if (offlineMapboxPack) {
+            offlineMap.downloaded = true;
+          }
+
+          offlineMapboxPacks.push(offlineMap);
+        }
+
+        setOfflineMaps(offlineMapboxPacks);
+      };
+
       refreshOfflineMapList();
     }, [user]),
   );
@@ -122,9 +121,10 @@ function DownloadedMaps() {
         {offlineMaps ? (
           <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
             {offlineMaps.map((offlineMap) => {
-              const center = getCenterCoordinates(offlineMap.bounds);
+              // const center = getCenterCoordinates(offlineMap.bounds);
               return (
                 <RStack
+                  key={offlineMap.name}
                   style={{
                     flexDirection: 'column',
                     display: 'flex',
@@ -162,7 +162,7 @@ function DownloadedMaps() {
       </RScrollView>
     </View>
   );
-}
+};
 
 const loadStyles = ({ currentTheme }) => {
   return {
@@ -173,5 +173,3 @@ const loadStyles = ({ currentTheme }) => {
     },
   };
 };
-
-export default disableScreen(DownloadedMaps);

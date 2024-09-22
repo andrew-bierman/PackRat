@@ -99,6 +99,7 @@ export * from './RStack';
 export * from './RTabs';
 export * from './RText';
 export * from './Rparagraph';
+export * from './FullScreen';
 export * from './SizableText';
 export * from './XStack';
 export * from './YStack';
