@@ -1,5 +1,5 @@
 import { Modal, Text, View, Image } from 'react-native';
-import { offlineManager } from '@rnmapbox/maps';
+import offlineManager from '@rnmapbox/maps';
 import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from 'expo-router';
 import useTheme from 'app/hooks/useTheme';
@@ -10,6 +10,7 @@ import { Map } from 'app/modules/map';
 import { useAuthUserToken, useUserQuery } from 'app/modules/auth';
 import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
 import { disableScreen } from 'app/hoc/disableScreen';
+import { MapPreviewCard } from 'app/modules/map/components';
 
 interface OfflineMap {
   name: string;
@@ -59,6 +60,8 @@ export const OfflineMapsScreen = () => {
   const { user } = useUserQuery();
   const { token } = useAuthUserToken();
   const [offlineMaps, setOfflineMaps] = useState<OfflineMap[]>();
+
+  console.log('offlineMaps', offlineMaps)
   useFocusEffect(
     useCallback(() => {
       const refreshOfflineMapList = async () => {
@@ -113,7 +116,7 @@ export const OfflineMapsScreen = () => {
             fontSize: 20,
             fontWeight: 'bold',
             marginVertical: 20,
-            color: currentTheme.colors.white,
+            color: currentTheme.colors.black,
           }}
         >
           Downloaded Maps
@@ -121,6 +124,7 @@ export const OfflineMapsScreen = () => {
         {offlineMaps ? (
           <View style={{ gap: 16, paddingHorizontal: 16, paddingBottom: 16 }}>
             {offlineMaps.map((offlineMap) => {
+              console.log('singleMap' , offlineMap)
               // const center = getCenterCoordinates(offlineMap.bounds);
               return (
                 <RStack
@@ -133,23 +137,24 @@ export const OfflineMapsScreen = () => {
                     borderRadius: 15,
                   }}
                 >
-                  <Map
+                  {/* <Map
                     shape={offlineMap.metadata.shape}
                     shouldEnableDownload={!offlineMap.downloaded}
                     mapName={offlineMap.name}
                     forceFullScreen={false}
-                  />
-                  <Text
+                  /> */}
+                  {/* <Text
                     style={{
                       fontSize: 16,
                       fontWeight: 'bold',
                       marginTop: 5,
                       textAlign: 'center',
-                      color: currentTheme.colors.white,
+                      color: currentTheme.colors.black,
                     }}
                   >
                     {offlineMap.name}
-                  </Text>
+                  </Text> */}
+                  <MapPreviewCard title={offlineMap.name} isDownloaded={offlineMap.downloaded}/>
                 </RStack>
               );
             })}
