@@ -16,6 +16,8 @@ import { Platform } from 'react-native';
 import { useEditTrips } from 'app/hooks/trips';
 import { useAddFavorite } from 'app/modules/feed';
 import useTheme from 'app/hooks/useTheme';
+import { PackSecondaryCard } from 'app/modules/pack/components/PackCard/PackSecondaryCard';
+import { TripSecondaryCard } from 'app/modules/trip/components/TripCard/TripSecondaryCard';
 
 const RText: any = OriginalRText;
 
@@ -94,166 +96,66 @@ export const UserDataCard = ({
   const truncatedDestination = truncateString(destination, 25);
 
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 8,
-        marginVertical: 4,
-        borderRadius: 8,
-      }}
-    >
-      <View
-        style={
-          {
-            minHeight: 150,
-            minWidth: Platform.OS === 'web' ? 250 : 225,
-            border: '1px solid gray',
-            borderLeft: `10px solid ${is_public ? 'green' : 'red'}`,
-            borderRadius: 8,
-            overflow: 'hidden',
-            backgroundColor: '#EBEBEB',
-          } as any
-        }
-      >
-        <RStack style={{ padding: 16, gap: 16 }}>
-          <RStack style={{ gap: 8 }}>
-            <RH2>
-              <View
-                style={
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    gap: 10,
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                  } as any
-                }
-              >
-                <RText style={{ fontSize: 16, color: 'black' }}>
-                  {truncatedName}
-                </RText>
-                {(isPackLoading && type === 'pack') ||
-                (isTripLoading && type === 'trip') ? (
-                  <RSkeleton
-                    style={{
-                      height: 20,
-                      width: 36,
-                    }}
-                  />
-                ) : (
-                  <>
-                    {!differentUser && (
-                      <RSwitch
-                        checked={is_public}
-                        onCheckedChange={() => {
-                          handleChangeStatus(index);
-                        }}
-                        size="$1.5"
-                      />
-                    )}
-                  </>
-                )}
-              </View>
-            </RH2>
-            {type === 'pack' ? (
-              <RText
-                style={{
-                  fontSize: 12,
-                  color: 'mediumpurple',
-                  // marginLeft: '-0.5px',
-                  // marginTop: '-3px',
-                }}
-              >
-                Total Weight: {total_weight?.toFixed(2)}g
-              </RText>
-            ) : (
-              <RText
-                style={{
-                  fontSize: 12,
-                  color: 'mediumpurple',
-                  // marginLeft: '-0.5px',
-                  // marginTop: '-3px',
-                }}
-              >
-                Destination: {truncatedDestination}
-              </RText>
-            )}
-          </RStack>
-
-          <RStack
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+    <RStack>
+      {type === 'pack' ? (
+        <RStack
+          style={{
+            backgroundColor: currentTheme.colors.secondaryBlue,
+            borderRadius: 20,
+          }}
+        >
+          <PackSecondaryCard
+            id={id}
+            title={truncatedName}
+            createdAt={createdAt}
+            details={{
+              score: favorites_count,
+              weight: total_weight,
             }}
+            cardType="secondary"
+          />
+          <RStack
+            style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}
           >
-            <RText
+            <TouchableOpacity
+              onPress={handleAddToFavorite}
               style={{
-                color: 'gray',
-                fontSize: 12,
-                fontWeight: '400',
-              }}
-            >
-              {formatDistanceToNow(
-                new Date(
-                  !Number.isNaN(new Date(createdAt).getTime())
-                    ? createdAt
-                    : new Date(),
-                ).getTime(),
-                {
-                  addSuffix: true,
-                },
-              ) ?? 0}
-            </RText>
-            <View
-              style={{
+                display: 'flex',
+                flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: 10,
               }}
             >
-              <RStack
-                color="gray"
-                gap="$2"
-                flexDirection="row"
-                fontWeight={400}
-              >
-                <TouchableOpacity
-                  onPress={handleAddToFavorite}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+              <AntDesign
+                name="heart"
+                size={16}
+                color={isFavorite ? 'red' : currentTheme.colors.cardIconColor}
+              />
+            </TouchableOpacity>
+            <>
+              {!differentUser && (
+                <RSwitch
+                  checked={is_public}
+                  onCheckedChange={() => {
+                    handleChangeStatus(index);
                   }}
-                >
-                  <AntDesign
-                    name="heart"
-                    size={16}
-                    color={
-                      isFavorite ? 'red' : currentTheme.colors.cardIconColor
-                    }
-                  />
-                </TouchableOpacity>
-                <View>
-                  <RText color={currentTheme.colors.text}>
-                    {favorites_count}
-                  </RText>
-                </View>
-              </RStack>
-            </View>
+                  size="$1.5"
+                />
+              )}
+            </>
           </RStack>
         </RStack>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <RLink href={`/${type}/${id}`} style={{ textDecoration: 'none' }}>
-            <RText color="gray" fontWeight="bold">
-              View Details
-            </RText>
-          </RLink>
-        </View>
-      </View>
-    </View>
+      ) : (
+        <TripSecondaryCard
+          id={id}
+          title={truncatedName}
+          createdAt={createdAt}
+          details={{
+            destination: truncatedDestination,
+          }}
+          cardType="secondary"
+        />
+      )}
+    </RStack>
   );
 };
