@@ -214,9 +214,9 @@ export const offlineMap = sqliteTable('offlineMap', {
   name: text('name').notNull(),
   bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
   minZoom: integer('minZoom').notNull(),
-  maxZoom: integer('minZoom').notNull(),
+  maxZoom: integer('maxZoom').notNull(),
   metadata: text('metadata', { mode: 'json' }).$type<OfflineMap['metadata']>(),
-  ownerId: text('owner_id').references(() => user.id, {
+  owner_id: text('owner_id').references(() => user.id, {
     onDelete: 'cascade',
   }),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
