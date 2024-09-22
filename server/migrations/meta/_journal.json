@@ -15,6 +15,13 @@
       "when": 1727001703197,
       "tag": "0001_dizzy_the_phantom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1727009944105,
+      "tag": "0002_lyrical_living_tribunal",
+      "breakpoints": true
     }
   ]
 }

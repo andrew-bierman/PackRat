@@ -1,0 +1,1 @@
+ALTER TABLE offlineMap ADD `maxZoom` integer NOT NULL;
