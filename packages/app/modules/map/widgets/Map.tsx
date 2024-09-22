@@ -9,15 +9,25 @@ import { MapButtonsOverlay } from './MapButtonsOverLay';
 interface MapProps {
   shape: any;
   style?: ViewProps['style'];
+  shouldEnableDownload?: boolean;
+  onExitFullScreen?: () => void;
+  isFullScreenModeByDefault?: boolean;
+  initialBounds?: any;
 }
 
 export const Map: FC<MapProps> = ({
   shape,
   style = { width: '100%', height: 420, position: 'relative' },
+  shouldEnableDownload = true,
+  onExitFullScreen,
+  isFullScreenModeByDefault,
+  initialBounds,
 }) => {
   const mapBoundsRef = useRef([]);
   const { selectedStyle, mapStyles, onStyleChange } = useMapStyles();
-  const { isFullScreenMode, toggleFullScreen } = useMapFullScreen();
+  const { isFullScreenMode, toggleFullScreen } = useMapFullScreen(
+    isFullScreenModeByDefault,
+  );
 
   const handleMapBoundsChange = useCallback((bounds) => {
     mapBoundsRef.current = bounds;
@@ -29,8 +39,13 @@ export const Map: FC<MapProps> = ({
         shape={shape}
         mapStyle={selectedStyle}
         onVisibleBoundsChange={handleMapBoundsChange}
+        initialBounds={initialBounds}
       />
-      <MapButtonsOverlay currentBounds={mapBoundsRef} shape={shape}>
+      <MapButtonsOverlay
+        currentBounds={mapBoundsRef}
+        shape={shape}
+        shouldEnableDownload={shouldEnableDownload}
+      >
         <MapStylePicker
           btnStyle={{ position: 'absolute', top: 10, left: 10 }}
           mapStyles={mapStyles}
@@ -38,7 +53,13 @@ export const Map: FC<MapProps> = ({
         />
         <FullscreenBtn
           style={{ position: 'absolute', top: 10, right: 10 }}
-          toggleFullscreen={toggleFullScreen}
+          toggleFullscreen={() => {
+            if (isFullScreenMode) {
+              onExitFullScreen?.();
+            }
+
+            toggleFullScreen();
+          }}
           isFullScreenMode={isFullScreenMode}
         />
       </MapButtonsOverlay>

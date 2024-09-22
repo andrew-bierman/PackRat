@@ -29,7 +29,7 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
   const styles = useCustomStyles(loadStyles);
   const { isModalOpen, onClose, onOpen } = useModalState();
   const { downloadMap, isDownloading, progress } = useDownloadMapProgress();
-  const { handleDownloadMap } = useDownloadMap(downloadMap);
+  const { handleDownloadMap, isSaving } = useDownloadMap(downloadMap);
   const formattedProgress = !isNaN(progress) ? Math.round(progress) : 0;
 
   const handleSubmit = ({ mapName }) => {
@@ -40,7 +40,7 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
   return (
     <>
       <MapActionBtn style={style} onPress={onOpen}>
-        {isDownloading ? (
+        {isDownloading || isSaving ? (
           <RText style={{ color: '#000' }}>{`${formattedProgress}%`}</RText>
         ) : (
           <Entypo name={'download'} size={21} color="grey" />

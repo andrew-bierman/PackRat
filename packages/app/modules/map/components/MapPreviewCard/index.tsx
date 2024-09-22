@@ -1,48 +1,39 @@
-import React from 'react';
+import React, { type FC } from 'react';
 import { StatusLabel } from './StatusLabel';
-import { View, RText, Card, YStack, Details } from '@packrat/ui'
+import { View, RText, Card, YStack, Details } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
+import { TouchableOpacity } from 'react-native';
+import { MapImage } from './MapImage';
 
 interface MapPreviewCardProps {
-    title: String,
-    isDownloaded: boolean,
+  id: string;
+  title: string;
+  isDownloaded: boolean;
+  onShowMapClick: (id: string) => void;
 }
 
-export const MapPreviewCard: FC<MapPreviewCardProps> = ({ title, isDownloaded }) => {
+export const MapPreviewCard: FC<MapPreviewCardProps> = ({
+  id,
+  onShowMapClick,
+  title,
+  isDownloaded,
+}) => {
+  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+    useTheme();
 
-    const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
-        useTheme();
-    return (
-        <View style={{
-            width: '100%',
-        }}>
-            <Card
-                title={title}
-                subtitle={<StatusLabel isDownloaded={isDownloaded} />}
-                link=''
-                image={null}
-                type='primary'
-                actions={null}
-                content={
-                    <YStack>
-                        <RText>Options</RText>
-                        <Details
-                            items={[
-                                {
-                                    key: 'Show Map',
-                                    label: 'Show Map',
-                                    value: 'Show Map',
-                                },
-                            ]}
-                        />
-                    </YStack>
-                }
-                style={{
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            />
-        </View>
-    )
+  return (
+    <Card
+      title={title}
+      subtitle={isDownloaded ? <StatusLabel /> : null}
+      link=""
+      image={<MapImage />}
+      isFullWidth
+      type="secondary"
+      actions={
+        <TouchableOpacity onPress={() => onShowMapClick(id)}>
+          <RText>Show map</RText>
+        </TouchableOpacity>
+      }
+    />
+  );
 };

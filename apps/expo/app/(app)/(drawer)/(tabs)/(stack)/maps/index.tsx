@@ -1,5 +1,5 @@
 import React from 'react';
-import { OfflineMapsScreen } from 'app/modules/map';
+import { OfflineMapsScreen } from 'app/modules/map/screens/OfflineMapsScreen';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';

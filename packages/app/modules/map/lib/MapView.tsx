@@ -32,6 +32,7 @@ export const MapView: FC<MapViewProps> = ({
   shape,
   mapStyle,
   onVisibleBoundsChange,
+  initialBounds,
 }) => {
   const mapRef = useRef<Map>(null);
 
@@ -50,7 +51,7 @@ export const MapView: FC<MapViewProps> = ({
     if (mapRef.current && shape) {
       const map = mapRef.current;
 
-      const bbox = getBoundingBoxFromShape(shape);
+      const bbox = initialBounds || getBoundingBoxFromShape(shape);
 
       map.fitBounds(bbox, { padding: 20 });
     }

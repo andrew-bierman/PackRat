@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-export const useMapFullScreen = () => {
-  const [isFullScreenMode, setIsFullScreenMode] = useState(false);
+export const useMapFullScreen = (defaultMode: boolean = false) => {
+  const [isFullScreenMode, setIsFullScreenMode] = useState(defaultMode);
 
   const toggleFullScreen = () => setIsFullScreenMode((prev) => !prev);
 

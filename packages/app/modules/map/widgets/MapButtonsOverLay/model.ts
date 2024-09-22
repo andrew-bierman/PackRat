@@ -5,4 +5,5 @@ export interface MapButtonsOverlayProps {
   children: ReactNode;
   currentBounds?: any;
   shape?: Shape;
+  shouldEnableDownload?: boolean;
 }

@@ -1,9 +1,9 @@
-import { useUserQuery } from 'app/modules/auth';
-import { useUpdateUser } from 'app/modules/user';
+import { useAuthUser } from 'app/modules/auth';
+import { queryTrpc } from 'app/trpc';
 
 export const useDownloadMap = (onDownload) => {
-  const { user, refetch } = useUserQuery();
-  const updateUser = useUpdateUser();
+  const { mutateAsync, isLoading } = queryTrpc.saveOfflineMap.useMutation();
+  const authUser = useAuthUser();
 
   const handleDownloadMap = ({ mapName, bounds, shape }) => {
     const downloadOptions = {
@@ -12,25 +12,19 @@ export const useDownloadMap = (onDownload) => {
       bounds,
       minZoom: 0,
       maxZoom: 8,
+      owner_id: authUser.id,
       metadata: {
         shape: JSON.stringify(shape),
       },
     };
 
     // Save the map under user profile.
-    updateUser({
-      id: user.id,
-      offlineMaps: {
-        ...(user.offlineMaps || {}),
-        [mapName.toLowerCase()]: downloadOptions,
-      },
-    })
-      .then(async () => refetch())
+    mutateAsync(downloadOptions)
       .then(() => {
         onDownload(downloadOptions);
       })
       .catch(() => {});
   };
 
-  return { handleDownloadMap };
+  return { handleDownloadMap, isSaving: isLoading };
 };
