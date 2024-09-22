@@ -207,6 +207,22 @@ export const item = sqliteTable('item', {
   // @@map("items"): undefined,
 });
 
+export const offlineMap = sqliteTable('offlineMap', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+  minZoom: integer('minZoom').notNull(),
+  maxZoom: integer('minZoom').notNull(),
+  metadata: text('metadata', { mode: 'json' }).$type<OfflineMap['metadata']>(),
+  ownerId: text('owner_id').references(() => user.id, {
+    onDelete: 'cascade',
+  }),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const itemOwners = sqliteTable(
   'item_owners',
   {
