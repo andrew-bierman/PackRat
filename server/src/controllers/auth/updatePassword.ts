@@ -25,13 +25,13 @@ export function updatePasswordRoute() {
   return protectedProcedure
     .input(validator.updatePassword)
     .mutation(async (opts) => {
-      const { email, password } = opts.input;
+      const { email, oldPassword, password } = opts.rawInput;
       const { env }: any = opts.ctx;
       const JWT_SECRET = env.JWT_SECRET;
       const userClass = new User();
-      const user = await userClass.findByCredentials(email, password);
+      const user = await userClass.findByCredentials(email, oldPassword);
       if (!user) {
-        throw new Error('Password is not correct');
+        throw new Error('Old password is incorrect');
       }
       const hashedPassword = await hashPassword(JWT_SECRET, password);
       const currentUser = await findUserAndUpdate(
