@@ -18,7 +18,7 @@ import RIconButton from '../../../RIconButton';
 import { ChevronDown } from '@tamagui/lucide-icons';
 import { BaseAlert } from '@packrat/ui';
 import { useProfile } from 'app/modules/user/hooks';
-
+import { useAuthUser } from 'app/modules/auth';
 
 type ModalName = 'edit' | 'delete';
 
@@ -60,8 +60,8 @@ export function BasicTable({
   refetch,
   setRefetch,
 }: BasicTableProps) {
-  const { user } = useProfile(null);
-  console.log('user', user.preferredWeight)
+  const user = useAuthUser();
+  console.log('user', user)
   const ActionButtons = ({ item }) => {
 
     const [activeModal, setActiveModal] = React.useState<ModalName | null>(
@@ -70,7 +70,6 @@ export function BasicTable({
     const [selectedItemId, setSelectedItemId] = React.useState<string | null>(
       null,
     );
-
 
     const openModal = (modalName: ModalName, itemId: string) => {
       setActiveModal(modalName);
@@ -89,10 +88,6 @@ export function BasicTable({
     const handleDeleteClick = () => {
       openModal('delete', item.id);
     };
-
-
-
-
 
     return (
       <>
@@ -252,8 +247,6 @@ export function BasicTable({
   });
 
   const { sm } = useMedia();
-
-  console.log('groupedData', groupedData)
 
   const headerGroups = table.getHeaderGroups();
   const tableRows = table.getRowModel().rows;
