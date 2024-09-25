@@ -22,6 +22,7 @@ import { roundNumber } from 'app/utils';
 import { useEditPack } from 'app/modules/pack/hooks';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import useTheme from 'app/hooks/useTheme';
+import { StarIcon } from 'lucide-react-native';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
@@ -32,6 +33,7 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
     setIsPublic(value);
     editPack({ id: props.id, name: props.title, is_public: value });
   };
+  console.log(props.details.similarityScore);
   const { currentTheme } = useTheme();
 
   return (
@@ -40,15 +42,20 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
       link={`/pack/${props.id}`}
       image={<PackImage />}
       subtitle={
-        <Details
-          items={[
-            {
-              key: 'score',
-              label: 'Score',
-              value: props.details.score,
-            },
-          ]}
-        />
+        <RStack
+          style={{
+            flexDirection: 'row',
+            gap: 4,
+            alignItems: 'center',
+          }}
+        >
+          <StarIcon size={16} color={currentTheme.colors.text} />
+          <RText>
+            {!isNaN(props.details.similarityScore)
+              ? props.details.similarityScore
+              : props.details.score}
+          </RText>
+        </RStack>
       }
       actions={
         <RStack style={{ flexDirection: 'row', gap: 12 }}>

@@ -12,7 +12,7 @@ export const PrimaryCard: FC<PrimaryCardProps> = (props) => {
       <Card.Header>
         <XStack>
           <View
-            style={{ width: 120, height: 120, border: '1px solid lightgray' }}
+            style={{ width: 100, height: 100, border: '1px solid lightgray' }}
           >
             {props.image}
           </View>
