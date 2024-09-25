@@ -163,6 +163,7 @@ export function calculatePackScore(packData: any) {
       redundancyAndVersatility: redundancyAndVersatilityGrade,
     }),
     scores: JSON.stringify({
+      totalScore,
       weightScore,
       essentialItemsScore,
       redundancyAndVersatilityScore,
