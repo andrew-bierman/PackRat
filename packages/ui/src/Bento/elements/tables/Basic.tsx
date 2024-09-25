@@ -17,6 +17,8 @@ import { RDropdownMenu } from '../../../ZDropdown';
 import RIconButton from '../../../RIconButton';
 import { ChevronDown } from '@tamagui/lucide-icons';
 import { BaseAlert } from '@packrat/ui';
+import { useProfile } from 'app/modules/user/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 type ModalName = 'edit' | 'delete';
 
@@ -58,7 +60,10 @@ export function BasicTable({
   refetch,
   setRefetch,
 }: BasicTableProps) {
+  const user = useAuthUser();
+  console.log('user', user)
   const ActionButtons = ({ item }) => {
+
     const [activeModal, setActiveModal] = React.useState<ModalName | null>(
       null,
     );
@@ -128,11 +133,11 @@ export function BasicTable({
         >
           <RText> Are you sure you want to delete this item?</RText>
         </BaseAlert>
-        
+
         {hasPermissions ? (
           Platform.OS === 'android' ||
-          Platform.OS === 'ios' ||
-          window.innerWidth < 900 ? (
+            Platform.OS === 'ios' ||
+            window.innerWidth < 900 ? (
             <View>
               <RDropdownMenu
                 menuItems={[
@@ -163,6 +168,24 @@ export function BasicTable({
     );
   };
 
+  const convertToPreferredWeight = (preferredUnit, weightInGrams) => {
+    let convertedWeight;
+
+    if (preferredUnit === 'lb') {
+      convertedWeight = weightInGrams / 453.592; // Convert grams to pounds
+    } else if (preferredUnit === 'oz') {
+      convertedWeight = weightInGrams / 28.3495; // Convert grams to ounces
+    } else if (preferredUnit === 'kg') {
+      convertedWeight = weightInGrams / 1000;    // Convert grams to kilograms
+    } else if (preferredUnit === 'g') {
+      convertedWeight = weightInGrams;            // Already in grams
+    } else {
+      throw new Error(`Unsupported unit: ${preferredUnit}`);
+    }
+
+    return parseFloat(convertedWeight.toFixed(1));
+  };
+
   const columnHelper = createColumnHelper<Item>();
   const columns = [
     columnHelper.accessor('name', {
@@ -170,10 +193,18 @@ export function BasicTable({
       header: () => 'Name',
       // footer: (info) => info.column.id,
     }),
+    // columnHelper.accessor('weight', {
+    //   cell: (info) => info.getValue(),
+    //   header: () => 'Weight',
+    //   // footer: (info) => info.column.id,
+    // }),
     columnHelper.accessor('weight', {
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const weightInGrams = info.getValue();
+        const preferredWeight = convertToPreferredWeight(user.preferredWeight, weightInGrams);
+        return preferredWeight;
+      },
       header: () => 'Weight',
-      // footer: (info) => info.column.id,
     }),
     columnHelper.accessor('quantity', {
       header: () => 'Quantity',
@@ -301,9 +332,9 @@ export function BasicTable({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </Text>
                 </Table.HeaderCell>
               ))}
