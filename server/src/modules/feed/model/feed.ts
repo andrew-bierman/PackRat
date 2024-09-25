@@ -31,6 +31,7 @@ export class Feed {
           owner_id: pack.owner_id,
           grades: pack.grades,
           scores: pack.scores,
+          is_public: pack.is_public,
           type: literal('pack'),
           description: literal(''),
           destination: literal(''),

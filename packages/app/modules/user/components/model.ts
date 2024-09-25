@@ -1,16 +1,16 @@
 import { type CardType } from '@packrat/ui';
 
-export type FeedType =
+export type UserDataType =
   | 'public'
   | 'userPacks'
   | 'userTrips'
   | 'similarPacks'
   | 'similarItems';
-export type FeedResource = 'pack' | 'trip';
+export type UserDataResource = 'pack' | 'trip';
 
 export interface BaseFeedItem {
   id: string;
-  type: FeedResource;
+  type: UserDataResource;
   name: string;
   owner: {
     id: string;
@@ -32,7 +32,7 @@ interface PackFeedItem extends BaseFeedItem {
   quantity?: number;
   total_weight: number;
   total_score: number;
-  userFavoritePacks?: string[];
+  userFavoritePacks?: string[] | Array<{ userId: string }>;
   itemPacks?: any[];
 }
 
@@ -46,11 +46,10 @@ export interface TripFeedItem extends BaseFeedItem {
   activity: string;
 }
 
-export type FeedItem = PackFeedItem | TripFeedItem;
-export interface FeedCardProps<Details> {
+export type UserData = PackFeedItem | TripFeedItem;
+export interface UserDataCardProps<Details> {
   id: string;
   title: string;
-  is_public: boolean;
   cardType: CardType;
   createdAt: string;
   details: Details;
