@@ -1,24 +1,10 @@
-import {
-  Card,
-  Details,
-  RButton,
-  RLink,
-  RStack,
-  RSwitch,
-  RText,
-  YStack,
-} from '@packrat/ui';
+import { Card, RButton, RStack, RSwitch } from '@packrat/ui';
 import React, { useState, type FC } from 'react';
 import { TripImage } from 'app/modules/trip/components/TripCard/TripImage';
-import {
-  CreatedAtLabel,
-  FavoriteButton,
-  type FeedCardProps,
-} from 'app/modules/feed';
-import { DuplicateIcon } from 'app/assets/icons';
-import { type TripDetails } from 'modules/trip/model';
+import { type FeedCardProps } from 'app/modules/feed';
 import { LocationLabel } from 'app/modules/trip/components/LocationLabel/LocationLabel';
 import useTheme from 'app/hooks/useTheme';
+import { type TripDetails } from 'modules/trip/model';
 import { useEditTrips } from 'app/hooks/trips';
 
 interface TripCardProps extends FeedCardProps<TripDetails> {}
@@ -40,15 +26,6 @@ export const UserTripCard: FC<TripCardProps> = (props) => {
       subtitle={<LocationLabel location={props.details.destination} />}
       actions={
         <RStack style={{ flexDirection: 'row', gap: 12 }}>
-          {/* <FavoriteButton
-            count={props.favoriteCount}
-            isAuthUserFavorite={props.isUserFavorite}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              props.toggleFavorite();
-            }}
-          /> */}
           <RButton
             style={{
               backgroundColor: currentTheme.colors.background,
@@ -70,6 +47,12 @@ export const UserTripCard: FC<TripCardProps> = (props) => {
         </RStack>
       }
       type={props.cardType}
+      style={{
+        borderColor: isPublic
+          ? currentTheme.colors.secondaryBlue
+          : currentTheme.colors.background,
+        borderWidth: 2,
+      }}
     />
   );
 };

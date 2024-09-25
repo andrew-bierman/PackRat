@@ -1,40 +1,44 @@
-import {
-  Card,
-  Details,
-  RButton,
-  RLink,
-  RStack,
-  RSwitch,
-  RText,
-} from '@packrat/ui';
-import React, { useState, type FC } from 'react';
+import { Card, RButton, RStack, RSwitch, RText } from '@packrat/ui';
+import React, { useEffect, useState, type FC } from 'react';
 import { PackImage } from 'app/modules/pack/components/PackCard/PackImage';
 import {
   FavoriteButton,
-  CreatedAtLabel,
+  useFetchUserFavorites,
   type FeedCardProps,
 } from 'app/modules/feed';
 import { type PackDetails } from 'app/modules/pack/model';
-import { DuplicateIcon } from 'app/assets/icons';
-import { useItemWeightUnit } from 'app/modules/item';
-import { convertWeight } from 'app/utils/convertWeight';
-import { roundNumber } from 'app/utils';
 import { useEditPack } from 'app/modules/pack/hooks';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import useTheme from 'app/hooks/useTheme';
 import { StarIcon } from 'lucide-react-native';
+import { useUserPacks } from 'app/modules/pack/hooks';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
 export const UserPackCard: FC<PackCardProps> = (props) => {
-  const { editPack, isLoading, isError } = useEditPack();
+  const { editPack } = useEditPack();
   const [isPublic, setIsPublic] = useState(props.is_public);
+
+  const { currentTheme } = useTheme();
+
+  const { refetch } = useUserPacks(props.ownerId, {}, '', true);
+  const { refetch: refetchFavorites } = useFetchUserFavorites(props.ownerId);
+
   const updateIsPublic = (value) => {
     setIsPublic(value);
-    editPack({ id: props.id, name: props.title, is_public: value });
+    editPack(
+      { id: props.id, name: props.title, is_public: value },
+      {
+        onSuccess: () => {
+          refetch();
+          refetchFavorites();
+        },
+      },
+    );
   };
-  console.log(props.details.similarityScore);
-  const { currentTheme } = useTheme();
+
+  useEffect(() => {
+    setIsPublic(props.is_public);
+  }, [props.is_public]);
 
   return (
     <Card
@@ -66,6 +70,7 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
               e.stopPropagation();
               e.preventDefault();
               props.toggleFavorite();
+              refetch();
             }}
           />
           <RButton
@@ -89,6 +94,12 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
         </RStack>
       }
       type={props.cardType}
+      style={{
+        borderColor: isPublic
+          ? currentTheme.colors.secondaryBlue
+          : currentTheme.colors.background,
+        borderWidth: 2,
+      }}
     />
   );
 };

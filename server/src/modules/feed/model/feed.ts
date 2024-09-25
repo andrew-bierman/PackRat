@@ -61,6 +61,7 @@ export class Feed {
           owner_id: trip.owner_id,
           grades: literal('{}'),
           scores: literal('{}'),
+          is_public: trip.is_public,
           type: literal('trip'),
           description: trip.description,
           destination: trip.destination,
