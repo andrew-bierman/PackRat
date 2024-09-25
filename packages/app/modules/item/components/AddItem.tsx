@@ -66,12 +66,34 @@ export const AddItem = ({
     editPackItem,
   } = useEditPackItem(isItemPage);
 
-  const handleSubmit = (data: Item) => {
-    if (isEdit) {
-      // editPackItem(data as AddItem);
-      editPackItem(data as any);
+  const convertWeighToSmallestUnit = (unit, weight) => {
+    let convertedWeight;
+  
+    if (unit === 'lb') {
+      convertedWeight = weight * 453.592;
+    } else if (unit === 'oz') {
+      convertedWeight = weight * 28.3495;
+    } else if (unit === 'kg') {
+      convertedWeight = weight * 1000;
+    } else if (unit === 'g') {
+      convertedWeight = weight;
     } else {
-      addPackItem(data);
+      throw new Error(`Unsupported unit: ${unit}`);
+    }
+  
+    return parseFloat(convertedWeight.toFixed(1));
+  };
+
+  const handleSubmit = (data: Item) => {
+    
+    const convertedData = {
+      ...data,
+      weight: convertWeighToSmallestUnit(data.unit, data.weight),
+    }
+    if (isEdit) {
+      editPackItem(convertedData as any);
+    } else {
+      addPackItem(convertedData);
     }
     if (closeModalHandler) closeModalHandler();
   };
