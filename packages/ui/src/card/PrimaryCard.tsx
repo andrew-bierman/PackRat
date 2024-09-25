@@ -42,12 +42,20 @@ export const PrimaryCard: FC<PrimaryCardProps> = (props) => {
           </YStack>
         </XStack>
       </Card.Header>
-      <View style={{ paddingLeft: 18, paddingRight: 18, maxWidth: 560 }}>
+      <View
+        style={{
+          paddingLeft: 18,
+          paddingRight: 18,
+          maxWidth: 560,
+        }}
+      >
         {props.content}
       </View>
-      <Card.Footer padded>
-        <View>{props.footer}</View>
-      </Card.Footer>
+      {props.footer && (
+        <Card.Footer padded>
+          <View>{props.footer}</View>
+        </Card.Footer>
+      )}
     </Card>
   );
 };
