@@ -108,6 +108,10 @@ export function calculatePackScore(packData: any) {
   // console.log("weight: ", weight);
   // console.log('items: ', items)
 
+  if (!itemDocuments || itemDocuments.length === 0) {
+    return null;
+  }
+
   const totalWeight = itemDocuments.reduce((total: number, item: any) => {
     if (item.unit === 'lb') {
       return total + item.weight * 16 * item.quantity; // Considering 1 lb equals 16 oz
