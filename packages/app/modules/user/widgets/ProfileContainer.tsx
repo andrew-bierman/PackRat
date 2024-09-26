@@ -263,7 +263,7 @@ export function ProfileContainer({ id = null }) {
               </View>
             )}
             {/* DISABLE TRIP TEMP */}
-            {/* {tripsList.length > 0 && (
+            {tripsList.length > 0 && (
               <View style={styles.userDataContainer}>
                 <UserDataContainer
                   data={tripsList}
@@ -271,7 +271,7 @@ export function ProfileContainer({ id = null }) {
                   userId={user?.id}
                 />
               </View>
-            )} */}
+            )}
           </View>
         </RStack>
       </ScrollView>

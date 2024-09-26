@@ -72,7 +72,7 @@ export const FeedSearchFilter = ({
   }, []);
 
   useEffect(() => {
-    if (!sortOptions.includes(queryString)) {
+    if (!sortOptions.includes(queryString) && handleSortChange) {
       handleSortChange(sortOptions[0]);
     }
   }, [sortOptions, queryString]);

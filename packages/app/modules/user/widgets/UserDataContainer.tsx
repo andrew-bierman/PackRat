@@ -50,19 +50,7 @@ export function UserDataContainer({
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
-    return (
-      <UserDataCard
-        key={item.id}
-        {...item}
-        index={index}
-        differentUser={currentUser?.id !== item.owner_id}
-        activeUserId={userId}
-        isFavorite={item?.userFavoritePacks?.some(
-          (obj) => obj?.['userId'] === currentUser?.id,
-        )}
-        currentUserId={currentUser?.id}
-      />
-    );
+    return <UserDataCard item={item} cardType="primary" feedType={item.type} />;
   };
 
   // Map function to render multiple skeleton cards
