@@ -100,7 +100,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 placeholder={
                   <RIconButton
                     backgroundColor="transparent"
-                    icon={<MaterialIcons name="more-horiz" size={20} />}
+                    icon={<MaterialIcons name="more-horiz" size={24} />}
                     style={{
                       height: 20,
                     }}

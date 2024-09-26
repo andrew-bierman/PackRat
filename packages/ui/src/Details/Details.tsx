@@ -33,7 +33,7 @@ export const Details: FC<DetailsProps> = ({ items }) => {
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 textTransform: 'capitalize',
-                color: primaryColor?.val,
+                // color: primaryColor?.val,
                 flex: 1,
                 fontSize: 14,
               }}
