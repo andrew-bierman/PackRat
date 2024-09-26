@@ -135,14 +135,14 @@ export const TableContainer = ({
             weight={totalWeight}
             unit={weightUnit}
           />
+          <WeightUnitDropdown
+            value={weightUnit}
+            onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+          />
         </>
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
-      <WeightUnitDropdown
-        value={weightUnit}
-        onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-      />
     </View>
   );
 };
