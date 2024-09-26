@@ -40,6 +40,9 @@ export class Feed {
           quantity: sql`COALESCE(SUM(DISTINCT ${item.quantity}), 0)`,
           userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId})`,
           total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
+          activity: literal(null),
+          start_date: literal(null),
+          end_date: literal(null),
         })
         .from(pack)
         .leftJoin(userFavoritePacks, eq(pack.id, userFavoritePacks.packId))
@@ -69,6 +72,9 @@ export class Feed {
           quantity: literal(null),
           userFavorites: literal('[]'),
           total_weight: literal('0'),
+          activity: trip.activity,
+          start_date: trip.start_date,
+          end_date: trip.end_date,
         })
         .from(trip);
 
