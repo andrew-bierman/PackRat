@@ -75,12 +75,6 @@ export default function PackContainer({ isCreatingTrip = false }) {
             />
             {currentPackId && (
               <>
-                <AddItemModal
-                  currentPackId={currentPackId}
-                  currentPack={currentPack}
-                  isAddItemModalOpen={isAddItemModalOpen}
-                  setIsAddItemModalOpen={setIsAddItemModalOpen}
-                />
                 <TableContainerComponent currentPack={currentPack} />
               </>
             )}
