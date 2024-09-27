@@ -1,5 +1,5 @@
+import { Feed } from '../../modules/feed/model';
 import { User } from '../../drizzle/methods/User';
-import { Pack } from '../../drizzle/methods/pack';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -9,7 +9,7 @@ import { Pack } from '../../drizzle/methods/pack';
  */
 export const getUserFavoritesService = async (userId: string) => {
   const userClass = new User();
-  const packClass = new Pack();
+  const feedClass = new Feed();
   const user = (await userClass.findUser({
     userId,
     includeFavorites: true,
@@ -19,13 +19,13 @@ export const getUserFavoritesService = async (userId: string) => {
     throw new Error(`User with id ${userId} not found`);
   }
 
-  const userFavorites = user.userFavoritePacks?.map((item) => ({
-    ...item.pack,
-    scores: JSON.parse(item.pack.scores as string),
-    grades: JSON.parse(item.pack.grades as string),
-    total_weight: packClass.computeTotalWeight(item.pack),
-    favorites_count: packClass.computeFavouritesCount(item.pack),
-    total_score: packClass.computeTotalScores(item.pack),
-  }));
+  const { data: userFavorites } = await feedClass.findFeed(
+    'Most Recent',
+    {
+      includeUserFavoritesOnly: true,
+      ownerId: userId,
+    },
+    'trips',
+  );
   return userFavorites;
 };

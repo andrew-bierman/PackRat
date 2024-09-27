@@ -8,7 +8,6 @@ import {
   userFavoritePacks,
 } from '../../../db/schema';
 import { literal } from 'src/drizzle/helpers';
-import { convertWeight } from '../../../utils/convertWeight';
 import {
   getPaginationParams,
   type PaginationParams,
@@ -38,7 +37,7 @@ export class Feed {
           destination: literal(''),
           favorites_count: sql`COALESCE(COUNT(DISTINCT ${userFavoritePacks.userId}), 0) as favorites_count`,
           quantity: sql`COALESCE(SUM(DISTINCT ${item.quantity}), 0)`,
-          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId})`,
+          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId}) as userFavorites`,
           total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
           activity: literal(null),
           start_date: literal(null),
@@ -49,6 +48,12 @@ export class Feed {
         .leftJoin(itemPacks, eq(pack.id, itemPacks.packId))
         .leftJoin(item, eq(itemPacks.itemId, item.id))
         .groupBy(pack.id);
+
+      if (modifiers.includeUserFavoritesOnly) {
+        packsQuery = packsQuery.having(
+          this.generateHavingConditions(modifiers, pack),
+        );
+      }
 
       if (modifiers) {
         packsQuery = packsQuery.where(
@@ -207,6 +212,21 @@ export class Feed {
 
     if (modifiers.searchTerm) {
       conditions.push(like(table.name, `%${modifiers.searchTerm}%`));
+    }
+
+    return conditions.length > 0 ? and(...conditions) : undefined;
+  }
+
+  generateHavingConditions(
+    modifiers: Modifiers,
+    table: typeof trip | typeof pack,
+  ) {
+    const conditions = [];
+
+    if (modifiers.ownerId && modifiers.includeUserFavoritesOnly) {
+      conditions.push(
+        sql`userFavorites LIKE CONCAT('%', ${modifiers.ownerId}, '%')`,
+      );
     }
 
     return conditions.length > 0 ? and(...conditions) : undefined;

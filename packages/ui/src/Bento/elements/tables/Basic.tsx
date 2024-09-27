@@ -19,6 +19,8 @@ import { ChevronDown } from '@tamagui/lucide-icons';
 import { BaseAlert } from '@packrat/ui';
 import { useProfile } from 'app/modules/user/hooks';
 import { useAuthUser } from 'app/modules/auth';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 type ModalName = 'edit' | 'delete';
 
@@ -61,9 +63,8 @@ export function BasicTable({
   setRefetch,
 }: BasicTableProps) {
   const user = useAuthUser();
-  console.log('user', user)
+  console.log('user', user);
   const ActionButtons = ({ item }) => {
-
     const [activeModal, setActiveModal] = React.useState<ModalName | null>(
       null,
     );
@@ -136,8 +137,8 @@ export function BasicTable({
 
         {hasPermissions ? (
           Platform.OS === 'android' ||
-            Platform.OS === 'ios' ||
-            window.innerWidth < 900 ? (
+          Platform.OS === 'ios' ||
+          window.innerWidth < 900 ? (
             <View>
               <RDropdownMenu
                 menuItems={[
@@ -168,24 +169,6 @@ export function BasicTable({
     );
   };
 
-  const convertToPreferredWeight = (preferredUnit, weightInGrams) => {
-    let convertedWeight;
-
-    if (preferredUnit === 'lb') {
-      convertedWeight = weightInGrams / 453.592; // Convert grams to pounds
-    } else if (preferredUnit === 'oz') {
-      convertedWeight = weightInGrams / 28.3495; // Convert grams to ounces
-    } else if (preferredUnit === 'kg') {
-      convertedWeight = weightInGrams / 1000;    // Convert grams to kilograms
-    } else if (preferredUnit === 'g') {
-      convertedWeight = weightInGrams;            // Already in grams
-    } else {
-      throw new Error(`Unsupported unit: ${preferredUnit}`);
-    }
-
-    return parseFloat(convertedWeight.toFixed(1));
-  };
-
   const columnHelper = createColumnHelper<Item>();
   const columns = [
     columnHelper.accessor('name', {
@@ -201,7 +184,12 @@ export function BasicTable({
     columnHelper.accessor('weight', {
       cell: (info) => {
         const weightInGrams = info.getValue();
-        const preferredWeight = convertToPreferredWeight(user.preferredWeight, weightInGrams);
+
+        const preferredWeight = convertWeight(
+          weightInGrams,
+          SMALLEST_ITEM_UNIT,
+          info.row.original.unit as any,
+        );
         return preferredWeight;
       },
       header: () => 'Weight',
@@ -275,13 +263,17 @@ export function BasicTable({
                 if (name === 'ownerId' || name === 'id') {
                   return null;
                 }
+                const finalValue =
+                  name === 'weight'
+                    ? convertWeight(value, SMALLEST_ITEM_UNIT, row.unit)
+                    : value;
                 return (
-                  <View fd="row" justifyContent="space-between">
+                  <View key={name} fd="row" justifyContent="space-between">
                     <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
                     {name === 'category' ? (
                       <Text color="$gray10">{String(value?.name)}</Text>
                     ) : (
-                      <Text color="$gray10">{String(value)}</Text>
+                      <Text color="$gray10">{String(finalValue)}</Text>
                     )}
                   </View>
                 );
@@ -332,9 +324,9 @@ export function BasicTable({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </Text>
                 </Table.HeaderCell>
               ))}

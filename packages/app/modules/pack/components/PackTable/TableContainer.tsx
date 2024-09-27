@@ -1,10 +1,7 @@
+import React from 'react';
 import { RButton, RSkeleton, RText } from '@packrat/ui';
 import { View } from 'react-native';
-import {
-  usePackTable,
-  useDeletePackItem,
-  useIsAuthUserPack,
-} from 'app/modules/pack';
+import { useDeletePackItem, useIsAuthUserPack } from 'app/modules/pack';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './packtable.style';
 import {
@@ -12,6 +9,7 @@ import {
   WeightUnitDropdown,
   ErrorMessage,
 } from './TableHelperComponents';
+import { usePackTable } from './usePackTable';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 
 interface TableContainerProps {
@@ -58,7 +56,6 @@ export const TableContainer = ({
 
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={String(error)} />;
-
 
   return (
     <View style={[styles.container]}>
