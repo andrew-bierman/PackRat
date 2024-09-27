@@ -9,18 +9,17 @@ import * as React from 'react';
 import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 import { AddItem } from 'app/modules/item';
-import { DeletePackItemModal, EditPackItemModal } from 'app/modules/pack';
-import { ThreeDotsMenu, YStack, RButton, RText } from '@packrat/ui';
+import { MaterialIcons } from '@expo/vector-icons';
+import { EditPackItemModal } from 'app/modules/pack';
+import { RText } from '@packrat/ui';
 
-import { Platform } from 'react-native';
-import { RDropdownMenu } from '../../../ZDropdown';
 import RIconButton from '../../../RIconButton';
-import { ChevronDown } from '@tamagui/lucide-icons';
 import { BaseAlert } from '@packrat/ui';
 import { useProfile } from 'app/modules/user/hooks';
 import { useAuthUser } from 'app/modules/auth';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
+import CascadedDropdownComponent from '@packrat/ui/src/CascadedDropdown';
 
 type ModalName = 'edit' | 'delete';
 
@@ -41,6 +40,11 @@ interface Item {
 
 interface GroupedData {
   [key: string]: Item[];
+}
+
+interface optionValues {
+  label: string;
+  value: string;
 }
 
 interface BasicTableProps {
@@ -82,13 +86,21 @@ export function BasicTable({
       setSelectedItemId(null);
     };
 
-    const handleEditClick = () => {
-      openModal('edit', item.id);
+    const handleActionsOpenChange = (state) => {
+      switch (state) {
+        case 'Edit':
+          openModal('edit', item.id);
+          break;
+        case 'Delete':
+          openModal('delete', item.id);
+          break;
+      }
     };
 
-    const handleDeleteClick = () => {
-      openModal('delete', item.id);
-    };
+    const optionValues: optionValues[] = [
+      { label: 'Edit', value: 'Edit' },
+      { label: 'Delete', value: 'Delete' },
+    ];
 
     return (
       <>
@@ -136,34 +148,28 @@ export function BasicTable({
         </BaseAlert>
 
         {hasPermissions ? (
-          Platform.OS === 'android' ||
-          Platform.OS === 'ios' ||
-          window.innerWidth < 900 ? (
-            <View>
-              <RDropdownMenu
-                menuItems={[
-                  { label: 'Edit', onSelect: handleEditClick },
-                  { label: 'Delete', onSelect: handleDeleteClick },
-                ]}
-                menuName={
-                  <RIconButton
-                    backgroundColor="transparent"
-                    icon={ChevronDown}
-                    style={{ padding: 0 }}
-                  />
-                }
-              />
-            </View>
-          ) : (
-            <View>
-              <ThreeDotsMenu>
-                <YStack space="$1">
-                  <RButton onPress={handleEditClick}>Edit</RButton>
-                  <RButton onPress={handleDeleteClick}>Delete</RButton>
-                </YStack>
-              </ThreeDotsMenu>
-            </View>
-          )
+          <View
+            style={{
+              minWidth: 50,
+              maxWidth: 100,
+            }}
+          >
+            <CascadedDropdownComponent
+              value={null}
+              data={optionValues}
+              onValueChange={(value) => handleActionsOpenChange(value)}
+              placeholder={
+                <RIconButton
+                  backgroundColor="transparent"
+                  icon={<MaterialIcons name="more-horiz" size={24} />}
+                  style={{
+                    height: 20,
+                  }}
+                />
+              }
+              native={true}
+            />
+          </View>
         ) : null}
       </>
     );
