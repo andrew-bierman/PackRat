@@ -133,7 +133,7 @@ export const getPackByIdService = async (packId: string): Promise<PackData> => {
       ...pack,
       scores: pack.scores ? JSON.parse(pack.scores as string) : {},
       grades: pack.grades ? JSON.parse(pack.grades as string) : {},
-      total_weight: packClass.computeTotalWeight(pack),
+      total_weight: 0,
       favorites_count: packClass.computeFavouritesCount(pack),
       total_score: packClass.computeTotalScores(pack),
       items: pack.itemPacks.map((itemPack) => itemPack.item),

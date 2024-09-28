@@ -1,10 +1,7 @@
+import React from 'react';
 import { RButton, RSkeleton, RText } from '@packrat/ui';
 import { View } from 'react-native';
-import {
-  usePackTable,
-  useDeletePackItem,
-  useIsAuthUserPack,
-} from 'app/modules/pack';
+import { useDeletePackItem, useIsAuthUserPack } from 'app/modules/pack';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './packtable.style';
 import {
@@ -12,6 +9,7 @@ import {
   WeightUnitDropdown,
   ErrorMessage,
 } from './TableHelperComponents';
+import { usePackTable } from './usePackTable';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
 import {
   createColumnHelper,
@@ -21,8 +19,9 @@ import {
 } from '@tanstack/react-table';
 
 import ActionButtons from './ActionButtons';
-import React from 'react';
 import { type Item } from 'app/modules/item';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 interface TableContainerProps {
   currentPack: any;
@@ -77,7 +76,12 @@ export const TableContainer = ({
       // footer: (info) => info.column.id,
     }),
     columnHelper.accessor('weight', {
-      cell: (info) => info.getValue(),
+      cell: (info) =>
+        convertWeight(
+          info.getValue(),
+          SMALLEST_ITEM_UNIT,
+          info.row.original.unit as any,
+        ),
       header: () => 'Weight',
       // footer: (info) => info.column.id,
     }),
@@ -191,14 +195,14 @@ export const TableContainer = ({
             weight={totalWeight}
             unit={weightUnit}
           />
+          <WeightUnitDropdown
+            value={weightUnit}
+            onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+          />
         </>
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
-      <WeightUnitDropdown
-        value={weightUnit}
-        onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-      />
     </View>
   );
 };

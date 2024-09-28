@@ -1,14 +1,6 @@
 import { AddItem } from 'app/modules/item';
 import { EditPackItemModal } from 'app/modules/pack';
-import {
-  ThreeDotsMenu,
-  YStack,
-  RButton,
-  RText,
-  RDropdownMenu,
-  View,
-  RIconButton,
-} from '@packrat/ui';
+import { RText, View, ActionsDropdownComponent } from '@packrat/ui';
 
 import { Platform } from 'react-native';
 // import { RDropdownMenu } from '../../../ZDropdown';
@@ -24,6 +16,11 @@ interface ActionButtonsProps {
   item: Item;
   onDelete: (params: { itemId: string; packId: string }) => void;
   currentPack: any;
+}
+
+interface optionValues {
+  label: string;
+  value: string;
 }
 
 export default function ActionButtons({
@@ -46,13 +43,21 @@ export default function ActionButtons({
     setSelectedItemId(null);
   };
 
-  const handleEditClick = () => {
-    openModal('edit', item.id);
+  const handleActionsOpenChange = (state) => {
+    switch (state) {
+      case 'Edit':
+        openModal('edit', item.id);
+        break;
+      case 'Delete':
+        openModal('delete', item.id);
+        break;
+    }
   };
 
-  const handleDeleteClick = () => {
-    openModal('delete', item.id);
-  };
+  const optionValues: optionValues[] = [
+    { label: 'Edit', value: 'Edit' },
+    { label: 'Delete', value: 'Delete' },
+  ];
 
   return (
     <>
@@ -100,34 +105,19 @@ export default function ActionButtons({
         <RText> Are you sure you want to delete this item?</RText>
       </BaseAlert>
 
-      {Platform.OS === 'android' ||
-      Platform.OS === 'ios' ||
-      window.innerWidth < 900 ? (
-        <View>
-          <RDropdownMenu
-            menuItems={[
-              { label: 'Edit', onSelect: handleEditClick },
-              { label: 'Delete', onSelect: handleDeleteClick },
-            ]}
-            menuName={
-              <RIconButton
-                backgroundColor="transparent"
-                icon={ChevronDown}
-                style={{ padding: 0 }}
-              />
-            }
-          />
-        </View>
-      ) : (
-        <View>
-          <ThreeDotsMenu>
-            <YStack space="$1">
-              <RButton onPress={handleEditClick}>Edit</RButton>
-              <RButton onPress={handleDeleteClick}>Delete</RButton>
-            </YStack>
-          </ThreeDotsMenu>
-        </View>
-      )}
+      <View
+        style={{
+          minWidth: 50,
+          maxWidth: 100,
+        }}
+      >
+        <ActionsDropdownComponent
+          value={null}
+          data={optionValues}
+          onValueChange={(value) => handleActionsOpenChange(value)}
+          native={true}
+        />
+      </View>
     </>
   );
 }

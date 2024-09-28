@@ -14,19 +14,10 @@ import {
 } from '@packrat/ui';
 import { Search, X } from '@tamagui/lucide-icons';
 import { Switch } from 'tamagui';
+import { useFeedSortOptions } from '../hooks';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
-
-const dataValues = [
-  'Favorite',
-  'Most Recent',
-  'Lightest',
-  'Heaviest',
-  // 'Most Items',
-  // 'Fewest Items',
-  'Oldest',
-];
 
 interface FeedSearchFilterProps {
   feedType?: string | null;
@@ -57,6 +48,9 @@ export const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
+  const sortOptions = useFeedSortOptions(
+    selectedTypes?.trip || feedType === 'userTrips',
+  );
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
   const handleSetSearchValue = (v: string) => {
@@ -76,6 +70,12 @@ export const FeedSearchFilter = ({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!sortOptions.includes(queryString) && handleSortChange) {
+      handleSortChange(sortOptions[0]);
+    }
+  }, [sortOptions, queryString]);
 
   return (
     <View style={styles.filterContainer}>
@@ -119,6 +119,7 @@ export const FeedSearchFilter = ({
                 id="single-switch"
                 size="$1.5"
                 checked={selectedTypes?.pack ?? false}
+                disabled={!selectedTypes?.trip}
                 onCheckedChange={handleTogglePack}
               >
                 <Switch.Thumb />
@@ -134,6 +135,7 @@ export const FeedSearchFilter = ({
                 id="two-switch"
                 size="$1.5"
                 checked={selectedTypes?.trip ?? false}
+                disabled={!selectedTypes?.pack}
                 onCheckedChange={handleToggleTrip}
               >
                 <Switch.Thumb />
@@ -149,8 +151,7 @@ export const FeedSearchFilter = ({
               Discover our curated pack templates to help you get started.
             </RText>
           )}
-          {/* DISABLE SORTS */}
-          {/* <RStack
+          <RStack
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -171,12 +172,12 @@ export const FeedSearchFilter = ({
             <View style={{ flex: 1 }}>
               <DropdownComponent
                 value={queryString}
-                data={dataValues}
+                data={sortOptions}
                 onValueChange={handleSortChange}
                 placeholder={queryString}
               />
             </View>
-          </RStack> */}
+          </RStack>
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
             <RButton
               style={{ marginLeft: 'auto', marginTop: 8 }}

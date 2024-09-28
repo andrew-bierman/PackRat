@@ -10,7 +10,7 @@ import { type PackDetails } from 'app/modules/pack/model';
 import { DuplicateIcon } from 'app/assets/icons';
 import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
-import { roundNumber } from 'app/utils';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
@@ -23,7 +23,7 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
       label: key,
       value:
         key === 'weight'
-          ? `${roundNumber(convertWeight(value, 'kg', weightUnit))} ${weightUnit}`
+          ? `${convertWeight(value, SMALLEST_ITEM_UNIT, weightUnit)} ${weightUnit}`
           : value,
     }));
 

@@ -1,3 +1,5 @@
+export type ItemUnit = 'lb' | 'oz' | 'kg' | 'g';
+
 interface Category {
   id: string;
   name: string;

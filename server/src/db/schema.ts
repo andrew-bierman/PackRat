@@ -10,6 +10,7 @@ import {
   real,
   sqliteTable,
   text,
+  unique,
 } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
@@ -251,6 +252,30 @@ export const item = sqliteTable('item', {
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("items"): undefined,
 });
+
+export const offlineMap = sqliteTable(
+  'offlineMap',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: text('name').notNull(),
+    bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+    minZoom: integer('minZoom').notNull(),
+    maxZoom: integer('maxZoom').notNull(),
+    metadata: text('metadata', { mode: 'json' }).$type<
+      OfflineMap['metadata']
+    >(),
+    owner_id: text('owner_id').references(() => user.id, {
+      onDelete: 'cascade',
+    }),
+    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    uniqueNameOwner: unique().on(table.name, table.owner_id),
+  }),
+);
 
 export const itemOwners = sqliteTable(
   'item_owners',

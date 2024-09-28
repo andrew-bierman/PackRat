@@ -10,4 +10,5 @@ export interface BaseCardProps {
   content?: ReactNode;
   footer?: ReactNode;
   actions?: ReactNode;
+  style?: any;
 }

@@ -20,7 +20,7 @@ export const deleteItemService = async (
   const itemClass = new Item();
   const ItemPacksClass = new ItemPacks();
 
-  await itemClass.delete(itemId);
+  await itemClass.delete(itemId, undefined, packId);
   if (packId) {
     await ItemPacksClass.delete(itemId, packId);
   }
