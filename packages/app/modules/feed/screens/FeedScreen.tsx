@@ -29,6 +29,7 @@ interface FeedProps {
 
 const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
   const router = useRouter();
+  console.log({ feedType });
   const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,

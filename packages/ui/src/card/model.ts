@@ -11,4 +11,5 @@ export interface BaseCardProps {
   isFullWidth?: boolean;
   footer?: ReactNode;
   actions?: ReactNode;
+  style?: any;
 }

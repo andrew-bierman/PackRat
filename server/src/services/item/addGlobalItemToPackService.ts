@@ -3,6 +3,7 @@
 import { Item } from '../../drizzle/methods/Item';
 import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
+import { scorePackService } from '../pack/scorePackService';
 
 /**
  * Adds a global item to the pack service.
@@ -27,12 +28,14 @@ export const addGlobalItemToPackService = async (
     throw new Error('Global Item does not exist!');
   }
   const { id, ...duplicatedItemValues } = item;
-  const newItem = await itemClass.create({
-    ...duplicatedItemValues,
-    global: false,
-    ownerId,
-  });
-  await itemPacksClass.create({ itemId: newItem.id, packId });
+  const newItem = await itemClass.create(
+    {
+      ...duplicatedItemValues,
+      global: false,
+      ownerId,
+    },
+    packId,
+  );
 
   return newItem;
 };

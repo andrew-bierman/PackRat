@@ -14,13 +14,13 @@ export const useProfile = (id = null) => {
     data: allPacks,
     isLoading: allPacksLoading,
     error: allPacksError,
-  } = useUserPacks(userId, { isPublic: true }, '', true); // TODO: Add enabled as parameter
+  } = useUserPacks(userId, {}, '', true); // TODO: Add enabled as parameter
 
   const {
     data: allTrips,
     isLoading: tripsIsLoading,
     error: tripsError,
-  } = useUserTrips(userId); // TODO: Add enabled as parameter
+  } = useUserTrips(userId, {}, '', true); // TODO: Add enabled as parameter
 
   const {
     data: allFavorites,

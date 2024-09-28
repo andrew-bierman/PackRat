@@ -33,7 +33,10 @@ export { Container } from './Container';
 export { MainContentWeb } from './MainContentWeb';
 export { ContextMenu, RContextMenu } from './RContextMenu';
 export { DropdownComponent } from './Dropdown';
-export { CascadedDropdownComponent } from './CascadedDropdown';
+export {
+  CascadedDropdownComponent,
+  ActionsDropdownComponent,
+} from './CascadedDropdown';
 // export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 export { RSkeleton } from './RSkeleton';
 
