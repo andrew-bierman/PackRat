@@ -19,7 +19,7 @@ import { useProfile } from 'app/modules/user/hooks';
 import { useAuthUser } from 'app/modules/auth';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
-import CascadedDropdownComponent from '@packrat/ui/src/CascadedDropdown';
+import { ActionsDropdownComponent } from '@packrat/ui';
 
 type ModalName = 'edit' | 'delete';
 
@@ -154,19 +154,10 @@ export function BasicTable({
               maxWidth: 100,
             }}
           >
-            <CascadedDropdownComponent
+            <ActionsDropdownComponent
               value={null}
               data={optionValues}
               onValueChange={(value) => handleActionsOpenChange(value)}
-              placeholder={
-                <RIconButton
-                  backgroundColor="transparent"
-                  icon={<MaterialIcons name="more-horiz" size={24} />}
-                  style={{
-                    height: 20,
-                  }}
-                />
-              }
               native={true}
             />
           </View>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
