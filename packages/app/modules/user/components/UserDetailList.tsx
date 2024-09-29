@@ -33,12 +33,12 @@ export const UserDataList = ({ data: resource, userId, type }: DataListProps) =>
     minMatchCharLength: 1,
   };
 
-  const data = type === "packs"? useUserPacks(
+  const data = useUserPacks(
     userId,
     { searchTerm: searchQuery },
     type,
     true,
-  ) : useUserPacks(userId, { searchTerm: searchQuery }, type, true);
+  );
   
 
   // ref for bottom sheet
