@@ -40,7 +40,7 @@ export function UserDataContainer({
   isLoading,
   SkeletonComponent,
 }: UserDataContainerProps) {
-  const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
+  const { currentTheme } =
     useTheme();
   const currentUser = useAuthUser();
 
@@ -131,7 +131,7 @@ export function UserDataContainer({
                 />
 
                 <SearchProvider>
-                  <UserDataList data={data} />
+                  <UserDataList type={type} userId={userId} data={data} />
                 </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (

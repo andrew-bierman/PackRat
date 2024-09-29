@@ -1,9 +1,14 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { View, FlatList, Platform } from 'react-native';
+import { View, FlatList, Platform, Dimensions, ActivityIndicator  } from 'react-native';
 import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from 'app/utils/fuseSearch';
-import { BaseDialog, BaseModal } from '@packrat/ui';
+import { BaseDialog, BaseModal, RButton } from '@packrat/ui';
+import { useUserPacks } from 'app/modules/pack';
+import { useFetchUserFavorites } from 'app/modules/feed';
+import { user } from 'server/src/db/schema';
 // import BottomSheet from '@gorhom/bottom-sheet';
+
+const windowHeight = Dimensions.get('window').height;
 
 interface DataItem {
   _id: string;
@@ -12,10 +17,13 @@ interface DataItem {
 
 interface DataListProps {
   data: DataItem[];
+  userId?: string;
+  type?: string;
 }
 
-export const UserDataList = ({ data }: DataListProps) => {
+export const UserDataList = ({ data: resource, userId, type }: DataListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [queryString, setQueryString] = useState('Favorite');
   const keys = ['name', 'items.name', 'items.category'];
   const options = {
     threshold: 0.4,
@@ -25,10 +33,13 @@ export const UserDataList = ({ data }: DataListProps) => {
     minMatchCharLength: 1,
   };
 
-  const results = fuseSearch(data, searchQuery, keys, options);
-  const filteredData = searchQuery
-    ? results.map((result) => result.item)
-    : data;
+  const data = type === "packs"? useUserPacks(
+    userId,
+    { searchTerm: searchQuery },
+    type,
+    true,
+  ) : useUserPacks(userId, { searchTerm: searchQuery }, type, true);
+  
 
   // ref for bottom sheet
   const bottomSheetRef = useRef(null);
@@ -52,29 +63,39 @@ export const UserDataList = ({ data }: DataListProps) => {
           footerComponent={undefined}
         >
           <View
-            style={{ width: '100vw', paddingBottom: 10, maxWidth: 992 } as any}
+            style={{ width: '100vw',
+              paddingBottom: 10,
+              maxWidth: 992,
+              height: windowHeight * 0.8,
+              flexDirection: 'column', } as any}
           >
             <FeedSearchFilter
               isSortHidden={true}
-              queryString={searchQuery}
+              queryString={queryString}
               setSearchQuery={setSearchQuery}
             />
-            <FlatList
-              data={filteredData.slice(0, 2)}
-              horizontal={false}
-              keyExtractor={(item) => item?.id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-              renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
-            />
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={data.data}
+                horizontal={false}
+                keyExtractor={(item) => item?.id}
+                ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+                renderItem={({ item }) => (
+                  <FeedCard
+                    key={item?._id}
+                    item={item}
+                    cardType="primary"
+                    feedType={item.type}
+                  />
+                )}
+                showsVerticalScrollIndicator={true}
+                maxToRenderPerBatch={2}
+              />
+            </View>
+              {data.isLoading && <ActivityIndicator size="small" color="#0000ff" />}
+              {data.nextPage && !data.isLoading ? (
+                <RButton onPress={data.fetchNextPage} style={{marginTop: 4}}>Load more</RButton>
+              ) : null}
           </View>
         </BaseModal>
       ) : (
@@ -93,12 +114,12 @@ export const UserDataList = ({ data }: DataListProps) => {
           >
             <FeedSearchFilter
               isSortHidden={true}
-              queryString={searchQuery}
+              queryString={queryString}
               setSearchQuery={setSearchQuery}
             />
 
             <FlatList
-              data={filteredData}
+              data={data.data}
               horizontal={false}
               keyExtractor={(item) => item?._id}
               ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}

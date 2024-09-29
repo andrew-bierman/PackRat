@@ -2,7 +2,7 @@
 
 import { PaginationParams } from '../../../helpers/pagination';
 import { Feed } from '../model';
-import { Modifiers } from '../models';
+import { Modifiers, FeedQueryBy } from '../models';
 
 /**
  * Retrieves public trips based on the given query parameter.
@@ -18,8 +18,11 @@ export const getFeedService = async (
 ) => {
   try {
     const feedClass = new Feed();
+    if (queryBy === 'favorites') {
+      modifiers.includeUserFavoritesOnly = true;
+    }
     const publicFeed = await feedClass.findFeed(
-      queryBy,
+      queryBy as FeedQueryBy,
       modifiers,
       excludeType,
       pagination,
