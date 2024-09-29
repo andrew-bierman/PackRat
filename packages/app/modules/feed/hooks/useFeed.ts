@@ -46,7 +46,7 @@ export const useFeed = ({
   const userPacks = useUserPacks(
     ownerId || undefined,
     { searchTerm: searchQuery },
-    queryString,
+    queryString,  
     feedType === 'userPacks',
   );
   const userTrips = useUserTrips(

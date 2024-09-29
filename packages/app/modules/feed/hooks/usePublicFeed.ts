@@ -16,6 +16,7 @@ export const usePublicFeed = (
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
+
   const { data, isLoading, refetch } = queryTrpc.getPublicFeed.useQuery(
     {
       queryBy: queryBy ?? 'Favorites',
@@ -46,7 +47,7 @@ export const usePublicFeed = (
     setPagination,
     { nextPage: data?.nextOffset, enabled },
   );
-
+  console.log('allData ', allData)
   return {
     data: allData,
     isLoading,

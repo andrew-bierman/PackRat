@@ -4,8 +4,10 @@ import {
   Platform,
   Dimensions,
   NativeScrollEvent,
+  RefreshControl,
+  FlatList,
 } from 'react-native';
-import { RStack } from '@packrat/ui';
+import { RStack, RText } from '@packrat/ui';
 import ScrollButton from './ScrollButton';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
@@ -13,6 +15,9 @@ interface CarouselProps {
   children?: ReactNode[];
   itemWidth?: number;
   iconColor?: string;
+  refreshing?: boolean;
+  onEndReached: () => void;
+  onRefresh?: () => void;
 }
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -20,9 +25,12 @@ const { width: screenWidth } = Dimensions.get('window');
 const Carousel: React.FC<CarouselProps> = ({
   children = [],
   itemWidth,
+  refreshing,
+  onRefresh,
+  onEndReached,
   iconColor,
 }) => {
-  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const styles = useCustomStyles(loadStyles);
 
@@ -67,31 +75,39 @@ const Carousel: React.FC<CarouselProps> = ({
         />
       )}
 
-      <ScrollView
+      <FlatList
         ref={scrollViewRef}
         horizontal
         scrollEnabled
         style={styles.carousel}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row' }}
-        pagingEnabled
+        // pagingEnabled
         onMomentumScrollEnd={handleScroll}
-      >
-        {children &&
-          children.map((child, index) => (
-            <RStack
-              key={index}
-              style={{
-                ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
-                marginRight: 10,
-                marginTop: 10,
-                flexDirection: 'row',
-              }}
-            >
-              {child}
-            </RStack>
-          ))}
-      </ScrollView>
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        // keyExtractor={keyExtractor}
+        data={children} // Pass the children as data to FlatList
+        renderItem={({ item, index }) => (
+          <RStack
+            key={index}
+            style={{
+              ...(index === 0 ? { marginLeft: 10 } : { marginLeft: 0 }),
+              marginRight: 10,
+              marginTop: 10,    
+              flexDirection: 'row',
+            }}
+          >
+            {item}
+          </RStack>
+        )}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={1}
+      />
 
       {/* Show buttons only on web */}
       {Platform.OS === 'web' && (
