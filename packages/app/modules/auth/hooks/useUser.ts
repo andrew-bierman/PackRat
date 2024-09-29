@@ -18,7 +18,6 @@ export const useUserQuery = () => {
     } else {
       setIsRequestEnabled(false);
     }
-    console.log('isRequestEnabled', isRequestEnabled);
   }, [token, isTokenLoading]);
 
   const { refetch, data, isLoading: isRequestLoading } = queryTrpc.getMe.useQuery(undefined, {
