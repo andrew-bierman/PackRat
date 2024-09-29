@@ -3,6 +3,7 @@ import { type InsertItemCategory } from '../../db/schema';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { DbClient } from 'src/db/client';
 import { item as ItemTable } from '../../db/schema';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 
 export const bulkAddItemsGlobalService = async (
   items: Array<{
@@ -35,7 +36,7 @@ export const bulkAddItemsGlobalService = async (
 
     const newItem = {
       name,
-      weight,
+      weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
       quantity,
       unit,
       categoryId: category.id,

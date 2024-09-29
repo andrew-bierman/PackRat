@@ -4,6 +4,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 // import { prisma } from '../../prisma';
 
 /**
@@ -37,7 +38,7 @@ export const addItemGlobalService = async (
   }
   const newItem = await itemClass.create({
     name,
-    weight,
+    weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
     quantity,
     unit,
     categoryId: category.id,

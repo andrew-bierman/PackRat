@@ -149,7 +149,7 @@ export const ImportForm: FC<ImportFormProps> = ({
         }}
       >
         <CascadedDropdownComponent
-          value={selectedType}
+          value={selectedType.value}
           data={[
             ...(currentpage !== 'items'
               ? csvOption
