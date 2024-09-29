@@ -18,6 +18,7 @@ export const importItemsGlobal = async (c: Context) => {
             'Unit',
             'Quantity',
             'Category',
+            'image_urls',
           ];
           const parsedHeaders = results.meta.fields;
           try {
@@ -46,6 +47,7 @@ export const importItemsGlobal = async (c: Context) => {
                 item.Category,
                 ownerId,
                 c.ctx.executionCtx,
+                item.image_urls,
               );
             }
             resolve('items');
@@ -80,6 +82,7 @@ export function importItemsGlobalRoute() {
               'Unit',
               'Quantity',
               'Category',
+              'image_urls',
             ];
             const parsedHeaders = results.meta.fields;
             try {
@@ -110,6 +113,7 @@ export function importItemsGlobalRoute() {
                   item.Category,
                   ownerId,
                   opts.ctx.executionCtx,
+                  item.image_urls,
                 );
               }
               return resolve('items');
