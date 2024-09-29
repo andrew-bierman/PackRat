@@ -1,40 +1,16 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { View, FlatList, Platform } from 'react-native';
+import { View, FlatList, Platform, ScrollView } from 'react-native';
 import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from 'app/utils/fuseSearch';
-import { BaseDialog, BaseModal } from '@packrat/ui';
-// import BottomSheet from '@gorhom/bottom-sheet';
-
-interface DataItem {
-  _id: string;
-  type: string;
-}
+import { BaseDialog, BaseModal, RButton } from '@packrat/ui';
+import { type PreviewResourceStateWithData } from 'app/hooks/common';
 
 interface DataListProps {
-  data: DataItem[];
+  resource: PreviewResourceStateWithData;
 }
 
-export const UserDataList = ({ data }: DataListProps) => {
+export const UserDataList = ({ resource }: DataListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const keys = ['name', 'items.name', 'items.category'];
-  const options = {
-    threshold: 0.4,
-    location: 0,
-    distance: 100,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-  };
-
-  const results = fuseSearch(data, searchQuery, keys, options);
-  const filteredData = searchQuery
-    ? results.map((result) => result.item)
-    : data;
-
-  // ref for bottom sheet
-  const bottomSheetRef = useRef(null);
-
-  // variables for bottom sheet behavior
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
 
   return (
     <>
@@ -42,6 +18,9 @@ export const UserDataList = ({ data }: DataListProps) => {
         <BaseModal
           title="See all"
           trigger="See all"
+          isOpen={resource.isSeeAllModalOpen}
+          onOpen={() => resource.setIsSeeAllModalOpen(true)}
+          onClose={() => resource.setIsSeeAllModalOpen(false)}
           footerButtons={[
             {
               label: 'Cancel',
@@ -51,7 +30,7 @@ export const UserDataList = ({ data }: DataListProps) => {
           ]}
           footerComponent={undefined}
         >
-          <View
+          <ScrollView
             style={{ width: '100vw', paddingBottom: 10, maxWidth: 992 } as any}
           >
             <FeedSearchFilter
@@ -60,7 +39,7 @@ export const UserDataList = ({ data }: DataListProps) => {
               setSearchQuery={setSearchQuery}
             />
             <FlatList
-              data={filteredData.slice(0, 2)}
+              data={resource.allQueryData}
               horizontal={false}
               keyExtractor={(item) => item?.id}
               ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
@@ -75,7 +54,10 @@ export const UserDataList = ({ data }: DataListProps) => {
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}
             />
-          </View>
+            {resource.nextPage ? (
+              <RButton onPress={resource.fetchNextPage}>Load more</RButton>
+            ) : null}
+          </ScrollView>
         </BaseModal>
       ) : (
         <View style={{ width: '30%', alignSelf: 'center' }}>
@@ -98,7 +80,7 @@ export const UserDataList = ({ data }: DataListProps) => {
             />
 
             <FlatList
-              data={filteredData}
+              data={resource.allQueryData}
               horizontal={false}
               keyExtractor={(item) => item?._id}
               ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
@@ -113,6 +95,9 @@ export const UserDataList = ({ data }: DataListProps) => {
               showsVerticalScrollIndicator={false}
               maxToRenderPerBatch={2}
             />
+            {resource.nextPage ? (
+              <RButton onPress={resource.fetchNextPage}>Load more</RButton>
+            ) : null}
           </BaseDialog>
         </View>
       )}

@@ -1,6 +1,6 @@
 import { type Dispatch, type SetStateAction, useEffect, useRef } from 'react';
 
-const DEFAULT_LIMIT = 20;
+const DEFAULT_LIMIT = 1;
 
 export const getPaginationInitialParams = (defaultPage = 1) => ({
   limit: DEFAULT_LIMIT,

@@ -10,6 +10,7 @@ import { View } from 'react-native';
 import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';
+import { type PreviewResourceStateWithData } from 'app/hooks/common';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -26,7 +27,7 @@ const SkeletonUserDataCard = () => {
 };
 
 interface UserDataContainerProps {
-  data: any;
+  resource: PreviewResourceStateWithData;
   type: 'packs' | 'trips' | 'favorites';
   userId?: string;
   isLoading?: boolean;
@@ -34,7 +35,7 @@ interface UserDataContainerProps {
 }
 
 export function UserDataContainer({
-  data = [],
+  resource = [],
   type,
   userId,
   isLoading,
@@ -107,14 +108,14 @@ export function UserDataContainer({
           >
             {isLoading ? (
               skeletonCards
-            ) : data && data.length > 0 ? (
+            ) : resource?.previewData && resource?.previewData.length > 0 ? (
               <>
                 <VirtualizedList
                   showsHorizontalScrollIndicator={false}
                   showsVerticalScrollIndicator={false}
-                  getItemCount={() => data.length}
+                  getItemCount={() => resource.previewData.length}
                   getItem={(data, index) => data[index]}
-                  data={data}
+                  data={resource.previewData}
                   keyExtractor={(item) => item.id}
                   renderItem={Card}
                   scrollEnabled={true}
@@ -131,7 +132,7 @@ export function UserDataContainer({
                 />
 
                 <SearchProvider>
-                  <UserDataList data={data} />
+                  <UserDataList resource={resource} />
                 </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (

@@ -10,6 +10,7 @@ export function getUserPacksFeedRoute() {
         queryBy: z.string(),
         ownerId: z.string(),
         isPublic: z.boolean().optional(),
+        isPreview: z.boolean().optional(),
         searchTerm: z.string().optional(),
         pagination: z
           .object({ limit: z.number(), offset: z.number() })

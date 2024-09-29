@@ -19,7 +19,7 @@ export const getUserFavoritesService = async (userId: string) => {
     throw new Error(`User with id ${userId} not found`);
   }
 
-  const { data: userFavorites } = await feedClass.findFeed(
+  const userFavorites = await feedClass.findFeed(
     'Most Recent',
     {
       includeUserFavoritesOnly: true,

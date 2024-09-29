@@ -4,11 +4,15 @@ import {
   useInfinitePagination,
   type PaginationParams,
 } from 'app/hooks/pagination';
+import {
+  type PreviewResourceStateWithData,
+  usePreviewResourceState,
+} from 'app/hooks/common';
 import { useState } from 'react';
 
 export const useUserTrips = (
   ownerId: string | undefined,
-  params?: { searchTerm: string },
+  params?: { searchTerm: string; isPublic?: boolean },
   queryEnabled: boolean = true,
 ) => {
   const [allData, setAllData] = useState([]);
@@ -16,12 +20,12 @@ export const useUserTrips = (
     getPaginationInitialParams(),
   );
   const enabled = queryEnabled && !!ownerId;
-  const { searchTerm } = params || {};
+  const { searchTerm, isPublic } = params || {};
 
   // Leverage the query hook provided by tRPC
   const { data, error, isLoading, refetch } =
     queryTrpc.getUserTripsFeed.useQuery(
-      { ownerId, searchTerm, queryBy: 'Most Recent', pagination },
+      { ownerId, searchTerm, queryBy: 'Most Recent', pagination, isPublic },
       {
         enabled, // This query will run only if 'enabled' is true.
         refetchOnWindowFocus: false,
@@ -47,15 +51,54 @@ export const useUserTrips = (
     { nextPage: data?.nextOffset, enabled },
   );
 
-  // Extract trips or set an empty array if data is undefined.
-  // const trips = data?.trips || [];
-
   return {
     data: allData,
+    totalCount: data?.totaLCount,
     error,
     isLoading,
     refetch,
     fetchNextPage,
     nextPage: data?.nextOffset || false,
+  };
+};
+
+interface FetchUserTripsPreviewReturn extends PreviewResourceStateWithData {
+  totalCount?: number;
+  fetchNextPage: () => void;
+  nextPage?: number;
+}
+
+export const useUserTripsWithPreview = (
+  userId: string,
+): FetchUserTripsPreviewReturn => {
+  const { isAllQueryEnabled, ...previewResourceState } =
+    usePreviewResourceState();
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    fetchNextPage,
+    nextPage,
+  } = useUserTrips(userId, { isPublic: true, searchTerm: '' }, true);
+
+  const {
+    data: allQueryData,
+    isLoading: isAllQueryLoading,
+    totalCount,
+  } = useUserTrips(
+    userId,
+    { isPublic: true, searchTerm: '' },
+    isAllQueryEnabled,
+  );
+
+  return {
+    ...previewResourceState,
+    isAllQueryEnabled,
+    previewData,
+    isPreviewLoading,
+    allQueryData,
+    isAllQueryLoading,
+    totalCount,
+    fetchNextPage,
+    nextPage,
   };
 };
