@@ -5,6 +5,8 @@ import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
+import { DbClient } from 'src/db/client';
+import { itemImage as itemImageTable } from '../../db/schema';
 // import { prisma } from '../../prisma';
 
 /**
@@ -25,6 +27,7 @@ export const addItemGlobalService = async (
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
   executionCtx: ExecutionContext,
+  image_urls?: string,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -45,6 +48,20 @@ export const addItemGlobalService = async (
     global: true,
     ownerId,
   });
+
+  if (image_urls) {
+    const urls = image_urls.split(',');
+    for (const url of urls) {
+      const newItemImage = {
+        itemId: newItem.id,
+        url,
+      };
+      await DbClient.instance
+        .insert(itemImageTable)
+        .values(newItemImage)
+        .run();
+    }
+  }
 
   executionCtx.waitUntil(
     VectorClient.instance.syncRecord({

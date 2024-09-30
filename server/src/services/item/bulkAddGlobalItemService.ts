@@ -2,8 +2,9 @@ import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { DbClient } from 'src/db/client';
-import { item as ItemTable } from '../../db/schema';
+import { item as ItemTable, itemImage as itemImageTable } from '../../db/schema';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
+import { eq } from 'drizzle-orm';
 
 export const bulkAddItemsGlobalService = async (
   items: Array<{
@@ -13,6 +14,7 @@ export const bulkAddItemsGlobalService = async (
     unit: string;
     type: 'Food' | 'Water' | 'Essentials';
     ownerId: string;
+    image_urls?: string;
   }>,
   executionCtx: ExecutionContext,
 ) => {
@@ -22,7 +24,7 @@ export const bulkAddItemsGlobalService = async (
   const insertedItems = [];
 
   for (const itemData of items) {
-    const { name, weight, quantity, unit, type, ownerId } = itemData;
+    const { name, weight, quantity, unit, type, ownerId, image_urls } = itemData;
     if (!categories.includes(type)) {
       throw new Error(`Category must be one of: ${categories.join(', ')}`);
     }
@@ -32,6 +34,17 @@ export const bulkAddItemsGlobalService = async (
       (await itemCategoryClass.findItemCategory({ name: type })) || null;
     if (!category) {
       category = await itemCategoryClass.create({ name: type });
+    }
+
+    // Check if item with the same name already exists
+    const existingItem = await DbClient.instance
+    .select()
+    .from(ItemTable)
+    .where(eq(ItemTable.name, name))
+    .get();
+
+    if (existingItem) {
+      continue;
     }
 
     const newItem = {
@@ -49,6 +62,21 @@ export const bulkAddItemsGlobalService = async (
       .values(newItem)
       .returning()
       .get();
+
+      if (image_urls) {
+        const urls = image_urls.split(',');
+        for (const url of urls) {
+          const newItemImage = {
+            itemId: item.id,
+            url,
+          };
+          await DbClient.instance
+            .insert(itemImageTable)
+            .values(newItemImage)
+            .run();
+        }
+        console.log('Added image urls for item:', item.id);
+      }
 
     insertedItems.push(item);
   }
