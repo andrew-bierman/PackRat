@@ -27,14 +27,11 @@ interface SelectedType {
   value: string;
 }
 
-const options = [
-  { label: 'bucket 1', value: 'bucket 1', key: 'bucket 1' },
-  { label: 'bucket 2', value: 'bucket 2', key: 'bucket 2' },
-  { label: 'bucket 3', value: 'bucket 3', key: 'bucket 3' },
-  { label: 'bucket 4', value: 'bucket 4', key: 'bucket 4' },
-  { label: 'bucket 5', value: 'bucket 5', key: 'bucket 5' },
-  { label: 'bucket 6', value: 'bucket 6', key: 'bucket 6' },
-];
+const bucketCount = 6;
+const options = Array.from({ length: bucketCount }, (_, i) => {
+  const bucket = `bucket ${i + 1}`;
+  return { label: bucket, value: bucket, key: bucket };
+});
 
 const csvOption = [{ label: 'CSV', value: '.csv', key: '.csv' }];
 
