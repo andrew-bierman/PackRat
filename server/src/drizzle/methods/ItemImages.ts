@@ -75,7 +75,7 @@ export class ItemImages {
         }
     }
     // get all images for an item
-    async getByItemId(itemId: string) {
+    async getByItemId({itemId}: {itemId: string}) {
         try {
         const itemImages = await DbClient.instance
             .select()
