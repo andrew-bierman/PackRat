@@ -208,6 +208,17 @@ export const item = sqliteTable('item', {
   // @@map("items"): undefined,
 });
 
+export const itemImage = sqliteTable('item_image', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  itemId: text('item_id')
+    .references(() => item.id, { onDelete: 'cascade' })
+    .notNull(),
+  url: text('url').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const offlineMap = sqliteTable(
   'offlineMap',
   {

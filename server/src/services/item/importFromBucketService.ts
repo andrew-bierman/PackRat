@@ -9,6 +9,7 @@ interface CSVType {
   unit: string;
   type: 'Essentials' | 'Food' | 'Water';
   ownerId: string;
+  image_urls: string;
 }
 
 function getSignatureKey(
@@ -135,6 +136,7 @@ export async function listBucketContents(
     { label: 'bucket 3', value: 'cabelas' },
     { label: 'bucket 4', value: 'moosejaw' },
     { label: 'bucket 5', value: 'backcountry' },
+    { label: 'bucket 6', value: 'patagonia' },
   ];
 
   directory =
@@ -177,6 +179,7 @@ export async function parseCSVData(fileData: string, ownerId: string) {
               unit: item.weight_unit || 'g',
               type: 'Essentials',
               ownerId,
+              image_urls: item.image_urls,
             });
           }
           resolve(itemsToInsert);

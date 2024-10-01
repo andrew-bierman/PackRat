@@ -8,6 +8,7 @@ export * from './deleteItem';
 export * from './editItem';
 export * from './getItems';
 export * from './getItemById';
+export * from './getItemImages';
 export * from './editGlobalItemAsDuplicate';
 export * from './getItemsGlobally';
 export * from './searchItemsByName';
