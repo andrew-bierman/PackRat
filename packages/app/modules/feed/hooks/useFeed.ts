@@ -3,23 +3,13 @@ import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
 import { type FeedType } from '../model';
+import { type PaginationReturn } from 'app/hooks/pagination';
 
-interface UseFeedResult {
+interface UseFeedResult extends Partial<PaginationReturn> {
   data: any[] | null;
   isLoading: boolean;
   refetch?: () => void;
   setPage?: (page: number) => void;
-  nextPage?: number | boolean;
-  fetchNextPage?: () => void;
-}
-
-interface UseFeedResult {
-  data: any[] | null;
-  isLoading: boolean;
-  refetch?: () => void;
-  setPage?: (page: number) => void;
-  nextPage?: number | boolean;
-  fetchNextPage?: () => void;
 }
 
 export const useFeed = ({

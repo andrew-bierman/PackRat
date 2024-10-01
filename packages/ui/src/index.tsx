@@ -105,6 +105,7 @@ export * from './Rparagraph';
 export * from './SizableText';
 export * from './XStack';
 export * from './YStack';
+export * from './Pagination';
 // Future components
 // export * from './RCheckbox';
 // export * from './RSelect';
