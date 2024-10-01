@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { type PaginationReturn } from 'app/hooks/pagination';
 
 interface PreviewResourceState {
   isSeeAllModalOpen: boolean;
@@ -6,7 +7,9 @@ interface PreviewResourceState {
   setIsSeeAllModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface PreviewResourceStateWithData extends PreviewResourceState {
+export interface PreviewResourceStateWithData
+  extends PreviewResourceState,
+    Partial<PaginationReturn> {
   isPreviewLoading: boolean;
   previewData: any;
   isAllQueryLoading: boolean;
@@ -16,10 +19,17 @@ export interface PreviewResourceStateWithData extends PreviewResourceState {
 }
 export const usePreviewResourceState = (): PreviewResourceState => {
   const [isSeeAllModalOpen, setIsSeeAllModalOpen] = useState(false);
+  const [isAllQueryEnabled, setIsAllQueryEnabled] = useState(false);
+
+  useEffect(() => {
+    if (isSeeAllModalOpen) {
+      setIsAllQueryEnabled(true);
+    }
+  }, [isSeeAllModalOpen]);
 
   return {
     isSeeAllModalOpen,
     setIsSeeAllModalOpen,
-    isAllQueryEnabled: isSeeAllModalOpen,
+    isAllQueryEnabled,
   };
 };

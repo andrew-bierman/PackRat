@@ -13,19 +13,30 @@ export interface PaginationParams {
 }
 
 interface PaginationOptions {
-  nextPage?: number;
+  prevPage?: number | false;
+  nextPage?: number | false;
   enabled?: boolean;
   defaultPage?: number;
 }
 
-export const useInfinitePagination = (
+export const usePagination = (
   fetchFunction: () => void,
   paginationParams: PaginationParams,
   setPaginationParams: Dispatch<SetStateAction<PaginationParams>>,
   options: PaginationOptions = {},
 ) => {
   const initialRender = useRef(false);
-  const { nextPage, enabled = true } = options;
+  const { prevPage, nextPage, enabled = true } = options;
+
+  const fetchPrevPage = () => {
+    if (prevPage === false) {
+      return;
+    }
+    setPaginationParams((prev) => ({
+      ...prev,
+      offset: prevPage,
+    }));
+  };
 
   const fetchNextPage = () => {
     setPaginationParams((prev) => ({
@@ -50,9 +61,18 @@ export const useInfinitePagination = (
     run();
   }, [paginationParams.limit, paginationParams.offset, enabled]);
 
-  return { fetchNextPage };
+  return { fetchPrevPage, fetchNextPage };
 };
 
 function getOffset(page: number, limit: number) {
   return (page - 1) * limit;
+}
+
+export interface PaginationReturn {
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  currentPage: number;
+  totalPages: number;
+  fetchPrevPage: () => void;
+  fetchNextPage: () => void;
 }

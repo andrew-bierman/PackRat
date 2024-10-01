@@ -194,6 +194,8 @@ export function ProfileContainer({ id = null }) {
     favoritesQuery,
     userPacksQuery,
     userTripsQuery,
+    searchTerms,
+    onSearchChange,
     tripsCount,
     packsCount,
     favoritesCount,
@@ -234,6 +236,8 @@ export function ProfileContainer({ id = null }) {
                   type="favorites"
                   userId={user?.id}
                   isLoading={isLoading}
+                  searchTerm={searchTerms.favorites}
+                  onSearchChange={onSearchChange}
                 />
               ) : (
                 <RText
@@ -251,6 +255,8 @@ export function ProfileContainer({ id = null }) {
                   resource={userPacksQuery}
                   type="packs"
                   userId={user?.id}
+                  searchTerm={searchTerms.packs}
+                  onSearchChange={onSearchChange}
                 />
               </View>
             )}
@@ -260,6 +266,8 @@ export function ProfileContainer({ id = null }) {
                   resource={userTripsQuery}
                   type="trips"
                   userId={user?.id}
+                  searchTerm={searchTerms.packs}
+                  onSearchChange={onSearchChange}
                 />
               </View>
             )}

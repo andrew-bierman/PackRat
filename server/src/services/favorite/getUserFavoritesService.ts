@@ -1,5 +1,6 @@
 import { Feed } from '../../modules/feed/model';
 import { User } from '../../drizzle/methods/User';
+import { PaginationParams } from 'src/helpers/pagination';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -7,7 +8,12 @@ import { User } from '../../drizzle/methods/User';
  * @param {string} userId - The ID of the user.
  * @return {Promise<Array<Pack>>} An array of favorite packs.
  */
-export const getUserFavoritesService = async (userId: string) => {
+export const getUserFavoritesService = async (
+  userId: string,
+  options?: { searchTerm?: string },
+  pagination?: PaginationParams,
+) => {
+  const { searchTerm } = options || {};
   const userClass = new User();
   const feedClass = new Feed();
   const user = (await userClass.findUser({
@@ -23,9 +29,11 @@ export const getUserFavoritesService = async (userId: string) => {
     'Most Recent',
     {
       includeUserFavoritesOnly: true,
+      searchTerm,
       ownerId: userId,
     },
     'trips',
+    pagination,
   );
   return userFavorites;
 };

@@ -2,7 +2,7 @@ import { queryTrpc } from 'app/trpc';
 import {
   getPaginationInitialParams,
   type PaginationParams,
-  useInfinitePagination,
+  usePagination,
 } from 'app/hooks/pagination';
 import { useEffect, useState } from 'react';
 import {
@@ -12,50 +12,49 @@ import {
 
 export const useFetchUserFavorites = (
   userId: string,
-  { queryEnabled = true, isPreview = false } = {},
+  { queryEnabled = true, isPreview = false, searchTerm = '' } = {},
 ) => {
   const enabled = !!userId && queryEnabled;
-  const [allData, setAllData] = useState();
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
 
   const { data, error, isLoading, refetch } =
     queryTrpc.getUserFavorites.useQuery(
-      { userId, pagination, isPreview },
+      { userId, pagination, isPreview, searchTerm },
       {
         enabled,
         refetchOnWindowFocus: false,
       },
     );
-  const { fetchNextPage } = useInfinitePagination(
+  const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
     pagination,
     setPagination,
-    { nextPage: data?.nextOffset, enabled },
+    {
+      prevPage: data?.prevOffset,
+      nextPage: data?.nextOffset,
+      enabled,
+    },
   );
 
   useEffect(() => {
-    if (data?.data) {
-      setAllData((prevData) => {
-        if (pagination.offset === 0) {
-          return data.data;
-        }
-
-        return [...(Array.isArray(prevData) ? prevData : []), ...data.data];
-      });
-    }
-  }, [data]);
+    setPagination(getPaginationInitialParams());
+  }, [searchTerm, userId]);
 
   return {
-    data: allData,
+    data: data?.data || [],
     totalCount: data?.totalCount,
     error,
     isLoading,
     enabled,
     refetch,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage: data?.nextOffset || false,
+    hasPrevPage: data?.prevOffset !== false,
+    hasNextPage: data?.nextOffset !== false,
+    currentPage: data?.currentPage,
+    totalPages: data?.totalPages,
   };
 };
 
@@ -64,6 +63,7 @@ interface FetchUserFavoritesReturn extends PreviewResourceStateWithData {
 }
 export const useFetchUserFavoritesWithPreview = (
   userId: string,
+  searchTerm: string,
 ): FetchUserFavoritesReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
@@ -74,9 +74,16 @@ export const useFetchUserFavoritesWithPreview = (
     data: allQueryData,
     isLoading: isAllQueryLoading,
     totalCount,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage,
-  } = useFetchUserFavorites(userId, { queryEnabled: isAllQueryEnabled });
+    totalPages,
+    currentPage,
+    hasPrevPage,
+    hasNextPage,
+  } = useFetchUserFavorites(userId, {
+    queryEnabled: isAllQueryEnabled,
+    searchTerm,
+  });
 
   return {
     ...previewResourceState,
@@ -86,7 +93,11 @@ export const useFetchUserFavoritesWithPreview = (
     allQueryData,
     isAllQueryLoading,
     totalCount,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage,
+    totalPages,
+    currentPage,
+    hasPrevPage,
+    hasNextPage,
   };
 };

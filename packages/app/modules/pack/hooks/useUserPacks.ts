@@ -1,14 +1,14 @@
 import { queryTrpc } from 'app/trpc';
 import {
   getPaginationInitialParams,
-  useInfinitePagination,
+  usePagination,
   type PaginationParams,
 } from 'app/hooks/pagination';
 import {
   type PreviewResourceStateWithData,
   usePreviewResourceState,
 } from 'app/hooks/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface QueryOptions {
   isPublic?: boolean;
@@ -23,7 +23,6 @@ export const useUserPacks = (
   queryEnabled = false,
 ) => {
   const { isPublic, searchTerm, isPreview } = options;
-  const [allData, setAllData] = useState([]);
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -42,18 +41,6 @@ export const useUserPacks = (
       {
         enabled,
         refetchOnWindowFocus: false,
-        keepPreviousData: true,
-        onSuccess: (newData) => {
-          if (newData?.data) {
-            setAllData((prevData) => {
-              if (pagination.offset === 0) {
-                return newData.data;
-              }
-
-              return [...prevData, ...newData.data];
-            });
-          }
-        },
       },
     );
   utils.getPacks.setData({
@@ -61,23 +48,33 @@ export const useUserPacks = (
     queryBy: queryString,
   });
 
-  const { fetchNextPage } = useInfinitePagination(
+  const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
     pagination,
     setPagination,
-    { nextPage: data?.nextOffset, enabled },
+    {
+      prevPage: data?.prevOffset,
+      nextPage: data?.nextOffset,
+      enabled,
+    },
   );
 
-  // Extract packs or set an empty array if data is undefined.
+  useEffect(() => {
+    setPagination(getPaginationInitialParams());
+  }, [searchTerm, ownerId]);
 
   return {
-    data: allData,
-    totalCount: data?.totalCount,
-    error,
+    data: data?.data || [],
     isLoading,
+    totalCount: data?.totalCount,
     refetch,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage: data?.nextOffset || false,
+    hasPrevPage: data?.prevOffset !== false,
+    hasNextPage: data?.nextOffset !== false,
+    currentPage: data?.currentPage,
+    totalPages: data?.totalPages,
+    error: null,
   };
 };
 
@@ -89,6 +86,7 @@ interface FetchUserPacksPreviewReturn extends PreviewResourceStateWithData {
 
 export const useUserPacksWithPreview = (
   userId: string,
+  searchTerm: string,
 ): FetchUserPacksPreviewReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
@@ -102,10 +100,14 @@ export const useUserPacksWithPreview = (
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage,
     totalCount,
-  } = useUserPacks(userId, { isPublic: true }, 'Most Recent', true);
+    hasPrevPage,
+    hasNextPage,
+    currentPage,
+    totalPages,
+  } = useUserPacks(userId, { isPublic: true, searchTerm }, 'Most Recent', true);
 
   return {
     ...previewResourceState,
@@ -115,7 +117,11 @@ export const useUserPacksWithPreview = (
     allQueryData,
     isAllQueryLoading,
     totalCount,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage,
+    totalPages,
+    currentPage,
+    hasPrevPage,
+    hasNextPage,
   };
 };

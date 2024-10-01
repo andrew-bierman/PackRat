@@ -10,6 +10,7 @@ import {
 import { literal } from 'src/drizzle/helpers';
 import {
   getPaginationParams,
+  getPrevOffset,
   type PaginationParams,
 } from '../../../helpers/pagination';
 import { FeedQueryBy, Modifiers } from '../models';
@@ -17,6 +18,48 @@ import { FeedQueryBy, Modifiers } from '../models';
 // Adding aliases to columns for order operations
 export class Feed {
   async findFeed(
+    queryBy: FeedQueryBy,
+    modifiers?: Modifiers,
+    excludeType?: 'trips' | 'packs',
+    pagination?: PaginationParams,
+  ) {
+    let currentPagination = getPaginationParams(pagination);
+
+    // it tries to load previous page if current page is empty
+    // Using while instead of recursion
+    while (true) {
+      const { data, totalCount } = await this.findFeedQuery(
+        queryBy,
+        modifiers,
+        excludeType,
+        currentPagination,
+      );
+
+      if (totalCount === 0 || !data?.length) {
+        const prevOffset = getPrevOffset(currentPagination);
+        if (prevOffset === false) {
+          return {
+            data: [],
+            totalCount: 0,
+            currentPagination: { offset: 0, limit: currentPagination.limit },
+          };
+        }
+
+        currentPagination = {
+          offset: prevOffset,
+          limit: currentPagination.limit,
+        };
+      } else {
+        return {
+          data,
+          totalCount,
+          currentPagination,
+        };
+      }
+    }
+  }
+
+  async findFeedQuery(
     queryBy: FeedQueryBy,
     modifiers?: Modifiers,
     excludeType?: 'trips' | 'packs',

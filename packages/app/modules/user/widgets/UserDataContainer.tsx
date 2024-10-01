@@ -2,7 +2,7 @@ import { RLink } from '@packrat/ui';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import { UserDataCard, UserDataList } from '../components';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
@@ -11,6 +11,7 @@ import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';
 import { type PreviewResourceStateWithData } from 'app/hooks/common';
+import type { PreviewListType } from '../model';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -28,18 +29,22 @@ const SkeletonUserDataCard = () => {
 
 interface UserDataContainerProps {
   resource: PreviewResourceStateWithData;
-  type: 'packs' | 'trips' | 'favorites';
+  type: PreviewListType;
   userId?: string;
   isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
+  searchTerm: string;
+  onSearchChange: (search: string, type: PreviewListType) => void;
 }
 
-export function UserDataContainer({
-  resource = [],
+export const UserDataContainer = memo(function UserDataContainer({
+  resource,
   type,
   userId,
   isLoading,
   SkeletonComponent,
+  searchTerm,
+  onSearchChange,
 }: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -132,7 +137,11 @@ export function UserDataContainer({
                 />
 
                 <SearchProvider>
-                  <UserDataList resource={resource} />
+                  <UserDataList
+                    resource={resource}
+                    search={searchTerm}
+                    onSearchChange={(search) => onSearchChange(search, type)}
+                  />
                 </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
@@ -149,4 +158,4 @@ export function UserDataContainer({
       </LargeCard>
     </Layout>
   );
-}
+});

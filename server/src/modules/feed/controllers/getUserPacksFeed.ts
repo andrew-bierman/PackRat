@@ -1,4 +1,4 @@
-import { getNextOffset } from 'src/helpers/pagination';
+import { getPaginationResponse } from 'src/helpers/pagination';
 import { protectedProcedure } from '../../../trpc';
 import { getFeedService } from '../services';
 import { z } from 'zod';
@@ -19,12 +19,15 @@ export function getUserPacksFeedRoute() {
     )
     .query(async (opts) => {
       const { queryBy, searchTerm, ownerId, pagination, isPublic } = opts.input;
-      const { data, totalCount } = await getFeedService(
+      const { data, totalCount, currentPagination } = await getFeedService(
         queryBy,
         { searchTerm, ownerId, isPublic },
         'trips',
         pagination,
       );
-      return { data, nextOffset: getNextOffset(pagination, totalCount) };
+      return {
+        data,
+        ...getPaginationResponse(currentPagination, totalCount as number),
+      };
     });
 }
