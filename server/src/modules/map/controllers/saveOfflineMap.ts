@@ -16,7 +16,10 @@ export function saveOfflineMapRoute() {
       }),
     )
     .mutation(async (opts) => {
-      const offlineMap = await saveOfflineMapService(opts.input);
+      const offlineMap = await saveOfflineMapService(
+        opts.input,
+        opts.ctx.executionCtx,
+      );
       return offlineMap;
     });
 }
