@@ -2,8 +2,12 @@ import { GeoJson } from '../../drizzle/methods/Geojson';
 import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
 import { Trip } from '../../drizzle/methods/trip';
 import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
+import { GeojsonStorageService } from '../geojsonStorage';
 
-export const addTripService = async (tripData: any) => {
+export const addTripService = async (
+  tripData: any,
+  executionCtx: ExecutionContext,
+) => {
   try {
     const { geoJSON, ...otherTripData } = tripData;
     console.log({ tripData });
@@ -25,6 +29,10 @@ export const addTripService = async (tripData: any) => {
       tripId: newTrip.id,
       geojsonId: insertedGeoJson.id,
     });
+
+    executionCtx.waitUntil(
+      GeojsonStorageService.save('trip', JSON.stringify(geoJSON), newTrip.id),
+    );
 
     return newTrip;
   } catch (error) {

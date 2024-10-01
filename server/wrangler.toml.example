@@ -11,6 +11,10 @@ binding = "DB"
 database_name = "preview"
 database_id = ""
 
+[[env.preview.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-preview'
+
 [env.preview.ai]
 binding = "AI"
 
@@ -39,6 +43,10 @@ WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "production"
+
+[[env.production.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-production'
 
 [env.production.ai]
 binding = "AI"
