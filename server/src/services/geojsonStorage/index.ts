@@ -1,3 +1,5 @@
+export type ResourceType = 'trip' | 'map';
+
 export class GeojsonStorageService {
   private static _bucket: R2Bucket | null = null;
   private static _instance: GeojsonStorageService | null = null;
@@ -18,11 +20,19 @@ export class GeojsonStorageService {
   }
 
   public static async save(
-    resource: 'trip' | 'map',
+    resource: ResourceType,
     geojson: string,
     resourceId: string,
   ): Promise<R2Object> {
     const object = await this._bucket.put(`${resource}/${resourceId}`, geojson);
+    return object;
+  }
+
+  public static async retrieve(
+    resource: ResourceType,
+    resourceId: string,
+  ): Promise<R2ObjectBody> {
+    const object = await this._bucket.get(`${resource}/${resourceId}`);
     return object;
   }
 }
