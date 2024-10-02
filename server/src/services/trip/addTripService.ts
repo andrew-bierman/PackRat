@@ -1,7 +1,9 @@
+import { calculateTripScore } from 'src/utils/scoreTrip';
 import { GeoJson } from '../../drizzle/methods/Geojson';
 import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
 import { Trip } from '../../drizzle/methods/trip';
 import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
+import { scoreTripService } from './scoreTripService';
 
 export const addTripService = async (tripData: any) => {
   try {
@@ -14,6 +16,7 @@ export const addTripService = async (tripData: any) => {
       trails: otherTripData.trails ? JSON.parse(otherTripData.trails) : null,
       parks: otherTripData.parks ? JSON.parse(otherTripData.parks) : null,
     });
+    await scoreTripService(newTrip.id);
     const geojsonClass = new GeoJson();
     const tripGeoJsonClass = new TripGeoJson();
     if (!geoJSON) {

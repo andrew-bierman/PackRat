@@ -4,4 +4,5 @@ export interface TripDetails {
   description: string;
   destination: string;
   activity: string;
+  score: number;
 }

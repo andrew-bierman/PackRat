@@ -9,14 +9,6 @@ import { LocationLabel } from '../LocationLabel';
 interface TripCardProps extends FeedCardProps<TripDetails> {}
 
 export const TripPrimaryCard: FC<TripCardProps> = (props) => {
-  const tripDetails = Object.entries(props.details)
-    .filter(([key]) => key !== 'description')
-    .map(([key, value]) => ({
-      key,
-      label: key,
-      value,
-    }));
-
   return (
     <Card
       title={props.title}
@@ -41,6 +33,11 @@ export const TripPrimaryCard: FC<TripCardProps> = (props) => {
           <RText>{props.details.description}</RText>
           <Details
             items={[
+              {
+                key: 'score',
+                label: 'Score',
+                value: props.details.score,
+              },
               {
                 key: 'startDate',
                 label: 'Start Date',

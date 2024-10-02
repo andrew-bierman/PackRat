@@ -146,7 +146,9 @@ export function TripDetails() {
                         return (
                           <ScoreContainer
                             type="trip"
-                            data={data}
+                            data={{
+                              total_score: data?.scores?.totalScore || 0,
+                            }}
                             isOwner={Boolean(isOwner)}
                           />
                         );
