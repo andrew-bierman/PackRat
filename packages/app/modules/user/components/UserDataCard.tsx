@@ -6,7 +6,6 @@ import { useAddFavorite } from 'app/modules/feed';
 import { useAuthUser } from 'app/modules/auth';
 import { UserTripCard } from './UserTripCard';
 import { UserPackCard } from './UserPackCard';
-import { View, Text } from 'react-native';
 
 const convertersByType = {
   pack: UserDataPackCardConverter,

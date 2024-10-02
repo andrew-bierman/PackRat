@@ -111,7 +111,7 @@ export class Feed {
           name: trip.name,
           owner_id: trip.owner_id,
           grades: literal('{}'),
-          scores: literal('{}'),
+          scores: trip.scores,
           is_public: trip.is_public,
           type: literal('trip'),
           description: trip.description,
@@ -221,9 +221,13 @@ export class Feed {
     return packQuery;
   }
 
-  computeTotalScores(pack) {
-    if (!pack.scores) return 0;
-    const scores = this.parseJSON(pack.scores);
+  computeTotalScores(resource) {
+    if (resource.type === 'trip') {
+      return resource?.scores?.totalScore || 0;
+    }
+
+    if (!resource.scores) return 0;
+    const scores = this.parseJSON(resource.scores);
     const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,
