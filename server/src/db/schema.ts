@@ -208,6 +208,17 @@ export const item = sqliteTable('item', {
   // @@map("items"): undefined,
 });
 
+export const itemImage = sqliteTable('item_image', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  itemId: text('item_id')
+    .references(() => item.id, { onDelete: 'cascade' })
+    .notNull(),
+  url: text('url').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 export const offlineMap = sqliteTable(
   'offlineMap',
   {
@@ -349,6 +360,13 @@ export const trip = sqliteTable('trip', {
   is_public: integer('is_public', { mode: 'boolean' }),
   activity: text('activity').default('trip'),
   type: text('type').default('trip'),
+  scores: text('scores', { mode: 'json' })
+    .$type<Object>()
+    .default(
+      JSON.stringify({
+        totalScore: 0,
+      }),
+    ),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("trips"): undefined,

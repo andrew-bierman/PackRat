@@ -9,3 +9,4 @@ export { useItem } from './useItem';
 export { useItemRow } from './useItemRow';
 export { useImportItem } from './useImportItem';
 export { useImportFromBucket } from './useImportFromBucket';
+export { useItemImages } from './useItemImages';

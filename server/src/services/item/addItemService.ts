@@ -5,6 +5,7 @@ import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
 import { VectorClient } from '../../vector/client';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 import { type ExecutionContext } from 'hono';
 
 /**
@@ -42,7 +43,7 @@ export const addItemService = async (
   const item = await itemClass.create(
     {
       name,
-      weight,
+      weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
       quantity,
       unit,
       // packs: [packId],

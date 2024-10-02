@@ -58,14 +58,10 @@ export const AddItem = ({
   const { editPackItem } = useEditPackItem(isItemPage);
 
   const handleSubmit = (data: Item) => {
-    const convertedData = {
-      ...data,
-      weight: convertWeighToSmallestUnit(data.unit as ItemUnit, data.weight),
-    };
     if (isEdit) {
-      editPackItem(convertedData as any);
+      editPackItem(data as any);
     } else {
-      addPackItem(convertedData);
+      addPackItem(data);
     }
     if (closeModalHandler) closeModalHandler();
   };

@@ -7,19 +7,20 @@ import {
 } from '../../services/item/item.service';
 import { z } from 'zod';
 
-export const importFromBucket = async (c) => {
-  const { directory, ownerId } = await c.req.query();
+async function importItemsFromBucket(directory, ownerId, env, executionCtx) {
+  const {
+    BUCKET_ENDPOINT: endpoint,
+    BUCKET_NAME: bucket,
+    BUCKET_REGION: region,
+    BUCKET_SERVICE: service,
+    BUCKET_ACCESS_KEY_ID: accessKeyId,
+    BUCKET_SECRET_KEY: secretKey,
+    BUCKET_SESSION_TOKEN: sessionToken,
+    AWS_SIGN_ALGORITHM: algorithm,
+    X_AMZ_SECURITY_TOKEN: x_amz_token,
+  } = env;
 
-  const endpoint = c.env.BUCKET_ENDPOINT;
-  const bucket = c.env.BUCKET_NAME;
   const method = 'GET';
-  const region = c.env.BUCKET_REGION;
-  const service = c.env.BUCKET_SERVICE;
-  const accessKeyId = c.env.BUCKET_ACCESS_KEY_ID;
-  const secretKey = c.env.BUCKET_SECRET_KEY;
-  const sessionToken = c.env.BUCKET_SESSION_TOKEN;
-  const algorithm = c.env.AWS_SIGN_ALGORITHM;
-  const x_amz_token = c.env.X_AMZ_SECURITY_TOKEN;
 
   try {
     const latestFileName = await listBucketContents(
@@ -37,7 +38,7 @@ export const importFromBucket = async (c) => {
     );
 
     if (!latestFileName) {
-      throw new Error('No files found in the supposed directory');
+      throw new Error('No files found in the directory');
     }
 
     const fileData = await fetchFromS3(
@@ -53,17 +54,26 @@ export const importFromBucket = async (c) => {
     );
 
     const itemsToInsert = await parseCSVData(fileData, ownerId);
-    const insertedItems = await bulkAddItemsGlobalService(
-      itemsToInsert,
-      c.executionCtx,
-    );
+    const insertedItems = await bulkAddItemsGlobalService(itemsToInsert, executionCtx);
+
+    return insertedItems;
+  } catch (err) {
+    console.error('Error:', err);
+    throw err; // Let the calling function handle the error
+  }
+}
+
+export const importFromBucket = async (c) => {
+  const { directory, ownerId } = await c.req.query();
+
+  try {
+    const insertedItems = await importItemsFromBucket(directory, ownerId, c.env, c.executionCtx);
 
     return c.json({
       message: 'Items inserted successfully',
       data: insertedItems,
     });
   } catch (err) {
-    console.error('Error:', err);
     return c.json({ error: 'An error occurred' });
   }
 };
@@ -73,44 +83,10 @@ export function importFromBucketRoute() {
     .input(z.object({ directory: z.string(), ownerId: z.string() }))
     .mutation(async (opts) => {
       const { directory, ownerId } = opts.input;
-      const { env, executionCtx }: any = opts.ctx;
+      const { env, executionCtx } = opts.ctx;
 
       try {
-        const latestFileName = await listBucketContents(
-          env.BUCKET_ENDPOINT,
-          env.BUCKET_NAME,
-          directory,
-          'GET',
-          env.BUCKET_SERVICE,
-          env.BUCKET_REGION,
-          env.BUCKET_ACCESS_KEY_ID,
-          env.BUCKET_SECRET_KEY,
-          env.BUCKET_SESSION_TOKEN,
-          env.AWS_SIGN_ALGORITHM,
-          env.X_AMZ_SECURITY_TOKEN,
-        );
-
-        if (!latestFileName) {
-          throw new Error('No files found in the directory');
-        }
-
-        const fileData = await fetchFromS3(
-          `${env.BUCKET_ENDPOINT}/${env.BUCKET_NAME}/${latestFileName}`,
-          'GET',
-          env.BUCKET_SERVICE,
-          env.BUCKET_REGION,
-          env.BUCKET_ACCESS_KEY_ID,
-          env.BUCKET_SECRET_KEY,
-          env.BUCKET_SESSION_TOKEN,
-          env.AWS_SIGN_ALGORITHM,
-          env.X_AMZ_SECURITY_TOKEN,
-        );
-
-        const itemsToInsert = await parseCSVData(fileData, ownerId);
-        const insertedItems = await bulkAddItemsGlobalService(
-          itemsToInsert,
-          executionCtx,
-        );
+        const insertedItems = await importItemsFromBucket(directory, ownerId, env, executionCtx);
 
         return insertedItems;
       } catch (err) {
