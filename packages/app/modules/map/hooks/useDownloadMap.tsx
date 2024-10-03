@@ -18,12 +18,14 @@ export const useDownloadMap = (onDownload) => {
       },
     };
 
+    alert(JSON.stringify(downloadOptions));
+
     // Save the map under user profile.
     mutateAsync(downloadOptions)
       .then(() => {
         onDownload(downloadOptions);
       })
-      .catch(() => {});
+      .catch((e) => {});
   };
 
   return { handleDownloadMap, isSaving: isLoading };

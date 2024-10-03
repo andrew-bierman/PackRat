@@ -359,6 +359,7 @@ export const trip = sqliteTable('trip', {
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
   activity: text('activity').default('trip'),
+  bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
   type: text('type').default('trip'),
   scores: text('scores', { mode: 'json' })
     .$type<Object>()

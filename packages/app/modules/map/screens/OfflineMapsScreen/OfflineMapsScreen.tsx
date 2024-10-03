@@ -7,17 +7,14 @@ import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/
 import { MapPreviewCard } from 'app/modules/map/components';
 import { Map } from 'app/modules/map';
 import { useOfflineMaps } from '../../hooks/useOfflineMaps';
+import { OfflineMapComponent } from './OfflineMap';
 
-interface OfflineMap {
+export interface OfflineMap {
+  id: string;
   name: string;
   styleURL: string;
   bounds: [number[], number[]];
-  minZoom: number;
-  maxZoom: number;
   downloaded: boolean;
-  metadata: {
-    shape: unknown;
-  };
 }
 
 export const OfflineMapsScreen = () => {
@@ -37,13 +34,10 @@ export const OfflineMapsScreen = () => {
         height: '100%',
       }}
     >
-      {selectedMap?.metadata?.shape ? (
-        <Map
-          shape={selectedMap.metadata.shape}
-          shouldEnableDownload={!selectedMap.downloaded}
-          onExitFullScreen={() => setSelectedMapId('')}
-          initialBounds={selectedMap.bounds}
-          isFullScreenModeByDefault
+      {selectedMap ? (
+        <OfflineMapComponent
+          map={selectedMap}
+          onClose={() => setSelectedMapId('')}
         />
       ) : null}
       <RScrollView nestedScrollEnabled={true} mt={50} mb={50}>
@@ -87,8 +81,12 @@ const useOfflineMapWithDownloadStatus = (offlineMaps) => {
 
   useEffect(() => {
     (async () => {
-      const res = await addDownloadStatusToMaps(offlineMaps);
-      setOfflineMapWithDownloadStatus(res);
+      try {
+        const res = await addDownloadStatusToMaps(offlineMaps);
+        setOfflineMapWithDownloadStatus(res);
+      } catch (e) {
+        setOfflineMapWithDownloadStatus(offlineMaps);
+      }
     })();
   }, [offlineMaps]);
 
@@ -99,14 +97,10 @@ const addDownloadStatusToMaps = async (offlineMaps: OfflineMap[]) => {
   const offlineMapboxPacks: OfflineMap[] = [];
   for (const map of offlineMaps) {
     const offlineMap: OfflineMap = {
+      id: map.id,
       styleURL: `${map.styleURL}`,
       name: `${map.name}`,
-      minZoom: map.minZoom,
-      maxZoom: map.maxZoom,
       bounds: map.bounds,
-      metadata: {
-        shape: JSON.parse(map.metadata.shape as string),
-      },
       downloaded: false,
     };
 

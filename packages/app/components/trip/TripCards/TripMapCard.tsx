@@ -4,15 +4,24 @@ import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
+import { getTripGEOURI } from '../utils';
 
 interface TripMapCardProps {
   isLoading?: boolean;
-  shape: any;
+  shape?: any;
+  onVisibleBoundsChange?: (bounds: number[]) => void;
+  tripId?: string;
+  initialBounds?: any;
 }
 
-export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
+export const TripMapCard = ({
+  isLoading,
+  shape,
+  initialBounds,
+  tripId,
+  onVisibleBoundsChange,
+}: TripMapCardProps) => {
   const { currentTheme } = useTheme();
-  console.log({ shape });
 
   return (
     <TripCardBase
@@ -32,7 +41,13 @@ export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
         </RStack>
       ) : (
         <ErrorBoundary>
-          <Map style={{ width: '100%', height: 320 }} shape={shape} />
+          <Map
+            style={{ width: '100%', height: 320 }}
+            shapeURI={tripId ? getTripGEOURI(tripId) : undefined}
+            onVisibleBoundsChange={onVisibleBoundsChange}
+            initialBounds={initialBounds}
+            shape={shape}
+          />
         </ErrorBoundary>
       )}
     </TripCardBase>

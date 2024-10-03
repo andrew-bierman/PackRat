@@ -2,13 +2,12 @@ import { queryTrpc } from 'app/trpc';
 import {
   getPaginationInitialParams,
   type PaginationParams,
-  useInfinitePagination,
+  usePagination,
 } from 'app/hooks/pagination';
 import { useState } from 'react';
 import { useAuthUser } from 'app/modules/auth';
 
 export const useOfflineMaps = () => {
-  const [allData, setAllData] = useState([]);
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -20,21 +19,10 @@ export const useOfflineMaps = () => {
     },
     {
       refetchOnWindowFocus: false,
-      onSuccess: (newData) => {
-        if (newData?.offlineMaps) {
-          setAllData((prevData) => {
-            if (pagination.offset === 0) {
-              return newData.offlineMaps;
-            }
-
-            return [...prevData, ...newData.offlineMaps];
-          });
-        }
-      },
       onError: (error) => console.error('Error fetching public packs:', error),
     },
   );
-  const { fetchNextPage } = useInfinitePagination(
+  const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
     pagination,
     setPagination,
@@ -42,7 +30,7 @@ export const useOfflineMaps = () => {
   );
 
   return {
-    data: allData,
+    data: data?.data,
     isLoading,
     refetch,
     fetchNextPage,

@@ -11,17 +11,10 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
 import ScoreContainer from 'app/components/ScoreContainer';
-import {
-  TableContainerComponent,
-  WeatherCardComponent,
-  TripCardComponent,
-  ScoreContainerComponent,
-  loadStyles,
-} from './TripDetailsComponents';
+import { TableContainerComponent, loadStyles } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
-
-import { formatTripActivityLabel } from 'app/utils/tripUtils';
 import Layout from 'app/components/layout/Layout';
+import { TripMapCard } from 'app/components/trip/TripCards';
 
 interface TripData {
   packs?: any;
@@ -135,11 +128,11 @@ export function TripDetails() {
                       case SECTION.WEATHER:
                         return null; // TODO handle saved trip weather
                       case SECTION.TRIP:
+                        console.log({ data });
                         return (
-                          <TripCardComponent
-                            data={data}
-                            weatherObject={weatherObject}
-                            currentTheme={currentTheme}
+                          <TripMapCard
+                            tripId={data.id}
+                            initialBounds={data.bounds}
                           />
                         );
                       case SECTION.SCORE:

@@ -10,6 +10,8 @@ MapboxGL.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
 export const MapView: FC<MapViewProps> = ({
   shape,
+  shapeURI,
+  isInteractive,
   mapStyle,
   initialBounds,
   onVisibleBoundsChange,
@@ -31,13 +33,20 @@ export const MapView: FC<MapViewProps> = ({
         style={{ flex: 1 }}
         logoEnabled={false}
         onRegionDidChange={onCameraChange}
+        zoomEnabled={isInteractive}
+        scrollEnabled={isInteractive}
+        rotateEnabled={isInteractive}
       >
         <Camera
           zoomLevel={9}
           animationMode="flyTo"
-          bounds={{ sw: [bounds[0], bounds[1]], ne: [bounds[2], bounds[3]] }}
+          bounds={
+            bounds
+              ? { sw: [bounds[0], bounds[1]], ne: [bounds[2], bounds[3]] }
+              : undefined
+          }
         />
-        <MapboxGL.ShapeSource shape={shape} id="geojson">
+        <MapboxGL.ShapeSource shape={shape} url={shapeURI} id="geojson">
           <MapboxGL.FillLayer id="place" style={{ fillOpacity: 0.3 }} />
         </MapboxGL.ShapeSource>
       </MapboxGL.MapView>

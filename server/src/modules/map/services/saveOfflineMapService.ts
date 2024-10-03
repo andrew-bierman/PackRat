@@ -10,13 +10,18 @@ export const saveOfflineMapService = async (
   executionCtx: ExecutionContext,
 ) => {
   try {
+    const { metadata, ...offlineMapData } = offlineMap;
     const offlineMapClass = new OfflineMap();
-    const newOfflineMap = await offlineMapClass.create(offlineMap);
+    console.log({ offlineMapData });
+    const newOfflineMap = await offlineMapClass.create({
+      metadata: null,
+      ...offlineMapData,
+    });
 
     executionCtx.waitUntil(
       GeojsonStorageService.save(
         'map',
-        offlineMap.metadata.shape,
+        JSON.stringify(metadata.shape),
         newOfflineMap.id,
       ),
     );

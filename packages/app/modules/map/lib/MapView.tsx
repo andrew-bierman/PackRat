@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, type FC } from 'react';
+import React, { useCallback, useRef, type FC } from 'react';
 import MapContainer, { Source, Layer } from 'react-map-gl';
 import { MAPBOX_ACCESS_TOKEN } from '@packrat/config';
 import MapLib, { type Map } from 'mapbox-gl';
@@ -30,9 +30,11 @@ export const dataLayer = {
 };
 export const MapView: FC<MapViewProps> = ({
   shape,
+  shapeURI,
   mapStyle,
   onVisibleBoundsChange,
   initialBounds,
+  isInteractive = true,
 }) => {
   const mapRef = useRef<Map>(null);
 
@@ -45,11 +47,12 @@ export const MapView: FC<MapViewProps> = ({
   const onMoveEnd = useCallback(updateVisibleBounds, [updateVisibleBounds]);
   const onZoomEnd = useCallback(updateVisibleBounds, [updateVisibleBounds]);
 
-  useMapListeners(mapRef.current, onMoveEnd, onZoomEnd);
+  const attachListeners = useMapListeners(onMoveEnd, onZoomEnd);
 
   const onMapLoad = () => {
-    if (mapRef.current && shape) {
+    if (mapRef.current && (shape || initialBounds)) {
       const map = mapRef.current;
+      attachListeners(map);
 
       const bbox = initialBounds || getBoundingBoxFromShape(shape);
 
@@ -58,8 +61,16 @@ export const MapView: FC<MapViewProps> = ({
   };
 
   return (
-    <MapContainer onLoad={onMapLoad} ref={mapRef} mapStyle={mapStyle}>
-      <Source type="geojson" data={shape}>
+    <MapContainer
+      onLoad={onMapLoad}
+      ref={mapRef}
+      mapStyle={mapStyle}
+      touchZoomRotate={isInteractive}
+      scrollZoom={isInteractive}
+      doubleClickZoom={isInteractive}
+      dragPan={isInteractive}
+    >
+      <Source type="geojson" data={shapeURI || shape}>
         <Layer {...dataLayer} />
       </Source>
     </MapContainer>
@@ -67,20 +78,20 @@ export const MapView: FC<MapViewProps> = ({
 };
 
 export const useMapListeners = (
-  map: Map | null,
   onMoveEnd: () => void,
   onZoomEnd: () => void,
 ) => {
-  useEffect(() => {
+  const attachListeners = (map: Map) => {
     if (!map) return;
 
     map.on('moveend', onMoveEnd);
     map.on('zoomend', onZoomEnd);
 
-    // Cleanup event listeners on unmount
     return () => {
       map.off('moveend', onMoveEnd);
       map.off('zoomend', onZoomEnd);
     };
-  }, [map, onMoveEnd, onZoomEnd]);
+  };
+
+  return attachListeners;
 };

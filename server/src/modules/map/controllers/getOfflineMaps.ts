@@ -1,4 +1,4 @@
-import { getNextOffset } from 'src/helpers/pagination';
+import { getPaginationResponse } from 'src/helpers/pagination';
 import { protectedProcedure } from '../../../trpc';
 import { getOfflineMapsService } from '../services';
 import { z } from 'zod';
@@ -17,6 +17,9 @@ export function getOfflineMapsRoute() {
         ownerId,
         pagination,
       );
-      return { offlineMaps, nextOffset: getNextOffset(pagination, totalCount) };
+      return {
+        data: offlineMaps,
+        ...getPaginationResponse(pagination, totalCount),
+      };
     });
 }

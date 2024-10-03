@@ -7,18 +7,24 @@ import { FullScreen } from '@packrat/ui';
 import { MapButtonsOverlay } from './MapButtonsOverLay';
 
 interface MapProps {
-  shape: any;
+  shape?: any;
+  shapeURI?: string;
   style?: ViewProps['style'];
   shouldEnableDownload?: boolean;
   onExitFullScreen?: () => void;
+  onVisibleBoundsChange?: (bounds: number[]) => void;
   isFullScreenModeByDefault?: boolean;
   initialBounds?: any;
+  offlineMapName?: string;
 }
 
 export const Map: FC<MapProps> = ({
   shape,
+  shapeURI,
   style = { width: '100%', height: 420, position: 'relative' },
   shouldEnableDownload = true,
+  offlineMapName,
+  onVisibleBoundsChange,
   onExitFullScreen,
   isFullScreenModeByDefault,
   initialBounds,
@@ -31,12 +37,16 @@ export const Map: FC<MapProps> = ({
 
   const handleMapBoundsChange = useCallback((bounds) => {
     mapBoundsRef.current = bounds;
+    onVisibleBoundsChange?.(bounds);
   }, []);
 
   return (
     <FullScreen defaultStyles={style} isFullScreen={isFullScreenMode}>
       <MapView
         shape={shape}
+        shapeURI={shapeURI}
+        offlineMapName={offlineMapName}
+        isInteractive={isFullScreenMode}
         mapStyle={selectedStyle}
         onVisibleBoundsChange={handleMapBoundsChange}
         initialBounds={initialBounds}

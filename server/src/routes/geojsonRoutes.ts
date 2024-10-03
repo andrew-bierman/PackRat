@@ -21,8 +21,10 @@ router.get(
       const headers = new Headers();
       object.writeHttpMetadata(headers);
       headers.set('etag', object.httpEtag);
+      headers.set('Content-Type', 'application/geo+json');
+      const json = await object.json();
 
-      return new Response(object.body, {
+      return new Response(json, {
         headers,
       });
     } catch (error) {

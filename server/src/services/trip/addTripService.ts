@@ -12,7 +12,6 @@ export const addTripService = async (
 ) => {
   try {
     const { geoJSON, ...otherTripData } = tripData;
-    console.log({ tripData });
     const tripClass = new Trip();
     // Create Trip
     const newTrip = await tripClass.create({
@@ -27,11 +26,11 @@ export const addTripService = async (
       throw new Error("Geojson data doesn't exist");
     }
 
-    const insertedGeoJson = await geojsonClass.create(geoJSON);
-    await tripGeoJsonClass.create({
-      tripId: newTrip.id,
-      geojsonId: insertedGeoJson.id,
-    });
+    // const insertedGeoJson = await geojsonClass.create(geoJSON);
+    // await tripGeoJsonClass.create({
+    //   tripId: newTrip.id,
+    //   geojsonId: insertedGeoJson.id,
+    // });
 
     executionCtx.waitUntil(
       GeojsonStorageService.save('trip', JSON.stringify(geoJSON), newTrip.id),

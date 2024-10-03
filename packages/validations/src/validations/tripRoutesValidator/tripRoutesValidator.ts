@@ -56,6 +56,7 @@ export const addTripDetails = z.object({
   geoJSON: z.string(),
   owner_id: z.string(),
   pack_id: z.string(),
+  bounds: z.tuple([z.array(z.number()), z.array(z.number())]),
 });
 
 export const addTrip = addTripDetails.merge(addTripForm);
