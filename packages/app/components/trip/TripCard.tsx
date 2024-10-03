@@ -11,7 +11,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme/index';
 import Carousel from '../carousel';
-import { Map } from '@packrat/map';
+import { Map } from 'app/modules/map';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 
 interface TripCardProps {

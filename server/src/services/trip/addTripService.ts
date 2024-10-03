@@ -3,12 +3,15 @@ import { GeoJson } from '../../drizzle/methods/Geojson';
 import { TripGeoJson } from '../../drizzle/methods/TripGeoJson';
 import { Trip } from '../../drizzle/methods/trip';
 import { validateGeojsonId, validateGeojsonType } from '../../utils/geojson';
+import { GeojsonStorageService } from '../geojsonStorage';
 import { scoreTripService } from './scoreTripService';
 
-export const addTripService = async (tripData: any) => {
+export const addTripService = async (
+  tripData: any,
+  executionCtx: ExecutionContext,
+) => {
   try {
     const { geoJSON, ...otherTripData } = tripData;
-    console.log({ tripData });
     const tripClass = new Trip();
     // Create Trip
     const newTrip = await tripClass.create({
@@ -23,11 +26,15 @@ export const addTripService = async (tripData: any) => {
       throw new Error("Geojson data doesn't exist");
     }
 
-    const insertedGeoJson = await geojsonClass.create(geoJSON);
-    await tripGeoJsonClass.create({
-      tripId: newTrip.id,
-      geojsonId: insertedGeoJson.id,
-    });
+    // const insertedGeoJson = await geojsonClass.create(geoJSON);
+    // await tripGeoJsonClass.create({
+    //   tripId: newTrip.id,
+    //   geojsonId: insertedGeoJson.id,
+    // });
+
+    executionCtx.waitUntil(
+      GeojsonStorageService.save('trip', JSON.stringify(geoJSON), newTrip.id),
+    );
 
     return newTrip;
   } catch (error) {

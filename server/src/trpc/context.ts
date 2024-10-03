@@ -3,6 +3,8 @@ import { extractTokenAndGetUser } from './utils/auth';
 import { DbClient } from '../db/client';
 import { VectorClient } from '../vector/client';
 import { AiClient } from '../integrations/ai/client';
+import { type R2Bucket } from '@cloudflare/workers-types';
+import { GeojsonStorageService } from 'src/services/geojsonStorage';
 
 let DB: D1Database;
 
@@ -13,9 +15,10 @@ type ContextEnv = Omit<Env, 'DB'>;
  */
 export const createContext = (honoContext: Context) => async () => {
   const { env, req } = honoContext;
-  const { DB: db, ...restEnv } = env;
+  const { DB: db, GEOJSON_BUCKET, ...restEnv } = env;
   DB = db;
 
+  GeojsonStorageService.init(GEOJSON_BUCKET);
   await DbClient.init(honoContext.env.DB);
   await VectorClient.init({
     apiKey: honoContext.env.VECTORIZE_API_KEY,
@@ -33,6 +36,7 @@ export const createContext = (honoContext: Context) => async () => {
 
   return {
     env: restEnv as ContextEnv,
+    geojsonBucket: GEOJSON_BUCKET as R2Bucket,
     user,
     executionCtx: honoContext.executionCtx,
   };

@@ -3,7 +3,9 @@ import { type BaseCardProps } from './model';
 import { Card, View, XStack, YStack } from 'tamagui';
 import RText from '../RText';
 
-interface SecondaryCardProps extends Omit<BaseCardProps, 'content'> {}
+interface SecondaryCardProps extends Omit<BaseCardProps, 'content'> {
+  isFullWidth?: boolean;
+}
 
 export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
   return (
@@ -11,7 +13,7 @@ export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
       elevate
       size="$4"
       bordered
-      style={{ height: 120, width: 200 }}
+      style={{ height: 120, width: props.isFullWidth ? '100%' : 200 }}
       {...props}
     >
       <Card.Background>{props.image}</Card.Background>

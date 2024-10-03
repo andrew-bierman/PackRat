@@ -1,16 +1,26 @@
 import { ErrorBoundary, RStack, RText } from '@packrat/ui';
-import { Map } from '@packrat/map';
+import { Map } from 'app/modules/map';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
+import { getTripGEOURI } from '../utils';
 
 interface TripMapCardProps {
   isLoading?: boolean;
-  shape: any;
+  shape?: any;
+  onVisibleBoundsChange?: (bounds: number[]) => void;
+  tripId?: string;
+  initialBounds?: any;
 }
 
-export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
+export const TripMapCard = ({
+  isLoading,
+  shape,
+  initialBounds,
+  tripId,
+  onVisibleBoundsChange,
+}: TripMapCardProps) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -31,7 +41,13 @@ export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
         </RStack>
       ) : (
         <ErrorBoundary>
-          <Map shape={shape} />
+          <Map
+            style={{ width: '100%', height: 320 }}
+            shapeURI={tripId ? getTripGEOURI(tripId) : undefined}
+            onVisibleBoundsChange={onVisibleBoundsChange}
+            initialBounds={initialBounds}
+            shape={shape}
+          />
         </ErrorBoundary>
       )}
     </TripCardBase>

@@ -127,7 +127,7 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       textAlign: 'center',
       padding: Platform.OS === 'web' ? '5%' : currentTheme.size.mobilePadding,
-      paddingHorizontal: currentTheme.padding.paddingInside,
+      paddingHorizontal: 20,
       marginBottom: 20,
       height: Platform.OS === 'web' ? 'calc(min( 80vh, 80vw))' : '23%',
       minHeight: 350,
