@@ -47,7 +47,7 @@ export function SignInScreen({
         'Error',
         'No biometrics are enrolled. Please set up biometrics in your device settings.',
       );
-      return false;
+      return true;
     }
 
     const result = await LocalAuthentication.authenticateAsync({

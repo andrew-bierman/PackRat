@@ -122,9 +122,10 @@ export function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    padding: 10,
-                    // paddingHorizontal: 1,
-                    // paddingVertical: 3,
+                    // padding: 10,
+                    // margin: 10,
+                    // paddingHorizontal: 8,
+                    // paddingVertical: 10,
                     // justifyContent: 'center',
                     // alignItems: 'center',
                   }}
