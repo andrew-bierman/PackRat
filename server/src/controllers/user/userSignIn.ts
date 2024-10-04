@@ -33,6 +33,8 @@ export function userSignInRoute() {
       user.id,
     );
 
-    return { accessToken, refreshToken };
+    const { password, ...userResponse } = user;
+
+    return { accessToken, refreshToken, user: userResponse };
   });
 }
