@@ -63,8 +63,7 @@ const loadStyles = (theme) => {
     alignItems: 'center',
     textAlign: 'center',
     padding: currentTheme.size.cardPadding,
-    paddingHorizontal: currentTheme.padding.paddingInside,
-    marginBottom: 20,
+    margin: 80,
     overflow: 'hidden',
     alignSelf: 'center',
   };
