@@ -71,8 +71,8 @@ export function TripDetails() {
     <Layout>
       <View
         style={{
-          minHeight:
-            Platform.OS == 'web' ? '100vh' : Dimensions.get('screen').height,
+          minHeight: '100%',
+          paddingBottom: 80,
         }}
       >
         <DetailsComponent
@@ -84,16 +84,14 @@ export function TripDetails() {
             <View>
               <FlatList
                 data={Object.entries(SECTION)}
-                contentContainerStyle={{
-                  paddingBottom: Platform.OS !== 'web' ? 350 : 0,
-                }}
+                contentContainerStyle={{ paddingBottom: 100 }}
                 keyExtractor={([key, val]) => val}
                 renderItem={({ item }) => {
                   {
                     switch (item[1]) {
                       case SECTION.DESCRIPTION:
                         return (
-                          <RStack style={{ width: xxs ? '20%' : '100%' }}>
+                          <RStack style={{ width: '100%' }}>
                             <RText>{data?.description}</RText>
                             <Details
                               items={[
@@ -130,10 +128,17 @@ export function TripDetails() {
                       case SECTION.TRIP:
                         console.log({ data });
                         return (
-                          <TripMapCard
-                            tripId={data.id}
-                            initialBounds={data.bounds}
-                          />
+                          <RStack
+                            style={{
+                              flex: 1,
+                              marginBottom: 40,
+                            }}
+                          >
+                            <TripMapCard
+                              tripId={data.id}
+                              initialBounds={data.bounds}
+                            />
+                          </RStack>
                         );
                       case SECTION.SCORE:
                         return (
