@@ -72,6 +72,7 @@ export const editItemService = async (
         content: name,
         metadata: {
           isPublic: newItem.global,
+          ownerId: newItem.ownerId,
         },
         namespace: 'items',
       },

@@ -80,6 +80,7 @@ export const addItemService = async (
       namespace: 'items',
       metadata: {
         isPublic: item.global,
+        ownerId,
       },
     }),
   );

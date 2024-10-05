@@ -52,6 +52,7 @@ export const addItemGlobalService = async (
       namespace: 'items',
       metadata: {
         isPublic: newItem.global,
+        ownerId,
       },
     }),
   );
