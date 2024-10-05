@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import { convertWeight } from 'app/utils/convertWeight';
 import { useAuthUser } from 'app/modules/auth';
-import { useDuplicatePackItem } from './useDuplicatePackItem';
+import { useDuplicatePackItem } from '../../hooks/useDuplicatePackItem';
 import { useItemWeightUnit, ItemCategoryEnum } from 'app/modules/item';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
-export const usePackTable = ({
-  currentPack,
-  selectedPack,
-  refetch,
-  setRefetch,
-  copy,
-}) => {
+export const usePackTable = ({ currentPack, copy }) => {
   const user = useAuthUser();
   const duplicatePackItem = useDuplicatePackItem();
   let ids = [];
@@ -80,7 +75,7 @@ export const usePackTable = ({
             case ItemCategoryEnum.ESSENTIALS: {
               totalBaseWeight += convertWeight(
                 itemWeight * itemQuantity,
-                itemUnit as any,
+                SMALLEST_ITEM_UNIT,
                 weightUnit,
               );
               break;
@@ -88,7 +83,7 @@ export const usePackTable = ({
             case ItemCategoryEnum.FOOD: {
               totalFoodWeight += convertWeight(
                 itemWeight * itemQuantity,
-                itemUnit as any,
+                SMALLEST_ITEM_UNIT,
                 weightUnit,
               );
               foodItems.push(item);
@@ -97,7 +92,7 @@ export const usePackTable = ({
             case ItemCategoryEnum.WATER: {
               totalWaterWeight += convertWeight(
                 itemWeight * itemQuantity,
-                itemUnit as any,
+                SMALLEST_ITEM_UNIT,
                 weightUnit,
               );
               waterItem = item;

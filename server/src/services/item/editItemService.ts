@@ -6,6 +6,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 
 /**
  * Edit an item in the service.
@@ -55,12 +56,16 @@ export const editItemService = async (
       });
     }
   }
-
+  const itemUnit = unit || item.unit;
   // const item = await itemClass.findItem({ id });
   const newItem = await itemClass.update(id, {
     name: name || item.name,
-    weight: weight || item.weight,
-    unit: unit || item.unit,
+    weight: convertWeight(
+      Number(weight || item.weight),
+      itemUnit as any,
+      SMALLEST_WEIGHT_UNIT,
+    ),
+    unit: itemUnit,
     quantity: quantity || item.quantity,
     categoryId: category.id || item.categoryId,
   });

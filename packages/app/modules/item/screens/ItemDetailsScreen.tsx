@@ -2,20 +2,25 @@ import { View } from 'react-native';
 import React from 'react';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useItem, useItemId } from 'app/modules/item';
+import { useItem, useItemId, useItemImages } from 'app/modules/item';
 import { usePagination } from 'app/hooks/common';
 import { RH3, RImage, RScrollView, RStack, RText, XStack } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import { CustomCard } from 'app/components/card';
 import LargeCard from 'app/components/card/LargeCard';
 import { FeedPreview } from 'app/modules/feed';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from '../constants';
 
 export function ItemDetailsScreen() {
-  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
+  // const { limit, handleLimitChange, page, handlePageChange } = usePagination();
   const [itemId] = useItemId();
   const { data: item, isError } = useItem(itemId);
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
+  const {data: itemImages, isError: isImagesError} = useItemImages(itemId);
+
+  console.log('itemImages', itemImages);
 
   return (
     <RScrollView style={{ marginBottom: 50 }}>
@@ -28,7 +33,7 @@ export function ItemDetailsScreen() {
               content={
                 <XStack gap="$4">
                   <RImage
-                    src="https://via.placeholder.com/150"
+                    src={itemImages?.[0]?.url || "https://via.placeholder.com/150"}
                     width={150}
                     height={150}
                   />
@@ -36,7 +41,12 @@ export function ItemDetailsScreen() {
                     <RStack>
                       <RText>Category: {item?.category?.name || '-'}</RText>
                       <RText>
-                        Weight: {item?.weight}
+                        Weight:{' '}
+                        {convertWeight(
+                          Number(item?.weight),
+                          SMALLEST_ITEM_UNIT,
+                          item?.unit as any,
+                        )}
                         {item?.unit}
                       </RText>
                       <RText>Quantity: {item?.quantity}</RText>

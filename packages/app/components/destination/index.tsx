@@ -198,7 +198,7 @@ export const DestinationPage = () => {
                 contentProps={{ shape }}
                 type="map"
               />
-              <WeatherData latLng={latLng} />
+              {/* <WeatherData latLng={latLng} /> */}
             </>
           )}
         </View>

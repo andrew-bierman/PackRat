@@ -28,5 +28,5 @@ export const convertWeight = (
   const weightInGrams = weight * units[fromUnit];
   const convertedWeight = weightInGrams / units[toUnit];
 
-  return convertedWeight;
+  return Number(convertedWeight.toFixed(2));
 };

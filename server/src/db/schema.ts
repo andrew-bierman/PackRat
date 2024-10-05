@@ -10,6 +10,7 @@ import {
   real,
   sqliteTable,
   text,
+  unique,
 } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
@@ -207,6 +208,41 @@ export const item = sqliteTable('item', {
   // @@map("items"): undefined,
 });
 
+export const itemImage = sqliteTable('item_image', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  itemId: text('item_id')
+    .references(() => item.id, { onDelete: 'cascade' })
+    .notNull(),
+  url: text('url').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const offlineMap = sqliteTable(
+  'offlineMap',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: text('name').notNull(),
+    bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+    minZoom: integer('minZoom').notNull(),
+    maxZoom: integer('maxZoom').notNull(),
+    metadata: text('metadata', { mode: 'json' }).$type<
+      OfflineMap['metadata']
+    >(),
+    owner_id: text('owner_id').references(() => user.id, {
+      onDelete: 'cascade',
+    }),
+    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    uniqueNameOwner: unique().on(table.name, table.owner_id),
+  }),
+);
+
 export const itemOwners = sqliteTable(
   'item_owners',
   {
@@ -323,7 +359,15 @@ export const trip = sqliteTable('trip', {
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
   activity: text('activity').default('trip'),
+  bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
   type: text('type').default('trip'),
+  scores: text('scores', { mode: 'json' })
+    .$type<Object>()
+    .default(
+      JSON.stringify({
+        totalScore: 0,
+      }),
+    ),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("trips"): undefined,

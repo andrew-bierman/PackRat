@@ -9,7 +9,6 @@ export * from './useFetchSinglePack';
 export * from './useImportPackItem';
 export * from './useIsAuthUserPack';
 export * from './usePackId';
-export * from './usePackTable';
 export * from './useSimilarPacks';
 export * from './useUserPackById';
 export * from './useUserPacks';

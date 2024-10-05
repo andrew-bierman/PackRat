@@ -191,9 +191,11 @@ export function ProfileContainer({ id = null }) {
   const styles = useCustomStyles(loadStyles);
   const {
     user,
-    favoritesList,
-    packsList,
-    tripsList,
+    favoritesQuery,
+    userPacksQuery,
+    userTripsQuery,
+    searchTerms,
+    onSearchChange,
     tripsCount,
     packsCount,
     favoritesCount,
@@ -224,24 +226,18 @@ export function ProfileContainer({ id = null }) {
           />
           <View style={styles.mainContentContainer}>
             <View style={styles.userDataContainer}>
-              {isLoading && (
-                <UserDataContainer
-                  data={[]}
-                  type="packs"
-                  userId={user?.id}
-                  isLoading={isLoading}
-                  SkeletonComponent={<SkeletonUserDataCard />}
-                />
-              )}
+              {isLoading && <SkeletonUserDataCard />}
             </View>
 
             <View style={styles.userDataContainer}>
-              {favoritesList.length > 0 ? (
+              {favoritesQuery?.previewData?.length > 0 ? (
                 <UserDataContainer
-                  data={favoritesList}
+                  resource={favoritesQuery}
                   type="favorites"
                   userId={user?.id}
                   isLoading={isLoading}
+                  searchTerm={searchTerms.favorites}
+                  onSearchChange={onSearchChange}
                 />
               ) : (
                 <RText
@@ -253,25 +249,28 @@ export function ProfileContainer({ id = null }) {
                 </RText>
               )}
             </View>
-            {packsList.length > 0 && (
+            {userPacksQuery?.previewData?.length > 0 && (
               <View style={styles.userDataContainer}>
                 <UserDataContainer
-                  data={packsList}
+                  resource={userPacksQuery}
                   type="packs"
                   userId={user?.id}
+                  searchTerm={searchTerms.packs}
+                  onSearchChange={onSearchChange}
                 />
               </View>
             )}
-            {/* DISABLE TRIP TEMP */}
-            {/* {tripsList.length > 0 && (
+            {userTripsQuery?.previewData?.length > 0 && (
               <View style={styles.userDataContainer}>
                 <UserDataContainer
-                  data={tripsList}
+                  resource={userTripsQuery}
                   type="trips"
                   userId={user?.id}
+                  searchTerm={searchTerms.packs}
+                  onSearchChange={onSearchChange}
                 />
               </View>
-            )} */}
+            )}
           </View>
         </RStack>
       </ScrollView>

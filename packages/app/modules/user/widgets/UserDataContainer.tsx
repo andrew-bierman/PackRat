@@ -2,7 +2,7 @@ import { RLink } from '@packrat/ui';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { VirtualizedList } from 'react-native';
 import { UserDataCard, UserDataList } from '../components';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
 import { hexToRGBA } from 'app/utils/colorFunctions';
@@ -10,6 +10,8 @@ import { View } from 'react-native';
 import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';
+import { type PreviewResourceStateWithData } from 'app/hooks/common';
+import type { PreviewListType } from '../model';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -26,19 +28,23 @@ const SkeletonUserDataCard = () => {
 };
 
 interface UserDataContainerProps {
-  data: any;
-  type: 'packs' | 'trips' | 'favorites';
+  resource: PreviewResourceStateWithData;
+  type: PreviewListType;
   userId?: string;
   isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
+  searchTerm: string;
+  onSearchChange: (search: string, type: PreviewListType) => void;
 }
 
-export function UserDataContainer({
-  data = [],
+export const UserDataContainer = memo(function UserDataContainer({
+  resource,
   type,
   userId,
   isLoading,
   SkeletonComponent,
+  searchTerm,
+  onSearchChange,
 }: UserDataContainerProps) {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -50,19 +56,7 @@ export function UserDataContainer({
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item, index }) => {
-    return (
-      <UserDataCard
-        key={item.id}
-        {...item}
-        index={index}
-        differentUser={currentUser?.id !== item.owner_id}
-        activeUserId={userId}
-        isFavorite={item?.userFavoritePacks?.some(
-          (obj) => obj?.['userId'] === currentUser?.id,
-        )}
-        currentUserId={currentUser?.id}
-      />
-    );
+    return <UserDataCard item={item} cardType="primary" feedType={item.type} />;
   };
 
   // Map function to render multiple skeleton cards
@@ -119,14 +113,14 @@ export function UserDataContainer({
           >
             {isLoading ? (
               skeletonCards
-            ) : data && data.length > 0 ? (
+            ) : resource?.previewData && resource?.previewData.length > 0 ? (
               <>
                 <VirtualizedList
                   showsHorizontalScrollIndicator={false}
                   showsVerticalScrollIndicator={false}
-                  getItemCount={() => data.length}
+                  getItemCount={() => resource.previewData.length}
                   getItem={(data, index) => data[index]}
-                  data={data}
+                  data={resource.previewData}
                   keyExtractor={(item) => item.id}
                   renderItem={Card}
                   scrollEnabled={true}
@@ -143,7 +137,11 @@ export function UserDataContainer({
                 />
 
                 <SearchProvider>
-                  <UserDataList data={data} />
+                  <UserDataList
+                    resource={resource}
+                    search={searchTerm}
+                    onSearchChange={(search) => onSearchChange(search, type)}
+                  />
                 </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
@@ -160,4 +158,4 @@ export function UserDataContainer({
       </LargeCard>
     </Layout>
   );
-}
+});

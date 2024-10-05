@@ -2,6 +2,7 @@ export interface Modifiers {
   isPublic?: boolean;
   ownerId?: string;
   searchTerm?: string;
+  includeUserFavoritesOnly?: boolean;
 }
 
 export type FeedQueryBy =

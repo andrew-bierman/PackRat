@@ -1,4 +1,4 @@
-import { and, eq, like, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, like, sql } from 'drizzle-orm';
 import { DbClient } from '../../../db/client';
 import {
   item,
@@ -8,15 +8,58 @@ import {
   userFavoritePacks,
 } from '../../../db/schema';
 import { literal } from 'src/drizzle/helpers';
-import { convertWeight } from '../../../utils/convertWeight';
 import {
   getPaginationParams,
+  getPrevOffset,
   type PaginationParams,
 } from '../../../helpers/pagination';
 import { FeedQueryBy, Modifiers } from '../models';
 
+// Adding aliases to columns for order operations
 export class Feed {
   async findFeed(
+    queryBy: FeedQueryBy,
+    modifiers?: Modifiers,
+    excludeType?: 'trips' | 'packs',
+    pagination?: PaginationParams,
+  ) {
+    let currentPagination = getPaginationParams(pagination);
+
+    // it tries to load previous page if current page is empty
+    // Using while instead of recursion
+    while (true) {
+      const { data, totalCount } = await this.findFeedQuery(
+        queryBy,
+        modifiers,
+        excludeType,
+        currentPagination,
+      );
+
+      if (totalCount === 0 || !data?.length) {
+        const prevOffset = getPrevOffset(currentPagination);
+        if (prevOffset === false) {
+          return {
+            data: [],
+            totalCount: 0,
+            currentPagination: { offset: 0, limit: currentPagination.limit },
+          };
+        }
+
+        currentPagination = {
+          offset: prevOffset,
+          limit: currentPagination.limit,
+        };
+      } else {
+        return {
+          data,
+          totalCount,
+          currentPagination,
+        };
+      }
+    }
+  }
+
+  async findFeedQuery(
     queryBy: FeedQueryBy,
     modifiers?: Modifiers,
     excludeType?: 'trips' | 'packs',
@@ -26,24 +69,34 @@ export class Feed {
       let packsQuery = DbClient.instance
         .select({
           id: pack.id,
-          createdAt: pack.createdAt,
+          createdAt: sql`${pack.createdAt} as createdAt`,
           name: pack.name,
           owner_id: pack.owner_id,
           grades: pack.grades,
           scores: pack.scores,
+          is_public: pack.is_public,
           type: literal('pack'),
           description: literal(''),
           destination: literal(''),
           favorites_count: sql`COALESCE(COUNT(DISTINCT ${userFavoritePacks.userId}), 0) as favorites_count`,
           quantity: sql`COALESCE(SUM(DISTINCT ${item.quantity}), 0)`,
-          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId})`,
-          total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0)`,
+          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId}) as userFavorites`,
+          total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
+          activity: literal(null),
+          start_date: literal(null),
+          end_date: literal(null),
         })
         .from(pack)
         .leftJoin(userFavoritePacks, eq(pack.id, userFavoritePacks.packId))
         .leftJoin(itemPacks, eq(pack.id, itemPacks.packId))
         .leftJoin(item, eq(itemPacks.itemId, item.id))
         .groupBy(pack.id);
+
+      if (modifiers.includeUserFavoritesOnly) {
+        packsQuery = packsQuery.having(
+          this.generateHavingConditions(modifiers, pack),
+        );
+      }
 
       if (modifiers) {
         packsQuery = packsQuery.where(
@@ -54,11 +107,12 @@ export class Feed {
       let tripsQuery = DbClient.instance
         .select({
           id: trip.id,
-          createdAt: trip.createdAt,
+          createdAt: sql`${trip.createdAt} as createdAt`,
           name: trip.name,
           owner_id: trip.owner_id,
           grades: literal('{}'),
-          scores: literal('{}'),
+          scores: trip.scores,
+          is_public: trip.is_public,
           type: literal('trip'),
           description: trip.description,
           destination: trip.destination,
@@ -66,6 +120,9 @@ export class Feed {
           quantity: literal(null),
           userFavorites: literal('[]'),
           total_weight: literal('0'),
+          activity: trip.activity,
+          start_date: trip.start_date,
+          end_date: trip.end_date,
         })
         .from(trip);
 
@@ -105,8 +162,11 @@ export class Feed {
         .all();
       const { limit, offset } = getPaginationParams(pagination);
       if (queryBy === 'Oldest' || queryBy === 'Most Recent') {
-        const orderDirection = queryBy === 'Most Recent' ? 'desc' : 'asc';
-        feedQuery = feedQuery.orderBy((row) => row.createdAt, orderDirection);
+        const order =
+          queryBy === 'Most Recent'
+            ? desc(sql`createdAt`)
+            : asc(sql`createdAt`);
+        feedQuery = feedQuery.orderBy(order);
       }
 
       const feedData = await feedQuery.limit(limit).offset(offset).all();
@@ -151,22 +211,23 @@ export class Feed {
       queryBy === 'Lightest'
     ) {
       const orderConfig = {
-        Favorite: { field: 'favorites_count', orderDirection: 'desc' },
-        Heaviest: { field: 'total_weight', orderDirection: 'desc' },
-        Lightest: { field: 'total_weight', orderDirection: 'asc' },
+        Favorite: desc(sql`favorites_count`),
+        Heaviest: desc(sql`total_weight`),
+        Lightest: asc(sql`total_weight`),
       };
-      return packQuery.orderBy(
-        orderConfig[queryBy].field,
-        orderConfig[queryBy].orderDirection,
-      );
+      return packQuery.orderBy(orderConfig[queryBy]);
     }
 
     return packQuery;
   }
 
-  computeTotalScores(pack) {
-    if (!pack.scores) return 0;
-    const scores = this.parseJSON(pack.scores);
+  computeTotalScores(resource) {
+    if (resource.type === 'trip') {
+      return resource?.scores?.totalScore || 0;
+    }
+
+    if (!resource.scores) return 0;
+    const scores = this.parseJSON(resource.scores);
     const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,
@@ -198,6 +259,21 @@ export class Feed {
 
     if (modifiers.searchTerm) {
       conditions.push(like(table.name, `%${modifiers.searchTerm}%`));
+    }
+
+    return conditions.length > 0 ? and(...conditions) : undefined;
+  }
+
+  generateHavingConditions(
+    modifiers: Modifiers,
+    table: typeof trip | typeof pack,
+  ) {
+    const conditions = [];
+
+    if (modifiers.ownerId && modifiers.includeUserFavoritesOnly) {
+      conditions.push(
+        sql`userFavorites LIKE CONCAT('%', ${modifiers.ownerId}, '%')`,
+      );
     }
 
     return conditions.length > 0 ? and(...conditions) : undefined;

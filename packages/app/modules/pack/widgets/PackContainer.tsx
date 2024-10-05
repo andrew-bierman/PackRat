@@ -7,6 +7,7 @@ import { usePackId, useUserPacks, TableContainer } from 'app/modules/pack';
 import { DropdownComponent } from '@packrat/ui';
 import { Spinner } from 'tamagui';
 import useTheme from 'app/hooks/useTheme';
+import { TableContainerComponent } from 'app/screens/trip/TripDetailsComponents';
 
 export default function PackContainer({ isCreatingTrip = false }) {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -74,19 +75,7 @@ export default function PackContainer({ isCreatingTrip = false }) {
             />
             {currentPackId && (
               <>
-                <AddItemModal
-                  currentPackId={currentPackId}
-                  currentPack={currentPack}
-                  isAddItemModalOpen={isAddItemModalOpen}
-                  setIsAddItemModalOpen={setIsAddItemModalOpen}
-                />
-                <TableContainer
-                  key={`table - ${currentPackId}`}
-                  currentPack={currentPack}
-                  selectedPack={currentPackId}
-                  refetch={refetch}
-                  setRefetch={setRefetch}
-                />
+                <TableContainerComponent currentPack={currentPack} />
               </>
             )}
           </>
