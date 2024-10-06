@@ -56,6 +56,9 @@ runs:
         echo 'binding = "DB"' >> wrangler.toml
         echo 'database_name = "${{ inputs.environment }}"' >> wrangler.toml
         echo 'database_id = "${{ inputs.DB_ID }}"' >> wrangler.toml
+        echo '[[env.${{ inputs.environment }}.r2_buckets]]' >> wrangler.toml
+        echo 'binding = "GEOJSON_BUCKET"' >> wrangler.toml
+        echo 'bucket_name = "packrat-geojson-bucket-${{ inputs.environment }}"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.ai]' >> wrangler.toml
         echo 'binding = "AI"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.vars]' >> wrangler.toml
