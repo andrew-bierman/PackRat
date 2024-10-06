@@ -28,8 +28,8 @@ jobs:
       - name: Setup JS Runtime environment
         uses: ./.github/actions/setup-js-runtime
 
-      - name: Generate wrangler.toml
-        uses: ./.github/actions/setup-wrangler-toml
+      - name: Generate wrangler.toml and .env
+        uses: ./.github/actions/setup-wrangler-toml-and-dotenv
         with:
           environment: preview
           APP_URL: ${{ secrets.PREVIEW_APP_URL }}

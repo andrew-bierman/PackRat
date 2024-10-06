@@ -1,5 +1,5 @@
-name: 'Print Wrangler Logs'
-description: 'Prints Wrangler logs files if exist'
+name: 'Migrate DB'
+description: 'Applies DB migrations'
 inputs:
   CLOUDFLARE_API_TOKEN:
     description: 'Cloudflare API Token'
