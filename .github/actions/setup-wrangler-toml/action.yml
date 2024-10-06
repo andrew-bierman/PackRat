@@ -58,9 +58,6 @@ runs:
         echo 'database_id = "${{ inputs.DB_ID }}"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.ai]' >> wrangler.toml
         echo 'binding = "AI"' >> wrangler.toml
-        echo '[[env.${{ inputs.environment }}.vectorize]]' >> wrangler.toml
-        echo 'binding = "VECTOR_INDEX"' >> wrangler.toml
-        echo 'index_name = "${{ inputs.VECTOR_INDEX_NAME }}"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.vars]' >> wrangler.toml
         echo 'APP_URL = "${{ inputs.APP_URL }}"' >> wrangler.toml
         echo 'AWS_SIGN_ALGORITHM = "${{ inputs.AWS_SIGN_ALGORITHM }}"' >> wrangler.toml
