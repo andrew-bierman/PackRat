@@ -1,5 +1,5 @@
-name: "Generate Wrangler TOML"
-description: "Generates the wrangler.toml file for Cloudflare Workers"
+name: "Generate Wrangler TOML and Dotenv File"
+description: "Generates wrangler.toml and .env files for Cloudflare Workers"
 inputs:
   APP_URL:
     description: "The Application URL"
@@ -43,10 +43,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Generate wrangler.toml
+    - name: Generate wrangler.toml and .env
       shell: bash
       working-directory: ${{ github.workspace }}/server
       run: |
+        echo 'NODE_ENV=development' > .env
         echo 'name = "packrat-api"' > wrangler.toml
         echo 'main = "src/index.ts"' >> wrangler.toml
         echo 'compatibility_date = "2024-03-14"' >> wrangler.toml
