@@ -17,16 +17,21 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   id,
 }) => {
   const { data: feedData, isLoading } = useFeed({ feedType, id });
+  const validFeedData = feedData.filter((item) => item.id);
 
   return isLoading ? (
     <Loader />
   ) : (
     <Carousel itemWidth={itemWidth}>
-      {feedData
+      {validFeedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem) => {
           return (
-            <View style={{ marginBottom: 10 }}>
+            <View
+              style={{
+                marginBottom: 10,
+              }}
+            >
               <FeedCard item={item} cardType="secondary" feedType={item.type} />
             </View>
           );
