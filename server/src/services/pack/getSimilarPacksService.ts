@@ -37,9 +37,13 @@ export async function getSimilarPacksService(
     return [];
   }
 
-  const similarPacksResult = await packRepository.findAllInArray(
-    matches.map((m) => m.id),
-  );
+  const array = [];
+  for (const m of matches) {
+    if (m.id == id) continue; // filter current pack's id
+    array.push(m.id);
+  }
+
+  const similarPacksResult = await packRepository.findAllInArray(array);
 
   // add similarity score to packs result
   const similarPacks = similarPacksResult.map((similarPack) => {

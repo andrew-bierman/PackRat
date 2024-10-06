@@ -37,9 +37,13 @@ export async function getSimilarItemsService(
     return [];
   }
 
-  const similarItemsResult = await itemRepository.findAllInArray(
-    matches.map((m) => m.id),
-  );
+  const array = [];
+  for (const m of matches) {
+    if (m.id == id) continue; // filter current items's id
+    array.push(m.id);
+  }
+
+  const similarItemsResult = await itemRepository.findAllInArray(array);
 
   // add similarity score to items result
   const similarItems = similarItemsResult.map((similarItem) => {
