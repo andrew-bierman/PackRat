@@ -17,7 +17,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   id,
 }) => {
   const { data: feedData, isLoading } = useFeed({ feedType, id });
-  const validFeedData = feedData.filter((item) => item.id);
+  const validFeedData = feedData?.filter?.((item) => item.id);
 
   return isLoading ? (
     <Loader />

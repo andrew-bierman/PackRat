@@ -1,4 +1,4 @@
-import { eq, sql, asc, desc, and } from 'drizzle-orm';
+import { eq, sql, asc, desc, and, inArray } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import {
   type InsertPack,
@@ -197,6 +197,13 @@ export class Pack {
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
+  }
+
+  async findAllInArray(arr: string[]) {
+    return await DbClient.instance
+      .select()
+      .from(PackTable)
+      .where(inArray(PackTable.id, arr));
   }
 
   async sortPacksByItems(options: any) {
