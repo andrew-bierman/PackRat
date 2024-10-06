@@ -1,12 +1,11 @@
-import { useUserQuery } from '../hooks';
+import { useUserLoader } from '../hooks';
 
 export const AuthLoader = ({
   children,
   loadingElement,
   unauthorizedElement,
 }) => {
-  const { isLoading, user } = useUserQuery();
-
+  const { user, isLoading } = useUserLoader();
   if (isLoading) {
     return loadingElement;
   }
