@@ -47,17 +47,17 @@ export function SettingsScreen() {
   return user ? (
     <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
       <RStack
-        gap={8}
+        // gap={8}
         width="fit-content"
         maw="100%"
         style={{
-          paddingTop: 20,
+          paddingTop: 10,
           paddingBottom: 100,
           paddingLeft: 20,
           paddingRight: 20,
         }}
         marginHorizontal="auto"
-        marginVertical={40}
+        marginVertical="auto"
       >
         <RStack
           style={{

@@ -1,6 +1,6 @@
 import { RLink } from '@packrat/ui';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
-import { VirtualizedList } from 'react-native';
+import { Platform, VirtualizedList } from 'react-native';
 import { UserDataCard, UserDataList } from '../components';
 import React, { memo, useEffect, useState } from 'react';
 import LargeCard from 'app/components/card/LargeCard';
@@ -83,14 +83,14 @@ export const UserDataContainer = memo(function UserDataContainer({
   return (
     <Layout>
       <LargeCard
+        type={Platform.OS !== 'web' ? 'mobile' : null}
         customStyle={{
           backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
-          padding: 10,
+          padding: 0,
         }}
       >
         <RStack
           style={{
-            gap: 10,
             alignItems: 'center',
             width: '100%',
           }}
@@ -128,12 +128,9 @@ export const UserDataContainer = memo(function UserDataContainer({
                   horizontal={true}
                   nestedScrollEnabled={true}
                   contentContainerStyle={{
-                    padding: 10,
-                    // paddingHorizontal: 1,
-                    // paddingVertical: 3,
-                    // justifyContent: 'center',
-                    // alignItems: 'center',
+                    paddingHorizontal: 10,
                   }}
+                  ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
                 />
 
                 <SearchProvider>

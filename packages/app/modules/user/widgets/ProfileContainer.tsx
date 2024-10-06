@@ -294,8 +294,6 @@ const loadStyles = (theme) => {
       backgroundColor: currentTheme.colors.background,
       alignItems: 'center',
       borderRadius: 12,
-      marginBottom: 25,
-      padding: 20,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
