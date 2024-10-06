@@ -1,5 +1,5 @@
-name: "Generate Wrangler TOML"
-description: "Generates the wrangler.toml file for Cloudflare Workers"
+name: "Generate Wrangler TOML and Dotenv File"
+description: "Generates wrangler.toml and .env files for Cloudflare Workers"
 inputs:
   APP_URL:
     description: "The Application URL"
@@ -43,10 +43,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Generate wrangler.toml
+    - name: Generate wrangler.toml and .env
       shell: bash
       working-directory: ${{ github.workspace }}/server
       run: |
+        echo 'NODE_ENV=development' > .env
         echo 'name = "packrat-api"' > wrangler.toml
         echo 'main = "src/index.ts"' >> wrangler.toml
         echo 'compatibility_date = "2024-03-14"' >> wrangler.toml
@@ -56,11 +57,11 @@ runs:
         echo 'binding = "DB"' >> wrangler.toml
         echo 'database_name = "${{ inputs.environment }}"' >> wrangler.toml
         echo 'database_id = "${{ inputs.DB_ID }}"' >> wrangler.toml
+        echo '[[env.${{ inputs.environment }}.r2_buckets]]' >> wrangler.toml
+        echo 'binding = "GEOJSON_BUCKET"' >> wrangler.toml
+        echo 'bucket_name = "packrat-geojson-bucket-${{ inputs.environment }}"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.ai]' >> wrangler.toml
         echo 'binding = "AI"' >> wrangler.toml
-        echo '[[env.${{ inputs.environment }}.vectorize]]' >> wrangler.toml
-        echo 'binding = "VECTOR_INDEX"' >> wrangler.toml
-        echo 'index_name = "${{ inputs.VECTOR_INDEX_NAME }}"' >> wrangler.toml
         echo '[env.${{ inputs.environment }}.vars]' >> wrangler.toml
         echo 'APP_URL = "${{ inputs.APP_URL }}"' >> wrangler.toml
         echo 'AWS_SIGN_ALGORITHM = "${{ inputs.AWS_SIGN_ALGORITHM }}"' >> wrangler.toml
