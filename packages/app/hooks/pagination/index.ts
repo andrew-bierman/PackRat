@@ -1,1 +1,1 @@
-export * from './useInfinitePagination';
+export * from './usePagination';

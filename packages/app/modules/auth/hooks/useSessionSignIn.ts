@@ -11,6 +11,7 @@ export const useSessionSignIn = () => {
     (async () => {
       await Storage.setItem('token', tokens.accessToken);
       await Storage.setItem('refreshToken', tokens.refreshToken);
+      setUser(tokens.user);
       router.push('/');
     })();
   }, []);

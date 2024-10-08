@@ -5,8 +5,8 @@ import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
 import RStack from '@packrat/ui/src/RStack';
 import RIconButton from '@packrat/ui/src/RIconButton';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import { CascadedDropdownComponent } from '@packrat/ui/src/CascadedDropdown';
+import { AntDesign } from '@expo/vector-icons';
+import { ActionsDropdownComponent } from '@packrat/ui/src/CascadedDropdown';
 import { useFetchSingleTrip } from 'app/hooks/singletrips/useFetchSingleTrip';
 import { useTripActions } from './useTripActions';
 import { useAuthUser } from 'app/modules/auth';
@@ -83,19 +83,10 @@ export const TripCardHeader = ({ data, title }: TripCardHeaderProps) => {
                 maxWidth: 100,
               }}
             >
-              <CascadedDropdownComponent
+              <ActionsDropdownComponent
                 value={null}
                 data={optionValues}
                 onValueChange={(value) => handleActionsOpenChange(value)}
-                placeholder={
-                  <RIconButton
-                    backgroundColor="transparent"
-                    icon={<MaterialIcons name="more-horiz" size={20} />}
-                    style={{
-                      height: 20,
-                    }}
-                  />
-                }
                 native={true}
               />
             </View>

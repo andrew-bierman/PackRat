@@ -1,4 +1,6 @@
 import { DbClient } from '../../db/client';
+import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
+import { type InsertItem, item as ItemTable } from '../../db/schema';
 import { and, count, eq, like, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
@@ -137,6 +139,13 @@ export class Item {
     } catch (error) {
       throw new Error(`Failed to find all the items: ${error.message}`);
     }
+  }
+
+  async findAllInArray(arr: string[]) {
+    return await DbClient.instance
+      .select()
+      .from(ItemTable)
+      .where(inArray(ItemTable.id, arr));
   }
 
   async findGlobal(limit: number, offset: number, searchString: string) {

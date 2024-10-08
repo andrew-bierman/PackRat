@@ -34,6 +34,7 @@ export const editPackService = async (
         content: name,
         metadata: {
           isPublic: updatedData.is_public,
+          ownerId: pack.owner_id,
         },
         namespace: 'packs',
       },

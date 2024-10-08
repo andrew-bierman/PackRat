@@ -8,9 +8,9 @@ import {
   userFavoritePacks,
 } from '../../../db/schema';
 import { literal } from 'src/drizzle/helpers';
-import { convertWeight } from '../../../utils/convertWeight';
 import {
   getPaginationParams,
+  getPrevOffset,
   type PaginationParams,
 } from '../../../helpers/pagination';
 import { FeedQueryBy, Modifiers } from '../models';
@@ -18,6 +18,48 @@ import { FeedQueryBy, Modifiers } from '../models';
 // Adding aliases to columns for order operations
 export class Feed {
   async findFeed(
+    queryBy: FeedQueryBy,
+    modifiers?: Modifiers,
+    excludeType?: 'trips' | 'packs',
+    pagination?: PaginationParams,
+  ) {
+    let currentPagination = getPaginationParams(pagination);
+
+    // it tries to load previous page if current page is empty
+    // Using while instead of recursion
+    while (true) {
+      const { data, totalCount } = await this.findFeedQuery(
+        queryBy,
+        modifiers,
+        excludeType,
+        currentPagination,
+      );
+
+      if (totalCount === 0 || !data?.length) {
+        const prevOffset = getPrevOffset(currentPagination);
+        if (prevOffset === false) {
+          return {
+            data: [],
+            totalCount: 0,
+            currentPagination: { offset: 0, limit: currentPagination.limit },
+          };
+        }
+
+        currentPagination = {
+          offset: prevOffset,
+          limit: currentPagination.limit,
+        };
+      } else {
+        return {
+          data,
+          totalCount,
+          currentPagination,
+        };
+      }
+    }
+  }
+
+  async findFeedQuery(
     queryBy: FeedQueryBy,
     modifiers?: Modifiers,
     excludeType?: 'trips' | 'packs',
@@ -38,7 +80,7 @@ export class Feed {
           destination: literal(''),
           favorites_count: sql`COALESCE(COUNT(DISTINCT ${userFavoritePacks.userId}), 0) as favorites_count`,
           quantity: sql`COALESCE(SUM(DISTINCT ${item.quantity}), 0)`,
-          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId})`,
+          userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId}) as userFavorites`,
           total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
           activity: literal(null),
           start_date: literal(null),
@@ -49,6 +91,12 @@ export class Feed {
         .leftJoin(itemPacks, eq(pack.id, itemPacks.packId))
         .leftJoin(item, eq(itemPacks.itemId, item.id))
         .groupBy(pack.id);
+
+      if (modifiers.includeUserFavoritesOnly) {
+        packsQuery = packsQuery.having(
+          this.generateHavingConditions(modifiers, pack),
+        );
+      }
 
       if (modifiers) {
         packsQuery = packsQuery.where(
@@ -63,7 +111,7 @@ export class Feed {
           name: trip.name,
           owner_id: trip.owner_id,
           grades: literal('{}'),
-          scores: literal('{}'),
+          scores: trip.scores,
           is_public: trip.is_public,
           type: literal('trip'),
           description: trip.description,
@@ -173,9 +221,13 @@ export class Feed {
     return packQuery;
   }
 
-  computeTotalScores(pack) {
-    if (!pack.scores) return 0;
-    const scores = this.parseJSON(pack.scores);
+  computeTotalScores(resource) {
+    if (resource.type === 'trip') {
+      return resource?.scores?.totalScore || 0;
+    }
+
+    if (!resource.scores) return 0;
+    const scores = this.parseJSON(resource.scores);
     const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,
@@ -207,6 +259,21 @@ export class Feed {
 
     if (modifiers.searchTerm) {
       conditions.push(like(table.name, `%${modifiers.searchTerm}%`));
+    }
+
+    return conditions.length > 0 ? and(...conditions) : undefined;
+  }
+
+  generateHavingConditions(
+    modifiers: Modifiers,
+    table: typeof trip | typeof pack,
+  ) {
+    const conditions = [];
+
+    if (modifiers.ownerId && modifiers.includeUserFavoritesOnly) {
+      conditions.push(
+        sql`userFavorites LIKE CONCAT('%', ${modifiers.ownerId}, '%')`,
+      );
     }
 
     return conditions.length > 0 ? and(...conditions) : undefined;

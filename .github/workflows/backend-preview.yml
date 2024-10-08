@@ -8,7 +8,6 @@ on:
     paths:
       - '.github/workflows/backend-preview.yml'
       - 'packages/validations/**'
-      - 'packages/shared-types/**'
       - 'server/**'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,8 +28,8 @@ jobs:
       - name: Setup JS Runtime environment
         uses: ./.github/actions/setup-js-runtime
 
-      - name: Generate wrangler.toml
-        uses: ./.github/actions/setup-wrangler-toml
+      - name: Generate wrangler.toml and .env
+        uses: ./.github/actions/setup-wrangler-toml-and-dotenv
         with:
           environment: preview
           APP_URL: ${{ secrets.PREVIEW_APP_URL }}
@@ -42,6 +41,7 @@ jobs:
           BUCKET_SESSION_TOKEN: ${{ secrets.PREVIEW_BUCKET_SESSION_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.PREVIEW_CLOUDFLARE_ACCOUNT_ID }}
           DB_ID: ${{ secrets.PREVIEW_DB_ID }}
+          MIGRATIONS_PATH: migrations-preview
           GOOGLE_CLIENT_ID: ${{ secrets.PREVIEW_GOOGLE_CLIENT_ID }}
           STMP_EMAIL: ${{ secrets.PREVIEW_STMP_EMAIL }}
           VECTOR_INDEX_NAME: ${{ secrets.PREVIEW_VECTOR_INDEX }}

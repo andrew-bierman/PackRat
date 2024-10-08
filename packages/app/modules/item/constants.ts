@@ -10,3 +10,5 @@ export const ItemCategoryEnum = {
   // MEDICAL: 'Medical',
   // OTHER: 'Other',
 };
+
+export const SMALLEST_ITEM_UNIT = 'g';

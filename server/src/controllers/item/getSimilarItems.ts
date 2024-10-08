@@ -4,13 +4,13 @@ import * as validator from '@packrat/validations';
 
 export const getSimilarItems = async (c) => {
   try {
-    const { id, limit, visibility } = await c.req.json();
+    const { id, limit } = await c.req.json();
 
     if (limit < 1) {
       throw new Error('limit must be greater than 0');
     }
 
-    const items = await getSimilarItemsService(id, limit, visibility);
+    const items = await getSimilarItemsService(id, limit);
     return c.json({ items }, 200);
   } catch (error) {
     return c.json(
@@ -24,13 +24,13 @@ export function getSimilarItemsRoute() {
   return protectedProcedure
     .input(validator.getSimilarItems)
     .query(async (opts) => {
-      const { id, limit, visibility } = opts.input;
+      const { id, limit } = opts.input;
 
       if (limit < 1) {
         throw new Error('limit must be greater than 0');
       }
 
-      const items = await getSimilarItemsService(id, limit, visibility);
+      const items = await getSimilarItemsService(id, limit);
       return items;
     });
 }

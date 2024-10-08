@@ -3,7 +3,7 @@ import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/modules/auth';
-import { CascadedDropdownComponent } from '@packrat/ui/src/CascadedDropdown';
+import { ActionsDropdownComponent } from '@packrat/ui';
 import { EditableText } from '@packrat/ui/src/EditableText';
 import RStack from '@packrat/ui/src/RStack';
 import RIconButton from '@packrat/ui/src/RIconButton';
@@ -93,19 +93,10 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
                 maxWidth: 100,
               }}
             >
-              <CascadedDropdownComponent
+              <ActionsDropdownComponent
                 value={null}
                 data={optionValues}
                 onValueChange={(value) => handleActionsOpenChange(value)}
-                placeholder={
-                  <RIconButton
-                    backgroundColor="transparent"
-                    icon={<MaterialIcons name="more-horiz" size={20} />}
-                    style={{
-                      height: 20,
-                    }}
-                  />
-                }
                 native={true}
               />
             </View>

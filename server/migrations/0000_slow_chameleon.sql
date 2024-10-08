@@ -82,6 +82,14 @@ CREATE TABLE `refresh_tokens` (
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `item_image` (
+  `id` text PRIMARY KEY NOT NULL,
+  `item_id` text NOT NULL,
+  `url` text NOT NULL,
+  `created_at` text DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`item_id`) REFERENCES `item`(`id`) ON DELETE CASCADE
+);
+--> statement-breakpoint
 CREATE TABLE `relation` (
 	`id` text PRIMARY KEY NOT NULL,
 	`osm_id` integer,
