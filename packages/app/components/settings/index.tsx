@@ -22,13 +22,13 @@ import {
   SubmitButton,
 } from '@packrat/ui';
 import Avatar from '../Avatar/Avatar';
-import { useProfileSettings } from '../../hooks/user';
+import { useProfileSettings } from 'app/modules/user/hooks';
 import {
   deleteUserForm,
   passwordChangeSchema,
   userSettingsSchema,
 } from '@packrat/validations';
-import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
+import { useDeleteProfile } from 'app/modules/user/hooks';
 
 export function SettingsForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

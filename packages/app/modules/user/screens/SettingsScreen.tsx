@@ -26,11 +26,7 @@ import {
 } from '@packrat/validations';
 import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
-<<<<<<< HEAD:packages/app/screens/user/Settings.tsx
-import { useDeleteProfile } from '../../hooks/user/useDeleteProfile';
-import { SettingsForm } from '../../components/settings';
-=======
->>>>>>> development:packages/app/modules/user/screens/SettingsScreen.tsx
+import { SettingsForm } from 'app/components/settings';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
