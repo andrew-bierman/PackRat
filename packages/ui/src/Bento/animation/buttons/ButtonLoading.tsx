@@ -46,7 +46,7 @@ function ButtonLoadingExample() {
       setLoading(!loading);
     }, 3000);
     return () => clearInterval(interval as NodeJS.Timeout);
-  });
+  }, []);
   return (
     <Button onPress={() => setLoading(!loading)} size="$5">
       <View

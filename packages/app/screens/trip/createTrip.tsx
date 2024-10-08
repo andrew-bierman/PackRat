@@ -1,6 +1,6 @@
 import React from 'react';
 import { RStack } from '@packrat/ui';
-import { ScrollView } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import { useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
@@ -18,7 +18,19 @@ import {
   TripDateRangeCard,
 } from 'app/components/trip/TripCards';
 import { WeatherData } from 'app/components/weather/WeatherData';
-import { disableScreen } from 'app/hoc/disableScreen';
+import { useFlatList } from 'app/hooks/useFlatList';
+
+const SECTIONS = {
+  SEARCH: 'SEARCH',
+  WEATHER: 'WEATHER',
+  TRAIL: 'TRAIL',
+  PARK: 'PARK',
+  PACK: 'PACK',
+  ACTIVITY: 'ACTIVITY',
+  DATE: 'DATE',
+  MAP: 'MAP',
+  FOOTER: 'FOOTER',
+};
 
 function Trips() {
   const styles = useCustomStyles(loadStyles);
@@ -42,58 +54,82 @@ function Trips() {
     end_date: tripStore.end_date,
   };
 
+  const { flatListData, keyExtractor, renderItem } = useFlatList(SECTIONS, {
+    [SECTIONS.SEARCH]: <TripSearchCard searchRef={placesAutoCompleteRef} />,
+    [SECTIONS.WEATHER]: latLng ? <WeatherData latLng={latLng} /> : null,
+    [SECTIONS.TRAIL]: (
+      <TripTrailCard
+        data={filteredTrails || []}
+        onToggle={(trail) => togglePlace('trails', trail)}
+        selectedValue={tripStore.trails?.map?.(({ id }) => id) || []}
+      />
+    ),
+    [SECTIONS.PARK]: (
+      <TripParkCard
+        data={parksData || []}
+        onToggle={(park) => togglePlace('parks', park)}
+        selectedValue={tripStore.parks?.map?.(({ id }) => id) || []}
+      />
+    ),
+    [SECTIONS.PACK]: <GearList />,
+    [SECTIONS.ACTIVITY]: (
+      <TripActivityCard
+        selectedValue={tripStore.activity}
+        onChange={(activity) => setTripValue('activity', activity)}
+      />
+    ),
+    [SECTIONS.DATE]: (
+      <TripDateRangeCard dateRange={dateRange} setDateRange={setDateRange} />
+    ),
+    [SECTIONS.MAP]:
+      !hasPhotonError && photonDetails ? (
+        <TripMapCard
+          isLoading={isPhotonLoading}
+          shape={photonDetails}
+          onVisibleBoundsChange={(bounds) => {
+            console.log({ bounds });
+            setTripValue('bounds', bounds);
+          }}
+        />
+      ) : null,
+    [SECTIONS.FOOTER]: isValid && (
+      <RStack>
+        <SaveTripContainer tripStore={tripStore} />
+      </RStack>
+    ),
+  });
+
   return (
     <ScrollView nestedScrollEnabled={true}>
       <RStack style={styles.mutualStyles}>
-        {/* <MultiStepForm steps={steps} /> */}
         <RStack style={styles.container}>
-          <TripSearchCard searchRef={placesAutoCompleteRef} />
-          {latLng ? <WeatherData latLng={latLng} /> : null}
-          <TripTrailCard
-            data={filteredTrails || []}
-            onToggle={(trail) => togglePlace('trail', trail)}
-            selectedValue={tripStore.trail}
+          <FlatList
+            data={flatListData}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
           />
-          <TripParkCard
-            data={parksData || []}
-            onToggle={(park) => togglePlace('park', park)}
-            selectedValue={tripStore.park}
-          />
-          <GearList />
-          <TripActivityCard
-            selectedValue={tripStore.type}
-            onChange={(activity) => setTripValue('type', activity)}
-          />
-          <TripDateRangeCard
-            dateRange={dateRange}
-            setDateRange={setDateRange}
-          />
-          {!hasPhotonError && photonDetails ? (
-            <TripMapCard isLoading={isPhotonLoading} shape={photonDetails} />
-          ) : null}
-          {isValid && (
-            <RStack>
-              <SaveTripContainer tripStore={tripStore} />
-            </RStack>
-          )}
         </RStack>
       </RStack>
     </ScrollView>
   );
 }
 
-const loadStyles = () => ({
-  mutualStyles: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-    paddingBottom: 30,
-  },
-  container: {
-    gap: 50,
-    padding: 20,
-  },
-});
+const loadStyles = () => {
+  const { currentTheme } = useTheme();
 
-export default disableScreen(Trips);
+  return {
+    mutualStyles: {
+      backgroundColor: currentTheme.colors.background,
+      flex: 1,
+      flexDirection: 'column',
+      height: '100%',
+      paddingBottom: 30,
+    },
+    container: {
+      gap: 50,
+      padding: 20,
+    },
+  };
+};
+
+export default Trips;

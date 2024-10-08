@@ -1,14 +1,14 @@
-import React, { useMemo, useState } from 'react';
-import { FlatList, View, Platform } from 'react-native';
+import React, { useMemo, useState, useEffect, memo } from 'react';
+import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
 import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from 'app/utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
-import { RText } from '@packrat/ui';
+import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
-import { disableScreen } from 'app/hoc/disableScreen';
+import { type FeedType } from '../model';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -23,85 +23,63 @@ const ERROR_MESSAGES = {
   userTrips: 'No User Trips Available',
 };
 
-interface FeedItem {
-  id: string;
-  type: string;
-}
-
-interface SelectedTypes {
-  pack: boolean;
-  trip: boolean;
-}
-
 interface FeedProps {
-  feedType?: string;
+  feedType?: FeedType;
 }
 
-interface UseFeedResult {
-  data: any[] | null;
-  error: any | null;
-  isLoading: boolean;
-  refetch: () => void;
-}
-
-const Feed = ({ feedType = 'public' }: FeedProps) => {
+const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
   const router = useRouter();
-
+  console.log({ feedType });
   const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
     trip: false,
   });
-  const [selectedTrips, setSelectedTrips] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
   const [refreshing, setRefreshing] = useState(false);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   const user = useAuthUser();
   const ownerId = user?.id;
-
   const styles = useCustomStyles(loadStyles);
-  const { data, error, isLoading, refetch } = useFeed({
+  const {
+    data,
+    isLoading,
+    refetch,
+    fetchPrevPage,
+    fetchNextPage,
+    hasPrevPage,
+    hasNextPage,
+    currentPage,
+    totalPages,
+  } = useFeed({
     queryString,
     ownerId,
     feedType,
     selectedTypes,
-  }) as UseFeedResult;
+    searchQuery,
+  });
 
+  // Refresh data
   const onRefresh = () => {
     setRefreshing(true);
-    refetch();
+    refetch && refetch(); // Ensure refetch is defined
     setRefreshing(false);
   };
 
-  let arrayData = data;
-
-  const filteredData = useMemo(() => {
-    if (!arrayData) {
-      return [];
-    }
-    // Fuse search
-    const keys = ['name', 'items.name', 'items.category'];
-    const options = {
-      threshold: 0.4,
-      location: 0,
-      distance: 100,
-      maxPatternLength: 32,
-      minMatchCharLength: 1,
-    };
-
-    const results = fuseSearch(arrayData, searchQuery, keys, options);
-
-    // Convert fuse results back into the format we want
-    // if searchQuery is empty, use the original data
-    return searchQuery ? results.map((result) => result.item) : data;
-  }, [searchQuery, data]);
-
-  /**
-   * Renders the data for the feed based on the feed type and search query.
-   *
-   * @return {ReactNode} The rendered feed data.
-   */
+  // const filteredData = useMemo(() => {
+  //   if (!data) return [];
+  //   const keys = ['name', 'items.name', 'items.category'];
+  //   const options = {
+  //     threshold: 0.4,
+  //     location: 0,
+  //     distance: 100,
+  //     maxPatternLength: 32,
+  //     minMatchCharLength: 1,
+  //   };
+  //   const results = fuseSearch(data, searchQuery, keys, options);
+  //   return searchQuery ? results.map((result) => result.item) : data;
+  // }, [searchQuery, data]);
 
   const handleTogglePack = () => {
     setSelectedTypes((prevState) => ({
@@ -121,12 +99,8 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
     setQueryString(value);
   };
 
-  const urlPath = URL_PATHS[feedType];
-  const createUrlPath = URL_PATHS[feedType] + 'create';
-  const errorText = ERROR_MESSAGES[feedType];
-
   const handleCreateClick = () => {
-    // handle create click logic
+    const createUrlPath = URL_PATHS[feedType] + 'create';
     router.push(createUrlPath);
   };
 
@@ -147,68 +121,64 @@ const Feed = ({ feedType = 'public' }: FeedProps) => {
             handleCreateClick={handleCreateClick}
           />
           <FlatList
-            data={filteredData}
+            data={data}
             horizontal={false}
-            keyExtractor={(item) => item?.id + item?.type}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 12, width: '100%' }} />
+            )}
+            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => (
               <FeedCard
                 key={item?.id}
-                type={item?.type}
-                favorited_by={item?.userFavoritePacks}
-                {...item}
+                item={item}
+                cardType="primary"
+                feedType={item.type}
               />
             )}
-            ListFooterComponent={() => <View style={{ height: 50 }} />}
+            ListFooterComponent={() =>
+              isFetchingNextPage || isLoading ? (
+                <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                <View style={{ height: 50 }} />
+              )
+            }
             ListEmptyComponent={() => (
               <RText style={{ textAlign: 'center', marginTop: 20 }}>
                 {ERROR_MESSAGES[feedType]}
               </RText>
             )}
-            showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
+            // onEndReached={fetchNextPage} // Trigger next page fetch
+            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+            showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
           />
+          {totalPages > 1 ? (
+            <Pagination
+              isPrevBtnDisabled={!hasPrevPage}
+              isNextBtnDisabled={!hasNextPage}
+              onPressPrevBtn={fetchPrevPage}
+              onPressNextBtn={fetchNextPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          ) : null}
         </View>
       </SearchProvider>
     </View>
   );
-};
+});
 
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-  return {
-    mainContainer: {
-      flex: 1,
-      backgroundColor: currentTheme.colors.background,
-      fontSize: 18,
-      padding: 15,
-      ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
-    },
-    // filterContainer: {
-    //   backgroundColor: currentTheme.colors.card,
-    //   padding: 15,
-    //   fontSize: 18,
-    //   width: '100%',
-    //   borderRadius: 10,
-    //   marginTop: 20,
-    // },
-    // searchContainer: {
-    //   flexDirection: 'row',
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
-    //   marginBottom: 10,
-    //   padding: 10,
-    //   borderRadius: 5,
-    // },
-    // cardContainer: {
-    //   flexDirection: 'row',
-    //   flexWrap: 'wrap',
-    //   justifyContent: 'space-around',
-    //   alignItems: 'center',
-    // },
-  };
-};
+const loadStyles = (theme) => ({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: theme.currentTheme.colors.background,
+    fontSize: 18,
+    padding: 15,
+    ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
+  },
+});
 
-export default disableScreen(Feed, (props) => props.feedType === 'userTrips');
+export default Feed;

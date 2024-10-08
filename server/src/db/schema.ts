@@ -10,6 +10,7 @@ import {
   real,
   sqliteTable,
   text,
+  unique,
 } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
@@ -32,7 +33,6 @@ export const user = sqliteTable('user', {
   name: text('name').notNull(),
   password: text('password').notNull(), // Trim + MinLength(7) + Validation
   email: text('email').notNull().unique(), // Lowercase + Trim + Validation
-  token: text('token'), // Trim
   googleId: text('google_id'),
   code: text('code'),
   is_certified_guide: integer('is_certified_guide', {
@@ -208,6 +208,41 @@ export const item = sqliteTable('item', {
   // @@map("items"): undefined,
 });
 
+export const itemImage = sqliteTable('item_image', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  itemId: text('item_id')
+    .references(() => item.id, { onDelete: 'cascade' })
+    .notNull(),
+  url: text('url').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const offlineMap = sqliteTable(
+  'offlineMap',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    name: text('name').notNull(),
+    bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+    minZoom: integer('minZoom').notNull(),
+    maxZoom: integer('maxZoom').notNull(),
+    metadata: text('metadata', { mode: 'json' }).$type<
+      OfflineMap['metadata']
+    >(),
+    owner_id: text('owner_id').references(() => user.id, {
+      onDelete: 'cascade',
+    }),
+    createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    uniqueNameOwner: unique().on(table.name, table.owner_id),
+  }),
+);
+
 export const itemOwners = sqliteTable(
   'item_owners',
   {
@@ -307,8 +342,12 @@ export const trip = sqliteTable('trip', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   description: text('description').notNull(),
-  duration: text('duration').notNull(),
-  weather: text('weather').notNull(),
+  parks: text('parks', { mode: 'json' }).$type<
+    Array<{ id: string; name: string }>
+  >(),
+  trails: text('parks', { mode: 'json' }).$type<
+    Array<{ id: string; name: string }>
+  >(),
   start_date: text('start_date').notNull(),
   end_date: text('end_date').notNull(),
   destination: text('destination').notNull(),
@@ -319,7 +358,16 @@ export const trip = sqliteTable('trip', {
     onDelete: 'set null',
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
+  activity: text('activity').default('trip'),
+  bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
   type: text('type').default('trip'),
+  scores: text('scores', { mode: 'json' })
+    .$type<Object>()
+    .default(
+      JSON.stringify({
+        totalScore: 0,
+      }),
+    ),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("trips"): undefined,
@@ -449,28 +497,16 @@ export const geojson = sqliteTable('geojson', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  type: text('type').notNull(), // Regex
-  geojsonId: text('geo_json_id').notNull(), // Regex
-  properties: text('properties', { mode: 'json' }).$type<Object>(),
-  geometry: text('geometry', { mode: 'json' })
-    .$type<{
-      type:
-        | 'Point'
-        | 'LineString'
-        | 'Polygon'
-        | 'MultiPoint'
-        | 'MultiPolygon'
-        | 'MultiLineString';
-      coordinates: Array<number | number[]>;
-    }>()
-    .notNull(),
+  geoJSON: text('geoJSON').$type<string>(),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const geojsonRelations = relations(geojson, ({ many }) => ({
-  trips: many(tripGeojsons),
-  tripGeojsons: many(tripGeojsons),
+export const geojsonRelations = relations(geojson, ({ one }) => ({
+  tripGeojson: one(tripGeojsons, {
+    fields: [geojson.id],
+    references: [tripGeojsons.geojsonId],
+  }),
 }));
 
 export const tripGeojsonsRelations = relations(tripGeojsons, ({ one }) => ({
@@ -483,6 +519,14 @@ export const tripGeojsonsRelations = relations(tripGeojsons, ({ one }) => ({
     references: [geojson.id],
   }),
 }));
+
+export const refreshTokens = sqliteTable('refresh_tokens', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }),
+  token: text('token').notNull(),
+});
 
 export type User = InferSelectModel<typeof user>;
 export type InsertUser = InferInsertModel<typeof user>;

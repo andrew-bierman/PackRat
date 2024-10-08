@@ -13,6 +13,7 @@ import favoriteRouters from './favoriteRoutes';
 import userRoutes from './userRoutes';
 import testRoutes from './testRoutes';
 import mapPreviewRouter from './mapPreviewRouter';
+import geojsonRoutes from './geojsonRoutes';
 import healthRoutes from './healthRoutes';
 import { Hono } from 'hono';
 
@@ -34,6 +35,7 @@ router.route('/openai', openAiRoutes);
 router.route('/template', templateRoutes);
 router.route('/favorite', favoriteRouters);
 router.route('/mapPreview', mapPreviewRouter);
+router.route('/geojson', geojsonRoutes);
 router.route('/health', healthRoutes);
 
 // Also listen to /api for backwards compatibility

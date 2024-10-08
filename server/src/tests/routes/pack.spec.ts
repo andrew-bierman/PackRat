@@ -113,7 +113,7 @@ describe('Pack routes', () => {
         {
           id: packId,
           content: nameToBeUpdated,
-          metadata: { isPublic },
+          metadata: { isPublic, ownerId: pack.owner_id },
           namespace: 'packs',
         },
         true,
@@ -123,18 +123,20 @@ describe('Pack routes', () => {
 
   describe('addPack', () => {
     let createdPackId = null;
+    let ownerId = null;
 
     it('should create a pack', async () => {
       const { id, ...partialPack } = pack;
+      ownerId =
+        partialPack.owner_id === null
+          ? 'default_owner_id'
+          : partialPack.owner_id;
       const input = {
         ...partialPack,
         name: 'test 123',
         is_public:
           partialPack.is_public === null ? false : partialPack.is_public,
-        owner_id:
-          partialPack.owner_id === null
-            ? 'default_owner_id'
-            : partialPack.owner_id,
+        owner_id: ownerId,
       };
       const createdPack = await caller.addPack(input);
       createdPackId = createdPack.id;
@@ -146,7 +148,7 @@ describe('Pack routes', () => {
       expect(mockSyncRecord).toHaveBeenCalledWith({
         id: createdPackId,
         content: 'test 123',
-        metadata: { isPublic: true },
+        metadata: { isPublic: true, ownerId },
         namespace: 'packs',
       });
     });
@@ -181,12 +183,9 @@ describe('Pack routes', () => {
         id: packId,
         limit: 3,
       });
-      expect(mockSearchVector).toHaveBeenCalledWith(
-        pack.name,
-        'packs',
-        3,
-        undefined,
-      );
+      expect(mockSearchVector).toHaveBeenCalledWith(pack.name, 'packs', 3, {
+        isPublic: true,
+      });
     });
 
     it('should return similar packs', async () => {

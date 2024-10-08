@@ -33,7 +33,10 @@ export { Container } from './Container';
 export { MainContentWeb } from './MainContentWeb';
 export { ContextMenu, RContextMenu } from './RContextMenu';
 export { DropdownComponent } from './Dropdown';
-export { CascadedDropdownComponent } from './CascadedDropdown';
+export {
+  CascadedDropdownComponent,
+  ActionsDropdownComponent,
+} from './CascadedDropdown';
 // export { DropdownMenu, ExampleDropdown } from './RDropdown/DropdownBase';
 export { RSkeleton } from './RSkeleton';
 
@@ -78,7 +81,9 @@ export {
 
 export * from './InputText';
 export * from './form';
-
+export * from './card';
+export * from './Details';
+export { View } from 'tamagui';
 export { config } from './tamagui.config';
 // export * from 'tamagui';
 export * from '@tamagui/toast';
@@ -97,9 +102,11 @@ export * from './RStack';
 export * from './RTabs';
 export * from './RText';
 export * from './Rparagraph';
+export * from './FullScreen';
 export * from './SizableText';
 export * from './XStack';
 export * from './YStack';
+export * from './Pagination';
 // Future components
 // export * from './RCheckbox';
 // export * from './RSelect';

@@ -128,10 +128,10 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
       }}
     >
       <DropdownComponent
-        value={value}
+        value={`Select Weight unit :  ${value}`}
         data={optionValues}
         onValueChange={(itemValue) => onChange(itemValue)}
-        placeholder={`Select Weight unit :  ${value}`}
+        placeholder={'Select Weight unit'}
         native={true}
       />
     </View>

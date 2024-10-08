@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   RCard as OriginalRCard,
   RParagraph as OriginalRParagraph,
@@ -10,7 +11,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from '../../hooks/useTheme';
 import { theme } from '../../theme/index';
 import Carousel from '../carousel';
-import MapContainer from '../map/MapContainer';
+import { Map } from 'app/modules/map';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 
 interface TripCardProps {
@@ -101,11 +102,11 @@ export default function TripCard({
             <Text>Loading....</Text>
           </RStack>
         ) : (
-          <MapContainer shape={shape} />
+          <Map shape={shape} />
         )
       ) : isSearch ? (
         // <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
-        <PlacesAutocomplete ref={searchRef} /> //because handle select is not defined here
+        <PlacesAutocomplete ref={searchRef} /> // because handle select is not defined here
       ) : (
         <RStack style={{ width: '80%' }}>
           <Carousel iconColor={isDark ? '#fff' : '#000'}>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Carousel from 'app/components/carousel';
 import { useFeed } from '../../hooks';
-import { default as FeedPreviewCard, type FeedItem } from './FeedPreviewCard';
 import Loader from 'app/components/Loader';
+import { FeedCard, type FeedItem } from 'app/modules/feed';
+import { View } from 'tamagui';
 
 interface FeedPreviewScrollProps {
   itemWidth: number;
@@ -16,26 +17,41 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   id,
 }) => {
   const { data: feedData, isLoading } = useFeed({ feedType, id });
+  const validFeedData = feedData?.filter?.((item) => item.id);
 
   return isLoading ? (
     <Loader />
   ) : (
     <Carousel itemWidth={itemWidth}>
-      {feedData
+      {validFeedData
         ?.filter((item): item is FeedItem => item.type !== null)
         .map((item: FeedItem) => {
-          const linkStr = `/${item.type}/${item.id}`;
-          return linkStr ? (
-            <FeedPreviewCard {...{ linkStr, item, feedType }} key={linkStr} />
-          ) : null;
+          return (
+            <View
+              style={{
+                marginBottom: 10,
+              }}
+            >
+              <FeedCard item={item} cardType="secondary" feedType={item.type} />
+            </View>
+          );
         })}
     </Carousel>
   );
 };
 
-export const FeedPreview: React.FC<{ feedType: string; id?: string }> = ({
+interface FeedPreviewProps {
+  feedType: string;
+  id?: string;
+}
+
+export const FeedPreview = memo(function FeedPreview({
   feedType,
   id,
-}) => {
+}: FeedPreviewProps) {
+  console.log({
+    feedType,
+    id,
+  });
   return <FeedPreviewScroll itemWidth={200} feedType={feedType} id={id} />;
-};
+});

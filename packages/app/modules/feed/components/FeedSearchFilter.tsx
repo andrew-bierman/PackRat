@@ -10,21 +10,14 @@ import {
   Form,
   InputWithIcon,
   DropdownComponent,
+  RSwitch,
 } from '@packrat/ui';
 import { Search, X } from '@tamagui/lucide-icons';
+import { Switch } from 'tamagui';
+import { useFeedSortOptions } from '../hooks';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 const RSeparator: any = OriginalRSeparator;
-
-const dataValues = [
-  'Favorite',
-  'Most Recent',
-  'Lightest',
-  'Heaviest',
-  // 'Most Items',
-  // 'Fewest Items',
-  'Oldest',
-];
 
 interface FeedSearchFilterProps {
   feedType?: string | null;
@@ -55,6 +48,9 @@ export const FeedSearchFilter = ({
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
+  const sortOptions = useFeedSortOptions(
+    selectedTypes?.trip || feedType === 'userTrips',
+  );
 
   // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
   const handleSetSearchValue = (v: string) => {
@@ -75,6 +71,12 @@ export const FeedSearchFilter = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!sortOptions.includes(queryString) && handleSortChange) {
+      handleSortChange(sortOptions[0]);
+    }
+  }, [sortOptions, queryString]);
+
   return (
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
@@ -87,24 +89,6 @@ export const FeedSearchFilter = ({
               placeholder={`Search ${feedType || 'Feed'}`}
               value={searchValue}
             />
-            {/* <FormInput
-                width='100%'
-                placeholder={`Search ${feedType || 'Feed'}`}
-                name="search"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.nativeEvent.text)}
-              />
-              <RIconButton
-                backgroundColor="transparent"
-                onPress={() => onSearch(searchValue)}
-                icon={
-                  <AntDesign
-                    name="search1"
-                    size={24}
-                    color={currentTheme.colors.cardIconColor}
-                  />
-                }
-              /> */}
           </RStack>
         </Form>
       </View>
@@ -123,45 +107,39 @@ export const FeedSearchFilter = ({
             <RStack
               style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
             >
-              {/* DISABLE TRIP TEMP */}
               <RText
                 fontSize={18}
                 fontWeight="bold"
-                color={currentTheme.colors.text}
+                color={currentTheme.colors.tertiaryBlue}
               >
-                Discover Other Users' Public Packs
+                Packs
               </RText>
-              {/* <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.tertiaryBlue}
-                >
-                  Packs
-                </RText>
 
-                <RSwitch
-                  id="single-switch"
-                  size="$1.5"
-                  checked={selectedTypes?.pack ?? false}
-                  onCheckedChange={handleTogglePack}
-                >
-                  <Switch.Thumb />
-                </RSwitch>
-                <RText
-                  fontSize={18}
-                  fontWeight="bold"
-                  color={currentTheme.colors.tertiaryBlue}
-                >
-                  Trips
-                </RText> 
-                <RSwitch
-                  id="two-switch"
-                  size="$1.5"
-                  checked={selectedTypes?.trip ?? false}
-                  onCheckedChange={handleToggleTrip}
-                >
-                  <Switch.Thumb />
-                </RSwitch>*/}
+              <RSwitch
+                id="single-switch"
+                size="$1.5"
+                checked={selectedTypes?.pack ?? false}
+                disabled={!selectedTypes?.trip}
+                onCheckedChange={handleTogglePack}
+              >
+                <Switch.Thumb />
+              </RSwitch>
+              <RText
+                fontSize={18}
+                fontWeight="bold"
+                color={currentTheme.colors.tertiaryBlue}
+              >
+                Trips
+              </RText>
+              <RSwitch
+                id="two-switch"
+                size="$1.5"
+                checked={selectedTypes?.trip ?? false}
+                disabled={!selectedTypes?.pack}
+                onCheckedChange={handleToggleTrip}
+              >
+                <Switch.Thumb />
+              </RSwitch>
             </RStack>
           )}
           <RStack
@@ -185,7 +163,7 @@ export const FeedSearchFilter = ({
             <View style={{ flex: 1 }}>
               <DropdownComponent
                 value={queryString}
-                data={dataValues}
+                data={sortOptions}
                 onValueChange={handleSortChange}
                 placeholder={queryString}
               />
