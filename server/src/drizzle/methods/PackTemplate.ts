@@ -1,10 +1,14 @@
-import { eq } from 'drizzle-orm';
+import { eq, like } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
 import { packTemplate as packTemplateTable } from 'src/db/schema';
 
+export type Filter = {
+  searchQuery?: string;
+};
+
 export class PackTemplate {
-  async findMany() {
+  async findMany(filter?: Filter) {
     const packTemplates = await DbClient.instance.query.packTemplate.findMany({
       with: {
         itemPackTemplates: {
@@ -13,6 +17,9 @@ export class PackTemplate {
           },
         },
       },
+      ...(filter?.searchQuery
+        ? { where: like(packTemplateTable.name, `%${filter.searchQuery}%`) }
+        : {}),
     });
 
     return packTemplates.map((packTemplate) => {

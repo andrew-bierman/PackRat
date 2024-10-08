@@ -1,6 +1,6 @@
-import { PackTemplate } from 'src/drizzle/methods/PackTemplate';
+import { PackTemplate, type Filter } from 'src/drizzle/methods/PackTemplate';
 
-export async function getPackTemplatesService() {
+export async function getPackTemplatesService(filter?: Filter) {
   const packTemplateHelper = new PackTemplate();
-  return await packTemplateHelper.findMany();
+  return await packTemplateHelper.findMany(filter);
 }

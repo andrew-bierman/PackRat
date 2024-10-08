@@ -47,7 +47,10 @@ export const useFeed = ({
   );
   const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
   const similarItems = useSimilarItems(id, feedType === 'similarItems');
-  const packTemplates = usePackTemplates(feedType === 'packTemplates');
+  const packTemplates = usePackTemplates(
+    searchQuery,
+    feedType === 'packTemplates',
+  );
 
   switch (feedType) {
     case 'public':
