@@ -29,10 +29,10 @@ export const Pricing = () => {
           </RText>
         </View>
         <View style={styles.card}>
-          <RText style={{ width: '100%', fontSize: 18, textAlign: 'left', borderWidth: 1, borderColor: 'white', color: currentTheme.colors.background }}>
+          <RText style={{ width: '100%', fontSize: 18, textAlign: 'left', color: currentTheme.colors.background }}>
             Free Access
           </RText>
-          <RText style={{ width: '100%', fontSize: 25, textAlign: 'left', borderWidth: 1, borderColor: 'white', color: currentTheme.colors.background }}>
+          <RText style={{ width: '100%', fontSize: 25, textAlign: 'left', color: currentTheme.colors.background }}>
             $0
           </RText>
           <View style={{ width: '100%' }}>
