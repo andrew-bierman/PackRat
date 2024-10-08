@@ -7,6 +7,7 @@ interface Env {
   STMP_EMAIL: 'test';
   STMP_PASSWORD: 'test';
   JWT_SECRET: 'test';
+  REFRESH_TOKEN_SECRET: string;
   SEND_GRID_API_KEY: 'test';
   MAPBOX_ACCESS_TOKEN: 'test';
   OSM_URI: 'test';

@@ -11,7 +11,6 @@ on:
       - 'packages/app/**'
       - 'apps/expo/**'
       - 'packages/ui/**'
-      - 'packages/shared-types/**'
       - 'packages/config/**'
       - 'packages/crosspath/**'
 

@@ -1,8 +1,11 @@
-import { eq, sql, asc, desc, and } from 'drizzle-orm';
+import { eq, sql, asc, desc, and, inArray } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
-import { type InsertPack, pack as PackTable, itemPacks } from '../../db/schema';
-import { convertWeight } from '../../utils/convertWeight';
-
+import {
+  type InsertPack,
+  pack as PackTable,
+  item,
+  itemPacks,
+} from '../../db/schema';
 export class Pack {
   getRelations({ includeRelated, ownerId = true, completeItems = false }) {
     if (!includeRelated) {
@@ -151,6 +154,8 @@ export class Pack {
         sortOption,
         ownerId,
         is_public,
+        page,
+        limit,
       } = options;
       const filterConditions = [];
 
@@ -169,23 +174,36 @@ export class Pack {
         includeRelated,
         completeItems: true,
       });
+
+      const offset = (page - 1) * limit;
+
       const packs = await DbClient.instance.query.pack.findMany({
         ...(modifiedFilter && { where: modifiedFilter }),
         orderBy: orderByFunction,
         ...(includeRelated ? relations : {}),
+        offset: offset,
+        limit: limit,
       });
+
       return (await packs).map((pack: any) => ({
         ...pack,
         scores: JSON.parse(pack.scores as string),
         grades: JSON.parse(pack.grades as string),
-        total_weight: this.computeTotalWeight(pack),
         favorites_count: this.computeFavouritesCount(pack),
         total_score: this.computeTotalScores(pack),
         items: pack.itemPacks.map((itemPack) => itemPack.item),
+        total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
       }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
     }
+  }
+
+  async findAllInArray(arr: string[]) {
+    return await DbClient.instance
+      .select()
+      .from(PackTable)
+      .where(inArray(PackTable.id, arr));
   }
 
   async sortPacksByItems(options: any) {
@@ -253,24 +271,6 @@ export class Pack {
   //     throw new Error(`Failed to sort packs by owners: ${error.message}`);
   //   }
   // }
-
-  computeTotalWeight(pack) {
-    if (pack.itemPacks && pack.itemPacks.length > 0) {
-      const totalWeight = pack.itemPacks.reduce(
-        (total: number, itemPack: any) => {
-          const weightInGrams = convertWeight(
-            itemPack.item.weight,
-            itemPack.item.unit,
-            'g',
-          );
-          return total + weightInGrams * itemPack.item.quantity;
-        },
-        0,
-      );
-      return totalWeight;
-    }
-    return 0;
-  }
 
   computeFavouritesCount(pack) {
     return pack.userFavoritePacks?.length ?? 0;

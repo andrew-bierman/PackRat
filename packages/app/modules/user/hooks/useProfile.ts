@@ -1,60 +1,66 @@
-import { useFetchUserFavorites } from 'app/modules/feed';
-import { useUserPacks } from 'app/modules/pack';
-import { useUserTrips } from 'app/hooks/singletrips';
+import { useFetchUserFavoritesWithPreview } from 'app/modules/feed';
+import { useUserPacksWithPreview } from 'app/modules/pack';
 import { useAuthUser, useMatchesCurrentUser } from 'app/modules/auth';
 import { useGetUser } from './useGetUser';
+import { useUserTripsWithPreview } from 'app/modules/trip/hooks/useUserTrips';
+import { useCallback, useState } from 'react';
+import type { PreviewListType } from '../model';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
   const userId = id ?? authUser?.id;
+  const [searchTerms, setSearchTerms] = useState<
+    Record<PreviewListType, string>
+  >({ favorites: '', packs: '', trips: '' });
 
   const isCurrentUser = useMatchesCurrentUser(userId as string); // TODO: Implement this hook in more components
 
-  const {
-    data: allPacks,
-    isLoading: allPacksLoading,
-    error: allPacksError,
-  } = useUserPacks(userId); // TODO: Add enabled as parameter
+  const favoritesQuery = useFetchUserFavoritesWithPreview(
+    userId as string,
+    searchTerms.favorites,
+  );
+  const userPacksQuery = useUserPacksWithPreview(
+    userId as string,
+    searchTerms.packs,
+  );
+  const userTripsQuery = useUserTripsWithPreview(
+    userId as string,
+    searchTerms.trips,
+  );
 
-  const {
-    data: allTrips,
-    isLoading: tripsIsLoading,
-    error: tripsError,
-  } = useUserTrips(userId); // TODO: Add enabled as parameter
+  const onSearchChange = useCallback(
+    (search: string, type: PreviewListType) => {
+      setSearchTerms((prev) => ({ ...prev, [type]: search }));
+    },
+    [],
+  );
 
-  const {
-    data: allFavorites,
-    isLoading: allFavoritesLoading,
-    error: allFavoritesError,
-  } = useFetchUserFavorites(userId as string); // TODO: Add enabled as parameter
-
-  const {
-    data: userData,
-    isLoading: userIsLoading,
-    error: userError,
-  } = useGetUser(userId as string);
+  const { data: userData, isLoading: userIsLoading } = useGetUser(
+    userId as string,
+  );
 
   const user = !isCurrentUser ? userData : authUser;
 
   const isLoading =
-    userIsLoading || allPacksLoading || tripsIsLoading || allFavoritesLoading;
+    userIsLoading ||
+    userPacksQuery.isPreviewLoading ||
+    userTripsQuery.isPreviewLoading ||
+    favoritesQuery.isPreviewLoading;
 
-  const error = userError || allPacksError || tripsError || allFavoritesError;
-
-  const tripsCount = allTrips?.length ?? 0;
-  const packsCount = allPacks?.length ?? 0;
-  const favoritesCount = allFavorites?.length ?? 0;
+  const error = '';
 
   return {
     user,
-    favoritesList: Array.isArray(allFavorites) ? allFavorites : [],
-    packsList: Array.isArray(allPacks) ? allPacks : [],
-    tripsList: Array.isArray(allTrips) ? allTrips : [],
-    tripsCount,
-    packsCount,
-    favoritesCount,
+    favoritesQuery,
+    userPacksQuery,
+    userTripsQuery,
+    tripsCount: userTripsQuery.totalCount,
+    packsCount: userPacksQuery.totalCount,
+    favoritesCount: favoritesQuery.totalCount,
     isLoading,
     error,
     isCurrentUser,
+    searchTerms,
+    onSearchChange,
   };
 };

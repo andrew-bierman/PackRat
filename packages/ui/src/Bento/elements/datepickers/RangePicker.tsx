@@ -21,6 +21,7 @@ import {
 } from './common/dateParts';
 import { Platform } from 'react-native';
 import { useDateAnimation } from './DatePicker';
+import useTheme from 'app/hooks/useTheme';
 
 const RANGE_STYLE: { [key: string]: GetProps<typeof View> } = {
   'in-range': {
@@ -305,6 +306,7 @@ export function RangePicker({
       setOpen(false);
     }
   }, [selectedDates]);
+  const { currentTheme } = useTheme();
 
   // uncomment this to limit the range of dates
   //   const M = now.getMonth()
@@ -323,6 +325,7 @@ export function RangePicker({
           }}
           onButtonPress={() => setOpen(true)}
           width={260}
+          color={currentTheme.colors.text}
         />
       </DatePicker.Trigger>
 

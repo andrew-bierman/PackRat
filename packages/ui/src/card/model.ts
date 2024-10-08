@@ -8,6 +8,8 @@ export interface BaseCardProps {
   image: ReactNode;
   subtitle: ReactNode;
   content?: ReactNode;
+  isFullWidth?: boolean;
   footer?: ReactNode;
   actions?: ReactNode;
+  style?: any;
 }

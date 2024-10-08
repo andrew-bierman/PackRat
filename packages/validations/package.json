@@ -16,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@packrat/shared-types": "*",
     "@types/express": "^4.17.17",
     "@types/node": "^20.14.2",
     "express": "^4.19.2",

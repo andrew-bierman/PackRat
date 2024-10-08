@@ -170,11 +170,13 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
           alignSelf="center"
           position="relative"
           backgroundColor={currentTheme.colors.background}
+          paddingTop={10}
           borderRadius={8}
         >
           <RStack
             flexDirection="row"
             alignItems="center"
+            justifyContent="center"
             borderBottomWidth={1}
             borderColor={currentTheme.colors.border}
             padding={4}
@@ -206,6 +208,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 padding: 0,
                 margin: 0,
                 flex: 1,
+                fontSize: 20,
               }}
             />
             {searchString && searchString.trim().length > 0 && (

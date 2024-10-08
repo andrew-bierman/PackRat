@@ -1,5 +1,8 @@
 import React from 'react';
 import useTheme from 'app/hooks/useTheme';
+import { TripCardBase } from './TripCardBase';
+import { getEnumValues } from 'app/utils/getEnumValues';
+import { formatTripActivityLabel } from 'app/utils/tripUtils';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Select as OriginalSelect } from '@packrat/ui';
@@ -17,9 +20,6 @@ enum TripActivity {
 }
 
 const Select: any = OriginalSelect;
-import { TripCardBase } from './TripCardBase';
-import { getEnumValues } from 'app/utils/getEnumValues';
-import { formatTripActivityLabel } from 'app/utils/tripUtils';
 
 const ActivityOptions = getEnumValues(TripActivity).map((activity) => ({
   label: formatTripActivityLabel(activity.toString()),

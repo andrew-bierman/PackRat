@@ -14,19 +14,20 @@ function useAsyncState<T>(
   ) as UseStateHook<T>;
 }
 
+// Function to set storage items based on the platform
 export async function setStorageItemAsync(key: string, value: string | null) {
   if (Platform.OS === 'web') {
     try {
-      if (value == null) {
-        await AsyncStorage.removeItem(key);
+      if (value === null) {
+        localStorage.removeItem(key);
       } else {
-        await AsyncStorage.setItem(key, value);
+        localStorage.setItem(key, value);
       }
     } catch (e) {
-      console.error('Local storage is unavailable:', e);
+      console.error('Web localStorage is unavailable:', e);
     }
   } else {
-    if (value == null) {
+    if (value === null) {
       await SecureStore.deleteItemAsync(key);
     } else {
       await SecureStore.setItemAsync(key, value);
@@ -34,20 +35,20 @@ export async function setStorageItemAsync(key: string, value: string | null) {
   }
 }
 
+// Custom hook to manage storage state (works for both web and native platforms)
 export function useStorageState(key: string): UseStateHook<string> {
-  // Public
+  // Public state
   const [state, setState] = useAsyncState<string>();
 
-  // Get
+  // Get storage value on mount
   React.useEffect(() => {
     const getToken = async () => {
       if (Platform.OS === 'web') {
         try {
-          const token = await AsyncStorage.getItem(key);
-          if (!token) return '';
+          const token = localStorage.getItem(key);
           setState(token);
         } catch (e) {
-          console.error('Local storage is unavailable:', e);
+          console.error('Web localStorage is unavailable:', e);
         }
       } else {
         await SecureStore.getItemAsync(key).then((value) => {
@@ -59,11 +60,11 @@ export function useStorageState(key: string): UseStateHook<string> {
     try {
       getToken();
     } catch (e) {
-      console.error('Local storage is unavailable:', e);
+      console.error('Storage retrieval error:', e);
     }
   }, [key]);
 
-  // Set
+  // Set storage value
   const setValue = React.useCallback(
     (value: string | null) => {
       setStorageItemAsync(key, value).then(() => {

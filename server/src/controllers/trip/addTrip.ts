@@ -15,6 +15,6 @@ export const addTrip = async (c) => {
 export function addTripRoute() {
   return protectedProcedure.input(validator.addTrip).mutation(async (opts) => {
     const tripData = opts.input;
-    return await addTripService(tripData);
+    return await addTripService(tripData, opts.ctx.executionCtx);
   });
 }

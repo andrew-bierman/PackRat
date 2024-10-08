@@ -1,1 +1,0 @@
-ALTER TABLE conversation ADD `itemTypeId` text NOT NULL;
