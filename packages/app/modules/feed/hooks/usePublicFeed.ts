@@ -1,76 +1,73 @@
 import { queryTrpc } from 'app/trpc';
+import {
+  getPaginationInitialParams,
+  type PaginationParams,
+  usePagination,
+} from 'app/hooks/pagination';
+import { useEffect, useState } from 'react';
 
-type DataType = {
-  type: string;
-  id: string;
-  duration: string;
-  name: string;
-  description: string;
-  createdAt: string | null;
-  updatedAt: string | null;
-  pack_id: string | null;
-  owner_id: string | null;
-  is_public: boolean | null;
-  //  ... rest
-}[];
-
-type OptionalDataType = {
-  [K in keyof DataType]?: DataType[K];
-}[];
-
-export const usePublicFeed = (queryString, selectedTypes) => {
-  let data: OptionalDataType = [];
-  let isLoading = true;
-  let refetch = () => {};
-  try {
-    const queryOptions = {
+export const usePublicFeed = (
+  queryBy,
+  searchQuery: string,
+  selectedTypes,
+  enabled = false,
+) => {
+  const [pagination, setPagination] = useState<PaginationParams>(
+    getPaginationInitialParams(),
+  );
+  const { data, isLoading, refetch } = queryTrpc.getPublicFeed.useQuery(
+    {
+      queryBy: queryBy ?? 'Favorites',
+      pagination,
+      searchTerm: searchQuery,
+      excludeType: getExcludeType(selectedTypes),
+    },
+    {
+      enabled,
       refetchOnWindowFocus: false,
-      keepPreviousData: true,
-      staleTime: 1000 * 60, // 1 min
-      cacheTime: 1000 * 60 * 5, // 5 min
-    };
-    const publicPacks = queryTrpc.getPublicPacks.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        onSuccess: (data) =>
-          console.log('Successfully fetched public packs!', data),
-        onError: (error) =>
-          console.error('Error fetching public packs:', error),
-      },
-    );
+      onError: (error) => console.error('Error fetching public packs:', error),
+    },
+  );
+  const { fetchPrevPage, fetchNextPage } = usePagination(
+    refetch,
+    pagination,
+    setPagination,
+    {
+      prevPage: data?.prevOffset,
+      nextPage: data?.nextOffset,
+      enabled,
+    },
+  );
 
-    const publicTrips = queryTrpc.getPublicTripsRoute.useQuery(
-      { queryBy: queryString ?? 'Favorite' },
-      {
-        ...queryOptions,
-        enabled: publicPacks?.status === 'success',
-      },
-    );
+  useEffect(() => {
+    setPagination(getPaginationInitialParams());
+  }, [queryBy, searchQuery, selectedTypes?.pack, selectedTypes?.trip]);
 
-    isLoading =
-      publicPacks?.status !== 'success' && publicTrips?.status !== 'success';
+  return {
+    data: data?.data || [],
+    isLoading,
+    refetch,
+    fetchPrevPage,
+    fetchNextPage,
+    hasPrevPage: data?.prevOffset !== false,
+    hasNextPage: data?.nextOffset !== false,
+    currentPage: data?.currentPage,
+    totalPages: data?.totalPages,
+    error: null,
+  };
+};
 
-    if (selectedTypes.pack && publicPacks?.status === 'success')
-      data = [
-        ...data,
-        ...publicPacks.data.map((item) => ({ ...item, type: 'pack' })),
-      ];
-
-    if (selectedTypes.trip && publicTrips?.status === 'success')
-      data = [
-        ...data,
-        ...publicTrips.data.map((item) => ({ ...item, type: 'trip' })),
-      ];
-
-    refetch = () => {
-      publicPacks.refetch();
-      publicTrips.refetch();
-    };
-  } catch (error) {
-    console.error(error);
-    return { data: null, error, isLoading, refetch };
+const getExcludeType = (selectedTypes: { pack?: boolean; trip?: boolean }) => {
+  const { pack, trip } = selectedTypes || {};
+  if (pack && trip) {
+    return undefined;
   }
 
-  return { data, error: null, isLoading, refetch };
+  if (!pack) {
+    return 'packs';
+  }
+
+  if (!trip) {
+    return 'trips';
+  }
 };

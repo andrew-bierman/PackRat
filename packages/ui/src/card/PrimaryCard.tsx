@@ -12,7 +12,7 @@ export const PrimaryCard: FC<PrimaryCardProps> = (props) => {
       <Card.Header>
         <XStack>
           <View
-            style={{ width: 120, height: 120, border: '1px solid lightgray' }}
+            style={{ width: 100, height: 100, border: '1px solid lightgray' }}
           >
             {props.image}
           </View>
@@ -42,12 +42,22 @@ export const PrimaryCard: FC<PrimaryCardProps> = (props) => {
           </YStack>
         </XStack>
       </Card.Header>
-      <View style={{ paddingLeft: 18, paddingRight: 18, maxWidth: 560 }}>
-        {props.content}
-      </View>
-      <Card.Footer padded>
-        <View>{props.footer}</View>
-      </Card.Footer>
+      {props.content && (
+        <View
+          style={{
+            paddingLeft: 18,
+            paddingRight: 18,
+            maxWidth: 560,
+          }}
+        >
+          {props.content}
+        </View>
+      )}
+      {props.footer && (
+        <Card.Footer padded>
+          <View>{props.footer}</View>
+        </Card.Footer>
+      )}
     </Card>
   );
 };

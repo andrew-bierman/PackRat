@@ -1,3 +1,4 @@
+import React from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { theme } from 'app/theme';
 import { TripCardBase } from './TripCardBase';
@@ -9,36 +10,40 @@ import {
   RStack,
 } from '@packrat/ui';
 import Carousel from 'app/components/carousel';
+import { current } from 'immer';
 
 const RCard: any = OrirginalRCard;
 const RParagraph: any = OriginalRParagraph;
 
-type TripPlaceCardProps = {
-  data: string[];
-  onToggle: (place: string) => void;
-  selectedValue: string;
+interface TripPlaceCardProps {
+  data: Array<{ id: string; name: string }>;
+  onToggle: (place: { id: string; name: string }) => void;
+  selectedValue: string[];
   icon: React.FC;
   title: string;
-};
+}
 
 const TripPlaceCard = ({
   data,
   onToggle,
   icon,
   title,
-  selectedValue,
+  selectedValue = [],
 }: TripPlaceCardProps) => {
-  const { isDark } = useTheme();
+  const { currentTheme } = useTheme();
 
   return (
     <TripCardBase icon={icon} title={title}>
       <RStack style={{ flex: 1, maxWidth: '100%' }}>
-        <Carousel iconColor={isDark ? '#fff' : '#000'}>
+        <Carousel iconColor={currentTheme.colors.text}>
           {data?.map((item) => {
             return (
               <RCard
+                key={item.id}
                 backgroundColor={
-                  item === selectedValue ? theme.colors.background : null
+                  selectedValue.includes(item.id)
+                    ? currentTheme.colors.background
+                    : null
                 }
                 onPress={() => {
                   onToggle(item);
@@ -49,9 +54,13 @@ const TripPlaceCard = ({
               >
                 <RCard.Header padded>
                   <RParagraph
-                    color={item === selectedValue ? 'white' : 'black'}
+                    color={
+                      selectedValue.includes(item.id)
+                        ? currentTheme.colors.secondaryBlue
+                        : currentTheme.colors.text
+                    }
                   >
-                    {item}
+                    {item.name}
                   </RParagraph>
                 </RCard.Header>
               </RCard>

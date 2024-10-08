@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { CLIENT_URL } from '@packrat/config';
-import { RH3, RText } from '@packrat/ui';
+import { RButton, RH3, RIconButton, RSpinner, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import Layout from 'app/components/layout/Layout';
 import {
@@ -11,15 +11,18 @@ import {
   TableContainer,
 } from 'app/modules/pack';
 import useResponsive from 'app/hooks/useResponsive';
-import { FlatList, View } from 'react-native';
+import { FlatList, Platform, View } from 'react-native';
 import ScoreContainer from '../../../components/ScoreContainer';
-// import ChatContainer from '../chat';
 import { TextLink } from '@packrat/crosspath';
 import { DetailsComponent } from '../../../components/details';
 import { ImportItemModal, AddItemModal } from 'app/modules/item';
 import { FeedPreview } from 'app/modules/feed';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
+import ChatModalTrigger from 'app/components/chat';
+import { Ionicons } from '@expo/vector-icons';
+
+import { useRouter } from 'app/hooks/router';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -48,6 +51,7 @@ export function PackDetailsScreen() {
     refetch: refetchQuery,
   } = useFetchSinglePack(packId);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
+  const router = useRouter();
 
   // const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
@@ -57,7 +61,12 @@ export function PackDetailsScreen() {
 
   const isError = error !== null;
 
-  if (isLoading) return <RText>Loading...</RText>;
+  if (isLoading)
+    return (
+      <Layout>
+        <RSpinner />
+      </Layout>
+    );
 
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
@@ -188,22 +197,70 @@ export function PackDetailsScreen() {
         </View>
       )}
       {/* Disable Chat */}
-      {/* <View
-        style={{
-          position: 'absolute',
-          right: -40,
-          bottom: 20,
-          flexDirection: 'row',
-          alignSelf: 'flex-end',
-        }}
-      >
-        <ChatContainer
-          itemTypeId={currentPackId}
-          title="Chat"
-          trigger="Open Chat"
-          type="pack"
-        />
-      </View> */}
+      {Platform.OS === 'web' ? (
+        <View
+          style={{
+            position: 'absolute',
+            right: -40,
+            bottom: 20,
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}
+        >
+          <ChatModalTrigger
+            itemTypeId={currentPackId}
+            title="Chat"
+            trigger="Open Chat"
+            type="pack"
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            position: 'absolute',
+            right: 40,
+            bottom: 40,
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}
+        >
+          {/* <View
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          > */}
+          <RIconButton
+            backgroundColor="transparent"
+            style={{
+              width: 50,
+              height: 50,
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 0,
+            }}
+            icon={
+              <Ionicons
+                name="chatbubble-ellipses-sharp"
+                size={50}
+                color={currentTheme.colors.iconColor}
+              />
+            }
+            onPress={() => {
+              router.push({
+                pathname: '/chat',
+                query: {
+                  itemTypeId: currentPackId,
+                  type: 'pack',
+                },
+              });
+            }}
+          />
+        </View>
+        // </View>
+      )}
     </Layout>
   );
 }

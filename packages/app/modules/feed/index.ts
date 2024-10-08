@@ -1,6 +1,12 @@
 export * from './widgets';
 export * from './screens';
-export { useFeed, useAddFavorite, useFetchUserFavorites } from './hooks';
+export {
+  useFeed,
+  useAddFavorite,
+  useFetchUserFavorites,
+  useFetchUserFavoritesWithPreview,
+  useFeedSortOptions,
+} from './hooks';
 export {
   SearchProvider,
   FeedSearchFilter,

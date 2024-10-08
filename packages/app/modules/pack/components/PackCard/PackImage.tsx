@@ -1,6 +1,6 @@
 import React, { type FC } from 'react';
 import { View } from '@packrat/ui';
-import { Package } from '@tamagui/lucide-icons';
+import { Backpack } from '@tamagui/lucide-icons';
 import { type ViewProps } from 'tamagui';
 
 interface PackImageProps {
@@ -22,7 +22,7 @@ export const PackImage: FC<PackImageProps> = ({ style = {} }) => {
       ]}
     >
       <View>
-        <Package />
+        <Backpack />
       </View>
     </View>
   );

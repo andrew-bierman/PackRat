@@ -1,3 +1,4 @@
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useAddPackItem, useEditPackItem } from 'app/modules/pack';
@@ -6,8 +7,12 @@ import {
   editItem as editItemSchema,
   type Item,
 } from '@packrat/validations';
-import { useMemo } from 'react';
 import { useAuthUser } from 'app/modules/auth';
+import { convertWeighToSmallestUnit } from '../utils';
+import { type ItemUnit } from '../model';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from '../constants';
+import { useItemWeightUnit } from '../hooks';
 
 interface AddItemProps {
   id?: string;
@@ -34,19 +39,13 @@ interface AddItemProps {
   setRefetch?: () => void;
 }
 
-type AddItem = Omit<Item, 'id'> & { id: string };
-
 export const AddItem = ({
   isEdit,
   initialData,
   packId,
   currentPack,
-  editAsDuplicate,
-  setPage = (page: number) => {}, // temp fix, need props type
-  page,
   closeModalHandler,
   isItemPage,
-  setIsAddItemModalOpen = () => {},
 }: AddItemProps) => {
   // const [currPackId] = usePackId();
 
@@ -54,21 +53,12 @@ export const AddItem = ({
 
   const ownerId = user?.id;
 
-  const {
-    // mutation: addPackItemMutation
-    isLoading,
-    isError,
-    addPackItem,
-  } = useAddPackItem();
-  const {
-    // mutation: addPackItemMutation
-
-    editPackItem,
-  } = useEditPackItem(isItemPage);
+  const { isLoading, addPackItem } = useAddPackItem();
+  const [userPreferUnit] = useItemWeightUnit();
+  const { editPackItem } = useEditPackItem(isItemPage);
 
   const handleSubmit = (data: Item) => {
     if (isEdit) {
-      // editPackItem(data as AddItem);
       editPackItem(data as any);
     } else {
       addPackItem(data);
@@ -78,13 +68,19 @@ export const AddItem = ({
 
   const defaultValues = useMemo(() => {
     if (!initialData) {
-      return { unit: 'lb', ownerId, packId };
+      return { unit: userPreferUnit, ownerId, packId };
     }
     const result = {
       id: '',
       ownerId,
       name: initialData.name || '',
-      weight: initialData.weight,
+      weight: initialData.unit
+        ? convertWeight(
+            initialData.weight,
+            SMALLEST_ITEM_UNIT,
+            initialData.unit,
+          )
+        : undefined,
       quantity: initialData.quantity,
       type: initialData.category?.name,
       unit: initialData.unit,
@@ -98,7 +94,7 @@ export const AddItem = ({
     }
 
     return result;
-  }, [initialData, isEdit, packId, ownerId]);
+  }, [initialData, isEdit, packId, ownerId, userPreferUnit]);
 
   return (
     <View>

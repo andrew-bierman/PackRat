@@ -8,10 +8,12 @@ import {
   getPaginationRowModel,
 } from '@tanstack/react-table';
 import { useMedia } from 'tamagui';
+import { convertWeight } from 'app/utils/convertWeight';
 import { Text, View, Button, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
 import { Pressable } from 'react-native';
 import { useRouter } from '@packrat/crosspath';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -66,7 +68,12 @@ export function PaginatedSortedTable({
       footer: (info) => info.column.id,
     }),
     columnHelper.accessor('weight', {
-      cell: (info) => info.getValue(),
+      cell: (info) =>
+        convertWeight(
+          info.getValue(),
+          SMALLEST_ITEM_UNIT,
+          info.row.original.unit as any,
+        ),
       header: () => 'Weight',
       footer: (info) => info.column.id,
     }),

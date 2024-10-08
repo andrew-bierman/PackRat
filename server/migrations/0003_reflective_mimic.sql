@@ -1,1 +1,0 @@
-ALTER TABLE user ADD `offline_maps` text;

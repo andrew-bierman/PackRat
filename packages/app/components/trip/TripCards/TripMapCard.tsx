@@ -1,16 +1,26 @@
 import { ErrorBoundary, RStack, RText } from '@packrat/ui';
-import MapContainer from 'app/components/map/MapContainer';
+import { Map } from 'app/modules/map';
 import useTheme from 'app/hooks/useTheme';
 import { TripCardBase } from './TripCardBase';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
+import { getTripGEOURI } from '../utils';
 
-type TripMapCardProps = {
+interface TripMapCardProps {
   isLoading?: boolean;
-  shape: any;
-};
+  shape?: any;
+  onVisibleBoundsChange?: (bounds: number[]) => void;
+  tripId?: string;
+  initialBounds?: any;
+}
 
-export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
+export const TripMapCard = ({
+  isLoading,
+  shape,
+  initialBounds,
+  tripId,
+  onVisibleBoundsChange,
+}: TripMapCardProps) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -31,7 +41,13 @@ export const TripMapCard = ({ isLoading, shape }: TripMapCardProps) => {
         </RStack>
       ) : (
         <ErrorBoundary>
-          <MapContainer shape={shape} />
+          <Map
+            style={{ width: '100%', height: 320 }}
+            shapeURI={tripId ? getTripGEOURI(tripId) : undefined}
+            onVisibleBoundsChange={onVisibleBoundsChange}
+            initialBounds={initialBounds}
+            shape={shape}
+          />
         </ErrorBoundary>
       )}
     </TripCardBase>
@@ -47,8 +63,7 @@ const loadStyles = (theme) => {
     alignItems: 'center',
     textAlign: 'center',
     padding: currentTheme.size.cardPadding,
-    paddingHorizontal: currentTheme.padding.paddingInside,
-    marginBottom: 20,
+    margin: 80,
     overflow: 'hidden',
     alignSelf: 'center',
   };

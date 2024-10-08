@@ -36,7 +36,7 @@ const axiosFetch = async (url, options) => {
 // export const reactTrpc = createTRPCReact<AppRouter>();
 export const queryTrpc = createTRPCReact<AppRouter>();
 
-export const trpc = queryTrpc.createClient({
+const trpcClientOpts = {
   links: [
     httpBatchLink({
       url: `${api}/trpc`,
@@ -50,6 +50,16 @@ export const trpc = queryTrpc.createClient({
     }),
   ],
   transformer: undefined,
-});
+};
+
+export const trpc = queryTrpc.createClient(trpcClientOpts);
+
+export const vanillaTrpcClient = createTRPCProxyClient<AppRouter>({
+  links: [
+    httpBatchLink({
+      url: `${api}/trpc`,
+    }),
+  ],
+}); // For calling procedures imperatively (outside of a component)
 
 export const queryClient = new QueryClient();

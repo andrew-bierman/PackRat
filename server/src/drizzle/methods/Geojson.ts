@@ -2,12 +2,12 @@ import { DbClient } from '../../db/client';
 import { type InsertGeoJson, geojson } from '../../db/schema';
 
 export class GeoJson {
-  async create(geoJSONData: InsertGeoJson) {
+  async create(geoJSON: InsertGeoJson) {
     try {
       const db = DbClient.instance;
       const record = await db
         .insert(geojson)
-        .values(geoJSONData)
+        .values({ geoJSON })
         .returning()
         .get();
       return record;

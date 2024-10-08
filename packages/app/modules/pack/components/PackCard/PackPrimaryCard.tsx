@@ -10,19 +10,22 @@ import { type PackDetails } from 'app/modules/pack/model';
 import { DuplicateIcon } from 'app/assets/icons';
 import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
 export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   const [weightUnit] = useItemWeightUnit();
-  const packDetails = Object.entries(props.details).map(([key, value]) => ({
-    key,
-    label: key,
-    value:
-      key === 'weight'
-        ? `${convertWeight(value, 'g', weightUnit)} ${weightUnit}`
-        : value,
-  }));
+  const packDetails = Object.entries(props.details)
+    .filter(([key]) => key !== 'similarityScore')
+    .map(([key, value]) => ({
+      key,
+      label: key,
+      value:
+        key === 'weight'
+          ? `${convertWeight(value, SMALLEST_ITEM_UNIT, weightUnit)} ${weightUnit}`
+          : value,
+    }));
 
   return (
     <Card
