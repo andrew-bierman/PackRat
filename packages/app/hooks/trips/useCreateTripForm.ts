@@ -1,10 +1,10 @@
 import { useCreateTripStore } from 'app/screens/trip/createTripStore';
 import { useValidateSchema } from 'app/hooks/common';
-import { addTripDetails } from '@packrat/validations';
+import { addTripDetails } from '@packrat/validations/src/validations/';
 import { useEffect, useMemo } from 'react';
 import { type addTripKey } from 'app/screens/trip/createTripStore/store';
-import { useAuthUser } from 'app/auth/hooks';
-import { usePackId } from 'app/hooks/packs';
+import { useAuthUser } from 'app/modules/auth';
+import { usePackId } from 'app/modules/pack';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 
 export const useCreateTripForm = (currentDestination, photonDetails) => {
@@ -17,8 +17,16 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
     formatCreateTripValuesForAPI,
   );
 
-  const togglePlace = (name: 'trail' | 'park', value: any) => {
-    setTripValue(name, store[name] !== value ? value : '');
+  const togglePlace = (name: 'trails' | 'parks', value: any) => {
+    const currentPlaces = store[name] || [];
+
+    const placeExists = currentPlaces.some((place) => place.id === value.id);
+
+    const updatedPlaces = placeExists
+      ? currentPlaces.filter((place) => place.id !== value.id)
+      : [...currentPlaces, value];
+
+    setTripValue(name, updatedPlaces);
   };
 
   const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(

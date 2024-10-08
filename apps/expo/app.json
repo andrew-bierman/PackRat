@@ -1,12 +1,15 @@
 {
   "expo": {
-    "name": "packrat",
+    "name": "Packrat",
     "slug": "packrat",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/packrat-app-icon.png",
     "userInterfaceStyle": "automatic",
     "scheme": "packrat",
+    "splash": {
+      "image": "./assets/splash.png"
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
@@ -14,8 +17,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/packrat-app-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#026A9F"
       },
       "package": "com.andrewbierman.packrat"
     },
@@ -46,10 +49,15 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "13.4"
+            "deploymentTarget": "13.4",
+            "buildNumber": "3",
+            "infoPlist": {
+              "ITSAppUsesNonExemptEncryption": false
+            }
           }
         }
-      ]
+      ],
+      ["./translucent-default-splash-screen-config"]
     ],
     "extra": {
       "eas": {

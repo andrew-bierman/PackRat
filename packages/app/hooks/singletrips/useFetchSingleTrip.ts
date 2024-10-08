@@ -1,5 +1,5 @@
 import { queryTrpc } from '../../trpc';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 
 interface TripData {
   owner_id: string;

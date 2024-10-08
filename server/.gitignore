@@ -4,3 +4,4 @@ node_modules
 
 # ignore wrangler build
 .wrangler
+.dev.vars

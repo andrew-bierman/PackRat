@@ -4,7 +4,7 @@ import { api } from '../../constants/api';
 import { PasswordResetForm } from './PasswordResetForm';
 import { RequestPasswordResetEmailModal } from './RequestEmailModal';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { usePasswordResetToken } from 'app/auth/hooks';
+import { usePasswordResetToken } from 'app/modules/auth';
 
 export const RequestPasswordReset = () => {
   const [email, setEmail] = useState('');

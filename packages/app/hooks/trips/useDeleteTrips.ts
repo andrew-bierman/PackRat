@@ -1,19 +1,16 @@
-import { queryTrpc } from '../../trpc';
+import { useRouter } from 'app/hooks/router';
+import { queryTrpc } from 'app/trpc';
 
-export const useDeleteTrips = () => {
-  const utils = queryTrpc.useUtils();
-  const mutation = queryTrpc.deleteTrip.useMutation();
+export const useDeleteTrips = (id) => {
+  const { mutateAsync: deleteTrip } = queryTrpc.deleteTrip.useMutation();
+  const router = useRouter();
 
-  const deleteTrips = (tripId) => {
-    mutation.mutate(tripId, {
-      onSuccess: () => {
-        utils.getTrips.invalidate();
-      },
-    });
+  const handleDeleteTrip = async () => {
+    try {
+      await deleteTrip({ tripId: id });
+      router.replace('/trips');
+    } catch {}
   };
 
-  return {
-    deleteTrips,
-    ...mutation,
-  };
+  return { handleDeleteTrip };
 };

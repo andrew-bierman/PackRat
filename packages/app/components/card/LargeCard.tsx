@@ -52,7 +52,8 @@ const LargeCard: React.FC<LargeCardProps> = ({
 }) => {
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const containerStyle = customStyle || getContainerStyle(type);
+  // const containerStyle = customStyle || getContainerStyle(type);
+  const containerStyle = { ...getContainerStyle(type), ...(customStyle || {}) };
 
   return (
     <RStack
@@ -68,13 +69,12 @@ const LargeCard: React.FC<LargeCardProps> = ({
           flexDirection: 'row',
           gap: 15,
           alignItems: 'center',
-          paddingVertical: 15,
         }}
       >
         {Icon ? <Icon /> : null}
         <RText
           style={{
-            color: currentTheme.colors.textPrimary,
+            color: currentTheme.colors.text,
             fontSize: currentTheme.font.size,
             fontWeight: 600,
           }}
@@ -106,9 +106,9 @@ const loadStyles = (theme: any) => {
       padding: currentTheme.size.mobilePadding,
       justifyContent: 'space-between',
       alignItems: 'center',
-      gap: 25,
-      flex: 1,
-      paddingHorizontal: 100,
+      // gap: 25,
+      // flex: 1,
+      // paddingHorizontal: 100,
     },
     searchContainer: {
       backgroundColor: currentTheme.colors.card,
@@ -126,13 +126,10 @@ const loadStyles = (theme: any) => {
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
-      padding:
-        Platform.OS === 'web'
-          ? currentTheme.size.cardPadding
-          : currentTheme.size.mobilePadding,
-      paddingHorizontal: currentTheme.padding.paddingInside,
+      padding: Platform.OS === 'web' ? '5%' : currentTheme.size.mobilePadding,
+      paddingHorizontal: 20,
       marginBottom: 20,
-      height: Platform.OS === 'web' ? 650 : '23%',
+      height: Platform.OS === 'web' ? 'calc(min( 80vh, 80vw))' : '23%',
       minHeight: 350,
       overflow: 'hidden',
     },

@@ -4,20 +4,19 @@ import { DefaultTheme } from 'react-native-paper';
 export const theme = {
   colors: {
     primary: '#0A84FF',
-    background: '#0284c7',
-    secondaryBlue: '#0C66A1',
+    background: '#fcfcfc',
+    secondaryBlue: '#cce5ff',
+    tertiaryBlue: '#0C66A1',
     accentPurple: '#6C63FF',
-    card: '#fafafa',
-    text: '#FFFFFF',
-    textColor: '#000',
-    border: '#fafafa',
+    card: '#f8f8f8',
+    text: '#333333',
+    border: '#f3f3f3',
     notification: '#0A84FF',
     error: '#FF453A',
-    textPrimary: '#22c55e',
-    textSecondary: '#EBEBF599',
-    textDarkGrey: '#3B3B3B',
+    textGreen: '#22c55e',
+    tertiaryBlueGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
-    iconColor: '#FFFFFF',
+    iconColor: '#003064',
     weatherIcon: '#0284c7',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
@@ -41,23 +40,23 @@ export const theme = {
     widthDesktop: '85%',
   },
 };
+
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
-    background: '#1A1A1D',
+    background: '#050505',
     secondaryBlue: '#0C66A1',
+    tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',
-    card: '#2D2D2D',
-    text: '#C5C6C7',
-    textColor: '#C5C6C7',
-    border: '#4E4E50',
+    card: '#1c1a17',
+    text: '#eaf6ff',
+    border: '#221f1c',
     notification: '#0A84FF',
     error: '#FF453A',
-    textPrimary: '#22c55e',
-    textSecondary: '#C5C6C799',
-    textDarkGrey: '#3B3B3B',
-    cardIconColor: '#22c55e',
-    iconColor: '#C5C6C7',
+    textGreen: '#22c55e',
+    tertiaryBlueGrey: '#3B3B3B',
+    cardIconColor: '#d6e3ff',
+    iconColor: '#cfe5ff',
     weatherIcon: '#0A84FF',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
@@ -87,7 +86,7 @@ export const nativeBaseLightTheme = extendTheme({
       500: theme.colors.background,
     },
     amber: {
-      100: theme.colors.text,
+      100: theme.colors.white,
     },
   },
 });
@@ -97,7 +96,7 @@ export const nativeBaseDarkTheme = extendTheme({
       500: darkTheme.colors.background,
     },
     amber: {
-      100: darkTheme.colors.text,
+      100: darkTheme.colors.white,
     },
   },
 });
@@ -107,7 +106,7 @@ export const lightThemePaper = {
   colors: {
     ...DefaultTheme.colors,
     primary: theme.colors.primary,
-    onSurface: theme.colors.text,
+    onSurface: theme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: theme.colors.background,
@@ -120,7 +119,7 @@ export const darkPaperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: darkTheme.colors.primary,
-    onSurface: darkTheme.colors.text,
+    onSurface: darkTheme.colors.white,
     elevation: {
       ...DefaultTheme.colors.elevation,
       level1: darkTheme.colors.background,

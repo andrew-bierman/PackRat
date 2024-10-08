@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Check, ChevronDown } from '@tamagui/lucide-icons';
 import {
   Adapt,
@@ -76,7 +76,12 @@ export function SelectItem(props) {
         extractOptionAttributes(item, index, textKey, valueKey),
       )
       .map(({ text, value, index }) => (
-        <Select.Item key={`${text} + ${value}`} index={index} value={value}>
+        <Select.Item
+          style={{ backgroundColor: '$color5' }}
+          key={`${text} + ${value}`}
+          index={index}
+          value={value}
+        >
           <Select.ItemText>
             {text.charAt(0).toUpperCase() + text.slice(1)}
           </Select.ItemText>
@@ -93,6 +98,11 @@ export function SelectItem(props) {
 
   const [position, setPosition] = useState(0);
 
+  const selectedItemLabel = useMemo(() => {
+    const label = data.find((i) => i[valueKey] === value)?.[textKey];
+    return label || value;
+  }, [value]);
+
   return (
     <Select
       value={value}
@@ -100,8 +110,10 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger>
-        <Select.Value>{placeholder}</Select.Value>
+      <Select.Trigger style={{ backgroundColor: '$color5' }}>
+        <Select.Value style={{ backgroundColor: '$color5' }}>
+          {selectedItemLabel ?? placeholder}
+        </Select.Value>
       </Select.Trigger>
       <Select.Content zIndex={200000}>
         <Select.Viewport minWidth={200}>

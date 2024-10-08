@@ -8,15 +8,18 @@ import { useMedia } from 'tamagui';
 import * as React from 'react';
 import { Text, View, getTokenValue } from 'tamagui';
 import { Table } from './common/tableParts';
-import { DeletePackItemModal } from 'app/components/pack_table/DeletePackItemModal';
-import { EditPackItemModal } from 'app/components/pack_table/EditPackItemModal';
-import { AddItem } from 'app/components/item/AddItem';
-import { ThreeDotsMenu, YStack, RButton } from '@packrat/ui';
+import { AddItem } from 'app/modules/item';
+import { MaterialIcons } from '@expo/vector-icons';
+import { EditPackItemModal } from 'app/modules/pack';
+import { RText } from '@packrat/ui';
 
-import { Platform } from 'react-native';
-import { RDropdownMenu } from '../../../ZDropdown';
 import RIconButton from '../../../RIconButton';
-import { ChevronDown } from '@tamagui/lucide-icons';
+import { BaseAlert } from '@packrat/ui';
+import { useProfile } from 'app/modules/user/hooks';
+import { useAuthUser } from 'app/modules/auth';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
+import { ActionsDropdownComponent } from '@packrat/ui';
 
 type ModalName = 'edit' | 'delete';
 
@@ -39,6 +42,11 @@ interface GroupedData {
   [key: string]: Item[];
 }
 
+interface optionValues {
+  label: string;
+  value: string;
+}
+
 interface BasicTableProps {
   groupedData: GroupedData;
   handleCheckboxChange: (itemId: string) => void;
@@ -58,6 +66,8 @@ export function BasicTable({
   refetch,
   setRefetch,
 }: BasicTableProps) {
+  const user = useAuthUser();
+  console.log('user', user);
   const ActionButtons = ({ item }) => {
     const [activeModal, setActiveModal] = React.useState<ModalName | null>(
       null,
@@ -76,13 +86,21 @@ export function BasicTable({
       setSelectedItemId(null);
     };
 
-    const handleEditClick = () => {
-      openModal('edit', item.id);
+    const handleActionsOpenChange = (state) => {
+      switch (state) {
+        case 'Edit':
+          openModal('edit', item.id);
+          break;
+        case 'Delete':
+          openModal('delete', item.id);
+          break;
+      }
     };
 
-    const handleDeleteClick = () => {
-      openModal('delete', item.id);
-    };
+    const optionValues: optionValues[] = [
+      { label: 'Edit', value: 'Edit' },
+      { label: 'Delete', value: 'Delete' },
+    ];
 
     return (
       <>
@@ -101,42 +119,48 @@ export function BasicTable({
             />
           )}
         </EditPackItemModal>
-        <DeletePackItemModal
+        <BaseAlert
           isOpen={activeModal === 'delete'}
           onClose={closeModal}
-          onConfirm={() =>
-            onDelete({ itemId: item.id, packId: currentPack.id })
-          }
-        />
+          hideIcon={true}
+          title={'Delete Item'}
+          footerButtons={[
+            {
+              label: 'Cancel',
+              onClick: () => {
+                closeModal();
+              },
+              color: 'gray',
+              disabled: false,
+            },
+            {
+              label: 'Delete',
+              onClick: () => {
+                closeModal();
+                onDelete({ itemId: item.id, packId: currentPack.id });
+              },
+              color: '#B22222',
+              disabled: false,
+            },
+          ]}
+        >
+          <RText> Are you sure you want to delete this item?</RText>
+        </BaseAlert>
+
         {hasPermissions ? (
-          Platform.OS === 'android' ||
-          Platform.OS === 'ios' ||
-          window.innerWidth < 900 ? (
-            <View>
-              <RDropdownMenu
-                menuItems={[
-                  { label: 'Edit', onSelect: handleEditClick },
-                  { label: 'Delete', onSelect: handleDeleteClick },
-                ]}
-                menuName={
-                  <RIconButton
-                    backgroundColor="transparent"
-                    icon={ChevronDown}
-                    style={{ padding: 0 }}
-                  />
-                }
-              />
-            </View>
-          ) : (
-            <View>
-              <ThreeDotsMenu>
-                <YStack space="$1">
-                  <RButton onPress={handleEditClick}>Edit</RButton>
-                  <RButton onPress={handleDeleteClick}>Delete</RButton>
-                </YStack>
-              </ThreeDotsMenu>
-            </View>
-          )
+          <View
+            style={{
+              minWidth: 50,
+              maxWidth: 100,
+            }}
+          >
+            <ActionsDropdownComponent
+              value={null}
+              data={optionValues}
+              onValueChange={(value) => handleActionsOpenChange(value)}
+              native={true}
+            />
+          </View>
         ) : null}
       </>
     );
@@ -149,10 +173,23 @@ export function BasicTable({
       header: () => 'Name',
       // footer: (info) => info.column.id,
     }),
+    // columnHelper.accessor('weight', {
+    //   cell: (info) => info.getValue(),
+    //   header: () => 'Weight',
+    //   // footer: (info) => info.column.id,
+    // }),
     columnHelper.accessor('weight', {
-      cell: (info) => info.getValue(),
+      cell: (info) => {
+        const weightInGrams = info.getValue();
+
+        const preferredWeight = convertWeight(
+          weightInGrams,
+          SMALLEST_ITEM_UNIT,
+          info.row.original.unit as any,
+        );
+        return preferredWeight;
+      },
       header: () => 'Weight',
-      // footer: (info) => info.column.id,
     }),
     columnHelper.accessor('quantity', {
       header: () => 'Quantity',
@@ -207,20 +244,13 @@ export function BasicTable({
 
   if (sm) {
     return (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-        }}
-      >
+      <View alignItems="center" justifyContent="center" gap="$5">
         {tableData.map((row, i) => (
           <View
             key={i}
             borderRadius="$4"
             borderWidth="$1"
             borderColor="$borderColor"
-            flex={1}
             alignSelf="stretch"
             gap="$3"
           >
@@ -229,13 +259,17 @@ export function BasicTable({
                 if (name === 'ownerId' || name === 'id') {
                   return null;
                 }
+                const finalValue =
+                  name === 'weight'
+                    ? convertWeight(value, SMALLEST_ITEM_UNIT, row.unit)
+                    : value;
                 return (
-                  <View fd="row" justifyContent="space-between">
+                  <View key={name} fd="row" justifyContent="space-between">
                     <Text>{name.charAt(0).toUpperCase() + name.slice(1)}</Text>
                     {name === 'category' ? (
                       <Text color="$gray10">{String(value?.name)}</Text>
                     ) : (
-                      <Text color="$gray10">{String(value)}</Text>
+                      <Text color="$gray10">{String(finalValue)}</Text>
                     )}
                   </View>
                 );
@@ -259,7 +293,11 @@ export function BasicTable({
 
   return (
     <View
-      style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+      }}
     >
       <Table
         alignCells={{ x: 'center', y: 'center' }}

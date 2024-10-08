@@ -57,7 +57,6 @@ export function signUpRoute() {
       password,
       name,
     });
-    await userClass.generateAuthToken(JWT_SECRET, user.id);
     await sendWelcomeEmail(
       user.email,
       user.name,

@@ -25,12 +25,7 @@ const loadStyles = (theme: any) => {
       color: currentTheme.colors.text,
       marginRight: 10,
     },
-    headerDark: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      color: currentTheme.colors.text,
-      marginRight: 10,
-    },
+
     textContainer: {
       marginBottom: 20,
     },
@@ -39,15 +34,6 @@ const loadStyles = (theme: any) => {
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: 'sans-serif',
-      color: currentTheme.colors.text,
-      textAlign: 'left',
-      marginBottom: 20,
-    },
-    textDark: {
-      fontSize: 18,
-      lineHeight: 28,
-      letterSpacing: 1,
-      // fontFamily: "sans-serif",
       color: currentTheme.colors.text,
       textAlign: 'left',
       marginBottom: 20,

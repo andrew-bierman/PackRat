@@ -4,6 +4,7 @@ import { DbClient } from '../../db/client';
 import {
   type InsertUser,
   user as UserTable,
+  refreshTokens,
   userFavoritePacks,
 } from '../../db/schema';
 import bcrypt from 'bcryptjs';
@@ -27,6 +28,15 @@ export class User {
       .select()
       .from(UserTable)
       .where(eq(UserTable.username, username))
+      .limit(1)
+      .get();
+  }
+
+  async getAdminId() {
+    return DbClient.instance
+      .select()
+      .from(UserTable)
+      .where(eq(UserTable.role, 'admin'))
       .limit(1)
       .get();
   }
@@ -73,16 +83,39 @@ export class User {
     }
   }
 
-  async generateAuthToken(jwtSecret: string, id: string) {
+  async generateAccessToken(jwtSecret: string, id: string) {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     try {
-      const token = await jwt.sign({ id }, jwtSecret);
-      const filter = eq(UserTable.id, id);
-      await DbClient.instance.update(UserTable).set({ token }).where(filter);
+      const token = await jwt.sign(
+        { id, exp: Math.floor(Date.now() / 1000) + 60 * 30 }, // 30 mins expiry
+        jwtSecret,
+      );
       return token;
     } catch (error) {
-      throw new Error(`Failed to generate token: ${error.message}`);
+      throw new Error(`Failed to generate access token: ${error.message}`);
     }
+  }
+
+  async generateRefreshToken(jwtSecret: string, id: string) {
+    if (!jwtSecret) throw new Error('jwtSecret is not defined');
+    try {
+      const token = await jwt.sign(
+        { id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 14 }, // 14 days expiry
+        jwtSecret,
+      );
+      await DbClient.instance
+        .insert(refreshTokens)
+        .values({ token, userId: id });
+      return token;
+    } catch (error) {
+      throw new Error(`Failed to generate refresh token: ${error.message}`);
+    }
+  }
+
+  async deleteRefreshToken(token: string) {
+    await DbClient.instance
+      .delete(refreshTokens)
+      .where(eq(refreshTokens.token, token));
   }
 
   async generateResetToken(

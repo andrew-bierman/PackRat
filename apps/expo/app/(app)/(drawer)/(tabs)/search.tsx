@@ -1,13 +1,11 @@
-import React from 'react';
-import { Platform, type TextInput } from 'react-native';
-import { useCallback, useRef } from 'react';
+import { RStack } from '@packrat/ui';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
+import { useRouter } from 'app/hooks/router';
+import useTheme from 'app/hooks/useTheme';
 import { Stack, useFocusEffect } from 'expo-router';
 import Head from 'expo-router/head';
-import { useRouter } from 'app/hooks/router';
-import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
-import { RStack } from '@packrat/ui';
-import useTheme from 'app/hooks/useTheme';
-import { View } from 'native-base';
+import React, { useCallback, useRef } from 'react';
+import { Platform, SafeAreaView, type TextInput } from 'react-native';
 
 interface SearchResult {
   properties: {
@@ -61,7 +59,10 @@ export default function Search() {
 
   return (
     <RStack
-      style={{ paddingTop: 24, backgroundColor: currentTheme.colors.text }}
+      style={{
+        paddingTop: 24,
+        backgroundColor: currentTheme.colors.background,
+      }}
     >
       {Platform.OS === 'web' && (
         <Head>
@@ -77,13 +78,13 @@ export default function Search() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <View style={{ width: '100%' }}>
+      <SafeAreaView style={{ width: '100%', height: '100%' }}>
         <PlacesAutocomplete
           onSelect={handleSearchSelect}
           placeholder="Search for a place"
           ref={ref}
         />
-      </View>
+      </SafeAreaView>
       {/* Add search virtual list for feed, packs, trips, places with prop to determine which to display */}
     </RStack>
   );

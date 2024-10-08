@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Separator, Text, View, YGroup } from 'tamagui';
 import { RButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
-import { useAddPackItem } from 'app/hooks/packs/useAddPackItem';
+import { useAddPackItem } from 'app/modules/pack';
+import { ScrollView } from 'react-native';
 
 interface Category {
   id: string;
@@ -40,20 +41,18 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
     <YGroup
       style={{
         background: isDark ? '#333' : 'white',
-        padding: 10,
+        // padding: 10,
         borderRadius: 0,
+        height: '100%',
+        flex: 1,
       }}
     >
-      <View
+      <ScrollView
         style={{
           minWidth: 300,
+          height: '100%',
+          overflow: 'auto',
         }}
-        $group-window-gtXs={{
-          padding: '$3',
-          width: 800,
-          height: 100,
-        }}
-        gap="$1.5"
       >
         {itemsList.map((item, i) => (
           <React.Fragment key={item.id}>
@@ -61,7 +60,7 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
             {i < itemsList.length - 1 && <Separator />}
           </React.Fragment>
         ))}
-      </View>
+      </ScrollView>
     </YGroup>
   );
 }
@@ -87,12 +86,13 @@ function Item({ item, onAddItem }) {
           gap: '$4',
         }}
         backgroundColor="$color1"
-        style={{ borderRadius: 5, flexDirection: 'row', aligItems: 'center' }}
+        style={{
+          borderRadius: 5,
+          flexDirection: 'row',
+          aligItems: 'center',
+        }}
       >
-        <View
-          style={{ flexDirection: 'column', justifyContent: 'center' }}
-          flexShrink={1}
-        >
+        <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
           <Text selectable>{item.name}</Text>
           <Text
             selectable

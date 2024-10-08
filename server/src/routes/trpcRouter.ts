@@ -18,6 +18,8 @@ import {
   checkCodeRoute,
   emailExistsRoute,
   updatePasswordRoute,
+  refreshTokenRoute,
+  logoutRoute,
 } from '../controllers/auth';
 import { getWeatherRoute } from '../controllers/weather';
 import {
@@ -67,10 +69,12 @@ import {
   editGlobalItemAsDuplicateRoute,
   editItemRoute,
   getItemByIdRoute,
+  getItemImagesRoute,
   getItemsGloballyRoute,
   getItemsRoute,
   searchItemsByNameRoute,
   getSimilarItemsRoute,
+  importFromBucketRoute,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
@@ -90,11 +94,20 @@ import {
 } from '../controllers/getOsm';
 
 import { router as trpcRouter } from '../trpc';
+import {
+  getPublicFeedRoute,
+  getUserPacksFeedRoute,
+  getUserTripsFeedRoute,
+} from '../modules/feed';
+
+import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
   signUp: signUpRoute(),
+  logout: logoutRoute(),
+  refreshToken: refreshTokenRoute(),
   resetPassword: resetPasswordRoute(),
   getGoogleAuthURL: getGoogleAuthURLRoute(),
   googleSignin: googleSigninRoute(),
@@ -108,6 +121,13 @@ export const appRouter = trpcRouter({
   updatePassword: updatePasswordRoute(),
   // weather routes
   getWeather: getWeatherRoute(),
+  // feed routes
+  getPublicFeed: getPublicFeedRoute(),
+  getUserPacksFeed: getUserPacksFeedRoute(),
+  getUserTripsFeed: getUserTripsFeedRoute(),
+  // map routes
+  getOfflineMaps: getOfflineMapsRoute(),
+  saveOfflineMap: saveOfflineMapRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),
@@ -149,6 +169,7 @@ export const appRouter = trpcRouter({
   // item routes
   getItems: getItemsRoute(),
   getItemById: getItemByIdRoute(),
+  getItemImages: getItemImagesRoute(),
   searchItemsByName: searchItemsByNameRoute(),
   addItem: addItemRoute(), // Done
   importItems: importItemsRoute(), // Done
@@ -161,6 +182,7 @@ export const appRouter = trpcRouter({
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
   deleteGlobalItem: deleteGlobalItemRoute(), // Done,
   getSimilarItems: getSimilarItemsRoute(),
+  importFromBucket: importFromBucketRoute(),
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

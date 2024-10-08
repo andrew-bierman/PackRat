@@ -9,3 +9,6 @@ export * from './getItemByIdService';
 export * from './getItemsGloballyService';
 export * from './searchItemsByNameService';
 export * from './getItemsService';
+export * from './bulkAddGlobalItemService';
+export * from './importFromBucketService';
+export * from "./getItemImagesByIdService";

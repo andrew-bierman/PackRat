@@ -4,7 +4,7 @@ import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useIsMobileView } from 'app/hooks/common';
 import { useNavigate } from 'app/hooks/navigation';
-import { useAuthUser } from 'app/auth/hooks';
+import { useAuthUser } from 'app/modules/auth';
 import { Button } from 'tamagui';
 import { EvilIcons } from '@expo/vector-icons';
 import SVGLogoComponent from 'app/components/logo';

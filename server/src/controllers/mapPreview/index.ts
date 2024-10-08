@@ -28,15 +28,13 @@ const getMapPreview = async (ctx: Context) => {
     }
 
     const newResponse = new Response(response.body, {
+      status: 200,
       headers: {
         'Content-Type': 'image/png',
       },
     });
 
-    console.log('newResponse', newResponse);
-
-    // return newResponse;
-    return ctx.json(newResponse, 200);
+    return newResponse;
   } catch (error) {
     console.log(error);
     return ctx.json({ error: error.message }, 400);

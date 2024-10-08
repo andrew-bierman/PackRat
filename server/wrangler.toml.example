@@ -1,49 +1,73 @@
 name = "packrat-api"
 main = "src/index.ts"
 compatibility_date = "2024-03-14"
-compatibility_flags = ["nodejs_compat"] # Sometimes this is needed for tests
-# node_compat = true
+# compatibility_flags = ["nodejs_compat"] # Sometimes this is needed for tests
+node_compat = true
 
-logpush = true
-
-[[ d1_databases ]]
+# Preview environment
+[env.preview]
+[[env.preview.d1_databases]]
 binding = "DB"
-database_name = "production"
-database_id = "3f9677cd-7dd9-4a2c-92c6-be5dbbf47baa"
+database_name = "preview"
+database_id = ""
 
-[ai]
+[[env.preview.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-preview'
+
+[env.preview.ai]
 binding = "AI"
 
-[[vectorize]]
-binding = "VECTOR_INDEX"
-index_name = "vector-index"
+#[[env.preview.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index-preview"
 
-[[queues.producers]]
-queue = "etl-queue"
-binding = "ETL_QUEUE"
+[env.preview.vars]
+APP_URL=""
+AWS_SIGN_ALGORITHM="AWS4-HMAC-SHA256"
+BUCKET_ENDPOINT=""
+BUCKET_NAME="packrat-scrapy-bucket"
+BUCKET_REGION="auto"
+BUCKET_SERVICE="s3"
+BUCKET_SESSION_TOKEN=""
+CLOUDFLARE_ACCOUNT_ID=""
+GOOGLE_CLIENT_ID=""
+NODE_ENV="preview"
+OSM_URI=""
+STMP_EMAIL=""
+VECTOR_INDEX="vector-index-preview"
+WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"
 
-[[queues.consumers]]
-queue = "etl-queue"
-max_batch_size = 10
-max_batch_timeout = 5
 
-[[r2_buckets]]
-bucket_name = "packrat-etl-bucket"
-binding = "ETL_BUCKET"
+# Production environment
+[env.production]
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "production"
 
-# Add vars below
-# [vars]
-# GOOGLE_CLIENT_ID=""
-# GOOGLE_CLIENT_SECRET=""
-# STMP_EMAIL=""
-# STMP_PASSWORD=""
-# JWT_SECRET=""
-# SEND_GRID_API_KEY=""
-# MAPBOX_ACCESS_TOKEN=""
-# OSM_URI=""
-# WEATHER_URL=""
-# WEATHER_WEEK_URL=""
-# OPENWEATHER_KEY=""
-# VECTORIZE_API_KEY=""
-# AI_API_KEY=""
-# CLOUDFLARE_ACCOUNT_ID=""
+[[env.production.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-production'
+
+[env.production.ai]
+binding = "AI"
+
+#[[env.production.vectorize]]
+#binding = "VECTOR_INDEX"
+#index_name = "vector-index-production"
+
+[env.production.vars]
+APP_URL=""
+AWS_SIGN_ALGORITHM="AWS4-HMAC-SHA256"
+BUCKET_ENDPOINT=""
+BUCKET_NAME="packrat-scrapy-bucket"
+BUCKET_REGION="auto"
+BUCKET_SERVICE="s3"
+BUCKET_SESSION_TOKEN=""
+CLOUDFLARE_ACCOUNT_ID=""
+GOOGLE_CLIENT_ID=""
+NODE_ENV="production"
+OSM_URI=""
+STMP_EMAIL=""
+VECTOR_INDEX="vector-index-production"
+WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"

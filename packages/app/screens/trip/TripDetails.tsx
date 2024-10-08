@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react';
 import { createParam } from 'app/hooks/params';
 import { format } from 'date-fns';
-import { TableContainer } from '../../components/pack_table/Table';
 import { View } from 'react-native';
-import { RText, RStack } from '@packrat/ui';
+import { RText, Details, RStack } from '@packrat/ui';
 import { DetailsComponent } from '../../components/details';
-import { Platform, StyleSheet, FlatList, Dimensions, Text } from 'react-native';
+import { Platform, FlatList, Dimensions, Text } from 'react-native';
 import { CLIENT_URL } from '@packrat/config';
 import useTheme from '../../hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import useResponsive from 'app/hooks/useResponsive';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
 import ScoreContainer from 'app/components/ScoreContainer';
-// import useWeather from './useWeather';
+import { TableContainerComponent, loadStyles } from './TripDetailsComponents';
+import { useTripId } from 'app/hooks/trips';
+import Layout from 'app/components/layout/Layout';
+import { TripMapCard } from 'app/components/trip/TripCards';
 
 interface TripData {
   packs?: any;
@@ -21,17 +24,6 @@ interface TripData {
   description?: string;
   [key: string]: any;
 }
-
-import {
-  TableContainerComponent,
-  WeatherCardComponent,
-  TripCardComponent,
-  ScoreContainerComponent,
-  loadStyles,
-} from './TripDetailsComponents';
-import { useTripId } from 'app/hooks/trips';
-import { formatTripActivityLabel } from 'app/utils/tripUtils';
-import Layout from 'app/components/layout/Layout';
 
 const SECTION = {
   DESCRIPTION: 'DESCRIPTION',
@@ -60,6 +52,7 @@ export function TripDetails() {
   const data = rawData as TripData;
 
   const { weatherObject } = useTripWeather(data);
+  const { xxs, xs } = useResponsive();
 
   const link = `${CLIENT_URL}/trip/${tripId}`;
 
@@ -77,12 +70,10 @@ export function TripDetails() {
   return (
     <Layout>
       <View
-        style={[
-          styles.mainContainer,
-          Platform.OS == 'web'
-            ? { minHeight: '100vh' }
-            : { minHeight: Dimensions.get('screen').height },
-        ]}
+        style={{
+          minHeight: '100%',
+          paddingBottom: 80,
+        }}
       >
         <DetailsComponent
           type="trip"
@@ -93,53 +84,40 @@ export function TripDetails() {
             <View>
               <FlatList
                 data={Object.entries(SECTION)}
-                contentContainerStyle={{
-                  paddingBottom: Platform.OS !== 'web' ? 350 : 0,
-                }}
+                contentContainerStyle={{ paddingBottom: 100 }}
                 keyExtractor={([key, val]) => val}
                 renderItem={({ item }) => {
                   {
                     switch (item[1]) {
                       case SECTION.DESCRIPTION:
                         return (
-                          <View style={{ marginBottom: '5%' }}>
-                            {data?.description && (
-                              <RStack>
-                                <Text style={styles.descriptionText}>
-                                  Description: {data?.description}
-                                </Text>
-                              </RStack>
-                            )}
-                            {data?.type && (
-                              <RStack>
-                                <Text style={styles.descriptionText}>
-                                  Activity:{' '}
-                                  {formatTripActivityLabel(data?.type)}
-                                </Text>
-                              </RStack>
-                            )}
-                            {data?.destination && (
-                              <RStack>
-                                <Text style={styles.descriptionText}>
-                                  Destination: {data?.destination}
-                                </Text>
-                              </RStack>
-                            )}
-                            {data.start_date && (
-                              <RStack>
-                                <Text style={styles.descriptionText}>
-                                  Start Date:{data.start_date}
-                                </Text>
-                              </RStack>
-                            )}
-                            {data.end_date && (
-                              <RStack>
-                                <Text style={styles.descriptionText}>
-                                  End Date:{data.end_date}
-                                </Text>
-                              </RStack>
-                            )}
-                          </View>
+                          <RStack style={{ width: '100%' }}>
+                            <RText>{data?.description}</RText>
+                            <Details
+                              items={[
+                                {
+                                  key: 'start_date',
+                                  label: 'Start Date',
+                                  value: data?.start_date,
+                                },
+                                {
+                                  key: 'end_date',
+                                  label: 'End Date',
+                                  value: data?.end_date,
+                                },
+                                {
+                                  key: 'activity',
+                                  label: 'Activity',
+                                  value: data?.activity,
+                                },
+                                {
+                                  key: 'destination',
+                                  label: 'Destination',
+                                  value: data?.destination,
+                                },
+                              ]}
+                            />
+                          </RStack>
                         );
                       case SECTION.TABLE:
                         return (
@@ -148,18 +126,27 @@ export function TripDetails() {
                       case SECTION.WEATHER:
                         return null; // TODO handle saved trip weather
                       case SECTION.TRIP:
+                        console.log({ data });
                         return (
-                          <TripCardComponent
-                            data={data}
-                            weatherObject={weatherObject}
-                            currentTheme={currentTheme}
-                          />
+                          <RStack
+                            style={{
+                              flex: 1,
+                              marginBottom: 40,
+                            }}
+                          >
+                            <TripMapCard
+                              tripId={data.id}
+                              initialBounds={data.bounds}
+                            />
+                          </RStack>
                         );
                       case SECTION.SCORE:
                         return (
                           <ScoreContainer
                             type="trip"
-                            data={data}
+                            data={{
+                              total_score: data?.scores?.totalScore || 0,
+                            }}
                             isOwner={Boolean(isOwner)}
                           />
                         );

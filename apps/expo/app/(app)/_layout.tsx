@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Slot } from 'expo-router';
-import { AuthWrapper } from 'app/auth/AuthWrapper';
+import { AuthWrapper } from 'app/modules/auth';
 import { Stack } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

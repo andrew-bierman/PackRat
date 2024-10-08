@@ -37,11 +37,11 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  Bun: This middleware uses CompressionStream which is not yet supported in bun.
 //  ref: https://hono.dev/middleware/builtin/compress
 
-// SETUP HTTPS Enforcement Middleware
-app.use('*', enforceHttps()); // Apply to all routes
+// SETUP HTTPS Enforcement Middleware "This is for HTTP and has no relation to the tRPC server". and there are routes that are only available over HTTPS
+app.use('*', enforceHttps()); // Apply to all routes so avoid commenting this unless you are on local
 
-// SETUP SECURITY HEADERS
-app.use('*', securityHeaders()); // Apply to all routes
+// SETUP Security Headers Middleware "This is for HTTP and has no relation to the tRPC server". and there are routes that are only available over HTTPS
+app.use('*', securityHeaders()); // Apply to all routes so avoid commenting this unless you are on local
 
 // SETUP CORS
 app.use('*', async (c, next) => {
@@ -85,5 +85,4 @@ const worker = {
   queue,
 };
 
-// EXPORT WORKER
 export default worker;

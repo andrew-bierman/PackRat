@@ -1,4 +1,5 @@
-// import { Facebook, Github } from '@tamagui/lucide-icons';
+import React from 'react';
+import * as LocalAuthentication from 'expo-local-authentication';
 import {
   AnimatePresence,
   H1,
@@ -9,12 +10,13 @@ import {
   Theme,
   View,
 } from 'tamagui';
+import { Text, Platform, Alert } from 'react-native';
 import { FormCard } from './components/layoutParts';
 import { RLink } from '@packrat/ui';
 import { Form, FormInput, SubmitButton } from '@packrat/ui';
 import { userSignIn } from '@packrat/validations';
-import { FontAwesome } from '@expo/vector-icons';
-import { RIconButton } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function SignInScreen({
   promptAsync,
@@ -22,22 +24,73 @@ export function SignInScreen({
   signInStatus,
   isGoogleSignInReady,
 }) {
+  const { currentTheme } = useTheme();
+  const { xxs, xs } = useResponsive();
+
+  const handleBiometricAuth = async () => {
+    if (Platform.OS === 'web' || true) {
+      return true;
+    }
+
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    if (!hasHardware) {
+      Alert.alert(
+        'Error',
+        'Your device does not support biometric authentication.',
+      );
+      return false;
+    }
+
+    const hasBiometrics = await LocalAuthentication.isEnrolledAsync();
+    if (!hasBiometrics) {
+      Alert.alert(
+        'Error',
+        'No biometrics are enrolled. Please set up biometrics in your device settings.',
+      );
+      return false;
+    }
+
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Authenticate to continue',
+      fallbackLabel: 'Use Passcode',
+    });
+
+    if (!result.success) {
+      Alert.alert('Authentication failed', 'Please try again.');
+    }
+
+    return result.success;
+  };
+
+  const handleSubmit = async (data) => {
+    const isBiometricallyAuthenticated = await handleBiometricAuth();
+    if (isBiometricallyAuthenticated) {
+      signIn(data);
+    }
+  };
+
   return (
     <FormCard>
       <View
-        flexDirection="column"
-        alignItems="stretch"
-        minWidth="100%"
-        maxWidth="100%"
+        fd="column"
+        f={1}
+        ai="stretch"
+        miw="100%"
+        maw="100%"
         gap="$4"
-        padding="$4"
-        paddingVertical="$6"
+        p="$4"
+        py="$14"
         $group-window-gtSm={{
           paddingVertical: '$4',
           width: 400,
         }}
       >
-        <H1 alignSelf="center" size="$8" $group-window-xs={{ size: '$7' }}>
+        <H1
+          alignSelf="center"
+          size="$8"
+          $group-window-xs={{ size: '$7' }}
+          color={currentTheme.colors.tertiaryBlue}
+        >
           Sign in to your account
         </H1>
         <Form validationSchema={userSignIn}>
@@ -57,10 +110,10 @@ export function SignInScreen({
             <Theme inverse>
               <SubmitButton
                 disabled={signInStatus === 'loading'}
-                onSubmit={(data) => signIn(data)}
+                onSubmit={handleSubmit}
                 style={{
                   marginTop: 16,
-                  backgroundColor: '#232323',
+                  backgroundColor: currentTheme.colors.tertiaryBlue,
                   color: 'white',
                 }}
                 width="100%"
@@ -88,7 +141,9 @@ export function SignInScreen({
                   </AnimatePresence>
                 }
               >
-                Sign In
+                <Text style={{ color: currentTheme.colors.white }}>
+                  Sign In
+                </Text>
               </SubmitButton>
             </Theme>
           </View>
@@ -109,20 +164,6 @@ export function SignInScreen({
                 <Paragraph>Or</Paragraph>
                 <Separator />
               </View>
-              {/* <View flexDirection="row" flexWrap="wrap" gap="$3">
-                <RIconButton
-                  disabled={!isGoogleSignInReady}
-                  flex={1}
-                  onPress={async (event) => {
-                    event.preventDefault();
-                    await promptAsync();
-                  }}
-                  icon={<FontAwesome name="google" size={16} />}
-                >
-                  Continue with Google
-                </RIconButton>
-              </View> */}
-              {/* <ForgotPasswordLink /> */}
             </Theme>
           </View>
         </Form>

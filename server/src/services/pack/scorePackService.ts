@@ -44,8 +44,8 @@ export async function scorePackService(packId: string) {
 
     const updatedPack = await packClass.update({
       id: pack.id,
-      scores: packScore.scores,
-      grades: packScore.grades,
+      scores: packScore?.scores || null,
+      grades: packScore?.grades || null,
     });
 
     return updatedPack;

@@ -71,6 +71,7 @@ describe('Item routes', () => {
       unit: 'g',
       weight: 1,
       global: true,
+      ownerId: owner.id,
     });
   });
 
@@ -123,7 +124,7 @@ describe('Item routes', () => {
       expect(mockSyncRecord).toHaveBeenCalledWith({
         id: itemId,
         content: 'test',
-        metadata: { isPublic },
+        metadata: { isPublic, ownerId: owner.id },
         namespace: 'items',
       });
     });
@@ -149,7 +150,7 @@ describe('Item routes', () => {
         {
           id: itemId,
           content: nameToBeUpdated,
-          metadata: { isPublic: true },
+          metadata: { isPublic: true, ownerId: owner.id },
           namespace: 'items',
         },
         true,
@@ -195,7 +196,7 @@ describe('Item routes', () => {
       expect(mockSyncRecord).toHaveBeenCalledWith({
         id: itemId,
         content: 'test 123',
-        metadata: { isPublic: true },
+        metadata: { isPublic: true, ownerId: owner.id },
         namespace: 'items',
       });
     });
@@ -234,6 +235,7 @@ describe('Item routes', () => {
         categoryId: dupCategory,
         createdAt: dupCreatedAt,
         global: dupGlobal,
+        ownerId: dupOwnerId,
         ...partialDuplicatedItem
       } = await caller.editGlobalItemAsDuplicate({
         ...item,
@@ -251,6 +253,7 @@ describe('Item routes', () => {
         categoryId,
         createdAt,
         global,
+        ownerId,
         ...partialOriginalItem
       } = item;
 
@@ -283,12 +286,9 @@ describe('Item routes', () => {
         id: itemId,
         limit: 3,
       });
-      expect(mockSearchVector).toHaveBeenCalledWith(
-        item.name,
-        'items',
-        3,
-        undefined,
-      );
+      expect(mockSearchVector).toHaveBeenCalledWith(item.name, 'items', 3, {
+        isPublic: true,
+      });
     });
 
     it('should return similar items', async () => {

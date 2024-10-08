@@ -30,12 +30,13 @@ const featurePropertiesSchema = z.record(
   z.union([z.string(), z.number(), z.boolean()]),
 );
 
-const featureSchema = z.object({
-  type: z.literal('Feature'),
-  id: z.string(),
-  properties: featurePropertiesSchema,
-  geometry: geometrySchema,
-});
+// TODO ADD MAPS
+// const featureSchema = z.object({
+//   type: z.literal('Feature'),
+//   id: z.string(),
+//   properties: featurePropertiesSchema,
+//   geometry: geometrySchema,
+// });
 
 export const getTrips = z.object({
   owner_id: z.string().optional(),
@@ -46,19 +47,16 @@ export const getTripById = z.object({
 });
 
 export const addTripDetails = z.object({
-  duration: z.string(),
   start_date: z.string(),
   end_date: z.string(),
   destination: z.string(),
-  type: z.enum(tripActivityValues),
-  park: z.string().optional(),
-  trail: z.string().optional(),
-  geoJSON: z.object({
-    type: z.literal('FeatureCollection'),
-    features: z.array(featureSchema),
-  }),
+  activity: z.enum(tripActivityValues),
+  parks: z.string().optional(),
+  trails: z.string().optional(),
+  geoJSON: z.string(),
   owner_id: z.string(),
   pack_id: z.string(),
+  bounds: z.tuple([z.array(z.number()), z.array(z.number())]),
 });
 
 export const addTrip = addTripDetails.merge(addTripForm);

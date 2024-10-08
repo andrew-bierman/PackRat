@@ -1,18 +1,46 @@
 import { DbClient } from '../../db/client';
-import { and, count, eq, like, sql } from 'drizzle-orm';
+import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
 import { type InsertItem, item as ItemTable } from '../../db/schema';
+import { and, count, eq, like, sql } from 'drizzle-orm';
+import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
+import { scorePackService } from '../../services/pack/scorePackService';
+import { ItemPacks } from './ItemPacks';
 
 export class Item {
-  async create(data: InsertItem) {
+  async create(data: InsertItem, packId?: string) {
     try {
       const item = await DbClient.instance
         .insert(ItemTable)
         .values(data)
         .returning()
         .get();
+
+      if (packId) {
+        const itemPacksClass = new ItemPacks();
+        await itemPacksClass.create({ itemId: item.id, packId });
+        await this.updateScoreIfNeeded(packId);
+      }
+
       return item;
     } catch (error) {
       throw new Error(`Failed to create item: ${error.message}`);
+    }
+  }
+
+  async createBulk(data: InsertItem[]) {
+    try {
+      const insertedItems = [];
+      for (const itemData of data) {
+        const item = await DbClient.instance
+          .insert(ItemTable)
+          .values(itemData)
+          .returning()
+          .get();
+        insertedItems.push(item);
+      }
+      return insertedItems;
+    } catch (error) {
+      throw new Error(`Failed to create items: ${error.message}`);
     }
   }
 
@@ -28,19 +56,32 @@ export class Item {
         .where(filter)
         .returning()
         .get();
+      const packIds = await DbClient.instance
+        .select()
+        .from(itemPacks)
+        .where(eq(itemPacks.itemId, item.id))
+        .all();
+
+      for (const { packId } of packIds) {
+        await this.updateScoreIfNeeded(packId);
+      }
+
       return item;
     } catch (error) {
       throw new Error(`Failed to update item: ${error.message}`);
     }
   }
 
-  async delete(id: string, filter = eq(ItemTable.id, id)) {
+  async delete(id: string, filter = eq(ItemTable.id, id), packId?: string) {
     try {
       const deletedItem = await DbClient.instance
         .delete(ItemTable)
         .where(filter)
         .returning()
         .get();
+
+      await this.updateScoreIfNeeded(packId);
+
       return deletedItem;
     } catch (error) {
       throw new Error(`Failed to delete item: ${error.message}`);
@@ -100,6 +141,13 @@ export class Item {
     }
   }
 
+  async findAllInArray(arr: string[]) {
+    return await DbClient.instance
+      .select()
+      .from(ItemTable)
+      .where(inArray(ItemTable.id, arr));
+  }
+
   async findGlobal(limit: number, offset: number, searchString: string) {
     try {
       const items = await DbClient.instance.query.item.findMany({
@@ -153,5 +201,11 @@ export class Item {
     } catch (error) {
       throw new Error(`Failed to find count of items: ${error.message}`);
     }
+  }
+
+  async updateScoreIfNeeded(packId?: string) {
+    if (!packId) return;
+
+    await scorePackService(packId);
   }
 }

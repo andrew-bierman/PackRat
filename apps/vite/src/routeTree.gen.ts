@@ -36,6 +36,7 @@ const TripTripIdLazyImport = createFileRoute('/trip/$tripId')()
 const ProfileIdLazyImport = createFileRoute('/profile/$id')()
 const PackCreateLazyImport = createFileRoute('/pack/create')()
 const PackIdLazyImport = createFileRoute('/pack/$id')()
+const ItemItemIdLazyImport = createFileRoute('/item/$itemId')()
 const DestinationQueryLazyImport = createFileRoute('/destination/query')()
 const ProfileSettingsIndexLazyImport = createFileRoute('/profile/settings/')()
 
@@ -149,6 +150,11 @@ const PackIdLazyRoute = PackIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pack/$id.lazy').then((d) => d.Route))
 
+const ItemItemIdLazyRoute = ItemItemIdLazyImport.update({
+  path: '/item/$itemId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/item/$itemId.lazy').then((d) => d.Route))
+
 const DestinationQueryLazyRoute = DestinationQueryLazyImport.update({
   path: '/destination/query',
   getParentRoute: () => rootRoute,
@@ -168,90 +174,163 @@ const ProfileSettingsIndexLazyRoute = ProfileSettingsIndexLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/destination/query': {
+      id: '/destination/query'
+      path: '/destination/query'
+      fullPath: '/destination/query'
       preLoaderRoute: typeof DestinationQueryLazyImport
       parentRoute: typeof rootRoute
     }
+    '/item/$itemId': {
+      id: '/item/$itemId'
+      path: '/item/$itemId'
+      fullPath: '/item/$itemId'
+      preLoaderRoute: typeof ItemItemIdLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/pack/$id': {
+      id: '/pack/$id'
+      path: '/pack/$id'
+      fullPath: '/pack/$id'
       preLoaderRoute: typeof PackIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/create': {
+      id: '/pack/create'
+      path: '/pack/create'
+      fullPath: '/pack/create'
       preLoaderRoute: typeof PackCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/$id': {
+      id: '/profile/$id'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
       preLoaderRoute: typeof ProfileIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/trip/$tripId': {
+      id: '/trip/$tripId'
+      path: '/trip/$tripId'
+      fullPath: '/trip/$tripId'
       preLoaderRoute: typeof TripTripIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/trip/create': {
+      id: '/trip/create'
+      path: '/trip/create'
+      fullPath: '/trip/create'
       preLoaderRoute: typeof TripCreateLazyImport
       parentRoute: typeof rootRoute
     }
     '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about'
       preLoaderRoute: typeof AboutIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/appearance/': {
+      id: '/appearance/'
+      path: '/appearance'
+      fullPath: '/appearance'
       preLoaderRoute: typeof AppearanceIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/feed/': {
+      id: '/feed/'
+      path: '/feed'
+      fullPath: '/feed'
       preLoaderRoute: typeof FeedIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/items/': {
+      id: '/items/'
+      path: '/items'
+      fullPath: '/items'
       preLoaderRoute: typeof ItemsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/map/': {
+      id: '/map/'
+      path: '/map'
+      fullPath: '/map'
       preLoaderRoute: typeof MapIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/maps/': {
+      id: '/maps/'
+      path: '/maps'
+      fullPath: '/maps'
       preLoaderRoute: typeof MapsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/packs/': {
+      id: '/packs/'
+      path: '/packs'
+      fullPath: '/packs'
       preLoaderRoute: typeof PacksIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/password-reset/': {
+      id: '/password-reset/'
+      path: '/password-reset'
+      fullPath: '/password-reset'
       preLoaderRoute: typeof PasswordResetIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/privacy/': {
+      id: '/privacy/'
+      path: '/privacy'
+      fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
       preLoaderRoute: typeof ProfileIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/register/': {
+      id: '/register/'
+      path: '/register'
+      fullPath: '/register'
       preLoaderRoute: typeof RegisterIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/sign-in/': {
+      id: '/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
       preLoaderRoute: typeof SignInIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/trips/': {
+      id: '/trips/'
+      path: '/trips'
+      fullPath: '/trips'
       preLoaderRoute: typeof TripsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/settings/': {
+      id: '/profile/settings/'
+      path: '/profile/settings'
+      fullPath: '/profile/settings'
       preLoaderRoute: typeof ProfileSettingsIndexLazyImport
       parentRoute: typeof rootRoute
     }
@@ -260,29 +339,322 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
-  IndexRoute,
-  DestinationQueryLazyRoute,
-  PackIdLazyRoute,
-  PackCreateLazyRoute,
-  ProfileIdLazyRoute,
-  TripTripIdLazyRoute,
-  TripCreateLazyRoute,
-  AboutIndexLazyRoute,
-  AppearanceIndexLazyRoute,
-  DashboardIndexLazyRoute,
-  FeedIndexLazyRoute,
-  ItemsIndexLazyRoute,
-  MapIndexLazyRoute,
-  MapsIndexLazyRoute,
-  PacksIndexLazyRoute,
-  PasswordResetIndexLazyRoute,
-  PrivacyIndexLazyRoute,
-  ProfileIndexLazyRoute,
-  RegisterIndexLazyRoute,
-  SignInIndexLazyRoute,
-  TripsIndexLazyRoute,
-  ProfileSettingsIndexLazyRoute,
-])
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/destination/query': typeof DestinationQueryLazyRoute
+  '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack/$id': typeof PackIdLazyRoute
+  '/pack/create': typeof PackCreateLazyRoute
+  '/profile/$id': typeof ProfileIdLazyRoute
+  '/trip/$tripId': typeof TripTripIdLazyRoute
+  '/trip/create': typeof TripCreateLazyRoute
+  '/about': typeof AboutIndexLazyRoute
+  '/appearance': typeof AppearanceIndexLazyRoute
+  '/dashboard': typeof DashboardIndexLazyRoute
+  '/feed': typeof FeedIndexLazyRoute
+  '/items': typeof ItemsIndexLazyRoute
+  '/map': typeof MapIndexLazyRoute
+  '/maps': typeof MapsIndexLazyRoute
+  '/packs': typeof PacksIndexLazyRoute
+  '/password-reset': typeof PasswordResetIndexLazyRoute
+  '/privacy': typeof PrivacyIndexLazyRoute
+  '/profile': typeof ProfileIndexLazyRoute
+  '/register': typeof RegisterIndexLazyRoute
+  '/sign-in': typeof SignInIndexLazyRoute
+  '/trips': typeof TripsIndexLazyRoute
+  '/profile/settings': typeof ProfileSettingsIndexLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/destination/query': typeof DestinationQueryLazyRoute
+  '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack/$id': typeof PackIdLazyRoute
+  '/pack/create': typeof PackCreateLazyRoute
+  '/profile/$id': typeof ProfileIdLazyRoute
+  '/trip/$tripId': typeof TripTripIdLazyRoute
+  '/trip/create': typeof TripCreateLazyRoute
+  '/about': typeof AboutIndexLazyRoute
+  '/appearance': typeof AppearanceIndexLazyRoute
+  '/dashboard': typeof DashboardIndexLazyRoute
+  '/feed': typeof FeedIndexLazyRoute
+  '/items': typeof ItemsIndexLazyRoute
+  '/map': typeof MapIndexLazyRoute
+  '/maps': typeof MapsIndexLazyRoute
+  '/packs': typeof PacksIndexLazyRoute
+  '/password-reset': typeof PasswordResetIndexLazyRoute
+  '/privacy': typeof PrivacyIndexLazyRoute
+  '/profile': typeof ProfileIndexLazyRoute
+  '/register': typeof RegisterIndexLazyRoute
+  '/sign-in': typeof SignInIndexLazyRoute
+  '/trips': typeof TripsIndexLazyRoute
+  '/profile/settings': typeof ProfileSettingsIndexLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/destination/query': typeof DestinationQueryLazyRoute
+  '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack/$id': typeof PackIdLazyRoute
+  '/pack/create': typeof PackCreateLazyRoute
+  '/profile/$id': typeof ProfileIdLazyRoute
+  '/trip/$tripId': typeof TripTripIdLazyRoute
+  '/trip/create': typeof TripCreateLazyRoute
+  '/about/': typeof AboutIndexLazyRoute
+  '/appearance/': typeof AppearanceIndexLazyRoute
+  '/dashboard/': typeof DashboardIndexLazyRoute
+  '/feed/': typeof FeedIndexLazyRoute
+  '/items/': typeof ItemsIndexLazyRoute
+  '/map/': typeof MapIndexLazyRoute
+  '/maps/': typeof MapsIndexLazyRoute
+  '/packs/': typeof PacksIndexLazyRoute
+  '/password-reset/': typeof PasswordResetIndexLazyRoute
+  '/privacy/': typeof PrivacyIndexLazyRoute
+  '/profile/': typeof ProfileIndexLazyRoute
+  '/register/': typeof RegisterIndexLazyRoute
+  '/sign-in/': typeof SignInIndexLazyRoute
+  '/trips/': typeof TripsIndexLazyRoute
+  '/profile/settings/': typeof ProfileSettingsIndexLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/destination/query'
+    | '/item/$itemId'
+    | '/pack/$id'
+    | '/pack/create'
+    | '/profile/$id'
+    | '/trip/$tripId'
+    | '/trip/create'
+    | '/about'
+    | '/appearance'
+    | '/dashboard'
+    | '/feed'
+    | '/items'
+    | '/map'
+    | '/maps'
+    | '/packs'
+    | '/password-reset'
+    | '/privacy'
+    | '/profile'
+    | '/register'
+    | '/sign-in'
+    | '/trips'
+    | '/profile/settings'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/destination/query'
+    | '/item/$itemId'
+    | '/pack/$id'
+    | '/pack/create'
+    | '/profile/$id'
+    | '/trip/$tripId'
+    | '/trip/create'
+    | '/about'
+    | '/appearance'
+    | '/dashboard'
+    | '/feed'
+    | '/items'
+    | '/map'
+    | '/maps'
+    | '/packs'
+    | '/password-reset'
+    | '/privacy'
+    | '/profile'
+    | '/register'
+    | '/sign-in'
+    | '/trips'
+    | '/profile/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/destination/query'
+    | '/item/$itemId'
+    | '/pack/$id'
+    | '/pack/create'
+    | '/profile/$id'
+    | '/trip/$tripId'
+    | '/trip/create'
+    | '/about/'
+    | '/appearance/'
+    | '/dashboard/'
+    | '/feed/'
+    | '/items/'
+    | '/map/'
+    | '/maps/'
+    | '/packs/'
+    | '/password-reset/'
+    | '/privacy/'
+    | '/profile/'
+    | '/register/'
+    | '/sign-in/'
+    | '/trips/'
+    | '/profile/settings/'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  DestinationQueryLazyRoute: typeof DestinationQueryLazyRoute
+  ItemItemIdLazyRoute: typeof ItemItemIdLazyRoute
+  PackIdLazyRoute: typeof PackIdLazyRoute
+  PackCreateLazyRoute: typeof PackCreateLazyRoute
+  ProfileIdLazyRoute: typeof ProfileIdLazyRoute
+  TripTripIdLazyRoute: typeof TripTripIdLazyRoute
+  TripCreateLazyRoute: typeof TripCreateLazyRoute
+  AboutIndexLazyRoute: typeof AboutIndexLazyRoute
+  AppearanceIndexLazyRoute: typeof AppearanceIndexLazyRoute
+  DashboardIndexLazyRoute: typeof DashboardIndexLazyRoute
+  FeedIndexLazyRoute: typeof FeedIndexLazyRoute
+  ItemsIndexLazyRoute: typeof ItemsIndexLazyRoute
+  MapIndexLazyRoute: typeof MapIndexLazyRoute
+  MapsIndexLazyRoute: typeof MapsIndexLazyRoute
+  PacksIndexLazyRoute: typeof PacksIndexLazyRoute
+  PasswordResetIndexLazyRoute: typeof PasswordResetIndexLazyRoute
+  PrivacyIndexLazyRoute: typeof PrivacyIndexLazyRoute
+  ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
+  RegisterIndexLazyRoute: typeof RegisterIndexLazyRoute
+  SignInIndexLazyRoute: typeof SignInIndexLazyRoute
+  TripsIndexLazyRoute: typeof TripsIndexLazyRoute
+  ProfileSettingsIndexLazyRoute: typeof ProfileSettingsIndexLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  DestinationQueryLazyRoute: DestinationQueryLazyRoute,
+  ItemItemIdLazyRoute: ItemItemIdLazyRoute,
+  PackIdLazyRoute: PackIdLazyRoute,
+  PackCreateLazyRoute: PackCreateLazyRoute,
+  ProfileIdLazyRoute: ProfileIdLazyRoute,
+  TripTripIdLazyRoute: TripTripIdLazyRoute,
+  TripCreateLazyRoute: TripCreateLazyRoute,
+  AboutIndexLazyRoute: AboutIndexLazyRoute,
+  AppearanceIndexLazyRoute: AppearanceIndexLazyRoute,
+  DashboardIndexLazyRoute: DashboardIndexLazyRoute,
+  FeedIndexLazyRoute: FeedIndexLazyRoute,
+  ItemsIndexLazyRoute: ItemsIndexLazyRoute,
+  MapIndexLazyRoute: MapIndexLazyRoute,
+  MapsIndexLazyRoute: MapsIndexLazyRoute,
+  PacksIndexLazyRoute: PacksIndexLazyRoute,
+  PasswordResetIndexLazyRoute: PasswordResetIndexLazyRoute,
+  PrivacyIndexLazyRoute: PrivacyIndexLazyRoute,
+  ProfileIndexLazyRoute: ProfileIndexLazyRoute,
+  RegisterIndexLazyRoute: RegisterIndexLazyRoute,
+  SignInIndexLazyRoute: SignInIndexLazyRoute,
+  TripsIndexLazyRoute: TripsIndexLazyRoute,
+  ProfileSettingsIndexLazyRoute: ProfileSettingsIndexLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/destination/query",
+        "/item/$itemId",
+        "/pack/$id",
+        "/pack/create",
+        "/profile/$id",
+        "/trip/$tripId",
+        "/trip/create",
+        "/about/",
+        "/appearance/",
+        "/dashboard/",
+        "/feed/",
+        "/items/",
+        "/map/",
+        "/maps/",
+        "/packs/",
+        "/password-reset/",
+        "/privacy/",
+        "/profile/",
+        "/register/",
+        "/sign-in/",
+        "/trips/",
+        "/profile/settings/"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/destination/query": {
+      "filePath": "destination/query.lazy.tsx"
+    },
+    "/item/$itemId": {
+      "filePath": "item/$itemId.lazy.tsx"
+    },
+    "/pack/$id": {
+      "filePath": "pack/$id.lazy.tsx"
+    },
+    "/pack/create": {
+      "filePath": "pack/create.lazy.tsx"
+    },
+    "/profile/$id": {
+      "filePath": "profile/$id.lazy.tsx"
+    },
+    "/trip/$tripId": {
+      "filePath": "trip/$tripId.lazy.tsx"
+    },
+    "/trip/create": {
+      "filePath": "trip/create.lazy.tsx"
+    },
+    "/about/": {
+      "filePath": "about/index.lazy.tsx"
+    },
+    "/appearance/": {
+      "filePath": "appearance/index.lazy.tsx"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.lazy.tsx"
+    },
+    "/feed/": {
+      "filePath": "feed/index.lazy.tsx"
+    },
+    "/items/": {
+      "filePath": "items/index.lazy.tsx"
+    },
+    "/map/": {
+      "filePath": "map/index.lazy.tsx"
+    },
+    "/maps/": {
+      "filePath": "maps/index.lazy.tsx"
+    },
+    "/packs/": {
+      "filePath": "packs/index.lazy.tsx"
+    },
+    "/password-reset/": {
+      "filePath": "password-reset/index.lazy.tsx"
+    },
+    "/privacy/": {
+      "filePath": "privacy/index.lazy.tsx"
+    },
+    "/profile/": {
+      "filePath": "profile/index.lazy.tsx"
+    },
+    "/register/": {
+      "filePath": "register/index.lazy.tsx"
+    },
+    "/sign-in/": {
+      "filePath": "sign-in/index.lazy.tsx"
+    },
+    "/trips/": {
+      "filePath": "trips/index.lazy.tsx"
+    },
+    "/profile/settings/": {
+      "filePath": "profile/settings/index.lazy.tsx"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

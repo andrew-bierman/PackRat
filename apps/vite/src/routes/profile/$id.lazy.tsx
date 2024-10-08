@@ -1,6 +1,5 @@
 import React from 'react';
-import ProfileContainer from 'app/screens/user/ProfileContainer';
-import { useProfileId } from 'app/hooks/user';
+import { ProfileScreen, useProfileId } from 'app/modules/user';
 
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -13,7 +12,7 @@ export default function Profile() {
 
   return (
     <>
-      <ProfileContainer id={id} />
+      <ProfileScreen userId={id} />
     </>
   );
 }

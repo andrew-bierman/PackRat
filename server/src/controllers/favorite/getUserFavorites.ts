@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { protectedProcedure } from '../../trpc';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 import { type Context } from 'hono';
+import { getPaginationResponse } from 'src/helpers/pagination';
 
 export const getUserFavorites = async (c: Context) => {
   try {
@@ -15,10 +16,22 @@ export const getUserFavorites = async (c: Context) => {
 
 export function getUserFavoritesRoute() {
   return protectedProcedure
-    .input(z.object({ userId: z.string() }))
+    .input(
+      z.object({
+        userId: z.string(),
+        pagination: z.object({ limit: z.number(), offset: z.number() }),
+        searchTerm: z.string().optional(),
+        isPreview: z.boolean().optional(),
+      }),
+    )
     .query(async (opts) => {
-      const { userId } = opts.input;
-      const favorites = await getUserFavoritesService(userId);
-      return favorites;
+      const { userId, pagination, searchTerm } = opts.input;
+      const { data, totalCount, currentPagination } =
+        await getUserFavoritesService(userId, { searchTerm }, pagination);
+
+      return {
+        data,
+        ...getPaginationResponse(currentPagination, totalCount as number),
+      };
     });
 }

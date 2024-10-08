@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
-import { RButton, RStack, RText as OriginalRText } from '@packrat/ui';
+import { RButton, RText as OriginalRText } from '@packrat/ui';
 import useTheme from '../../hooks/useTheme';
-import { MapContainer } from 'app/components/map';
-import { defaultShape } from '../../utils/mapFunctions';
 import LargeCard from '../card/LargeCard';
-import WeatherCard from '../weather/WeatherCard';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
@@ -16,6 +13,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { PlacesAutocomplete } from '../PlacesAutocomplete/PlacesAutocomplete';
 import { useRouter } from 'app/hooks/router';
 import { WeatherData } from 'app/components/weather/WeatherData';
+import { Map } from 'app/modules/map';
 
 const RText: any = OriginalRText;
 
@@ -91,7 +89,7 @@ export const DestinationPage = () => {
     } as any,
   });
 
-  const shape = geoJSON ?? defaultShape;
+  const shape = geoJSON;
 
   interface SearchResult {
     properties: {
@@ -129,7 +127,7 @@ export const DestinationPage = () => {
     }
   };
 
-  const map = () => <MapContainer shape={shape} />;
+  const map = () => <Map shape={shape} />;
 
   return (
     <View style={styles.container}>
@@ -159,7 +157,7 @@ export const DestinationPage = () => {
                 ) : (
                   <RButton
                     style={{
-                      backgroundColor: currentTheme.colors.text,
+                      backgroundColor: currentTheme.colors.card,
                       minWidth: '100%',
                       height: 25,
                       flexDirection: 'row',
@@ -171,12 +169,9 @@ export const DestinationPage = () => {
                     <MaterialCommunityIcons
                       name="magnify"
                       size={24}
-                      color={currentTheme.colors.background}
+                      color={currentTheme.colors.text}
                     />
-                    <RText
-                      color={currentTheme.colors.textDarkGrey}
-                      opacity={0.6}
-                    >
+                    <RText color={currentTheme.colors.text} opacity={0.6}>
                       Search by park, city, or trail
                     </RText>
                   </RButton>
@@ -187,20 +182,20 @@ export const DestinationPage = () => {
                 geoJSON={geoJSON}
                 selectedSearchResult={currentDestination}
               />
-              {/* <LargeCard
+              <LargeCard
                 title="Map"
                 Icon={() => (
                   <Ionicons
                     name="location"
                     size={24}
-                    color={currentTheme.colors.textPrimary}
+                    color={currentTheme.colors.text}
                   />
                 )}
                 ContentComponent={map}
                 contentProps={{ shape }}
                 type="map"
-              /> */}
-              <WeatherData latLng={latLng} />
+              />
+              {/* <WeatherData latLng={latLng} /> */}
             </>
           )}
         </View>
@@ -224,7 +219,7 @@ const loadStyles = (theme) => {
     headerContainer: {
       alignSelf: 'center',
       width: '90%',
-      backgroundColor: isDark ? '#2D2D2D' : currentTheme.colors.white,
+      backgroundColor: currentTheme.colors.card,
       padding: 25,
       borderRadius: 10,
       marginBottom: 20,
@@ -232,12 +227,12 @@ const loadStyles = (theme) => {
       alignItems: 'flex-start',
     },
     headerText: {
-      color: currentTheme.colors.textPrimary,
+      color: currentTheme.colors.text,
       fontSize: 22,
       fontWeight: 'bold',
     },
     headerSubText: {
-      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 16,
       marginTop: 5,
     },
@@ -246,7 +241,7 @@ const loadStyles = (theme) => {
       marginTop: 10,
     },
     languageText: {
-      color: isDark ? 'white' : currentTheme.colors.textDarkGrey,
+      color: isDark ? 'white' : currentTheme.colors.whiteDarkGrey,
       fontSize: 14,
       marginRight: 10,
       marginBottom: 5, // Add margin to provide spacing between the language texts

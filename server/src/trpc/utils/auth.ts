@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
-import { User } from '../../drizzle/methods/User';
+import { User as UserRepository } from '../../drizzle/methods/User';
+import { type User } from 'src/db/schema';
 import * as jwt from 'hono/jwt';
 
 // import * as jwt from 'hono/jwt';
@@ -30,31 +31,21 @@ const extractToken = (req: Request): string | null => {
 
 /**
  * Finds the user based on the verified token.
- * @param {PrismaClient} prisma - The Prisma client.
- * @param {JwtPayload} decoded - The decoded JWT payload.
  * @param {string} token - The JWT token.
- * @returns {Promise<User>} - The user associated with the token.
- * @throws {Error} If user is not found.
+ * @param {string} jwtSecret - The JWT secret.
+ * @returns {Promise<User>} - The user associated with the token. Resolves to null if token couldn't be verified or user is not found.
  */
-const findUser = async (token: string, jwtSecret: string) => {
-  const userClass = new User();
+const findUser = async (token: string, jwtSecret: string): Promise<User> => {
+  const userRepository = new UserRepository();
+  let user: User = null;
   // const user: any = await userClass.validateResetToken(token, jwtSecret);
   try {
     const decoded = await jwt.verify(token, jwtSecret);
-    const user = await userClass.findUser({ userId: decoded.id });
-    if (!user)
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'User associated with this token not found.',
-      });
-
-    return user;
+    user = await userRepository.findUser({ userId: decoded.id as string });
   } catch {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User associated with this token not found.',
-    });
+    // pass
   }
+  return user;
 };
 
 const extractTokenAndGetUser = async (req: Request, jwtSecret: string) => {
