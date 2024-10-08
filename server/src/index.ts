@@ -57,10 +57,6 @@ app.use('*', async (c, next) => {
   return corsMiddleware(c, next);
 });
 
-// SETUP LOGGING
-//  tRPC is already logging requests, but you can add your own middleware
-//  app.use('*', logger());
-
 // SETUP TRPC SERVER
 app.use(`${TRPC_API_ENDPOINT}/*`, honoTRPCServer({ router: appRouter }));
 

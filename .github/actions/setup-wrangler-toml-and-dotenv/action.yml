@@ -31,6 +31,9 @@ inputs:
   DB_ID:
     description: 'The database ID'
     required: true
+  MIGRATIONS_PATH:
+    description: 'Migrations path'
+    required: true
   GOOGLE_CLIENT_ID:
     description: 'Google Client ID'
     required: true
