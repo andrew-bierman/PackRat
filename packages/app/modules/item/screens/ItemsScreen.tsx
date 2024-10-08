@@ -98,9 +98,11 @@ export function ItemsScreen() {
             <BaseModal title="Add a global Item" trigger="Add Item">
               <AddItemGlobal />
             </BaseModal>
-            { role === 'admin' && <BaseModal title="Import global Item" trigger="Import Item">
-              <ImportItemGlobal />
-            </BaseModal>}
+            {role === 'admin' && (
+              <BaseModal title="Import global Item" trigger="Import Item">
+                <ImportItemGlobal />
+              </BaseModal>
+            )}
           </View>
         </RStack>
         {!isError && data?.items && Array.isArray(data.items) && (

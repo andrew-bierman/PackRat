@@ -69,6 +69,7 @@ import {
   editGlobalItemAsDuplicateRoute,
   editItemRoute,
   getItemByIdRoute,
+  getItemImagesRoute,
   getItemsGloballyRoute,
   getItemsRoute,
   searchItemsByNameRoute,
@@ -104,6 +105,8 @@ import {
 
 import { router as trpcRouter } from '../trpc';
 
+import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
+
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
   signIn: userSignInRoute(),
@@ -127,6 +130,9 @@ export const appRouter = trpcRouter({
   getPublicFeed: getPublicFeedRoute(),
   getUserPacksFeed: getUserPacksFeedRoute(),
   getUserTripsFeed: getUserTripsFeedRoute(),
+  // map routes
+  getOfflineMaps: getOfflineMapsRoute(),
+  saveOfflineMap: saveOfflineMapRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),
@@ -171,6 +177,7 @@ export const appRouter = trpcRouter({
   // item routes
   getItems: getItemsRoute(),
   getItemById: getItemByIdRoute(),
+  getItemImages: getItemImagesRoute(),
   searchItemsByName: searchItemsByNameRoute(),
   addItem: addItemRoute(), // Done
   importItems: importItemsRoute(), // Done

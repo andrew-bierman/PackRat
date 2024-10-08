@@ -11,6 +11,10 @@ interface VectorsQueryResponse {
   messages: Array<{ code: number; message: string }>;
 }
 
+interface Metadata {
+  [key: string]: string | number | boolean;
+}
+
 class VectorClient {
   private static _instance: VectorClient | null = null;
   private readonly apiKey: string;
@@ -56,7 +60,7 @@ class VectorClient {
     id: string,
     values: number[],
     namespace: string,
-    metadata: { isPublic: boolean },
+    metadata: Metadata,
   ) {
     const url = `${this.VECTORIZE_INDEX_URL}/insert`;
     const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
@@ -84,7 +88,7 @@ class VectorClient {
     id: string,
     values: number[],
     namespace: string,
-    metadata: { isPublic: boolean },
+    metadata: Metadata,
   ) {
     const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
 
@@ -149,7 +153,7 @@ class VectorClient {
     content: string,
     namespace: string,
     topK: number = 3,
-    filter?: Record<string, any>,
+    filter?: Record<string, string | number | boolean>,
   ): Promise<VectorsQueryResponse> {
     const vector = await AiClient.getEmbedding(content);
     const url = `${this.VECTORIZE_INDEX_URL}/query`;
@@ -187,7 +191,7 @@ class VectorClient {
       id: string;
       content: string;
       namespace: string;
-      metadata: { isPublic: boolean };
+      metadata: Metadata;
     },
     upsert: boolean = false,
   ) {

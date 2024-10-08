@@ -24,6 +24,7 @@ export const feedItemPackCardConverter: Converter<
     createdAt: formatDistanceToNowStrict(new Date(input.createdAt), {
       addSuffix: false,
     }),
+    is_public: input.is_public,
     title: truncateString(input.name, 25),
     ownerId:
       typeof input.owner_id === 'string'
@@ -58,6 +59,7 @@ export const feedItemTripCardConverter: Converter<
       addSuffix: false,
     }),
     title: truncateString(input.name, 25),
+    is_public: input.is_public,
     ownerId:
       typeof input.owner_id === 'string'
         ? input.owner_id
@@ -68,6 +70,7 @@ export const feedItemTripCardConverter: Converter<
       startDate: input.start_date,
       endDate: input.end_date,
       activity: input.activity,
+      score: !isNaN(input.total_score) ? roundNumber(input.total_score) : 0,
     },
     favoriteCount: input.favorites_count,
   };

@@ -45,6 +45,8 @@ export interface TripFeedItem extends BaseFeedItem {
   start_date: string;
   end_date: string;
   activity: string;
+  scores: { totalScore: number };
+  total_score: number;
 }
 
 export type FeedItem = PackFeedItem | TripFeedItem;

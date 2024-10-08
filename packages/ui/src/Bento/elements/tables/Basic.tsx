@@ -26,7 +26,7 @@ export function BasicTable<T extends object>({
 
   if (sm) {
     return (
-      <View alignItems="center" justifyContent="center" width="100%" gap="$5">
+      <View alignItems="center" justifyContent="center" gap="$5">
         {tableRows.map((row) => {
           return (
             <View

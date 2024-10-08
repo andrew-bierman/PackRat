@@ -9,7 +9,12 @@ export const QuickActionsSection = ({ closeQuickActions }) => {
   const { handleActionSelect, quickActionData } = useQuickActions();
 
   return (
-    <RStack style={{ flexDirection: 'column', ...styles.section }}>
+    <RStack
+      style={{
+        flexDirection: 'column',
+        ...styles.section,
+      }}
+    >
       {quickActionData.map((action) => (
         <QuickActionButton
           key={action.action}
@@ -30,8 +35,9 @@ const loadStyles = (theme: any) => {
   return {
     section: {
       display: 'flex',
-      minWidth: 250,
-      justifyContent: 'center',
+      minWidth: 200,
+      minHeight: 200,
+      justifyContent: 'flex-start',
     },
   };
 };

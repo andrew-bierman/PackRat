@@ -1,47 +1,38 @@
 import React, { useRef, useMemo, useState } from 'react';
-import { View, FlatList, Platform } from 'react-native';
+import {
+  View,
+  FlatList,
+  Platform,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
 import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from 'app/utils/fuseSearch';
-import { BaseDialog, BaseModal } from '@packrat/ui';
-// import BottomSheet from '@gorhom/bottom-sheet';
-
-interface DataItem {
-  _id: string;
-  type: string;
-}
+import { BaseDialog, BaseModal, Pagination, RButton } from '@packrat/ui';
+import { type PreviewResourceStateWithData } from 'app/hooks/common';
 
 interface DataListProps {
-  data: DataItem[];
+  resource: PreviewResourceStateWithData;
+  search: string;
+  onSearchChange: (search: string) => void;
 }
 
-export const UserDataList = ({ data }: DataListProps) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const keys = ['name', 'items.name', 'items.category'];
-  const options = {
-    threshold: 0.4,
-    location: 0,
-    distance: 100,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-  };
+const windowHeight = Dimensions.get('window').height;
 
-  const results = fuseSearch(data, searchQuery, keys, options);
-  const filteredData = searchQuery
-    ? results.map((result) => result.item)
-    : data;
-
-  // ref for bottom sheet
-  const bottomSheetRef = useRef(null);
-
-  // variables for bottom sheet behavior
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
-
+export const UserDataList = ({
+  resource,
+  search,
+  onSearchChange,
+}: DataListProps) => {
   return (
     <>
       {Platform.OS == 'web' ? (
         <BaseModal
           title="See all"
           trigger="See all"
+          isOpen={resource.isSeeAllModalOpen}
+          onOpen={() => resource.setIsSeeAllModalOpen(true)}
+          onClose={() => resource.setIsSeeAllModalOpen(false)}
           footerButtons={[
             {
               label: 'Cancel',
@@ -52,29 +43,49 @@ export const UserDataList = ({ data }: DataListProps) => {
           footerComponent={undefined}
         >
           <View
-            style={{ width: '100vw', paddingBottom: 10, maxWidth: 992 } as any}
+            style={
+              {
+                width: '100vw',
+                paddingBottom: 10,
+                maxWidth: 992,
+                height: windowHeight * 0.8,
+                flexDirection: 'column',
+              } as any
+            }
           >
             <FeedSearchFilter
               isSortHidden={true}
-              queryString={searchQuery}
-              setSearchQuery={setSearchQuery}
+              queryString={search}
+              setSearchQuery={onSearchChange}
             />
-            <FlatList
-              data={filteredData.slice(0, 2)}
-              horizontal={false}
-              keyExtractor={(item) => item?.id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-              renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
-            />
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={resource.allQueryData}
+                horizontal={false}
+                keyExtractor={(item) => item?.id}
+                ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+                renderItem={({ item }) => (
+                  <FeedCard
+                    key={item?._id}
+                    item={item}
+                    cardType="primary"
+                    feedType={item.type}
+                  />
+                )}
+                showsVerticalScrollIndicator={false}
+                maxToRenderPerBatch={2}
+              />
+            </View>
+            {resource.totalPages > 1 ? (
+              <Pagination
+                currentPage={resource.currentPage}
+                totalPages={resource.totalPages}
+                isPrevBtnDisabled={!resource.hasPrevPage}
+                isNextBtnDisabled={!resource.hasNextPage}
+                onPressPrevBtn={resource.fetchPrevPage}
+                onPressNextBtn={resource.fetchNextPage}
+              />
+            ) : null}
           </View>
         </BaseModal>
       ) : (
@@ -93,26 +104,30 @@ export const UserDataList = ({ data }: DataListProps) => {
           >
             <FeedSearchFilter
               isSortHidden={true}
-              queryString={searchQuery}
-              setSearchQuery={setSearchQuery}
+              queryString={search}
+              setSearchQuery={onSearchChange}
             />
-
-            <FlatList
-              data={filteredData}
-              horizontal={false}
-              keyExtractor={(item) => item?._id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-              renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
-            />
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={resource.allQueryData}
+                horizontal={false}
+                keyExtractor={(item) => item?._id}
+                ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+                renderItem={({ item }) => (
+                  <FeedCard
+                    key={item?._id}
+                    item={item}
+                    cardType="primary"
+                    feedType={item.type}
+                  />
+                )}
+                showsVerticalScrollIndicator={false}
+                maxToRenderPerBatch={2}
+              />
+            </View>
+            {resource.nextPage ? (
+              <RButton onPress={resource.fetchNextPage}>Load more</RButton>
+            ) : null}
           </BaseDialog>
         </View>
       )}

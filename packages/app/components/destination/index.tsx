@@ -157,7 +157,7 @@ export const DestinationPage = () => {
                 ) : (
                   <RButton
                     style={{
-                      backgroundColor: currentTheme.colors.white,
+                      backgroundColor: currentTheme.colors.card,
                       minWidth: '100%',
                       height: 25,
                       flexDirection: 'row',
@@ -169,12 +169,9 @@ export const DestinationPage = () => {
                     <MaterialCommunityIcons
                       name="magnify"
                       size={24}
-                      color={currentTheme.colors.background}
+                      color={currentTheme.colors.text}
                     />
-                    <RText
-                      color={currentTheme.colors.whiteDarkGrey}
-                      opacity={0.6}
-                    >
+                    <RText color={currentTheme.colors.text} opacity={0.6}>
                       Search by park, city, or trail
                     </RText>
                   </RButton>
@@ -198,7 +195,7 @@ export const DestinationPage = () => {
                 contentProps={{ shape }}
                 type="map"
               />
-              <WeatherData latLng={latLng} />
+              {/* <WeatherData latLng={latLng} /> */}
             </>
           )}
         </View>
@@ -222,7 +219,7 @@ const loadStyles = (theme) => {
     headerContainer: {
       alignSelf: 'center',
       width: '90%',
-      backgroundColor: isDark ? '#2D2D2D' : currentTheme.colors.white,
+      backgroundColor: currentTheme.colors.card,
       padding: 25,
       borderRadius: 10,
       marginBottom: 20,

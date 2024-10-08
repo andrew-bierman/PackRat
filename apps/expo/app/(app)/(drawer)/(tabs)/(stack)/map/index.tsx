@@ -21,7 +21,7 @@ export default function FeedNav() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <Map />
+      <OfflineMapsScreen />
     </>
   );
 }

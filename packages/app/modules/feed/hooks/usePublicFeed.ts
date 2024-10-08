@@ -2,9 +2,9 @@ import { queryTrpc } from 'app/trpc';
 import {
   getPaginationInitialParams,
   type PaginationParams,
-  useInfinitePagination,
+  usePagination,
 } from 'app/hooks/pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const usePublicFeed = (
   queryBy,
@@ -12,7 +12,6 @@ export const usePublicFeed = (
   selectedTypes,
   enabled = false,
 ) => {
-  const [allData, setAllData] = useState([]);
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -26,33 +25,34 @@ export const usePublicFeed = (
     {
       enabled,
       refetchOnWindowFocus: false,
-      onSuccess: (newData) => {
-        if (newData?.data) {
-          setAllData((prevData) => {
-            if (pagination.offset === 0) {
-              return newData.data;
-            }
-
-            return [...prevData, ...newData.data];
-          });
-        }
-      },
       onError: (error) => console.error('Error fetching public packs:', error),
     },
   );
-  const { fetchNextPage } = useInfinitePagination(
+  const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
     pagination,
     setPagination,
-    { nextPage: data?.nextOffset, enabled },
+    {
+      prevPage: data?.prevOffset,
+      nextPage: data?.nextOffset,
+      enabled,
+    },
   );
 
+  useEffect(() => {
+    setPagination(getPaginationInitialParams());
+  }, [queryBy, searchQuery, selectedTypes?.pack, selectedTypes?.trip]);
+
   return {
-    data: allData,
+    data: data?.data || [],
     isLoading,
     refetch,
+    fetchPrevPage,
     fetchNextPage,
-    nextPage: data?.nextOffset || false,
+    hasPrevPage: data?.prevOffset !== false,
+    hasNextPage: data?.nextOffset !== false,
+    currentPage: data?.currentPage,
+    totalPages: data?.totalPages,
     error: null,
   };
 };

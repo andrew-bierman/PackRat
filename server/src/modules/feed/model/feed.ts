@@ -10,6 +10,7 @@ import {
 import { literal } from 'src/drizzle/helpers';
 import {
   getPaginationParams,
+  getPrevOffset,
   type PaginationParams,
 } from '../../../helpers/pagination';
 import { FeedQueryBy, Modifiers } from '../models';
@@ -17,6 +18,48 @@ import { FeedQueryBy, Modifiers } from '../models';
 // Adding aliases to columns for order operations
 export class Feed {
   async findFeed(
+    queryBy: FeedQueryBy,
+    modifiers?: Modifiers,
+    excludeType?: 'trips' | 'packs',
+    pagination?: PaginationParams,
+  ) {
+    let currentPagination = getPaginationParams(pagination);
+
+    // it tries to load previous page if current page is empty
+    // Using while instead of recursion
+    while (true) {
+      const { data, totalCount } = await this.findFeedQuery(
+        queryBy,
+        modifiers,
+        excludeType,
+        currentPagination,
+      );
+
+      if (totalCount === 0 || !data?.length) {
+        const prevOffset = getPrevOffset(currentPagination);
+        if (prevOffset === false) {
+          return {
+            data: [],
+            totalCount: 0,
+            currentPagination: { offset: 0, limit: currentPagination.limit },
+          };
+        }
+
+        currentPagination = {
+          offset: prevOffset,
+          limit: currentPagination.limit,
+        };
+      } else {
+        return {
+          data,
+          totalCount,
+          currentPagination,
+        };
+      }
+    }
+  }
+
+  async findFeedQuery(
     queryBy: FeedQueryBy,
     modifiers?: Modifiers,
     excludeType?: 'trips' | 'packs',
@@ -68,7 +111,7 @@ export class Feed {
           name: trip.name,
           owner_id: trip.owner_id,
           grades: literal('{}'),
-          scores: literal('{}'),
+          scores: trip.scores,
           is_public: trip.is_public,
           type: literal('trip'),
           description: trip.description,
@@ -178,9 +221,13 @@ export class Feed {
     return packQuery;
   }
 
-  computeTotalScores(pack) {
-    if (!pack.scores) return 0;
-    const scores = this.parseJSON(pack.scores);
+  computeTotalScores(resource) {
+    if (resource.type === 'trip') {
+      return resource?.scores?.totalScore || 0;
+    }
+
+    if (!resource.scores) return 0;
+    const scores = this.parseJSON(resource.scores);
     const scoresArray: number[] = Object.values(scores);
     const sum: number = scoresArray.reduce(
       (total: number, score: number) => total + score,

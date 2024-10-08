@@ -32,7 +32,6 @@ const loadStyles = (theme) => {
       top: 50,
       left: 10,
       zIndex: 1,
-      backgroundColor: currentTheme.colors.background,
       height: 54,
       width: 150,
       borderRadius: 5,

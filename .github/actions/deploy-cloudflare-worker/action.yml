@@ -1,5 +1,5 @@
-name: 'Print Wrangler Logs'
-description: 'Prints Wrangler logs files if exist'
+name: 'Deploy worker'
+description: 'Deploys worker'
 inputs:
   WORKERS_AI_API_KEY:
     description: 'The Workers AI API Key'
@@ -12,7 +12,7 @@ inputs:
     required: true
   BUCKET_SECRET_KEY:
     description: 'The Bucket Secret Key'
-    requuired: true
+    required: true
   GOOGLE_CLIENT_SECRET:
     description: 'The Google client secret'
     required: true
@@ -59,7 +59,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Deploy database
+    - name: Deploy worker
       uses: cloudflare/wrangler-action@v3.3.2
       with:
         wranglerVersion: '3.75.0'

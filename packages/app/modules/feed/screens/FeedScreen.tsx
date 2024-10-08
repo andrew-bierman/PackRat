@@ -6,7 +6,7 @@ import { fuseSearch } from 'app/utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
 import { RefreshControl } from 'react-native';
-import { RButton, RText } from '@packrat/ui';
+import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
 
@@ -42,7 +42,17 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
   const user = useAuthUser();
   const ownerId = user?.id;
   const styles = useCustomStyles(loadStyles);
-  const { data, isLoading, fetchNextPage, refetch, nextPage } = useFeed({
+  const {
+    data,
+    isLoading,
+    refetch,
+    fetchPrevPage,
+    fetchNextPage,
+    hasPrevPage,
+    hasNextPage,
+    currentPage,
+    totalPages,
+  } = useFeed({
     queryString,
     ownerId,
     feedType,
@@ -145,8 +155,15 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
           />
-          {nextPage ? (
-            <RButton onPress={fetchNextPage}>Load more</RButton>
+          {totalPages > 1 ? (
+            <Pagination
+              isPrevBtnDisabled={!hasPrevPage}
+              isNextBtnDisabled={!hasNextPage}
+              onPressPrevBtn={fetchPrevPage}
+              onPressNextBtn={fetchNextPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
           ) : null}
         </View>
       </SearchProvider>

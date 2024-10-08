@@ -206,11 +206,11 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
           <RText style={{ fontWeight: 300, color: currentTheme.colors.text }}>
             {description}
           </RText>
-          {isOwner && (
+          {/* {isOwner && (
             <RButton style={styles.button} onPress={handleScoreClick}>
               <RText style={styles.buttonText}>Calculate Score</RText>
             </RButton>
-          )}
+          )} */}
         </YStack>
         {isAlreadyScored && (
           <View

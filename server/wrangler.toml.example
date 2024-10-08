@@ -11,6 +11,10 @@ binding = "DB"
 database_name = "preview"
 database_id = ""
 
+[[env.preview.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-preview'
+
 [env.preview.ai]
 binding = "AI"
 
@@ -26,11 +30,12 @@ BUCKET_NAME="packrat-scrapy-bucket"
 BUCKET_REGION="auto"
 BUCKET_SERVICE="s3"
 BUCKET_SESSION_TOKEN=""
+CLOUDFLARE_ACCOUNT_ID=""
 GOOGLE_CLIENT_ID=""
 NODE_ENV="preview"
-VECTOR_INDEX="vector-index-preview"
 OSM_URI=""
 STMP_EMAIL=""
+VECTOR_INDEX="vector-index-preview"
 WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"
 
 
@@ -39,6 +44,10 @@ WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "production"
+
+[[env.production.r2_buckets]]
+binding = 'GEOJSON_BUCKET' 
+bucket_name = 'packrat-geojson-bucket-production'
 
 [env.production.ai]
 binding = "AI"
@@ -55,9 +64,10 @@ BUCKET_NAME="packrat-scrapy-bucket"
 BUCKET_REGION="auto"
 BUCKET_SERVICE="s3"
 BUCKET_SESSION_TOKEN=""
+CLOUDFLARE_ACCOUNT_ID=""
 GOOGLE_CLIENT_ID=""
 NODE_ENV="production"
-VECTOR_INDEX="vector-index-production"
 OSM_URI=""
 STMP_EMAIL=""
+VECTOR_INDEX="vector-index-production"
 WEATHER_URL="https://api.openweathermap.org/data/2.5/forecast"

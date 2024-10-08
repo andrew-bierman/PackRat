@@ -11,17 +11,10 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
 import { useFetchSingleTrip, useTripWeather } from 'app/hooks/singletrips';
 import ScoreContainer from 'app/components/ScoreContainer';
-import {
-  TableContainerComponent,
-  WeatherCardComponent,
-  TripCardComponent,
-  ScoreContainerComponent,
-  loadStyles,
-} from './TripDetailsComponents';
+import { TableContainerComponent, loadStyles } from './TripDetailsComponents';
 import { useTripId } from 'app/hooks/trips';
-
-import { formatTripActivityLabel } from 'app/utils/tripUtils';
 import Layout from 'app/components/layout/Layout';
+import { TripMapCard } from 'app/components/trip/TripCards';
 
 interface TripData {
   packs?: any;
@@ -78,8 +71,8 @@ export function TripDetails() {
     <Layout>
       <View
         style={{
-          minHeight:
-            Platform.OS == 'web' ? '100vh' : Dimensions.get('screen').height,
+          minHeight: '100%',
+          paddingBottom: 80,
         }}
       >
         <DetailsComponent
@@ -91,16 +84,14 @@ export function TripDetails() {
             <View>
               <FlatList
                 data={Object.entries(SECTION)}
-                contentContainerStyle={{
-                  paddingBottom: Platform.OS !== 'web' ? 350 : 0,
-                }}
+                contentContainerStyle={{ paddingBottom: 100 }}
                 keyExtractor={([key, val]) => val}
                 renderItem={({ item }) => {
                   {
                     switch (item[1]) {
                       case SECTION.DESCRIPTION:
                         return (
-                          <RStack style={{ width: xxs ? '20%' : '100%' }}>
+                          <RStack style={{ width: '100%' }}>
                             <RText>{data?.description}</RText>
                             <Details
                               items={[
@@ -135,18 +126,27 @@ export function TripDetails() {
                       case SECTION.WEATHER:
                         return null; // TODO handle saved trip weather
                       case SECTION.TRIP:
+                        console.log({ data });
                         return (
-                          <TripCardComponent
-                            data={data}
-                            weatherObject={weatherObject}
-                            currentTheme={currentTheme}
-                          />
+                          <RStack
+                            style={{
+                              flex: 1,
+                              marginBottom: 40,
+                            }}
+                          >
+                            <TripMapCard
+                              tripId={data.id}
+                              initialBounds={data.bounds}
+                            />
+                          </RStack>
                         );
                       case SECTION.SCORE:
                         return (
                           <ScoreContainer
                             type="trip"
-                            data={data}
+                            data={{
+                              total_score: data?.scores?.totalScore || 0,
+                            }}
                             isOwner={Boolean(isOwner)}
                           />
                         );

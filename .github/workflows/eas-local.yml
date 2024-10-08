@@ -8,7 +8,6 @@ on:
       - 'packages/app/**'
       - 'apps/expo/**'
       - 'packages/ui/**'
-      - 'packages/shared-types/**'
       - 'packages/config/**'
       - 'packages/crosspath/**'
   pull_request:
@@ -17,7 +16,6 @@ on:
       - 'packages/app/**'
       - 'apps/expo/**'
       - 'packages/ui/**'
-      - 'packages/shared-types/**'
       - 'packages/config/**'
       - 'packages/crosspath/**'
 

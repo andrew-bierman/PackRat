@@ -1,4 +1,5 @@
 export type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+export const SMALLEST_WEIGHT_UNIT = 'g';
 
 const units: Record<WeightUnit, number> = {
   g: 1,

@@ -9,8 +9,8 @@ import {
 import { type PackDetails } from 'app/modules/pack/model';
 import { useEditPack } from 'app/modules/pack/hooks';
 import useTheme from 'app/hooks/useTheme';
-import { StarIcon } from 'lucide-react-native';
 import { useUserPacks } from 'app/modules/pack/hooks';
+import { ScoreLabel } from 'app/components/ScoreLabel';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
@@ -46,20 +46,13 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
       link={`/pack/${props.id}`}
       image={<PackImage />}
       subtitle={
-        <RStack
-          style={{
-            flexDirection: 'row',
-            gap: 4,
-            alignItems: 'center',
-          }}
-        >
-          <StarIcon size={16} color={currentTheme.colors.text} />
-          <RText>
-            {!isNaN(props.details.similarityScore)
+        <ScoreLabel
+          score={
+            !isNaN(props.details.similarityScore)
               ? props.details.similarityScore
-              : props.details.score}
-          </RText>
-        </RStack>
+              : Number(props.details.score)
+          }
+        />
       }
       actions={
         <RStack style={{ flexDirection: 'row', gap: 12 }}>
