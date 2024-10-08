@@ -1,47 +1,47 @@
-name: "Generate Wrangler TOML and Dotenv File"
-description: "Generates wrangler.toml and .env files for Cloudflare Workers"
+name: 'Generate Wrangler TOML and Dotenv File'
+description: 'Generates wrangler.toml and .env files for Cloudflare Workers'
 inputs:
   APP_URL:
-    description: "The Application URL"
+    description: 'The Application URL'
     required: true
   AWS_SIGN_ALGORITHM:
-    description: "The AWS sign algorithm"
+    description: 'The AWS sign algorithm'
     required: true
   BUCKET_ENDPOINT:
-    description: "The bucket endpoint"
+    description: 'The bucket endpoint'
     required: true
   BUCKET_NAME:
-    description: "The bucket name"
+    description: 'The bucket name'
     required: true
   BUCKET_REGION:
-    description: "The bucket region"
+    description: 'The bucket region'
     required: true
   BUCKET_SERVICE:
-    description: "The bucket service"
+    description: 'The bucket service'
     required: true
   BUCKET_SESSION_TOKEN:
-    description: "The bucket session token"
+    description: 'The bucket session token'
     required: true
   environment:
-    description: "The current environment"
+    description: 'The current environment'
     required: true
   CLOUDFLARE_ACCOUNT_ID:
-    description: "Cloudflare Account ID"
+    description: 'Cloudflare Account ID'
     required: true
   DB_ID:
-    description: "The database ID"
+    description: 'The database ID'
     required: true
   GOOGLE_CLIENT_ID:
-    description: "Google Client ID"
+    description: 'Google Client ID'
     required: true
   STMP_EMAIL:
-    description: "SMTP Email"
+    description: 'SMTP Email'
     required: true
   VECTOR_INDEX_NAME:
-    description: "The vector index"
+    description: 'The vector index'
     required: true
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Generate wrangler.toml and .env
       shell: bash
@@ -57,6 +57,7 @@ runs:
         echo 'binding = "DB"' >> wrangler.toml
         echo 'database_name = "${{ inputs.environment }}"' >> wrangler.toml
         echo 'database_id = "${{ inputs.DB_ID }}"' >> wrangler.toml
+        echo 'migrations_dir = "${{ inputs.MIGRATIONS_PATH }}"' >> wrangler.toml
         echo '[[env.${{ inputs.environment }}.r2_buckets]]' >> wrangler.toml
         echo 'binding = "GEOJSON_BUCKET"' >> wrangler.toml
         echo 'bucket_name = "packrat-geojson-bucket-${{ inputs.environment }}"' >> wrangler.toml
