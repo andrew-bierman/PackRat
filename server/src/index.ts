@@ -85,5 +85,4 @@ const worker = {
   queue,
 };
 
-// EXPORT WORKER
 export default worker;
