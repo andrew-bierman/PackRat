@@ -1,7 +1,8 @@
-import { asc, desc, eq, like, sql } from 'drizzle-orm';
+import { asc, count, desc, eq, like, sql } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
 import { packTemplate, item, itemPackTemplates } from 'src/db/schema';
+import { PaginationParams } from 'src/helpers/pagination';
 
 export type Filter = {
   searchQuery?: string;
@@ -10,7 +11,15 @@ export type Filter = {
 export type ORDER_BY = 'Lightest' | 'Heaviest';
 
 export class PackTemplate {
-  async findMany({ filter, orderBy }: { filter?: Filter; orderBy?: ORDER_BY }) {
+  async findMany({
+    filter,
+    orderBy,
+    pagination,
+  }: {
+    filter?: Filter;
+    orderBy?: ORDER_BY;
+    pagination: PaginationParams;
+  }) {
     const query = DbClient.instance
       .select({
         id: packTemplate.id,
@@ -42,7 +51,20 @@ export class PackTemplate {
       );
     }
 
-    return await query.all();
+    const totalCountResult = await DbClient.instance
+      .select({ count: count() })
+      .from(query.as('pack_templates'))
+      .all();
+
+    const data = await query
+      .offset(pagination.offset)
+      .limit(pagination.limit)
+      .all();
+
+    return {
+      data,
+      totalCount: totalCountResult[0].count,
+    };
   }
 
   async findPackTemplate(id: string) {

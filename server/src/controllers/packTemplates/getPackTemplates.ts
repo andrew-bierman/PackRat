@@ -6,6 +6,7 @@ export function getPackTemplatesRoute() {
   return protectedProcedure
     .input(validator.getPackTemplates)
     .query(async (opts) => {
-      return await getPackTemplatesService(opts.input);
+      const { filter, orderBy, pagination } = opts.input;
+      return await getPackTemplatesService(pagination, filter, orderBy);
     });
 }
