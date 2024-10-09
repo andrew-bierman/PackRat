@@ -99,6 +99,7 @@ export function SettingsForm() {
               }}
             >
               <ImageUpload
+                hasProfileImage={control._defaultValues.profilepicture ?  true : false}
                 label={""}
                 name="profileImage"
                 previewElement={<Avatar size={90} />}

@@ -4,7 +4,7 @@ import OriginalRStack from '../../../RStack';
 import OriginalRH5 from '../../../RH5';
 import OriginalRButton from '../../../RButton';
 import { useImageUpload } from './useImageUpload';
-import { cloneElement } from 'react';
+import { cloneElement, useState } from 'react';
 import { Button } from 'tamagui';
 import { Upload, Popcorn } from '@tamagui/lucide-icons';
 
@@ -12,8 +12,18 @@ const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
 const RH5: any = OriginalRH5;
 
-export const ImageUpload = ({ previewElement, name, label }) => {
+export const ImageUpload = ({ hasProfileImage, previewElement, name, label }) => {
   const { pickImage, removeImage, src } = useImageUpload(name);
+  const [hasImage, setHasImage] = useState(hasProfileImage);
+
+  const handleRemoveImage = async () => {
+    await removeImage();
+    setHasImage(false);
+  };
+  const handlePickImage = async () => {
+    await pickImage();
+    setHasImage(true);
+  };
 
   return (
     <RStack
@@ -54,29 +64,30 @@ export const ImageUpload = ({ previewElement, name, label }) => {
               color: 'white',
               textAlign: 'center'
             }}
-            onPress={pickImage}
+            onPress={handlePickImage}
           >
             Update Profile Picture
           </RButton>
-          {/* <RButton
-            size="$3"
-            type="button"
-            icon={
-              <Button.Icon>
-                <Popcorn y={0} />
-              </Button.Icon>
-            }
-            color="white"
-            size="$3"
-            style={{
-              backgroundColor: '#232323',
-              color: 'white',
-              textAlign: 'center'
-            }}
-            onPress={removeImage}
-          >
-            Remove Profile Picture
-          </RButton> */}
+          {hasImage && (
+            <RButton
+              size="$3"
+              type="button"
+              icon={
+                <Button.Icon>
+                  <Popcorn y={0} />
+                </Button.Icon>
+              }
+              color="white"
+              style={{
+                backgroundColor: '#232323',
+                color: 'white',
+                textAlign: 'center'
+              }}
+              onPress={handleRemoveImage}
+            >
+              Remove Profile Picture
+            </RButton>
+          )}
           {/* <RButton
             size="$3"
             onPress={removeImage}
