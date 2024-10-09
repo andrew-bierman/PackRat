@@ -43,27 +43,6 @@
       "when": 1727955752820,
       "tag": "0005_heavy_the_initiative",
       "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1728418289707,
-      "tag": "0006_parallel_firelord",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1727860846361,
-      "tag": "0004_ambitious_old_lace",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1727955752820,
-      "tag": "0005_heavy_the_initiative",
-      "breakpoints": true
     }
   ]
 }
