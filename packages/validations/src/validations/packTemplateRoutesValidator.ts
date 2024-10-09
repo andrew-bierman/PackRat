@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 export const getPackTemplates = z
   .object({
-    searchQuery: z.string(),
+    searchQuery: z.string().optional(),
+    orderBy: z.string().optional(),
   })
   .optional();
 

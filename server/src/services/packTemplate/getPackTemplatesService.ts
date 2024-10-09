@@ -1,6 +1,16 @@
-import { PackTemplate, type Filter } from 'src/drizzle/methods/PackTemplate';
+import {
+  PackTemplate,
+  type Filter,
+  type ORDER_BY,
+} from 'src/drizzle/methods/PackTemplate';
 
-export async function getPackTemplatesService(filter?: Filter) {
+export async function getPackTemplatesService({
+  filter,
+  orderBy,
+}: {
+  filter?: Filter;
+  orderBy?: ORDER_BY;
+}) {
   const packTemplateHelper = new PackTemplate();
-  return await packTemplateHelper.findMany(filter);
+  return await packTemplateHelper.findMany({ filter, orderBy });
 }

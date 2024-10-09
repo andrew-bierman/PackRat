@@ -49,6 +49,7 @@ export const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
   const sortOptions = useFeedSortOptions(
+    feedType,
     selectedTypes?.trip || feedType === 'userTrips',
   );
 

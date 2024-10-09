@@ -1,19 +1,13 @@
 import { queryTrpc } from 'app/trpc';
 
-export const usePackTemplates = (
-  searchQuery?: string,
-  enabled: boolean = true,
-) => {
+export const usePackTemplates = (params?: object, enabled: boolean = true) => {
   const { data, error, isLoading, refetch } =
-    queryTrpc.getPackTemplates.useQuery(
-      { searchQuery },
-      {
-        enabled,
-        refetchOnWindowFocus: false,
-        staleTime: Infinity,
-        cacheTime: Infinity,
-      },
-    );
+    queryTrpc.getPackTemplates.useQuery(params, {
+      enabled,
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    });
 
   return { data, error, isLoading, refetch };
 };
