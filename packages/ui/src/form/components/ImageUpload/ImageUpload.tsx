@@ -5,6 +5,7 @@ import OriginalRH5 from '../../../RH5';
 import OriginalRButton from '../../../RButton';
 import { useImageUpload } from './useImageUpload';
 import { cloneElement } from 'react';
+import { View } from 'tamagui';
 
 const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
@@ -14,14 +15,12 @@ export const ImageUpload = ({ previewElement, name, label }) => {
   const { pickImage, removeImage, src } = useImageUpload(name);
 
   return (
-    <RStack alignItems="center" space style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       {cloneElement(previewElement, { src })}
-      <RStack space="$2">
+      <View>
         <RH5 fontWeight="medium">{label}</RH5>
-        <RStack
-          space="$2"
-          alignItems="flex-end"
-          style={{ flexDirection: 'row' }}
+        <View
+          style={{ flexDirection: 'row', alignItems: 'flex-end' }}
         >
           <RButton
             size="$3"
@@ -40,8 +39,8 @@ export const ImageUpload = ({ previewElement, name, label }) => {
           >
             Remove
           </RButton>
-        </RStack>
-      </RStack>
-    </RStack>
+        </View>
+      </View>
+    </View>
   );
 };

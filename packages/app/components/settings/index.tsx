@@ -29,13 +29,14 @@ import {
   userSettingsSchema,
 } from '@packrat/validations';
 import { useDeleteProfile } from 'app/modules/user/hooks';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function SettingsForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
-
+  const {xs, sm, md } = useResponsive();
 
   const {
     control,
@@ -67,7 +68,7 @@ export function SettingsForm() {
 
   return (
     <FormCard>
-      <RStack
+      <View
         style={{
           flexDirection: 'column',
           alignItems: 'center',
@@ -77,16 +78,7 @@ export function SettingsForm() {
         $group-window-gtXs={{ width: 400 }}
         gap="$4"
       >
-        {/* <H1
-            alignSelf="center"
-            size="$8"
-            $group-window-xs={{
-              size: '$7',
-            }}
-          >
-            Create an account
-          </H1> */}
-        <RStack
+        <View
           gap="$5"
           style={{
             flexDirection: 'column',
@@ -99,12 +91,11 @@ export function SettingsForm() {
             validationSchema={userSettingsSchema}
             defaultValues={{ ...user, profileImage: user.profileImage || '' }}
           >
-            <RStack
+            <View
               style={{
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                maxWidth: '100%',
               }}
             >
               <ImageUpload
@@ -112,53 +103,55 @@ export function SettingsForm() {
                 name="profileImage"
                 previewElement={<Avatar size={90} />}
               />
-            </RStack>
+            </View>
             <FormInput label="Name" name="name" />
             <FormInput label="Username" name="username" />
             <FormInput label="Email" name="email" />
-            <RStack
+            <H1
+                style={{
+                  alignSelf: 'center',
+                }}
+                size="$8"
+                $group-window-xs={{
+                  size: '$7',
+                }}
+              >
+                Preferred units
+              </H1>
+            <View
               style={{
-                alignItems: 'center',
+                flexDirection: sm || xs ? 'column' : 'row',
+                justifyContent: sm || xs ? 'normal' : 'space-between',
               }}
             >
-              <RH5>Preferred units</RH5>
-            </RStack>
-            <RStack
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <RStack>
+              <View>
                 <RLabel>Weather: </RLabel>
                 <FormSelect
                   options={weatherOptions}
                   name="preferredWeather"
-                  style={{ width: '100%' }}
+                  fullWidth={xs || sm ? true : false}
                 />
-              </RStack>
-              <RStack>
+              </View>
+              <View>
                 <RLabel>Weight: </RLabel>
                 <FormSelect
                   options={weightOptions}
                   name="preferredWeight"
-                  style={{ width: '100%' }}
+                  fullWidth={xs || sm ? true : false}
                 />
-              </RStack>
-            </RStack>
+              </View>
+            </View>
             <SubmitButton
               themeInverse
               style={{
                 marginTop: 16,
                 backgroundColor: '#232323',
                 color: 'white',
+                textAlign: 'center'
               }}
               disabled={loading}
               onSubmit={(data) => handleEditUser(data)}
               cursor={loading ? 'progress' : 'pointer'}
-              alignSelf="center"
-              width={'100%'}
               iconAfter={
                 <AnimatePresence>
                   {loading && (
@@ -189,18 +182,17 @@ export function SettingsForm() {
           </Form>
 
           <Form validationSchema={passwordChangeSchema}>
-            <RStack
+            <View
               style={{
-                flexWrap: 'wrap',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                maxWidth: '100%',
+                textAlign: 'center',
               }}
             >
               <H1
                 style={{
-                  alignSelf: 'center',
+                  textAlign: 'center',
                 }}
                 size="$8"
                 $group-window-xs={{
@@ -210,11 +202,11 @@ export function SettingsForm() {
                 Change Password
               </H1>
               <Label size={'$2'}>We will email you to verify the change.</Label>
-            </RStack>
-            <RStack
+            </View>
+            <View
               style={{ gap: 16, maxWidth: '100%', marginHorizontal: 'auto' }}
             >
-              <RStack>
+              <View>
                 <RLabel htmlFor="oldPassword">Old password</RLabel>
                 <FormInput
                   id="oldPassword"
@@ -222,23 +214,23 @@ export function SettingsForm() {
                   secureTextEntry={true}
                   passwordIconProps={{ color: 'black' }}
                 />
-              </RStack>
-              <RStack>
+              </View>
+              <View>
                 <RLabel htmlFor="newPassword">New password</RLabel>
                 <FormInput
                   id="newPassword"
                   name="newPassword"
                   secureTextEntry={true}
                 />
-              </RStack>
-              <RStack>
+              </View>
+              <View>
                 <RLabel htmlFor="confirmPassword">Confirm new password</RLabel>
                 <FormInput
                   id="confirmPassword"
                   name="confirmPassword"
                   secureTextEntry={true}
                 />
-              </RStack>
+              </View>
               <SubmitButton
                 themeInverse
                 style={{
@@ -253,16 +245,15 @@ export function SettingsForm() {
               >
                 Change Password
               </SubmitButton>
-            </RStack>
+            </View>
           </Form>
           <Form validationSchema={deleteUserForm}>
-            <RStack
+            <View
               style={{
-                flexWrap: 'wrap',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                maxWidth: '100%',
+                textAlign: 'center'
               }}
             >
               <H1
@@ -277,12 +268,12 @@ export function SettingsForm() {
               >
                 Delete Account
               </H1>
-              <Label size={'$2'}>
+              <Label style={{textAlign: 'center'}} size={'$2'}>
                 Deleting your account will remove all your information from our
                 database. This cannot be undone
               </Label>
-            </RStack>
-            <RStack>
+            </View>
+            <View>
               <RLabel htmlFor="confirmText">
                 To Confirm This, Type 'delete'
               </RLabel>
@@ -301,10 +292,10 @@ export function SettingsForm() {
               >
                 Delete Profile
               </SubmitButton>
-            </RStack>
+            </View>
           </Form>
-        </RStack>
-      </RStack>
+        </View>
+      </View>
     </FormCard>
   );
 }
