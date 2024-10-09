@@ -26,6 +26,7 @@ import {
 } from '@packrat/validations';
 import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
+import { SettingsForm } from 'app/components/settings';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -59,6 +60,7 @@ export function SettingsScreen() {
         marginHorizontal="auto"
         marginVertical="auto"
       >
+        
         <RStack
           style={{
             display: 'flex',
@@ -85,7 +87,8 @@ export function SettingsScreen() {
           />
           <RH2>Profile</RH2>
         </RStack>
-        <Form
+        <SettingsForm/>
+        {/* <Form
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user, profileImage: user.profileImage || '' }}
         >
@@ -213,7 +216,7 @@ export function SettingsScreen() {
               </SubmitButton>
             </RStack>
           </RStack>
-        </Form>
+        </Form> */}
       </RStack>
     </RScrollView>
   ) : null;
