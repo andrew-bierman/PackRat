@@ -58,7 +58,7 @@ export const ImageUpload = ({ previewElement, name, label }) => {
           >
             Update Profile Picture
           </RButton>
-          <RButton
+          {/* <RButton
             size="$3"
             type="button"
             icon={
@@ -76,7 +76,7 @@ export const ImageUpload = ({ previewElement, name, label }) => {
             onPress={removeImage}
           >
             Remove Profile Picture
-          </RButton>
+          </RButton> */}
           {/* <RButton
             size="$3"
             onPress={removeImage}
