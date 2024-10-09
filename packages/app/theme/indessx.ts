@@ -1,37 +1,25 @@
 import { extendTheme } from 'native-base';
-import { Platform } from 'react-native';
 import { DefaultTheme } from 'react-native-paper';
 
 export const theme = {
   colors: {
-    primary: '#0A84FF',
     background: Platform.OS === 'web' ? 'hsla(0, 0%, 96%, 1)' : '#fcfcfc',
     secondaryBlue: Platform.OS === 'web' ?'#0C66A1' : '#cce5ff',
+    tertiaryBlue:  Platform.OS === 'web' ? '#0C66A1' : '#0C66A1',
     accentPurple: Platform.OS === 'web' ? '#6C63FF' : '#6C63FF',
     card: Platform.OS === 'web' ? '#f8f8f8' : '#f8f8f8',
     text: Platform.OS === 'web' ? '#333333' : '#333333',
     border: Platform.OS === 'web' ? '#f3f3f3' : '#f3f3f3',  
-    notification: '#0A84FF',
+    notification: Platform.OS === 'web' ? '#0A84FF' : '#0A84FF',
+    error: '#FF453A',
     textGreen: Platform.OS === 'web' ? undefined : '#22c55e',
     tertiaryBlueGrey: Platform.OS === 'web' ? undefined : '#3B3B3B',
-    error: '#FF453A',
-    textPrimary: 'black',
-    textSecondary: '#EBEBF599',
-    tertiaryBlue:  Platform.OS === 'web' ? '#0C66A1' : '#0C66A1',
-    textDarkGrey: '#3B3B3B',
-    cardIconColor: '#22c55e',
+    cardIconColor: Platform.OS === 'web' ? '#22c55e' : '#22c55e',
     iconColor: Platform.OS === 'web' ? '#FFFFFF' : '#003064',
-    icon: 'black',
-    weatherIcon: '#0284c7',
-    drawerIconColor: '#3B3B3B',
+    weatherIcon: Platform.OS === 'web' ? '#0284c7' : '#0284c7',
+    drawerIconColor: Platform.OS === 'web' ? '#3B3B3B' : '#3B3B3B',
     white: '#FFFFFF',
     black: '#000000',
-    cardBorderPrimary: 'rgba(0, 0, 0, 0.2)',
-    buttonBackgroundPrimary: '#404040',
-    floatingBg: '#f0f2f5',
-    navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
-    navbarPrimaryBackground: '#f6f6f6',
-    logo: 'rgb(12, 102, 161)'
   },
   font: {
     headerFont: 56,
@@ -55,7 +43,7 @@ export const theme = {
 export const darkTheme = {
   colors: {
     primary: '#0A84FF',
-    background: 'black',
+    background: '#050505',
     secondaryBlue: '#0C66A1',
     tertiaryBlue: '#96c7f2',
     accentPurple: '#6C63FF',
@@ -64,21 +52,13 @@ export const darkTheme = {
     border: '#221f1c',
     notification: '#0A84FF',
     error: '#FF453A',
-    textPrimary: 'white',
-    textSecondary: '#C5C6C799',
-    textDarkGrey: '#B0B0B0',
-    cardIconColor: '#22c55e',
-    iconColor: '#C5C6C7',
-    icon: 'white',
+    textGreen: '#22c55e',
+    tertiaryBlueGrey: '#3B3B3B',
+    cardIconColor: '#d6e3ff',
+    iconColor: '#cfe5ff',
     weatherIcon: '#0A84FF',
     drawerIconColor: '#3B3B3B',
     white: '#FFFFFF',
-    cardBorderPrimary: 'rgba(255, 255, 255, 0.3)',
-    buttonBackgroundPrimary: '#B0B0B0',
-    floatingBg: '#232323',
-    navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
-    navbarPrimaryBackground: 'black',
-    logo: 'rgb(150, 199, 242)'
   },
   font: {
     headerFont: 56,

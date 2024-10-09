@@ -15,7 +15,7 @@ export const NavigationList: React.FC<NavigationListProps> = ({
   onItemSelect = () => {},
 }) => {
   const isMobileView = useIsMobileView();
-  const { currentTheme } = useTheme();
+  const { currentTheme, isLight, isDark } = useTheme();
   const { navigationItems } = useNavigationList();
   return (
     <>
@@ -27,11 +27,11 @@ export const NavigationList: React.FC<NavigationListProps> = ({
               width: '100%',
               borderRadius: 8,
               marginBottom: isMobileView ? 6 : 0,
-              backgroundColor: currentTheme.colors.background,
-              color: currentTheme.colors.white,
+              backgroundColor: isDark ? currentTheme.colors.background : '#f0f2f5',
+              color: isDark ? currentTheme.colors.white : '#315173',
             }}
             hoverStyle={{
-              bg: currentTheme.colors.border as any,
+              bg: isDark ? currentTheme.colors.secondaryBlue as any : 'rgb(249, 249, 249)',
             }}
             key={item.href + index}
           >
