@@ -61,7 +61,7 @@ export function SettingsScreen() {
         marginVertical="auto"
       >
         
-        <RStack
+        {/* <RStack
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -86,7 +86,7 @@ export function SettingsScreen() {
             }}
           />
           <RH2>Profile</RH2>
-        </RStack>
+        </RStack> */}
         <SettingsForm/>
         {/* <Form
           validationSchema={userSettingsSchema}

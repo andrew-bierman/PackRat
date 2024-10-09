@@ -99,7 +99,7 @@ export function SettingsForm() {
               }}
             >
               <ImageUpload
-                label="Profile Picture"
+                label={""}
                 name="profileImage"
                 previewElement={<Avatar size={90} />}
               />
