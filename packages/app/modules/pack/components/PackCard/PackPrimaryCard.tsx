@@ -30,7 +30,7 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   return (
     <Card
       title={props.title}
-      link={`/${props.isTemplate ? 'pack-templates' : 'pack'}/${props.id}`}
+      link={`/pack/${props.id}`}
       image={<PackImage />}
       subtitle={<CreatedAtLabel date={props.createdAt} />}
       actions={
@@ -44,22 +44,20 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
               props.toggleFavorite();
             }}
           />
-          {!props.isTemplate && (
-            <>
-              <RStack
-                alignItems="center"
-                style={{ flexDirection: 'row', gap: 8 }}
-              >
-                <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
-              </RStack>
-              <RLink
-                href={`/profile/${props.ownerId}`}
-                style={{ textDecoration: 'none' }}
-              >
-                <RText style={{ marginLeft: 'auto' }}>View owner</RText>
-              </RLink>
-            </>
-          )}
+          <>
+            <RStack
+              alignItems="center"
+              style={{ flexDirection: 'row', gap: 8 }}
+            >
+              <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
+            </RStack>
+            <RLink
+              href={`/profile/${props.ownerId}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <RText style={{ marginLeft: 'auto' }}>View owner</RText>
+            </RLink>
+          </>
         </RStack>
       }
       content={<Details items={packDetails} />}
