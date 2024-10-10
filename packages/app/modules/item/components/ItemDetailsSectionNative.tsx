@@ -113,13 +113,11 @@ const loadStyles = (theme: any) => {
     title: {
       fontSize: 28,
       fontWeight: 'bold',
-      marginBottom: 10,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 10,
     },
     categoryText: {
       fontSize: 12,
@@ -129,9 +127,6 @@ const loadStyles = (theme: any) => {
       fontSize: 22,
       fontWeight: '600',
       marginRight: 10,
-    },
-    descriptionSection: {
-      marginBottom: 20,
     },
     descriptionText: {
       fontSize: 14,
@@ -146,9 +141,6 @@ const loadStyles = (theme: any) => {
     sellerText: {
       fontSize: 16,
     },
-    buttonContainer: {
-      marginTop: 10,
-    },
     GoToStoreButton: {
       backgroundColor: currentTheme.colors.secondaryBlue,
       paddingVertical: 8,
@@ -158,7 +150,7 @@ const loadStyles = (theme: any) => {
     },
     buttonText: {
       color: currentTheme.colors.text,
-      fontWeight: 'bold',
+      fontWeight: 700,
       fontSize: 16,
     },
     productDetailsSection: {

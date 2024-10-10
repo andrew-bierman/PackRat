@@ -1,6 +1,7 @@
 import React from 'react';
 import { Accordion, Paragraph, Square } from 'tamagui';
 import { ChevronDown } from '@tamagui/lucide-icons';
+import { Details } from '@packrat/ui';
 
 interface Details {
   key1: string;
@@ -30,11 +31,11 @@ export function ExpandableDetailsSection({
         </Accordion.Trigger>
         <Accordion.HeightAnimator animation="quick">
           <Accordion.Content>
-            {Object.entries(details).map(([key, value], index) => (
-              <Paragraph key={index}>
-                {key}: {value}
-              </Paragraph>
-            ))}
+            <Details
+              items={Object.entries(details).map(([key, value]) => {
+                return { key, label: key, value };
+              })}
+            />
           </Accordion.Content>
         </Accordion.HeightAnimator>
       </Accordion.Item>
