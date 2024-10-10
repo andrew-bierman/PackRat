@@ -46,12 +46,10 @@ export async function getSimilarItemsService(
   const similarItemsResult = await itemRepository.findAllInArray(array);
 
   // add similarity score to items result
-  const similarItems = similarItemsResult.map((similarItem) => {
-    return {
-      ...similarItem,
-      similarityScore: matches.find((m) => m.id == similarItem.id).score,
-    };
-  });
+  const similarItems = similarItemsResult.map((similarItem) => ({
+    ...similarItem,
+    similarityScore: matches.find((m) => m.id == similarItem.id).score,
+  }));
 
   return similarItems;
 }
