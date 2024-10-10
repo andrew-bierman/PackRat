@@ -16,6 +16,13 @@ export const bulkAddItemsGlobalService = async (
     type: 'Food' | 'Water' | 'Essentials';
     ownerId: string;
     image_urls?: string;
+    sku?: string;
+    productUrl?: string;
+    description?: string;
+    productDetails?: {
+      [key: string]: string | number | boolean | null;
+    };
+    seller?: string;
   }>,
   executionCtx: ExecutionContext,
 ) => {
@@ -25,8 +32,20 @@ export const bulkAddItemsGlobalService = async (
   const insertedItems = [];
 
   for (const itemData of items) {
-    const { name, weight, quantity, unit, type, ownerId, image_urls } =
-      itemData;
+    const {
+      name,
+      weight,
+      quantity,
+      unit,
+      type,
+      ownerId,
+      image_urls,
+      sku,
+      productUrl,
+      description,
+      productDetails,
+      seller,
+    } = itemData;
     if (!categories.includes(type)) {
       throw new Error(`Category must be one of: ${categories.join(', ')}`);
     }
@@ -57,6 +76,11 @@ export const bulkAddItemsGlobalService = async (
       categoryId: category.id,
       global: true,
       ownerId,
+      sku,
+      productUrl,
+      description,
+      productDetails,
+      seller,
     };
 
     const item = await DbClient.instance
