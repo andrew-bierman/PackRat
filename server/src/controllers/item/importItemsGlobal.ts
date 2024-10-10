@@ -77,11 +77,11 @@ export function importItemsGlobalRoute() {
           header: true,
           complete: async function (results) {
             const expectedHeaders = [
-              'name',
-              'weight',
-              'unit',
-              'quantity',
-              'category',
+              'Name',
+              'Weight',
+              'Unit',
+              'Quantity',
+              'Category',
               'image_urls',
               'sku',
               'product_url',
