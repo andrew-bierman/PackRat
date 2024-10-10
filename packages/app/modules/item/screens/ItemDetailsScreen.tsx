@@ -122,18 +122,26 @@
 import React from 'react';
 import { RScrollView, RStack } from '@packrat/ui';
 import { ItemDetailsSection } from '../components/ItemDetailsSection';
-import { View } from 'react-native';
+import { Platform } from 'react-native';
+import { ItemDetailsSectionNative } from '../components/ItemDetailsSectionNative';
+import useTheme from 'app/hooks/useTheme';
 
 export function ItemDetailsScreen() {
+  const { currentTheme } = useTheme();
   return (
     <RScrollView
       style={{
-        marginBottom: 50,
+        marginBottom: 40,
         flex: 1,
+        backgroundColor: currentTheme.colors.background,
       }}
     >
-      <RStack style={{ padding: 10, width: '100%' }}>
-        <ItemDetailsSection />
+      <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
+        {Platform.OS === 'web' ? (
+          <ItemDetailsSection />
+        ) : (
+          <ItemDetailsSectionNative />
+        )}
       </RStack>
     </RScrollView>
   );

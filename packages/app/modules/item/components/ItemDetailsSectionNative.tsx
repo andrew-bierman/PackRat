@@ -39,47 +39,43 @@ const mockItemData: ItemData = {
   },
 };
 
-export function ItemDetailsSection() {
+export function ItemDetailsSectionNative() {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
 
   return (
     <RStack style={styles.container}>
-      <RStack style={styles.contentContainer}>
-        <RStack style={styles.imagePlaceholder}>
-          <RText style={styles.placeholderText}>
-            Image Section Placeholder
-          </RText>
-        </RStack>
-        <RStack style={styles.detailsContainer}>
-          <RText style={styles.title}>{mockItemData.title}</RText>
-          <RStack style={styles.infoRow}>
-            <RStack style={{ flexDirection: 'column' }}>
-              <RText style={styles.categoryText}>{mockItemData.category}</RText>
-              <RText style={styles.weightText}>
-                {convertWeight(
-                  mockItemData.weight,
-                  SMALLEST_ITEM_UNIT,
-                  mockItemData.unit,
-                )}
-                {mockItemData.unit}
-              </RText>
-            </RStack>
-          </RStack>
-          <RStack style={styles.descriptionSection}>
-            <RText>{mockItemData.description}</RText>
-          </RStack>
-          <RStack style={styles.skuSellerRow}>
-            <RText style={styles.skuText}>SKU: {mockItemData.sku}</RText>
-            <RText style={styles.sellerText}>
-              Seller: {mockItemData.seller}
+      <RStack style={styles.imagePlaceholder}>
+        <RText style={styles.placeholderText}>Image Section Placeholder</RText>
+      </RStack>
+      <RStack style={styles.detailsContainer}>
+        <RText style={styles.title}>{mockItemData.title}</RText>
+        <RStack style={styles.infoRow}>
+          <RStack style={{ flexDirection: 'column' }}>
+            <RText style={styles.categoryText}>{mockItemData.category}</RText>
+            <RText style={styles.weightText}>
+              {convertWeight(
+                mockItemData.weight,
+                SMALLEST_ITEM_UNIT,
+                mockItemData.unit,
+              )}
+              {mockItemData.unit}
             </RText>
           </RStack>
-          <RStack style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.GoToStoreButton}>
-              <RText style={styles.buttonText}>Go to Store</RText>
-            </TouchableOpacity>
-          </RStack>
+        </RStack>
+        <RStack style={styles.descriptionSection}>
+          <RText style={styles.descriptionText}>
+            {mockItemData.description}
+          </RText>
+        </RStack>
+        <RStack style={styles.skuSellerRow}>
+          <RText style={styles.skuText}>SKU: {mockItemData.sku}</RText>
+          <RText style={styles.sellerText}>Seller: {mockItemData.seller}</RText>
+        </RStack>
+        <RStack style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.GoToStoreButton}>
+            <RText style={styles.buttonText}>Go to Store</RText>
+          </TouchableOpacity>
         </RStack>
       </RStack>
       <RStack style={styles.productDetailsSection}>
@@ -98,29 +94,24 @@ const loadStyles = (theme: any) => {
       padding: 10,
       backgroundColor: currentTheme.colors.card,
     },
-    contentContainer: {
-      flexDirection: 'row',
-      height: '100%',
-      width: '100%',
-    },
-    detailsContainer: {
-      flex: 1,
-      padding: 20,
-    },
     imagePlaceholder: {
-      width: '50%',
+      width: '100%',
       height: 200,
       backgroundColor: currentTheme.colors.border,
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: 10,
+      marginBottom: 10,
     },
     placeholderText: {
       color: currentTheme.colors.text,
       fontSize: 16,
     },
+    detailsContainer: {
+      flex: 1,
+      padding: 20,
+    },
     title: {
-      fontSize: 24,
+      fontSize: 28,
       fontWeight: 'bold',
       marginBottom: 10,
     },
@@ -135,22 +126,25 @@ const loadStyles = (theme: any) => {
       fontWeight: '400',
     },
     weightText: {
-      fontSize: 20,
+      fontSize: 22,
       fontWeight: '600',
       marginRight: 10,
     },
     descriptionSection: {
       marginBottom: 20,
     },
+    descriptionText: {
+      fontSize: 14,
+    },
     skuSellerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
     skuText: {
-      fontSize: 14,
+      fontSize: 16,
     },
     sellerText: {
-      fontSize: 14,
+      fontSize: 16,
     },
     buttonContainer: {
       marginTop: 10,
@@ -165,7 +159,7 @@ const loadStyles = (theme: any) => {
     buttonText: {
       color: currentTheme.colors.text,
       fontWeight: 'bold',
-      fontSize: 14,
+      fontSize: 16,
     },
     productDetailsSection: {
       width: '100%',
