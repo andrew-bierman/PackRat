@@ -28,6 +28,13 @@ export const addItemGlobalService = async (
   ownerId: string,
   executionCtx: ExecutionContext,
   image_urls?: string,
+  sku?: string,
+  productUrl?: string,
+  description?: string,
+  productDetails?: {
+    [key: string]: string | number | boolean | null;
+  },
+  seller?: string,
 ) => {
   let category: InsertItemCategory | null;
   if (!categories.includes(type)) {
@@ -47,6 +54,11 @@ export const addItemGlobalService = async (
     categoryId: category.id,
     global: true,
     ownerId,
+    sku,
+    productUrl,
+    description,
+    productDetails,
+    seller,
   });
 
   if (image_urls) {
@@ -56,10 +68,7 @@ export const addItemGlobalService = async (
         itemId: newItem.id,
         url,
       };
-      await DbClient.instance
-        .insert(itemImageTable)
-        .values(newItemImage)
-        .run();
+      await DbClient.instance.insert(itemImageTable).values(newItemImage).run();
     }
   }
 

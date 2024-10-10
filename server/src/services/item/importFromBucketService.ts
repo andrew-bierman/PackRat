@@ -10,6 +10,13 @@ interface CSVType {
   type: 'Essentials' | 'Food' | 'Water';
   ownerId: string;
   image_urls: string;
+  sku?: string;
+  productUrl?: string;
+  description?: string;
+  productDetails?: {
+    [key: string]: string | number | boolean | null;
+  };
+  seller?: string;
 }
 
 function getSignatureKey(
@@ -180,6 +187,11 @@ export async function parseCSVData(fileData: string, ownerId: string) {
               type: 'Essentials',
               ownerId,
               image_urls: item.image_urls,
+              sku: item.sku,
+              productUrl: item.product_url,
+              description: item.description,
+              productDetails: item.techs,
+              seller: item.seller,
             });
           }
           resolve(itemsToInsert);
