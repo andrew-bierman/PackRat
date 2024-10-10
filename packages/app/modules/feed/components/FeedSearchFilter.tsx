@@ -49,6 +49,7 @@ export const FeedSearchFilter = ({
   const [searchValue, setSearchValue] = useState();
   const debounceTimerRef = useRef(null);
   const sortOptions = useFeedSortOptions(
+    feedType,
     selectedTypes?.trip || feedType === 'userTrips',
   );
 
@@ -142,6 +143,15 @@ export const FeedSearchFilter = ({
               </RSwitch>
             </RStack>
           )}
+          {feedType === 'packTemplates' && (
+            <RText
+              fontSize={18}
+              fontWeight="bold"
+              color={currentTheme.colors.text}
+            >
+              Discover our curated pack templates to help you get started.
+            </RText>
+          )}
           <RStack
             style={{
               flexDirection: 'row',
@@ -207,6 +217,7 @@ const loadStyles = (theme: any) => {
       width: '100%',
       borderRadius: 10,
       marginTop: 20,
+      marginBottom: 8,
     },
     searchContainer: {
       flexDirection: 'row',

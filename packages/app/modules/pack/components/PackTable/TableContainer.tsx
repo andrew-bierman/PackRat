@@ -11,6 +11,17 @@ import {
 } from './TableHelperComponents';
 import { usePackTable } from './usePackTable';
 import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+  ColumnDef,
+} from '@tanstack/react-table';
+
+import ActionButtons from './ActionButtons';
+import { type Item } from 'app/modules/item';
+import { convertWeight } from 'app/utils/convertWeight';
+import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
 
 interface TableContainerProps {
   currentPack: any;
@@ -57,19 +68,71 @@ export const TableContainer = ({
   if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={String(error)} />;
 
+  const columnHelper = createColumnHelper<Item>();
+  const columns: ColumnDef<Item, any>[] = [
+    columnHelper.accessor('name', {
+      cell: (info) => info.getValue(),
+      header: () => 'Name',
+      // footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('weight', {
+      cell: (info) =>
+        convertWeight(
+          info.getValue(),
+          SMALLEST_ITEM_UNIT,
+          info.row.original.unit as any,
+        ),
+      header: () => 'Weight',
+      // footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('quantity', {
+      header: () => 'Quantity',
+      cell: (info) => info.renderValue(),
+      // footer: (info) => info.column.id,
+    }),
+    columnHelper.accessor('category.name', {
+      header: () => 'Category',
+      cell: (info) => info.getValue(),
+      // footer: (info) => 'category',
+    }),
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  if (hasPermissions) {
+    columns.push(
+      columnHelper.display({
+        id: 'actions',
+        cell: (props) => (
+          <ActionButtons
+            item={props.row.original}
+            onDelete={deletePackItem}
+            currentPack={currentPack}
+          />
+        ),
+        header: () => 'Actions',
+      }),
+    );
+  }
+
+  const headerGroup = table.getHeaderGroups()[0];
+  const tableRows = table.getRowModel().rows;
+  const footerGroup = table.getFooterGroups()[0];
+
   return (
     <View style={[styles.container]}>
       {data?.length ? (
         <>
           <BasicTable
-            groupedData={groupedData}
-            onDelete={deletePackItem}
-            handleCheckboxChange={handleCheckboxChange}
-            currentPack={currentPack}
-            hasPermissions={isAuthUserPack}
-            refetch={refetch ?? false}
-            setRefetch={setRefetch}
-          ></BasicTable>
+            headerGroup={headerGroup}
+            tableRows={tableRows}
+            footerGroup={footerGroup}
+            columnsLength={columns.length}
+          />
           {/* <Table style={styles.tableStyle} flexArr={flexArr}>
             <TitleRow title="Pack List" />
             <Row

@@ -1,5 +1,4 @@
-import React from 'react';
-import * as LocalAuthentication from 'expo-local-authentication';
+// import { Facebook, Github } from '@tamagui/lucide-icons';
 import {
   AnimatePresence,
   H1,
@@ -10,11 +9,13 @@ import {
   Theme,
   View,
 } from 'tamagui';
-import { Text, Platform, Alert } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { FormCard } from './components/layoutParts';
 import { RLink } from '@packrat/ui';
 import { Form, FormInput, SubmitButton } from '@packrat/ui';
 import { userSignIn } from '@packrat/validations';
+import { FontAwesome } from '@expo/vector-icons';
+import { RIconButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
 
@@ -26,64 +27,24 @@ export function SignInScreen({
 }) {
   const { currentTheme } = useTheme();
   const { xxs, xs } = useResponsive();
-
-  const handleBiometricAuth = async () => {
-    if (Platform.OS === 'web' || true) {
-      return true;
-    }
-
-    const hasHardware = await LocalAuthentication.hasHardwareAsync();
-    if (!hasHardware) {
-      Alert.alert(
-        'Error',
-        'Your device does not support biometric authentication.',
-      );
-      return false;
-    }
-
-    const hasBiometrics = await LocalAuthentication.isEnrolledAsync();
-    if (!hasBiometrics) {
-      Alert.alert(
-        'Error',
-        'No biometrics are enrolled. Please set up biometrics in your device settings.',
-      );
-      return false;
-    }
-
-    const result = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Authenticate to continue',
-      fallbackLabel: 'Use Passcode',
-    });
-
-    if (!result.success) {
-      Alert.alert('Authentication failed', 'Please try again.');
-    }
-
-    return result.success;
-  };
-
-  const handleSubmit = async (data) => {
-    const isBiometricallyAuthenticated = await handleBiometricAuth();
-    if (isBiometricallyAuthenticated) {
-      signIn(data);
-    }
-  };
-
   return (
-    <FormCard>
+    <FormCard
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <View
-        fd="column"
-        f={1}
-        ai="stretch"
-        miw="100%"
-        maw="100%"
+        flexDirection="column"
+        maxWidth="100%"
+        minWidth="100%"
+        maxHeight="100%"
+        minHeight="100%"
+        alignItems="center"
+        justifyContent="center"
         gap="$4"
-        p="$4"
-        py="$14"
-        $group-window-gtSm={{
-          paddingVertical: '$4',
-          width: 400,
-        }}
+        padding="$4"
+        paddingVertical="$6"
       >
         <H1
           alignSelf="center"
@@ -94,7 +55,11 @@ export function SignInScreen({
           Sign in to your account
         </H1>
         <Form validationSchema={userSignIn}>
-          <View flexDirection="column" gap="$3">
+          <View
+            flexDirection="column"
+            gap="$3"
+            width={xxs ? '80%' : xs ? '80%' : '20%'}
+          >
             <FormInput
               label="Email ID"
               keyboardType="email-address"
@@ -110,7 +75,7 @@ export function SignInScreen({
             <Theme inverse>
               <SubmitButton
                 disabled={signInStatus === 'loading'}
-                onSubmit={handleSubmit}
+                onSubmit={(data) => signIn(data)}
                 style={{
                   marginTop: 16,
                   backgroundColor: currentTheme.colors.tertiaryBlue,
@@ -164,6 +129,20 @@ export function SignInScreen({
                 <Paragraph>Or</Paragraph>
                 <Separator />
               </View>
+              {/* <View flexDirection="row" flexWrap="wrap" gap="$3">
+                <RIconButton
+                  disabled={!isGoogleSignInReady}
+                  flex={1}
+                  onPress={async (event) => {
+                    event.preventDefault();
+                    await promptAsync();
+                  }}
+                  icon={<FontAwesome name="google" size={16} />}
+                >
+                  Continue with Google
+                </RIconButton>
+              </View> */}
+              {/* <ForgotPasswordLink /> */}
             </Theme>
           </View>
         </Form>

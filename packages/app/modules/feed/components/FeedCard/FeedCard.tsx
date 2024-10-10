@@ -1,20 +1,27 @@
 import React, { type FC } from 'react';
 import { type FeedItem, type FeedResource } from 'app/modules/feed/model';
-import { feedItemPackCardConverter, feedItemTripCardConverter } from './utils';
+import {
+  feedItemPackCardConverter,
+  feedItemTripCardConverter,
+  feedItemPackTemplateCardConverter,
+} from './utils';
 import { PackCard } from 'app/modules/pack';
 import { type CardType } from '@packrat/ui';
 import { useAddFavorite } from 'app/modules/feed';
 import { useAuthUser } from 'app/modules/auth';
 import { TripCard } from 'app/modules/trip';
+import { PackTemplateCard } from 'app/modules/pack-templates';
 
 const convertersByType = {
   pack: feedItemPackCardConverter,
   trip: feedItemTripCardConverter,
+  packTemplate: feedItemPackTemplateCardConverter,
 };
 
 const cardComponentsByType = {
   pack: PackCard,
   trip: TripCard,
+  packTemplate: PackTemplateCard,
 };
 
 interface FeedCardProps {

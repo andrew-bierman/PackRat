@@ -7,3 +7,4 @@ export {
   AddItem,
   AddItemModal,
 } from './components';
+export * from './model';
