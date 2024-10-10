@@ -1,17 +1,9 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { RText, RStack, ImageGallery, mockImages, View } from '@packrat/ui';
+import { RStack, ImageGallery, View, mockImages } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { convertWeight } from 'app/utils/convertWeight';
-import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';
-
-interface Details {
-  key1: string;
-  key2: string;
-  key3: string;
-}
+import ItemDetailsContent from './ItemDetailsContent';
 
 interface ItemData {
   title: string;
@@ -21,25 +13,14 @@ interface ItemData {
   weight: number;
   unit: string;
   description: string;
-  details: Details;
+  details?: {
+    key1: string;
+    key2: string;
+    key3: string;
+  };
 }
 
-const mockItemData: ItemData = {
-  title: 'Product Title',
-  sku: 'SKU123',
-  seller: 'Seller Name',
-  category: 'Product Category',
-  weight: 2,
-  unit: 'kg',
-  description: 'This is a dummy description of the item for display purposes.',
-  details: {
-    key1: 'Value 1',
-    key2: 'Value 2',
-    key3: 'Value 3',
-  },
-};
-
-export function ItemDetailsSection() {
+export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
 
@@ -50,39 +31,24 @@ export function ItemDetailsSection() {
           <ImageGallery images={mockImages} />
         </View>
         <RStack style={styles.detailsContainer}>
-          <RText style={styles.title}>{mockItemData.title}</RText>
-          <RStack style={styles.infoRow}>
-            <RStack style={{ flexDirection: 'column' }}>
-              <RText style={styles.categoryText}>{mockItemData.category}</RText>
-              <RText style={styles.weightText}>
-                {convertWeight(
-                  mockItemData.weight,
-                  SMALLEST_ITEM_UNIT,
-                  mockItemData.unit,
-                )}
-                {mockItemData.unit}
-              </RText>
-            </RStack>
-          </RStack>
-          <RStack style={styles.descriptionSection}>
-            <RText>{mockItemData.description}</RText>
-          </RStack>
-          <RStack style={styles.skuSellerRow}>
-            <RText style={styles.skuText}>SKU: {mockItemData.sku}</RText>
-            <RText style={styles.sellerText}>
-              Seller: {mockItemData.seller}
-            </RText>
-          </RStack>
-          <RStack style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.GoToStoreButton}>
-              <RText style={styles.buttonText}>Go to Store</RText>
-            </TouchableOpacity>
-          </RStack>
+          <ItemDetailsContent
+            itemData={{
+              title: itemData.title,
+              sku: itemData.sku,
+              seller: itemData.seller,
+              category: itemData.category,
+              weight: itemData.weight,
+              unit: itemData.unit,
+              description: itemData.description,
+            }}
+          />
         </RStack>
       </RStack>
-      <RStack style={styles.productDetailsSection}>
-        <ExpandableDetailsSection details={mockItemData.details} />
-      </RStack>
+      {itemData.details && (
+        <RStack style={styles.productDetailsSection}>
+          <ExpandableDetailsSection details={itemData.details} />
+        </RStack>
+      )}
     </RStack>
   );
 }
@@ -112,56 +78,6 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       alignItems: 'center',
       marginRight: 10,
-    },
-    placeholderText: {
-      color: currentTheme.colors.text,
-      fontSize: 16,
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-    },
-    infoRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    categoryText: {
-      fontSize: 12,
-      fontWeight: '400',
-    },
-    weightText: {
-      fontSize: 20,
-      fontWeight: '600',
-      marginRight: 10,
-    },
-    descriptionSection: {
-      marginBottom: 5,
-    },
-    skuSellerRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    skuText: {
-      fontSize: 14,
-      fontWeight: 600,
-    },
-    sellerText: {
-      fontSize: 14,
-      fontWeight: 600,
-    },
-    buttonContainer: {},
-    GoToStoreButton: {
-      backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      borderRadius: 3,
-      alignItems: 'center',
-    },
-    buttonText: {
-      color: currentTheme.colors.text,
-      fontWeight: 'bold',
-      fontSize: 14,
     },
     productDetailsSection: {
       width: '100%',
