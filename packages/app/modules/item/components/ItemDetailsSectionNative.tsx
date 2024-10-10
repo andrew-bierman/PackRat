@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { RText, RStack } from '@packrat/ui';
+import { RText, RStack, ImageGallery, mockImages } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
@@ -46,7 +46,7 @@ export function ItemDetailsSectionNative() {
   return (
     <RStack style={styles.container}>
       <RStack style={styles.imagePlaceholder}>
-        <RText style={styles.placeholderText}>Image Section Placeholder</RText>
+        <ImageGallery images={mockImages} />
       </RStack>
       <RStack style={styles.detailsContainer}>
         <RText style={styles.title}>{mockItemData.title}</RText>

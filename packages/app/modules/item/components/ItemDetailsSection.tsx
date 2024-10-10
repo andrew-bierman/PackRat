@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { RText, RStack } from '@packrat/ui';
+import { RText, RStack, ImageGallery, mockImages, View } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
@@ -46,11 +46,9 @@ export function ItemDetailsSection() {
   return (
     <RStack style={styles.container}>
       <RStack style={styles.contentContainer}>
-        <RStack style={styles.imagePlaceholder}>
-          <RText style={styles.placeholderText}>
-            Image Section Placeholder
-          </RText>
-        </RStack>
+        <View style={styles.imagePlaceholder}>
+          <ImageGallery images={mockImages} />
+        </View>
         <RStack style={styles.detailsContainer}>
           <RText style={styles.title}>{mockItemData.title}</RText>
           <RStack style={styles.infoRow}>
@@ -101,15 +99,15 @@ const loadStyles = (theme: any) => {
     contentContainer: {
       flexDirection: 'row',
       height: '100%',
-      width: '100%',
     },
     detailsContainer: {
       flex: 1,
       padding: 10,
     },
     imagePlaceholder: {
-      width: '50%',
-      height: 200,
+      flex: 1,
+      overflow: 'hidden',
+      height: 300,
       backgroundColor: currentTheme.colors.border,
       justifyContent: 'center',
       alignItems: 'center',
