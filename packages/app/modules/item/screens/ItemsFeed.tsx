@@ -103,6 +103,7 @@ const loadStyles = (theme: any) => {
       height: 800,
       padding: 10,
       alignItems: 'center',
+      backgroundColor: currentTheme.colors.background,
     },
     container: {
       backgroundColor: currentTheme.colors.card,

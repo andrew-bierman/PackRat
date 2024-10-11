@@ -1,11 +1,9 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { RText, RStack, ImageGallery, mockImages } from '@packrat/ui';
+import { RStack, ImageGallery, mockImages } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { convertWeight } from 'app/utils/convertWeight';
-import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';
+import ItemDetailsContent from './ItemDetailsContent';
 
 interface Details {
   key1: string;
@@ -21,7 +19,7 @@ interface ItemData {
   weight: number;
   unit: string;
   description: string;
-  details: Details;
+  details?: Details;
 }
 
 const mockItemData: ItemData = {
@@ -48,39 +46,26 @@ export function ItemDetailsSectionNative() {
       <RStack style={styles.imagePlaceholder}>
         <ImageGallery images={mockImages} />
       </RStack>
+
       <RStack style={styles.detailsContainer}>
-        <RText style={styles.title}>{mockItemData.title}</RText>
-        <RStack style={styles.infoRow}>
-          <RStack style={{ flexDirection: 'column' }}>
-            <RText style={styles.categoryText}>{mockItemData.category}</RText>
-            <RText style={styles.weightText}>
-              {convertWeight(
-                mockItemData.weight,
-                SMALLEST_ITEM_UNIT,
-                mockItemData.unit,
-              )}
-              {mockItemData.unit}
-            </RText>
-          </RStack>
-        </RStack>
-        <RStack style={styles.descriptionSection}>
-          <RText style={styles.descriptionText}>
-            {mockItemData.description}
-          </RText>
-        </RStack>
-        <RStack style={styles.skuSellerRow}>
-          <RText style={styles.skuText}>SKU: {mockItemData.sku}</RText>
-          <RText style={styles.sellerText}>Seller: {mockItemData.seller}</RText>
-        </RStack>
-        <RStack style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.GoToStoreButton}>
-            <RText style={styles.buttonText}>Go to Store</RText>
-          </TouchableOpacity>
-        </RStack>
+        <ItemDetailsContent
+          itemData={{
+            title: mockItemData.title,
+            sku: mockItemData.sku,
+            seller: mockItemData.seller,
+            category: mockItemData.category,
+            weight: mockItemData.weight,
+            unit: mockItemData.unit,
+            description: mockItemData.description,
+          }}
+        />
       </RStack>
-      <RStack style={styles.productDetailsSection}>
-        <ExpandableDetailsSection details={mockItemData.details} />
-      </RStack>
+
+      {mockItemData.details && (
+        <RStack style={styles.productDetailsSection}>
+          <ExpandableDetailsSection details={mockItemData.details} />
+        </RStack>
+      )}
     </RStack>
   );
 }
@@ -102,56 +87,8 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       marginBottom: 10,
     },
-    placeholderText: {
-      color: currentTheme.colors.text,
-      fontSize: 16,
-    },
     detailsContainer: {
       flex: 1,
-      padding: 20,
-    },
-    title: {
-      fontSize: 28,
-      fontWeight: 'bold',
-    },
-    infoRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    categoryText: {
-      fontSize: 12,
-      fontWeight: '400',
-    },
-    weightText: {
-      fontSize: 22,
-      fontWeight: '600',
-      marginRight: 10,
-    },
-    descriptionText: {
-      fontSize: 14,
-    },
-    skuSellerRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    skuText: {
-      fontSize: 16,
-    },
-    sellerText: {
-      fontSize: 16,
-    },
-    GoToStoreButton: {
-      backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      borderRadius: 3,
-      alignItems: 'center',
-    },
-    buttonText: {
-      color: currentTheme.colors.text,
-      fontWeight: 700,
-      fontSize: 16,
     },
     productDetailsSection: {
       width: '100%',

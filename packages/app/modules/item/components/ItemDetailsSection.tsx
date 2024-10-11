@@ -20,6 +20,21 @@ interface ItemData {
   };
 }
 
+const mockItemData: ItemData = {
+  title: 'Product Title',
+  sku: 'SKU123',
+  seller: 'Seller Name',
+  category: 'Product Category',
+  weight: 2,
+  unit: 'kg',
+  description: 'This is a dummy description of the item for display purposes.',
+  details: {
+    key1: 'Value 1',
+    key2: 'Value 2',
+    key3: 'Value 3',
+  },
+};
+
 export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
@@ -33,20 +48,20 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
         <RStack style={styles.detailsContainer}>
           <ItemDetailsContent
             itemData={{
-              title: itemData.title,
-              sku: itemData.sku,
-              seller: itemData.seller,
-              category: itemData.category,
-              weight: itemData.weight,
-              unit: itemData.unit,
-              description: itemData.description,
+              title: mockItemData.title,
+              sku: mockItemData.sku,
+              seller: mockItemData.seller,
+              category: mockItemData.category,
+              weight: mockItemData.weight,
+              unit: mockItemData.unit,
+              description: mockItemData.description,
             }}
           />
         </RStack>
       </RStack>
-      {itemData.details && (
+      {mockItemData.details && (
         <RStack style={styles.productDetailsSection}>
-          <ExpandableDetailsSection details={itemData.details} />
+          <ExpandableDetailsSection details={mockItemData.details} />
         </RStack>
       )}
     </RStack>

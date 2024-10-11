@@ -16,13 +16,12 @@ export default function Item() {
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Pack',
+          title: 'Item',
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      {/* <DetailsComponent type='pack'/> */}
       <ItemDetailsScreen />
     </>
   );
