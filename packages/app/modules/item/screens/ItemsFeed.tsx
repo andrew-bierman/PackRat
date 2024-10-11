@@ -67,10 +67,10 @@ export function ItemsFeed() {
         <View style={{ padding: 20, width: '100%' }}>
           <FlatList
             data={data}
-            horizontal={false}
             ItemSeparatorComponent={() => (
               <View style={{ height: 12, width: '100%' }} />
             )}
+            numColumns={4}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => <ItemCard itemData={item as Item} />}
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom

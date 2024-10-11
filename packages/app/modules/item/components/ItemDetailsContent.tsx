@@ -15,6 +15,7 @@ interface ItemData {
   weight: number;
   unit: string;
   description: string;
+  productUrl: string;
 }
 
 const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {

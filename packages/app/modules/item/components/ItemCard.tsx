@@ -27,7 +27,6 @@ interface ItemCardProps {
 
 const ItemCard = ({ itemData }: ItemCardProps) => {
   const { currentTheme } = useTheme();
-  const firstImage = mockImages[0];
   const router = useRouter();
   const { xxs } = useResponsive();
 
@@ -45,9 +44,9 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
       style={{
         borderRadius: 10,
         backgroundColor: currentTheme.colors.card,
-        padding: xxs ? 4 : 10,
-        height: xxs ? 300 : 350,
-        width: xxs ? '100%' : '50%',
+        padding: 4,
+        width: '100%',
+        minWidth: 250,
       }}
     >
       <RStack
@@ -57,10 +56,15 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
           width: '100%',
         }}
       >
-        <View style={{ width: '40%' }}>
+        <View
+          style={{
+            width: '40%',
+            backgroundColor: currentTheme.colors.background,
+          }}
+        >
           <Image
-            source={{ uri: firstImage }}
-            resizeMode="stretch"
+            source={{ uri: itemData?.images?.[0]?.url }}
+            resizeMode="contain"
             style={{ width: '100%', height: '100%' }}
           />
         </View>

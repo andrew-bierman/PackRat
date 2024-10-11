@@ -14,7 +14,11 @@ export const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
   return (
     <XStack style={{ width: '100%', flex: 1, gap: 10 }}>
       <TouchableOpacity
-        style={{ alignSelf: 'center', marginHorizontal: 16 }}
+        style={{
+          alignSelf: 'center',
+          marginHorizontal: 16,
+          opacity: images?.length > 1 ? 1 : 0,
+        }}
         onPress={goPrev}
       >
         <ArrowLeft />
@@ -26,7 +30,11 @@ export const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
         style={{ flex: 1 }}
       />
       <TouchableOpacity
-        style={{ alignSelf: 'center', marginHorizontal: 16 }}
+        style={{
+          alignSelf: 'center',
+          marginHorizontal: 16,
+          opacity: images?.length > 1 ? 1 : 0,
+        }}
         onPress={goNext}
       >
         <ArrowRight />

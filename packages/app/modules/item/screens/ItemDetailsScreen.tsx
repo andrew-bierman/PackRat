@@ -121,11 +121,17 @@
 
 import React from 'react';
 import { RScrollView, RStack } from '@packrat/ui';
+import { useItem, useItemId } from 'app/modules/item';
 import { ItemDetailsSection } from '../components/ItemDetailsSection';
 import useTheme from 'app/hooks/useTheme';
 
 export function ItemDetailsScreen() {
   const { currentTheme } = useTheme();
+  const [itemId] = useItemId();
+  const { data: item, isLoading } = useItem(itemId);
+  if (isLoading) {
+    return null;
+  }
   return (
     <RScrollView
       style={{
@@ -135,7 +141,7 @@ export function ItemDetailsScreen() {
       }}
     >
       <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
-        <ItemDetailsSection />
+        <ItemDetailsSection itemData={item} />
       </RStack>
     </RScrollView>
   );

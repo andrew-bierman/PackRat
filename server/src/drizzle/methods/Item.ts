@@ -97,6 +97,11 @@ export class Item {
       const item = await DbClient.instance.query.item.findFirst({
         where: filter,
         with: {
+          images: {
+            columns: {
+              url: true,
+            },
+          },
           category: {
             columns: {
               id: true,

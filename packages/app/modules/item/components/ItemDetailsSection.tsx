@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RStack, ImageGallery, View, mockImages } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
@@ -7,62 +7,60 @@ import ItemDetailsContent from './ItemDetailsContent';
 import useResponsive from 'app/hooks/useResponsive';
 
 interface ItemData {
-  title: string;
+  name: string;
   sku: string;
   seller: string;
-  category: string;
+  category: { name: string };
   weight: number;
   unit: string;
   description: string;
-  details?: {
-    key1: string;
-    key2: string;
-    key3: string;
-  };
+  images: Array<{ url: string }>;
+  productDetails?: string;
+  productUrl: string;
 }
-
-const mockItemData: ItemData = {
-  title: 'Product Title',
-  sku: 'SKU123',
-  seller: 'Seller Name',
-  category: 'Product Category',
-  weight: 2,
-  unit: 'kg',
-  description: 'This is a dummy description of the item for display purposes.',
-  details: {
-    key1: 'Value 1',
-    key2: 'Value 2',
-    key3: 'Value 3',
-  },
-};
 
 export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
+  const productDetails = useMemo(() => {
+    try {
+      const parsedDetails = JSON.parse(
+        itemData?.productDetails?.replace?.(/'/g, '"'),
+      );
+      return parsedDetails;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }, [itemData?.productDetails]);
+  console.log(itemData);
 
   return (
     <RStack style={styles.container}>
       <RStack style={styles.contentContainer}>
         <View style={styles.imagePlaceholder}>
-          <ImageGallery images={mockImages} />
+          <ImageGallery
+            images={itemData?.images?.map?.(({ url }) => url) || []}
+          />
         </View>
         <RStack style={styles.detailsContainer}>
           <ItemDetailsContent
             itemData={{
-              title: mockItemData.title,
-              sku: mockItemData.sku,
-              seller: mockItemData.seller,
-              category: mockItemData.category,
-              weight: mockItemData.weight,
-              unit: mockItemData.unit,
-              description: mockItemData.description,
+              title: itemData.name,
+              sku: itemData.sku,
+              seller: itemData.seller,
+              category: itemData.category?.name,
+              weight: itemData.weight,
+              unit: itemData.unit,
+              description: itemData.description,
+              productUrl: itemData.productUrl,
             }}
           />
         </RStack>
       </RStack>
-      {mockItemData.details && (
+      {productDetails && (
         <RStack style={styles.productDetailsSection}>
-          <ExpandableDetailsSection details={mockItemData.details} />
+          <ExpandableDetailsSection details={productDetails} />
         </RStack>
       )}
     </RStack>
