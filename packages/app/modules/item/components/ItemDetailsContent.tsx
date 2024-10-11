@@ -5,6 +5,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ItemData {
   title: string;
@@ -44,11 +45,9 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
           <RText style={styles.skuText}>SKU: {itemData.sku}</RText>
           <RText style={styles.sellerText}>Seller: {itemData.seller}</RText>
         </RStack>
-        <RStack style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.GoToStoreButton}>
-            <RText style={styles.buttonText}>Go to Store</RText>
-          </TouchableOpacity>
-        </RStack>
+        <TouchableOpacity style={styles.GoToStoreButton}>
+          <RText style={styles.buttonText}>Go to Store</RText>
+        </TouchableOpacity>
       </RStack>
     </RStack>
   );
@@ -56,6 +55,7 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
+  const { xxs } = useResponsive();
 
   return {
     container: {
@@ -65,10 +65,10 @@ const loadStyles = (theme: any) => {
     },
     detailsContainer: {
       flex: 1,
-      padding: 10,
+      padding: xxs ? 0 : 10,
     },
     title: {
-      fontSize: 24,
+      fontSize: xxs ? 22 : 24,
       fontWeight: 'bold',
     },
     infoRow: {
@@ -81,8 +81,8 @@ const loadStyles = (theme: any) => {
       fontWeight: '400',
     },
     weightText: {
-      fontSize: 20,
-      fontWeight: '600',
+      fontSize: xxs ? 18 : 20,
+      fontWeight: xxs ? '800' : '600',
       marginRight: 10,
     },
     descriptionSection: {
@@ -91,20 +91,20 @@ const loadStyles = (theme: any) => {
     skuSellerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      paddingBottom: xxs ? 4 : 0,
     },
     skuText: {
-      fontSize: 14,
+      fontSize: xxs ? 12 : 14,
       fontWeight: '600',
     },
     sellerText: {
-      fontSize: 14,
+      fontSize: xxs ? 12 : 14,
       fontWeight: '600',
     },
-    buttonContainer: {},
     GoToStoreButton: {
       backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
+      paddingVertical: xxs ? 4 : 8,
+      paddingHorizontal: xxs ? 12 : 15,
       borderRadius: 3,
       alignItems: 'center',
     },
