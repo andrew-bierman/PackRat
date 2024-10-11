@@ -19,7 +19,6 @@ interface ItemData {
 
 const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
   const styles = useCustomStyles(loadStyles);
-  const { currentTheme } = useTheme();
 
   return (
     <RStack style={styles.container}>
@@ -55,43 +54,45 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
-  const { xxs } = useResponsive();
+  const { xxs, xs, sm } = useResponsive();
 
   return {
     container: {
       flex: 1,
-      padding: 10,
+      padding: xxs ? 0 : xs ? 8 : 10,
       backgroundColor: currentTheme.colors.card,
     },
     detailsContainer: {
       flex: 1,
-      padding: xxs ? 0 : 10,
+      padding: xxs ? 0 : xs ? 8 : 10,
     },
     title: {
-      fontSize: xxs ? 22 : 24,
+      fontSize: xxs ? 20 : xs ? 22 : sm ? 24 : 26,
       fontWeight: 'bold',
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      marginVertical: xs ? 5 : 10,
     },
     categoryText: {
       fontSize: 12,
       fontWeight: '400',
     },
     weightText: {
-      fontSize: xxs ? 18 : 20,
-      fontWeight: xxs ? '800' : '600',
+      fontSize: xxs ? 16 : xs ? 18 : 20,
+      fontWeight: xxs ? '800' : xs ? '700' : '600',
       marginRight: 10,
     },
     descriptionSection: {
-      marginBottom: 5,
+      height: xxs ? 80 : xs ? 90 : 100,
+      marginVertical: 10,
     },
     skuSellerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingBottom: xxs ? 4 : 0,
+      paddingBottom: xxs ? 0 : 8,
     },
     skuText: {
       fontSize: xxs ? 12 : 14,
@@ -104,14 +105,15 @@ const loadStyles = (theme: any) => {
     GoToStoreButton: {
       backgroundColor: currentTheme.colors.secondaryBlue,
       paddingVertical: xxs ? 4 : 8,
-      paddingHorizontal: xxs ? 12 : 15,
+      paddingHorizontal: xxs ? 0 : 15,
       borderRadius: 3,
       alignItems: 'center',
+      marginTop: 10,
     },
     buttonText: {
       color: currentTheme.colors.text,
       fontWeight: 'bold',
-      fontSize: 14,
+      fontSize: xxs ? 12 : 14,
     },
   };
 };
