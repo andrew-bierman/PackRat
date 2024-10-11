@@ -122,8 +122,6 @@
 import React from 'react';
 import { RScrollView, RStack } from '@packrat/ui';
 import { ItemDetailsSection } from '../components/ItemDetailsSection';
-import { Platform } from 'react-native';
-import { ItemDetailsSectionNative } from '../components/ItemDetailsSectionNative';
 import useTheme from 'app/hooks/useTheme';
 
 export function ItemDetailsScreen() {
@@ -137,11 +135,7 @@ export function ItemDetailsScreen() {
       }}
     >
       <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
-        {Platform.OS === 'web' ? (
-          <ItemDetailsSection />
-        ) : (
-          <ItemDetailsSectionNative />
-        )}
+        <ItemDetailsSection />
       </RStack>
     </RScrollView>
   );

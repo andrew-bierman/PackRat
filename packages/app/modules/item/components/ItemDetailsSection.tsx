@@ -4,6 +4,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';
 import ItemDetailsContent from './ItemDetailsContent';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ItemData {
   title: string;
@@ -70,16 +71,17 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
+  const { xxs } = useResponsive();
 
   return {
     container: {
       flex: 1,
       padding: 10,
+      flexDirection: 'column',
       backgroundColor: currentTheme.colors.card,
     },
     contentContainer: {
-      flexDirection: 'row',
-      height: '100%',
+      flexDirection: xxs ? 'column' : 'row',
     },
     detailsContainer: {
       flex: 1,
