@@ -1,66 +1,33 @@
-import React, { useState } from 'react';
 import { View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { AddItemGlobal, ImportItemGlobal } from '../components';
+import { ItemsTable } from 'app/modules/item/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { DropdownComponent, RScrollView, RStack, RText } from '@packrat/ui';
+import { useItems } from 'app/modules/item';
+import { usePagination } from 'app/hooks/common';
+import {
+  BaseModal,
+  DropdownComponent,
+  RScrollView,
+  RStack,
+  RText,
+} from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
-import ItemCard from '../components/ItemCard';
-
-interface Item {
-  id: number;
-  name: string;
-  category: {
-    name: string;
-  };
-  sku: string;
-  seller: string;
-  weight: number;
-  unit: string;
-  description: string;
-  details?: {
-    key1: string;
-    key2: string;
-    key3: string;
-  };
-}
-
-const mockItems: Item[] = [
-  {
-    id: 1,
-    name: 'Apple',
-    category: { name: 'Food' },
-    sku: 'SKU123',
-    seller: 'FruitSeller',
-    weight: 0.2,
-    unit: 'kg',
-    description: 'Fresh apple from the farm.',
-  },
-  {
-    id: 2,
-    name: 'Water Bottle',
-    category: { name: 'Water' },
-    sku: 'SKU124',
-    seller: 'WaterSeller',
-    weight: 1.0,
-    unit: 'L',
-    description: 'Clean drinking water.',
-  },
-  {
-    id: 3,
-    name: 'Toothpaste',
-    category: { name: 'Essentials' },
-    sku: 'SKU125',
-    seller: 'DailySeller',
-    weight: 0.05,
-    unit: 'kg',
-    description: 'Mint-flavored toothpaste.',
-    details: { key1: 'Detail1', key2: 'Detail2', key3: 'Detail3' },
-  },
-];
+import { useAuthUser } from 'app/modules/auth';
 
 export function ItemsScreen() {
+  const { limit, handleLimitChange, page, handlePageChange } = usePagination();
+  const { data, isFetching, isError } = useItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
-  const [value, setValue] = useState<string>('Food');
+  const [value, setValue] = useState('Food');
 
+  const authUser = useAuthUser();
+  const role = authUser?.role;
+
+  // for zeego = {false} options will be:
+  // const optionValues = ['Food', 'Water', 'Essentials'];
+
+  // for zeego ={true} options will be:
   const optionValues = [
     { label: 'Food', value: 'Food' },
     { label: 'Water', value: 'Water' },
@@ -68,17 +35,37 @@ export function ItemsScreen() {
     { label: 'All items', value: 'All items' },
   ];
 
-  const sortItemsByCategory = (items: Item[], selectedCategory: string) => {
-    if (!items) return [];
-    if (selectedCategory === 'All items') return items;
-    return items.filter((item) => item.category.name === selectedCategory);
+  const sortItemsByCategory = (items, selectedCategory) => {
+    if (!items) {
+      return [];
+    }
+    const selectedCategoryItems = items.filter(
+      (item) => item.category.name === selectedCategory,
+    );
+    const otherItems = items.filter(
+      (item) => item.category.name !== selectedCategory,
+    );
+
+    selectedCategoryItems.sort((a, b) => a.name.localeCompare(b.name));
+    otherItems.sort((a, b) => a.name.localeCompare(b.name));
+
+    return [...selectedCategoryItems, ...otherItems];
   };
 
-  const handleSort = (category: string) => {
+  const [sortedItems, setSortedItems] = useState(
+    sortItemsByCategory(data?.items, value),
+  );
+
+  const handleSort = (category) => {
     setValue(category);
+    const sorted = sortItemsByCategory(data?.items, category);
+    setSortedItems(sorted);
   };
 
-  const sortedItems = sortItemsByCategory(mockItems, value);
+  useEffect(() => {
+    const sorted = sortItemsByCategory(data?.items, value);
+    setSortedItems(sorted);
+  }, [data]);
 
   return (
     <RScrollView>
@@ -99,30 +86,60 @@ export function ItemsScreen() {
               />
             </View>
           </RStack>
+          <View
+            style={{
+              marginBottom: 10,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              gap: 5,
+            }}
+          >
+            <BaseModal title="Add a global Item" trigger="Add Item">
+              <AddItemGlobal />
+            </BaseModal>
+            {role === 'admin' && (
+              <BaseModal title="Import global Item" trigger="Import Item">
+                <ImportItemGlobal />
+              </BaseModal>
+            )}
+          </View>
         </RStack>
-
-        <View style={{ padding: 20, width: '100%' }}>
-          {sortedItems.map((item) => (
-            <View key={item.id} style={styles.cardsContainer}>
-              <ItemCard itemData={item} />
-            </View>
-          ))}
-        </View>
+        {!isError && data?.items && Array.isArray(data.items) && (
+          <View style={{ padding: 10, width: '100%' }}>
+            <ItemsTable
+              limit={limit}
+              setLimit={handleLimitChange}
+              page={page}
+              setPage={handlePageChange}
+              data={sortedItems}
+              isLoading={isFetching}
+              totalPages={data?.totalPages}
+            />
+          </View>
+        )}
       </RStack>
     </RScrollView>
   );
 }
 
-const loadStyles = (theme: any) => {
+const loadStyles = (theme) => {
   const { currentTheme } = theme;
   const { xxs, xs } = useResponsive();
 
   return {
     mainContainer: {
+      backgroundColor: currentTheme.colors.background,
       flexDirection: 'column',
-      height: 800,
+      flex: 1,
       padding: 10,
       alignItems: 'center',
+    },
+    button: {
+      color: currentTheme.colors.white,
+      display: 'flex',
+      alignItems: 'center',
+      textAlign: 'center',
     },
     container: {
       backgroundColor: currentTheme.colors.card,
@@ -138,13 +155,6 @@ const loadStyles = (theme: any) => {
       justifyContent: 'space-between',
       flexDirection: 'row',
       alignItems: 'center',
-    },
-    cardsContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      gap: 10,
-      padding: 10,
     },
   };
 };

@@ -5,6 +5,7 @@ import { and, count, eq, like, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
+import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
 
 export class Item {
   async create(data: InsertItem, packId?: string) {
@@ -165,6 +166,44 @@ export class Item {
         orderBy: (item, { desc }) => desc(item.createdAt),
       });
       return items;
+    } catch (error) {
+      throw new Error(`Failed to find global items: ${error.message}`);
+    }
+  }
+
+  async findFeed(filters: {
+    pagination?: PaginationParams;
+    searchTerm: string;
+  }) {
+    try {
+      const { pagination, searchTerm } = filters;
+      const { limit, offset } = getPaginationParams(pagination);
+      const items = await DbClient.instance.query.item.findMany({
+        where: and(
+          eq(ItemTable.global, true),
+          like(ItemTable.name, `%${searchTerm}%`),
+        ),
+        with: {
+          category: {
+            columns: { id: true, name: true },
+          },
+          images: {
+            columns: { url: true },
+          },
+        },
+        offset,
+        limit,
+        orderBy: (item, { desc }) => desc(item.createdAt),
+      });
+
+      const totalCountQuery = await DbClient.instance
+        .select({
+          totalCount: sql`COUNT(*)`,
+        })
+        .from(ItemTable)
+        .all();
+
+      return { data: items, totalCount: totalCountQuery?.[0]?.totalCount || 0 };
     } catch (error) {
       throw new Error(`Failed to find global items: ${error.message}`);
     }

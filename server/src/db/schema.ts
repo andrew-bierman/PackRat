@@ -307,11 +307,19 @@ export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
   }),
 }));
 
+export const itemImageRelations = relations(itemImage, ({ one }) => ({
+  author: one(item, {
+    fields: [itemImage.itemId],
+    references: [item.id],
+  }),
+}));
+
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
     fields: [item.categoryId],
     references: [itemCategory.id],
   }),
+  images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
 }));
