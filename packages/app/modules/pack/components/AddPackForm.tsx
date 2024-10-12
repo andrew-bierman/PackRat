@@ -47,11 +47,11 @@ export const AddPackForm = ({
     try {
       const response = await addNewPackAsync({ ...data, isPublic });
 
-      onSuccess?.();
-
       if (!response?.id) {
         return;
       }
+      onSuccess?.(response.id);
+
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
       }
