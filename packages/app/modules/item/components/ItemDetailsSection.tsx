@@ -76,7 +76,7 @@ const loadStyles = (theme: any) => {
       flex: 1,
       padding: 10,
       flexDirection: 'column',
-      backgroundColor: currentTheme.colors.card,
+      backgroundColor: currentTheme.colors.background,
     },
     contentContainer: {
       flexDirection: xxs ? 'column' : 'row',

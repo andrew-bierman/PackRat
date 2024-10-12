@@ -21,9 +21,6 @@ interface ItemData {
 const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
   const styles = useCustomStyles(loadStyles);
 
-  const truncatedSKU =
-    itemData.sku.length > 7 ? `${itemData.sku.slice(0, 7)}...` : itemData.sku;
-
   return (
     <RStack style={styles.container}>
       <RStack style={styles.detailsContainer}>
@@ -54,7 +51,7 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
         </RStack>
         <RStack style={styles.skuSellerRow}>
           <RText numberOfLines={1} ellipsizeMode="tail" style={styles.skuText}>
-            SKU: {truncatedSKU}
+            SKU: {itemData.sku}
           </RText>
           <RText
             numberOfLines={1}
@@ -74,13 +71,12 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
-  const { xxs, xs, sm, md, lg } = useResponsive();
+  const { xxs, xs, sm } = useResponsive();
 
   return {
     container: {
       flex: 1,
       padding: xxs ? 0 : xs ? 8 : 10,
-      backgroundColor: currentTheme.colors.card,
     },
     detailsContainer: {
       flex: 1,
@@ -128,12 +124,14 @@ const loadStyles = (theme: any) => {
       fontSize: xxs ? 9 : 10,
       fontWeight: '600',
       flexShrink: 1,
-      marginRight: 5,
+      maxWidth: '40%',
+      paddingTop: xxs ? 9 : 0,
     },
     sellerText: {
       fontSize: xxs ? 9 : 10,
       fontWeight: '600',
-      flexShrink: 1,
+      flexGrow: 0,
+      flexShrink: 0,
     },
     GoToStoreButton: {
       backgroundColor: currentTheme.colors.secondaryBlue,
