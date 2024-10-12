@@ -29,6 +29,11 @@ jobs:
         uses: ./.github/actions/setup-eas
         with:
           expo-token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Inject `ascAppId` into `eas.json`
+        shell: bash
+        working-directory: ${{ github.workspace }}/apps/expo
+        run: echo "$(jq '.submit.production.ios.ascAppId = "${{ secrets.ASC_APP_ID }}"' eas.json)" > eas.json
         
       - name: Build on EAS
         working-directory: ./apps/expo
