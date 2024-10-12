@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, Image } from 'tamagui';
 import ItemDetailsContent from './ItemDetailsContent';
-import { mockImages, RStack } from '@packrat/ui';
-import { TouchableOpacity, View, StyleSheet, Platform } from 'react-native';
+import { RStack } from '@packrat/ui';
+import { TouchableOpacity, View, Platform } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
 import { useRouter } from 'app/hooks/router';
 import RLink from '@packrat/ui/src/RLink';
@@ -44,8 +44,9 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
       style={{
         borderRadius: 10,
         backgroundColor: currentTheme.colors.card,
-        padding: 4,
+        padding: 10,
         width: '100%',
+        height: xxs ? 250 : 300,
         minWidth: 250,
       }}
     >
@@ -63,13 +64,18 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
           }}
         >
           <Image
-            source={{ uri: itemData?.images?.[0]?.url }}
+            source={{
+              uri: itemData?.images?.[0]?.url,
+            }}
             resizeMode="contain"
-            style={{ width: '100%', height: '100%' }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
           />
         </View>
 
-        <RStack style={{ flex: 1, paddingLeft: 5 }}>
+        <RStack style={{ flex: 1, paddingLeft: 10 }}>
           <ItemDetailsContent
             itemData={{
               title: itemData.name,

@@ -36,10 +36,20 @@ export function ItemsFeed() {
     totalPages,
   } = useItemsFeed();
   const styles = useCustomStyles(loadStyles);
+  const { xxs, xs, sm, md, lg } = useResponsive();
 
   if (isLoading) {
     return null;
   }
+
+  const getNumColumns = () => {
+    if (xxs || xs) return 1;
+    if (sm) return 2;
+    if (md) return 3;
+    return 4;
+  };
+
+  const numColumns = getNumColumns();
 
   console.log({ data });
 
@@ -67,12 +77,14 @@ export function ItemsFeed() {
         <View style={{ padding: 20, width: '100%' }}>
           <FlatList
             data={data}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: 12, width: '100%' }} />
-            )}
-            numColumns={4}
+            numColumns={numColumns}
+            key={`flatlist-numColumns-${numColumns}`}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
-            renderItem={({ item }) => <ItemCard itemData={item as Item} />}
+            renderItem={({ item }) => (
+              <View style={{ flex: 1 / numColumns, padding: 10 }}>
+                <ItemCard itemData={item as Item} />
+              </View>
+            )}
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
@@ -100,10 +112,11 @@ const loadStyles = (theme: any) => {
   return {
     mainContainer: {
       flexDirection: 'column',
-      height: 800,
+      height: '100%',
       padding: 10,
       alignItems: 'center',
       backgroundColor: currentTheme.colors.background,
+      marginBottom: 50,
     },
     container: {
       backgroundColor: currentTheme.colors.card,

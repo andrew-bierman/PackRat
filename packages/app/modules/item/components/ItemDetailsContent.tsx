@@ -21,10 +21,15 @@ interface ItemData {
 const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
   const styles = useCustomStyles(loadStyles);
 
+  const truncatedSKU =
+    itemData.sku.length > 7 ? `${itemData.sku.slice(0, 7)}...` : itemData.sku;
+
   return (
     <RStack style={styles.container}>
       <RStack style={styles.detailsContainer}>
-        <RText style={styles.title}>{itemData.title}</RText>
+        <RText numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
+          {itemData.title}
+        </RText>
         <RStack style={styles.infoRow}>
           <RStack style={{ flexDirection: 'column' }}>
             <RText style={styles.categoryText}>{itemData.category}</RText>
@@ -39,11 +44,25 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
           </RStack>
         </RStack>
         <RStack style={styles.descriptionSection}>
-          <RText>{itemData.description}</RText>
+          <RText
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={styles.descriptionText}
+          >
+            {itemData.description}
+          </RText>
         </RStack>
         <RStack style={styles.skuSellerRow}>
-          <RText style={styles.skuText}>SKU: {itemData.sku}</RText>
-          <RText style={styles.sellerText}>Seller: {itemData.seller}</RText>
+          <RText numberOfLines={1} ellipsizeMode="tail" style={styles.skuText}>
+            SKU: {truncatedSKU}
+          </RText>
+          <RText
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={styles.sellerText}
+          >
+            Seller: {itemData.seller}
+          </RText>
         </RStack>
         <TouchableOpacity style={styles.GoToStoreButton}>
           <RText style={styles.buttonText}>Go to Store</RText>
@@ -55,7 +74,7 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
-  const { xxs, xs, sm } = useResponsive();
+  const { xxs, xs, sm, md, lg } = useResponsive();
 
   return {
     container: {
@@ -66,55 +85,68 @@ const loadStyles = (theme: any) => {
     detailsContainer: {
       flex: 1,
       padding: xxs ? 0 : xs ? 8 : 10,
+      flexDirection: 'column',
+      justifyContent: 'space-between',
     },
     title: {
-      fontSize: xxs ? 20 : xs ? 22 : sm ? 24 : 26,
+      fontSize: xxs ? 16 : xs ? 16 : sm ? 18 : 20,
       fontWeight: 'bold',
+      maxHeight: 60,
+      marginVertical: xxs ? 0 : 5,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginVertical: xs ? 5 : 10,
+      marginVertical: xxs ? 0 : xs ? 3 : 5,
+      flexShrink: 1,
     },
     categoryText: {
-      fontSize: 12,
+      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
       fontWeight: '400',
     },
     weightText: {
-      fontSize: xxs ? 16 : xs ? 18 : 20,
+      fontSize: xxs ? 16 : xs ? 16 : 18,
       fontWeight: xxs ? '800' : xs ? '700' : '600',
-      marginRight: 10,
     },
     descriptionSection: {
-      height: xxs ? 80 : xs ? 90 : 100,
-      marginVertical: 10,
+      maxHeight: 60,
+      marginVertical: xxs ? 0 : 5,
+      padding: xxs ? 0 : 5,
+    },
+    descriptionText: {
+      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
     },
     skuSellerRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingBottom: xxs ? 0 : 8,
+      alignItems: 'center',
+      paddingBottom: xxs ? 0 : 5,
+      height: 30,
     },
     skuText: {
-      fontSize: xxs ? 12 : 14,
+      fontSize: xxs ? 9 : 10,
       fontWeight: '600',
+      flexShrink: 1,
+      marginRight: 5,
     },
     sellerText: {
-      fontSize: xxs ? 12 : 14,
+      fontSize: xxs ? 9 : 10,
       fontWeight: '600',
+      flexShrink: 1,
     },
     GoToStoreButton: {
       backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: xxs ? 4 : 8,
-      paddingHorizontal: xxs ? 0 : 15,
+      paddingVertical: xxs ? 4 : 6,
+      paddingHorizontal: xxs ? 0 : 10,
       borderRadius: 3,
       alignItems: 'center',
-      marginTop: 10,
+      marginTop: 5,
     },
     buttonText: {
       color: currentTheme.colors.text,
       fontWeight: 'bold',
-      fontSize: xxs ? 12 : 14,
+      fontSize: xxs ? 10 : 12,
     },
   };
 };
