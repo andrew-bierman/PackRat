@@ -87,7 +87,6 @@ function Trips() {
           isLoading={isPhotonLoading}
           shape={photonDetails}
           onVisibleBoundsChange={(bounds) => {
-            console.log({ bounds });
             setTripValue('bounds', bounds);
           }}
         />

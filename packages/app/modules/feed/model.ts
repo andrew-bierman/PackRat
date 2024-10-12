@@ -5,8 +5,9 @@ export type FeedType =
   | 'userPacks'
   | 'userTrips'
   | 'similarPacks'
-  | 'similarItems';
-export type FeedResource = 'pack' | 'trip';
+  | 'similarItems'
+  | 'packTemplates';
+export type FeedResource = 'pack' | 'trip' | 'packTemplate';
 
 export interface BaseFeedItem {
   id: string;

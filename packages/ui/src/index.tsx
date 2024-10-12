@@ -86,6 +86,8 @@ export * from './Details';
 export { View } from 'tamagui';
 export { config } from './tamagui.config';
 // export * from 'tamagui';
+
+export { ListItem as RListItem } from 'tamagui';
 export * from '@tamagui/toast';
 export * from './Bento';
 export * from './DateRangePicker';
@@ -96,6 +98,7 @@ export * from './modal';
 export * from './toast';
 export * from './alert';
 export * from './RCard';
+export * from './ItemPickerOverlay';
 export * from './RImage';
 export * from './RInput';
 export * from './RScrollview';

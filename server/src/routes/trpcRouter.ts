@@ -93,13 +93,20 @@ import {
   getTrailsOSMRoute,
   postSingleGeoJSONRoute,
 } from '../controllers/getOsm';
-
-import { router as trpcRouter } from '../trpc';
 import {
   getPublicFeedRoute,
   getUserPacksFeedRoute,
   getUserTripsFeedRoute,
 } from '../modules/feed';
+import {
+  getPackTemplatesRoute,
+  getPackTemplateRoute,
+  createPackFromTemplateRoute,
+} from '../controllers/packTemplates';
+
+import { router as trpcRouter } from '../trpc';
+
+import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 
 import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 
@@ -137,6 +144,9 @@ export const appRouter = trpcRouter({
   editTrip: editTripRoute(),
   deleteTrip: deleteTripRoute(),
   // templates routes
+  getPackTemplates: getPackTemplatesRoute(),
+  getPackTemplate: getPackTemplateRoute(),
+  createPackFromTemplate: createPackFromTemplateRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),

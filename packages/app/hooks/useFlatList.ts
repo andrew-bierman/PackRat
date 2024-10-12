@@ -9,7 +9,6 @@ export const useFlatList = (
   const renderItem = ({ item }) => {
     const sectionKey = item[1];
 
-    console.log({ sectionKey });
     return sectionComponents[sectionKey];
   };
 
