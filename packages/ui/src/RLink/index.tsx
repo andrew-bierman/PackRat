@@ -3,7 +3,7 @@ import React from 'react';
 
 const Link: React.FC<any> = ({ children, linkStyle, ...props }) => {
   return (
-    <OriginalLink {...props} style={[{ textDecoration: 'none' }, linkStyle]}>
+    <OriginalLink {...props} style={{ textDecoration: 'none' }}>
       {children}
     </OriginalLink>
   );
