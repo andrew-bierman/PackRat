@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { RStack, ImageGallery, View, mockImages } from '@packrat/ui';
+import { RStack, ImageGallery, View } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';

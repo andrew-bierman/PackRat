@@ -1,5 +1,6 @@
 import React, { type FC } from 'react';
-import { Image, XStack } from 'tamagui';
+import { XStack } from 'tamagui';
+import Image from 'react-native-fast-image';
 import { useImageGallery } from './useImageGallery';
 import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons';
 import { TouchableOpacity } from 'react-native';
@@ -13,32 +14,34 @@ export const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
 
   return (
     <XStack style={{ width: '100%', flex: 1, gap: 10 }}>
-      <TouchableOpacity
-        style={{
-          alignSelf: 'center',
-          marginHorizontal: 16,
-          opacity: images?.length > 1 ? 1 : 0,
-        }}
-        onPress={goPrev}
-      >
-        <ArrowLeft />
-      </TouchableOpacity>
+      {images?.length > 1 ? (
+        <TouchableOpacity
+          style={{
+            alignSelf: 'center',
+            marginHorizontal: 16,
+            opacity: images?.length > 1 ? 1 : 0,
+          }}
+          onPress={goPrev}
+        >
+          <ArrowLeft size={12} />
+        </TouchableOpacity>
+      ) : null}
       <Image
         source={{ uri: activeImageSrc }}
-        width="100%"
         resizeMode="contain"
-        style={{ flex: 1 }}
+        style={{ flex: 1, width: '100%' }}
       />
-      <TouchableOpacity
-        style={{
-          alignSelf: 'center',
-          marginHorizontal: 16,
-          opacity: images?.length > 1 ? 1 : 0,
-        }}
-        onPress={goNext}
-      >
-        <ArrowRight />
-      </TouchableOpacity>
+      {images?.length > 1 ? (
+        <TouchableOpacity
+          style={{
+            alignSelf: 'center',
+            marginHorizontal: 16,
+          }}
+          onPress={goNext}
+        >
+          <ArrowRight />
+        </TouchableOpacity>
+      ) : null}
     </XStack>
   );
 };

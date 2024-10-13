@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, Image } from 'tamagui';
+import { Card } from 'tamagui';
+import Image from 'react-native-fast-image';
 import ItemDetailsContent from './ItemDetailsContent';
 import { RStack } from '@packrat/ui';
 import { TouchableOpacity, View, Platform } from 'react-native';
@@ -66,8 +67,9 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
           <Image
             source={{
               uri: itemData?.images?.[0]?.url,
+              priority: Image.priority.normal,
             }}
-            resizeMode="contain"
+            resizeMode={Image.resizeMode.contain}
             style={{
               width: '100%',
               height: '100%',
