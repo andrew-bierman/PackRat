@@ -84,6 +84,7 @@ const ItemCard = ({ itemData }: ItemCardProps) => {
               sku: itemData.sku,
               seller: itemData.seller,
               category: itemData.category.name,
+              productUrl: itemData.productUrl,
               weight: itemData.weight,
               unit: itemData.unit,
               description: itemData.description,

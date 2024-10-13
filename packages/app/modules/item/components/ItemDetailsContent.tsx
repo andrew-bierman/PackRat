@@ -6,6 +6,7 @@ import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
+import { openExternalLink } from 'app/utils';
 
 interface ItemData {
   title: string;
@@ -61,7 +62,12 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
             Seller: {itemData.seller}
           </RText>
         </RStack>
-        <TouchableOpacity style={styles.GoToStoreButton}>
+        <TouchableOpacity
+          onPress={() => {
+            openExternalLink(itemData.productUrl);
+          }}
+          style={styles.GoToStoreButton}
+        >
           <RText style={styles.buttonText}>Go to Store</RText>
         </TouchableOpacity>
       </RStack>

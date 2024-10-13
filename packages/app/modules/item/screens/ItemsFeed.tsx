@@ -35,6 +35,7 @@ export function ItemsFeed() {
     hasPrevPage,
     totalPages,
   } = useItemsFeed();
+  console.log({ data });
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();
 
