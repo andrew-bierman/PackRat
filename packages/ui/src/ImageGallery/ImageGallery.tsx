@@ -1,8 +1,8 @@
 import React, { type FC } from 'react';
 import { XStack } from 'tamagui';
-import Image from 'react-native-fast-image';
 import { useImageGallery } from './useImageGallery';
 import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons';
+import { Image } from '../Image';
 import { TouchableOpacity } from 'react-native';
 
 interface ImageGalleryProps {

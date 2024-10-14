@@ -8,5 +8,5 @@ import { API_URL } from '@packrat/config';
  */
 
 // use this for android emulator
-export const api = 'http://10.0.2.2:8787/api';
-// export const api = API_URL;
+// export const api = 'http://10.0.2.2:8787/api';
+export const api = API_URL;

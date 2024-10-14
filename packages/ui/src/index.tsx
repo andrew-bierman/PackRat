@@ -93,6 +93,7 @@ export * from './Bento';
 export * from './DateRangePicker';
 export * from './dialog';
 export * from './ImageGallery';
+export * from './Image';
 export * from './list';
 export * from './modal';
 export * from './toast';
