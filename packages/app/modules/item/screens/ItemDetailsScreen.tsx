@@ -97,7 +97,7 @@ const loadStyles = (theme) => {
     },
     breadcrumbLink: {
       color: currentTheme.colors.text,
-      fontSize: 24,
+      fontSize: 18,
       fontWeight: 'bold',
     },
     breadcrumbSeparator: {
