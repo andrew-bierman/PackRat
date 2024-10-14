@@ -87,13 +87,12 @@ function Trips() {
           isLoading={isPhotonLoading}
           shape={photonDetails}
           onVisibleBoundsChange={(bounds) => {
-            console.log({ bounds });
             setTripValue('bounds', bounds);
           }}
         />
       ) : null,
     [SECTIONS.FOOTER]: isValid && (
-      <RStack>
+      <RStack style={{marginBottom: 20}}>
         <SaveTripContainer tripStore={tripStore} />
       </RStack>
     ),

@@ -4,12 +4,15 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { AddPackContainer } from '../../modules/pack/widgets/AddPackContainer';
 import useTheme from '../../hooks/useTheme';
 import PackContainer from '../../modules/pack/widgets/PackContainer';
+import { usePackId } from 'app/modules/pack';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 
 export const GearList = () => {
   const { currentTheme } = useTheme();
+  const [_, setPackIdParam] = usePackId();
+
   return (
     <RStack
       alignSelf="center"
@@ -58,8 +61,8 @@ export const GearList = () => {
         </RStack>
       </RStack>
 
-      <AddPackContainer isCreatingTrip={true} />
-      <PackContainer isCreatingTrip={true} />
+      <AddPackContainer onSuccess={setPackIdParam} isCreatingTrip={true} />
+      <PackContainer />
     </RStack>
   );
 };

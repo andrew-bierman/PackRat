@@ -46,6 +46,17 @@ export const DetailsComponent = ({
             />
           </>
         );
+      case 'packTemplate':
+        return (
+          <CustomCard
+            data={data}
+            title={data.name}
+            link={link}
+            content={additionalComps}
+            footer={null}
+            type="packTemplate"
+          />
+        );
       case 'trip':
         // Add trip-specific logic here
         return (

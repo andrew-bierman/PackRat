@@ -38,28 +38,35 @@ export const CustomCardHeader = ({
       <RStack style={{ flex: 1 }}>
         {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
-      <View>
-        <RLink href={`/profile/${ownerId}`} style={{ textDecoration: 'none' }}>
-          <RText>
-            {user?.id === ownerId
-              ? 'Your Profile'
-              : `View ${
-                  data.owners && data.owners?.length
-                    ? data.owners[0]?.name
-                    : 'Profile'
-                }`}
-          </RText>
-        </RLink>
-      </View>
-      {user?.id !== ownerId && COPY_TYPES.includes(data.type) && (
-        <RButton
-          onPress={() => {
-            setIsCopyPackModalOpen(true);
-          }}
-          style={{ backgroundColor: 'transparent' }}
-        >
-          <RText style={{ color: 'black' }}>Copy Pack</RText>
-        </RButton>
+      {data.type != 'packTemplate' && (
+        <>
+          <View>
+            <RLink
+              href={`/profile/${ownerId}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <RText>
+                {user?.id === ownerId
+                  ? 'Your Profile'
+                  : `View ${
+                      data.owners && data.owners?.length
+                        ? data.owners[0]?.name
+                        : 'Profile'
+                    }`}
+              </RText>
+            </RLink>
+          </View>
+          {user?.id !== ownerId && COPY_TYPES.includes(data.type) && (
+            <RButton
+              onPress={() => {
+                setIsCopyPackModalOpen(true);
+              }}
+              style={{ backgroundColor: 'transparent' }}
+            >
+              <RText style={{ color: 'black' }}>Copy Pack</RText>
+            </RButton>
+          )}
+        </>
       )}
       {actionsComponent}
       <CopyPackModal

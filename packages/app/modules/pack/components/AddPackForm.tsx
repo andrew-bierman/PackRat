@@ -47,11 +47,11 @@ export const AddPackForm = ({
     try {
       const response = await addNewPackAsync({ ...data, isPublic });
 
-      onSuccess?.();
-
       if (!response?.id) {
         return;
       }
+      onSuccess?.(response.id);
+
       if (!isCreatingTrip) {
         router.push(`/pack/${response.id}`);
       }
@@ -122,7 +122,6 @@ const loadStyles = (theme, appTheme) => {
       textAlign: 'center',
       justifyContent: 'center',
       width: '100%',
-      flex: 1,
       paddingHorizontal: 18,
       gap: 20,
       paddingTop: 20,

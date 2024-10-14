@@ -4,6 +4,7 @@ import { type PackDetails } from 'app/modules/pack';
 import { truncateString } from 'app/utils/truncateString';
 import { type TripDetails } from 'modules/trip/model';
 import { roundNumber } from 'app/utils';
+import { RouterOutput } from 'app/trpc';
 
 type Converter<Input, Result> = (
   input: Input,
@@ -73,4 +74,11 @@ export const feedItemTripCardConverter: Converter<
     },
     favoriteCount: input.favorites_count,
   };
+};
+
+export const feedItemPackTemplateCardConverter: Converter<
+  FeedItem,
+  RouterOutput['getPackTemplates'][0]
+> = (input) => {
+  return input;
 };

@@ -19,9 +19,11 @@ const packSortOptions = [
 
 const commonOptions = [SORT_OPTIONS.MOST_RECENT, SORT_OPTIONS.OLDEST];
 
-export const useFeedSortOptions = (isTripsEnabled = false) => {
-  return useMemo(
-    () => (isTripsEnabled ? commonOptions : packSortOptions),
-    [isTripsEnabled],
-  );
+const packTemplateSortOptions = [SORT_OPTIONS.LIGHTEST, SORT_OPTIONS.HEAVIEST];
+
+export const useFeedSortOptions = (feedType, isTripsEnabled = false) => {
+  return useMemo(() => {
+    if (feedType === 'packTemplates') return packTemplateSortOptions;
+    return isTripsEnabled ? commonOptions : packSortOptions;
+  }, [isTripsEnabled]);
 };
