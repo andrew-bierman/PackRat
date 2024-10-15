@@ -75,7 +75,14 @@ export function ItemsFeed() {
           </RStack>
         </RStack>
 
-        <View style={{ padding: 20, width: '100%' }}>
+        <View
+          style={{
+            padding: 20,
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <FlatList
             data={data}
             numColumns={numColumns}
@@ -91,14 +98,16 @@ export function ItemsFeed() {
             maxToRenderPerBatch={2}
           />
           {totalPages > 1 ? (
-            <Pagination
-              isPrevBtnDisabled={!hasPrevPage}
-              isNextBtnDisabled={!hasNextPage}
-              onPressPrevBtn={fetchPrevPage}
-              onPressNextBtn={fetchNextPage}
-              currentPage={currentPage}
-              totalPages={totalPages}
-            />
+            <View style={{ marginTop: 40 }}>
+              <Pagination
+                isPrevBtnDisabled={!hasPrevPage}
+                isNextBtnDisabled={!hasNextPage}
+                onPressPrevBtn={fetchPrevPage}
+                onPressNextBtn={fetchNextPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
+            </View>
           ) : null}
         </View>
       </RStack>
