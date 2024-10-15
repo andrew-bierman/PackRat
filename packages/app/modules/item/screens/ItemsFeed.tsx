@@ -3,6 +3,8 @@ import { FlatList, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   DropdownComponent,
+  Form,
+  InputWithIcon,
   Pagination,
   RScrollView,
   RStack,
@@ -12,6 +14,7 @@ import useResponsive from 'app/hooks/useResponsive';
 import ItemCard from '../components/ItemCard';
 import { useFeedSortOptions } from 'app/modules/feed/hooks/useFeedSortOptions';
 import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
+import { Search, X } from '@tamagui/lucide-icons';
 
 interface Item {
   id: number;
@@ -48,14 +51,19 @@ export function ItemsFeed() {
 
   const sortOptions = useFeedSortOptions('itemFeed');
   const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const [searchValue, setSearchValue] = useState();
 
   const handleSortChange = (newSortValue: string) => {
     setSortValue(newSortValue);
   };
 
+  const handleSetSearchValue = (v: string) => {
+    setSearchValue(v);
+  };
+
   useEffect(() => {
     console.log('Sort by', sortValue);
-  }, [sortOptions, sortValue]);
+  }, [sortValue]);
 
   if (isLoading) {
     return null;
@@ -73,12 +81,25 @@ export function ItemsFeed() {
   return (
     <RScrollView>
       <RStack style={styles.mainContainer}>
-        <RStack style={styles.container}>
+        <RStack style={styles.filterContainer}>
+          <RStack style={styles.searchContainer}>
+            <Form>
+              <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+                <InputWithIcon
+                  LeftIcon={<Search />}
+                  RightIcon={<X />}
+                  onChange={handleSetSearchValue}
+                  placeholder={`Search ItemsFeed`}
+                  value={searchValue}
+                />
+              </RStack>
+            </Form>
+          </RStack>
           <RStack style={styles.sortContainer}>
             <RText style={{ fontWeight: 'bold', textWrap: 'nowrap' }}>
               Sort By:
             </RText>
-            <View style={{ flex: 1 }}>
+            <RStack style={{ flex: 1 }}>
               <DropdownComponent
                 value={sortValue}
                 data={sortOptions}
@@ -87,11 +108,11 @@ export function ItemsFeed() {
                 native={true}
                 zeego={true}
               />
-            </View>
+            </RStack>
           </RStack>
         </RStack>
 
-        <View
+        <RStack
           style={{
             padding: 20,
             width: '100%',
@@ -105,16 +126,16 @@ export function ItemsFeed() {
             key={`flatlist-numColumns-${numColumns}`}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => (
-              <View style={{ flex: 1 / numColumns, padding: 10 }}>
+              <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
                 <ItemCard itemData={item as Item} />
-              </View>
+              </RStack>
             )}
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
           />
           {totalPages > 1 ? (
-            <View style={{ marginTop: 40 }}>
+            <RStack style={{ marginTop: 40 }}>
               <Pagination
                 isPrevBtnDisabled={!hasPrevPage}
                 isNextBtnDisabled={!hasNextPage}
@@ -123,9 +144,9 @@ export function ItemsFeed() {
                 currentPage={currentPage}
                 totalPages={totalPages}
               />
-            </View>
+            </RStack>
           ) : null}
-        </View>
+        </RStack>
       </RStack>
     </RScrollView>
   );
@@ -165,6 +186,23 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       gap: 10,
       padding: 10,
+    },
+    filterContainer: {
+      backgroundColor: currentTheme.colors.card,
+      padding: 15,
+      fontSize: 18,
+      width: '100%',
+      borderRadius: 10,
+      marginTop: 20,
+      marginBottom: 8,
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 10,
+      padding: 10,
+      borderRadius: 5,
     },
   };
 };
