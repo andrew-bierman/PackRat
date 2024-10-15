@@ -131,7 +131,7 @@ const loadStyles = (theme: any) => {
       fontWeight: '600',
       flexShrink: 1,
       maxWidth: '40%',
-      paddingTop: xxs ? 9 : 0,
+      paddingTop: xxs ? 13 : 0,
     },
     sellerText: {
       fontSize: xxs ? 9 : 10,

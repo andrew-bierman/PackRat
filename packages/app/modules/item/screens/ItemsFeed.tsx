@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Pagination, RScrollView, RStack, RText } from '@packrat/ui';
+import {
+  DropdownComponent,
+  Form,
+  InputWithIcon,
+  Pagination,
+  RScrollView,
+  RStack,
+  RText,
+} from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import ItemCard from '../components/ItemCard';
-import { useItemsFeed } from '../hooks';
+import { useFeedSortOptions } from 'app/modules/feed/hooks/useFeedSortOptions';
+import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
+import { Search, X } from '@tamagui/lucide-icons';
 
 interface Item {
   id: number;
@@ -39,6 +49,22 @@ export function ItemsFeed() {
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();
 
+  const sortOptions = useFeedSortOptions('itemFeed');
+  const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const [searchValue, setSearchValue] = useState();
+
+  const handleSortChange = (newSortValue: string) => {
+    setSortValue(newSortValue);
+  };
+
+  const handleSetSearchValue = (v: string) => {
+    setSearchValue(v);
+  };
+
+  useEffect(() => {
+    console.log('Sort by', sortValue);
+  }, [sortValue]);
+
   if (isLoading) {
     return null;
   }
@@ -52,55 +78,75 @@ export function ItemsFeed() {
 
   const numColumns = getNumColumns();
 
-  console.log({ data });
-
   return (
     <RScrollView>
       <RStack style={styles.mainContainer}>
-        <RStack style={styles.container}>
+        <RStack style={styles.filterContainer}>
+          <RStack style={styles.searchContainer}>
+            <Form>
+              <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+                <InputWithIcon
+                  LeftIcon={<Search />}
+                  RightIcon={<X />}
+                  onChange={handleSetSearchValue}
+                  placeholder={`Search ItemsFeed`}
+                  value={searchValue}
+                />
+              </RStack>
+            </Form>
+          </RStack>
           <RStack style={styles.sortContainer}>
             <RText style={{ fontWeight: 'bold', textWrap: 'nowrap' }}>
               Sort By:
             </RText>
-            <View style={{ flex: 1 }}>
-              {/* <DropdownComponent
-                value={value}
-                data={optionValues}
-                onValueChange={handleSort}
-                placeholder={value}
+            <RStack style={{ flex: 1 }}>
+              <DropdownComponent
+                value={sortValue}
+                data={sortOptions}
+                onValueChange={handleSortChange}
+                placeholder="Select Sort Option"
                 native={true}
                 zeego={true}
-              /> */}
-            </View>
+              />
+            </RStack>
           </RStack>
         </RStack>
 
-        <View style={{ padding: 20, width: '100%' }}>
+        <RStack
+          style={{
+            padding: 20,
+            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <FlatList
             data={data}
             numColumns={numColumns}
             key={`flatlist-numColumns-${numColumns}`}
             keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
             renderItem={({ item }) => (
-              <View style={{ flex: 1 / numColumns, padding: 10 }}>
+              <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
                 <ItemCard itemData={item as Item} />
-              </View>
+              </RStack>
             )}
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
           />
           {totalPages > 1 ? (
-            <Pagination
-              isPrevBtnDisabled={!hasPrevPage}
-              isNextBtnDisabled={!hasNextPage}
-              onPressPrevBtn={fetchPrevPage}
-              onPressNextBtn={fetchNextPage}
-              currentPage={currentPage}
-              totalPages={totalPages}
-            />
+            <RStack style={{ marginTop: 40 }}>
+              <Pagination
+                isPrevBtnDisabled={!hasPrevPage}
+                isNextBtnDisabled={!hasNextPage}
+                onPressPrevBtn={fetchPrevPage}
+                onPressNextBtn={fetchNextPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
+            </RStack>
           ) : null}
-        </View>
+        </RStack>
       </RStack>
     </RScrollView>
   );
@@ -140,6 +186,23 @@ const loadStyles = (theme: any) => {
       justifyContent: 'center',
       gap: 10,
       padding: 10,
+    },
+    filterContainer: {
+      backgroundColor: currentTheme.colors.card,
+      padding: 15,
+      fontSize: 18,
+      width: '100%',
+      borderRadius: 10,
+      marginTop: 20,
+      marginBottom: 8,
+    },
+    searchContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 10,
+      padding: 10,
+      borderRadius: 5,
     },
   };
 };
