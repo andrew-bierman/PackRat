@@ -82,7 +82,7 @@
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
     "helmet": "^7.0.0",
-    "hono": "^4.2.7",
+    "hono": "^4.6.5",
     "i": "^0.3.7",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
