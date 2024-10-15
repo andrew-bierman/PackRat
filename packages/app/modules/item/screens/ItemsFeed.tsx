@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { Pagination, RScrollView, RStack, RText } from '@packrat/ui';
+import {
+  DropdownComponent,
+  Pagination,
+  RScrollView,
+  RStack,
+  RText,
+} from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import ItemCard from '../components/ItemCard';
-import { useItemsFeed } from '../hooks';
+import { useFeedSortOptions } from 'app/modules/feed/hooks/useFeedSortOptions';
+import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
 
 interface Item {
   id: number;
@@ -39,6 +46,17 @@ export function ItemsFeed() {
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();
 
+  const sortOptions = useFeedSortOptions('itemFeed');
+  const [sortValue, setSortValue] = useState(sortOptions[0]);
+
+  const handleSortChange = (newSortValue: string) => {
+    setSortValue(newSortValue);
+  };
+
+  useEffect(() => {
+    console.log('Sort by', sortValue);
+  }, [sortOptions, sortValue]);
+
   if (isLoading) {
     return null;
   }
@@ -52,8 +70,6 @@ export function ItemsFeed() {
 
   const numColumns = getNumColumns();
 
-  console.log({ data });
-
   return (
     <RScrollView>
       <RStack style={styles.mainContainer}>
@@ -63,14 +79,14 @@ export function ItemsFeed() {
               Sort By:
             </RText>
             <View style={{ flex: 1 }}>
-              {/* <DropdownComponent
-                value={value}
-                data={optionValues}
-                onValueChange={handleSort}
-                placeholder={value}
+              <DropdownComponent
+                value={sortValue}
+                data={sortOptions}
+                onValueChange={handleSortChange}
+                placeholder="Select Sort Option"
                 native={true}
                 zeego={true}
-              /> */}
+              />
             </View>
           </RStack>
         </RStack>
