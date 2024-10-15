@@ -13,19 +13,14 @@ import { scorePackService } from '../pack/scorePackService';
  * @param {string} ownerId - The ID of the owner.
  * @return {Promise<object>} - A promise that resolves to the added item.
  */
-export const addGlobalItemToPackService = async (
-  packId: string,
-  itemId: string,
-  ownerId: string,
-) => {
+export const deleteItemFromPack = async (packId: string, itemId: string) => {
   const itemClass = new Item();
   const itemPacksClass = new ItemPacks();
   const item = await itemClass.findItem({
     id: itemId,
-    isGlobal: true,
   });
   if (!item) {
-    throw new Error('Global Item does not exist!');
+    throw new Error('Item does not exist!');
   }
-  await itemPacksClass.create({ itemId, packId });
+  await itemPacksClass.delete(itemId, packId);
 };

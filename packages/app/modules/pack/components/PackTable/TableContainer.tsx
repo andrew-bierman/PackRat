@@ -22,6 +22,7 @@ import ActionButtons from './ActionButtons';
 import { type Item } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
+import { useAuthUser } from 'app/modules/auth';
 
 interface TableContainerProps {
   currentPack: any;
@@ -42,6 +43,7 @@ export const TableContainer = ({
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
+  const authUser = useAuthUser();
   const {
     isLoading,
     error,
@@ -110,6 +112,7 @@ export const TableContainer = ({
         cell: (props) => (
           <ActionButtons
             item={props.row.original}
+            isOwner={props.row.original.ownerId === authUser?.id}
             onDelete={deletePackItem}
             currentPack={currentPack}
           />
