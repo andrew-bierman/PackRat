@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RSkeleton, RButton, RText } from '@packrat/ui';
+import { RSkeleton, RButton, RText, RStack, RSeparator } from '@packrat/ui'; // Added RSeparator here
 import { View } from 'react-native';
 import { YGroup } from 'tamagui';
 import {
@@ -8,10 +8,9 @@ import {
   ErrorMessage,
 } from './TableHelperComponents';
 import { usePackTable } from './usePackTable';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { loadStyles } from './packtable.style';
 import { ItemList } from './ItemList';
-
+import useResponsive from 'app/hooks/useResponsive';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 interface TableContainerProps {
   currentPack: any;
   selectedPack?: any;
@@ -29,6 +28,7 @@ export const TableContainer = ({
   setRefetch = () => {},
   copy,
 }: TableContainerProps) => {
+  const { sm } = useResponsive();
   const styles = useCustomStyles(loadStyles);
   const {
     isLoading,
@@ -81,8 +81,8 @@ export const TableContainer = ({
   return (
     <View style={styles.container}>
       {data?.length ? (
-        <>
-          <YGroup alignSelf="stretch" bordered width="100%" size="$8">
+        <View style={styles.layoutContainer}>
+          <YGroup alignSelf="stretch" size="$8" style={styles.itemsList}>
             {data.map((item) => (
               <YGroup.Item key={item.id}>
                 <ItemList
@@ -96,42 +96,75 @@ export const TableContainer = ({
             ))}
           </YGroup>
 
-          {copy && (
-            <RButton
-              style={{
-                width: 300,
-                marginHorizontal: 'auto',
-                marginTop: 10,
-              }}
-              onPress={handleDuplicate}
-            >
-              Copy
-            </RButton>
-          )}
+          {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
 
-          <TotalWeightBox
-            label="Base Weight"
-            weight={totalBaseWeight}
-            unit={weightUnit}
-          />
-          <TotalWeightBox
-            label="Water + Food Weight"
-            weight={totalWaterWeight + totalFoodWeight}
-            unit={weightUnit}
-          />
-          <TotalWeightBox
-            label="Total Weight"
-            weight={totalWeight}
-            unit={weightUnit}
-          />
-          <WeightUnitDropdown
-            value={weightUnit}
-            onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-          />
-        </>
+          <View style={styles.summarySection}>
+            <TotalWeightBox
+              label="Base Weight"
+              weight={totalBaseWeight}
+              unit={weightUnit}
+            />
+            <TotalWeightBox
+              label="Water + Food Weight"
+              weight={totalWaterWeight + totalFoodWeight}
+              unit={weightUnit}
+            />
+            <RSeparator style={styles.separator} />
+            <TotalWeightBox
+              label="Total Weight"
+              weight={totalWeight}
+              unit={weightUnit}
+            />
+            <WeightUnitDropdown
+              value={weightUnit}
+              onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+            />
+          </View>
+        </View>
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
     </View>
   );
+};
+
+const loadStyles = (theme: any) => {
+  const { currentTheme } = theme;
+  const { sm } = useResponsive();
+
+  return {
+    container: {
+      flex: 1,
+      padding: 10,
+      width: '100%',
+    },
+    layoutContainer: {
+      flexDirection: sm ? 'column' : 'row',
+      justifyContent: 'space-between',
+    },
+    itemsList: {
+      flex: 2,
+      marginRight: 20,
+      backgroundColor: currentTheme.colors.card,
+      width: '100%',
+      height: '100%',
+    },
+    summarySection: {
+      marginTop: sm ? 20 : 0,
+      flex: 1,
+      padding: sm ? 10 : 5,
+      borderRadius: 10,
+      elevation: 8,
+      backgroundColor: currentTheme.colors.card,
+    },
+    separator: {
+      marginVertical: 10,
+    },
+    noItemsText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      margin: 20,
+      textAlign: 'center',
+    },
+  };
 };
