@@ -13,6 +13,7 @@ import {
   DropdownComponent,
   RButton,
   RListItem,
+  RStack,
   useModalState,
 } from '@packrat/ui';
 import { Spinner } from 'tamagui';
@@ -64,7 +65,13 @@ export default function PackContainer() {
         </RListItem>
       ) : null}
       {currentPack ? (
-        <TableContainerComponent currentPack={currentPack} />
+        <RStack
+          style={{
+            flex: 1,
+          }}
+        >
+          <TableContainerComponent currentPack={currentPack} />
+        </RStack>
       ) : null}
     </View>
   );

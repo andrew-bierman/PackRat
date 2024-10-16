@@ -126,7 +126,7 @@ const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: currentTheme.colors.card,
-        width: xxs ? '59%' : '40%',
+        width: xxs ? '65%' : '45%',
       }}
     >
       <DropdownComponent
