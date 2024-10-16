@@ -109,7 +109,9 @@ export const ItemList = ({
           <RText
             style={{
               color: currentTheme.colors.text,
-              fontSize: responsive.xxs ? 11 : responsive.sm ? 12 : 14,
+              marginLeft: responsive.xxs ? 10 : 20,
+              width: responsive.xxs ? 50 : 80,
+              fontSize: responsive.xxs ? 10 : responsive.sm ? 12 : 14,
             }}
           >
             {`Weight: ${convertWeight(item.weight, SMALLEST_ITEM_UNIT, item.unit)}`}
