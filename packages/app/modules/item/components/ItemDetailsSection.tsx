@@ -1,12 +1,18 @@
 import React, { useMemo } from 'react';
-import { RStack, ImageGallery, View } from '@packrat/ui';
+import { RStack, ImageGallery, View, RButton } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';
+import { useItemPackPicker } from '../hooks/useItemPackPicker';
+
 import ItemDetailsContent from './ItemDetailsContent';
 import useResponsive from 'app/hooks/useResponsive';
+import RadioButtonGroup from 'react-native-paper/lib/typescript/components/RadioButton/RadioButtonGroup';
+import { PlusCircle } from '@tamagui/lucide-icons';
+import { PackPickerOverlay } from 'app/modules/pack';
 
 interface ItemData {
+  id: string;
   name: string;
   sku: string;
   seller: string;
@@ -21,7 +27,8 @@ interface ItemData {
 
 export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
   const styles = useCustomStyles(loadStyles);
-  const { currentTheme } = useTheme();
+  const { overlayProps, onTriggerOpen } = useItemPackPicker();
+
   const productDetails = useMemo(() => {
     try {
       const parsedDetails = JSON.parse(
@@ -33,12 +40,26 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
       return null;
     }
   }, [itemData?.productDetails]);
-  console.log(itemData);
 
   return (
     <RStack style={styles.container}>
       <RStack style={styles.contentContainer}>
         <View style={styles.imagePlaceholder}>
+          <RButton
+            style={{
+              position: 'absolute',
+              top: 4,
+              right: 4,
+              padding: 0,
+              backgroundColor: 'transparent',
+              zIndex: 10,
+            }}
+            onPress={(e) => {
+              onTriggerOpen(itemData.id, e);
+            }}
+          >
+            <PlusCircle />
+          </RButton>
           <ImageGallery
             images={itemData?.images?.map?.(({ url }) => url) || []}
           />
@@ -63,6 +84,7 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
           <ExpandableDetailsSection details={productDetails} />
         </RStack>
       )}
+      <PackPickerOverlay {...overlayProps} />
     </RStack>
   );
 }

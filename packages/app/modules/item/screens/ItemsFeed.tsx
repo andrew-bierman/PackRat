@@ -15,9 +15,11 @@ import ItemCard from '../components/ItemCard';
 import { useFeedSortOptions } from 'app/modules/feed/hooks/useFeedSortOptions';
 import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
 import { Search, X } from '@tamagui/lucide-icons';
+import { PackPickerOverlay } from 'app/modules/pack';
+import { useItemPackPicker } from '../hooks/useItemPackPicker';
 
 interface Item {
-  id: number;
+  id: string;
   name: string;
   category: {
     name: string;
@@ -37,6 +39,7 @@ interface Item {
 export function ItemsFeed() {
   const sortOptions = useFeedSortOptions('itemFeed');
   const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const { overlayProps, onTriggerOpen } = useItemPackPicker();
   const [searchValue, setSearchValue] = useState();
   const {
     data,
@@ -58,10 +61,6 @@ export function ItemsFeed() {
   const handleSetSearchValue = (v: string) => {
     setSearchValue(v);
   };
-
-  useEffect(() => {
-    console.log('Sort by', sortValue);
-  }, [sortValue]);
 
   const getNumColumns = () => {
     if (xxs || xs) return 1;
@@ -126,7 +125,10 @@ export function ItemsFeed() {
               } // Ensure unique keys
               renderItem={({ item }) => (
                 <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
-                  <ItemCard itemData={item as Item} />
+                  <ItemCard
+                    itemData={item as Item}
+                    onAddPackPress={onTriggerOpen}
+                  />
                 </RStack>
               )}
               onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
@@ -148,6 +150,7 @@ export function ItemsFeed() {
           </RStack>
         )}
       </RStack>
+      <PackPickerOverlay {...overlayProps} />
     </RScrollView>
   );
 }

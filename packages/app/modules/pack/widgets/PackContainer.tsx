@@ -48,7 +48,6 @@ export default function PackContainer() {
         isOpen={isModalOpen}
         onChange={onSelectPack}
         onFirstTimeLoad={onFirstTimeLoad}
-        selectedPackIds={[packIdParam]}
         onClose={onClose}
         title="Select Pack"
       />

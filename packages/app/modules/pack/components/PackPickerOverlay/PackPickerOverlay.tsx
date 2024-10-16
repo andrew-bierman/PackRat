@@ -6,11 +6,13 @@ import { Backpack, Check } from '@tamagui/lucide-icons';
 
 interface PackPickerOverlayProps {
   isOpen: boolean;
-  selectedPackIds?: string[];
   onChange: (packId: string) => void;
   onFirstTimeLoad?: (data: any[]) => void;
   title: string;
+  itemId?: string;
   onClose: () => void;
+  saveBtnText?: string;
+  onSave?: () => void;
 }
 export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
   isOpen,
@@ -18,11 +20,18 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
   onClose,
   onChange,
   onFirstTimeLoad,
-  selectedPackIds,
+  itemId,
+  saveBtnText,
+  onSave,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const user = useAuthUser();
-  const { data: packs } = useUserPacks(user?.id, { searchTerm }, '', true);
+  const { data: packs } = useUserPacks(
+    user?.id,
+    { searchTerm, itemId },
+    '',
+    true,
+  );
   const isLoadedOnce = useRef(false);
 
   const handleClose = () => {
@@ -43,7 +52,7 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
       data={packs}
       ListEmptyComponent={() => <RText>No Packs Found</RText>}
       renderItem={({ item }) => {
-        const isSelected = selectedPackIds?.includes?.(item.id);
+        const isSelected = item.hasItem;
         const handleChange = () => onChange(item.id);
 
         return (
@@ -56,6 +65,8 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
         );
       }}
       onSearchChange={setSearchTerm}
+      saveBtnText={saveBtnText}
+      onSave={onSave}
       modalProps={{
         title,
         onClose: handleClose,

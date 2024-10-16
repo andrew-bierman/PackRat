@@ -14,6 +14,7 @@ interface QueryOptions {
   isPublic?: boolean;
   isPreview?: boolean;
   searchTerm?: string;
+  itemId?: string;
 }
 
 export const useUserPacks = (
@@ -22,7 +23,7 @@ export const useUserPacks = (
   queryString = '',
   queryEnabled = false,
 ) => {
-  const { isPublic, searchTerm, isPreview } = options;
+  const { isPublic, searchTerm, isPreview, itemId } = options;
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -37,7 +38,7 @@ export const useUserPacks = (
         pagination,
         searchTerm,
         isPreview,
-        itemId: 'pkbrv5ae67r5njo08aa19eos',
+        itemId,
       },
       {
         enabled,
