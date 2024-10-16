@@ -79,7 +79,8 @@ export const ItemList = ({
               width: 40,
               height: responsive.xxs ? 25 : 30,
               color: currentTheme.colors.text,
-              fontSize: 14,
+              fontSize: 12,
+              borderWidth: 0,
             }}
           />
 
