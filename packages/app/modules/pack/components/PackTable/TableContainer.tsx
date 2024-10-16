@@ -1,28 +1,16 @@
-import React from 'react';
-import { RButton, RSkeleton, RText } from '@packrat/ui';
+import React, { useState } from 'react';
+import { RSkeleton, RButton, RText } from '@packrat/ui';
 import { View } from 'react-native';
-import { useDeletePackItem, useIsAuthUserPack } from 'app/modules/pack';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { loadStyles } from './packtable.style';
+import { YGroup } from 'tamagui';
 import {
   TotalWeightBox,
   WeightUnitDropdown,
   ErrorMessage,
 } from './TableHelperComponents';
 import { usePackTable } from './usePackTable';
-import { BasicTable } from '@packrat/ui/src/Bento/elements/tables';
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-  ColumnDef,
-} from '@tanstack/react-table';
-
-import ActionButtons from './ActionButtons';
-import { type Item } from 'app/modules/item';
-import { convertWeight } from 'app/utils/convertWeight';
-import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
-import { useAuthUser } from 'app/modules/auth';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import { loadStyles } from './packtable.style';
+import { ItemList } from './ItemList';
 
 interface TableContainerProps {
   currentPack: any;
@@ -42,22 +30,17 @@ export const TableContainer = ({
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
-  const isAuthUserPack = useIsAuthUserPack(currentPack);
-  const authUser = useAuthUser();
   const {
     isLoading,
     error,
     data,
-    groupedData,
-    checkedItems,
-    handleCheckboxChange,
-    handleDuplicate,
     totalBaseWeight,
     totalFoodWeight,
     totalWaterWeight,
     totalWeight,
     weightUnit,
     setWeightUnit,
+    handleDuplicate,
   } = usePackTable({
     currentPack,
     selectedPack,
@@ -65,113 +48,55 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
-  const { deletePackItem } = useDeletePackItem();
 
-  if (isLoading) return <RSkeleton style={{}} />;
+  const [quantities, setQuantities] = useState(
+    data.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}),
+  );
+
+  const handleIncrease = (itemId: string) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [itemId]: prevQuantities[itemId] + 1,
+    }));
+  };
+
+  const handleDecrease = (itemId: string) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [itemId]: Math.max(1, prevQuantities[itemId] - 1),
+    }));
+  };
+
+  const handleQuantityChange = (itemId: string, newQuantity: string) => {
+    const quantity = Math.max(1, parseInt(newQuantity) || 1);
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [itemId]: quantity,
+    }));
+  };
+
+  if (isLoading) return <RSkeleton />;
   if (error) return <ErrorMessage message={String(error)} />;
 
-  const columnHelper = createColumnHelper<Item>();
-  const columns: ColumnDef<Item, any>[] = [
-    columnHelper.accessor('name', {
-      cell: (info) => info.getValue(),
-      header: () => 'Name',
-      // footer: (info) => info.column.id,
-    }),
-    columnHelper.accessor('weight', {
-      cell: (info) =>
-        convertWeight(
-          info.getValue(),
-          SMALLEST_ITEM_UNIT,
-          info.row.original.unit as any,
-        ),
-      header: () => 'Weight',
-      // footer: (info) => info.column.id,
-    }),
-    columnHelper.accessor('quantity', {
-      header: () => 'Quantity',
-      cell: (info) => info.renderValue(),
-      // footer: (info) => info.column.id,
-    }),
-    columnHelper.accessor('category.name', {
-      header: () => 'Category',
-      cell: (info) => info.getValue(),
-      // footer: (info) => 'category',
-    }),
-  ];
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  if (hasPermissions) {
-    columns.push(
-      columnHelper.display({
-        id: 'actions',
-        cell: (props) => (
-          <ActionButtons
-            item={props.row.original}
-            isOwner={props.row.original.ownerId === authUser?.id}
-            onDelete={deletePackItem}
-            currentPack={currentPack}
-          />
-        ),
-        header: () => 'Actions',
-      }),
-    );
-  }
-
-  const headerGroup = table.getHeaderGroups()[0];
-  const tableRows = table.getRowModel().rows;
-  const footerGroup = table.getFooterGroups()[0];
-
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       {data?.length ? (
         <>
-          <BasicTable
-            headerGroup={headerGroup}
-            tableRows={tableRows}
-            footerGroup={footerGroup}
-            columnsLength={columns.length}
-          />
-          {/* <Table style={styles.tableStyle} flexArr={flexArr}>
-            <TitleRow title="Pack List" />
-            <Row
-              flexArr={flexArr}
-              data={headerRow.map((header, index) => (
-                <Cell key={index} data={header} textStyle={styles.headerText} />
-              ))}
-              style={styles.head}
-            />
-            <FlatList
-              data={Object.entries(groupedData)}
-              keyExtractor={([category, items]) => category}
-              renderItem={({ item: [category, items] }) => (
-                <>
-                  <CategoryRow category={category} />
-                  <FlatList
-                    data={Array.isArray(items) ? items : []} // Ensure items is an array
-                    keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) => (
-                      <TableItem
-                        itemData={item}
-                        onDelete={deletePackItem}
-                        handleCheckboxChange={handleCheckboxChange}
-                        flexArr={flexArr}
-                        currentPack={currentPack}
-                        hasPermissions={isAuthUserPack}
-                        refetch={refetch}
-                        setRefetch={setRefetch}
-                      />
-                    )}
-                  />
-                </>
-              )}
-            />
-          </Table> */}
-          {copy ? (
+          <YGroup alignSelf="stretch" bordered width="100%" size="$8">
+            {data.map((item) => (
+              <YGroup.Item key={item.id}>
+                <ItemList
+                  item={item}
+                  quantities={quantities}
+                  handleIncrease={handleIncrease}
+                  handleDecrease={handleDecrease}
+                  handleQuantityChange={handleQuantityChange}
+                />
+              </YGroup.Item>
+            ))}
+          </YGroup>
+
+          {copy && (
             <RButton
               style={{
                 width: 300,
@@ -182,7 +107,8 @@ export const TableContainer = ({
             >
               Copy
             </RButton>
-          ) : null}
+          )}
+
           <TotalWeightBox
             label="Base Weight"
             weight={totalBaseWeight}
