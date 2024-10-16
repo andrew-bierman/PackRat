@@ -17,6 +17,7 @@ export function getItemsFeedRoute() {
     .query(async (opts) => {
       const { queryBy, searchTerm, pagination } = opts.input;
       const { data, totalCount } = await getItemsFeedService({
+        queryBy,
         searchTerm,
         pagination,
       });

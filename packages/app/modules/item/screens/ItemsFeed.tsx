@@ -35,6 +35,9 @@ interface Item {
 }
 
 export function ItemsFeed() {
+  const sortOptions = useFeedSortOptions('itemFeed');
+  const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const [searchValue, setSearchValue] = useState();
   const {
     data,
     isLoading,
@@ -44,14 +47,9 @@ export function ItemsFeed() {
     currentPage,
     hasPrevPage,
     totalPages,
-  } = useItemsFeed();
-  console.log({ data });
+  } = useItemsFeed(sortValue, searchValue);
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();
-
-  const sortOptions = useFeedSortOptions('itemFeed');
-  const [sortValue, setSortValue] = useState(sortOptions[0]);
-  const [searchValue, setSearchValue] = useState();
 
   const handleSortChange = (newSortValue: string) => {
     setSortValue(newSortValue);
@@ -64,10 +62,6 @@ export function ItemsFeed() {
   useEffect(() => {
     console.log('Sort by', sortValue);
   }, [sortValue]);
-
-  if (isLoading) {
-    return null;
-  }
 
   const getNumColumns = () => {
     if (xxs || xs) return 1;
@@ -112,41 +106,47 @@ export function ItemsFeed() {
           </RStack>
         </RStack>
 
-        <RStack
-          style={{
-            padding: 20,
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <FlatList
-            data={data}
-            numColumns={numColumns}
-            key={`flatlist-numColumns-${numColumns}`}
-            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
-            renderItem={({ item }) => (
-              <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
-                <ItemCard itemData={item as Item} />
+        {isLoading ? (
+          <RText>Loading...</RText>
+        ) : (
+          <RStack
+            style={{
+              padding: 20,
+              width: '100%',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <FlatList
+              data={data}
+              numColumns={numColumns}
+              key={`flatlist-numColumns-${numColumns}`}
+              keyExtractor={(item, index) =>
+                `${item?.id}_${item?.type}_${index}`
+              } // Ensure unique keys
+              renderItem={({ item }) => (
+                <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
+                  <ItemCard itemData={item as Item} />
+                </RStack>
+              )}
+              onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+              showsVerticalScrollIndicator={false}
+              maxToRenderPerBatch={2}
+            />
+            {totalPages > 1 ? (
+              <RStack style={{ marginTop: 40 }}>
+                <Pagination
+                  isPrevBtnDisabled={!hasPrevPage}
+                  isNextBtnDisabled={!hasNextPage}
+                  onPressPrevBtn={fetchPrevPage}
+                  onPressNextBtn={fetchNextPage}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                />
               </RStack>
-            )}
-            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
-            showsVerticalScrollIndicator={false}
-            maxToRenderPerBatch={2}
-          />
-          {totalPages > 1 ? (
-            <RStack style={{ marginTop: 40 }}>
-              <Pagination
-                isPrevBtnDisabled={!hasPrevPage}
-                isNextBtnDisabled={!hasNextPage}
-                onPressPrevBtn={fetchPrevPage}
-                onPressNextBtn={fetchNextPage}
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
-            </RStack>
-          ) : null}
-        </RStack>
+            ) : null}
+          </RStack>
+        )}
       </RStack>
     </RScrollView>
   );

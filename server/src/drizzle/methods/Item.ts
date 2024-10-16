@@ -1,5 +1,5 @@
 import { DbClient } from '../../db/client';
-import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, inArray, like, sql } from 'drizzle-orm';
 import { type InsertItem, item as ItemTable } from '../../db/schema';
 import { and, count, eq, like, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
@@ -178,11 +178,13 @@ export class Item {
 
   async findFeed(filters: {
     pagination?: PaginationParams;
-    searchTerm: string;
+    searchTerm?: string;
+    queryBy?: string;
   }) {
     try {
-      const { pagination, searchTerm } = filters;
+      const { pagination, searchTerm, queryBy } = filters;
       const { limit, offset } = getPaginationParams(pagination);
+      const orderByFunction = this.applyFeedOrdersOrders(queryBy);
       const items = await DbClient.instance.query.item.findMany({
         where: and(
           eq(ItemTable.global, true),
@@ -198,7 +200,7 @@ export class Item {
         },
         offset,
         limit,
-        orderBy: (item, { desc }) => desc(item.createdAt),
+        orderBy: orderByFunction,
       });
 
       const totalCountQuery = await DbClient.instance
@@ -206,6 +208,12 @@ export class Item {
           totalCount: sql`COUNT(*)`,
         })
         .from(ItemTable)
+        .where(
+          and(
+            eq(ItemTable.global, true),
+            like(ItemTable.name, `%${searchTerm}%`),
+          ),
+        )
         .all();
 
       return { data: items, totalCount: totalCountQuery?.[0]?.totalCount || 0 };
@@ -251,5 +259,19 @@ export class Item {
     if (!packId) return;
 
     await scorePackService(packId);
+  }
+
+  applyFeedOrdersOrders(queryBy: string) {
+    console.log(queryBy);
+    if (!['Most Recent', 'Oldest'].includes(queryBy)) {
+      return desc(ItemTable.createdAt);
+    }
+
+    const orderConfig = {
+      'Most Recent': desc(ItemTable.createdAt),
+      Oldest: asc(ItemTable.createdAt),
+    };
+
+    return orderConfig[queryBy];
   }
 }
