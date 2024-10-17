@@ -18,7 +18,7 @@ export class Pack {
       userFavoritePacks: { columns: { userId: true } },
       itemPacks: completeItems
         ? {
-            columns: { packId: true },
+            columns: { packId: true, quantity: true },
             with: {
               item: {
                 columns: {
@@ -26,7 +26,6 @@ export class Pack {
                   name: true,
                   ownerId: true,
                   weight: true,
-                  quantity: true,
                   unit: true,
                 },
                 with: {

@@ -92,7 +92,7 @@ function Trips() {
         />
       ) : null,
     [SECTIONS.FOOTER]: isValid && (
-      <RStack>
+      <RStack style={{marginBottom: 20}}>
         <SaveTripContainer tripStore={tripStore} />
       </RStack>
     ),
