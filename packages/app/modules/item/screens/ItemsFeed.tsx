@@ -104,7 +104,6 @@ export function ItemsFeed() {
             </RStack>
           </RStack>
         </RStack>
-
         {isLoading ? (
           <RText>Loading...</RText>
         ) : (
