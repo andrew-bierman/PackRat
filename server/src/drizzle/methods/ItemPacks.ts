@@ -42,6 +42,24 @@ export class ItemPacks {
     }
   }
 
+  async find({ itemId, packId }: { itemId?: string; packId?: string }) {
+    const itemFilter = itemId ? eq(ItemPacksTable.itemId, itemId) : undefined;
+    const packFilter = packId ? eq(ItemPacksTable.packId, packId) : undefined;
+
+    let filter;
+    if (itemId && packId) {
+      filter = and(itemFilter!, packFilter!);
+    } else if (itemId) {
+      filter = itemFilter;
+    } else if (packId) {
+      filter = packFilter;
+    }
+
+    return await DbClient.instance.query.itemPacks.findFirst({
+      where: filter,
+    });
+  }
+
   async toggle(itemId: string, packId: string) {
     try {
       const existingRecord = await DbClient.instance
@@ -81,7 +99,7 @@ export class ItemPacks {
       )
       .execute();
     const newRelation = { itemId: newItemId, packId };
-    await await DbClient.instance
+    await DbClient.instance
       .insert(ItemPacksTable)
       .values(newRelation)
       .returning()

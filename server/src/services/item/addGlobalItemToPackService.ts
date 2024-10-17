@@ -17,6 +17,7 @@ export const addGlobalItemToPackService = async (
   packId: string,
   itemId: string,
   ownerId: string,
+  quantity: number,
 ) => {
   const itemClass = new Item();
   const itemPacksClass = new ItemPacks();
