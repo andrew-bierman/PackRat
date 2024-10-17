@@ -1,4 +1,4 @@
-import React, { cloneElement, type ReactNode, forwardRef } from 'react';
+import React, { cloneElement, forwardRef } from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
@@ -54,12 +54,22 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
 
     const { isDark, currentTheme } = useTheme();
     const styles = useCustomStyles(loadStyles);
-    const options = [
-      ...results,
-      { id: 'create', name: `Create "${searchString}"`, title: searchString },
-    ];
 
-    console.log('options', options);
+    const hasExactMatch = results.some(
+      (result) => result.name.toLowerCase() === searchString?.toLowerCase(),
+    );
+
+    const options = hasExactMatch
+      ? [...results]
+      : [
+          {
+            id: 'create',
+            name: `Create "${searchString}"`,
+            title: searchString,
+          },
+          ...results,
+        ];
+
     if (Platform.OS === 'web') {
       return (
         <RStack style={styles.container}>
@@ -98,9 +108,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               />
               {searchString && (
                 <RButton
-                  onPress={() => {
-                    handleClearSearch();
-                  }}
+                  onPress={handleClearSearch}
                   style={{
                     position: 'absolute',
                     right: 1,
@@ -119,7 +127,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 display: isVisible ? 'block' : 'none',
               }}
             >
-              {showSearchResults && results && results?.length > 0 && (
+              {showSearchResults && (
                 <RScrollView
                   position="absolute"
                   top="100%"
@@ -154,12 +162,8 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                       <RStack
                         key={`result + ${i}`}
                         role="listitem"
-                        onPress={() => {
-                          handleSearchResultClick(result);
-                        }}
-                        style={{
-                          cursor: 'pointer',
-                        }}
+                        onPress={() => handleSearchResultClick(result)}
+                        style={{ cursor: 'pointer' }}
                       >
                         {cloneElement(ResultItemComponent, { item: result })}
                       </RStack>
@@ -238,16 +242,14 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               display: isVisible ? 'block' : 'none',
             }}
           >
-            {showSearchResults && results?.length > 0 && (
+            {showSearchResults && (
               <RScrollView keyboardShouldPersistTaps="handled">
                 <View role="list" style={{ width: '100%' }}>
                   {options.map((result, i) => (
                     <Pressable
                       key={`result + ${i}`}
                       role="listitem"
-                      onPress={() => {
-                        handleSearchResultClick(result);
-                      }}
+                      onPress={() => handleSearchResultClick(result)}
                       paddingHorizontal={16}
                       paddingVertical={8}
                     >
@@ -268,7 +270,6 @@ const loadStyles = () => ({
   container: {
     marginTop: 20,
     marginBottom: 15,
-    // maxWidth: 800,
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
