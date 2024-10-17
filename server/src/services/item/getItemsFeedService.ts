@@ -16,6 +16,7 @@ export const getItemsFeedService = async ({
   const { data, totalCount } = await itemClass.findFeed({
     searchTerm,
     pagination,
+    queryBy,
   });
 
   return {

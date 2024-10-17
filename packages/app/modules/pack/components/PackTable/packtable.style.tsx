@@ -1,8 +1,10 @@
 import { Platform } from 'react-native';
+import useResponsive from 'app/hooks/useResponsive';
 const isWeb = Platform.OS === 'web';
 
 export const loadStyles = (theme) => {
   const { currentTheme } = theme;
+  const { sm } = useResponsive();
 
   return {
     container: {
@@ -70,18 +72,13 @@ export const loadStyles = (theme) => {
       padding: 25,
       backgroundColor: currentTheme.colors.white,
     },
-    noItemsText: {
-      fontWeight: 'bold',
-      fontSize: 16,
-      margin: 20,
-      textAlign: 'center',
-    },
+
     totalWeightBox: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: isWeb ? '100%' : 300,
-      paddingHorizontal: 25,
-      marginVertical: 30,
+      paddingHorizontal: sm ? 10 : 20,
+      marginVertical: sm ? 10 : 20,
     },
   };
 };

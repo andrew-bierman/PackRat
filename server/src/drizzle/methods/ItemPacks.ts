@@ -42,6 +42,34 @@ export class ItemPacks {
     }
   }
 
+  async toggle(itemId: string, packId: string) {
+    try {
+      const existingRecord = await DbClient.instance
+        .select()
+        .from(ItemPacksTable)
+        .where(
+          and(
+            eq(ItemPacksTable.itemId, itemId),
+            eq(ItemPacksTable.packId, packId),
+          ),
+        )
+        .get();
+
+      if (existingRecord) {
+        const deletedRecord = await this.delete(itemId, packId);
+
+        return deletedRecord;
+      }
+
+      const newRecord = await this.create({ itemId, packId });
+      await this.updateScoreIfNeeded(packId);
+
+      return newRecord;
+    } catch (error) {
+      throw new Error(`Failed to delete item pack record: ${error.message}`);
+    }
+  }
+
   async updateRelation({ oldItemId, newItemId, packId }) {
     await DbClient.instance
       .delete(ItemPacksTable)
