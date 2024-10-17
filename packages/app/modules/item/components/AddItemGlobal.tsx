@@ -32,7 +32,6 @@ export const AddItemGlobal = () => {
   return (
     <View>
       <ItemForm
-        isGlobalItem={true}
         handleSubmit={handleSubmit}
         isLoading={isLoading}
         validationSchema={addItemSchema}

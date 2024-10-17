@@ -22,7 +22,6 @@ const FormRadioGroup: any = OriginalFormRadioGroup;
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 
 interface ItemFormProps {
-  isGlobalItem?: boolean;
   handleSubmit: (data: Item) => void;
   showSubmitButton?: boolean;
   isLoading: boolean;
@@ -39,7 +38,6 @@ interface ItemFormProps {
 }
 
 export const ItemForm = ({
-  isGlobalItem = false,
   handleSubmit,
   showSubmitButton = true,
   isLoading,
@@ -117,14 +115,12 @@ export const ItemForm = ({
                 </View>
               ))}
           </View>
-          {!isGlobalItem && (
-            <FormInput
-              name="quantity"
-              placeholder="Quantity"
-              isNumeric
-              style={{ width: '100%' }}
-            />
-          )}
+          <FormInput
+            name="quantity"
+            placeholder="Quantity"
+            isNumeric
+            style={{ width: '100%' }}
+          />
           <FormRadioGroup name="type" options={radioOptions} />
 
           {showSubmitButton && (

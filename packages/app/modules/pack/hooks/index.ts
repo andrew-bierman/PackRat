@@ -12,4 +12,3 @@ export * from './usePackId';
 export * from './useSimilarPacks';
 export * from './useUserPackById';
 export * from './useUserPacks';
-export * from './useAddGlobalItemToPack';

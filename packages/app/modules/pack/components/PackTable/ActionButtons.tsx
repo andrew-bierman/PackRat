@@ -70,7 +70,7 @@ export default function ActionButtons({
         {selectedItemId === item.id && (
           <AddItem
             id={item.id}
-            packId={currentPack.id}
+            packId={item.id}
             isEdit={true}
             initialData={item}
           />

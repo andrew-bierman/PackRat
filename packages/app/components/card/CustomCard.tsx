@@ -1,13 +1,13 @@
 import React from 'react';
 import { RStack, RSeparator } from '@packrat/ui';
 import { View, Dimensions, Platform } from 'react-native';
+import { SearchItem } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
 import { useAuthUser } from 'app/modules/auth';
 import { PackTemplateHeader } from 'app/modules/pack-templates';
-import { AddGlobalItemToPack } from 'app/modules/pack';
 
 interface CustomCardProps {
   title: string;
@@ -78,7 +78,20 @@ export const CustomCard = ({
         <RSeparator />
         {type === 'pack' && authUser?.id === data.owner_id ? (
           <>
-            <AddGlobalItemToPack />
+            <View
+              style={
+                {
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingRight: 16,
+                  paddingLeft: 16,
+                  position: 'relative',
+                  zIndex: 1,
+                } as any
+              }
+            >
+              <SearchItem />
+            </View>
             <RSeparator />
           </>
         ) : null}
