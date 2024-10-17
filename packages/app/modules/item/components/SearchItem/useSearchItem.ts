@@ -1,17 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useItems } from 'app/modules/item';
-import { queryTrpc } from 'app/trpc';
-import { useAuthUser } from 'app/modules/auth';
 import { useFetchSinglePack, usePackId } from 'app/modules/pack';
 
 export const useSearchItem = () => {
   const [packId] = usePackId();
   const currentPack = useFetchSinglePack(packId);
-  const { mutateAsync: addItemToPack } =
-    queryTrpc.addGlobalItemToPack.useMutation();
-  const utils = queryTrpc.useUtils();
 
-  const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
 
   const itemFilters = useMemo(() => {
@@ -38,23 +32,5 @@ export const useSearchItem = () => {
     });
   }, [data]);
 
-  const handleSearchResultClick = (item) => {
-    if (!user) {
-      throw new Error('User is not authenticated');
-    }
-
-    const ownerId = user.id;
-    const itemId = item?.id;
-
-    (async () => {
-      try {
-        await addItemToPack({ itemId, ownerId, packId });
-        utils.getPackById.invalidate();
-      } catch {}
-    })();
-
-    return '';
-  };
-
-  return { searchString, setSearchString, results, handleSearchResultClick };
+  return { searchString, setSearchString, results };
 };

@@ -1,13 +1,11 @@
 import { DbClient } from '../../db/client';
 import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
-import { type InsertItem, item as ItemTable } from '../../db/schema';
-import { and, count, eq, like, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
 
 export class Item {
-  async create(data: InsertItem, packId?: string) {
+  async create(data: InsertItem) {
     try {
       const item = await DbClient.instance
         .insert(ItemTable)
@@ -15,16 +13,40 @@ export class Item {
         .returning()
         .get();
 
-      if (packId) {
-        const itemPacksClass = new ItemPacks();
-        await itemPacksClass.create({ itemId: item.id, packId });
-        await this.updateScoreIfNeeded(packId);
-      }
-
       return item;
     } catch (error) {
       throw new Error(`Failed to create item: ${error.message}`);
     }
+  }
+
+  async createPackItem(data: InsertItem, packId: string, quantity: number) {
+    // TODO wrap in transaction
+    const item = await this.create(data);
+
+    const itemPacksClass = new ItemPacks();
+    await itemPacksClass.create({ itemId: item.id, packId, quantity });
+    await this.updateScoreIfNeeded(packId);
+
+    return item;
+  }
+
+  async updatePackItem(
+    id: string,
+    data: Partial<InsertItem>,
+    packId: string,
+    quantity?: number,
+  ) {
+    const item = await this.update(id, data);
+
+    if (quantity)
+      await DbClient.instance
+        .update(itemPacks)
+        .set({ quantity })
+        .where(and(eq(itemPacks.packId, packId), eq(itemPacks.itemId, id)));
+
+    await this.updateScoreIfNeeded(packId);
+
+    return item;
   }
 
   async createBulk(data: InsertItem[]) {
@@ -56,15 +78,6 @@ export class Item {
         .where(filter)
         .returning()
         .get();
-      const packIds = await DbClient.instance
-        .select()
-        .from(itemPacks)
-        .where(eq(itemPacks.itemId, item.id))
-        .all();
-
-      for (const { packId } of packIds) {
-        await this.updateScoreIfNeeded(packId);
-      }
 
       return item;
     } catch (error) {
@@ -72,8 +85,9 @@ export class Item {
     }
   }
 
-  async delete(id: string, filter = eq(ItemTable.id, id), packId?: string) {
+  async delete(id: string, filter = eq(ItemTable.id, id)) {
     try {
+      const { packId } = await new ItemPacks().find({ itemId: id });
       const deletedItem = await DbClient.instance
         .delete(ItemTable)
         .where(filter)

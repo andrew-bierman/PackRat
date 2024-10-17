@@ -4,9 +4,8 @@ import { useSearchItem } from './useSearchItem';
 
 const RText: any = OriginalRText;
 
-export const SearchItem = () => {
-  const { searchString, handleSearchResultClick, results, setSearchString } =
-    useSearchItem();
+export const SearchItem = ({ onSelect }) => {
+  const { searchString, results, setSearchString } = useSearchItem();
 
   return (
     <SearchInput
@@ -15,7 +14,7 @@ export const SearchItem = () => {
       resultItemComponent={<ResultItem />}
       placeholder="Search Global Item"
       results={results}
-      onSelect={handleSearchResultClick}
+      onSelect={onSelect}
     />
   );
 };

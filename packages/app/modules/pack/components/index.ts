@@ -7,3 +7,4 @@ export {
 export { CopyPackModal } from './CopyPackModal';
 export * from './PackCard';
 export * from './PackPickerOverlay';
+export * from './AddGlobalItemToPack';

@@ -80,7 +80,6 @@ export function importItemsGlobalRoute() {
               'Name',
               'Weight',
               'Unit',
-              'Quantity',
               'Category',
               'image_urls',
             ];
@@ -108,7 +107,6 @@ export function importItemsGlobalRoute() {
                 await addItemGlobalService(
                   item.Name,
                   item.Weight,
-                  item.Quantity,
                   item.Unit,
                   item.Category,
                   ownerId,

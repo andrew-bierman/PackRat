@@ -192,6 +192,7 @@ export const itemPackTemplates = sqliteTable(
     packTemplateId: text('pack_template_id').references(() => packTemplate.id, {
       onDelete: 'cascade',
     }),
+    quantity: integer('quantity').notNull().default(1),
   },
   (table) => {
     return {
@@ -239,7 +240,6 @@ export const item = sqliteTable('item', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   weight: real('weight').notNull(),
-  quantity: integer('quantity').notNull(),
   unit: text('unit').notNull(),
   categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
@@ -322,6 +322,7 @@ export const itemPacks = sqliteTable(
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
     packId: text('pack_id').references(() => pack.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull().default(1),
   },
   (table) => {
     return {

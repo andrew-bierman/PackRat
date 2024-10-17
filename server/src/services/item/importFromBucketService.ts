@@ -175,7 +175,6 @@ export async function parseCSVData(fileData: string, ownerId: string) {
             itemsToInsert.push({
               name: item.name,
               weight: item.weight || 0,
-              quantity: item.quantity || 1,
               unit: item.weight_unit || 'g',
               type: 'Essentials',
               ownerId,

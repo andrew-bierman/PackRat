@@ -17,6 +17,7 @@ export const addGlobalItemToPackService = async (
   packId: string,
   itemId: string,
   ownerId: string,
+  quantity: number,
 ) => {
   const itemClass = new Item();
   const itemPacksClass = new ItemPacks();
@@ -28,13 +29,14 @@ export const addGlobalItemToPackService = async (
     throw new Error('Global Item does not exist!');
   }
   const { id, ...duplicatedItemValues } = item;
-  const newItem = await itemClass.create(
+  const newItem = await itemClass.createPackItem(
     {
       ...duplicatedItemValues,
       global: false,
       ownerId,
     },
     packId,
+    quantity,
   );
 
   return newItem;
