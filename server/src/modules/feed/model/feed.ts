@@ -82,6 +82,9 @@ export class Feed {
           quantity: sql`COALESCE(SUM(${itemPacks.quantity}), 0)`,
           userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId}) as userFavorites`,
           total_weight: sql`COALESCE(SUM(${item.weight} * ${itemPacks.quantity}), 0) as total_weight`,
+          hasItem: modifiers.itemId
+            ? sql`CASE WHEN COUNT(DISTINCT CASE WHEN ${itemPacks.itemId} = ${modifiers.itemId} THEN 1 ELSE NULL END) > 0 THEN TRUE ELSE FALSE END as hasItem`
+            : literal(null),
           activity: literal(null),
           start_date: literal(null),
           end_date: literal(null),
@@ -120,6 +123,7 @@ export class Feed {
           quantity: literal(null),
           userFavorites: literal('[]'),
           total_weight: literal('0'),
+          hasItem: literal(null),
           activity: trip.activity,
           start_date: trip.start_date,
           end_date: trip.end_date,

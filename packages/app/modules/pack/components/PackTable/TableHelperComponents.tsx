@@ -118,13 +118,15 @@ const IgnoreItemCheckbox = ({
 
 const WeightUnitDropdown = ({ value, onChange }: WeightUnitDropdownProps) => {
   const { xxs, xxl, xs } = useResponsive();
+  const { currentTheme } = useTheme();
   return (
     <View
       style={{
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '55%',
+        backgroundColor: currentTheme.colors.card,
+        width: xxs ? '65%' : '45%',
       }}
     >
       <DropdownComponent
@@ -142,7 +144,7 @@ const TotalWeightBox = ({ label, weight, unit }: TotalWeightBoxProps) => {
   const styles = useCustomStyles(loadStyles);
   return (
     <View style={styles.totalWeightBox}>
-      <RText>{label}</RText>
+      <RText style={{ fontWeight: 'bold' }}>{label}</RText>
       <RText>{`${formatNumber(weight)} (${unit})`}</RText>
     </View>
   );

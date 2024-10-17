@@ -13,6 +13,7 @@ import {
   DropdownComponent,
   RButton,
   RListItem,
+  RStack,
   useModalState,
 } from '@packrat/ui';
 import { Spinner } from 'tamagui';
@@ -47,7 +48,6 @@ export default function PackContainer() {
         isOpen={isModalOpen}
         onChange={onSelectPack}
         onFirstTimeLoad={onFirstTimeLoad}
-        selectedPackIds={[packIdParam]}
         onClose={onClose}
         title="Select Pack"
       />
@@ -64,7 +64,13 @@ export default function PackContainer() {
         </RListItem>
       ) : null}
       {currentPack ? (
-        <TableContainerComponent currentPack={currentPack} />
+        <RStack
+          style={{
+            flex: 1,
+          }}
+        >
+          <TableContainerComponent currentPack={currentPack} />
+        </RStack>
       ) : null}
     </View>
   );

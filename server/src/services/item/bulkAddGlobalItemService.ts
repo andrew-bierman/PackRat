@@ -2,9 +2,13 @@ import { type ExecutionContext } from 'hono';
 import { type InsertItemCategory } from '../../db/schema';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { DbClient } from 'src/db/client';
-import { item as ItemTable, itemImage as itemImageTable } from '../../db/schema';
+import {
+  item as ItemTable,
+  itemImage as itemImageTable,
+} from '../../db/schema';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 import { eq } from 'drizzle-orm';
+import { VectorClient } from 'src/vector/client';
 
 export const bulkAddItemsGlobalService = async (
   items: Array<{
@@ -14,6 +18,13 @@ export const bulkAddItemsGlobalService = async (
     type: 'Food' | 'Water' | 'Essentials';
     ownerId: string;
     image_urls?: string;
+    sku?: string;
+    productUrl?: string;
+    description?: string;
+    productDetails?: {
+      [key: string]: string | number | boolean | null;
+    };
+    seller?: string;
   }>,
   executionCtx: ExecutionContext,
 ) => {
@@ -53,6 +64,11 @@ export const bulkAddItemsGlobalService = async (
       categoryId: category.id,
       global: true,
       ownerId,
+      sku,
+      productUrl,
+      description,
+      productDetails,
+      seller,
     };
 
     const item = await DbClient.instance
@@ -60,6 +76,18 @@ export const bulkAddItemsGlobalService = async (
       .values(newItem)
       .returning()
       .get();
+
+    executionCtx.waitUntil(
+      VectorClient.instance.syncRecord({
+        id: item.id,
+        content: name,
+        namespace: 'items',
+        metadata: {
+          isPublic: item.global,
+          ownerId,
+        },
+      }),
+    );
 
     if (image_urls) {
       const urls = image_urls.split(',');

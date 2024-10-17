@@ -248,6 +248,13 @@ export const item = sqliteTable('item', {
     onDelete: 'cascade',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
+  sku: text('sku'),
+  productUrl: text('product_url'),
+  description: text('description'),
+  productDetails: text('product_details', { mode: 'json' }).$type<{
+    [key: string]: string | number | boolean | null;
+  }>(),
+  seller: text('seller'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("items"): undefined,
@@ -346,11 +353,19 @@ export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
   }),
 }));
 
+export const itemImageRelations = relations(itemImage, ({ one }) => ({
+  author: one(item, {
+    fields: [itemImage.itemId],
+    references: [item.id],
+  }),
+}));
+
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
     fields: [item.categoryId],
     references: [itemCategory.id],
   }),
+  images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
 }));

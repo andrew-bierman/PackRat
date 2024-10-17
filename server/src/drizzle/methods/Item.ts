@@ -1,8 +1,9 @@
 import { DbClient } from '../../db/client';
-import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, inArray, like, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
+import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
 
 export class Item {
   async create(data: InsertItem) {
@@ -110,6 +111,11 @@ export class Item {
       const item = await DbClient.instance.query.item.findFirst({
         where: filter,
         with: {
+          images: {
+            columns: {
+              url: true,
+            },
+          },
           category: {
             columns: {
               id: true,
@@ -184,6 +190,52 @@ export class Item {
     }
   }
 
+  async findFeed(filters: {
+    pagination?: PaginationParams;
+    searchTerm?: string;
+    queryBy?: string;
+  }) {
+    try {
+      const { pagination, searchTerm, queryBy } = filters;
+      const { limit, offset } = getPaginationParams(pagination);
+      const orderByFunction = this.applyFeedOrdersOrders(queryBy);
+      const items = await DbClient.instance.query.item.findMany({
+        where: and(
+          eq(ItemTable.global, true),
+          like(ItemTable.name, `%${searchTerm}%`),
+        ),
+        with: {
+          category: {
+            columns: { id: true, name: true },
+          },
+          images: {
+            columns: { url: true },
+          },
+        },
+        offset,
+        limit,
+        orderBy: orderByFunction,
+      });
+
+      const totalCountQuery = await DbClient.instance
+        .select({
+          totalCount: sql`COUNT(*)`,
+        })
+        .from(ItemTable)
+        .where(
+          and(
+            eq(ItemTable.global, true),
+            like(ItemTable.name, `%${searchTerm}%`),
+          ),
+        )
+        .all();
+
+      return { data: items, totalCount: totalCountQuery?.[0]?.totalCount || 0 };
+    } catch (error) {
+      throw new Error(`Failed to find global items: ${error.message}`);
+    }
+  }
+
   async findItemsByName(name: string) {
     try {
       const searchName = `%${name}%`;
@@ -221,5 +273,19 @@ export class Item {
     if (!packId) return;
 
     await scorePackService(packId);
+  }
+
+  applyFeedOrdersOrders(queryBy: string) {
+    console.log(queryBy);
+    if (!['Most Recent', 'Oldest'].includes(queryBy)) {
+      return desc(ItemTable.createdAt);
+    }
+
+    const orderConfig = {
+      'Most Recent': desc(ItemTable.createdAt),
+      Oldest: asc(ItemTable.createdAt),
+    };
+
+    return orderConfig[queryBy];
   }
 }

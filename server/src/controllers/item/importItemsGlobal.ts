@@ -82,6 +82,11 @@ export function importItemsGlobalRoute() {
               'Unit',
               'Category',
               'image_urls',
+              'sku',
+              'product_url',
+              'description',
+              'techs',
+              'seller',
             ];
             const parsedHeaders = results.meta.fields;
             try {
@@ -112,6 +117,11 @@ export function importItemsGlobalRoute() {
                   ownerId,
                   opts.ctx.executionCtx,
                   item.image_urls,
+                  item.sku,
+                  item.product_url,
+                  item.description,
+                  item.techs,
+                  item.seller,
                 );
               }
               return resolve('items');
