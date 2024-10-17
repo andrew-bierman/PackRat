@@ -1,5 +1,5 @@
 import React from 'react';
-import { ItemsScreen } from 'app/modules/item';
+import { ItemsScreen, GetItemsScreen } from 'app/modules/item';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -36,7 +36,8 @@ export default function ItemsPage() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <ItemsScreen />
+      {/* <ItemsScreen /> */}
+      <GetItemsScreen />
     </>
   );
 }

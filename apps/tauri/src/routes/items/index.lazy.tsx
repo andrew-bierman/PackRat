@@ -1,5 +1,5 @@
 import React from 'react';
-import { ItemsScreen } from 'app/modules/item';
+import { ItemsScreen, GetItemsScreen } from 'app/modules/item';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,8 @@ export const Route = createLazyFileRoute('/items/')({
 export default function ItemsPage() {
   return (
     <AuthWrapper>
-      <ItemsScreen />
+      {/* <ItemsScreen /> */}
+      <GetItemsScreen />
     </AuthWrapper>
   );
 }

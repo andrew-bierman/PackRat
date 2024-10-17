@@ -124,13 +124,13 @@ export function ItemsFeed() {
             data={data}
             numColumns={numColumns}
             key={`flatlist-numColumns-${numColumns}`}
-            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
+            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`}
             renderItem={({ item }) => (
               <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
                 <ItemCard itemData={item as Item} />
               </RStack>
             )}
-            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
+            onEndReachedThreshold={0.5}
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
           />
