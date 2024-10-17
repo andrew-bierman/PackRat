@@ -22,6 +22,7 @@ const Pressable: any = OriginalPressable;
 
 interface SearchInputProps {
   onSelect: (result: any, index: number) => void;
+  onCreate: (result: any, index: number) => void;
   results: any[];
   onChange: (text: string) => void;
   searchString?: string;
@@ -33,6 +34,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
   function SearchInput(
     {
       onSelect,
+      onCreate,
       placeholder,
       resultItemComponent: ResultItemComponent,
       results,
@@ -48,10 +50,16 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       showSearchResults,
       isLoadingMobile,
       isVisible,
-    } = useSearchInput({ onSelect, onChange, searchString });
+    } = useSearchInput({ onSelect, onChange, onCreate, searchString });
 
     const { isDark, currentTheme } = useTheme();
     const styles = useCustomStyles(loadStyles);
+    const options = [
+      ...results,
+      { id: 'create', name: `Create "${searchString}"`, title: searchString },
+    ];
+
+    console.log('options', options);
     if (Platform.OS === 'web') {
       return (
         <RStack style={styles.container}>
@@ -117,7 +125,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                   top="100%"
                   left="0"
                   right="0"
-                  maxHeight={150}
+                  maxHeight={200}
                   borderWidth={1}
                   borderRadius={12}
                   backgroundColor={
@@ -142,7 +150,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                         : currentTheme.colors.white,
                     }}
                   >
-                    {results.map((result, i) => (
+                    {options.map((result, i) => (
                       <RStack
                         key={`result + ${i}`}
                         role="listitem"
@@ -233,7 +241,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
             {showSearchResults && results?.length > 0 && (
               <RScrollView keyboardShouldPersistTaps="handled">
                 <View role="list" style={{ width: '100%' }}>
-                  {results.map((result, i) => (
+                  {options.map((result, i) => (
                     <Pressable
                       key={`result + ${i}`}
                       role="listitem"
