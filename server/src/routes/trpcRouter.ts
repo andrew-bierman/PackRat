@@ -78,6 +78,7 @@ import {
   getItemsFeedRoute,
   deleteItemFromPackRoute,
   toggleItemPack,
+  setItemQuantityRoute,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
@@ -199,6 +200,7 @@ export const appRouter = trpcRouter({
   importFromBucket: importFromBucketRoute(),
   getItemsFeed: getItemsFeedRoute(),
   toggleItemPack: toggleItemPack(),
+  setItemQuantity: setItemQuantityRoute(),
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

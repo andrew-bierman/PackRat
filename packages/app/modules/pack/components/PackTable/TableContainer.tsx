@@ -11,6 +11,7 @@ import { usePackTable } from './usePackTable';
 import { ItemList } from './ItemList';
 import useResponsive from 'app/hooks/useResponsive';
 import useCustomStyles from 'app/hooks/useCustomStyles';
+import { useSetItemQuantity } from 'app/modules/item';
 interface TableContainerProps {
   currentPack: any;
   selectedPack?: any;
@@ -48,23 +49,49 @@ export const TableContainer = ({
     setRefetch,
     copy,
   });
+  const { setItemQuantity } = useSetItemQuantity();
 
   const [quantities, setQuantities] = useState(
     data.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}),
   );
 
+  const handleBlurQuantity = (itemId: string) => {
+    setItemQuantity({
+      itemId,
+      packId: currentPack.id,
+      quantity: quantities[itemId],
+    });
+  };
+
   const handleIncrease = (itemId: string) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [itemId]: prevQuantities[itemId] + 1,
-    }));
+    setQuantities((prevQuantities) => {
+      setItemQuantity({
+        itemId,
+        packId: currentPack.id,
+        quantity: prevQuantities[itemId] + 1,
+      });
+
+      return {
+        ...prevQuantities,
+        [itemId]: prevQuantities[itemId] + 1,
+      };
+    });
   };
 
   const handleDecrease = (itemId: string) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [itemId]: Math.max(1, prevQuantities[itemId] - 1),
-    }));
+    setQuantities((prevQuantities) => {
+      const newQuantity = Math.max(1, prevQuantities[itemId] - 1);
+      setItemQuantity({
+        itemId,
+        packId: currentPack.id,
+        quantity: newQuantity,
+      });
+
+      return {
+        ...prevQuantities,
+        [itemId]: newQuantity,
+      };
+    });
   };
 
   const handleQuantityChange = (itemId: string, newQuantity: string) => {
@@ -88,6 +115,7 @@ export const TableContainer = ({
                 <ItemList
                   item={item}
                   quantities={quantities}
+                  handleBlurQuantity={handleBlurQuantity}
                   handleIncrease={handleIncrease}
                   handleDecrease={handleDecrease}
                   handleQuantityChange={handleQuantityChange}

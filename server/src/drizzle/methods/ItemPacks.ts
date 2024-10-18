@@ -106,6 +106,18 @@ export class ItemPacks {
       .execute();
   }
 
+  async setItemQuantity({ packId, itemId, quantity }) {
+    await DbClient.instance
+      .update(ItemPacksTable)
+      .set({ quantity })
+      .where(
+        and(
+          eq(ItemPacksTable.packId, packId),
+          eq(ItemPacksTable.itemId, itemId),
+        ),
+      );
+  }
+
   async updateScoreIfNeeded(packId?: string) {
     if (!packId) return;
 

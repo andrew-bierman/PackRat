@@ -11,6 +11,7 @@ interface ItemListProps {
   item: any;
   quantities: any;
   handleDecrease: (itemId: string) => void;
+  handleBlurQuantity: (itemId: string) => void;
   handleIncrease: (itemId: string) => void;
   handleQuantityChange: (itemId: string, newQuantity: string) => void;
 }
@@ -20,6 +21,7 @@ export const ItemList = ({
   quantities,
   handleDecrease,
   handleIncrease,
+  handleBlurQuantity,
   handleQuantityChange,
 }: ItemListProps) => {
   const { currentTheme } = useTheme();
@@ -75,6 +77,7 @@ export const ItemList = ({
           <RInput
             value={String(quantities[item.id])}
             onChangeText={(text) => handleQuantityChange(item.id, text)}
+            onBlur={() => handleBlurQuantity(item.id)}
             style={{
               width: 40,
               height: responsive.xxs ? 25 : 30,
