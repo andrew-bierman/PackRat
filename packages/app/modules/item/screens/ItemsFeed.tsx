@@ -52,6 +52,7 @@ export function ItemsFeed() {
     totalPages,
   } = useItemsFeed(sortValue, searchValue);
   const styles = useCustomStyles(loadStyles);
+  
   const { xxs, xs, sm, md, lg } = useResponsive();
 
   const handleSortChange = (newSortValue: string) => {
@@ -104,7 +105,6 @@ export function ItemsFeed() {
             </RStack>
           </RStack>
         </RStack>
-
         {isLoading ? (
           <RText>Loading...</RText>
         ) : (

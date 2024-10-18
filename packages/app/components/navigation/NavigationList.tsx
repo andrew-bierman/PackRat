@@ -4,6 +4,7 @@ import { NavigationItem } from './NavigationItem';
 import { useIsMobileView } from 'app/hooks/common';
 import { View } from 'tamagui';
 import useTheme from '../../hooks/useTheme';
+import { useAuthUser } from 'app/modules/auth';
 
 type NavigationListProps = {
   itemStyle?: any;
@@ -12,8 +13,9 @@ type NavigationListProps = {
 
 export const NavigationList: React.FC<NavigationListProps> = ({
   itemStyle = null,
-  onItemSelect = () => {},
+  onItemSelect = () => { },
 }) => {
+  const User = useAuthUser()
   const isMobileView = useIsMobileView();
   const { currentTheme, isLight, isDark } = useTheme();
   const { navigationItems } = useNavigationList();
@@ -36,13 +38,15 @@ export const NavigationList: React.FC<NavigationListProps> = ({
             key={item.href + index}
           >
             {type === 'link' ? (
-              <NavigationItem
-                item={item}
-                itemStyle={itemStyle}
-                key={item.href + index}
-                onSelect={onItemSelect}
-                isMobileView={isMobileView}
-              />
+              User.role === 'user' && item.href === '/items' ? null : (
+                <NavigationItem
+                  item={item}
+                  itemStyle={itemStyle}
+                  key={item.href + index}
+                  onSelect={onItemSelect}
+                  isMobileView={isMobileView}
+                />
+              )
             ) : (
               item.Component && <item.Component />
             )}
