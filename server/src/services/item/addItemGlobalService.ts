@@ -22,7 +22,6 @@ import { itemImage as itemImageTable } from '../../db/schema';
 export const addItemGlobalService = async (
   name: string,
   weight: number,
-  quantity: number,
   unit: string,
   type: 'Food' | 'Water' | 'Essentials',
   ownerId: string,
@@ -49,7 +48,6 @@ export const addItemGlobalService = async (
   const newItem = await itemClass.create({
     name,
     weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
-    quantity,
     unit,
     categoryId: category.id,
     global: true,

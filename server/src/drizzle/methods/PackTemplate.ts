@@ -26,10 +26,11 @@ export class PackTemplate {
         name: packTemplate.name,
         type: packTemplate.type,
         description: packTemplate.description,
-        total_weight: sql`SUM(${item.weight} * ${item.quantity})`.as(
-          'total_weight',
-        ),
-        quantity: sql`SUM(${item.quantity})`,
+        total_weight:
+          sql`SUM(${item.weight} * ${itemPackTemplates.quantity})`.as(
+            'total_weight',
+          ),
+        quantity: sql`SUM(${itemPackTemplates.quantity})`,
       })
       .from(packTemplate)
       .leftJoin(
@@ -77,7 +78,10 @@ export class PackTemplate {
       });
 
     const items = packTemplateResult.itemPackTemplates.map(
-      (itemPackTemplate) => itemPackTemplate.item,
+      (itemPackTemplate) => ({
+        ...itemPackTemplate.item,
+        quantity: itemPackTemplate.quantity,
+      }),
     );
     const total_weight = items.reduce((sum, item) => {
       const weightInGrams = convertWeight(
