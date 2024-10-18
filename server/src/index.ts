@@ -38,10 +38,10 @@ const app = new Hono<{ Bindings: Bindings }>();
 //  ref: https://hono.dev/middleware/builtin/compress
 
 // SETUP HTTPS Enforcement Middleware "This is for HTTP and has no relation to the tRPC server". and there are routes that are only available over HTTPS
-// app.use('*', enforceHttps()); // Apply to all routes so avoid commenting this unless you are on local
+app.use('*', enforceHttps()); // Apply to all routes so avoid commenting this unless you are on local
 
 // SETUP Security Headers Middleware "This is for HTTP and has no relation to the tRPC server". and there are routes that are only available over HTTPS
-// app.use('*', securityHeaders()); // Apply to all routes so avoid commenting this unless you are on local
+app.use('*', securityHeaders()); // Apply to all routes so avoid commenting this unless you are on local
 
 // SETUP CORS
 app.use('*', async (c, next) => {

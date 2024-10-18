@@ -10,7 +10,8 @@ function GetItemsScreen() {
       if (user.role === 'admin') {
         const { ItemsScreen } = await import('./ItemsScreen');
         setItemsComponent(() => ItemsScreen);
-      } else if (user.role === 'user') {
+      } 
+      else if (user.role === 'user') {
         const { ItemsFeed: ItemsScreen } = await import('./ItemsFeed');
         setItemsComponent(() => ItemsScreen);
       }
