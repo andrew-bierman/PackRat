@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from 'tamagui';
 import ItemDetailsContent from './ItemDetailsContent';
 import { RStack, Image, RButton } from '@packrat/ui';
@@ -7,6 +7,7 @@ import useTheme from 'app/hooks/useTheme';
 import { useRouter } from 'app/hooks/router';
 import useResponsive from 'app/hooks/useResponsive';
 import { PlusCircle } from '@tamagui/lucide-icons';
+import ItemPlaceholder from 'app/assets/item-placeholder.png';
 
 interface Item {
   id: string;
@@ -74,6 +75,7 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
                 source={{
                   uri: itemData?.images?.[0]?.url,
                 }}
+                defaultSource={ItemPlaceholder}
                 resizeMode="contain"
                 style={{
                   width: '100%',
