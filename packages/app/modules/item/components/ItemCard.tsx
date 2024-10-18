@@ -7,7 +7,7 @@ import useTheme from 'app/hooks/useTheme';
 import { useRouter } from 'app/hooks/router';
 import useResponsive from 'app/hooks/useResponsive';
 import { PlusCircle } from '@tamagui/lucide-icons';
-import { LoadingPlaceholder } from '@packrat/ui';
+import ItemPlaceholder from 'app/assets/item-placeholder.png';
 
 interface Item {
   id: string;
@@ -33,7 +33,6 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
   const { currentTheme } = useTheme();
   const router = useRouter();
   const { xxs } = useResponsive();
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handlePress = (e) => {
     e.stopPropagation();
@@ -72,20 +71,12 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
                 backgroundColor: currentTheme.colors.background,
               }}
             >
-              {!imageLoaded && (
-                <LoadingPlaceholder
-                  width="100%"
-                  height="100%"
-                  marginBottom={20}
-                  color={currentTheme.colors.textDarkGrey}
-                />
-              )}
               <Image
                 source={{
                   uri: itemData?.images?.[0]?.url,
                 }}
+                defaultSource={ItemPlaceholder}
                 resizeMode="contain"
-                onLoad={() => setImageLoaded(true)}
                 style={{
                   width: '100%',
                   height: '100%',
