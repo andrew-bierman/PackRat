@@ -21,6 +21,7 @@ const TripsIndexLazyImport = createFileRoute('/trips/')()
 const SignInIndexLazyImport = createFileRoute('/sign-in/')()
 const RegisterIndexLazyImport = createFileRoute('/register/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const ProductsIndexLazyImport = createFileRoute('/products/')()
 const PrivacyIndexLazyImport = createFileRoute('/privacy/')()
 const PasswordResetIndexLazyImport = createFileRoute('/password-reset/')()
 const PacksIndexLazyImport = createFileRoute('/packs/')()
@@ -70,6 +71,13 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const ProductsIndexLazyRoute = ProductsIndexLazyImport.update({
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/products/index.lazy').then((d) => d.Route),
+)
 
 const PrivacyIndexLazyRoute = PrivacyIndexLazyImport.update({
   path: '/privacy/',
@@ -329,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/': {
       id: '/profile/'
       path: '/profile'
@@ -390,6 +405,7 @@ export interface FileRoutesByFullPath {
   '/packs': typeof PacksIndexLazyRoute
   '/password-reset': typeof PasswordResetIndexLazyRoute
   '/privacy': typeof PrivacyIndexLazyRoute
+  '/products': typeof ProductsIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
   '/register': typeof RegisterIndexLazyRoute
   '/sign-in': typeof SignInIndexLazyRoute
@@ -418,6 +434,7 @@ export interface FileRoutesByTo {
   '/packs': typeof PacksIndexLazyRoute
   '/password-reset': typeof PasswordResetIndexLazyRoute
   '/privacy': typeof PrivacyIndexLazyRoute
+  '/products': typeof ProductsIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
   '/register': typeof RegisterIndexLazyRoute
   '/sign-in': typeof SignInIndexLazyRoute
@@ -447,6 +464,7 @@ export interface FileRoutesById {
   '/packs/': typeof PacksIndexLazyRoute
   '/password-reset/': typeof PasswordResetIndexLazyRoute
   '/privacy/': typeof PrivacyIndexLazyRoute
+  '/products/': typeof ProductsIndexLazyRoute
   '/profile/': typeof ProfileIndexLazyRoute
   '/register/': typeof RegisterIndexLazyRoute
   '/sign-in/': typeof SignInIndexLazyRoute
@@ -477,6 +495,7 @@ export interface FileRouteTypes {
     | '/packs'
     | '/password-reset'
     | '/privacy'
+    | '/products'
     | '/profile'
     | '/register'
     | '/sign-in'
@@ -504,6 +523,7 @@ export interface FileRouteTypes {
     | '/packs'
     | '/password-reset'
     | '/privacy'
+    | '/products'
     | '/profile'
     | '/register'
     | '/sign-in'
@@ -531,6 +551,7 @@ export interface FileRouteTypes {
     | '/packs/'
     | '/password-reset/'
     | '/privacy/'
+    | '/products/'
     | '/profile/'
     | '/register/'
     | '/sign-in/'
@@ -560,6 +581,7 @@ export interface RootRouteChildren {
   PacksIndexLazyRoute: typeof PacksIndexLazyRoute
   PasswordResetIndexLazyRoute: typeof PasswordResetIndexLazyRoute
   PrivacyIndexLazyRoute: typeof PrivacyIndexLazyRoute
+  ProductsIndexLazyRoute: typeof ProductsIndexLazyRoute
   ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
   RegisterIndexLazyRoute: typeof RegisterIndexLazyRoute
   SignInIndexLazyRoute: typeof SignInIndexLazyRoute
@@ -588,6 +610,7 @@ const rootRouteChildren: RootRouteChildren = {
   PacksIndexLazyRoute: PacksIndexLazyRoute,
   PasswordResetIndexLazyRoute: PasswordResetIndexLazyRoute,
   PrivacyIndexLazyRoute: PrivacyIndexLazyRoute,
+  ProductsIndexLazyRoute: ProductsIndexLazyRoute,
   ProfileIndexLazyRoute: ProfileIndexLazyRoute,
   RegisterIndexLazyRoute: RegisterIndexLazyRoute,
   SignInIndexLazyRoute: SignInIndexLazyRoute,
@@ -627,6 +650,7 @@ export const routeTree = rootRoute
         "/packs/",
         "/password-reset/",
         "/privacy/",
+        "/products/",
         "/profile/",
         "/register/",
         "/sign-in/",
@@ -693,6 +717,9 @@ export const routeTree = rootRoute
     },
     "/privacy/": {
       "filePath": "privacy/index.lazy.tsx"
+    },
+    "/products/": {
+      "filePath": "products/index.lazy.tsx"
     },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"

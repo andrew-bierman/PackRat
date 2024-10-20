@@ -36,8 +36,8 @@ interface Item {
   };
 }
 
-export function ItemsFeed() {
-  const sortOptions = useFeedSortOptions('itemFeed');
+export function ProductsScreen() {
+  const sortOptions = useFeedSortOptions('products');
   const [sortValue, setSortValue] = useState(sortOptions[0]);
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
   const [searchValue, setSearchValue] = useState();

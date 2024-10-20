@@ -17,7 +17,7 @@ const packSortOptions = [
   SORT_OPTIONS.OLDEST,
 ];
 
-const itemFeedSortOptions = [
+const productsSortOptions = [
   SORT_OPTIONS.MOST_RECENT,
   SORT_OPTIONS.LIGHTEST,
   SORT_OPTIONS.HEAVIEST,
@@ -31,7 +31,7 @@ const packTemplateSortOptions = [SORT_OPTIONS.LIGHTEST, SORT_OPTIONS.HEAVIEST];
 export const useFeedSortOptions = (feedType, isTripsEnabled = false) => {
   return useMemo(() => {
     if (feedType === 'packTemplates') return packTemplateSortOptions;
-    if (feedType === 'itemFeed') return itemFeedSortOptions;
+    if (feedType === 'products') return productsSortOptions;
     return isTripsEnabled ? commonOptions : packSortOptions;
   }, [isTripsEnabled]);
 };

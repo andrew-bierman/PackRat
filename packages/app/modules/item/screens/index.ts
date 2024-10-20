@@ -1,2 +1,3 @@
-export { ItemsFeed as ItemsScreen } from './ItemsFeed';
+export { ProductsScreen } from './ProductsScreen';
+export { ItemsScreen } from './ItemsScreen';
 export { ItemDetailsScreen } from './ItemDetailsScreen';
