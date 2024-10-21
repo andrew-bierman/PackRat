@@ -44,15 +44,20 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
               props.toggleFavorite();
             }}
           />
-          <RStack alignItems="center" style={{ flexDirection: 'row', gap: 8 }}>
-            <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
-          </RStack>
-          <RLink
-            href={`/profile/${props.ownerId}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <RText style={{ marginLeft: 'auto' }}>View owner</RText>
-          </RLink>
+          <>
+            <RStack
+              alignItems="center"
+              style={{ flexDirection: 'row', gap: 8 }}
+            >
+              <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
+            </RStack>
+            <RLink
+              href={`/profile/${props.ownerId}`}
+              style={{ textDecoration: 'none' }}
+            >
+              <RText style={{ marginLeft: 'auto' }}>View owner</RText>
+            </RLink>
+          </>
         </RStack>
       }
       content={<Details items={packDetails} />}

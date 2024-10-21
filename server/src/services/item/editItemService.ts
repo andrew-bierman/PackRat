@@ -22,6 +22,7 @@ import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 export const editItemService = async (
   executionCtx: ExecutionContext,
   id: string,
+  packId: string,
   name?: string,
   weight?: number,
   unit?: string,
@@ -58,17 +59,21 @@ export const editItemService = async (
   }
   const itemUnit = unit || item.unit;
   // const item = await itemClass.findItem({ id });
-  const newItem = await itemClass.update(id, {
-    name: name || item.name,
-    weight: convertWeight(
-      Number(weight || item.weight),
-      itemUnit as any,
-      SMALLEST_WEIGHT_UNIT,
-    ),
-    unit: itemUnit,
-    quantity: quantity || item.quantity,
-    categoryId: category.id || item.categoryId,
-  });
+  const newItem = await itemClass.updatePackItem(
+    id,
+    {
+      name: name || item.name,
+      weight: convertWeight(
+        Number(weight || item.weight),
+        itemUnit as any,
+        SMALLEST_WEIGHT_UNIT,
+      ),
+      unit: itemUnit,
+      categoryId: category.id || item.categoryId,
+    },
+    packId,
+    quantity,
+  );
 
   executionCtx.waitUntil(
     VectorClient.instance.syncRecord(

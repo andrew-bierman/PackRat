@@ -2,6 +2,7 @@ import { appRouter } from '../routes/trpcRouter';
 import { createCallerFactory } from '../trpc';
 import { createId } from '@paralleldrive/cuid2';
 import { DbClient } from '../db/client';
+import { User as UserRepository } from '../drizzle/methods/User';
 
 const TEST_USER = {
   email: 'test@test.com',
@@ -19,7 +20,7 @@ const TEST_USER = {
   role: 'user' as const,
   token: 'test',
   updatedAt: new Date().toISOString(),
-  username: 'test',
+  username: 'test_user',
   userFavoritePacks: [],
   id: createId(),
 };
@@ -33,6 +34,8 @@ export async function setupTest(
   const { DB, ...rest } = env;
   // const db = await createDb(env.DB)
   await DbClient.init(env.DB);
+
+  await new UserRepository().create(TEST_USER);
 
   // const ctx: any = {
   //   user: TEST_USER,

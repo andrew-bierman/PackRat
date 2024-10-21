@@ -2,6 +2,7 @@ import { usePublicFeed } from './usePublicFeed';
 import { useUserPacks, useSimilarPacks } from 'app/modules/pack';
 import { useUserTrips } from 'app/modules/trip';
 import { useSimilarItems } from 'app/modules/item';
+import { usePackTemplates } from 'app/modules/pack-templates';
 import { type FeedType } from '../model';
 import { type PaginationReturn } from 'app/hooks/pagination';
 
@@ -46,6 +47,10 @@ export const useFeed = ({
   );
   const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
   const similarItems = useSimilarItems(id, feedType === 'similarItems');
+  const packTemplates = usePackTemplates(
+    { searchQuery, orderBy: queryString },
+    feedType === 'packTemplates',
+  );
 
   switch (feedType) {
     case 'public':
@@ -58,6 +63,8 @@ export const useFeed = ({
       return similarPacks;
     case 'similarItems':
       return similarItems;
+    case 'packTemplates':
+      return packTemplates;
     default:
       return { data: null, isLoading: true };
   }

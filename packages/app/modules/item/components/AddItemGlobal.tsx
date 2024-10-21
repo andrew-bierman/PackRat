@@ -2,7 +2,7 @@ import { View } from 'react-native';
 
 import { ItemForm } from './ItemForm'; // assuming you moved the form related code to a separate component
 import { useModal } from '@packrat/ui';
-import { useAddItem, useItems } from '../hooks';
+import { useAddItem, useUserItems } from '../hooks';
 import { usePagination } from 'app/hooks/common';
 import {
   addItemGlobal as addItemSchema,
@@ -12,7 +12,7 @@ import { useAuthUser } from 'app/modules/auth';
 
 export const AddItemGlobal = () => {
   const { limit, page } = usePagination();
-  const { isLoading } = useItems({ limit, page });
+  const { isLoading } = useUserItems({ limit, page });
   const authUser = useAuthUser();
 
   if (!authUser) {

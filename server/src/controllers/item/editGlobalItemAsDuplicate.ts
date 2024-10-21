@@ -5,15 +5,13 @@ import { protectedProcedure } from '../../trpc';
 export const editGlobalItemAsDuplicate = async (c) => {
   try {
     const { itemId } = await c.req.param();
-    const { packId, name, weight, quantity, unit, type } =
-      await c.req.parseBody();
+    const { packId, name, weight, unit, type } = await c.req.parseBody();
 
     const item = await editGlobalItemAsDuplicateService(
       itemId,
       packId,
       name,
       weight,
-      quantity,
       unit,
       type,
       c.ctx.executionCtx,
@@ -35,19 +33,17 @@ export function editGlobalItemAsDuplicateRoute() {
         packId: z.string(),
         name: z.string(),
         weight: z.number(),
-        quantity: z.number(),
         unit: z.string(),
         type: z.string(),
       }),
     )
     .mutation(async (opts) => {
-      const { itemId, packId, name, weight, quantity, unit, type } = opts.input;
+      const { itemId, packId, name, weight, unit, type } = opts.input;
       const item = await editGlobalItemAsDuplicateService(
         itemId,
         packId,
         name,
         weight,
-        quantity,
         unit,
         type,
         opts.ctx.executionCtx,

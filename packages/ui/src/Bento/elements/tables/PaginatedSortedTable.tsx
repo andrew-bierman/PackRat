@@ -77,11 +77,6 @@ export function PaginatedSortedTable({
       header: () => 'Weight',
       footer: (info) => info.column.id,
     }),
-    columnHelper.accessor('quantity', {
-      header: () => 'Quantity',
-      cell: (info) => info.renderValue(),
-      footer: (info) => info.column.id,
-    }),
     columnHelper.accessor('category.name', {
       header: () => 'Category',
       cell: (info) => info.getValue(),

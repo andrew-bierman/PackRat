@@ -40,17 +40,16 @@ export const addItemService = async (
   if (!category) {
     category = await itemCategoryClass.create({ name: type });
   }
-  const item = await itemClass.create(
+  const item = await itemClass.createPackItem(
     {
       name,
       weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
-      quantity,
       unit,
-      // packs: [packId],
       categoryId: category.id,
       ownerId,
     },
     packId,
+    quantity,
   );
 
   // await Pack.updateOne({ _id: packId }, { $addToSet: { items: newItem._id } });

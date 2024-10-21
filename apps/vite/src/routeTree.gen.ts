@@ -21,9 +21,11 @@ const TripsIndexLazyImport = createFileRoute('/trips/')()
 const SignInIndexLazyImport = createFileRoute('/sign-in/')()
 const RegisterIndexLazyImport = createFileRoute('/register/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const ProductsIndexLazyImport = createFileRoute('/products/')()
 const PrivacyIndexLazyImport = createFileRoute('/privacy/')()
 const PasswordResetIndexLazyImport = createFileRoute('/password-reset/')()
 const PacksIndexLazyImport = createFileRoute('/packs/')()
+const PackTemplatesIndexLazyImport = createFileRoute('/pack-templates/')()
 const MapsIndexLazyImport = createFileRoute('/maps/')()
 const MapIndexLazyImport = createFileRoute('/map/')()
 const ItemsIndexLazyImport = createFileRoute('/items/')()
@@ -36,6 +38,7 @@ const TripTripIdLazyImport = createFileRoute('/trip/$tripId')()
 const ProfileIdLazyImport = createFileRoute('/profile/$id')()
 const PackCreateLazyImport = createFileRoute('/pack/create')()
 const PackIdLazyImport = createFileRoute('/pack/$id')()
+const PackTemplatesIdLazyImport = createFileRoute('/pack-templates/$id')()
 const ItemItemIdLazyImport = createFileRoute('/item/$itemId')()
 const DestinationQueryLazyImport = createFileRoute('/destination/query')()
 const ProfileSettingsIndexLazyImport = createFileRoute('/profile/settings/')()
@@ -69,6 +72,13 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
 
+const ProductsIndexLazyRoute = ProductsIndexLazyImport.update({
+  path: '/products/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/products/index.lazy').then((d) => d.Route),
+)
+
 const PrivacyIndexLazyRoute = PrivacyIndexLazyImport.update({
   path: '/privacy/',
   getParentRoute: () => rootRoute,
@@ -85,6 +95,13 @@ const PacksIndexLazyRoute = PacksIndexLazyImport.update({
   path: '/packs/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/packs/index.lazy').then((d) => d.Route))
+
+const PackTemplatesIndexLazyRoute = PackTemplatesIndexLazyImport.update({
+  path: '/pack-templates/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/pack-templates/index.lazy').then((d) => d.Route),
+)
 
 const MapsIndexLazyRoute = MapsIndexLazyImport.update({
   path: '/maps/',
@@ -150,6 +167,13 @@ const PackIdLazyRoute = PackIdLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pack/$id.lazy').then((d) => d.Route))
 
+const PackTemplatesIdLazyRoute = PackTemplatesIdLazyImport.update({
+  path: '/pack-templates/$id',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/pack-templates/$id.lazy').then((d) => d.Route),
+)
+
 const ItemItemIdLazyRoute = ItemItemIdLazyImport.update({
   path: '/item/$itemId',
   getParentRoute: () => rootRoute,
@@ -192,6 +216,13 @@ declare module '@tanstack/react-router' {
       path: '/item/$itemId'
       fullPath: '/item/$itemId'
       preLoaderRoute: typeof ItemItemIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/pack-templates/$id': {
+      id: '/pack-templates/$id'
+      path: '/pack-templates/$id'
+      fullPath: '/pack-templates/$id'
+      preLoaderRoute: typeof PackTemplatesIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/pack/$id': {
@@ -278,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapsIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/pack-templates/': {
+      id: '/pack-templates/'
+      path: '/pack-templates'
+      fullPath: '/pack-templates'
+      preLoaderRoute: typeof PackTemplatesIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/packs/': {
       id: '/packs/'
       path: '/packs'
@@ -297,6 +335,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
@@ -343,6 +388,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/destination/query': typeof DestinationQueryLazyRoute
   '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack-templates/$id': typeof PackTemplatesIdLazyRoute
   '/pack/$id': typeof PackIdLazyRoute
   '/pack/create': typeof PackCreateLazyRoute
   '/profile/$id': typeof ProfileIdLazyRoute
@@ -355,9 +401,11 @@ export interface FileRoutesByFullPath {
   '/items': typeof ItemsIndexLazyRoute
   '/map': typeof MapIndexLazyRoute
   '/maps': typeof MapsIndexLazyRoute
+  '/pack-templates': typeof PackTemplatesIndexLazyRoute
   '/packs': typeof PacksIndexLazyRoute
   '/password-reset': typeof PasswordResetIndexLazyRoute
   '/privacy': typeof PrivacyIndexLazyRoute
+  '/products': typeof ProductsIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
   '/register': typeof RegisterIndexLazyRoute
   '/sign-in': typeof SignInIndexLazyRoute
@@ -369,6 +417,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/destination/query': typeof DestinationQueryLazyRoute
   '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack-templates/$id': typeof PackTemplatesIdLazyRoute
   '/pack/$id': typeof PackIdLazyRoute
   '/pack/create': typeof PackCreateLazyRoute
   '/profile/$id': typeof ProfileIdLazyRoute
@@ -381,9 +430,11 @@ export interface FileRoutesByTo {
   '/items': typeof ItemsIndexLazyRoute
   '/map': typeof MapIndexLazyRoute
   '/maps': typeof MapsIndexLazyRoute
+  '/pack-templates': typeof PackTemplatesIndexLazyRoute
   '/packs': typeof PacksIndexLazyRoute
   '/password-reset': typeof PasswordResetIndexLazyRoute
   '/privacy': typeof PrivacyIndexLazyRoute
+  '/products': typeof ProductsIndexLazyRoute
   '/profile': typeof ProfileIndexLazyRoute
   '/register': typeof RegisterIndexLazyRoute
   '/sign-in': typeof SignInIndexLazyRoute
@@ -396,6 +447,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/destination/query': typeof DestinationQueryLazyRoute
   '/item/$itemId': typeof ItemItemIdLazyRoute
+  '/pack-templates/$id': typeof PackTemplatesIdLazyRoute
   '/pack/$id': typeof PackIdLazyRoute
   '/pack/create': typeof PackCreateLazyRoute
   '/profile/$id': typeof ProfileIdLazyRoute
@@ -408,9 +460,11 @@ export interface FileRoutesById {
   '/items/': typeof ItemsIndexLazyRoute
   '/map/': typeof MapIndexLazyRoute
   '/maps/': typeof MapsIndexLazyRoute
+  '/pack-templates/': typeof PackTemplatesIndexLazyRoute
   '/packs/': typeof PacksIndexLazyRoute
   '/password-reset/': typeof PasswordResetIndexLazyRoute
   '/privacy/': typeof PrivacyIndexLazyRoute
+  '/products/': typeof ProductsIndexLazyRoute
   '/profile/': typeof ProfileIndexLazyRoute
   '/register/': typeof RegisterIndexLazyRoute
   '/sign-in/': typeof SignInIndexLazyRoute
@@ -424,6 +478,7 @@ export interface FileRouteTypes {
     | '/'
     | '/destination/query'
     | '/item/$itemId'
+    | '/pack-templates/$id'
     | '/pack/$id'
     | '/pack/create'
     | '/profile/$id'
@@ -436,9 +491,11 @@ export interface FileRouteTypes {
     | '/items'
     | '/map'
     | '/maps'
+    | '/pack-templates'
     | '/packs'
     | '/password-reset'
     | '/privacy'
+    | '/products'
     | '/profile'
     | '/register'
     | '/sign-in'
@@ -449,6 +506,7 @@ export interface FileRouteTypes {
     | '/'
     | '/destination/query'
     | '/item/$itemId'
+    | '/pack-templates/$id'
     | '/pack/$id'
     | '/pack/create'
     | '/profile/$id'
@@ -461,9 +519,11 @@ export interface FileRouteTypes {
     | '/items'
     | '/map'
     | '/maps'
+    | '/pack-templates'
     | '/packs'
     | '/password-reset'
     | '/privacy'
+    | '/products'
     | '/profile'
     | '/register'
     | '/sign-in'
@@ -474,6 +534,7 @@ export interface FileRouteTypes {
     | '/'
     | '/destination/query'
     | '/item/$itemId'
+    | '/pack-templates/$id'
     | '/pack/$id'
     | '/pack/create'
     | '/profile/$id'
@@ -486,9 +547,11 @@ export interface FileRouteTypes {
     | '/items/'
     | '/map/'
     | '/maps/'
+    | '/pack-templates/'
     | '/packs/'
     | '/password-reset/'
     | '/privacy/'
+    | '/products/'
     | '/profile/'
     | '/register/'
     | '/sign-in/'
@@ -501,6 +564,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DestinationQueryLazyRoute: typeof DestinationQueryLazyRoute
   ItemItemIdLazyRoute: typeof ItemItemIdLazyRoute
+  PackTemplatesIdLazyRoute: typeof PackTemplatesIdLazyRoute
   PackIdLazyRoute: typeof PackIdLazyRoute
   PackCreateLazyRoute: typeof PackCreateLazyRoute
   ProfileIdLazyRoute: typeof ProfileIdLazyRoute
@@ -513,9 +577,11 @@ export interface RootRouteChildren {
   ItemsIndexLazyRoute: typeof ItemsIndexLazyRoute
   MapIndexLazyRoute: typeof MapIndexLazyRoute
   MapsIndexLazyRoute: typeof MapsIndexLazyRoute
+  PackTemplatesIndexLazyRoute: typeof PackTemplatesIndexLazyRoute
   PacksIndexLazyRoute: typeof PacksIndexLazyRoute
   PasswordResetIndexLazyRoute: typeof PasswordResetIndexLazyRoute
   PrivacyIndexLazyRoute: typeof PrivacyIndexLazyRoute
+  ProductsIndexLazyRoute: typeof ProductsIndexLazyRoute
   ProfileIndexLazyRoute: typeof ProfileIndexLazyRoute
   RegisterIndexLazyRoute: typeof RegisterIndexLazyRoute
   SignInIndexLazyRoute: typeof SignInIndexLazyRoute
@@ -527,6 +593,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DestinationQueryLazyRoute: DestinationQueryLazyRoute,
   ItemItemIdLazyRoute: ItemItemIdLazyRoute,
+  PackTemplatesIdLazyRoute: PackTemplatesIdLazyRoute,
   PackIdLazyRoute: PackIdLazyRoute,
   PackCreateLazyRoute: PackCreateLazyRoute,
   ProfileIdLazyRoute: ProfileIdLazyRoute,
@@ -539,9 +606,11 @@ const rootRouteChildren: RootRouteChildren = {
   ItemsIndexLazyRoute: ItemsIndexLazyRoute,
   MapIndexLazyRoute: MapIndexLazyRoute,
   MapsIndexLazyRoute: MapsIndexLazyRoute,
+  PackTemplatesIndexLazyRoute: PackTemplatesIndexLazyRoute,
   PacksIndexLazyRoute: PacksIndexLazyRoute,
   PasswordResetIndexLazyRoute: PasswordResetIndexLazyRoute,
   PrivacyIndexLazyRoute: PrivacyIndexLazyRoute,
+  ProductsIndexLazyRoute: ProductsIndexLazyRoute,
   ProfileIndexLazyRoute: ProfileIndexLazyRoute,
   RegisterIndexLazyRoute: RegisterIndexLazyRoute,
   SignInIndexLazyRoute: SignInIndexLazyRoute,
@@ -564,6 +633,7 @@ export const routeTree = rootRoute
         "/",
         "/destination/query",
         "/item/$itemId",
+        "/pack-templates/$id",
         "/pack/$id",
         "/pack/create",
         "/profile/$id",
@@ -576,9 +646,11 @@ export const routeTree = rootRoute
         "/items/",
         "/map/",
         "/maps/",
+        "/pack-templates/",
         "/packs/",
         "/password-reset/",
         "/privacy/",
+        "/products/",
         "/profile/",
         "/register/",
         "/sign-in/",
@@ -594,6 +666,9 @@ export const routeTree = rootRoute
     },
     "/item/$itemId": {
       "filePath": "item/$itemId.lazy.tsx"
+    },
+    "/pack-templates/$id": {
+      "filePath": "pack-templates/$id.lazy.tsx"
     },
     "/pack/$id": {
       "filePath": "pack/$id.lazy.tsx"
@@ -631,6 +706,9 @@ export const routeTree = rootRoute
     "/maps/": {
       "filePath": "maps/index.lazy.tsx"
     },
+    "/pack-templates/": {
+      "filePath": "pack-templates/index.lazy.tsx"
+    },
     "/packs/": {
       "filePath": "packs/index.lazy.tsx"
     },
@@ -639,6 +717,9 @@ export const routeTree = rootRoute
     },
     "/privacy/": {
       "filePath": "privacy/index.lazy.tsx"
+    },
+    "/products/": {
+      "filePath": "products/index.lazy.tsx"
     },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"

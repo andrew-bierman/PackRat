@@ -1,4 +1,4 @@
-type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+export type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 export const SMALLEST_WEIGHT_UNIT = 'g';
 
 const units: Record<WeightUnit, number> = {
@@ -22,7 +22,7 @@ export const convertWeight = (
   fromUnit: WeightUnit,
   toUnit: WeightUnit,
 ): number => {
-  if (typeof weight !== 'number' || !fromUnit || !toUnit) {
+  if (typeof weight !== 'number' || !fromUnit || !toUnit || weight < 0) {
     return 0; // return 0 if weight is not a number or any of the units are missing
   }
 

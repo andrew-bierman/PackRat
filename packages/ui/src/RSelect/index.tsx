@@ -110,8 +110,8 @@ export function SelectItem(props) {
       onValueChange={handleChange}
       {...forwardedProps}
     >
-      <Select.Trigger style={{ backgroundColor: '$color5' }}>
-        <Select.Value style={{ backgroundColor: '$color5' }}>
+      <Select.Trigger >
+        <Select.Value >
           {selectedItemLabel ?? placeholder}
         </Select.Value>
       </Select.Trigger>

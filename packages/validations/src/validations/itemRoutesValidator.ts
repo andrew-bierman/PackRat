@@ -15,7 +15,7 @@ export const getItemById = z.object({
 export const addItem = z.object({
   name: z.string(),
   weight: z.number(),
-  quantity: z.number(),
+  quantity: z.number().int().positive(),
   unit: z.string(),
   packId: z.string(),
   type: z.string(),
@@ -38,12 +38,14 @@ export const editItem = z.object({
   quantity: z.number(),
   unit: z.string(),
   type: z.string(),
+  packId: z.string(),
 });
 
 export const addGlobalItemToPack = z.object({
   packId: z.string(),
   itemId: z.string(),
   ownerId: z.string(),
+  quantity: z.number().int().positive(),
 });
 
 export const deleteGlobalItem = z.object({
@@ -63,7 +65,6 @@ export const deleteItem = z.object({
 export const addItemGlobal = z.object({
   name: z.string(),
   weight: z.number(),
-  quantity: z.number(),
   unit: z.string(),
   type: z.string(),
   ownerId: z.string(),

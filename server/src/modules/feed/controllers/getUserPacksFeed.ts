@@ -9,6 +9,7 @@ export function getUserPacksFeedRoute() {
       z.object({
         queryBy: z.string(),
         ownerId: z.string(),
+        itemId: z.string().optional(),
         isPublic: z.boolean().optional(),
         isPreview: z.boolean().optional(),
         searchTerm: z.string().optional(),
@@ -18,10 +19,11 @@ export function getUserPacksFeedRoute() {
       }),
     )
     .query(async (opts) => {
-      const { queryBy, searchTerm, ownerId, pagination, isPublic } = opts.input;
+      const { queryBy, searchTerm, ownerId, pagination, isPublic, itemId } =
+        opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
         queryBy,
-        { searchTerm, ownerId, isPublic },
+        { searchTerm, ownerId, isPublic, itemId },
         'trips',
         pagination,
       );
