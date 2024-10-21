@@ -70,7 +70,7 @@ export const useNavigationList = () => {
       text: 'Products',
       iconSource: Fontisto,
     },
-    ...((user.role === 'admin'
+    ...((user?.role === 'admin'
       ? [
           {
             type: NavigationItemTypeEnum.LINK,
