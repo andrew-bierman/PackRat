@@ -192,6 +192,7 @@ export const itemPackTemplates = sqliteTable(
     packTemplateId: text('pack_template_id').references(() => packTemplate.id, {
       onDelete: 'cascade',
     }),
+    quantity: integer('quantity').notNull().default(1),
   },
   (table) => {
     return {
@@ -239,7 +240,6 @@ export const item = sqliteTable('item', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   weight: real('weight').notNull(),
-  quantity: integer('quantity').notNull(),
   unit: text('unit').notNull(),
   categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
@@ -248,6 +248,13 @@ export const item = sqliteTable('item', {
     onDelete: 'cascade',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
+  sku: text('sku'),
+  productUrl: text('product_url'),
+  description: text('description'),
+  productDetails: text('product_details', { mode: 'json' }).$type<{
+    [key: string]: string | number | boolean | null;
+  }>(),
+  seller: text('seller'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("items"): undefined,
@@ -322,6 +329,7 @@ export const itemPacks = sqliteTable(
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
     packId: text('pack_id').references(() => pack.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull().default(1),
   },
   (table) => {
     return {
@@ -345,11 +353,19 @@ export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
   }),
 }));
 
+export const itemImageRelations = relations(itemImage, ({ one }) => ({
+  author: one(item, {
+    fields: [itemImage.itemId],
+    references: [item.id],
+  }),
+}));
+
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
     fields: [item.categoryId],
     references: [itemCategory.id],
   }),
+  images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
 }));

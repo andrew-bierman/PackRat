@@ -126,6 +126,7 @@
     "react-native": "0.73.6",
     "react-native-dotenv": "^3.4.8",
     "react-native-elements": "^3.4.3",
+    "react-native-fast-image": "^8.6.3",
     "react-native-flash-message": "^0.4.2",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-google-places-autocomplete": "^2.5.1",

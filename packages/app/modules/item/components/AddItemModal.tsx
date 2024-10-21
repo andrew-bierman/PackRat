@@ -8,6 +8,8 @@ interface AddItemModalProps {
   isAddItemModalOpen: boolean;
   setIsAddItemModalOpen: any;
   setRefetch?: () => void;
+  showTrigger: boolean;
+  initialData: any;
 }
 
 export const AddItemModal = ({
@@ -15,7 +17,9 @@ export const AddItemModal = ({
   currentPack,
   isAddItemModalOpen,
   setIsAddItemModalOpen,
+  showTrigger = true,
   setRefetch = () => {},
+  initialData,
 }: AddItemModalProps) => {
   const { currentTheme } = useTheme();
 
@@ -23,6 +27,7 @@ export const AddItemModal = ({
     <BaseModal
       title="Add Item"
       trigger="Add Item"
+      showTrigger={showTrigger}
       footerButtons={[
         {
           label: 'Cancel',
@@ -36,6 +41,7 @@ export const AddItemModal = ({
       onClose={() => setIsAddItemModalOpen(false)}
     >
       <AddItem
+        initialData={initialData}
         packId={currentPackId}
         currentPack={currentPack}
         setRefetch={setRefetch}

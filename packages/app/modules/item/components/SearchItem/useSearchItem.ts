@@ -1,15 +1,12 @@
 import { useMemo, useState } from 'react';
-import { useItems } from 'app/modules/item';
-import { queryTrpc } from 'app/trpc';
+import { useUserItems, useTogglePackItem } from 'app/modules/item';
 import { useAuthUser } from 'app/modules/auth';
 import { useFetchSinglePack, usePackId } from 'app/modules/pack';
 
 export const useSearchItem = () => {
   const [packId] = usePackId();
   const currentPack = useFetchSinglePack(packId);
-  const { mutateAsync: addItemToPack } =
-    queryTrpc.addGlobalItemToPack.useMutation();
-  const utils = queryTrpc.useUtils();
+  const { togglePackItem } = useTogglePackItem();
 
   const user = useAuthUser();
   const [searchString, setSearchString] = useState('');
@@ -22,19 +19,22 @@ export const useSearchItem = () => {
     };
   }, [searchString]);
 
-  const { data } = useItems(itemFilters);
+  const { data } = useUserItems(itemFilters);
   const results = useMemo(() => {
     const packItems = currentPack?.data?.items;
     if (!Array.isArray(data?.items)) {
       return [];
     }
 
-    return data.items.filter((globalItem) => {
+    return data.items.map((item) => {
       if (!Array.isArray(packItems)) {
-        return true;
+        return item;
       }
 
-      return !packItems.some(({ id }) => id === globalItem.id);
+      return {
+        ...item,
+        isDisabled: packItems.some(({ id }) => id === item.id),
+      };
     });
   }, [data]);
 
@@ -48,8 +48,7 @@ export const useSearchItem = () => {
 
     (async () => {
       try {
-        await addItemToPack({ itemId, ownerId, packId });
-        utils.getPackById.invalidate();
+        await togglePackItem({ itemId, packId });
       } catch {}
     })();
 

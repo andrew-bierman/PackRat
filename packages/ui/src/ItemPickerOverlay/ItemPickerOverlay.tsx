@@ -13,11 +13,15 @@ interface ItemPickerOverlayProps {
   onSearchChange: (search: string) => void;
   searchTerm: string;
   title: string;
+  saveBtnText?: string;
+  onSave?: () => void;
 }
 export const ItemPickerOverlay: FC<ItemPickerOverlayProps> = ({
   modalProps,
   searchTerm,
   onSearchChange,
+  saveBtnText = 'Done',
+  onSave = () => {},
   ListEmptyComponent,
   data,
   renderItem,
@@ -29,9 +33,12 @@ export const ItemPickerOverlay: FC<ItemPickerOverlayProps> = ({
       {...modalProps}
       footerButtons={[
         {
-          label: 'Done',
+          label: saveBtnText,
           color: '#0A84FF',
-          onClick: (_, closeModal) => closeModal(),
+          onClick: (_, closeModal) => {
+            onSave();
+            closeModal();
+          },
         },
       ]}
       footerComponent={undefined}

@@ -80,9 +80,13 @@ export function importItemsGlobalRoute() {
               'Name',
               'Weight',
               'Unit',
-              'Quantity',
               'Category',
               'image_urls',
+              'sku',
+              'product_url',
+              'description',
+              'techs',
+              'seller',
             ];
             const parsedHeaders = results.meta.fields;
             try {
@@ -108,12 +112,16 @@ export function importItemsGlobalRoute() {
                 await addItemGlobalService(
                   item.Name,
                   item.Weight,
-                  item.Quantity,
                   item.Unit,
                   item.Category,
                   ownerId,
                   opts.ctx.executionCtx,
                   item.image_urls,
+                  item.sku,
+                  item.product_url,
+                  item.description,
+                  item.techs,
+                  item.seller,
                 );
               }
               return resolve('items');

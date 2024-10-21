@@ -16,6 +16,7 @@ interface ActionButtonsProps {
   item: Item;
   onDelete: (params: { itemId: string; packId: string }) => void;
   currentPack: any;
+  isOwner: boolean;
 }
 
 interface optionValues {
@@ -27,6 +28,7 @@ export default function ActionButtons({
   item,
   onDelete,
   currentPack,
+  isOwner,
 }: ActionButtonsProps) {
   const [activeModal, setActiveModal] = React.useState<ModalName | null>(null);
   const [selectedItemId, setSelectedItemId] = React.useState<string | null>(

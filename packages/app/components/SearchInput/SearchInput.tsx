@@ -1,4 +1,4 @@
-import React, { cloneElement, type ReactNode, forwardRef } from 'react';
+import React, { cloneElement, forwardRef, useMemo } from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
@@ -22,10 +22,12 @@ const Pressable: any = OriginalPressable;
 
 interface SearchInputProps {
   onSelect: (result: any, index: number) => void;
+  onCreate: (result: any, index: number) => void;
   results: any[];
   onChange: (text: string) => void;
   searchString?: string;
   placeholder?: string;
+  canCreateNewItem?: boolean;
   resultItemComponent: React.ReactElement;
 }
 
@@ -33,11 +35,13 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
   function SearchInput(
     {
       onSelect,
+      onCreate,
       placeholder,
       resultItemComponent: ResultItemComponent,
       results,
       onChange,
       searchString,
+      canCreateNewItem = false,
     },
     inputRef,
   ) {
@@ -48,10 +52,12 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       showSearchResults,
       isLoadingMobile,
       isVisible,
-    } = useSearchInput({ onSelect, onChange, searchString });
+    } = useSearchInput({ onSelect, onChange, onCreate, searchString });
+    const options = useSearchOptions(results, searchString, canCreateNewItem);
 
     const { isDark, currentTheme } = useTheme();
     const styles = useCustomStyles(loadStyles);
+
     if (Platform.OS === 'web') {
       return (
         <RStack style={styles.container}>
@@ -90,9 +96,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               />
               {searchString && (
                 <RButton
-                  onPress={() => {
-                    handleClearSearch();
-                  }}
+                  onPress={handleClearSearch}
                   style={{
                     position: 'absolute',
                     right: 1,
@@ -111,13 +115,13 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 display: isVisible ? 'block' : 'none',
               }}
             >
-              {showSearchResults && results && results?.length > 0 && (
+              {showSearchResults && (
                 <RScrollView
                   position="absolute"
                   top="100%"
                   left="0"
                   right="0"
-                  maxHeight={150}
+                  maxHeight={200}
                   borderWidth={1}
                   borderRadius={12}
                   backgroundColor={
@@ -142,16 +146,14 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                         : currentTheme.colors.white,
                     }}
                   >
-                    {results.map((result, i) => (
+                    {options.map((result, i) => (
                       <RStack
                         key={`result + ${i}`}
                         role="listitem"
-                        onPress={() => {
-                          handleSearchResultClick(result);
-                        }}
-                        style={{
-                          cursor: 'pointer',
-                        }}
+                        onPress={() =>
+                          !result.isDisabled && handleSearchResultClick(result)
+                        }
+                        style={{ cursor: 'pointer' }}
                       >
                         {cloneElement(ResultItemComponent, { item: result })}
                       </RStack>
@@ -230,16 +232,14 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               display: isVisible ? 'block' : 'none',
             }}
           >
-            {showSearchResults && results?.length > 0 && (
+            {showSearchResults && (
               <RScrollView keyboardShouldPersistTaps="handled">
                 <View role="list" style={{ width: '100%' }}>
-                  {results.map((result, i) => (
+                  {options.map((result, i) => (
                     <Pressable
                       key={`result + ${i}`}
                       role="listitem"
-                      onPress={() => {
-                        handleSearchResultClick(result);
-                      }}
+                      onPress={() => handleSearchResultClick(result)}
                       paddingHorizontal={16}
                       paddingVertical={8}
                     >
@@ -256,11 +256,41 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
   },
 );
 
+const useSearchOptions = (
+  results: any,
+  searchString: string,
+  canCreateNewItem: boolean,
+) => {
+  return useMemo(() => {
+    if (!Array.isArray(results)) {
+      return [];
+    }
+
+    if (!canCreateNewItem) {
+      return results;
+    }
+
+    const hasExactMatch = results.some(
+      (result) => result.name.toLowerCase() === searchString?.toLowerCase(),
+    );
+
+    return hasExactMatch
+      ? [...results]
+      : [
+          {
+            id: 'create',
+            name: `Create "${searchString}"`,
+            title: searchString,
+          },
+          ...results,
+        ];
+  }, [results]);
+};
+
 const loadStyles = () => ({
   container: {
     marginTop: 20,
     marginBottom: 15,
-    // maxWidth: 800,
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
