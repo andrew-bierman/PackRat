@@ -53,59 +53,16 @@ export const TableContainer = ({
   const { setItemQuantity } = useSetItemQuantity();
   const { deletePackItem } = useDeletePackItem();
 
-  const [quantities, setQuantities] = useState(
-    data.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}),
-  );
-
-  const handleBlurQuantity = (itemId: string) => {
+  const onSubmitQuantity = (itemId: string, quantity: number) => {
     setItemQuantity({
       itemId,
       packId: currentPack.id,
-      quantity: quantities[itemId],
+      quantity,
     });
   };
 
   const handleDeletePackItem = (itemId: string) => {
     deletePackItem({ packId: currentPack.id, itemId });
-  };
-
-  const handleIncrease = (itemId: string) => {
-    setQuantities((prevQuantities) => {
-      setItemQuantity({
-        itemId,
-        packId: currentPack.id,
-        quantity: prevQuantities[itemId] + 1,
-      });
-
-      return {
-        ...prevQuantities,
-        [itemId]: prevQuantities[itemId] + 1,
-      };
-    });
-  };
-
-  const handleDecrease = (itemId: string) => {
-    setQuantities((prevQuantities) => {
-      const newQuantity = Math.max(1, prevQuantities[itemId] - 1);
-      setItemQuantity({
-        itemId,
-        packId: currentPack.id,
-        quantity: newQuantity,
-      });
-
-      return {
-        ...prevQuantities,
-        [itemId]: newQuantity,
-      };
-    });
-  };
-
-  const handleQuantityChange = (itemId: string, newQuantity: string) => {
-    const quantity = Math.max(1, parseInt(newQuantity) || 1);
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [itemId]: quantity,
-    }));
   };
 
   if (isLoading) return <RSkeleton />;
@@ -120,11 +77,7 @@ export const TableContainer = ({
               <YGroup.Item key={item.id}>
                 <ItemList
                   item={item}
-                  quantities={quantities}
-                  handleBlurQuantity={handleBlurQuantity}
-                  handleIncrease={handleIncrease}
-                  handleDecrease={handleDecrease}
-                  handleQuantityChange={handleQuantityChange}
+                  onSubmitQuantity={onSubmitQuantity}
                   handleDeleteItem={handleDeletePackItem}
                 />
               </YGroup.Item>

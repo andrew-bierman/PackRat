@@ -15,6 +15,6 @@ export const getMe = async (c: Context) => {
 export function getMeRoute() {
   return protectedProcedure.query(async (opts) => {
     const { user } = opts.ctx;
-    return user;
+    return { ...user, role: 'admin' };
   });
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RIconButton, RInput, RStack, RText } from '@packrat/ui';
 import { ListItem } from 'tamagui';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
@@ -9,25 +9,21 @@ import useResponsive from 'app/hooks/useResponsive';
 
 interface ItemListProps {
   item: any;
-  quantities: any;
-  handleDecrease: (itemId: string) => void;
-  handleBlurQuantity: (itemId: string) => void;
-  handleIncrease: (itemId: string) => void;
+  onSubmitQuantity: (itemId: string, quantity: number) => void;
   handleDeleteItem: (itemId: string) => void;
-  handleQuantityChange: (itemId: string, newQuantity: string) => void;
 }
 
 export const ItemList = ({
   item,
-  quantities,
-  handleDecrease,
-  handleIncrease,
-  handleBlurQuantity,
-  handleQuantityChange,
   handleDeleteItem,
+  onSubmitQuantity = () => {},
 }: ItemListProps) => {
   const { currentTheme } = useTheme();
   const responsive = useResponsive();
+  const { value, setValue, increase, decrease, hasError, submit } =
+    useQuantityInput(item.quantity, (value: number) =>
+      onSubmitQuantity(item.id, value),
+    );
 
   return (
     <ListItem hoverTheme pressTheme>
@@ -62,7 +58,7 @@ export const ItemList = ({
           }}
         >
           <RIconButton
-            onPress={() => handleDecrease(item.id)}
+            onPress={decrease}
             style={{
               width: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
               height: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
@@ -77,20 +73,23 @@ export const ItemList = ({
           </RIconButton>
 
           <RInput
-            value={String(quantities[item.id])}
-            onChangeText={(text) => handleQuantityChange(item.id, text)}
-            onBlur={() => handleBlurQuantity(item.id)}
+            value={String(value)}
+            onChangeText={(text) => setValue(Number(text))}
+            onBlur={(e) => submit(Number(e.target.value))}
             style={{
               width: 40,
+              padding: 0,
+              textAlign: 'center',
               height: responsive.xxs ? 25 : 30,
               color: currentTheme.colors.text,
               fontSize: 12,
-              borderWidth: 0,
+              borderWidth: 1,
+              borderColor: hasError ? 'red' : '',
             }}
           />
 
           <RIconButton
-            onPress={() => handleIncrease(item.id)}
+            onPress={increase}
             style={{
               width: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
               height: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
@@ -148,3 +147,45 @@ export const ItemList = ({
     </ListItem>
   );
 };
+
+const useQuantityInput = (
+  defaultValue: number,
+  onChange: (value: number) => void,
+) => {
+  const [quantity, setQuantity] = useState(0);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setQuantity(defaultValue);
+  }, [defaultValue]);
+
+  const submit = (value: number) => {
+    setQuantity(value);
+    if (!validateQuantity(value)) {
+      return setHasError(true);
+    }
+
+    setHasError(false);
+
+    onChange(value);
+  };
+
+  const increase = () => {
+    submit(quantity + 1);
+  };
+
+  const decrease = () => {
+    submit(quantity - 1);
+  };
+
+  return {
+    value: quantity,
+    setValue: setQuantity,
+    hasError,
+    increase,
+    decrease,
+    submit,
+  };
+};
+
+const validateQuantity = (quantity: number) => quantity > 0;
