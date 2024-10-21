@@ -32,25 +32,25 @@ export function ItemDetailsScreen() {
       <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
         <RStack style={styles.breadcrumbContainer}>
           {Platform.OS === 'web' ? (
-            <RLink to="/items">
-              <RText style={styles.breadcrumbLink}>Items</RText>
+            <RLink to="/products">
+              <RText style={styles.breadcrumbLink}>Products</RText>
             </RLink>
           ) : (
-            <TouchableOpacity onPress={() => router.push('/items')}>
-              <RText style={styles.breadcrumbLink}>Items</RText>
+            <TouchableOpacity onPress={() => router.push('/products')}>
+              <RText style={styles.breadcrumbLink}>Products</RText>
             </TouchableOpacity>
           )}
 
           <RText style={styles.breadcrumbSeparator}>/</RText>
 
           {Platform.OS === 'web' ? (
-            <RLink to={`/items`}>
+            <RLink to={`/products`}>
               <RText style={styles.breadcrumbLink}>
                 {item?.category?.name}
               </RText>
             </RLink>
           ) : (
-            <TouchableOpacity onPress={() => router.push('/items')}>
+            <TouchableOpacity onPress={() => router.push('/products')}>
               <RText style={styles.breadcrumbLink}>
                 {item?.category?.name}
               </RText>
@@ -92,12 +92,14 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       backgroundColor: currentTheme.colors.border,
       padding: 8,
+      paddingLeft: 16,
       borderRadius: 20,
       marginBottom: 10,
+      gap: 4,
     },
     breadcrumbLink: {
       color: currentTheme.colors.text,
-      fontSize: 18,
+      fontSize: 14,
       fontWeight: 'bold',
     },
     breadcrumbSeparator: {
