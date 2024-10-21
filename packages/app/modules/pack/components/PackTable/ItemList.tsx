@@ -114,11 +114,11 @@ export const ItemList = ({
             style={{
               color: currentTheme.colors.text,
               marginLeft: responsive.xxs ? 10 : 20,
-              width: responsive.xxs ? 50 : 80,
+              width: responsive.xxs ? 80 : 110,
               fontSize: responsive.xxs ? 10 : responsive.sm ? 12 : 14,
             }}
           >
-            {`Weight: ${convertWeight(item.weight, SMALLEST_ITEM_UNIT, item.unit)}`}
+            {`Weight: ${convertWeight(item.weight, SMALLEST_ITEM_UNIT, item.unit)} ${item.unit}`}
           </RText>
         </RStack>
 
