@@ -13,6 +13,7 @@ interface ItemListProps {
   handleDecrease: (itemId: string) => void;
   handleBlurQuantity: (itemId: string) => void;
   handleIncrease: (itemId: string) => void;
+  handleDeleteItem: (itemId: string) => void;
   handleQuantityChange: (itemId: string, newQuantity: string) => void;
 }
 
@@ -23,6 +24,7 @@ export const ItemList = ({
   handleIncrease,
   handleBlurQuantity,
   handleQuantityChange,
+  handleDeleteItem,
 }: ItemListProps) => {
   const { currentTheme } = useTheme();
   const responsive = useResponsive();
@@ -133,7 +135,7 @@ export const ItemList = ({
         </RText>
 
         <RIconButton
-          onPress={() => console.log('Delete')}
+          onPress={() => handleDeleteItem(item.id)}
           style={{ backgroundColor: 'transparent' }}
         >
           <MaterialIcons

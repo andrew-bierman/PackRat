@@ -1,5 +1,5 @@
 import { DbClient } from '../../db/client';
-import { and, asc, count, desc, eq, inArray, like, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
 import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
@@ -161,6 +161,32 @@ export class Item {
     }
   }
 
+  async findUserItems(
+    ownerId: string,
+    searchString: string,
+    { limit, offset }: { limit: number; offset: number },
+  ) {
+    try {
+      const items = await DbClient.instance.query.item.findMany({
+        where: and(
+          or(eq(ItemTable.global, true), eq(ItemTable.ownerId, ownerId)),
+          like(ItemTable.name, `%${searchString}%`),
+        ),
+        with: {
+          category: {
+            columns: { id: true, name: true },
+          },
+        },
+        offset,
+        limit,
+        orderBy: (item, { desc }) => desc(item.createdAt),
+      });
+      return items;
+    } catch (error) {
+      throw new Error(`Failed to find user items: ${error.message}`);
+    }
+  }
+
   async findAllInArray(arr: string[]) {
     return await DbClient.instance
       .select()
@@ -276,7 +302,6 @@ export class Item {
   }
 
   applyFeedOrdersOrders(queryBy: string) {
-    console.log(queryBy);
     if (!['Most Recent', 'Oldest'].includes(queryBy)) {
       return desc(ItemTable.createdAt);
     }

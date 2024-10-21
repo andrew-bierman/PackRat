@@ -1,4 +1,4 @@
-import React, { cloneElement, forwardRef } from 'react';
+import React, { cloneElement, forwardRef, useMemo } from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
@@ -27,6 +27,7 @@ interface SearchInputProps {
   onChange: (text: string) => void;
   searchString?: string;
   placeholder?: string;
+  canCreateNewItem?: boolean;
   resultItemComponent: React.ReactElement;
 }
 
@@ -40,6 +41,7 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       results,
       onChange,
       searchString,
+      canCreateNewItem = false,
     },
     inputRef,
   ) {
@@ -51,24 +53,10 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       isLoadingMobile,
       isVisible,
     } = useSearchInput({ onSelect, onChange, onCreate, searchString });
+    const options = useSearchOptions(results, searchString, canCreateNewItem);
 
     const { isDark, currentTheme } = useTheme();
     const styles = useCustomStyles(loadStyles);
-
-    const hasExactMatch = results.some(
-      (result) => result.name.toLowerCase() === searchString?.toLowerCase(),
-    );
-
-    const options = hasExactMatch
-      ? [...results]
-      : [
-          {
-            id: 'create',
-            name: `Create "${searchString}"`,
-            title: searchString,
-          },
-          ...results,
-        ];
 
     if (Platform.OS === 'web') {
       return (
@@ -162,7 +150,9 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                       <RStack
                         key={`result + ${i}`}
                         role="listitem"
-                        onPress={() => handleSearchResultClick(result)}
+                        onPress={() =>
+                          !result.isDisabled && handleSearchResultClick(result)
+                        }
                         style={{ cursor: 'pointer' }}
                       >
                         {cloneElement(ResultItemComponent, { item: result })}
@@ -265,6 +255,37 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     }
   },
 );
+
+const useSearchOptions = (
+  results: any,
+  searchString: string,
+  canCreateNewItem: boolean,
+) => {
+  return useMemo(() => {
+    if (!Array.isArray(results)) {
+      return [];
+    }
+
+    if (!canCreateNewItem) {
+      return results;
+    }
+
+    const hasExactMatch = results.some(
+      (result) => result.name.toLowerCase() === searchString?.toLowerCase(),
+    );
+
+    return hasExactMatch
+      ? [...results]
+      : [
+          {
+            id: 'create',
+            name: `Create "${searchString}"`,
+            title: searchString,
+          },
+          ...results,
+        ];
+  }, [results]);
+};
 
 const loadStyles = () => ({
   container: {

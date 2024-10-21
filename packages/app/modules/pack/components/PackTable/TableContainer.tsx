@@ -12,6 +12,7 @@ import { ItemList } from './ItemList';
 import useResponsive from 'app/hooks/useResponsive';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useSetItemQuantity } from 'app/modules/item';
+import { useDeletePackItem } from 'app/modules/pack/hooks';
 interface TableContainerProps {
   currentPack: any;
   selectedPack?: any;
@@ -50,6 +51,7 @@ export const TableContainer = ({
     copy,
   });
   const { setItemQuantity } = useSetItemQuantity();
+  const { deletePackItem } = useDeletePackItem();
 
   const [quantities, setQuantities] = useState(
     data.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}),
@@ -61,6 +63,10 @@ export const TableContainer = ({
       packId: currentPack.id,
       quantity: quantities[itemId],
     });
+  };
+
+  const handleDeletePackItem = (itemId: string) => {
+    deletePackItem({ packId: currentPack.id, itemId });
   };
 
   const handleIncrease = (itemId: string) => {
@@ -119,6 +125,7 @@ export const TableContainer = ({
                   handleIncrease={handleIncrease}
                   handleDecrease={handleDecrease}
                   handleQuantityChange={handleQuantityChange}
+                  handleDeleteItem={handleDeletePackItem}
                 />
               </YGroup.Item>
             ))}

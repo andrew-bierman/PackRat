@@ -24,7 +24,8 @@ export const SearchItem = () => {
         searchString={searchString}
         onChange={setSearchString}
         resultItemComponent={<ResultItem />}
-        placeholder="Search Global Item"
+        placeholder="Looking for an item?"
+        canCreateNewItem
         results={results}
         onSelect={handleSearchResultClick}
         onCreate={({ title }) => {
@@ -47,7 +48,9 @@ export const SearchItem = () => {
 
 const ResultItem = ({ item }: any) => {
   return (
-    <RStack style={{ flexDirection: 'row' }}>
+    <RStack
+      style={{ flexDirection: 'row', opacity: item.isDisabled ? 0.4 : 1 }}
+    >
       <RText fontWeight="400">{item.name}</RText>
       <RText color="gray" textTransform={'capitalize'}></RText>
     </RStack>

@@ -19,3 +19,4 @@ export * from './getItemsFeed';
 export * from './deleteItemFromPack';
 export * from './toggleItemPack';
 export * from './setItemQuantity';
+export * from './getUserItems';

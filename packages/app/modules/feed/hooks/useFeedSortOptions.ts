@@ -17,12 +17,7 @@ const packSortOptions = [
   SORT_OPTIONS.OLDEST,
 ];
 
-const productsSortOptions = [
-  SORT_OPTIONS.MOST_RECENT,
-  SORT_OPTIONS.LIGHTEST,
-  SORT_OPTIONS.HEAVIEST,
-  SORT_OPTIONS.OLDEST,
-];
+const productsSortOptions = [SORT_OPTIONS.MOST_RECENT, SORT_OPTIONS.OLDEST];
 
 const commonOptions = [SORT_OPTIONS.MOST_RECENT, SORT_OPTIONS.OLDEST];
 

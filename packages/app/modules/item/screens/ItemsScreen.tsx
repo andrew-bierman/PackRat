@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { AddItemGlobal, ImportItemGlobal } from '../components';
 import { ItemsTable } from 'app/modules/item/components/itemtable/itemTable';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useItems } from 'app/modules/item';
+import { useGlobalItems } from 'app/modules/item';
 import { usePagination } from 'app/hooks/common';
 import {
   BaseModal,
@@ -17,7 +17,7 @@ import { useAuthUser } from 'app/modules/auth';
 
 export function ItemsScreen() {
   const { limit, handleLimitChange, page, handlePageChange } = usePagination();
-  const { data, isFetching, isError } = useItems({ limit, page });
+  const { data, isFetching, isError } = useGlobalItems({ limit, page });
   const styles = useCustomStyles(loadStyles);
   const [value, setValue] = useState('Food');
 
