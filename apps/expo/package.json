@@ -26,11 +26,11 @@
     "setup:keyreplace": "node setup.js",
     "setup:move": "yarn move:gradle && yarn move:pod",
     "setup": "yarn setup:copy && yarn setup:keyreplace && yarn setup:move",
-    "start-native": "TAMAGUI_TARGET=native npx expo start -c -d",
-    "start-web": "TAMAGUI_TARGET=web npx expo start -c",
-    "start": "EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --dev-client -c -d",
+    "start-native": "TAMAGUI_TARGET=native APP_VARIANT=development npx expo start -c -d",
+    "start-web": "TAMAGUI_TARGET=web APP_VARIANT=development npx expo start -c",
+    "start": "EXPO_USE_METRO_WORKSPACE_ROOT=1 APP_VARIANT=development npx expo start --dev-client -c -d",
     "test": "echo \"No tests yet\"",
-    "web": "npx expo start --web"
+    "web": "APP_VARIANT=development npx expo start --web"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
