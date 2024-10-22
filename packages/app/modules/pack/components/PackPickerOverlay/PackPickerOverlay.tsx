@@ -26,7 +26,7 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const user = useAuthUser();
-  const { data: packs } = useUserPacks(
+  const { data: packs, isLoading } = useUserPacks(
     user?.id,
     { searchTerm, itemId },
     '',
@@ -40,11 +40,11 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
   };
 
   useEffect(() => {
-    if (!isLoadedOnce.current && Array.isArray(packs)) {
+    if (!isLoadedOnce.current && Array.isArray(packs) && !isLoading) {
       isLoadedOnce.current = true;
       onFirstTimeLoad?.(packs);
     }
-  }, [packs, onFirstTimeLoad]);
+  }, [packs, onFirstTimeLoad, isLoading]);
 
   return (
     <ItemPickerOverlay
