@@ -1,11 +1,15 @@
 import React, { useMemo, useState, useEffect, memo } from 'react';
 import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
-import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
+import {
+  FeedCard,
+  FeedList,
+  FeedSearchFilter,
+  SearchProvider,
+} from '../components';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from 'app/utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
-import { RefreshControl } from 'react-native';
 import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
@@ -120,7 +124,7 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
             setSearchQuery={setSearchQuery}
             handleCreateClick={handleCreateClick}
           />
-          <FlatList
+          {/* <FlatList
             data={data}
             horizontal={false}
             ItemSeparatorComponent={() => (
@@ -154,6 +158,19 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
+          /> */}
+          <FeedList
+            data={data}
+            CardComponent={({ item }) => (
+              <FeedCard
+                key={item?.id}
+                item={item}
+                cardType="primary"
+                feedType={item.type}
+              />
+            )}
+            isLoading={isLoading}
+            separatorHeight={12}
           />
           {totalPages > 1 ? (
             <Pagination
