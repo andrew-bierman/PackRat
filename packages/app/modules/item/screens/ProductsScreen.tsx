@@ -97,8 +97,6 @@ export function ProductsScreen() {
               CardComponent={({ item }) => (
                 <ItemCard itemData={item} onAddPackPress={onTriggerOpen} />
               )}
-              refreshing={false}
-              onRefresh={() => {}}
               isLoading={isLoading}
               separatorHeight={12}
             />
