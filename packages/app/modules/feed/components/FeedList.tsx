@@ -12,8 +12,8 @@ import useTheme from 'app/hooks/useTheme';
 interface FeedListProps {
   data: any;
   CardComponent: React.ComponentType<{ item: any }>;
-  refreshing: boolean;
-  onRefresh: () => void;
+  refreshing?: boolean;
+  onRefresh?: () => void;
   isLoading?: boolean;
   errorMessage?: string;
   separatorHeight?: number;
@@ -24,7 +24,7 @@ interface FeedListProps {
 export const FeedList = ({
   data,
   CardComponent,
-  refreshing,
+  refreshing = false,
   onRefresh,
   isLoading = false,
   errorMessage = 'No Data Available',
@@ -64,7 +64,9 @@ export const FeedList = ({
           }
           ListEmptyComponent={() => <RText>{errorMessage}</RText>}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            onRefresh ? (
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            ) : undefined
           }
           showsVerticalScrollIndicator={false}
         />

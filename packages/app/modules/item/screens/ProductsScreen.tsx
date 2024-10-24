@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FlatList, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
@@ -17,24 +17,7 @@ import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
 import { Search, X } from '@tamagui/lucide-icons';
 import { PackPickerOverlay } from 'app/modules/pack';
 import { useItemPackPicker } from '../hooks/useItemPackPicker';
-
-interface Item {
-  id: string;
-  name: string;
-  category: {
-    name: string;
-  };
-  sku: string;
-  seller: string;
-  weight: number;
-  unit: string;
-  description: string;
-  details?: {
-    key1: string;
-    key2: string;
-    key3: string;
-  };
-}
+import { FeedList } from 'app/modules/feed/components/FeedList';
 
 export function ProductsScreen() {
   const sortOptions = useFeedSortOptions('products');
@@ -108,34 +91,16 @@ export function ProductsScreen() {
         {isLoading ? (
           <RText>Loading...</RText>
         ) : (
-          <RStack
-            style={{
-              padding: 20,
-              width: '100%',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <FlatList
+          <>
+            <FeedList
               data={data}
-              numColumns={numColumns}
-              key={`flatlist-numColumns-${numColumns}`}
-              keyExtractor={(item, index) =>
-                `${item?.id}_${item?.type}_${index}`
-              } // Ensure unique keys
-              renderItem={({ item }) => (
-                <RStack style={{ flex: 1 / numColumns, padding: 10 }}>
-                  <ItemCard
-                    itemData={item as Item}
-                    onAddPackPress={onTriggerOpen}
-                  />
-                </RStack>
+              CardComponent={({ item }) => (
+                <ItemCard itemData={item} onAddPackPress={onTriggerOpen} />
               )}
-              onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
+              isLoading={isLoading}
+              separatorHeight={12}
             />
-            {totalPages > 1 ? (
+            {totalPages > 1 && (
               <RStack style={{ marginTop: 40 }}>
                 <Pagination
                   isPrevBtnDisabled={!hasPrevPage}
@@ -146,8 +111,8 @@ export function ProductsScreen() {
                   totalPages={totalPages}
                 />
               </RStack>
-            ) : null}
-          </RStack>
+            )}
+          </>
         )}
       </RStack>
       <PackPickerOverlay {...overlayProps} />
