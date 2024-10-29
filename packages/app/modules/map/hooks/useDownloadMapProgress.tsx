@@ -1,8 +1,9 @@
 import { offlineManager } from '@rnmapbox/maps';
+import { type OfflineCreatePackOptionsArgs } from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflineCreatePackOptions';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-export const useDownloadMapProgress = () => {
+export const useDownloadMapProgress = (onDownloadEnd?: () => void) => {
   const [progress, setProgress] = useState(0);
   const [downloading, setDownloading] = useState(false);
 
@@ -11,6 +12,7 @@ export const useDownloadMapProgress = () => {
     setDownloading(true);
     if (offlineRegionStatus.percentage === 100) {
       Alert.alert('Map download successfully!');
+      onDownloadEnd?.();
       setDownloading(false);
     }
   };
@@ -19,7 +21,9 @@ export const useDownloadMapProgress = () => {
     Alert.alert(error.message);
   };
 
-  const downloadMap = async (optionsForDownload: any) => {
+  const downloadMap = async (
+    optionsForDownload: OfflineCreatePackOptionsArgs,
+  ) => {
     offlineManager
       .createPack(optionsForDownload, onDownloadProgress, errorListener)
       .catch((error: any) => {

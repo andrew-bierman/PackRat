@@ -52,17 +52,17 @@ export const useNavigationList = () => {
       text: 'Packs',
       iconSource: MaterialIcons,
     },
-    // ...((Platform.OS != 'web'
-    //   ? [
-    //       {
-    //         type: NavigationItemTypeEnum.LINK,
-    //         href: '/maps',
-    //         icon: 'map',
-    //         text: 'Downloaded Maps',
-    //         iconSource: Entypo,
-    //       },
-    //     ]
-    //   : []) as NavigationItem[]),
+    ...((Platform.OS != 'web'
+      ? [
+          {
+            type: NavigationItemTypeEnum.LINK,
+            href: '/maps',
+            icon: 'map',
+            text: 'Downloaded Maps',
+            iconSource: Entypo,
+          },
+        ]
+      : []) as NavigationItem[]),
     {
       type: NavigationItemTypeEnum.LINK,
       href: '/products',
