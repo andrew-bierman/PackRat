@@ -1,11 +1,11 @@
-# Native production pipeline 
+# Native production pipeline
 # Builds on EAS Cloud with auto submission
 name: EAS Build & Submit
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
-    branches: 
+    branches:
       - main
     paths:
       - 'packages/app/**'
@@ -34,7 +34,6 @@ jobs:
         shell: bash
         working-directory: ${{ github.workspace }}/apps/expo
         run: echo "$(jq '.submit.production.ios.ascAppId = "${{ secrets.ASC_APP_ID }}"' eas.json)" > eas.json
-        
       - name: Build on EAS
         working-directory: ./apps/expo
         run: eas build --platform all --profile production --non-interactive --no-wait --auto-submit
