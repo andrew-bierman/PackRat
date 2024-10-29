@@ -46,6 +46,7 @@ app.use('*', securityHeaders()); // Apply to all routes so avoid commenting this
 // SETUP CORS
 app.use('*', async (c, next) => {
   const CORS_ORIGIN = String(c.env.CORS_ORIGIN);
+  console.log('SETUP CORS');
   const corsMiddleware = cors({
     // origin: CORS_ORIGIN, // uncomment this line to enable CORS
     origin: '*', // temporary
