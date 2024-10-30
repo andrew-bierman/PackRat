@@ -76,6 +76,13 @@ export const feedItemTripCardConverter: Converter<
   };
 };
 
+export const feedItemCardConverter: Converter<
+  FeedItem,
+  RouterOutput['getPackTemplates'][0]
+> = (input) => {
+  return input;
+};
+
 export const feedItemPackTemplateCardConverter: Converter<
   FeedItem,
   RouterOutput['getPackTemplates'][0]

@@ -29,7 +29,10 @@ interface ItemCardProps {
   onAddPackPress: (itemId: string, e: any) => void;
 }
 
-const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
+export const ItemCard: React.FC<ItemCardProps> = ({
+  itemData,
+  onAddPackPress,
+}) => {
   const { currentTheme } = useTheme();
   const router = useRouter();
   const { xxs } = useResponsive();
