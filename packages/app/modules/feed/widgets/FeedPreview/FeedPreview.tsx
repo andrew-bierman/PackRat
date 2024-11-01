@@ -4,10 +4,11 @@ import { useFeed } from '../../hooks';
 import Loader from 'app/components/Loader';
 import { FeedCard, type FeedItem } from 'app/modules/feed';
 import { View } from 'tamagui';
+import type { FeedType } from 'app/modules/feed/model';
 
 interface FeedPreviewScrollProps {
   itemWidth: number;
-  feedType: string;
+  feedType: FeedType;
   id?: string;
 }
 
@@ -24,15 +25,23 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
   ) : (
     <Carousel itemWidth={itemWidth}>
       {validFeedData
-        ?.filter((item): item is FeedItem => item.type !== null)
+        ?.filter(
+          (item): item is FeedItem =>
+            item.type !== null || feedType === 'similarItems',
+        )
         .map((item: FeedItem) => {
           return (
             <View
+              key={item.id}
               style={{
                 marginBottom: 10,
               }}
             >
-              <FeedCard item={item} cardType="secondary" feedType={item.type} />
+              <FeedCard
+                item={item}
+                cardType="secondary"
+                feedType={item.type || 'item'}
+              />
             </View>
           );
         })}
