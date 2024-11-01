@@ -4,6 +4,7 @@ import {
   feedItemPackCardConverter,
   feedItemTripCardConverter,
   feedItemPackTemplateCardConverter,
+  feedItemCardConverter,
 } from './utils';
 import { PackCard } from 'app/modules/pack';
 import { type CardType } from '@packrat/ui';
@@ -16,6 +17,7 @@ import { ItemCard } from 'app/modules/item';
 const convertersByType = {
   pack: feedItemPackCardConverter,
   trip: feedItemTripCardConverter,
+  item: feedItemCardConverter,
   packTemplate: feedItemPackTemplateCardConverter,
 };
 

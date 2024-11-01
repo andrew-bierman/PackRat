@@ -11,7 +11,7 @@ import {
   RText,
 } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
-import ItemCard from '../components/ItemCard';
+import { ItemCard } from '../components/ItemCard';
 import { useFeedSortOptions } from 'app/modules/feed/hooks/useFeedSortOptions';
 import { useItemsFeed } from 'app/modules/item/hooks/useItemsFeed';
 import { Search, X } from '@tamagui/lucide-icons';
@@ -95,7 +95,11 @@ export function ProductsScreen() {
             <FeedList
               data={data}
               CardComponent={({ item }) => (
-                <ItemCard itemData={item} onAddPackPress={onTriggerOpen} />
+                <ItemCard
+                  cardType="primary"
+                  item={item}
+                  onAddPackPress={onTriggerOpen}
+                />
               )}
               isLoading={isLoading}
               separatorHeight={12}

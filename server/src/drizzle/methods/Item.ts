@@ -188,10 +188,17 @@ export class Item {
   }
 
   async findAllInArray(arr: string[]) {
-    return await DbClient.instance
-      .select()
-      .from(ItemTable)
-      .where(inArray(ItemTable.id, arr));
+    return await DbClient.instance.query.item.findMany({
+      where: inArray(ItemTable.id, arr),
+      with: {
+        category: {
+          columns: { id: true, name: true },
+        },
+        images: {
+          columns: { url: true },
+        },
+      },
+    });
   }
 
   async findGlobal(limit: number, offset: number, searchString: string) {

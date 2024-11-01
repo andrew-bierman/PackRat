@@ -64,6 +64,7 @@ export function ItemDetailsScreen() {
           width: '80%',
           backgroundColor: currentTheme.colors.secondaryBlue,
           paddingBottom: 24,
+          gap: 16,
           paddingTop: 0,
         }}
       >
