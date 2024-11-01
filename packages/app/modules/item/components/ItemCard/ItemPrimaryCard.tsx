@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from 'tamagui';
-import ItemDetailsContent from './ItemDetailsContent';
+import ItemDetailsContent from '../ItemDetailsContent';
 import { RStack, Image, RButton } from '@packrat/ui';
 import { TouchableOpacity, View, Platform } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
@@ -8,28 +8,12 @@ import { useRouter } from 'app/hooks/router';
 import useResponsive from 'app/hooks/useResponsive';
 import { PlusCircle } from '@tamagui/lucide-icons';
 import ItemPlaceholder from 'app/assets/item-placeholder.png';
+import type { ItemCardProps } from './model';
 
-interface Item {
-  id: string;
-  name: string;
-  category: {
-    name: string;
-  };
-  sku: string;
-  seller: string;
-  weight: number;
-  unit: string;
-  description: string;
-  productUrl?: string;
-  images?: Array<{ url }>;
-}
-
-interface ItemCardProps {
-  itemData: Item;
-  onAddPackPress: (itemId: string, e: any) => void;
-}
-
-const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
+export const ItemPrimaryCard: React.FC<ItemCardProps> = ({
+  item,
+  onAddPackPress,
+}) => {
   const { currentTheme } = useTheme();
   const router = useRouter();
   const { xxs } = useResponsive();
@@ -37,8 +21,8 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
   const handlePress = (e) => {
     e.stopPropagation();
     router.push({
-      pathname: `/item/${itemData.id}`,
-      query: { itemId: itemData.id },
+      pathname: `/item/${item.id}`,
+      query: { itemId: item.id },
     });
   };
 
@@ -73,7 +57,7 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
             >
               <Image
                 source={{
-                  uri: itemData?.images?.[0]?.url,
+                  uri: item?.images?.[0]?.url,
                 }}
                 defaultSource={ItemPlaceholder}
                 resizeMode="contain"
@@ -91,7 +75,7 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
                   backgroundColor: 'transparent',
                 }}
                 onPress={(e) => {
-                  onAddPackPress(itemData.id, e);
+                  onAddPackPress(item.id, e);
                 }}
               >
                 <PlusCircle />
@@ -101,14 +85,14 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
             <RStack style={{ flex: 1, paddingLeft: 10 }}>
               <ItemDetailsContent
                 itemData={{
-                  title: itemData.name,
-                  sku: itemData.sku,
-                  seller: itemData.seller,
-                  category: itemData.category.name,
-                  productUrl: itemData.productUrl,
-                  weight: itemData.weight,
-                  unit: itemData.unit,
-                  description: itemData.description,
+                  title: item.name,
+                  sku: item.sku,
+                  seller: item.seller,
+                  category: item?.category?.name,
+                  productUrl: item.productUrl,
+                  weight: item.weight,
+                  unit: item.unit,
+                  description: item.description,
                 }}
               />
             </RStack>
@@ -118,5 +102,3 @@ const ItemCard = ({ itemData, onAddPackPress }: ItemCardProps) => {
     </>
   );
 };
-
-export default ItemCard;

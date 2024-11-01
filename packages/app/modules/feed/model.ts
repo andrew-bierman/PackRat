@@ -7,7 +7,7 @@ export type FeedType =
   | 'similarPacks'
   | 'similarItems'
   | 'packTemplates';
-export type FeedResource = 'pack' | 'trip' | 'packTemplate';
+export type FeedResource = 'pack' | 'item' | 'trip' | 'packTemplate';
 
 export interface BaseFeedItem {
   id: string;
@@ -25,6 +25,7 @@ export interface BaseFeedItem {
   owner_id: string | { id: string };
   createdAt: string;
   owners: Array<{ any: any }>;
+  ga;
 }
 
 interface PackFeedItem extends BaseFeedItem {

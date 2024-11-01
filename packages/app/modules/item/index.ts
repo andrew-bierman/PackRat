@@ -6,5 +6,6 @@ export {
   SearchItem,
   AddItem,
   AddItemModal,
+  ItemCard,
 } from './components';
 export * from './model';
