@@ -6,6 +6,10 @@ import { ItemPacks } from './ItemPacks';
 import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
 
 export class Item {
+  static get tableName() {
+    return ItemTable._.name;
+  }
+
   async create(data: InsertItem) {
     try {
       const item = await DbClient.instance

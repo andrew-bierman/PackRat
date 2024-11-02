@@ -39,16 +39,15 @@ export const importItemsGlobal = async (c: Context) => {
                 continue;
               }
 
-              await addItemGlobalService(
-                item.Name,
-                item.Weight,
-                item.Quantity,
-                item.Unit,
-                item.Category,
+              await addItemGlobalService({
+                name: item.Name,
+                weight: item.Weight,
+                unit: item.Unit,
+                type: item.Category,
                 ownerId,
-                c.ctx.executionCtx,
-                item.image_urls,
-              );
+                executionCtx: c.ctx.executionCtx,
+                image_urls: item.image_urls,
+              });
             }
             resolve('items');
           } catch (error) {
@@ -68,26 +67,26 @@ export const importItemsGlobal = async (c: Context) => {
 };
 
 export function importItemsGlobalRoute() {
+  const expectedHeaders = [
+    'Name',
+    'Weight',
+    'Unit',
+    'Category',
+    'image_urls',
+    'sku',
+    'product_url',
+    'description',
+    'techs',
+    'seller',
+  ] as const;
   return protectedProcedure
     .input(validator.importItemsGlobal)
     .mutation(async (opts) => {
       const { content, ownerId } = opts.input;
       return new Promise((resolve, reject) => {
-        Papa.parse(content, {
+        Papa.parse<Record<(typeof expectedHeaders)[number], unknown>>(content, {
           header: true,
           complete: async function (results) {
-            const expectedHeaders = [
-              'Name',
-              'Weight',
-              'Unit',
-              'Category',
-              'image_urls',
-              'sku',
-              'product_url',
-              'description',
-              'techs',
-              'seller',
-            ];
             const parsedHeaders = results.meta.fields;
             try {
               const allHeadersPresent = expectedHeaders.every((header) =>
@@ -101,28 +100,29 @@ export function importItemsGlobalRoute() {
                 );
               }
 
-              for (const [index, item] of results.data.entries()) {
-                if (
-                  index === results.data.length - 1 &&
-                  Object.values(item).every((value) => value === '')
-                ) {
-                  continue;
-                }
+              const lastRawItem = results.data[results.data.length - 1];
+              if (
+                lastRawItem &&
+                Object.values(lastRawItem).every((value) => value === '')
+              ) {
+                results.data.pop();
+              }
 
-                await addItemGlobalService(
-                  item.Name,
-                  item.Weight,
-                  item.Unit,
-                  item.Category,
+              for (const item of results.data) {
+                await addItemGlobalService({
+                  name: String(item.Name),
+                  weight: Number(item.Weight),
+                  unit: String(item.Unit),
+                  type: String(item.Category),
                   ownerId,
-                  opts.ctx.executionCtx,
-                  item.image_urls,
-                  item.sku,
-                  item.product_url,
-                  item.description,
-                  item.techs,
-                  item.seller,
-                );
+                  executionCtx: opts.ctx.executionCtx,
+                  image_urls: item.image_urls && String(item.image_urls),
+                  sku: item.sku && String(item.sku),
+                  productUrl: item.product_url && String(item.product_url),
+                  description: item.description && String(item.description),
+                  seller: item.seller && String(item.seller),
+                  productDetails: item.techs,
+                });
               }
               return resolve('items');
             } catch (error) {
