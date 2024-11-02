@@ -7,14 +7,16 @@ export const addItemGlobal = async (c: Context) => {
   try {
     const { name, weight, unit, type, ownerId } = await c.req.json();
 
-    const item = await addItemGlobalService({
-      name,
-      weight,
-      unit,
-      type,
-      ownerId,
-      executionCtx: c.executionCtx,
-    });
+    const item = await addItemGlobalService(
+      {
+        name,
+        weight,
+        unit,
+        type,
+        ownerId,
+      },
+      c.executionCtx,
+    );
     return c.json({ item }, 200);
   } catch (error) {
     return c.json({ error: `Failed to add item: ${error.message}` }, 500);
@@ -31,14 +33,16 @@ export function addItemGlobalRoute() {
         throw new Error('Invalid item type');
       }
 
-      const item = await addItemGlobalService({
-        name,
-        weight,
-        unit,
-        type,
-        ownerId,
-        executionCtx: opts.ctx.executionCtx,
-      });
+      const item = await addItemGlobalService(
+        {
+          name,
+          weight,
+          unit,
+          type,
+          ownerId,
+        },
+        opts.ctx.executionCtx,
+      );
       return item;
     });
 }

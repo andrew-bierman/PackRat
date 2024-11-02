@@ -14,15 +14,11 @@ export const getItemImages = async (c: Context) => {
 };
 
 export function getItemImagesRoute() {
-  return protectedProcedure
-    .input(
-      z.object({
-        id: z.string().nonempty('ID cant be empty'),
-      }),
-    )
-    .query(async (opts) => {
-      const { id } = opts.input;
-      const item = await getItemImagesByIdService(id);
-      return item;
-    });
+  return protectedProcedure.input(z.object({
+    id: z.string().nonempty("ID cant be empty"),
+  })).query(async (opts) => {
+    const { id } = opts.input;
+    const item = await getItemImagesByIdService(id);
+    return item;
+  });
 }

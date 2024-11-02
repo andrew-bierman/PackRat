@@ -1,8 +1,12 @@
 import { type Context } from 'hono';
-import { addItemGlobalService } from '../../services/item/item.service';
+import {
+  addItemGlobalService,
+  addItemGlobalServiceBatch,
+} from '../../services/item/item.service';
 import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import Papa from 'papaparse';
+import { ItemCategoryEnum } from 'src/utils/itemCategory';
 
 export const importItemsGlobal = async (c: Context) => {
   try {
@@ -39,15 +43,17 @@ export const importItemsGlobal = async (c: Context) => {
                 continue;
               }
 
-              await addItemGlobalService({
-                name: item.Name,
-                weight: item.Weight,
-                unit: item.Unit,
-                type: item.Category,
-                ownerId,
-                executionCtx: c.ctx.executionCtx,
-                image_urls: item.image_urls,
-              });
+              await addItemGlobalService(
+                {
+                  name: item.Name,
+                  weight: item.Weight,
+                  unit: item.Unit,
+                  type: item.Category,
+                  ownerId,
+                  image_urls: item.image_urls,
+                },
+                c.executionCtx,
+              );
             }
             resolve('items');
           } catch (error) {
@@ -108,12 +114,13 @@ export function importItemsGlobalRoute() {
                 results.data.pop();
               }
 
-              for (const item of results.data) {
-                await addItemGlobalService({
+              await addItemGlobalServiceBatch(
+                results.data,
+                (item) => ({
                   name: String(item.Name),
                   weight: Number(item.Weight),
                   unit: String(item.Unit),
-                  type: String(item.Category),
+                  type: String(item.Category) as ItemCategoryEnum,
                   ownerId,
                   executionCtx: opts.ctx.executionCtx,
                   image_urls: item.image_urls && String(item.image_urls),
@@ -121,9 +128,14 @@ export function importItemsGlobalRoute() {
                   productUrl: item.product_url && String(item.product_url),
                   description: item.description && String(item.description),
                   seller: item.seller && String(item.seller),
-                  productDetails: item.techs,
-                });
-              }
+                  productDetails: item.techs as Record<
+                    string,
+                    string | number | boolean | null
+                  >,
+                }),
+                false,
+                opts.ctx.executionCtx,
+              );
               return resolve('items');
             } catch (error) {
               return reject(new Error(`Failed to add items: ${error.message}`));

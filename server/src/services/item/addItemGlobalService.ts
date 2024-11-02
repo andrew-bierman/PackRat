@@ -110,8 +110,9 @@ export const addItemGlobalService = async (
  * Adds list of items to the global service.
  * @return {Promise<Object>} The newly created item.
  */
-export const addItemGlobalServiceBatch = async (
-  rawItems: AddItemGlobalServiceParams[],
+export const addItemGlobalServiceBatch = async <T>(
+  rawItems: T[],
+  transform: (rawItem: T) => AddItemGlobalServiceParams,
   continueOnError = false,
   executionCtx: ExecutionContext,
 ) => {
@@ -195,5 +196,4 @@ export const addItemGlobalServiceBatch = async (
     });
   }
   executionCtx.waitUntil(VectorClient.instance.syncRecords(vectorData));
-  return createdItemsInOrder;
 };
