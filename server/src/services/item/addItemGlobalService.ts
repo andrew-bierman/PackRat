@@ -1,5 +1,9 @@
 import { type ExecutionContext } from 'hono';
-import { Item, type InsertItemCategory } from '../../db/schema';
+import {
+  Item,
+  ITEM_TABLE_NAME,
+  type InsertItemCategory,
+} from '../../db/schema';
 import { Item as ItemClass } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
@@ -7,6 +11,7 @@ import { VectorClient } from '../../vector/client';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 import { DbClient } from 'src/db/client';
 import { itemImage as itemImageTable } from '../../db/schema';
+import { summarizeItem } from 'src/utils/item';
 // import { prisma } from '../../prisma';
 
 interface AddItemGlobalServiceParams {
@@ -95,7 +100,7 @@ export const addItemGlobalService = async (
       content: `product_name: ${name}, category: ${type}, description: ${description}, productDetails: ${JSON.stringify(
         productDetails,
       )}`,
-      namespace: ItemClass.tableName,
+      namespace: ITEM_TABLE_NAME,
       metadata: {
         isPublic: newItem.global,
         ownerId,
@@ -120,7 +125,7 @@ export const addItemGlobalServiceBatch = async <T>(
 
   const createdItemsInOrder: Array<[itemIndex: number, item: Item]> = [];
   for (let idx = 0; idx < rawItems.length; idx++) {
-    const item = rawItems[idx];
+    const item = transform(rawItems[idx]);
     let category: InsertItemCategory | null;
     if (!categories.includes(item.type)) {
       const error = new Error(
@@ -183,12 +188,11 @@ export const addItemGlobalServiceBatch = async <T>(
   // Format Item for vector indexes
   const vectorData = [];
   for (const [idx, item] of createdItemsInOrder) {
+    item.category = { name: transform(rawItems[idx]).type };
     vectorData.push({
       id: item.id,
-      content: `product_name: ${item.name}, category: ${rawItems[idx].type}, description: ${item.description}, productDetails: ${JSON.stringify(
-        rawItems[idx].productDetails,
-      )}`,
-      namespace: ItemClass.tableName,
+      content: summarizeItem(item),
+      namespace: ITEM_TABLE_NAME,
       metadata: {
         isPublic: item.global,
         ownerId: item.ownerId,

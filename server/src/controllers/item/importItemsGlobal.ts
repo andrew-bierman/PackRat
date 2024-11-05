@@ -114,30 +114,51 @@ export function importItemsGlobalRoute() {
                 results.data.pop();
               }
 
+              let idx = 0;
               await addItemGlobalServiceBatch(
                 results.data,
-                (item) => ({
-                  name: String(item.Name),
-                  weight: Number(item.Weight),
-                  unit: String(item.Unit),
-                  type: String(item.Category) as ItemCategoryEnum,
-                  ownerId,
-                  executionCtx: opts.ctx.executionCtx,
-                  image_urls: item.image_urls && String(item.image_urls),
-                  sku: item.sku && String(item.sku),
-                  productUrl: item.product_url && String(item.product_url),
-                  description: item.description && String(item.description),
-                  seller: item.seller && String(item.seller),
-                  productDetails: item.techs as Record<
-                    string,
-                    string | number | boolean | null
-                  >,
-                }),
+                (item) => {
+                  const productDetailsStr = `${item.techs}`
+                    .replace(/'([^']*)'\s*:/g, '"$1":') // Replace single quotes keys with double quotes.
+                    .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes values with double quotes.
+                    .replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
+                      // Replace hex escape sequences with UTF-8 characters
+                      const codePoint = parseInt(hex, 16);
+                      return String.fromCharCode(codePoint);
+                    });
+
+                  idx++;
+                  console.log(`${idx} / ${results.data.length}`);
+                  try {
+                    const parsedProductDetails = JSON.parse(productDetailsStr);
+                  } catch (e) {
+                    console.log(
+                      `${productDetailsStr}\nFailed to parse product details for item ${item.Name}: ${e.message}`,
+                    );
+                    throw e;
+                  }
+
+                  return {
+                    name: String(item.Name),
+                    weight: Number(item.Weight),
+                    unit: String(item.Unit),
+                    type: String(item.Category) as ItemCategoryEnum,
+                    ownerId,
+                    executionCtx: opts.ctx.executionCtx,
+                    image_urls: item.image_urls && String(item.image_urls),
+                    sku: item.sku && String(item.sku),
+                    productUrl: item.product_url && String(item.product_url),
+                    description: item.description && String(item.description),
+                    seller: item.seller && String(item.seller),
+                    productDetails: JSON.parse(productDetailsStr),
+                  };
+                },
                 false,
                 opts.ctx.executionCtx,
               );
               return resolve('items');
             } catch (error) {
+              console.error(error);
               return reject(new Error(`Failed to add items: ${error.message}`));
             }
           },

@@ -207,8 +207,7 @@ class VectorClient {
       content: string;
       namespace: string;
       metadata: Metadata;
-    }>,
-    upsert: boolean = false,
+    }>
   ) {
     const contentList = [];
     for (const record of records) {
@@ -226,8 +225,7 @@ class VectorClient {
       metadata: records[index].metadata,
     }));
 
-    if (!upsert) await this.insert(values);
-    else await this.upsert(values);
+    await this.upsert(values);
   }
 
   public async syncRecord(
