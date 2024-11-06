@@ -50,7 +50,7 @@ export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
               {props.title}
             </RText>
             <RText
-              style={{ fontSize: 12, textAlign: 'left', lineHeight: 16 }}
+              style={{ fontSize: 12, textAlign: 'left', lineHeight: 26 }}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
