@@ -1,3 +1,4 @@
+import e from 'express';
 import { AiClient } from '../integrations/ai/client';
 
 interface VectorsQueryResponse {
@@ -11,9 +12,7 @@ interface VectorsQueryResponse {
   messages: Array<{ code: number; message: string }>;
 }
 
-interface Metadata {
-  [key: string]: string | number | boolean;
-}
+type Metadata = Record<string, string | number | boolean>;
 
 class VectorClient {
   private static _instance: VectorClient | null = null;
@@ -56,14 +55,26 @@ class VectorClient {
   // }
 
   // New API-based insert method
+  /**
+   * Inserts vectors into the index.
+   * If vectors with the same vector ID already exist in the index, only the vectors with new IDs will be inserted.
+   * @param vectors - A set of vectors to insert.
+   * @returns
+   */
   public async insert(
-    id: string,
-    values: number[],
-    namespace: string,
-    metadata: Metadata,
+    vectors: Array<{
+      id: string;
+      values: number[];
+      namespace: string;
+      metadata: Metadata;
+    }>,
   ) {
+    let ndjsonBody = '';
+    for (const vector of vectors) {
+      ndjsonBody += `${JSON.stringify(vector)}\n`;
+    }
+
     const url = `${this.VECTORIZE_INDEX_URL}/insert`;
-    const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -84,13 +95,22 @@ class VectorClient {
     return await response.json();
   }
 
+  /**
+   * Upserts vectors into the specified index, creating them if they do not exist and
+   * returns a mutation id corresponding to the vectors enqueued for upsertion.
+   */
   public async upsert(
-    id: string,
-    values: number[],
-    namespace: string,
-    metadata: Metadata,
+    vectors: Array<{
+      id: string;
+      values: number[];
+      namespace: string;
+      metadata: Metadata;
+    }>,
   ) {
-    const ndjsonBody = `${JSON.stringify({ id, values, namespace, metadata })}\n`;
+    let ndjsonBody = '';
+    for (const vector of vectors) {
+      ndjsonBody += `${JSON.stringify(vector)}\n`;
+    }
 
     const url = `${this.VECTORIZE_INDEX_URL}/upsert`;
 
@@ -181,6 +201,33 @@ class VectorClient {
     return await response.json();
   }
 
+  public async syncRecords(
+    records: Array<{
+      id: string;
+      content: string;
+      namespace: string;
+      metadata: Metadata;
+    }>
+  ) {
+    const contentList = [];
+    for (const record of records) {
+      contentList.push(record.content);
+    }
+    const values = await AiClient.getEmbeddingBash<{
+      id: string;
+      values: number[];
+      namespace: string;
+      metadata: Metadata;
+    }>(contentList, (embedding, index) => ({
+      id: records[index].id,
+      values: embedding,
+      namespace: records[index].namespace,
+      metadata: records[index].metadata,
+    }));
+
+    await this.upsert(values);
+  }
+
   public async syncRecord(
     {
       id,
@@ -196,8 +243,8 @@ class VectorClient {
     upsert: boolean = false,
   ) {
     const values = await AiClient.getEmbedding(content);
-    if (!upsert) await this.insert(id, values, namespace, metadata);
-    else await this.upsert(id, values, namespace, metadata);
+    if (!upsert) await this.insert([{ id, values, namespace, metadata }]);
+    else await this.upsert([{ id, values, namespace, metadata }]);
   }
 }
 

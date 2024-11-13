@@ -1,6 +1,11 @@
 import { DbClient } from '../../db/client';
 import { and, asc, count, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
-import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
+import {
+  type InsertItem,
+  ITEM_TABLE_NAME,
+  itemPacks,
+  item as ItemTable,
+} from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
 import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';

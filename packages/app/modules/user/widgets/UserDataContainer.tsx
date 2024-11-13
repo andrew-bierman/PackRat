@@ -95,16 +95,33 @@ export const UserDataContainer = memo(function UserDataContainer({
             width: '100%',
           }}
         >
-          <RText
+          <RStack
             style={{
-              textTransform: 'capitalize',
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: currentTheme.colors.tertiaryBlue,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              padding: 10,
             }}
           >
-            {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
-          </RText>
+            <RText
+              style={{
+                textTransform: 'capitalize',
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: currentTheme.colors.tertiaryBlue,
+              }}
+            >
+              {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
+            </RText>
+            <SearchProvider>
+              <UserDataList
+                resource={resource}
+                search={searchTerm}
+                onSearchChange={(search) => onSearchChange(search, type)}
+              />
+            </SearchProvider>
+          </RStack>
           <RStack
             style={{
               width: '100%',
@@ -132,14 +149,6 @@ export const UserDataContainer = memo(function UserDataContainer({
                   }}
                   ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
                 />
-
-                <SearchProvider>
-                  <UserDataList
-                    resource={resource}
-                    search={searchTerm}
-                    onSearchChange={(search) => onSearchChange(search, type)}
-                  />
-                </SearchProvider>
               </>
             ) : currentUser?.id === userId ? (
               <RLink href="/" style={{ textDecoration: 'none' }}>

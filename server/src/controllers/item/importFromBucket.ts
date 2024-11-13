@@ -54,7 +54,10 @@ async function importItemsFromBucket(directory, ownerId, env, executionCtx) {
     );
 
     const itemsToInsert = await parseCSVData(fileData, ownerId);
-    const insertedItems = await bulkAddItemsGlobalService(itemsToInsert, executionCtx);
+    const insertedItems = await bulkAddItemsGlobalService(
+      itemsToInsert,
+      executionCtx,
+    );
 
     return insertedItems;
   } catch (err) {
@@ -67,7 +70,12 @@ export const importFromBucket = async (c) => {
   const { directory, ownerId } = await c.req.query();
 
   try {
-    const insertedItems = await importItemsFromBucket(directory, ownerId, c.env, c.executionCtx);
+    const insertedItems = await importItemsFromBucket(
+      directory,
+      ownerId,
+      c.env,
+      c.executionCtx,
+    );
 
     return c.json({
       message: 'Items inserted successfully',
@@ -86,7 +94,12 @@ export function importFromBucketRoute() {
       const { env, executionCtx } = opts.ctx;
 
       try {
-        const insertedItems = await importItemsFromBucket(directory, ownerId, env, executionCtx);
+        const insertedItems = await importItemsFromBucket(
+          directory,
+          ownerId,
+          env,
+          executionCtx,
+        );
 
         return insertedItems;
       } catch (err) {
