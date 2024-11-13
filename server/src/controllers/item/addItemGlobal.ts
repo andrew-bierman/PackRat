@@ -8,11 +8,13 @@ export const addItemGlobal = async (c: Context) => {
     const { name, weight, unit, type, ownerId } = await c.req.json();
 
     const item = await addItemGlobalService(
-      name,
-      weight,
-      unit,
-      type,
-      ownerId,
+      {
+        name,
+        weight,
+        unit,
+        type,
+        ownerId,
+      },
       c.executionCtx,
     );
     return c.json({ item }, 200);
@@ -32,11 +34,13 @@ export function addItemGlobalRoute() {
       }
 
       const item = await addItemGlobalService(
-        name,
-        weight,
-        unit,
-        type,
-        ownerId,
+        {
+          name,
+          weight,
+          unit,
+          type,
+          ownerId,
+        },
         opts.ctx.executionCtx,
       );
       return item;

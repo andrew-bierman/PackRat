@@ -234,7 +234,8 @@ export const itemCategoryRelations = relations(itemCategory, ({ many }) => ({
   items: many(item),
 }));
 
-export const item = sqliteTable('item', {
+export const ITEM_TABLE_NAME = 'item';
+export const item = sqliteTable(ITEM_TABLE_NAME, {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),

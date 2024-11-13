@@ -229,47 +229,41 @@ export function ProfileContainer({ id = null }) {
               {isLoading && <SkeletonUserDataCard />}
             </View>
 
-            <View style={styles.userDataContainer}>
-              {favoritesQuery?.previewData?.length > 0 ? (
-                <UserDataContainer
-                  resource={favoritesQuery}
-                  type="favorites"
-                  userId={user?.id}
-                  isLoading={isLoading}
-                  searchTerm={searchTerms.favorites}
-                  onSearchChange={onSearchChange}
-                />
-              ) : (
-                <RText
-                  fontSize={20}
-                  fontWeight="bold"
-                  color={currentTheme.colors.tertiaryBlue}
-                >
-                  No favorites yet
-                </RText>
-              )}
-            </View>
+            {favoritesQuery?.previewData?.length > 0 ? (
+              <UserDataContainer
+                resource={favoritesQuery}
+                type="favorites"
+                userId={user?.id}
+                isLoading={isLoading}
+                searchTerm={searchTerms.favorites}
+                onSearchChange={onSearchChange}
+              />
+            ) : (
+              <RText
+                fontSize={20}
+                fontWeight="bold"
+                color={currentTheme.colors.tertiaryBlue}
+              >
+                No favorites yet
+              </RText>
+            )}
             {userPacksQuery?.previewData?.length > 0 && (
-              <View style={styles.userDataContainer}>
-                <UserDataContainer
-                  resource={userPacksQuery}
-                  type="packs"
-                  userId={user?.id}
-                  searchTerm={searchTerms.packs}
-                  onSearchChange={onSearchChange}
-                />
-              </View>
+              <UserDataContainer
+                resource={userPacksQuery}
+                type="packs"
+                userId={user?.id}
+                searchTerm={searchTerms.packs}
+                onSearchChange={onSearchChange}
+              />
             )}
             {userTripsQuery?.previewData?.length > 0 && (
-              <View style={styles.userDataContainer}>
-                <UserDataContainer
-                  resource={userTripsQuery}
-                  type="trips"
-                  userId={user?.id}
-                  searchTerm={searchTerms.packs}
-                  onSearchChange={onSearchChange}
-                />
-              </View>
+              <UserDataContainer
+                resource={userTripsQuery}
+                type="trips"
+                userId={user?.id}
+                searchTerm={searchTerms.packs}
+                onSearchChange={onSearchChange}
+              />
             )}
           </View>
         </RStack>
