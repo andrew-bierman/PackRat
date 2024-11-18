@@ -113,7 +113,7 @@
     "expo-system-ui": "~2.9.3",
     "expo-web-browser": "~12.8.2",
     "file-saver": "^2.0.5",
-    "firebase": "^9.19.1",
+    "firebase": "^10.9.0",
     "fuse.js": "^6.6.2",
     "lodash": "^4.17.21",
     "mapbox-gl": "1.13.3",
