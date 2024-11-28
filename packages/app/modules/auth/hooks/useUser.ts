@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useStorage } from 'app/hooks/storage/useStorage';
 import { queryTrpc } from 'app/trpc';
 import { useLogout } from './useLogout';
+import { useDeepCompareEffect } from 'app/hooks/common/useDeepCompareEffect';
+import { Storage } from 'app/utils/storage';
+import { useOfflineStore } from 'app/atoms';
 
 export const useAuthUserToken = () => {
   const [[isLoading, token]] = useStorage<string>('token');
@@ -26,13 +29,20 @@ export const useUserQuery = () => {
     retry: false,
   });
 
+  useDeepCompareEffect(() => {
+    if (data) {
+      Storage.setItem('user', JSON.stringify(data));
+    }
+  }, [data]);
+
   return { user: data, isLoading, refetch };
 };
 
 export const useAuthUser = () => {
   const { user } = useUserLoader();
+  const { userFromStorage } = useUserInOfflineMode();
 
-  return user;
+  return user || userFromStorage || {};
 };
 
 export const useUserLoader = () => {
@@ -42,4 +52,22 @@ export const useUserLoader = () => {
   });
 
   return { user, isLoading };
+};
+
+export const useUserInOfflineMode = () => {
+  const [[isLoading, userFromStorageStr]] = useStorage('user');
+  const { connectionStatus } = useOfflineStore();
+  const userFromStorage = useMemo(() => {
+    try {
+      const parsedUserFromStorage = JSON.parse(userFromStorageStr as String);
+      return parsedUserFromStorage;
+    } catch {
+      return null;
+    }
+  }, [userFromStorageStr]);
+
+  return {
+    userFromStorage: connectionStatus === 'offline' ? userFromStorage : null,
+    isLoading,
+  };
 };

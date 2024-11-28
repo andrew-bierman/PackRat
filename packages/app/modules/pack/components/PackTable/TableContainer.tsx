@@ -13,6 +13,7 @@ import useResponsive from 'app/hooks/useResponsive';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useSetItemQuantity } from 'app/modules/item';
 import { useDeletePackItem } from 'app/modules/pack/hooks';
+import { useOfflineStore } from 'app/atoms';
 interface TableContainerProps {
   currentPack: any;
   selectedPack?: any;
@@ -30,7 +31,6 @@ export const TableContainer = ({
   setRefetch = () => {},
   copy,
 }: TableContainerProps) => {
-  const { sm } = useResponsive();
   const styles = useCustomStyles(loadStyles);
   const {
     isLoading,
@@ -52,6 +52,7 @@ export const TableContainer = ({
   });
   const { setItemQuantity } = useSetItemQuantity();
   const { deletePackItem } = useDeletePackItem();
+  const { connectionStatus } = useOfflineStore();
 
   const onSubmitQuantity = (itemId: string, quantity: number) => {
     setItemQuantity({
@@ -77,6 +78,7 @@ export const TableContainer = ({
               <YGroup.Item key={item.id}>
                 <ItemList
                   item={item}
+                  isActionsEnabled={connectionStatus === 'connected'}
                   onSubmitQuantity={onSubmitQuantity}
                   handleDeleteItem={handleDeletePackItem}
                 />

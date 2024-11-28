@@ -6,6 +6,7 @@ import { useCopyClipboard } from 'app/hooks/common';
 import { useAuthUser } from 'app/modules/auth';
 import useTheme from '../../hooks/useTheme';
 import { CopyPackModal } from 'app/modules/pack';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface CustomCardHeaderProps {
   ownerId: string;
@@ -39,7 +40,7 @@ export const CustomCardHeader = ({
         {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
       {data.type != 'packTemplate' && (
-        <>
+        <ConnectionGate mode="connected">
           <View>
             <RLink
               href={`/profile/${ownerId}`}
@@ -66,7 +67,7 @@ export const CustomCardHeader = ({
               <RText style={{ color: 'black' }}>Copy Pack</RText>
             </RButton>
           )}
-        </>
+        </ConnectionGate>
       )}
       {actionsComponent}
       <CopyPackModal

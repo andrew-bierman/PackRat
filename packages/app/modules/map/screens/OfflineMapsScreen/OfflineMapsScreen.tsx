@@ -1,6 +1,12 @@
 import { Text, View } from 'react-native';
 import { offlineManager } from '@rnmapbox/maps';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  type ReactNode,
+  type FC,
+} from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { RScrollView, RStack } from '@packrat/ui';
 import { MapPreviewCard } from 'app/modules/map/components';
@@ -9,6 +15,7 @@ import { OfflineMapComponent } from './OfflineMap';
 import { useFocusEffect } from 'expo-router';
 import { useAuthUser } from 'app/modules/auth';
 import { OFFLINE_MAP_STYLE_URL } from 'app/modules/map/constants';
+import { useOfflineStore } from 'app/atoms';
 
 export interface OfflineMap {
   id: string;
@@ -21,7 +28,11 @@ export interface OfflineMap {
   downloaded: boolean;
 }
 
-export const OfflineMapsScreen = () => {
+interface OfflineMapScreenProps {
+  fallback?: ReactNode;
+}
+
+export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
   const [selectedMapId, setSelectedMapId] = useState('');
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
@@ -72,6 +83,7 @@ export const OfflineMapsScreen = () => {
                 </View>
               );
             })}
+            {offlineMaps.length === 0 && fallback}
           </RStack>
         ) : (
           <RStack>
@@ -129,6 +141,7 @@ const useOfflineMapsSyncWithAccount = (
   offlineMapPacks,
   remoteOfflineMaps,
 ): OfflineMap[] => {
+  const { connectionStatus } = useOfflineStore();
   return useMemo<OfflineMap[]>(() => {
     if (!Array.isArray(remoteOfflineMaps)) {
       return [];
@@ -151,6 +164,12 @@ const useOfflineMapsSyncWithAccount = (
         };
       });
 
-    return offlineMapPacks.concat(unSavedRemoteMaps);
+    const maps = offlineMapPacks.concat(unSavedRemoteMaps);
+
+    if (connectionStatus === 'connected') {
+      return maps;
+    }
+
+    return maps.filter(({ downloaded }) => downloaded);
   }, [offlineMapPacks, remoteOfflineMaps]);
 };

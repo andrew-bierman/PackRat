@@ -7,7 +7,7 @@ import {
 import { useState } from 'react';
 import { useAuthUser } from 'app/modules/auth';
 
-export const useOfflineMaps = () => {
+export const useOfflineMaps = (enabled = true) => {
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -18,6 +18,7 @@ export const useOfflineMaps = () => {
       pagination,
     },
     {
+      enabled,
       refetchOnWindowFocus: false,
       onError: (error) => console.error('Error fetching public packs:', error),
     },

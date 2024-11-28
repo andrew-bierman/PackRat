@@ -43,6 +43,9 @@ export const useUserPacks = (
       {
         enabled,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 60,
+        cacheTime: 60 * 60 * 24,
+        networkMode: 'offlineFirst',
       },
     );
   utils.getPacks.setData({
