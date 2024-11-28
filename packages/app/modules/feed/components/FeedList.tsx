@@ -4,6 +4,7 @@ import {
   View,
   ActivityIndicator,
   RefreshControl,
+  type ViewProps,
 } from 'react-native';
 import { RText } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
@@ -19,6 +20,7 @@ interface FeedListProps {
   separatorHeight?: number;
   footerComponent?: JSX.Element;
   keyExtractor?: (any, number) => string;
+  style?: ViewProps['style'];
 }
 
 export const FeedList = ({
@@ -29,6 +31,7 @@ export const FeedList = ({
   isLoading = false,
   errorMessage = 'No Data Available',
   footerComponent,
+  style,
   keyExtractor,
 }: FeedListProps) => {
   const { xs, xxs, sm, md, lg } = useResponsive();
@@ -45,7 +48,7 @@ export const FeedList = ({
   const numColumns = getNumColumns();
 
   return (
-    <View>
+    <View style={style}>
       {isLoading ? (
         <ActivityIndicator size="large" color={currentTheme.colors.text} />
       ) : (
