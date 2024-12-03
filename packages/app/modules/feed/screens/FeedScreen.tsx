@@ -13,6 +13,8 @@ import { useFeed } from 'app/modules/feed';
 import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
+import { ConnectionGate } from 'app/components/ConnectionGate';
+import { type ViewProps } from 'tamagui';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -29,11 +31,11 @@ const ERROR_MESSAGES = {
 
 interface FeedProps {
   feedType?: FeedType;
+  listStyle?: ViewProps['style'];
 }
 
-const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
+const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   const router = useRouter();
-  console.log({ feedType });
   const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
@@ -114,16 +116,18 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
         <View
           style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}
         >
-          <FeedSearchFilter
-            feedType={feedType}
-            handleSortChange={handleSortChange}
-            handleTogglePack={handleTogglePack}
-            handleToggleTrip={handleToggleTrip}
-            selectedTypes={selectedTypes}
-            queryString={queryString}
-            setSearchQuery={setSearchQuery}
-            handleCreateClick={handleCreateClick}
-          />
+          <ConnectionGate mode="connected">
+            <FeedSearchFilter
+              feedType={feedType}
+              handleSortChange={handleSortChange}
+              handleTogglePack={handleTogglePack}
+              handleToggleTrip={handleToggleTrip}
+              selectedTypes={selectedTypes}
+              queryString={queryString}
+              setSearchQuery={setSearchQuery}
+              handleCreateClick={handleCreateClick}
+            />
+          </ConnectionGate>
           {/* <FlatList
             data={data}
             horizontal={false}
@@ -161,6 +165,7 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
           /> */}
           <FeedList
             data={data}
+            style={listStyle}
             CardComponent={({ item }) => (
               <FeedCard
                 key={item?.id}

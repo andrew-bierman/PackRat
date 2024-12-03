@@ -12,6 +12,7 @@ import { usePackActions } from './usePackActions';
 import { useRouter } from 'app/hooks/router';
 import { Platform, View } from 'react-native';
 import { EditPackModal } from 'app/modules/pack/components/EditPackModal';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface PackCardHeaderProps {
   data: any;
@@ -87,19 +88,21 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
         }
         actionsComponent={
           user?.id === data.owner_id && (
-            <View
-              style={{
-                minWidth: 50,
-                maxWidth: 100,
-              }}
-            >
-              <ActionsDropdownComponent
-                value={null}
-                data={optionValues}
-                onValueChange={(value) => handleActionsOpenChange(value)}
-                native={true}
-              />
-            </View>
+            <ConnectionGate mode="connected">
+              <View
+                style={{
+                  minWidth: 50,
+                  maxWidth: 100,
+                }}
+              >
+                <ActionsDropdownComponent
+                  value={null}
+                  data={optionValues}
+                  onValueChange={(value) => handleActionsOpenChange(value)}
+                  native={true}
+                />
+              </View>
+            </ConnectionGate>
           )
         }
       />

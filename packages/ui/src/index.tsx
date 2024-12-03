@@ -89,6 +89,7 @@ export { config } from './tamagui.config';
 
 export { ListItem as RListItem } from 'tamagui';
 export * from '@tamagui/toast';
+export * from './EmptyState';
 export * from './Bento';
 export * from './DateRangePicker';
 export * from './dialog';

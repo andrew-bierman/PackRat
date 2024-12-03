@@ -63,7 +63,13 @@ export function PaginatedSortedTable({
 
   const columns = [
     columnHelper.accessor('name', {
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <View>
+          <Text style={{ alignSelf: 'left', width: 200 }}>
+            {info.getValue()}
+          </Text>
+        </View>
+      ),
       header: () => 'Name',
       footer: (info) => info.column.id,
     }),
