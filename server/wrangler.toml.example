@@ -10,6 +10,7 @@ node_compat = true
 binding = "DB"
 database_name = "preview"
 database_id = ""
+migrations_dir = "migrations-preview"
 
 [[env.preview.r2_buckets]]
 binding = 'GEOJSON_BUCKET' 

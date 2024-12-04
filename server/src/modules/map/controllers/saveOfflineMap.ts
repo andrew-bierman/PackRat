@@ -12,7 +12,7 @@ export function saveOfflineMapRoute() {
         minZoom: z.number(),
         maxZoom: z.number(),
         owner_id: z.string(),
-        metadata: z.object({ shape: z.string() }),
+        metadata: z.object({ shape: z.string(), userId: z.string() }),
       }),
     )
     .mutation(async (opts) => {

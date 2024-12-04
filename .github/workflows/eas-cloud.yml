@@ -1,11 +1,11 @@
-# Native production pipeline 
+# Native production pipeline
 # Builds on EAS Cloud with auto submission
 name: EAS Build & Submit
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
-    branches: 
+    branches:
       - main
     paths:
       - 'packages/app/**'

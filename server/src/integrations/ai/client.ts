@@ -32,7 +32,7 @@ class AiClient {
     }
   }
 
-  public async run(text: string) {
+  public async run(text: string | string[]) {
     const response = await fetch(this.EXECUTE_AI_MODEL_URL, {
       method: 'POST',
       headers: {
@@ -50,6 +50,40 @@ class AiClient {
     }
 
     return await response.json();
+  }
+
+  /**
+   * Transform a list of given text into a list of compact vectors.
+   * @param {string[]} contentList - List of text to transform.
+   * @returns {Promise<number[][]>} - List of compact vectors.
+   */
+  public static async getEmbeddingBash<T = number[]>(
+    contentList: string[],
+    transform: (embedding: number[], index: number) => T,
+  ): Promise<T[]> {
+    const MAX_BATCH_SIZE = 100; // REF: https://developers.cloudflare.com/workers-ai/models/bge-base-en-v1.5/
+    const MAX_ROUND = Math.ceil(contentList.length / MAX_BATCH_SIZE);
+
+    const result: T[] = [];
+
+    for (let round = 0; round < MAX_ROUND; round++) {
+      const batch = contentList.slice(
+        round * MAX_BATCH_SIZE,
+        (round + 1) * MAX_BATCH_SIZE,
+      );
+
+      const {
+        result: { data },
+      } = await AiClient.instance.run(batch);
+
+      // Flatten the result
+      for (let idx = 0; idx < batch.length; idx++) {
+        const embedding = data[idx];
+        result.push(transform(embedding, round * MAX_BATCH_SIZE + idx));
+      }
+    }
+
+    return result;
   }
 
   public static async getEmbedding(content: string): Promise<number[]> {

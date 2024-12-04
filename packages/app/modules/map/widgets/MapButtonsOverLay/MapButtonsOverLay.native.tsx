@@ -11,13 +11,13 @@ export const MapButtonsOverlay: FC<MapButtonsOverlayProps> = ({
   return (
     <>
       {/* DISABLE OFFLINE MAPS */}
-      {/* {shouldEnableDownload ? (
+      {shouldEnableDownload ? (
         <DownloadMapBtn
           currentBounds={currentBounds}
           shape={shape}
           style={{ position: 'absolute', bottom: 80, left: 10 }}
         />
-      ) : null} */}
+      ) : null}
       {children}
     </>
   );

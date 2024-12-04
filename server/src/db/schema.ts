@@ -172,6 +172,52 @@ export const packRelations = relations(pack, ({ one, many }) => ({
   trips: many(trip),
 }));
 
+export const packTemplate = sqliteTable('pack_template', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  description: text('description').notNull(),
+  type: text('type').default('packTemplate'),
+});
+
+export const packTemplateRelations = relations(packTemplate, ({ many }) => ({
+  itemPackTemplates: many(itemPackTemplates),
+}));
+
+export const itemPackTemplates = sqliteTable(
+  'item_pack_templates',
+  {
+    itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
+    packTemplateId: text('pack_template_id').references(() => packTemplate.id, {
+      onDelete: 'cascade',
+    }),
+    quantity: integer('quantity').notNull().default(1),
+  },
+  (table) => {
+    return {
+      pkWithCustomName: primaryKey({
+        name: 'id',
+        columns: [table.itemId, table.packTemplateId],
+      }),
+    };
+  },
+);
+
+export const itemPackTemplatesRelations = relations(
+  itemPackTemplates,
+  ({ one }) => ({
+    packTemplate: one(packTemplate, {
+      fields: [itemPackTemplates.packTemplateId],
+      references: [packTemplate.id],
+    }),
+    item: one(item, {
+      fields: [itemPackTemplates.itemId],
+      references: [item.id],
+    }),
+  }),
+);
+
 export const itemCategory = sqliteTable('item_category', {
   id: text('id')
     .primaryKey()
@@ -188,13 +234,13 @@ export const itemCategoryRelations = relations(itemCategory, ({ many }) => ({
   items: many(item),
 }));
 
-export const item = sqliteTable('item', {
+export const ITEM_TABLE_NAME = 'item';
+export const item = sqliteTable(ITEM_TABLE_NAME, {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   weight: real('weight').notNull(),
-  quantity: integer('quantity').notNull(),
   unit: text('unit').notNull(),
   categoryId: text('category_id').references(() => itemCategory.id, {
     onDelete: 'set null',
@@ -203,6 +249,13 @@ export const item = sqliteTable('item', {
     onDelete: 'cascade',
   }),
   global: integer('global', { mode: 'boolean' }).default(false),
+  sku: text('sku'),
+  productUrl: text('product_url'),
+  description: text('description'),
+  productDetails: text('product_details', { mode: 'json' }).$type<{
+    [key: string]: string | number | boolean | null;
+  }>(),
+  seller: text('seller'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
   // @@map("items"): undefined,
@@ -277,6 +330,7 @@ export const itemPacks = sqliteTable(
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
     packId: text('pack_id').references(() => pack.id, { onDelete: 'cascade' }),
+    quantity: integer('quantity').notNull().default(1),
   },
   (table) => {
     return {
@@ -300,11 +354,19 @@ export const itemPacksRelations = relations(itemPacks, ({ one }) => ({
   }),
 }));
 
+export const itemImageRelations = relations(itemImage, ({ one }) => ({
+  author: one(item, {
+    fields: [itemImage.itemId],
+    references: [item.id],
+  }),
+}));
+
 export const itemRelations = relations(item, ({ one, many }) => ({
   category: one(itemCategory, {
     fields: [item.categoryId],
     references: [itemCategory.id],
   }),
+  images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
 }));
@@ -547,6 +609,9 @@ export type Template = InferSelectModel<typeof template>;
 export type InsertTemplate = InferInsertModel<typeof template>;
 export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
+
+export type PackTemplate = InferSelectModel<typeof packTemplate>;
+export const selectPackTemplateSchema = createSelectSchema(packTemplate);
 
 export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;

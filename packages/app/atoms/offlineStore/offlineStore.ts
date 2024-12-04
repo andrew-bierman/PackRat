@@ -1,11 +1,13 @@
 import { atom, useAtom } from 'jotai';
 
+export type ConnectionStatus = 'pending' | 'connected' | 'offline';
+
 const requestsAtom = atom([]);
-const isConnectedAtom = atom(true);
+const connectionStatusAtom = atom<ConnectionStatus>('pending');
 
 export const useOfflineStore = () => {
   const [requests, setRequests] = useAtom(requestsAtom);
-  const [isConnected, setIsConnected] = useAtom(isConnectedAtom);
+  const [connectionStatus, setConnectionStatus] = useAtom(connectionStatusAtom);
 
-  return { requests, setRequests, isConnected, setIsConnected };
+  return { requests, setRequests, connectionStatus, setConnectionStatus };
 };

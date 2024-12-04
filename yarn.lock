@@ -21600,6 +21600,7 @@ __metadata:
     react-native: "npm:0.73.6"
     react-native-dotenv: "npm:^3.4.8"
     react-native-elements: "npm:^3.4.3"
+    react-native-fast-image: "npm:^8.6.3"
     react-native-flash-message: "npm:^0.4.2"
     react-native-gesture-handler: "npm:~2.14.0"
     react-native-google-places-autocomplete: "npm:^2.5.1"
@@ -32912,6 +32913,16 @@ __metadata:
     react-native-safe-area-context: ">= 3.0.0"
     react-native-vector-icons: ">7.0.0"
   checksum: 10/bae1ac0972c33a2527f88de81716569a4a452e12128a0fffa82ac5b375d3451495244aaaa303c081b41cfa36496653f84febda8a19157dbd8bedc56346851022
+  languageName: node
+  linkType: hard
+
+"react-native-fast-image@npm:^8.6.3":
+  version: 8.6.3
+  resolution: "react-native-fast-image@npm:8.6.3"
+  peerDependencies:
+    react: ^17 || ^18
+    react-native: ">=0.60.0"
+  checksum: 10/ed340c2b6c2e76658fa0a899a45132871017018bec0a03423b7456610810e79b2844dfa16063c05d98b89a7613eeb0de2fdf3ad978cdfa4d488a4e01228a7349
   languageName: node
   linkType: hard
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import { theme } from 'app/theme';
 import { DashboardScreen } from 'app/modules/dashboard';
 import useTheme from 'app/hooks/useTheme';
 import { useAuthUser, LoginScreen } from 'app/modules/auth';
 import Head from 'expo-router/head';
+import { useOfflineStore } from 'app/atoms';
 
 export default function HomeScreen() {
   const {
@@ -17,6 +18,7 @@ export default function HomeScreen() {
   } = useTheme();
 
   const user = useAuthUser();
+  const { connectionStatus } = useOfflineStore();
 
   const mutualStyles = {
     backgroundColor: currentTheme.colors.background,
@@ -35,9 +37,12 @@ export default function HomeScreen() {
           title: 'Home',
         }}
       />
-      <View style={mutualStyles}>
-        {!user ? <LoginScreen /> : <DashboardScreen />}
-      </View>
+      {connectionStatus === 'connected' && (
+        <View style={mutualStyles}>
+          {!user ? <LoginScreen /> : <DashboardScreen />}
+        </View>
+      )}
+      {connectionStatus === 'offline' && <Redirect href="offline/maps" />}
     </>
   );
 }

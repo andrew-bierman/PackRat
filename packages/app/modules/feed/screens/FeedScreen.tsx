@@ -1,14 +1,20 @@
 import React, { useMemo, useState, useEffect, memo } from 'react';
 import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
-import { FeedCard, FeedSearchFilter, SearchProvider } from '../components';
+import {
+  FeedCard,
+  FeedList,
+  FeedSearchFilter,
+  SearchProvider,
+} from '../components';
 import { useRouter } from 'app/hooks/router';
 import { fuseSearch } from 'app/utils/fuseSearch';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
-import { RefreshControl } from 'react-native';
 import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
+import { ConnectionGate } from 'app/components/ConnectionGate';
+import { type ViewProps } from 'tamagui';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -25,11 +31,11 @@ const ERROR_MESSAGES = {
 
 interface FeedProps {
   feedType?: FeedType;
+  listStyle?: ViewProps['style'];
 }
 
-const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
+const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   const router = useRouter();
-  console.log({ feedType });
   const [queryString, setQueryString] = useState('Favorite');
   const [selectedTypes, setSelectedTypes] = useState({
     pack: true,
@@ -110,17 +116,19 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
         <View
           style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}
         >
-          <FeedSearchFilter
-            feedType={feedType}
-            handleSortChange={handleSortChange}
-            handleTogglePack={handleTogglePack}
-            handleToggleTrip={handleToggleTrip}
-            selectedTypes={selectedTypes}
-            queryString={queryString}
-            setSearchQuery={setSearchQuery}
-            handleCreateClick={handleCreateClick}
-          />
-          <FlatList
+          <ConnectionGate mode="connected">
+            <FeedSearchFilter
+              feedType={feedType}
+              handleSortChange={handleSortChange}
+              handleTogglePack={handleTogglePack}
+              handleToggleTrip={handleToggleTrip}
+              selectedTypes={selectedTypes}
+              queryString={queryString}
+              setSearchQuery={setSearchQuery}
+              handleCreateClick={handleCreateClick}
+            />
+          </ConnectionGate>
+          {/* <FlatList
             data={data}
             horizontal={false}
             ItemSeparatorComponent={() => (
@@ -154,6 +162,20 @@ const Feed = memo(function Feed({ feedType = 'public' }: FeedProps) {
             onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
             showsVerticalScrollIndicator={false}
             maxToRenderPerBatch={2}
+          /> */}
+          <FeedList
+            data={data}
+            style={listStyle}
+            CardComponent={({ item }) => (
+              <FeedCard
+                key={item?.id}
+                item={item}
+                cardType="primary"
+                feedType={item.type}
+              />
+            )}
+            isLoading={isLoading}
+            separatorHeight={12}
           />
           {totalPages > 1 ? (
             <Pagination

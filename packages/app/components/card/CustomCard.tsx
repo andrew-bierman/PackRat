@@ -7,13 +7,15 @@ import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
 import { useAuthUser } from 'app/modules/auth';
+import { PackTemplateHeader } from 'app/modules/pack-templates';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface CustomCardProps {
   title: string;
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip' | 'item';
+  type: 'pack' | 'trip' | 'item' | 'packTemplate';
   destination?: string;
   data: {
     owner_id?: string;
@@ -25,6 +27,7 @@ const HEADER_COMPONENTS = {
   trip: TripCardHeader,
   pack: PackCardHeader,
   item: ItemCardHeader,
+  packTemplate: PackTemplateHeader,
 };
 
 export const CustomCard = ({
@@ -74,25 +77,27 @@ export const CustomCard = ({
           <Header data={data} title={title} link={link} />
         </View>
         <RSeparator />
-        {type === 'pack' && authUser?.id === data.owner_id ? (
-          <>
-            <View
-              style={
-                {
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingRight: 16,
-                  paddingLeft: 16,
-                  position: 'relative',
-                  zIndex: 1,
-                } as any
-              }
-            >
-              <SearchItem />
-            </View>
-            <RSeparator />
-          </>
-        ) : null}
+        <ConnectionGate mode="connected">
+          {type === 'pack' && authUser?.id === data.owner_id ? (
+            <>
+              <View
+                style={
+                  {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingRight: 16,
+                    paddingLeft: 16,
+                    position: 'relative',
+                    zIndex: 1,
+                  } as any
+                }
+              >
+                <SearchItem />
+              </View>
+              <RSeparator />
+            </>
+          ) : null}
+        </ConnectionGate>
         <View
           style={{
             paddingRight: 16,

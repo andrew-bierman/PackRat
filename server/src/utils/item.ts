@@ -1,5 +1,7 @@
 // import { prisma } from '../prisma';
 
+import { Item } from 'src/db/schema';
+
 // /**
 //  * Validates the item data and creates a new item.
 //  *
@@ -37,3 +39,20 @@
 
 //   return item;
 // };
+
+/**
+ * Summarizes the item data into a string.
+ */
+export const summarizeItem = (item: Item & { category?: { name: string } }) => {
+  const productName = item.name;
+  const category = item.category?.name;
+  const details = item.productDetails;
+  const description = item.description;
+
+  const parsedProductDetails = Object.entries(details).reduce(
+    (acc, [key, value]) => `${acc},${key}:${value}`,
+    '',
+  );
+
+  return `Title: ${productName}\nCategory: ${category}\nDetails: ${parsedProductDetails}\nDescription: ${description}`;
+};

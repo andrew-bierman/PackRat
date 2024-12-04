@@ -1,28 +1,48 @@
 import { Text, View } from 'react-native';
 import { offlineManager } from '@rnmapbox/maps';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  type ReactNode,
+  type FC,
+} from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { RScrollView, RStack } from '@packrat/ui';
-import type OfflinePack from '@rnmapbox/maps/lib/typescript/src/modules/offline/OfflinePack';
-import { MapPreviewCard } from 'app/modules/map/components';
-import { Map } from 'app/modules/map';
+import { MapPreviewCard } from 'app/modules/map/components/MapPreviewCard';
 import { useOfflineMaps } from '../../hooks/useOfflineMaps';
 import { OfflineMapComponent } from './OfflineMap';
+import { useFocusEffect } from 'expo-router';
+import { useAuthUser } from 'app/modules/auth';
+import { OFFLINE_MAP_STYLE_URL } from 'app/modules/map/constants';
+import { useOfflineStore } from 'app/atoms';
 
 export interface OfflineMap {
   id: string;
   name: string;
   styleURL: string;
+  userId: string;
+  minZoom?: number;
+  maxZoom?: number;
   bounds: [number[], number[]];
   downloaded: boolean;
 }
 
-export const OfflineMapsScreen = () => {
+interface OfflineMapScreenProps {
+  fallback?: ReactNode;
+}
+
+export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
   const [selectedMapId, setSelectedMapId] = useState('');
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
-  const { data } = useOfflineMaps();
-  const offlineMaps = useOfflineMapWithDownloadStatus(data);
+  const authUser = useAuthUser();
+  const offlineMapPacks = useOfflineMapPacks(authUser?.id);
+  const { data: remoteOfflineMaps } = useOfflineMaps();
+  const offlineMaps = useOfflineMapsSyncWithAccount(
+    offlineMapPacks,
+    remoteOfflineMaps,
+  );
   const selectedMap = useMemo(() => {
     return offlineMaps?.find?.((map) => map?.id === selectedMapId);
   }, [offlineMaps, selectedMapId]);
@@ -52,18 +72,18 @@ export const OfflineMapsScreen = () => {
             }}
           >
             {offlineMaps.map((offlineMap) => {
-              // const center = getCenterCoordinates(offlineMap.bounds);
               return (
                 <View style={{ maxWidth: 300 }} key={offlineMap.id}>
                   <MapPreviewCard
                     id={offlineMap.id}
                     onShowMapClick={setSelectedMapId}
-                    title={offlineMap.name}
+                    item={offlineMap}
                     isDownloaded={offlineMap.downloaded}
                   />
                 </View>
               );
             })}
+            {offlineMaps.length === 0 && fallback}
           </RStack>
         ) : (
           <RStack>
@@ -75,47 +95,81 @@ export const OfflineMapsScreen = () => {
   );
 };
 
-const useOfflineMapWithDownloadStatus = (offlineMaps) => {
-  const [offlineMapsWithDownloadStatus, setOfflineMapWithDownloadStatus] =
-    useState([]);
+const useOfflineMapPacks = (authUserId: string) => {
+  const [offlineMapPacks, setOfflineMapPacks] = useState<OfflineMap[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await addDownloadStatusToMaps(offlineMaps);
-        setOfflineMapWithDownloadStatus(res);
-      } catch (e) {
-        setOfflineMapWithDownloadStatus(offlineMaps);
-      }
-    })();
-  }, [offlineMaps]);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        try {
+          const offlineMapPacksRes = await offlineManager.getPacks();
+          const userOfflineMap = offlineMapPacksRes
+            .map(({ pack, _metadata }) => {
+              try {
+                const metadata = JSON.parse(pack.metadata);
+                return {
+                  id: metadata.id,
+                  name: _metadata.name,
+                  bounds: pack.bounds,
+                  styleURL: OFFLINE_MAP_STYLE_URL,
+                  userId: _metadata.userId,
+                  downloaded: true,
+                };
+              } catch {
+                return null;
+              }
+            })
+            .filter((offlineMap) => {
+              if (!offlineMap) {
+                return false;
+              }
 
-  return offlineMapsWithDownloadStatus;
+              return offlineMap.userId === authUserId;
+            });
+          setOfflineMapPacks(userOfflineMap);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }, []),
+  );
+
+  return offlineMapPacks;
 };
 
-const addDownloadStatusToMaps = async (offlineMaps: OfflineMap[]) => {
-  const offlineMapboxPacks: OfflineMap[] = [];
-  for (const map of offlineMaps) {
-    const offlineMap: OfflineMap = {
-      id: map.id,
-      styleURL: `${map.styleURL}`,
-      name: `${map.name}`,
-      bounds: map.bounds,
-      downloaded: false,
-    };
-
-    let offlineMapboxPack: OfflinePack | null;
-    try {
-      offlineMapboxPack = await offlineManager.getPack(map.name);
-    } catch (error) {
-      offlineMapboxPack = null;
+const useOfflineMapsSyncWithAccount = (
+  offlineMapPacks,
+  remoteOfflineMaps,
+): OfflineMap[] => {
+  const { connectionStatus } = useOfflineStore();
+  return useMemo<OfflineMap[]>(() => {
+    if (!Array.isArray(remoteOfflineMaps)) {
+      return [];
     }
 
-    if (offlineMapboxPack) {
-      offlineMap.downloaded = true;
+    const unSavedRemoteMaps = remoteOfflineMaps
+      .filter(({ id }) => {
+        return offlineMapPacks.findIndex((mapPack) => mapPack.id === id) === -1;
+      })
+      .map((remoteMap) => {
+        return {
+          id: remoteMap.id,
+          name: remoteMap.name,
+          styleURL: OFFLINE_MAP_STYLE_URL,
+          bounds: remoteMap.bounds,
+          minZoom: remoteMap.minZoom,
+          maxZoom: remoteMap.maxZoom,
+          userId: remoteMap?.metadata?.userId,
+          downloaded: false,
+        };
+      });
+
+    const maps = offlineMapPacks.concat(unSavedRemoteMaps);
+
+    if (connectionStatus === 'connected') {
+      return maps;
     }
 
-    offlineMapboxPacks.push(offlineMap);
-  }
-  return offlineMapboxPacks;
+    return maps.filter(({ downloaded }) => downloaded);
+  }, [offlineMapPacks, remoteOfflineMaps]);
 };
