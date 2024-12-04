@@ -5,6 +5,6 @@ export interface OfflineMap {
   minZoom: number;
   maxZoom: number;
   metadata: {
-    shape: string;
+    userId: string;
   };
 }

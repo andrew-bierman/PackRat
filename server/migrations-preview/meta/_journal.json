@@ -8,6 +8,20 @@
       "when": 1728379132533,
       "tag": "0000_modern_the_professor",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1728418305717,
+      "tag": "0001_true_red_hulk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1729778627679,
+      "tag": "0002_luxuriant_gunslinger",
+      "breakpoints": true
     }
   ]
 }

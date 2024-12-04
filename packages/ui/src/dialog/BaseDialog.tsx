@@ -7,6 +7,7 @@ import {
   Dialog as OriginalDialog,
   Sheet as OriginalSheet,
 } from 'tamagui';
+import RButton from '../RButton';
 
 const Dialog: any = OriginalDialog;
 const Sheet: any = OriginalSheet;
@@ -34,7 +35,7 @@ export const BaseDialog = ({
       }}
     >
       <Dialog.Trigger asChild>
-        <Button>{trigger}</Button>
+        <RButton>{trigger}</RButton>
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet zIndex={200000} modal dismissOnSnapToBottom>

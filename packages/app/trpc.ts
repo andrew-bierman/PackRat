@@ -1,4 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 import type { AppRouter } from 'server/src/routes/trpcRouter';
 import { api } from './constants/api';
 import { createTRPCReact } from '@trpc/react-query';
@@ -63,3 +64,7 @@ export const vanillaTrpcClient = createTRPCProxyClient<AppRouter>({
 }); // For calling procedures imperatively (outside of a component)
 
 export const queryClient = new QueryClient();
+
+export type RouterInput = inferRouterInputs<AppRouter>;
+export type RouterOutput = inferRouterOutputs<AppRouter>;
+ 

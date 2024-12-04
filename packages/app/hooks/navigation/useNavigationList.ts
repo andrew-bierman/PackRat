@@ -30,6 +30,84 @@ type NavigationItem =
 
 export const useNavigationList = () => {
   const user = useAuthUser();
+  const logedInMenuItems: NavigationItem[] = [
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/feed',
+      icon: 'newspaper-variant',
+      text: 'Feed',
+      iconSource: MaterialCommunityIcons,
+    },
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/trips',
+      icon: 'routes',
+      text: 'Trips',
+      iconSource: MaterialCommunityIcons,
+    },
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/packs',
+      icon: 'backpack',
+      text: 'Packs',
+      iconSource: MaterialIcons,
+    },
+    ...((Platform.OS != 'web'
+      ? [
+          {
+            type: NavigationItemTypeEnum.LINK,
+            href: '/maps',
+            icon: 'map',
+            text: 'Downloaded Maps',
+            iconSource: Entypo,
+          },
+        ]
+      : []) as NavigationItem[]),
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/products',
+      icon: 'tent',
+      text: 'Products',
+      iconSource: Fontisto,
+    },
+    ...((user?.role === 'admin'
+      ? [
+          {
+            type: NavigationItemTypeEnum.LINK,
+            href: '/items',
+            icon: 'map',
+            text: 'items',
+            iconSource: Fontisto,
+          },
+        ]
+      : []) as NavigationItem[]),
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/profile',
+      icon: 'book',
+      text: 'Profile',
+      iconSource: FontAwesome,
+    },
+    {
+      type: NavigationItemTypeEnum.DIVIDER,
+      Component: Separator,
+    },
+    // DISABLE SCREEN TEMP
+    // {
+    //   type: NavigationItemTypeEnum.LINK,
+    //   href: '/appearance',
+    //   icon: 'theme-light-dark',
+    //   text: 'Appearance',
+    //   iconSource: MaterialCommunityIcons,
+    // },
+    {
+      type: NavigationItemTypeEnum.LINK,
+      href: '/logout',
+      icon: 'logout',
+      text: 'Logout',
+      iconSource: MaterialIcons,
+    },
+  ];
   const navigationItems = useMemo(() => {
     const additionalMenuItems = user ? logedInMenuItems : loggeOutMenuItems;
 
@@ -73,74 +151,6 @@ const loggeOutMenuItems: NavigationItem[] = [
     href: '/register',
     icon: 'person-add',
     text: 'Register',
-    iconSource: MaterialIcons,
-  },
-];
-
-const logedInMenuItems: NavigationItem[] = [
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/feed',
-    icon: 'newspaper-variant',
-    text: 'Feed',
-    iconSource: MaterialCommunityIcons,
-  },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/trips',
-    icon: 'routes',
-    text: 'Trips',
-    iconSource: MaterialCommunityIcons,
-  },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/packs',
-    icon: 'backpack',
-    text: 'Packs',
-    iconSource: MaterialIcons,
-  },
-  // ...((Platform.OS != 'web'
-  //   ? [
-  //       {
-  //         type: NavigationItemTypeEnum.LINK,
-  //         href: '/maps',
-  //         icon: 'map',
-  //         text: 'Downloaded Maps',
-  //         iconSource: Entypo,
-  //       },
-  //     ]
-  //   : []) as NavigationItem[]),
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/items',
-    icon: 'tent',
-    text: 'Items',
-    iconSource: Fontisto,
-  },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/profile',
-    icon: 'book',
-    text: 'Profile',
-    iconSource: FontAwesome,
-  },
-  {
-    type: NavigationItemTypeEnum.DIVIDER,
-    Component: Separator,
-  },
-  // DISABLE SCREEN TEMP
-  // {
-  //   type: NavigationItemTypeEnum.LINK,
-  //   href: '/appearance',
-  //   icon: 'theme-light-dark',
-  //   text: 'Appearance',
-  //   iconSource: MaterialCommunityIcons,
-  // },
-  {
-    type: NavigationItemTypeEnum.LINK,
-    href: '/logout',
-    icon: 'logout',
-    text: 'Logout',
     iconSource: MaterialIcons,
   },
 ];

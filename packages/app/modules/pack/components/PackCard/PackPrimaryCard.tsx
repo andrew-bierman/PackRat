@@ -11,11 +11,14 @@ import { DuplicateIcon } from 'app/assets/icons';
 import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
+import { useOfflineStore } from 'app/atoms';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface PackCardProps extends FeedCardProps<PackDetails> {}
 
 export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   const [weightUnit] = useItemWeightUnit();
+  const packLink = usePackLink(props.id);
   const packDetails = Object.entries(props.details)
     .filter(([key]) => key !== 'similarityScore')
     .map(([key, value]) => ({
@@ -30,33 +33,46 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
   return (
     <Card
       title={props.title}
-      link={`/pack/${props.id}`}
+      link={packLink}
       image={<PackImage />}
       subtitle={<CreatedAtLabel date={props.createdAt} />}
       actions={
-        <RStack style={{ flexDirection: 'row', gap: 12 }}>
-          <FavoriteButton
-            count={props.favoriteCount}
-            isAuthUserFavorite={props.isUserFavorite}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              props.toggleFavorite();
-            }}
-          />
-          <RStack alignItems="center" style={{ flexDirection: 'row', gap: 8 }}>
-            <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
+        <ConnectionGate mode="connected">
+          <RStack style={{ flexDirection: 'row', gap: 12 }}>
+            <FavoriteButton
+              count={props.favoriteCount}
+              isAuthUserFavorite={props.isUserFavorite}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                props.toggleFavorite();
+              }}
+            />
+            <>
+              <RStack
+                alignItems="center"
+                style={{ flexDirection: 'row', gap: 8 }}
+              >
+                <DuplicateIcon link={`/pack/${props.id}?copy=true`} />
+              </RStack>
+              <RLink
+                href={`/profile/${props.ownerId}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <RText style={{ marginLeft: 'auto' }}>View owner</RText>
+              </RLink>
+            </>
           </RStack>
-          <RLink
-            href={`/profile/${props.ownerId}`}
-            style={{ textDecoration: 'none' }}
-          >
-            <RText style={{ marginLeft: 'auto' }}>View owner</RText>
-          </RLink>
-        </RStack>
+        </ConnectionGate>
       }
       content={<Details items={packDetails} />}
       type={props.cardType}
     />
   );
+};
+
+const usePackLink = (packId: string) => {
+  const { connectionStatus } = useOfflineStore();
+
+  return connectionStatus === 'connected' ? `/pack/${packId}` : '';
 };

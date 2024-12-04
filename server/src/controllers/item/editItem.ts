@@ -23,7 +23,7 @@ export const editItem = async (c) => {
 
 export function editItemRoute() {
   return protectedProcedure.input(validator.editItem).mutation(async (opts) => {
-    const { id, name, weight, unit, quantity, type } = opts.input;
+    const { id, packId, name, weight, unit, quantity, type } = opts.input;
 
     if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {
       throw new Error('Invalid item type');
@@ -32,6 +32,7 @@ export function editItemRoute() {
     const item = await editItemService(
       opts.ctx.executionCtx,
       id,
+      packId,
       name,
       weight,
       unit,

@@ -63,7 +63,13 @@ export function PaginatedSortedTable({
 
   const columns = [
     columnHelper.accessor('name', {
-      cell: (info) => info.getValue(),
+      cell: (info) => (
+        <View>
+          <Text style={{ alignSelf: 'left', width: 200 }}>
+            {info.getValue()}
+          </Text>
+        </View>
+      ),
       header: () => 'Name',
       footer: (info) => info.column.id,
     }),
@@ -75,11 +81,6 @@ export function PaginatedSortedTable({
           info.row.original.unit as any,
         ),
       header: () => 'Weight',
-      footer: (info) => info.column.id,
-    }),
-    columnHelper.accessor('quantity', {
-      header: () => 'Quantity',
-      cell: (info) => info.renderValue(),
       footer: (info) => info.column.id,
     }),
     columnHelper.accessor('category.name', {

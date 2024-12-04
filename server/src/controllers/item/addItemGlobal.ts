@@ -5,16 +5,17 @@ import * as validator from '@packrat/validations';
 
 export const addItemGlobal = async (c: Context) => {
   try {
-    const { name, weight, quantity, unit, type, ownerId } = await c.req.json();
+    const { name, weight, unit, type, ownerId } = await c.req.json();
 
     const item = await addItemGlobalService(
-      name,
-      weight,
-      quantity,
-      unit,
-      type,
-      ownerId,
-      c.ctx.executionCtx,
+      {
+        name,
+        weight,
+        unit,
+        type,
+        ownerId,
+      },
+      c.executionCtx,
     );
     return c.json({ item }, 200);
   } catch (error) {
@@ -26,19 +27,20 @@ export function addItemGlobalRoute() {
   return protectedProcedure
     .input(validator.addItemGlobal)
     .mutation(async (opts) => {
-      const { name, weight, quantity, unit, type, ownerId } = opts.input;
+      const { name, weight, unit, type, ownerId } = opts.input;
 
       if (type !== 'Food' && type !== 'Water' && type !== 'Essentials') {
         throw new Error('Invalid item type');
       }
 
       const item = await addItemGlobalService(
-        name,
-        weight,
-        quantity,
-        unit,
-        type,
-        ownerId,
+        {
+          name,
+          weight,
+          unit,
+          type,
+          ownerId,
+        },
         opts.ctx.executionCtx,
       );
       return item;

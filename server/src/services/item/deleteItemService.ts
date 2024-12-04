@@ -15,15 +15,10 @@ import { VectorClient } from '../../vector/client';
 export const deleteItemService = async (
   itemId: string,
   executionCtx: ExecutionContext,
-  packId?: string,
 ) => {
   const itemClass = new Item();
-  const ItemPacksClass = new ItemPacks();
 
-  await itemClass.delete(itemId, undefined, packId);
-  if (packId) {
-    await ItemPacksClass.delete(itemId, packId);
-  }
+  await itemClass.delete(itemId);
 
   executionCtx.waitUntil(VectorClient.instance.delete(itemId));
 

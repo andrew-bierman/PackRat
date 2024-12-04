@@ -10,6 +10,7 @@ export * from './trailsRouteValidator';
 export * from './openAIRoutesValidator';
 export * from './extrasValidator';
 export * from './templateRouteValidator';
+export * from './packTemplateRoutesValidator';
 export * from './weatherRoutesValidator';
 export * from './roleValidator';
 export * from './authTokenValidator';

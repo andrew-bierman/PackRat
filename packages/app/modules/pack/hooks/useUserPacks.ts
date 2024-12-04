@@ -14,6 +14,7 @@ interface QueryOptions {
   isPublic?: boolean;
   isPreview?: boolean;
   searchTerm?: string;
+  itemId?: string;
 }
 
 export const useUserPacks = (
@@ -22,7 +23,7 @@ export const useUserPacks = (
   queryString = '',
   queryEnabled = false,
 ) => {
-  const { isPublic, searchTerm, isPreview } = options;
+  const { isPublic, searchTerm, isPreview, itemId } = options;
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -37,10 +38,14 @@ export const useUserPacks = (
         pagination,
         searchTerm,
         isPreview,
+        itemId,
       },
       {
         enabled,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 60,
+        cacheTime: 60 * 60 * 24,
+        networkMode: 'offlineFirst',
       },
     );
   utils.getPacks.setData({

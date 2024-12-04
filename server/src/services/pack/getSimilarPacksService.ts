@@ -46,12 +46,10 @@ export async function getSimilarPacksService(
   const similarPacksResult = await packRepository.findAllInArray(array);
 
   // add similarity score to packs result
-  const similarPacks = similarPacksResult.map((similarPack) => {
-    return {
-      ...similarPack,
-      similarityScore: matches.find((m) => m.id == similarPack.id).score,
-    };
-  });
+  const similarPacks = similarPacksResult.map((similarPack) => ({
+    ...similarPack,
+    similarityScore: matches.find((m) => m.id == similarPack.id).score,
+  }));
 
   return similarPacks;
 }

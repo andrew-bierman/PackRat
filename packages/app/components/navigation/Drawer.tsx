@@ -9,7 +9,7 @@ import { NavigationList } from './NavigationList';
 const Popover: any = OriginalPopover;
 
 export function Drawer() {
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark, isLight } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
   return (
@@ -19,7 +19,7 @@ export function Drawer() {
           icon={<Menu strokeWidth={3} />}
           bg="transparent"
           outlineColor="transparent"
-          color={currentTheme.colors.tertiaryBlue}
+          color={currentTheme.colors.textPrimary}
           fontWeight="bold"
           focusStyle={{
             bg: 'transparent',
@@ -30,7 +30,6 @@ export function Drawer() {
             bg: 'transparent',
           }}
         >
-          Menu
         </Button>
       </Popover.Trigger>
       <Adapt when="sm" platform="touch">
@@ -84,7 +83,7 @@ const loadStyles = (theme) => {
     modalOverlay: {
       flex: 1,
       flexDirection: 'row',
-      backgroundColor: 'rgba(0,0,0,0.5)',
+      backgroundColor: currentTheme.colors.background,
     },
     fullScreenTouchable: {
       flex: 1,
@@ -106,6 +105,7 @@ const loadStyles = (theme) => {
     },
     popover: {
       alignItems: 'flex-start',
+      boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.29)'
     },
   };
 };
