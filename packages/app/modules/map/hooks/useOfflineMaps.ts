@@ -14,7 +14,7 @@ export const useOfflineMaps = (enabled = true) => {
   const authUser = useAuthUser();
   const { data, isLoading, refetch } = queryTrpc.getOfflineMaps.useQuery(
     {
-      ownerId: authUser.id,
+      ownerId: authUser?.id,
       pagination,
     },
     {

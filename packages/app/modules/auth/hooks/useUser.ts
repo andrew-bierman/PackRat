@@ -42,7 +42,7 @@ export const useAuthUser = () => {
   const { user } = useUserLoader();
   const { userFromStorage } = useUserInOfflineMode();
 
-  return user || userFromStorage || {};
+  return user || userFromStorage || null;
 };
 
 export const useUserLoader = () => {
