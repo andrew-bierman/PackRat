@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import useTheme from 'app/hooks/useTheme';
 import { RScrollView, RStack } from '@packrat/ui';
-import { MapPreviewCard } from 'app/modules/map/components';
+import { MapPreviewCard } from 'app/modules/map/components/MapPreviewCard';
 import { useOfflineMaps } from '../../hooks/useOfflineMaps';
 import { OfflineMapComponent } from './OfflineMap';
 import { useFocusEffect } from 'expo-router';
