@@ -77,7 +77,7 @@
     "eslint-plugin-drizzle": "^0.2.3",
     "express": "^4.19.2",
     "express-rate-limit": "^6.9.0",
-    "firebase": "^9.19.1",
+    "firebase": "^10.9.0",
     "firebase-admin": "^11.5.0",
     "google-auth-library": "^8.8.0",
     "googleapis": "^118.0.0",
