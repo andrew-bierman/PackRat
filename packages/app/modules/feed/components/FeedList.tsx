@@ -57,8 +57,10 @@ export const FeedList = ({
           numColumns={numColumns}
           data={data}
           keyExtractor={keyExtractor || ((item, index) => index.toString())}
+          contentContainerStyle={{ gap: 10 }}
+          columnWrapperStyle={{ gap: 10 }}
           renderItem={({ item }) => (
-            <View style={{ flex: 1, padding: 10 }}>
+            <View style={{ flex: 1 }}>
               <CardComponent item={item} />
             </View>
           )}

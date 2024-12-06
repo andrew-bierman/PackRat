@@ -122,9 +122,7 @@ const loadStyles = (theme, appTheme) => {
       textAlign: 'center',
       justifyContent: 'center',
       width: '100%',
-      paddingHorizontal: 18,
       gap: 20,
-      paddingTop: 20,
       backgroundColor: currentTheme.colors.background,
     },
     desktopStyle: {
@@ -132,7 +130,6 @@ const loadStyles = (theme, appTheme) => {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingVertical: 25,
       gap: 5,
     },
 
@@ -141,7 +138,6 @@ const loadStyles = (theme, appTheme) => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: 25,
       gap: 25,
     },
 

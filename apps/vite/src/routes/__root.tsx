@@ -11,10 +11,8 @@ import Footer from 'app/components/footer/Footer';
 const ThemedMainContentWeb = () => {
   const { isDark } = useContext(ThemeContext);
 
-  const backgroundColor = isDark ? '#000000' : '#F5F5F5';
-
   return (
-    <MainContentWeb style={{ backgroundColor, paddingTop: 80 }}>
+    <MainContentWeb isDark={!!isDark}>
       <Navbar />
       <Outlet />
       <Footer />

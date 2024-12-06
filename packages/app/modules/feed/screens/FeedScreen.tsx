@@ -20,6 +20,7 @@ import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
 import { ConnectionGate } from 'app/components/ConnectionGate';
+import Layout from 'app/components/layout/Layout';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -48,11 +49,9 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   const user = useAuthUser();
   const ownerId = user?.id;
-  const styles = useCustomStyles(loadStyles);
   const {
     data,
     isLoading,
@@ -78,20 +77,6 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
     setRefreshing(false);
   };
 
-  // const filteredData = useMemo(() => {
-  //   if (!data) return [];
-  //   const keys = ['name', 'items.name', 'items.category'];
-  //   const options = {
-  //     threshold: 0.4,
-  //     location: 0,
-  //     distance: 100,
-  //     maxPatternLength: 32,
-  //     minMatchCharLength: 1,
-  //   };
-  //   const results = fuseSearch(data, searchQuery, keys, options);
-  //   return searchQuery ? results.map((result) => result.item) : data;
-  // }, [searchQuery, data]);
-
   const handleTogglePack = () => {
     setSelectedTypes((prevState) => ({
       ...prevState,
@@ -116,11 +101,9 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <Layout>
       <SearchProvider>
-        <View
-          style={{ flex: 1, paddingBottom: Platform.OS === 'web' ? 10 : 0 }}
-        >
+        <View style={{ width: '100%' }}>
           <ConnectionGate mode="connected">
             <FeedSearchFilter
               feedType={feedType}
@@ -133,41 +116,6 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
               handleCreateClick={handleCreateClick}
             />
           </ConnectionGate>
-          {/* <FlatList
-            data={data}
-            horizontal={false}
-            ItemSeparatorComponent={() => (
-              <View style={{ height: 12, width: '100%' }} />
-            )}
-            keyExtractor={(item, index) => `${item?.id}_${item?.type}_${index}`} // Ensure unique keys
-            renderItem={({ item }) => (
-              <FeedCard
-                key={item?.id}
-                item={item}
-                cardType="primary"
-                feedType={item.type}
-              />
-            )}
-            ListFooterComponent={() =>
-              isFetchingNextPage || isLoading ? (
-                <ActivityIndicator size="small" color="#0000ff" />
-              ) : (
-                <View style={{ height: 50 }} />
-              )
-            }
-            ListEmptyComponent={() => (
-              <RText style={{ textAlign: 'center', marginTop: 20 }}>
-                {ERROR_MESSAGES[feedType]}
-              </RText>
-            )}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            // onEndReached={fetchNextPage} // Trigger next page fetch
-            onEndReachedThreshold={0.5} // Trigger when 50% from the bottom
-            showsVerticalScrollIndicator={false}
-            maxToRenderPerBatch={2}
-          /> */}
           <FeedList
             data={data}
             style={listStyle}
@@ -194,18 +142,8 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
           ) : null}
         </View>
       </SearchProvider>
-    </View>
+    </Layout>
   );
-});
-
-const loadStyles = (theme) => ({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: theme.currentTheme.colors.background,
-    fontSize: 18,
-    padding: 15,
-    ...(Platform.OS !== 'web' && { paddingBottom: 15, paddingTop: 0 }),
-  },
 });
 
 export default Feed;

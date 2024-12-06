@@ -17,48 +17,50 @@ export const DashboardScreen = () => {
 
   return (
     <Layout>
-      <RScrollView contentContainerStyle={styles.content} horizontal={false}>
-        <RStack
-          style={[
-            styles.container,
-            Platform.OS === 'web' ? { minHeight: '100vh' } : null,
-          ]}
-        >
-          <HeroSection style={styles.heroBanner} />
-          {Platform.OS === 'web' ? (
-            <Stack
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                alignSelf: 'flex-end',
-                paddingRight: 16,
-                gap: 8,
-              }}
-            >
-              <FAB />
-              <Button
-                style={{ alignSelf: 'flex-end' }}
-                onPress={() => router.push('/pack-templates')}
+      <View style={{ width: '100%' }}>
+        <RScrollView contentContainerStyle={styles.content} horizontal={false}>
+          <RStack
+            style={[
+              styles.container,
+              Platform.OS === 'web' ? { minHeight: '100vh' } : null,
+            ]}
+          >
+            <HeroSection style={styles.heroBanner} />
+            {Platform.OS === 'web' ? (
+              <Stack
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  alignSelf: 'flex-end',
+                  paddingRight: 16,
+                  gap: 8,
+                }}
               >
-                Templates
-              </Button>
-            </Stack>
-          ) : null}
+                <FAB />
+                <Button
+                  style={{ alignSelf: 'flex-end' }}
+                  onPress={() => router.push('/pack-templates')}
+                >
+                  Templates
+                </Button>
+              </Stack>
+            ) : null}
 
-          <View style={styles.gridContainer}>
-            <View style={styles.gridItem}>
-              <Section>
-                <SectionHeader
-                  iconName="newspaper-outline"
-                  text="Feed"
-                  textStyle={styles.sectionHeaderText}
-                />
-                <FeedPreview feedType="public" />
-              </Section>
+            <View style={styles.gridContainer}>
+              <View style={styles.gridItem}>
+                <Section>
+                  <SectionHeader
+                    iconName="newspaper-outline"
+                    text="Feed"
+                    textStyle={styles.sectionHeaderText}
+                  />
+                  <FeedPreview feedType="public" />
+                </Section>
+              </View>
             </View>
-          </View>
-        </RStack>
-      </RScrollView>
+          </RStack>
+        </RScrollView>
+      </View>
     </Layout>
   );
 };
@@ -77,13 +79,6 @@ const loadStyles = (theme) => {
       flexGrow: 1,
       justifyContent: 'flex-start',
       alignItems: 'stretch',
-      paddingHorizontal: 20,
-      width:
-        Platform.OS === 'web'
-          ? screenWidth <= SCREEN_WIDTH
-            ? '100vw'
-            : '90vw'
-          : '100%',
     },
     heroBanner: {
       width: '100%',

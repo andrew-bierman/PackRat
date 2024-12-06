@@ -1,5 +1,5 @@
-import { StyleProp, ViewStyle } from 'react-native';
-import { View } from 'react-native';
+import React from 'react';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
 
 const Layout = ({
   children,
@@ -16,6 +16,7 @@ const Layout = ({
           flex: 1,
           justifyContent: 'center',
           marginTop: 20,
+          paddingHorizontal: 16,
           marginBottom: 20,
           alignItems: 'center',
           backgroundColor: 'transparent',
