@@ -1,5 +1,6 @@
+import useTheme from 'app/hooks/useTheme';
 import React from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 
 const Layout = ({
   children,
@@ -8,18 +9,19 @@ const Layout = ({
   children: React.ReactNode;
   customStyle?: StyleProp<ViewStyle>;
 }) => {
+  const { currentTheme } = useTheme();
   return (
     <View
       style={[
         {
           display: 'flex',
+          backgroundColor: currentTheme.colors.background,
           flex: 1,
-          justifyContent: 'center',
-          marginTop: 20,
+          justifyContent: Platform.OS === 'web' ? 'center' : 'flex-start',
+          paddingTop: 20,
           paddingHorizontal: 16,
           marginBottom: 20,
           alignItems: 'center',
-          backgroundColor: 'transparent',
           width: '100%',
         },
         customStyle,

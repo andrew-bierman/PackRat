@@ -58,7 +58,7 @@ export const FeedList = ({
           data={data}
           keyExtractor={keyExtractor || ((item, index) => index.toString())}
           contentContainerStyle={{ gap: 10 }}
-          columnWrapperStyle={{ gap: 10 }}
+          columnWrapperStyle={numColumns > 1 ? { gap: 10 } : undefined}
           renderItem={({ item }) => (
             <View style={{ flex: 1 }}>
               <CardComponent item={item} />

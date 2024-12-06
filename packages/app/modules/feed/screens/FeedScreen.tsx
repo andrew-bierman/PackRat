@@ -103,7 +103,7 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   return (
     <Layout>
       <SearchProvider>
-        <View style={{ width: '100%' }}>
+        <View style={{ width: '100%', backgroundColor: 'transparent' }}>
           <ConnectionGate mode="connected">
             <FeedSearchFilter
               feedType={feedType}
