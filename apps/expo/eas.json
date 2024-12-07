@@ -7,6 +7,9 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      },
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
@@ -18,12 +21,18 @@
     "preview": {
       "autoIncrement": true,
       "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "preview"
+      },
       "ios": {
         "resourceClass": "m-medium"
       }
     },
     "production": {
       "autoIncrement": true,
+      "env": {
+        "APP_VARIANT": "production"
+      },
       "ios": {
         "resourceClass": "m-medium"
       }
