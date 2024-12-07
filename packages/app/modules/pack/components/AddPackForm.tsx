@@ -5,6 +5,7 @@ import {
   RStack,
   RSwitch,
   RText,
+  XStack,
   SubmitButton,
 } from '@packrat/ui';
 import { addPackSchema } from '@packrat/validations';
@@ -12,9 +13,10 @@ import { useAddNewPack } from '../hooks';
 import { useRouter } from 'app/hooks/router';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useResponsive from 'app/hooks/useResponsive';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Switch } from 'tamagui';
 import useTheme from '../../../hooks/useTheme';
+import { Users } from '@tamagui/lucide-icons';
 
 export const AddPackForm = ({
   isCreatingTrip = false,
@@ -74,32 +76,45 @@ export const AddPackForm = ({
           validationSchema={addPackSchema}
         >
           <FormInput
-            placeholder="Name"
+            containerProps={{ style: { width: '100%' } }}
+            helperTextProps={{ fontSize: 14, lineHeight: 20 }}
+            helperText='Choose a descriptive name, e.g., "Summer Beach Trip" or "Business Conference".'
+            placeholder="Add pack name"
             name="name"
-            label="Name"
-            style={{
-              textAlign: 'left',
-              width: 200,
-              alignItems: 'inherit',
-              justifyContent: 'center',
-            }}
+            label="Pack name"
           />
-          <RStack
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <RText>Public </RText>
-            <RSwitch
-              checked={isPublic}
-              onCheckedChange={handleOnValueChange}
-              size="$1.5"
+          <View style={{ width: '100%' }}>
+            <RStack
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: currentTheme.colors.textSecondary,
+                alignItems: 'center',
+                borderRadius: 8,
+                padding: 12,
+              }}
             >
-              <Switch.Thumb />
-            </RSwitch>
-          </RStack>
+              <XStack gap={10}>
+                <Users />
+                <RText style={{ fontSize: 16, fontWeight: 600 }}>
+                  Make This Pack Public{' '}
+                </RText>
+              </XStack>
+              <RSwitch
+                checked={isPublic}
+                onCheckedChange={handleOnValueChange}
+                size="$2"
+                style={{ backgroundColor: '#e4e4e7' }}
+              >
+                <Switch.Thumb unstyled style={{ backgroundColor: '#fff' }} />
+              </RSwitch>
+            </RStack>
+            <RText style={{ fontSize: 14, marginTop: 8, lineHeight: 20 }}>
+              Public packs can be viewed and copied by other users. Private
+              packs are visible only to you.
+            </RText>
+          </View>
           <SubmitButton style={styles.btn} onSubmit={handleAddPack}>
             <RText style={{ color: currentTheme.colors.white }}>
               {isLoading ? 'Loading...' : 'Add Pack'}
@@ -118,21 +133,13 @@ const loadStyles = (theme, appTheme) => {
   return {
     container: {
       flexDirection: 'column',
-      alignItems: 'center',
-      textAlign: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      paddingHorizontal: 18,
+      width: Platform.OS === 'web' ? '100%' : 'undefined',
       gap: 20,
-      paddingTop: 20,
-      backgroundColor: currentTheme.colors.background,
+      maxWidth: 440,
     },
     desktopStyle: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: 25,
       gap: 5,
     },
 
@@ -141,8 +148,7 @@ const loadStyles = (theme, appTheme) => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingHorizontal: 25,
-      gap: 25,
+      gap: 24,
     },
 
     input: {
@@ -156,9 +162,8 @@ const loadStyles = (theme, appTheme) => {
       paddingVertical: 12,
     },
     btn: {
-      width: '200px',
-      marginTop: 40,
-      marginBottom: 20,
+      backgroundColor: '#000000',
+      width: '100%',
     },
   };
 };
