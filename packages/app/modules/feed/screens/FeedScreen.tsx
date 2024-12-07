@@ -1,5 +1,11 @@
 import React, { useMemo, useState, useEffect, memo } from 'react';
-import { FlatList, View, Platform, ActivityIndicator } from 'react-native';
+import {
+  FlatList,
+  View,
+  Platform,
+  ActivityIndicator,
+  type ViewProps,
+} from 'react-native';
 import {
   FeedCard,
   FeedList,
@@ -14,7 +20,6 @@ import { Pagination, RButton, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
 import { ConnectionGate } from 'app/components/ConnectionGate';
-import { type ViewProps } from 'tamagui';
 
 const URL_PATHS = {
   userPacks: '/pack/',
