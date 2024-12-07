@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthLoader } from './AuthLoader';
 import { Redirect } from 'app/components/Redirect';
-import { Redirect as ExpoRedirect } from 'expo-router';
+import LandingPage from 'app/components/landing_page';
 import { RSpinner, RText } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
@@ -27,11 +27,7 @@ export const AuthWrapper = ({
     );
 
   const defaultUnauthorizedElement =
-    Platform.OS === 'web' ? (
-      <Redirect to="/sign-in" />
-    ) : (
-      <ExpoRedirect href="entry" />
-    );
+    Platform.OS === 'web' ? <Redirect to="/sign-in" /> : <LandingPage />;
 
   return (
     <AuthLoader
