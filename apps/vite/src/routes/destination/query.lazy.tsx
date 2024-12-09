@@ -1,7 +1,6 @@
 import React from 'react';
-import { DestinationPage } from 'app/components/destination';
+import { DestinationScreen } from 'app/modules/Map/screens/DestinationScreen';
 import { AuthWrapper } from 'app/modules/auth';
-// import DestinationPage from "../../components/destination";
 import { createLazyFileRoute } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/destination/query')({
@@ -11,7 +10,7 @@ export const Route = createLazyFileRoute('/destination/query')({
 export default function Destination() {
   return (
     <AuthWrapper>
-      <DestinationPage />
+      <DestinationScreen />
     </AuthWrapper>
   );
 }

@@ -1,13 +1,12 @@
-import { DestinationPage } from 'app/components/destination';
+import { DestinationScreen } from 'app/modules/Map/screens/DestinationScreen';
 import { AuthWrapper } from 'app/modules/auth';
-// import DestinationPage from "../../components/destination";
 
 // export const runtime = 'experimental-edge';
 
 export default function Destination() {
   return (
     <>
-      <DestinationPage />
+      <DestinationScreen />
     </>
   );
 }
