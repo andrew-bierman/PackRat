@@ -73,7 +73,7 @@ export const TableContainer = ({
     <View style={styles.container}>
       {data?.length ? (
         <View style={styles.layoutContainer}>
-          <YGroup alignSelf="stretch" size="$8">
+          <YGroup alignSelf="stretch" size="$8" style={styles.itemsList}>
             {data.map((item) => (
               <YGroup.Item key={item.id}>
                 <ItemList
@@ -88,26 +88,28 @@ export const TableContainer = ({
 
           {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
 
-          <TotalWeightBox
-            label="Base Weight"
-            weight={totalBaseWeight}
-            unit={weightUnit}
-          />
-          <TotalWeightBox
-            label="Water + Food Weight"
-            weight={totalWaterWeight + totalFoodWeight}
-            unit={weightUnit}
-          />
-          <RSeparator style={styles.separator} />
-          <TotalWeightBox
-            label="Total Weight"
-            weight={totalWeight}
-            unit={weightUnit}
-          />
-          <WeightUnitDropdown
-            value={weightUnit}
-            onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-          />
+          <View style={styles.summarySection}>
+            <TotalWeightBox
+              label="Base Weight"
+              weight={totalBaseWeight}
+              unit={weightUnit}
+            />
+            <TotalWeightBox
+              label="Water + Food Weight"
+              weight={totalWaterWeight + totalFoodWeight}
+              unit={weightUnit}
+            />
+            <RSeparator style={styles.separator} />
+            <TotalWeightBox
+              label="Total Weight"
+              weight={totalWeight}
+              unit={weightUnit}
+            />
+            <WeightUnitDropdown
+              value={weightUnit}
+              onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+            />
+          </View>
         </View>
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
@@ -127,8 +129,17 @@ const loadStyles = (theme: any) => {
       width: '100%',
     },
     layoutContainer: {
-      flexDirection: 'column',
+      flexDirection: sm ? 'column' : 'row',
       justifyContent: 'space-between',
+    },
+    itemsList: {
+      flex: 2,
+      marginRight: 20,
+      backgroundColor: currentTheme.colors.card,
+      width: '100%',
+      height: '100%',
+    },
+    summarySection: {
       marginTop: sm ? 20 : 0,
       flex: 1,
       padding: sm ? 10 : 5,
@@ -136,7 +147,6 @@ const loadStyles = (theme: any) => {
       elevation: 8,
       backgroundColor: currentTheme.colors.card,
     },
-
     separator: {
       marginVertical: 10,
     },

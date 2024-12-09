@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { RStack, RText, RIconButton, RInput } from '@packrat/ui';
+import React, { useEffect, useRef, useState } from 'react';
+import { RIconButton, RInput, RStack, RText } from '@packrat/ui';
 import { ListItem } from 'tamagui';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { convertWeight } from 'app/utils/convertWeight';
@@ -27,266 +27,31 @@ export const ItemList = ({
       onSubmitQuantity(item.id, value),
     );
 
-  const renderHeader = () => (
-    <RStack
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: currentTheme.colors.border,
-      }}
-    >
-      <RText
-        style={{
-          flexBasis: '25%',
-          fontWeight: 'bold',
-          color: currentTheme.colors.text,
-        }}
-      >
-        Name
-      </RText>
-      <RText
-        style={{
-          flexBasis: '20%',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          color: currentTheme.colors.text,
-        }}
-      >
-        Category
-      </RText>
-      <RText
-        style={{
-          flexBasis: '20%',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          color: currentTheme.colors.text,
-        }}
-      >
-        Weight
-      </RText>
-      <RText
-        style={{
-          flexBasis: '25%',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          color: currentTheme.colors.text,
-        }}
-      >
-        Quantity
-      </RText>
-      {isActionsEnabled && (
-        <RText
-          style={{
-            flexBasis: '10%',
-            textAlign: 'center',
-            fontWeight: 'bold',
-            color: currentTheme.colors.text,
-          }}
-        >
-          Actions
-        </RText>
-      )}
-    </RStack>
-  );
-
-  if (responsive.sm) {
-    return (
-      <>
-        <RStack
-          style={{
-            backgroundColor: currentTheme.colors.background,
-            padding: 16,
-            borderRadius: 8,
-            marginBottom: 10,
-            shadowOpacity: 0.2,
-            shadowRadius: 4,
-            shadowOffset: { width: 0, height: 2 },
-            elevation: 3,
-          }}
-        >
-          <RStack
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <RText
-              style={{
-                fontWeight: 'bold',
-                fontSize: responsive.xxs ? 14 : 16,
-                color: currentTheme.colors.text,
-              }}
-            >
-              {item.name}
-            </RText>
-            <RText
-              style={{
-                fontSize: responsive.xxs ? 12 : 14,
-                color: currentTheme.colors.textSecondary,
-              }}
-            >
-              {item.category.name}
-            </RText>
-          </RStack>
-          <RStack style={{ marginTop: 10 }}>
-            <RText
-              style={{
-                fontSize: responsive.xxs ? 12 : 14,
-                color: currentTheme.colors.textSecondary,
-              }}
-            >
-              {`Weight: ${convertWeight(
-                item.weight,
-                SMALLEST_ITEM_UNIT,
-                item.unit,
-              )} ${item.unit}`}
-            </RText>
-            {isActionsEnabled ? (
-              <RStack
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginTop: 10,
-                }}
-              >
-                <RStack
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}
-                >
-                  <RIconButton
-                    onPress={decrease}
-                    style={{
-                      width: 25,
-                      height: 25,
-                      padding: 0,
-                    }}
-                  >
-                    <AntDesign
-                      name="minus"
-                      size={14}
-                      color={currentTheme.colors.text}
-                    />
-                  </RIconButton>
-                  <RInput
-                    value={String(value)}
-                    onChangeText={(text) => setValue(Number(text))}
-                    onBlur={(e) => submit(Number(e.target.value))}
-                    style={{
-                      width: 50,
-                      padding: 0,
-                      textAlign: 'center',
-                      height: 30,
-                      color: currentTheme.colors.text,
-                      fontSize: 12,
-                      borderWidth: 1,
-                      borderColor: hasError
-                        ? 'red'
-                        : currentTheme.colors.border,
-                      marginHorizontal: 8,
-                    }}
-                  />
-                  <RIconButton
-                    onPress={increase}
-                    style={{
-                      width: 25,
-                      height: 25,
-                      padding: 0,
-                    }}
-                  >
-                    <AntDesign
-                      name="plus"
-                      size={14}
-                      color={currentTheme.colors.text}
-                    />
-                  </RIconButton>
-                </RStack>
-                <RStack
-                  style={{
-                    marginTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end',
-                  }}
-                >
-                  <RIconButton
-                    onPress={() => handleDeleteItem(item.id)}
-                    style={{
-                      backgroundColor: 'transparent',
-                    }}
-                  >
-                    <MaterialIcons
-                      name="delete"
-                      size={24}
-                      color={currentTheme.colors.text}
-                    />
-                  </RIconButton>
-                </RStack>
-              </RStack>
-            ) : (
-              <RText
-                style={{
-                  fontSize: 12,
-                  color: currentTheme.colors.text,
-                  marginTop: 10,
-                }}
-              >
-                Quantity: {value}
-              </RText>
-            )}
-          </RStack>
-        </RStack>
-      </>
-    );
-  }
-
   return (
-    <>
-      {renderHeader()}
-      <ListItem hoverTheme pressTheme>
-        <RStack
+    <ListItem hoverTheme pressTheme>
+      <RStack
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <RText
+          numberOfLines={1}
+          ellipsizeMode="tail"
           style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            marginTop: 10,
+            color: currentTheme.colors.text,
+            fontSize: responsive.xxs ? 12 : responsive.sm ? 14 : 16,
+            fontWeight: 'bold',
+            flexBasis: '25%',
           }}
         >
-          <RText
-            style={{
-              marginTop: 10,
-              color: currentTheme.colors.text,
-              fontSize: 16,
-              fontWeight: 'bold',
-              flexBasis: '25%',
-            }}
-          >
-            {item.name}
-          </RText>
-          <RText
-            style={{
-              color: currentTheme.colors.text,
-              fontSize: 14,
-              flexBasis: '20%',
-              textAlign: 'center',
-            }}
-          >
-            {item.category.name}
-          </RText>
-          <RText
-            style={{
-              color: currentTheme.colors.text,
-              flexBasis: '20%',
-              textAlign: 'center',
-            }}
-          >
-            {`${convertWeight(item.weight, SMALLEST_ITEM_UNIT, item.unit)} ${item.unit}`}
-          </RText>
+          {item.name}
+        </RText>
+
+        {isActionsEnabled ? (
           <RStack
             style={{
               flexDirection: 'row',
@@ -295,73 +60,103 @@ export const ItemList = ({
               flexBasis: '25%',
             }}
           >
-            {isActionsEnabled ? (
-              <>
-                <RIconButton
-                  onPress={decrease}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    padding: 0,
-                  }}
-                >
-                  <AntDesign
-                    name="minus"
-                    size={14}
-                    color={currentTheme.colors.text}
-                  />
-                </RIconButton>
-                <RInput
-                  value={String(value)}
-                  onChangeText={(text) => setValue(Number(text))}
-                  onBlur={(e) => submit(Number(e.target.value))}
-                  style={{
-                    width: 40,
-                    padding: 0,
-                    textAlign: 'center',
-                    height: 30,
-                    color: currentTheme.colors.text,
-                    fontSize: 12,
-                    borderWidth: 1,
-                    borderColor: hasError ? 'red' : currentTheme.colors.border,
-                  }}
-                />
-                <RIconButton
-                  onPress={increase}
-                  style={{
-                    width: 25,
-                    height: 25,
-                    padding: 0,
-                  }}
-                >
-                  <AntDesign
-                    name="plus"
-                    size={14}
-                    color={currentTheme.colors.text}
-                  />
-                </RIconButton>
-              </>
-            ) : (
-              <RText style={{ fontSize: 12, color: currentTheme.colors.text }}>
-                {value}
-              </RText>
-            )}
-          </RStack>
-          {isActionsEnabled && (
             <RIconButton
-              onPress={() => handleDeleteItem(item.id)}
-              style={{ backgroundColor: 'transparent', flexBasis: '10%' }}
+              onPress={decrease}
+              style={{
+                width: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
+                height: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
+                padding: 0,
+              }}
             >
-              <MaterialIcons
-                name="delete"
-                size={24}
+              <AntDesign
+                name="minus"
+                size={responsive.xxs ? 10 : responsive.sm ? 12 : 14}
                 color={currentTheme.colors.text}
               />
             </RIconButton>
-          )}
+
+            <RInput
+              value={String(value)}
+              onChangeText={(text) => setValue(Number(text))}
+              onBlur={(e) => submit(Number(e.target.value))}
+              style={{
+                width: 40,
+                padding: 0,
+                textAlign: 'center',
+                height: responsive.xxs ? 25 : 30,
+                color: currentTheme.colors.text,
+                fontSize: 12,
+                borderWidth: 1,
+                borderColor: hasError ? 'red' : '',
+              }}
+            />
+
+            <RIconButton
+              onPress={increase}
+              style={{
+                width: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
+                height: responsive.xxs ? 18 : responsive.sm ? 20 : 25,
+                padding: 0,
+              }}
+            >
+              <AntDesign
+                name="plus"
+                size={responsive.xxs ? 10 : responsive.sm ? 12 : 14}
+                color={currentTheme.colors.text}
+              />
+            </RIconButton>
+          </RStack>
+        ) : (
+          <RText
+            style={{ paddingRight: 16, fontSize: 12, alignSelf: 'center' }}
+          >
+            {value}
+          </RText>
+        )}
+
+        <RStack
+          style={{
+            flexBasis: '20%',
+            alignItems: 'center',
+          }}
+        >
+          <RText
+            style={{
+              color: currentTheme.colors.text,
+              marginLeft: responsive.xxs ? 10 : 20,
+              width: responsive.xxs ? 80 : 110,
+              fontSize: responsive.xxs ? 10 : responsive.sm ? 12 : 14,
+            }}
+          >
+            {`Weight: ${convertWeight(item.weight, SMALLEST_ITEM_UNIT, item.unit)} ${item.unit}`}
+          </RText>
         </RStack>
-      </ListItem>
-    </>
+
+        <RText
+          style={{
+            color: currentTheme.colors.text,
+            fontSize: responsive.xxs ? 11 : responsive.sm ? 12 : 14,
+            flexBasis: '20%',
+            textAlign: 'center',
+          }}
+        >
+          {item.category.name}
+        </RText>
+
+        {isActionsEnabled && (
+          <RIconButton
+            onPress={() => handleDeleteItem(item.id)}
+            style={{ backgroundColor: 'transparent' }}
+          >
+            <MaterialIcons
+              name="delete"
+              size={responsive.xxs ? 18 : responsive.sm ? 20 : 24}
+              color={currentTheme.colors.text}
+            />
+          </RIconButton>
+        )}
+      </RStack>
+    </ListItem>
   );
 };
 
