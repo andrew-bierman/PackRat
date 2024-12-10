@@ -1,12 +1,17 @@
 import { asc, count, desc, eq, like, sql } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
-import { packTemplate, item, itemPackTemplates } from 'src/db/schema';
+import {
+  packTemplate,
+  item,
+  itemPackTemplate,
+  InsertPackTemplate,
+} from 'src/db/schema';
 import { PaginationParams } from 'src/helpers/pagination';
 
-export type Filter = {
+export interface Filter {
   searchQuery?: string;
-};
+}
 
 export type ORDER_BY = 'Lightest' | 'Heaviest';
 
@@ -27,17 +32,17 @@ export class PackTemplate {
         type: packTemplate.type,
         description: packTemplate.description,
         total_weight:
-          sql`SUM(${item.weight} * ${itemPackTemplates.quantity})`.as(
+          sql`SUM(${item.weight} * ${itemPackTemplate.quantity})`.as(
             'total_weight',
           ),
-        quantity: sql`SUM(${itemPackTemplates.quantity})`,
+        quantity: sql`SUM(${itemPackTemplate.quantity})`,
       })
       .from(packTemplate)
       .leftJoin(
-        itemPackTemplates,
-        eq(packTemplate.id, itemPackTemplates.packTemplateId),
+        itemPackTemplate,
+        eq(packTemplate.id, itemPackTemplate.packTemplateId),
       )
-      .leftJoin(item, eq(itemPackTemplates.itemId, item.id))
+      .leftJoin(item, eq(itemPackTemplate.itemId, item.id))
       .groupBy(packTemplate.id);
 
     if (filter?.searchQuery) {
@@ -68,14 +73,53 @@ export class PackTemplate {
     };
   }
 
-  async findPackTemplate(id: string) {
+  /**
+   * Creates a pack template.
+   * @param data The date used to create a pack template.
+   */
+  async create(data: InsertPackTemplate) {
+    try {
+      const createdPackTemplate = await DbClient.instance
+        .insert(packTemplate)
+        .values(data)
+        .returning()
+        .get();
+      return createdPackTemplate;
+    } catch (error) {
+      throw new Error(`Failed to create a pack: ${error.message}`);
+    }
+  }
+
+  /**
+   * Finds a pack template by its ID or name.
+   * @param params The parameters to search for a pack template.
+   * @param params.id The ID of the pack template to search for.
+   * @param params.name The name of the pack template to search for.
+   * @returns
+   */
+  async findPackTemplate(
+    params: { id: string; name?: undefined } | { name: string; id?: undefined },
+  ) {
+    const { id, name } = params;
+    let filter;
+    if (id) {
+      filter = eq(packTemplate.id, id);
+    } else if (name) {
+      filter = eq(packTemplate.name, name);
+    } else {
+      throw new Error('Either id or name must be provided');
+    }
     const packTemplateResult =
       await DbClient.instance.query.packTemplate.findFirst({
-        where: eq(packTemplate.id, id),
+        where: filter,
         with: {
           itemPackTemplates: { with: { item: { with: { category: {} } } } },
         },
       });
+
+    if (!packTemplateResult) {
+      return packTemplateResult;
+    }
 
     const items = packTemplateResult.itemPackTemplates.map(
       (itemPackTemplate) => ({
@@ -91,13 +135,14 @@ export class PackTemplate {
       );
       return sum + weightInGrams * item.quantity;
     }, 0);
+
     const quantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
     delete packTemplateResult.itemPackTemplates;
 
     return {
       ...packTemplateResult,
-      items,
+      itemsPackTemplate: items,
       total_weight,
       quantity,
     };
