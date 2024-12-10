@@ -4,14 +4,18 @@ import { XCircle } from '@tamagui/lucide-icons';
 import useTheme from 'app/hooks/useTheme';
 import { View } from 'react-native';
 
-interface ErrorCardProps {
-  title: string;
+export interface ErrorCardProps {
+  title?: string;
   message: string;
 
-  onRetry: () => void;
+  onRetry?: () => void;
 }
 
-export const ErrorCard: FC<ErrorCardProps> = ({ message, title, onRetry }) => {
+export const ErrorCard: FC<ErrorCardProps> = ({
+  message,
+  title = 'Server error',
+  onRetry,
+}) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -44,19 +48,21 @@ export const ErrorCard: FC<ErrorCardProps> = ({ message, title, onRetry }) => {
           </RText>
         </View>
       </XStack>
-      <RButton
-        style={{
-          padding: 0,
-          width: 72,
-          marginTop: 8,
-          backgroundColor: 'white',
-          color: currentTheme.colors.error,
-          fontWeight: 600,
-        }}
-        onPress={onRetry}
-      >
-        Retry
-      </RButton>
+      {typeof onRetry === 'function' && (
+        <RButton
+          style={{
+            padding: 0,
+            width: 72,
+            marginTop: 8,
+            backgroundColor: 'white',
+            color: currentTheme.colors.error,
+            fontWeight: 600,
+          }}
+          onPress={onRetry}
+        >
+          Retry
+        </RButton>
+      )}
     </YStack>
   );
 };
