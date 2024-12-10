@@ -71,7 +71,7 @@ const DestinationHeader = ({ geoJSON, selectedSearchResult }) => {
 };
 
 // TODO refactor component
-export const DestinationPage = () => {
+export const DestinationScreen = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
 
