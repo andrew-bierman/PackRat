@@ -1,6 +1,6 @@
 import React from 'react';
 import { RStack } from '@packrat/ui';
-import { FlatList, ScrollView, View } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import { theme } from '../../theme';
 import { useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
@@ -106,9 +106,6 @@ function Trips() {
             data={flatListData}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            CellRendererComponent={({ style, index, ...props }) => (
-              <View style={[style, { zIndex: 20000 - index }]} {...props} />
-            )}
           />
         </RStack>
       </RStack>
