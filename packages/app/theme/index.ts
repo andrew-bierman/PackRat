@@ -6,18 +6,18 @@ export const theme = {
   colors: {
     primary: '#0A84FF',
     background: Platform.OS === 'web' ? 'hsla(0, 0%, 96%, 1)' : '#fcfcfc',
-    secondaryBlue: Platform.OS === 'web' ?'#0C66A1' : '#cce5ff',
+    secondaryBlue: Platform.OS === 'web' ? '#0C66A1' : '#cce5ff',
     accentPurple: Platform.OS === 'web' ? '#6C63FF' : '#6C63FF',
     card: Platform.OS === 'web' ? '#f8f8f8' : '#f8f8f8',
     text: Platform.OS === 'web' ? '#333333' : '#333333',
-    border: Platform.OS === 'web' ? '#f3f3f3' : '#f3f3f3',  
+    border: Platform.OS === 'web' ? '#f3f3f3' : '#f3f3f3',
     notification: '#0A84FF',
     textGreen: Platform.OS === 'web' ? undefined : '#22c55e',
     tertiaryBlueGrey: Platform.OS === 'web' ? undefined : '#3B3B3B',
     error: '#FF453A',
     textPrimary: 'black',
-    textSecondary: '#EBEBF599',
-    tertiaryBlue:  Platform.OS === 'web' ? '#0C66A1' : '#0C66A1',
+    textSecondary: '#48484a',
+    tertiaryBlue: Platform.OS === 'web' ? '#0C66A1' : '#0C66A1',
     textDarkGrey: '#3B3B3B',
     cardIconColor: '#22c55e',
     iconColor: Platform.OS === 'web' ? '#FFFFFF' : '#003064',
@@ -31,7 +31,7 @@ export const theme = {
     floatingBg: '#f0f2f5',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
     navbarPrimaryBackground: '#f6f6f6',
-    logo: 'rgb(12, 102, 161)'
+    logo: 'rgb(12, 102, 161)',
   },
   font: {
     headerFont: 56,
@@ -78,7 +78,7 @@ export const darkTheme = {
     floatingBg: '#232323',
     navbarBoxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.29)',
     navbarPrimaryBackground: 'black',
-    logo: 'rgb(150, 199, 242)'
+    logo: 'rgb(150, 199, 242)',
   },
   font: {
     headerFont: 56,
