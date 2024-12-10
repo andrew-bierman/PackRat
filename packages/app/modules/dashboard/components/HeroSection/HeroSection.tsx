@@ -108,7 +108,6 @@ const loadStyles = (theme: any) => {
   return {
     banner: {
       width: '100%',
-      padding: 20,
       backgroundColor: currentTheme.colors.background,
       alignItems: 'center',
       justifyContent: 'center',
@@ -133,7 +132,6 @@ const loadStyles = (theme: any) => {
     },
     searchBar: {
       width: '100%',
-      padding: 10,
       borderRadius: 5,
       backgroundColor: currentTheme.colors.inputBackground,
       color: currentTheme.colors.text,
