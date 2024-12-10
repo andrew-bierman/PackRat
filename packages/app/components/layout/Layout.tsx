@@ -17,6 +17,8 @@ const Layout = ({
           display: 'flex',
           backgroundColor: currentTheme.colors.background,
           flex: 1,
+          maxWidth: 1440,
+          margin: 'auto',
           justifyContent: Platform.OS === 'web' ? 'center' : 'flex-start',
           paddingTop: 20,
           paddingHorizontal: 16,
