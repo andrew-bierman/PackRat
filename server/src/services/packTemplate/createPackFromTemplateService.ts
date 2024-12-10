@@ -11,8 +11,9 @@ export const createPackFromTemplateService = async (
 ) => {
   const packTemplateRepository = new PackTemplateRepository();
 
-  const packTemplate =
-    await packTemplateRepository.findPackTemplate(packTemplateId);
+  const packTemplate = await packTemplateRepository.findPackTemplate({
+    id: packTemplateId,
+  });
 
   // TODO - creating pack and adding items to it should ideally be transactional
   const createdPack = await addPackService(

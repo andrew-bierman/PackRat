@@ -13,11 +13,32 @@ export const getPackTemplates = z.object({
   }),
 });
 
-export const getPackTemplate = z.object({
-  id: z.string().min(1),
-});
+export const getPackTemplate = z.union([
+  z.object({
+    id: z.string().min(1),
+    name: z.string().optional(),
+  }),
+  z.object({
+    name: z.string(),
+    id: z.string().optional(),
+  }),
+] as const);
 
 export const createPackFromTemplate = z.object({
   packTemplateId: z.string().min(1),
   newPackName: z.string().min(1),
 });
+
+export const addPackTemplate = z.object({
+  name: z.string(),
+  description: z.string(),
+  type: z.string(),
+  itemPackTemplates: z.array(
+    z.object({
+      itemId: z.string(),
+      quantity: z.number(),
+    }),
+  ),
+});
+
+export const addPackTemplates = z.array(addPackTemplate);
