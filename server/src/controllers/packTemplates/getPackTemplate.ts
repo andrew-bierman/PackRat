@@ -6,6 +6,7 @@ export function getPackTemplateRoute() {
   return protectedProcedure
     .input(validator.getPackTemplate)
     .query(async ({ input }) => {
-      return await getPackTemplateService(input.id);
+      const param = input.id ? { id: input.id } : { name: input.name };
+      return await getPackTemplateService(param);
     });
 }

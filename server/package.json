@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "NODE_OPTIONS=--max_old_space_size=4096 tsc",
@@ -143,6 +144,7 @@
     "expect.js": "^0.3.1",
     "jest": "^29.7.0",
     "migrate-mongo": "^10.0.0",
+    "miniflare": "^3.20241205.0",
     "mocha": "^10.2.0",
     "openapi-generator": "^0.1.39",
     "prettier": "^3.2.5",
