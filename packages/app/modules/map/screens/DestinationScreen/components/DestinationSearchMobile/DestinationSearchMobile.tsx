@@ -16,7 +16,7 @@ export const DestinationSearchMobile = () => {
       style={{
         backgroundColor: currentTheme.colors.card,
         minWidth: '100%',
-        height: 25,
+        height: 40,
         flexDirection: 'row',
       }}
       onPress={() => {
