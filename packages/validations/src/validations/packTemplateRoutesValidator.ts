@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { addNewItemGlobal } from './itemRoutesValidator';
 
 export const getPackTemplates = z.object({
   filter: z
@@ -33,9 +34,10 @@ export const addPackTemplate = z.object({
   name: z.string(),
   description: z.string(),
   type: z.string(),
+  itemsOwnerId: z.string(),
   itemPackTemplates: z.array(
     z.object({
-      itemId: z.string(),
+      item: addNewItemGlobal,
       quantity: z.number(),
     }),
   ),

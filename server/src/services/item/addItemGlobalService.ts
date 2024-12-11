@@ -12,6 +12,7 @@ import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
 import { DbClient } from 'src/db/client';
 import { itemImage as itemImageTable } from '../../db/schema';
 import { summarizeItem } from 'src/utils/item';
+import { addNewItemService, bulkAddNewItemsService } from './addItemService';
 // import { prisma } from '../../prisma';
 
 interface AddItemGlobalServiceParams {
@@ -117,87 +118,36 @@ export const addItemGlobalService = async (
  */
 export const addItemGlobalServiceBatch = async <T>(
   rawItems: T[],
-  transform: (rawItem: T) => AddItemGlobalServiceParams,
   continueOnError = false,
   executionCtx: ExecutionContext,
+  transform: (rawItem: T) => AddItemGlobalServiceParams,
 ) => {
-  const errors = [];
+  const errors: Error[] = [];
 
-  const createdItemsInOrder: Array<[itemIndex: number, item: Item]> = [];
-  for (let idx = 0; idx < rawItems.length; idx++) {
-    const item = transform(rawItems[idx]);
-    let category: InsertItemCategory | null;
-    if (!categories.includes(item.type)) {
-      const error = new Error(
-        `[${item.sku}#${item.name}]: Category must be one of: ${categories.join(', ')}`,
-      );
-      if (continueOnError) {
-        errors.push(error);
-        continue;
-      } else {
+  const createdItemsInOrder: Array<
+    Awaited<ReturnType<typeof addNewItemService>>
+  > = [];
+
+  function* itemIterator() {
+    for (let idx = 0; idx < rawItems.length; idx++) {
+      const item = transform(rawItems[idx]);
+      yield { ...item, category: item.type, imageUrls: item.image_urls };
+    }
+  }
+
+  await bulkAddNewItemsService({
+    items: itemIterator(),
+    executionCtx,
+    onItemCreationError: (error) => {
+      if (!continueOnError) {
         throw error;
       }
-    }
+      errors.push(error);
+    },
+  });
 
-    const itemClass = new ItemClass();
-    const itemCategoryClass = new ItemCategory();
-    category =
-      (await itemCategoryClass.findItemCategory({ name: item.type })) || null;
-    if (!category) {
-      category = await itemCategoryClass.create({ name: item.type });
-    }
-
-    const newItem = await itemClass.create({
-      name: item.name,
-      weight: convertWeight(
-        Number(item.weight),
-        item.unit as any,
-        SMALLEST_WEIGHT_UNIT,
-      ),
-      unit: item.unit,
-      categoryId: category.id,
-      global: true,
-      ownerId: item.ownerId,
-      sku: item.sku,
-      productUrl: item.productUrl,
-      description: item.description,
-      productDetails: item.productDetails,
-      seller: item.seller,
-    });
-
-    createdItemsInOrder.push([idx, newItem]);
-
-    if (item.image_urls) {
-      const urls = item.image_urls.split(',');
-
-      const newItemImages = [];
-      for (const url of urls) {
-        newItemImages.push({
-          itemId: newItem.id,
-          url,
-        });
-      }
-
-      await DbClient.instance
-        .insert(itemImageTable)
-        .values(newItemImages)
-        .run();
-    }
-  }
-
-  // Format Item for vector indexes
-  const vectorData = [];
-  for (const [idx, item] of createdItemsInOrder) {
-    item.category = { name: transform(rawItems[idx]).type };
-    vectorData.push({
-      id: item.id,
-      content: summarizeItem(item),
-      namespace: ITEM_TABLE_NAME,
-      metadata: {
-        isPublic: item.global,
-        ownerId: item.ownerId,
-      },
-    });
-  }
-  executionCtx.waitUntil(VectorClient.instance.syncRecords(vectorData));
+  return {
+    createdItemsInOrder,
+    errors,
+  };
 };

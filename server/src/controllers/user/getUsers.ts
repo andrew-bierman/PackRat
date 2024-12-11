@@ -1,4 +1,4 @@
-import { protectedProcedure } from '../../trpc';
+import { protectedProcedure, publicProcedure } from '../../trpc';
 import { responseHandler } from '../../helpers/responseHandler';
 import { User } from '../../drizzle/methods/User';
 
@@ -13,7 +13,7 @@ export const getUsers = async (c) => {
 };
 
 export function getUsersRoute() {
-  return protectedProcedure.query(async (opts) => {
+  return publicProcedure.query(async (opts) => {
     const userClass = new User();
     const users = await userClass.findMany();
     return users;

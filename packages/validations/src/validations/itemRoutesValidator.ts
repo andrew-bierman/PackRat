@@ -70,6 +70,22 @@ export const addItemGlobal = z.object({
   ownerId: z.string(),
 });
 
+export const addNewItemGlobal = z.object({
+  name: z.string(),
+  weight: z.number(),
+  unit: z.string(),
+  category: z.enum(['Food', 'Water', 'Essentials']),
+  sku: z.string(),
+  productUrl: z.string(),
+  description: z.string(),
+  productDetails: z.record(
+    z.string(),
+    z.union([z.string(), z.number(), z.boolean()]),
+  ),
+  seller: z.string(),
+  imageUrls: z.string(),
+});
+
 export const importItemsGlobal = z.object({
   content: z.string(),
   ownerId: z.string(),

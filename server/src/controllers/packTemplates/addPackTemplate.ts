@@ -1,7 +1,6 @@
 import { addPackTemplateService } from '../../services/packTemplate/packTemplate.service';
 import * as validator from '@packrat/validations';
 import { publicProcedure } from '../../trpc';
-import { th } from '@faker-js/faker';
 
 export function importPackTemplatesRoute() {
   return publicProcedure
@@ -10,20 +9,19 @@ export function importPackTemplatesRoute() {
       const array = opts.input;
       const packTemplates = [];
       for (let idx = 0; idx < array.length; idx++) {
-        const { name, description, type, itemPackTemplates } = array[idx];
+        const input = array[idx];
         try {
-          const template = await addPackTemplateService({
-            name,
-            description,
-            type,
-            itemPackTemplates,
-          });
-          packTemplates.push(template);
+          const packTemplate = await addPackTemplateService(
+            input,
+            opts.ctx.executionCtx,
+          );
+          packTemplates.push(packTemplate);
         } catch (error) {
           console.log(error);
           throw error;
         }
       }
+      return packTemplates;
     });
 }
 
@@ -31,13 +29,10 @@ export function addPackTemplateRoute() {
   return publicProcedure
     .input(validator.addPackTemplate)
     .mutation(async (opts) => {
-      const { name, description, type, itemPackTemplates } = opts.input;
-      const packTemplate = await addPackTemplateService({
-        name,
-        description,
-        type,
-        itemPackTemplates
-      });
+      const packTemplate = await addPackTemplateService(
+        opts.input,
+        opts.ctx.executionCtx,
+      );
       return packTemplate;
     });
 }
