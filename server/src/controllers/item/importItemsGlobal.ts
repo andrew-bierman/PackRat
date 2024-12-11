@@ -117,6 +117,8 @@ export function importItemsGlobalRoute() {
               let idx = 0;
               await addItemGlobalServiceBatch(
                 results.data,
+                true,
+                opts.ctx.executionCtx,
                 (item) => {
                   const productDetailsStr = `${item.techs}`
                     .replace(/'([^']*)'\s*:/g, '"$1":') // Replace single quotes keys with double quotes.
@@ -153,8 +155,6 @@ export function importItemsGlobalRoute() {
                     productDetails: JSON.parse(productDetailsStr),
                   };
                 },
-                false,
-                opts.ctx.executionCtx,
               );
               return resolve('items');
             } catch (error) {
