@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImportItem } from './ImportItem';
-import { BaseModal, RStack, RText } from '@packrat/ui';
+import { BaseModal, RSecondaryButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 
 interface ImportItemModalProps {
@@ -18,29 +18,15 @@ export const ImportItemModal = ({
 }: ImportItemModalProps) => {
   const { currentTheme } = useTheme();
 
-  const CustomTriggerButton = (
-    <RStack
-      style={{
-        width: '100%',
-        alignItems: 'center',
-      }}
-    >
-      <RText
-        style={{
-          color: currentTheme.colors.text,
-          fontWeight: 'bold',
-          fontSize: 20,
-        }}
-      >
-        Import Item
-      </RText>
-    </RStack>
-  );
-
   return (
     <BaseModal
       title="Import Item"
-      triggerComponent={CustomTriggerButton}
+      triggerComponent={
+        <RSecondaryButton
+          label="Import Item"
+          onPress={() => setIsImportItemModalOpen(true)}
+        />
+      }
       footerComponent={undefined}
       isOpen={isImportItemModalOpen}
       onOpen={() => setIsImportItemModalOpen(true)}

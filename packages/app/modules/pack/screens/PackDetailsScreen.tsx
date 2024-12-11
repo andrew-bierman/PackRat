@@ -88,7 +88,7 @@ export function PackDetailsScreen() {
                       <View
                         style={{
                           flex: 1,
-                          backgroundColor: currentTheme.colors.card,
+                          backgroundColor: '#232323',
                           borderRadius: 12,
                         }}
                       >
@@ -103,8 +103,10 @@ export function PackDetailsScreen() {
                       <View
                         style={{
                           flex: 1,
-                          backgroundColor: currentTheme.colors.card,
+                          backgroundColor: 'transparent',
                           borderRadius: 12,
+                          borderWidth: 1,
+                          borderColor: currentTheme.colors.cardBorderPrimary,
                         }}
                       >
                         <ImportItemModal

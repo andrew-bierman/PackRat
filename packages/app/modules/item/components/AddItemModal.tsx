@@ -1,9 +1,7 @@
 import React from 'react';
 import { AddItem } from './AddItem';
 import useTheme from 'app/hooks/useTheme';
-import { BaseModal } from '@packrat/ui';
-import { RText } from '@packrat/ui';
-import { View } from 'react-native';
+import { BaseModal, RPrimaryButton } from '@packrat/ui';
 
 interface AddItemModalProps {
   currentPackId: string;
@@ -26,29 +24,15 @@ export const AddItemModal = ({
 }: AddItemModalProps) => {
   const { currentTheme } = useTheme();
 
-  const CustomTriggerButton = (
-    <View
-      style={{
-        width: '100%',
-        alignItems: 'center',
-      }}
-    >
-      <RText
-        style={{
-          color: currentTheme.colors.text,
-          fontWeight: 'bold',
-          fontSize: 20,
-        }}
-      >
-        + Add Item
-      </RText>
-    </View>
-  );
-
   return (
     <BaseModal
       title="Add Item"
-      triggerComponent={CustomTriggerButton}
+      triggerComponent={
+        <RPrimaryButton
+          label="+ Add Item"
+          onPress={() => setIsAddItemModalOpen(true)}
+        />
+      }
       showTrigger={showTrigger}
       footerButtons={[
         {
