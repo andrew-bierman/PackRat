@@ -12,8 +12,7 @@ const StyledSecondaryButton = styled(Button, {
   borderWidth: 0,
   fontWeight: 'bold',
   fontSize: 16,
-  paddingVertical: 10,
-  paddingHorizontal: 20,
+  padding: 10,
   borderRadius: 8,
   cursor: 'pointer',
   hoverStyle: {
