@@ -15,7 +15,7 @@ export const MapButtonsOverlay: FC<MapButtonsOverlayProps> = ({
         <DownloadMapBtn
           currentBounds={currentBounds}
           shape={shape}
-          style={{ position: 'absolute', bottom: 80, left: 10 }}
+          style={{ position: 'absolute', bottom: 10, left: 10 }}
         />
       ) : null}
       {children}

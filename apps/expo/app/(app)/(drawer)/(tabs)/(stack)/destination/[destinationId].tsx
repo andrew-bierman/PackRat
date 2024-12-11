@@ -1,6 +1,6 @@
 import React from 'react';
+import { DestinationScreen } from 'app/modules/map/screens/DestinationScreen';
 import { Platform } from 'react-native';
-import { DestinationScreen } from '../../../../../../../../packages/app/modules/map/screens/DestinationScreen';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 

@@ -21,6 +21,7 @@ const Layout = ({
           margin: 'auto',
           justifyContent: Platform.OS === 'web' ? 'center' : 'flex-start',
           paddingTop: 20,
+          paddingBottom: Platform.OS !== 'web' ? 44 : undefined,
           paddingHorizontal: 16,
           marginBottom: 20,
           alignItems: 'center',

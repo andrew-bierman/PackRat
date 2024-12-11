@@ -124,9 +124,10 @@ export const DestinationScreen = () => {
               <DestinationSearchMobile />
             )}
           </View>
-          <XStack
+          <RStack
             style={{
-              gap: 16,
+              gap: 24,
+              marginTop: 16,
               flexDirection: gtSm ? 'row' : 'column',
               position: 'relative',
             }}
@@ -138,12 +139,18 @@ export const DestinationScreen = () => {
               }}
               isLoading={isMapLoading}
             >
-              <View style={{ flex: 1, width: gtSm ? 'auto' : '100%' }}>
+              <View
+                style={{
+                  flex: gtSm ? 1 : undefined,
+                  width: gtSm ? 'auto' : '100%',
+                  height: Platform.OS === 'web' ? 'auto' : 300,
+                }}
+              >
                 <Map shape={shape} />
               </View>
             </AsyncView>
             <View style={{ width: gtSm ? 350 : '100%' }}>{detailsSection}</View>
-          </XStack>
+          </RStack>
         </ScrollView>
       </View>
     </Layout>

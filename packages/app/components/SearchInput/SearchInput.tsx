@@ -289,8 +289,6 @@ const useSearchOptions = (
 
 const loadStyles = () => ({
   container: {
-    marginTop: 20,
-    marginBottom: 15,
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
