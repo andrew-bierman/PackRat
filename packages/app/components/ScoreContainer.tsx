@@ -236,12 +236,9 @@ const loadStyles = (theme: any) => {
       marginVertical: 15,
       padding: 26,
       marginTop: 25,
-      // borderColor: currentTheme.colors.border,
-      // borderWidth: 2,
-      borderColor: currentTheme.colors.border,
+      borderColor: currentTheme.colors.cardBorderPrimary,
       borderWidth: 1,
       borderRadius: 10,
-      boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
       backgroundColor: currentTheme.colors.background,
     },
     hStack: {

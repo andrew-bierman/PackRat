@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { CLIENT_URL } from '@packrat/config';
 import { RButton, RH3, RIconButton, RSpinner, RText } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
@@ -21,9 +20,9 @@ import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
 import ChatModalTrigger from 'app/components/chat';
 import { Ionicons } from '@expo/vector-icons';
-
 import { useRouter } from 'app/hooks/router';
 import { ConnectionGate } from 'app/components/ConnectionGate';
+import { AsyncView } from 'app/components/AsyncView/AsyncView';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -42,7 +41,7 @@ export function PackDetailsScreen() {
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [isImportItemModalOpen, setIsImportItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
-  const { xxs, xxl, xs } = useResponsive();
+  const { xxs, xxl, xs, sm } = useResponsive();
 
   const {
     data: currentPack,
@@ -52,37 +51,26 @@ export function PackDetailsScreen() {
   } = useFetchSinglePack(packId);
   const isAuthUserPack = useIsAuthUserPack(currentPack);
   const router = useRouter();
-  const { sm } = useResponsive();
 
   // const styles = useCustomStyles(loadStyles);
   const currentPackId = currentPack && currentPack.id;
-
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user.id;
-
-  const isError = error !== null;
-
-  if (isLoading)
-    return (
-      <Layout>
-        <RSpinner />
-      </Layout>
-    );
-
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
-      {!isError && (
-        <View
-          style={{
-            minHeight: '100%',
-            paddingBottom: 80,
-          }}
-        >
+      <AsyncView
+        isLoading={isLoading}
+        isError={!!error}
+        loadingComponent={<RSpinner />}
+        errorComponentProps={{
+          title: 'Error Loading Pack',
+          message: error?.message,
+        }}
+      >
+        <View style={{ minHeight: '100%', paddingBottom: 80 }}>
           <DetailsComponent
             type="pack"
             data={currentPack}
-            isLoading={isLoading}
-            error={error as any}
             additionalComps={
               <>
                 <ConnectionGate mode="connected">
@@ -92,24 +80,42 @@ export function PackDetailsScreen() {
                         display: 'flex',
                         flexDirection: 'row',
                         width: '100%',
-                        justifyContent: 'center',
+                        justifyContent: 'space-evenly',
                         gap: 5,
-                        marginBottom: 16, // Spacing below the buttons
+                        marginBottom: 16,
                       }}
                     >
-                      <AddItemModal
-                        currentPackId={currentPackId || ''}
-                        currentPack={currentPack}
-                        isAddItemModalOpen={isAddItemModalOpen}
-                        setIsAddItemModalOpen={setIsAddItemModalOpen}
-                        setRefetch={() => setRefetch((prev) => !prev)}
-                      />
-                      <ImportItemModal
-                        currentPackId={currentPackId || ''}
-                        currentPack={currentPack}
-                        isImportItemModalOpen={isImportItemModalOpen}
-                        setIsImportItemModalOpen={setIsImportItemModalOpen}
-                      />
+                      <View
+                        style={{
+                          flex: 1,
+                          backgroundColor: '#232323',
+                          borderRadius: 12,
+                        }}
+                      >
+                        <AddItemModal
+                          currentPackId={currentPackId || ''}
+                          currentPack={currentPack}
+                          isAddItemModalOpen={isAddItemModalOpen}
+                          setIsAddItemModalOpen={setIsAddItemModalOpen}
+                          setRefetch={() => setRefetch((prev) => !prev)}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flex: 1,
+                          backgroundColor: 'transparent',
+                          borderRadius: 12,
+                          borderWidth: 1,
+                          borderColor: currentTheme.colors.cardBorderPrimary,
+                        }}
+                      >
+                        <ImportItemModal
+                          currentPackId={currentPackId || ''}
+                          currentPack={currentPack}
+                          isImportItemModalOpen={isImportItemModalOpen}
+                          setIsImportItemModalOpen={setIsImportItemModalOpen}
+                        />
+                      </View>
                     </View>
                   ) : (
                     <RText
@@ -173,7 +179,10 @@ export function PackDetailsScreen() {
                                   customStyle={{
                                     width: '100%',
                                     backgroundColor:
-                                      currentTheme.colors.secondaryBlue,
+                                      currentTheme.colors.background,
+                                    borderWidth: 1,
+                                    borderColor:
+                                      currentTheme.colors.cardBorderPrimary,
                                     paddingBottom: 24,
                                     marginTop: 28,
                                     paddingTop: 0,
@@ -197,7 +206,6 @@ export function PackDetailsScreen() {
                             </View>
                           </View>
                         );
-
                       default:
                         return null;
                     }
@@ -208,7 +216,8 @@ export function PackDetailsScreen() {
             link={link}
           />
         </View>
-      )}
+      </AsyncView>
+
       <ConnectionGate mode="connected">
         {Platform.OS === 'web' ? (
           <View

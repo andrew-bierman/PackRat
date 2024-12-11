@@ -120,7 +120,7 @@ const loadStyles = (theme) => {
   return {
     mainContainer: {
       borderColor: currentTheme.colors.border,
-      borderWidth: 1,
+      borderWidth: 0,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
@@ -128,7 +128,7 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       marginBottom: 20,
       border: '1',
-      boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
+      // boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
       alignSelf: 'center',
     },
   };

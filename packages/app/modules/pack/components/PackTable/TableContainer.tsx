@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RSkeleton, RButton, RText, RStack, RSeparator } from '@packrat/ui'; // Added RSeparator here
+import { RSkeleton, RButton, RText, RStack, RSeparator } from '@packrat/ui';
 import { View } from 'react-native';
 import { YGroup } from 'tamagui';
 import {
@@ -9,11 +9,14 @@ import {
 } from './TableHelperComponents';
 import { usePackTable } from './usePackTable';
 import { ItemList } from './ItemList';
+import { ItemCard } from './ItemCard';
 import useResponsive from 'app/hooks/useResponsive';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useSetItemQuantity } from 'app/modules/item';
 import { useDeletePackItem } from 'app/modules/pack/hooks';
 import { useOfflineStore } from 'app/atoms';
+import { LayoutCard } from 'app/components/LayoutCard';
+
 interface TableContainerProps {
   currentPack: any;
   selectedPack?: any;
@@ -53,6 +56,7 @@ export const TableContainer = ({
   const { setItemQuantity } = useSetItemQuantity();
   const { deletePackItem } = useDeletePackItem();
   const { connectionStatus } = useOfflineStore();
+  const responsive = useResponsive();
 
   const onSubmitQuantity = (itemId: string, quantity: number) => {
     setItemQuantity({
@@ -72,43 +76,117 @@ export const TableContainer = ({
   return (
     <View style={styles.container}>
       {data?.length ? (
-        <View style={styles.layoutContainer}>
-          <YGroup alignSelf="stretch" size="$8">
-            {data.map((item) => (
-              <YGroup.Item key={item.id}>
-                <ItemList
-                  item={item}
-                  isActionsEnabled={connectionStatus === 'connected'}
-                  onSubmitQuantity={onSubmitQuantity}
-                  handleDeleteItem={handleDeletePackItem}
-                />
-              </YGroup.Item>
-            ))}
-          </YGroup>
+        <LayoutCard style={styles.layoutContainer}>
+          <RStack>
+            <RText style={styles.tableTitle}>Pack Items</RText>
+            {!responsive.sm && (
+              <RStack
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <RText
+                  style={{
+                    fontWeight: 'bold',
+                    flexBasis: '25%',
+                    marginLeft: 15,
+                  }}
+                >
+                  Name
+                </RText>
+                <RText
+                  style={{
+                    fontWeight: 'bold',
+                    flexBasis: '20%',
+                    textAlign: 'center',
+                  }}
+                >
+                  Category
+                </RText>
+                <RText
+                  style={{
+                    fontWeight: 'bold',
+                    flexBasis: '20%',
+                    textAlign: 'center',
+                  }}
+                >
+                  Weight
+                </RText>
+                <RText
+                  style={{
+                    fontWeight: 'bold',
+                    flexBasis: '25%',
+                    textAlign: 'center',
+                  }}
+                >
+                  Quantity
+                </RText>
+                {connectionStatus === 'connected' && (
+                  <RText style={{ fontWeight: 'bold', flexBasis: '10%' }}>
+                    Actions
+                  </RText>
+                )}
+              </RStack>
+            )}
 
-          {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
+            <YGroup alignSelf="stretch" size="$8">
+              {data.map((item) => (
+                <YGroup.Item key={item.id}>
+                  {responsive.sm ? (
+                    <ItemCard
+                      item={item}
+                      value={item.quantity}
+                      decrease={() =>
+                        onSubmitQuantity(item.id, item.quantity - 1)
+                      }
+                      increase={() =>
+                        onSubmitQuantity(item.id, item.quantity + 1)
+                      }
+                      setValue={(value) => onSubmitQuantity(item.id, value)}
+                      submit={(value) => onSubmitQuantity(item.id, value)}
+                      hasError={false}
+                      handleDeleteItem={handleDeletePackItem}
+                      isActionsEnabled={connectionStatus === 'connected'}
+                    />
+                  ) : (
+                    <ItemList
+                      item={item}
+                      isActionsEnabled={connectionStatus === 'connected'}
+                      onSubmitQuantity={onSubmitQuantity}
+                      handleDeleteItem={handleDeletePackItem}
+                    />
+                  )}
+                </YGroup.Item>
+              ))}
+            </YGroup>
 
-          <TotalWeightBox
-            label="Base Weight"
-            weight={totalBaseWeight}
-            unit={weightUnit}
-          />
-          <TotalWeightBox
-            label="Water + Food Weight"
-            weight={totalWaterWeight + totalFoodWeight}
-            unit={weightUnit}
-          />
-          <RSeparator style={styles.separator} />
-          <TotalWeightBox
-            label="Total Weight"
-            weight={totalWeight}
-            unit={weightUnit}
-          />
-          <WeightUnitDropdown
-            value={weightUnit}
-            onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-          />
-        </View>
+            {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
+
+            <TotalWeightBox
+              label="Base Weight"
+              weight={totalBaseWeight}
+              unit={weightUnit}
+            />
+            <TotalWeightBox
+              label="Water + Food Weight"
+              weight={totalWaterWeight + totalFoodWeight}
+              unit={weightUnit}
+            />
+            <RSeparator style={styles.separator} />
+            <TotalWeightBox
+              label="Total Weight"
+              weight={totalWeight}
+              unit={weightUnit}
+            />
+            <WeightUnitDropdown
+              value={weightUnit}
+              onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
+            />
+          </RStack>
+        </LayoutCard>
       ) : (
         <RText style={styles.noItemsText}>Add your First Item</RText>
       )}
@@ -129,14 +207,23 @@ const loadStyles = (theme: any) => {
     layoutContainer: {
       flexDirection: 'column',
       justifyContent: 'space-between',
-      marginTop: sm ? 20 : 0,
+      marginTop: 0,
       flex: 1,
-      padding: sm ? 10 : 5,
+      padding: 10,
       borderRadius: 10,
-      elevation: 8,
-      backgroundColor: currentTheme.colors.card,
+      backgroundColor: currentTheme.colors.background,
+      borderColor: currentTheme.colors.cardBorderPrimary,
+      borderWidth: 1,
     },
-
+    tableTitle: {
+      fontWeight: 'bold',
+      fontSize: 25,
+      textAlign: 'left',
+      marginTop: 20,
+      marginBottom: 20,
+      marginLeft: 15,
+      color: currentTheme.colors.text,
+    },
     separator: {
       marginVertical: 10,
     },
