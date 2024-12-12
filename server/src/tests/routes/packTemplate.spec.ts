@@ -123,6 +123,10 @@ describe('Pack template routes', () => {
         name: 'test',
         description: 'pack template description',
         type: 'pack',
+        itemPackTemplates: packTemplateItems.map((item) => ({
+          itemId: item.id,
+          quantity: 1,
+        })),
       });
       expect(packTemplate).toMatchObject([
         { ...packTemplate, items: packTemplateItems },
