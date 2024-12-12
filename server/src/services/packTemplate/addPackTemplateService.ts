@@ -18,7 +18,7 @@ import { i } from 'vitest/dist/reporters-QGe8gs4b.js';
  * @return {Object} An object containing the created pack.
  */
 export const addPackTemplateService = async (
-  packTemplateData: typeof validator.addPackTemplate._type,
+  packTemplateData: validator.AddPackTemplateType,
   executionCtx: ExecutionContext,
 ): Promise<PackTemplate> => {
   const { name, description, type } = packTemplateData;
@@ -48,9 +48,7 @@ export const addPackTemplateService = async (
     }
   }
 
-  await ItemService.bulkAddNewItemsService({
-    items: itemIterator(),
-    executionCtx,
+  await ItemService.bulkAddItemsGlobalService(itemIterator(), executionCtx, {
     onItemCreationError: (error, idx) => {
       console.error(`Error creating item at ${idx}:`, error);
     },

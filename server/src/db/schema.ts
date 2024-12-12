@@ -613,15 +613,10 @@ export const selectTemplateSchema = createSelectSchema(template);
 
 export type PackTemplate = InferSelectModel<typeof packTemplate>;
 export type InsertPackTemplate = InferInsertModel<typeof packTemplate>;
-export const insertPackTemplateSchema = createInsertSchema(packTemplate);
 export const selectPackTemplateSchema = createSelectSchema(packTemplate);
 
 export type ItemPackTemplate = InferSelectModel<typeof itemPackTemplate>;
 export type InsertItemPackTemplate = InferInsertModel<typeof itemPackTemplate>;
-export const insertItemPackTemplateSchema =
-  createInsertSchema(itemPackTemplate);
-export const selectItemPackTemplateSchema =
-  createSelectSchema(itemPackTemplate);
 
 export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;

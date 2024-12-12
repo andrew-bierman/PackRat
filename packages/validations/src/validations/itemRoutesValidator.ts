@@ -66,25 +66,19 @@ export const addItemGlobal = z.object({
   name: z.string(),
   weight: z.number(),
   unit: z.string(),
-  type: z.string(),
+  type: z.enum(['Food', 'Water', 'Essentials']),
   ownerId: z.string(),
+  sku: z.string().optional(),
+  productUrl: z.string().optional(),
+  description: z.string().optional(),
+  productDetails: z
+    .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+    .optional(),
+  seller: z.string().optional(),
+  image_urls: z.string().optional(),
 });
 
-export const addNewItemGlobal = z.object({
-  name: z.string(),
-  weight: z.number(),
-  unit: z.string(),
-  category: z.enum(['Food', 'Water', 'Essentials']),
-  sku: z.string(),
-  productUrl: z.string(),
-  description: z.string(),
-  productDetails: z.record(
-    z.string(),
-    z.union([z.string(), z.number(), z.boolean()]),
-  ),
-  seller: z.string(),
-  imageUrls: z.string(),
-});
+export type AddItemGlobalType = z.infer<typeof addItemGlobal>;
 
 export const importItemsGlobal = z.object({
   content: z.string(),

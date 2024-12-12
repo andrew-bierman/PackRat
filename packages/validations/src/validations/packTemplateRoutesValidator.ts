@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { addNewItemGlobal } from './itemRoutesValidator';
+import { addItemGlobal } from './itemRoutesValidator';
 
 export const getPackTemplates = z.object({
   filter: z
@@ -23,7 +23,7 @@ export const getPackTemplate = z.union([
     name: z.string(),
     id: z.string().optional(),
   }),
-] as const);
+]);
 
 export const createPackFromTemplate = z.object({
   packTemplateId: z.string().min(1),
@@ -37,10 +37,12 @@ export const addPackTemplate = z.object({
   itemsOwnerId: z.string(),
   itemPackTemplates: z.array(
     z.object({
-      item: addNewItemGlobal,
+      item: addItemGlobal.omit({ ownerId: true }),
       quantity: z.number(),
     }),
   ),
 });
+
+export type AddPackTemplateType = z.infer<typeof addPackTemplate>;
 
 export const addPackTemplates = z.array(addPackTemplate);
