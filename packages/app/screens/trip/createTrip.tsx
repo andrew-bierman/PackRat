@@ -15,10 +15,11 @@ import { WeatherData } from 'app/components/weather/WeatherData';
 import { useFlatList } from 'app/hooks/useFlatList';
 import useResponsive from 'app/hooks/useResponsive';
 import { LayoutCard } from 'app/components/LayoutCard';
-import { MapPin } from '@tamagui/lucide-icons';
+import { MapPin, MapPinned } from '@tamagui/lucide-icons';
 
 const SECTIONS = {
   MAP: 'MAP',
+  PLACE_NAME: 'PLACE_NAME',
   PACK: 'PACK',
   WEATHER: 'WEATHER',
 };
@@ -51,6 +52,15 @@ function Trips() {
         }}
       />
     ),
+    [SECTIONS.PLACE_NAME]: (
+      <XStack style={{ gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <MapPinned size={20} />
+        <RText style={{ fontSize: 20, fontWeight: 600 }}>
+          {photonDetails?.features?.[0]?.properties?.['name:en'] ||
+            photonDetails?.features?.[0]?.properties?.name}
+        </RText>
+      </XStack>
+    ),
     [SECTIONS.WEATHER]: (
       <LayoutCard>
         <WeatherData latLng={latLng} />
@@ -73,7 +83,13 @@ function Trips() {
         <YStack
           style={{ gap: 16, display: isChangePlaceMode ? 'none' : 'flex' }}
         >
-          <XStack style={{ justifyContent: 'space-between' }}>
+          <XStack
+            style={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
             <RText style={{ fontWeight: 700, fontSize: 24 }}>
               Plan Your Trip
             </RText>
@@ -86,7 +102,7 @@ function Trips() {
             />
           </XStack>
           <RStack style={{ flexDirection: gtSm ? 'row' : 'column', gap: 16 }}>
-            <View style={{ width: gtSm ? 416 : '100%' }}>
+            <View style={{ width: gtSm ? 450 : '100%' }}>
               <FlatList
                 data={flatListData}
                 keyExtractor={keyExtractor}

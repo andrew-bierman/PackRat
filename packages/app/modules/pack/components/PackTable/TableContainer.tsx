@@ -16,6 +16,7 @@ import { useSetItemQuantity } from 'app/modules/item';
 import { useDeletePackItem } from 'app/modules/pack/hooks';
 import { useOfflineStore } from 'app/atoms';
 import { LayoutCard } from 'app/components/LayoutCard';
+import { PackSummary } from './PackSummary';
 
 interface TableContainerProps {
   currentPack: any;
@@ -24,35 +25,29 @@ interface TableContainerProps {
   setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
   copy?: boolean;
   hasPermissions?: boolean;
+  hideSummary?: boolean;
+  forceCardLayout?: boolean;
 }
 
 export const TableContainer = ({
   currentPack,
   selectedPack,
   hasPermissions,
+  hideSummary = false,
   refetch,
   setRefetch = () => {},
   copy,
+  forceCardLayout = false,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
-  const {
-    isLoading,
-    error,
-    data,
-    totalBaseWeight,
-    totalFoodWeight,
-    totalWaterWeight,
-    totalWeight,
-    weightUnit,
-    setWeightUnit,
-    handleDuplicate,
-  } = usePackTable({
-    currentPack,
-    selectedPack,
-    refetch,
-    setRefetch,
-    copy,
-  });
+  const { isLoading, error, data, weightUnit, setWeightUnit, handleDuplicate } =
+    usePackTable({
+      currentPack,
+      selectedPack,
+      refetch,
+      setRefetch,
+      copy,
+    });
   const { setItemQuantity } = useSetItemQuantity();
   const { deletePackItem } = useDeletePackItem();
   const { connectionStatus } = useOfflineStore();
@@ -79,7 +74,7 @@ export const TableContainer = ({
         <LayoutCard style={styles.layoutContainer}>
           <RStack>
             <RText style={styles.tableTitle}>Pack Items</RText>
-            {!responsive.sm && (
+            {!responsive.sm && !forceCardLayout && (
               <RStack
                 style={{
                   width: '100%',
@@ -135,7 +130,7 @@ export const TableContainer = ({
             <YGroup alignSelf="stretch" size="$8">
               {data.map((item) => (
                 <YGroup.Item key={item.id}>
-                  {responsive.sm ? (
+                  {responsive.sm || forceCardLayout ? (
                     <ItemCard
                       item={item}
                       value={item.quantity}
@@ -165,26 +160,13 @@ export const TableContainer = ({
 
             {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
 
-            <TotalWeightBox
-              label="Base Weight"
-              weight={totalBaseWeight}
-              unit={weightUnit}
-            />
-            <TotalWeightBox
-              label="Water + Food Weight"
-              weight={totalWaterWeight + totalFoodWeight}
-              unit={weightUnit}
-            />
-            <RSeparator style={styles.separator} />
-            <TotalWeightBox
-              label="Total Weight"
-              weight={totalWeight}
-              unit={weightUnit}
-            />
-            <WeightUnitDropdown
-              value={weightUnit}
-              onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-            />
+            {!hideSummary && (
+              <PackSummary
+                currentPack={currentPack}
+                weightUnit={weightUnit}
+                setWeightUnit={setWeightUnit}
+              />
+            )}
           </RStack>
         </LayoutCard>
       ) : (
@@ -207,6 +189,7 @@ const loadStyles = (theme: any) => {
     layoutContainer: {
       flexDirection: 'column',
       justifyContent: 'space-between',
+      width: '100%',
       marginTop: 0,
       flex: 1,
       padding: 10,
@@ -223,9 +206,6 @@ const loadStyles = (theme: any) => {
       marginBottom: 20,
       marginLeft: 15,
       color: currentTheme.colors.text,
-    },
-    separator: {
-      marginVertical: 10,
     },
     noItemsText: {
       fontWeight: 'bold',
