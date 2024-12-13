@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled, Button, ButtonProps } from 'tamagui';
+import useTheme from 'app/hooks/useTheme';
 
 interface RSecondaryButtonProps extends ButtonProps {
   label: string;
@@ -7,14 +8,16 @@ interface RSecondaryButtonProps extends ButtonProps {
 
 const StyledSecondaryButton = styled(Button, {
   name: 'RSecondaryButton',
-  backgroundColor: 'transparent',
-  color: '#7e7f80',
   borderWidth: 0,
-  fontWeight: 500,
+  fontWeight: '500',
   fontSize: 16,
   padding: 2,
   borderRadius: 8,
   cursor: 'pointer',
+
+  hoverStyle: {
+    opacity: 0.8,
+  },
 
   variants: {
     disabled: {
@@ -48,8 +51,20 @@ const RSecondaryButton: React.FC<RSecondaryButtonProps> = ({
   size,
   ...props
 }) => {
+  const { currentTheme } = useTheme();
+
+  const dynamicStyle = {
+    backgroundColor: currentTheme.colors.background,
+    color: currentTheme.colors.text,
+  };
+
   return (
-    <StyledSecondaryButton disabled={disabled} size={size} {...props}>
+    <StyledSecondaryButton
+      disabled={disabled}
+      size={size}
+      style={dynamicStyle}
+      {...props}
+    >
       {label}
     </StyledSecondaryButton>
   );
