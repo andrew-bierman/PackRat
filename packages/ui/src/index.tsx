@@ -14,10 +14,8 @@ import RImage from './RImage';
 import RInput from './RInput';
 import RLabel from './RLabel';
 import RLink from './RLink';
-import RPrimaryButton from './RPrimaryButton';
 import RRadio from './RRadio';
 import RScrollView from './RScrollview';
-import RSecondaryButton from './RSecondaryButton';
 
 import RSelect from './RSelect';
 import RSeparator from './RSeparator';
@@ -66,10 +64,8 @@ export {
   RLabel,
   RLink,
   RParagraph,
-  RPrimaryButton,
   RRadio,
   RScrollView,
-  RSecondaryButton,
   RSelect,
   RSeparator,
   RSpinner,

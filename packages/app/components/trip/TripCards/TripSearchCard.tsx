@@ -1,7 +1,8 @@
 import React from 'react';
-import { RSecondaryButton, RText, YStack } from '@packrat/ui';
+import { RText, YStack } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'react-native';

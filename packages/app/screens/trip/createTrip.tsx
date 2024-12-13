@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  RPrimaryButton,
-  RSecondaryButton,
-  RStack,
-  RText,
-  XStack,
-  YStack,
-} from '@packrat/ui';
+import { RStack, RText, XStack, YStack } from '@packrat/ui';
 import { FlatList, View } from 'react-native';
 import { useRef } from 'react';
 import { GearList } from '../../components/GearList/GearList';
@@ -15,6 +8,7 @@ import useTheme from '../../hooks/useTheme';
 import { useCreateTripForm } from 'app/hooks/trips/useCreateTripForm';
 import { useTripsData } from './useTripsData';
 import Layout from 'app/components/layout/Layout';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 import { TripMapCard, TripSearchCard } from 'app/components/trip/TripCards';
 import { WeatherData } from 'app/components/weather/WeatherData';
@@ -33,6 +27,8 @@ function Trips() {
   const placesAutoCompleteRef = useRef({});
   const [isChangePlaceMode, setIsChangePlaceMode] = useState(false);
   const { gtSm } = useResponsive();
+
+  const { currentTheme } = useTheme();
   const {
     currentDestination,
     photonDetails,
@@ -84,6 +80,7 @@ function Trips() {
             <RSecondaryButton
               icon={<MapPin />}
               size={36}
+              borderWidth={2}
               onPress={() => setIsChangePlaceMode(true)}
               label="Change Direction"
             />
