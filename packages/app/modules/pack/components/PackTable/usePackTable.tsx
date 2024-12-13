@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { convertWeight } from 'app/utils/convertWeight';
 import { useAuthUser } from 'app/modules/auth';
 import { useDuplicatePackItem } from '../../hooks/useDuplicatePackItem';
-import { useItemWeightUnit, ItemCategoryEnum } from 'app/modules/item';
-import { SMALLEST_ITEM_UNIT } from 'app/modules/item/constants';
+import { useItemWeightUnit } from 'app/modules/item';
 
 export const usePackTable = ({ currentPack, copy }) => {
   const user = useAuthUser();
@@ -29,9 +27,6 @@ export const usePackTable = ({ currentPack, copy }) => {
   };
 
   const data = currentPack?.items;
-  let totalFoodWeight = 0;
-  let totalWaterWeight = 0;
-  let totalBaseWeight = 0;
   const isLoading = !data;
   const error = false;
 
@@ -44,66 +39,6 @@ export const usePackTable = ({ currentPack, copy }) => {
     quantity?: number;
     unit?: string;
   }[] = [];
-  // for calculating the total.
-  /*
-      Todo better to move this all inside a utility function and pass them variables
-      */
-  data
-    ?.filter(
-      (item: {
-        id: string;
-        category?: { name: string };
-        weight?: number;
-        quantity?: number;
-        unit?: string;
-      }) => !checkedItems.includes(item.id),
-    )
-    .forEach(
-      (item: {
-        id: string;
-        category?: { name: string };
-        weight?: number;
-        quantity?: number;
-        unit?: string;
-      }) => {
-        const categoryName = item.category ? item.category.name : 'Undefined';
-        const itemWeight = Number(item.weight) || 0; // ensure it's a number
-        const itemQuantity = Number(item.quantity) || 0; // ensure it's a number
-        const itemUnit = item.unit || null;
-        if (!copy) {
-          switch (categoryName) {
-            case ItemCategoryEnum.ESSENTIALS: {
-              totalBaseWeight += convertWeight(
-                itemWeight * itemQuantity,
-                SMALLEST_ITEM_UNIT,
-                weightUnit,
-              );
-              break;
-            }
-            case ItemCategoryEnum.FOOD: {
-              totalFoodWeight += convertWeight(
-                itemWeight * itemQuantity,
-                SMALLEST_ITEM_UNIT,
-                weightUnit,
-              );
-              foodItems.push(item);
-              break;
-            }
-            case ItemCategoryEnum.WATER: {
-              totalWaterWeight += convertWeight(
-                itemWeight * itemQuantity,
-                SMALLEST_ITEM_UNIT,
-                weightUnit,
-              );
-              waterItem = item;
-              break;
-            }
-          }
-        }
-      },
-    );
-
-  const totalWeight = totalBaseWeight + totalWaterWeight + totalFoodWeight;
 
   const handleCheckboxChange = (itemId: string) => {
     setCheckedItems((prev: string[]) =>
@@ -133,12 +68,8 @@ export const usePackTable = ({ currentPack, copy }) => {
     isLoading,
     error,
     data,
-    totalFoodWeight,
-    totalWaterWeight,
-    totalBaseWeight,
     waterItem,
     foodItems,
-    totalWeight,
     handleCheckboxChange,
     groupedData,
   };

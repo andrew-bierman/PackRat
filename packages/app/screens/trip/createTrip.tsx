@@ -89,7 +89,7 @@ function Trips() {
             />
           </XStack>
           <RStack style={{ flexDirection: gtSm ? 'row' : 'column', gap: 16 }}>
-            <View style={{ width: gtSm ? 416 : '100%' }}>
+            <View style={{ width: gtSm ? 450 : '100%' }}>
               <FlatList
                 data={flatListData}
                 keyExtractor={keyExtractor}

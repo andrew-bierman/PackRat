@@ -16,6 +16,7 @@ import { useSetItemQuantity } from 'app/modules/item';
 import { useDeletePackItem } from 'app/modules/pack/hooks';
 import { useOfflineStore } from 'app/atoms';
 import { LayoutCard } from 'app/components/LayoutCard';
+import { PackSummary } from './PackSummary';
 
 interface TableContainerProps {
   currentPack: any;
@@ -24,35 +25,27 @@ interface TableContainerProps {
   setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
   copy?: boolean;
   hasPermissions?: boolean;
+  hideSummary?: boolean;
 }
 
 export const TableContainer = ({
   currentPack,
   selectedPack,
   hasPermissions,
+  hideSummary = false,
   refetch,
   setRefetch = () => {},
   copy,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
-  const {
-    isLoading,
-    error,
-    data,
-    totalBaseWeight,
-    totalFoodWeight,
-    totalWaterWeight,
-    totalWeight,
-    weightUnit,
-    setWeightUnit,
-    handleDuplicate,
-  } = usePackTable({
-    currentPack,
-    selectedPack,
-    refetch,
-    setRefetch,
-    copy,
-  });
+  const { isLoading, error, data, weightUnit, setWeightUnit, handleDuplicate } =
+    usePackTable({
+      currentPack,
+      selectedPack,
+      refetch,
+      setRefetch,
+      copy,
+    });
   const { setItemQuantity } = useSetItemQuantity();
   const { deletePackItem } = useDeletePackItem();
   const { connectionStatus } = useOfflineStore();
@@ -165,26 +158,13 @@ export const TableContainer = ({
 
             {copy && <RButton onPress={handleDuplicate}>Copy</RButton>}
 
-            <TotalWeightBox
-              label="Base Weight"
-              weight={totalBaseWeight}
-              unit={weightUnit}
-            />
-            <TotalWeightBox
-              label="Water + Food Weight"
-              weight={totalWaterWeight + totalFoodWeight}
-              unit={weightUnit}
-            />
-            <RSeparator style={styles.separator} />
-            <TotalWeightBox
-              label="Total Weight"
-              weight={totalWeight}
-              unit={weightUnit}
-            />
-            <WeightUnitDropdown
-              value={weightUnit}
-              onChange={(itemValue: string) => setWeightUnit(itemValue as any)}
-            />
+            {!hideSummary && (
+              <PackSummary
+                currentPack={currentPack}
+                weightUnit={weightUnit}
+                setWeightUnit={setWeightUnit}
+              />
+            )}
           </RStack>
         </LayoutCard>
       ) : (
@@ -223,9 +203,6 @@ const loadStyles = (theme: any) => {
       marginBottom: 20,
       marginLeft: 15,
       color: currentTheme.colors.text,
-    },
-    separator: {
-      marginVertical: 10,
     },
     noItemsText: {
       fontWeight: 'bold',

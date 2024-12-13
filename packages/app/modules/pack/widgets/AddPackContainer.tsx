@@ -2,6 +2,7 @@ import React from 'react';
 import { BaseModal, RPrimaryButton, useModal } from '@packrat/ui';
 import { AddPackForm } from '../components';
 import { queryTrpc } from 'app/trpc';
+import { Plus } from '@tamagui/lucide-icons';
 
 export const AddPackContainer = ({
   isCreatingTrip,
@@ -13,7 +14,9 @@ export const AddPackContainer = ({
   return (
     <BaseModal
       title="Add Pack"
-      triggerComponent={<RPrimaryButton label="Add" />}
+      triggerComponent={
+        <RPrimaryButton size="$1.25" label="Create" icon={<Plus />} />
+      }
       footerComponent={undefined}
     >
       <PackModalContent isCreatingTrip={isCreatingTrip} onSuccess={onSuccess} />
