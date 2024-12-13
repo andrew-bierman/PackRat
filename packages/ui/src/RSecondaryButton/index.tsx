@@ -10,14 +10,11 @@ const StyledSecondaryButton = styled(Button, {
   backgroundColor: 'transparent',
   color: '#7e7f80',
   borderWidth: 0,
-  fontWeight: 'bold',
+  fontWeight: 500,
   fontSize: 16,
-  padding: 10,
+  padding: 2,
   borderRadius: 8,
   cursor: 'pointer',
-  hoverStyle: {
-    opacity: 0.8,
-  },
 
   variants: {
     disabled: {
@@ -29,12 +26,12 @@ const StyledSecondaryButton = styled(Button, {
     },
     size: {
       sm: {
-        fontSize: 14,
+        fontSize: 12,
         paddingVertical: 8,
         paddingHorizontal: 16,
       },
       lg: {
-        fontSize: 18,
+        fontSize: 14,
         paddingVertical: 12,
         paddingHorizontal: 24,
       },
@@ -50,10 +47,12 @@ const RSecondaryButton: React.FC<RSecondaryButtonProps> = ({
   disabled,
   size,
   ...props
-}) => (
-  <StyledSecondaryButton disabled={disabled} size={size} {...props}>
-    {label}
-  </StyledSecondaryButton>
-);
+}) => {
+  return (
+    <StyledSecondaryButton disabled={disabled} size={size} {...props}>
+      {label}
+    </StyledSecondaryButton>
+  );
+};
 
 export default RSecondaryButton;

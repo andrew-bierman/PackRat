@@ -33,6 +33,8 @@ function Trips() {
   const placesAutoCompleteRef = useRef({});
   const [isChangePlaceMode, setIsChangePlaceMode] = useState(false);
   const { gtSm } = useResponsive();
+
+  const { currentTheme } = useTheme();
   const {
     currentDestination,
     photonDetails,
@@ -84,6 +86,8 @@ function Trips() {
             <RSecondaryButton
               icon={<MapPin />}
               size={36}
+              color={currentTheme.colors.text}
+              borderWidth={2}
               onPress={() => setIsChangePlaceMode(true)}
               label="Change Direction"
             />
