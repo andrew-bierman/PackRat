@@ -26,6 +26,7 @@ interface TableContainerProps {
   copy?: boolean;
   hasPermissions?: boolean;
   hideSummary?: boolean;
+  forceCardLayout?: boolean;
 }
 
 export const TableContainer = ({
@@ -36,6 +37,7 @@ export const TableContainer = ({
   refetch,
   setRefetch = () => {},
   copy,
+  forceCardLayout = false,
 }: TableContainerProps) => {
   const styles = useCustomStyles(loadStyles);
   const { isLoading, error, data, weightUnit, setWeightUnit, handleDuplicate } =
@@ -72,7 +74,7 @@ export const TableContainer = ({
         <LayoutCard style={styles.layoutContainer}>
           <RStack>
             <RText style={styles.tableTitle}>Pack Items</RText>
-            {!responsive.sm && (
+            {!responsive.sm && !forceCardLayout && (
               <RStack
                 style={{
                   width: '100%',
@@ -128,7 +130,7 @@ export const TableContainer = ({
             <YGroup alignSelf="stretch" size="$8">
               {data.map((item) => (
                 <YGroup.Item key={item.id}>
-                  {responsive.sm ? (
+                  {responsive.sm || forceCardLayout ? (
                     <ItemCard
                       item={item}
                       value={item.quantity}
@@ -187,6 +189,7 @@ const loadStyles = (theme: any) => {
     layoutContainer: {
       flexDirection: 'column',
       justifyContent: 'space-between',
+      width: '100%',
       marginTop: 0,
       flex: 1,
       padding: 10,

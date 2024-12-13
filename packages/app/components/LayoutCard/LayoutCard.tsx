@@ -13,7 +13,7 @@ export const LayoutCard: FC<LayoutCardProps> = ({
   children,
   ...props
 }) => {
-  const { currentTheme } = useTheme();
+  const { currentTheme, isDark } = useTheme();
 
   return (
     <View
@@ -22,7 +22,8 @@ export const LayoutCard: FC<LayoutCardProps> = ({
         {
           backgroundColor: currentTheme.colors.card,
           boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
-          border: '1px solid #e5e7eb',
+          borderWidth: 1,
+          borderColor: isDark ? '#424242' : '#e5e7eb',
           padding: 24,
           borderRadius: 8,
         },

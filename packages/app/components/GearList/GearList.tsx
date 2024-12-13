@@ -12,9 +12,9 @@ import { useFetchSinglePack, usePackId } from 'app/modules/pack';
 import { LayoutCard } from 'app/components/LayoutCard';
 import { TableContainerComponent } from 'app/screens/trip/TripDetailsComponents';
 import { Accordion, Paragraph, Square } from 'tamagui';
-import { ChevronDown } from 'lucide-react-native';
 import { PackSummary } from 'app/modules/pack/components/PackTable/PackSummary';
 import { type WeightUnit } from 'app/utils/convertWeight';
+import { ChevronDown } from '@tamagui/lucide-icons';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
@@ -49,7 +49,7 @@ export const GearList = () => {
             style={{ overflow: 'hidden', width: '100%' }}
             type="multiple"
           >
-            <Accordion.Item value="details">
+            <Accordion.Item value="details" style={{ width: '100%' }}>
               <Accordion.Trigger
                 style={{
                   flexDirection: 'row',
@@ -67,14 +67,19 @@ export const GearList = () => {
                   </>
                 )}
               </Accordion.Trigger>
-              <Accordion.HeightAnimator animation="quick">
+              <Accordion.HeightAnimator
+                animation="quick"
+                style={{ width: '100%' }}
+              >
                 <Accordion.Content
                   style={{
-                    padding: 20,
+                    width: '100%',
+                    flex: 1,
                   }}
                 >
                   <TableContainerComponent
                     hideSummary
+                    forceCardLayout
                     currentPack={currentPack}
                   />
                 </Accordion.Content>
