@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RStack, RText, RIconButton, RInput } from '@packrat/ui';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ItemCardProps {
   item: any;
@@ -17,16 +18,16 @@ interface ItemCardProps {
 
 export const ItemCard = ({
   item,
-  value,
-  decrease,
-  increase,
-  setValue,
-  submit,
-  hasError,
   handleDeleteItem,
+  onSubmitQuantity = () => {},
   isActionsEnabled,
 }: ItemCardProps) => {
   const { currentTheme } = useTheme();
+  const responsive = useResponsive();
+  const { value, setValue, increase, decrease, hasError, submit } =
+    useQuantityInput(item.quantity, (value: number) =>
+      onSubmitQuantity(item.id, value),
+    );
 
   return (
     <RStack
@@ -169,3 +170,45 @@ export const ItemCard = ({
     </RStack>
   );
 };
+
+const useQuantityInput = (
+  defaultValue: number,
+  onChange: (value: number) => void,
+) => {
+  const [quantity, setQuantity] = useState(0);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setQuantity(defaultValue);
+  }, [defaultValue]);
+
+  const submit = (value: number) => {
+    setQuantity(value);
+    if (!validateQuantity(value)) {
+      return setHasError(true);
+    }
+
+    setHasError(false);
+
+    onChange(value);
+  };
+
+  const increase = () => {
+    submit(quantity + 1);
+  };
+
+  const decrease = () => {
+    submit(quantity - 1);
+  };
+
+  return {
+    value: quantity,
+    setValue: setQuantity,
+    hasError,
+    increase,
+    decrease,
+    submit,
+  };
+};
+
+const validateQuantity = (quantity: number) => quantity > 0;
