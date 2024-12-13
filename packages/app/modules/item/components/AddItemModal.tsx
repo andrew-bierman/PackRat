@@ -1,7 +1,8 @@
 import React from 'react';
 import { AddItem } from './AddItem';
 import useTheme from 'app/hooks/useTheme';
-import { BaseModal, RPrimaryButton } from '@packrat/ui';
+import { BaseModal } from '@packrat/ui';
+import RPrimaryButton from 'app/components/RPrimaryButton';
 
 interface AddItemModalProps {
   currentPackId: string;

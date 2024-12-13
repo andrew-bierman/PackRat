@@ -1,8 +1,9 @@
 import React from 'react';
-import { BaseModal, RPrimaryButton, useModal } from '@packrat/ui';
+import { BaseModal, useModal } from '@packrat/ui';
 import { AddPackForm } from '../components';
 import { queryTrpc } from 'app/trpc';
 import { Plus } from '@tamagui/lucide-icons';
+import RPrimaryButton from 'app/components/RPrimaryButton';
 
 export const AddPackContainer = ({
   isCreatingTrip,
