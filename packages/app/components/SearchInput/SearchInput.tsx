@@ -1,10 +1,15 @@
-import React, { cloneElement, forwardRef, useMemo } from 'react';
+import React, {
+  cloneElement,
+  forwardRef,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Platform, type TextInput } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-
 import {
   RStack as OriginalRStack,
   RInput as OriginalRInput,
@@ -13,12 +18,14 @@ import {
   RIconButton,
 } from '@packrat/ui';
 import { View, Pressable as OriginalPressable } from 'react-native';
+import { Adapt, Popover as OriginalPopover, Button } from 'tamagui';
 
-const RStack: any = OriginalRStack;
-const RInput: any = OriginalRInput;
-const RScrollView: any = OriginalRScrollView;
-const RButton: any = OriginalRButton;
-const Pressable: any = OriginalPressable;
+const Popover = OriginalPopover;
+const RStack = OriginalRStack;
+const RInput = OriginalRInput;
+const RScrollView = OriginalRScrollView;
+const RButton = OriginalRButton;
+const Pressable = OriginalPressable;
 
 interface SearchInputProps {
   onSelect: (result: any, index: number) => void;
@@ -45,6 +52,15 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
     },
     inputRef,
   ) {
+    const inputContainerRef = useRef<HTMLDivElement | null>(null);
+    const [inputWidth, setInputWidth] = useState<number | undefined>(undefined);
+
+    useLayoutEffect(() => {
+      if (inputContainerRef.current) {
+        setInputWidth(inputContainerRef.current.offsetWidth);
+      }
+    }, [inputContainerRef.current]);
+
     const {
       handleClearSearch,
       handleSearchResultClick,
@@ -53,117 +69,92 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       isLoadingMobile,
       isVisible,
     } = useSearchInput({ onSelect, onChange, onCreate, searchString });
-    const options = useSearchOptions(results, searchString, canCreateNewItem);
 
+    const options = useSearchOptions(results, searchString, canCreateNewItem);
     const { isDark, currentTheme } = useTheme();
-    const styles = useCustomStyles(loadStyles);
 
     if (Platform.OS === 'web') {
       return (
-        <RStack style={styles.container}>
-          <RStack
-            style={{ position: 'relative', height: 'auto', width: '100%' }}
-          >
-            <RStack
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-              }}
-            >
+        <Popover size="$20" allowFlip placement="bottom" open={isVisible}>
+          <Popover.Trigger asChild>
+            <RStack ref={inputContainerRef} style={{ width: '100%' }}>
               <RInput
-                style={{ flex: 1, backgroundColor: currentTheme.colors.card }}
-                paddingLeft={35}
-                paddingRight={55}
-                placeholder={placeholder ?? 'Search'}
-                onChangeText={handleSearchChange}
-                value={searchString}
-              />
-              <MaterialIcons
-                name="search"
+                ref={inputRef}
                 style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  borderRadius: '8px',
+                  border: `1px solid ${currentTheme.colors.border}`,
+                  backgroundColor: currentTheme.colors.card,
+                  fontSize: '16px',
                   color: currentTheme.colors.text,
-                  position: 'absolute',
-                  height: '100%',
-                  alignSelf: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 40,
-                  fontSize: 20,
                 }}
+                placeholder={placeholder ?? 'Search'}
+                value={searchString}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
               {searchString && (
-                <RButton
-                  onPress={handleClearSearch}
+                <MaterialIcons
+                  name="close"
                   style={{
                     position: 'absolute',
-                    right: 1,
-                    backgroundColor: 'transparent',
+                    right: 12,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    fontSize: 20,
+                    color: currentTheme.colors.text,
+                    cursor: 'pointer',
                   }}
-                  width={10}
-                >
-                  <MaterialIcons name="close" />
-                </RButton>
+                  onClick={handleClearSearch}
+                />
               )}
             </RStack>
-
-            <RStack
+          </Popover.Trigger>
+          {showSearchResults && (
+            <Popover.Content
               style={{
-                position: 'relative',
-                display: isVisible ? 'block' : 'none',
+                borderWidth: 1,
+                borderRadius: 8,
+                padding: 8,
+                backgroundColor: isDark
+                  ? currentTheme.colors.black
+                  : currentTheme.colors.white,
+                maxHeight: 200,
+                overflowY: 'auto',
+                width: inputWidth,
               }}
             >
-              {showSearchResults && (
-                <RScrollView
-                  position="absolute"
-                  top="100%"
-                  left="0"
-                  right="0"
-                  maxHeight={200}
-                  borderWidth={1}
-                  borderRadius={12}
-                  backgroundColor={
-                    !isDark
-                      ? currentTheme.colors.white
-                      : currentTheme.colors.black
-                  }
-                  style={{
-                    borderColor: isDark ? '#F8F8F8' : '##D1D5DB',
-                  }}
-                  showsVerticalScrollIndicator={false}
-                  zIndex={20000}
-                >
-                  <View
-                    role="list"
+              <RStack
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
+                }}
+              >
+                {options.map((result, i) => (
+                  <RStack
+                    key={`result-${i}`}
+                    role="listitem"
                     style={{
-                      width: '100%',
-                      gap: 8,
+                      cursor: 'pointer',
                       padding: 8,
-                      backgroundColor: isDark
-                        ? '#1A1A1D'
-                        : currentTheme.colors.white,
+                      borderRadius: 4,
+                      backgroundColor: result.isDisabled
+                        ? 'transparent'
+                        : currentTheme.colors.card,
                     }}
+                    onClick={() =>
+                      !result.isDisabled && handleSearchResultClick(result)
+                    }
                   >
-                    {options.map((result, i) => (
-                      <RStack
-                        key={`result + ${i}`}
-                        role="listitem"
-                        onPress={() =>
-                          !result.isDisabled && handleSearchResultClick(result)
-                        }
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {cloneElement(ResultItemComponent, { item: result })}
-                      </RStack>
-                    ))}
-                  </View>
-                </RScrollView>
-              )}
-            </RStack>
-          </RStack>
-        </RStack>
+                    {cloneElement(ResultItemComponent, { item: result })}
+                  </RStack>
+                ))}
+              </RStack>
+            </Popover.Content>
+          )}
+        </Popover>
       );
     } else {
       return (
@@ -262,13 +253,8 @@ const useSearchOptions = (
   canCreateNewItem: boolean,
 ) => {
   return useMemo(() => {
-    if (!Array.isArray(results)) {
-      return [];
-    }
-
-    if (!canCreateNewItem) {
-      return results;
-    }
+    if (!Array.isArray(results)) return [];
+    if (!canCreateNewItem) return results;
 
     const hasExactMatch = results.some(
       (result) => result.name.toLowerCase() === searchString?.toLowerCase(),
@@ -286,12 +272,3 @@ const useSearchOptions = (
         ];
   }, [results]);
 };
-
-const loadStyles = () => ({
-  container: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
