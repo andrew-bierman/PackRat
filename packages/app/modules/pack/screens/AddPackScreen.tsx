@@ -39,6 +39,7 @@ export const AddPackScreen = ({
         style={{
           width: '100%',
           maxWidth: 440,
+          margin: 'auto',
         }}
       >
         <View style={{ padding: 24 }}>
@@ -54,8 +55,9 @@ export const AddPackScreen = ({
               jc="space-between"
               style={{
                 width: '100%',
-                backgroundColor: theme.currentTheme.colors.textSecondary,
                 alignItems: 'center',
+                borderColor: 'ActiveBorder',
+                borderWidth: 1,
                 borderRadius: 8,
                 padding: 12,
               }}

@@ -4,8 +4,9 @@ import { TripActivity } from './enums';
 const tripActivityValues = Object.values(TripActivity) as [string, ...string[]];
 
 export const addTripForm = z.object({
-  name: z.string().nonempty(),
-  description: z.string().nonempty(),
+  name: z.string(),
+  description: z.string(),
+  activity: z.enum(tripActivityValues),
   is_public: z.union([z.literal('0'), z.literal('1')]),
 });
 
@@ -64,11 +65,12 @@ export const addTrip = addTripDetails.merge(addTripForm);
 export const editTrip = z.object({
   id: z.string(),
   name: z.string().optional(),
-  duration: z.string().optional(),
+  description: z.string().optional(),
+  activity: z.enum(tripActivityValues).optional(),
   start_date: z.string().optional(),
   end_date: z.string().optional(),
   destination: z.string().optional(),
-  is_public: z.boolean().optional(),
+  is_public: z.union([z.literal('0'), z.literal('1')]),
 });
 
 export const deleteTrip = z.object({

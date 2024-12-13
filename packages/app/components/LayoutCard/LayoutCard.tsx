@@ -1,10 +1,18 @@
-import React, { type FC } from 'react';
+import React, { type ReactNode, type FC } from 'react';
 import { View, type ViewProps } from 'tamagui';
 import useTheme from 'app/hooks/useTheme';
+import { RText } from '@packrat/ui';
 
-interface LayoutCardProps extends ViewProps {}
+interface LayoutCardProps extends ViewProps {
+  title?: ReactNode;
+}
 
-export const LayoutCard: FC<LayoutCardProps> = ({ style, ...props }) => {
+export const LayoutCard: FC<LayoutCardProps> = ({
+  style,
+  title,
+  children,
+  ...props
+}) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -20,6 +28,13 @@ export const LayoutCard: FC<LayoutCardProps> = ({ style, ...props }) => {
         },
         style,
       ]}
-    />
+    >
+      {title && (
+        <RText style={{ fontWeight: 600, fontSize: 24, marginBottom: 24 }}>
+          {title}
+        </RText>
+      )}
+      {children}
+    </View>
   );
 };

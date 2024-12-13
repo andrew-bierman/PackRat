@@ -63,15 +63,6 @@ export default function PackContainer() {
           {currentPack?.name}
         </RListItem>
       ) : null}
-      {currentPack ? (
-        <RStack
-          style={{
-            flex: 1,
-          }}
-        >
-          <TableContainerComponent currentPack={currentPack} />
-        </RStack>
-      ) : null}
     </View>
   );
 }
@@ -80,8 +71,6 @@ const loadStyles = () => ({
   mainContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 35,
     width: '100%',
-    padding: 20,
   },
 });

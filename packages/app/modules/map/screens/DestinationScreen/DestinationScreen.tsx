@@ -112,47 +112,43 @@ export const DestinationScreen = () => {
 
   return (
     <Layout>
-      <View style={styles.container}>
-        <ScrollView contentContainerStyle={{ width: '100%' }}>
-          <View style={{ padding: 2 }}>
-            {Platform.OS === 'web' ? (
-              <PlacesAutocomplete
-                onSelect={handleSearchSelect}
-                placeholder={'Search by park, city, or trail'}
-              />
-            ) : (
-              <DestinationSearchMobile />
-            )}
-          </View>
-          <RStack
+      <View style={{ padding: 2 }}>
+        {Platform.OS === 'web' ? (
+          <PlacesAutocomplete
+            onSelect={handleSearchSelect}
+            placeholder={'Search by park, city, or trail'}
+          />
+        ) : (
+          <DestinationSearchMobile />
+        )}
+      </View>
+      <RStack
+        style={{
+          gap: 24,
+          marginTop: 16,
+          flexDirection: gtSm ? 'row' : 'column',
+          position: 'relative',
+        }}
+      >
+        <AsyncView
+          isError={isMapError}
+          errorComponentProps={{
+            message: 'Failed to fetch map polygon',
+          }}
+          isLoading={isMapLoading}
+        >
+          <View
             style={{
-              gap: 24,
-              marginTop: 16,
-              flexDirection: gtSm ? 'row' : 'column',
-              position: 'relative',
+              flex: gtSm ? 1 : undefined,
+              width: gtSm ? 'auto' : '100%',
+              height: Platform.OS === 'web' ? 'auto' : 300,
             }}
           >
-            <AsyncView
-              isError={isMapError}
-              errorComponentProps={{
-                message: 'Failed to fetch map polygon',
-              }}
-              isLoading={isMapLoading}
-            >
-              <View
-                style={{
-                  flex: gtSm ? 1 : undefined,
-                  width: gtSm ? 'auto' : '100%',
-                  height: Platform.OS === 'web' ? 'auto' : 300,
-                }}
-              >
-                <Map shape={shape} />
-              </View>
-            </AsyncView>
-            <View style={{ width: gtSm ? 350 : '100%' }}>{detailsSection}</View>
-          </RStack>
-        </ScrollView>
-      </View>
+            <Map shape={shape} />
+          </View>
+        </AsyncView>
+        <View style={{ width: gtSm ? 350 : '100%' }}>{detailsSection}</View>
+      </RStack>
     </Layout>
   );
 };
@@ -160,11 +156,6 @@ export const DestinationScreen = () => {
 const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
-    container: {
-      width: '100%',
-      maxWidth: 1440,
-      padding: 16,
-    },
     headerContainer: {
       alignSelf: 'center',
       width: '90%',

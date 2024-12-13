@@ -19,7 +19,6 @@ const TableContainerComponent = ({ currentPack }) => {
 
   return (
     <View>
-      <TableContainer currentPack={data} />
       <AddItemModal
         currentPackId={currentPack.id || ''}
         currentPack={currentPack}
@@ -28,6 +27,7 @@ const TableContainerComponent = ({ currentPack }) => {
         // refetch={refetch}
         setRefetch={() => setRefetch((prev) => !prev)}
       />
+      <TableContainer currentPack={data} />
     </View>
   );
 };
