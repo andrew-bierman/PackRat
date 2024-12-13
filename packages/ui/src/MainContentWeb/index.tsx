@@ -10,5 +10,10 @@ interface ExtendedViewProps extends ViewProps {
 export const MainContentWeb: React.FC<ExtendedViewProps> = (props) => {
   const backgroundColor = props.isDark ? '#000000' : '#F5F5F5';
 
-  return <View style={{ backgroundColor, paddingTop: 80 }} {...props} />;
+  return (
+    <View
+      style={{ backgroundColor, paddingTop: 80, minHeight: '100vh' }}
+      {...props}
+    />
+  );
 };

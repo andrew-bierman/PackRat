@@ -13,13 +13,16 @@ export const useTripsData = () => {
   const {
     data: photonDetails,
     isError: hasPhotonError,
-    isLoading: isPhotonLoading,
-  } = useGetPhotonDetails({
-    properties: {
-      osm_id: osm?.osmId ?? '',
-      osm_type: osm?.osmType ?? '',
+    isFetching: isPhotonLoading,
+  } = useGetPhotonDetails(
+    {
+      properties: {
+        osm_id: osm?.osmId ?? '',
+        osm_type: osm?.osmType ?? '',
+      },
     },
-  });
+    false,
+  );
 
   const {
     error: parksError,

@@ -16,7 +16,7 @@ const StyledSecondaryButton = styled(Button, {
   borderRadius: 8,
   cursor: 'pointer',
   hoverStyle: {
-    backgroundColor: 'transparent',
+    opacity: 0.8,
   },
 
   variants: {

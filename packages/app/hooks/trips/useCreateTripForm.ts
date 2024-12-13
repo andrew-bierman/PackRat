@@ -44,11 +44,17 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
     validate(createTripFormValues);
   }, [createTripFormValues, validate]);
 
+  const dateRange = {
+    start_date: createTripFormValues.start_date,
+    end_date: createTripFormValues.end_date,
+  };
+
   return {
     tripStore: createTripFormValues,
     isValid,
     togglePlace,
     setTripValue,
+    dateRange,
     setDateRange,
   };
 };

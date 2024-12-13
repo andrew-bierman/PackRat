@@ -1,6 +1,12 @@
 import useTheme from 'app/hooks/useTheme';
 import React from 'react';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 
 const Layout = ({
   children,
@@ -30,7 +36,11 @@ const Layout = ({
         customStyle,
       ]}
     >
-      {children}
+      <View style={{ width: '100%' }}>
+        <ScrollView contentContainerStyle={{ width: '100%' }}>
+          {children}
+        </ScrollView>
+      </View>
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseModal, useModal } from '@packrat/ui';
+import { BaseModal, RPrimaryButton, useModal } from '@packrat/ui';
 import { AddPackForm } from '../components';
 import { queryTrpc } from 'app/trpc';
 
@@ -11,7 +11,11 @@ export const AddPackContainer = ({
   onSuccess?: (packId: string) => void;
 }) => {
   return (
-    <BaseModal title="Add Pack" trigger="Add Pack" footerComponent={undefined}>
+    <BaseModal
+      title="Add Pack"
+      triggerComponent={<RPrimaryButton label="Add" />}
+      footerComponent={undefined}
+    >
       <PackModalContent isCreatingTrip={isCreatingTrip} onSuccess={onSuccess} />
     </BaseModal>
   );
