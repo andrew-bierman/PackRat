@@ -70,28 +70,20 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
     searchQuery,
   });
 
-  // Refresh data
   const onRefresh = () => {
     setRefreshing(true);
-    refetch && refetch(); // Ensure refetch is defined
+    refetch && refetch();
     setRefreshing(false);
   };
 
-  const handleTogglePack = () => {
-    setSelectedTypes((prevState) => ({
-      ...prevState,
-      pack: !prevState.pack,
-    }));
+  const handleTypeChange = (value: string) => {
+    setSelectedTypes({
+      pack: value === 'Packs',
+      trip: value === 'Trips',
+    });
   };
 
-  const handleToggleTrip = () => {
-    setSelectedTypes((prevState) => ({
-      ...prevState,
-      trip: !prevState.trip,
-    }));
-  };
-
-  const handleSortChange = (value) => {
+  const handleSortChange = (value: string) => {
     setQueryString(value);
   };
 
@@ -108,8 +100,7 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
             <FeedSearchFilter
               feedType={feedType}
               handleSortChange={handleSortChange}
-              handleTogglePack={handleTogglePack}
-              handleToggleTrip={handleToggleTrip}
+              handleTypeChange={handleTypeChange}
               selectedTypes={selectedTypes}
               queryString={queryString}
               setSearchQuery={setSearchQuery}
