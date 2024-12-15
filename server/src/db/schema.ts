@@ -252,9 +252,9 @@ export const item = sqliteTable(ITEM_TABLE_NAME, {
   sku: text('sku'),
   productUrl: text('product_url'),
   description: text('description'),
-  productDetails: text('product_details', { mode: 'json' }).$type<{
-    [key: string]: string | number | boolean | null;
-  }>(),
+  productDetails: text('product_details', { mode: 'json' }).$type<
+    Record<string, string | number | boolean | null>
+  >(),
   seller: text('seller'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
