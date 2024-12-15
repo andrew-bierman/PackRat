@@ -23,6 +23,6 @@ export async function getPackTemplatesService(
   return {
     data,
     totalCount,
-    ...getPaginationResponse(pagination, totalCount as number),
+    ...getPaginationResponse(pagination, totalCount),
   };
 }

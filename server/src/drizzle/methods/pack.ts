@@ -180,8 +180,8 @@ export class Pack {
         ...(modifiedFilter && { where: modifiedFilter }),
         orderBy: orderByFunction,
         ...(includeRelated ? relations : {}),
-        offset: offset,
-        limit: limit,
+        offset,
+        limit,
       });
 
       return (await packs).map((pack: any) => ({
