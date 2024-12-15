@@ -4,9 +4,9 @@ import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
 import { packTemplate, item, itemPackTemplates } from 'src/db/schema';
 import { PaginationParams } from 'src/helpers/pagination';
 
-export type Filter = {
+export interface Filter {
   searchQuery?: string;
-};
+}
 
 export type ORDER_BY = 'Lightest' | 'Heaviest';
 
