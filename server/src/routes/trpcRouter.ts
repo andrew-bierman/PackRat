@@ -106,6 +106,8 @@ import {
   getPackTemplatesRoute,
   getPackTemplateRoute,
   createPackFromTemplateRoute,
+  addPackTemplateRoute,
+  importPackTemplatesRoute,
 } from '../controllers/packTemplates';
 
 import { router as trpcRouter } from '../trpc';
@@ -149,6 +151,8 @@ export const appRouter = trpcRouter({
   getPackTemplates: getPackTemplatesRoute(),
   getPackTemplate: getPackTemplateRoute(),
   createPackFromTemplate: createPackFromTemplateRoute(),
+  addPackTemplate: addPackTemplateRoute(),
+  addPackTemplates: importPackTemplatesRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),

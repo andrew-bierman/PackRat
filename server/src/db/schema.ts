@@ -182,10 +182,10 @@ export const packTemplate = sqliteTable('pack_template', {
 });
 
 export const packTemplateRelations = relations(packTemplate, ({ many }) => ({
-  itemPackTemplates: many(itemPackTemplates),
+  itemPackTemplates: many(itemPackTemplate),
 }));
 
-export const itemPackTemplates = sqliteTable(
+export const itemPackTemplate = sqliteTable(
   'item_pack_templates',
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
@@ -205,14 +205,14 @@ export const itemPackTemplates = sqliteTable(
 );
 
 export const itemPackTemplatesRelations = relations(
-  itemPackTemplates,
+  itemPackTemplate,
   ({ one }) => ({
     packTemplate: one(packTemplate, {
-      fields: [itemPackTemplates.packTemplateId],
+      fields: [itemPackTemplate.packTemplateId],
       references: [packTemplate.id],
     }),
     item: one(item, {
-      fields: [itemPackTemplates.itemId],
+      fields: [itemPackTemplate.itemId],
       references: [item.id],
     }),
   }),
@@ -369,6 +369,7 @@ export const itemRelations = relations(item, ({ one, many }) => ({
   images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
+  itemPackTemplates: many(itemPackTemplate),
 }));
 
 export const template = sqliteTable('template', {
@@ -611,7 +612,11 @@ export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
 
 export type PackTemplate = InferSelectModel<typeof packTemplate>;
+export type InsertPackTemplate = InferInsertModel<typeof packTemplate>;
 export const selectPackTemplateSchema = createSelectSchema(packTemplate);
+
+export type ItemPackTemplate = InferSelectModel<typeof itemPackTemplate>;
+export type InsertItemPackTemplate = InferInsertModel<typeof itemPackTemplate>;
 
 export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;
