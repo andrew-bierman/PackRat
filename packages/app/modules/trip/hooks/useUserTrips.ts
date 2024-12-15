@@ -8,7 +8,7 @@ import {
   type PreviewResourceStateWithData,
   usePreviewResourceState,
 } from 'app/hooks/common';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const useUserTrips = (
   ownerId: string | undefined,
@@ -20,23 +20,24 @@ export const useUserTrips = (
   );
   const enabled = queryEnabled && !!ownerId;
   const { searchTerm, isPublic, isPreview } = params || {};
+  const queryParams = useMemo(
+    () => ({
+      ownerId,
+      searchTerm,
+      queryBy: 'Most Recent',
+      pagination,
+      isPublic,
+      isPreview,
+    }),
+    [isPublic, isPreview, searchTerm, pagination, ownerId],
+  );
 
   // Leverage the query hook provided by tRPC
   const { data, error, isLoading, refetch } =
-    queryTrpc.getUserTripsFeed.useQuery(
-      {
-        ownerId,
-        searchTerm,
-        queryBy: 'Most Recent',
-        pagination,
-        isPublic,
-        isPreview,
-      },
-      {
-        enabled, // This query will run only if 'enabled' is true.
-        refetchOnWindowFocus: false,
-      },
-    );
+    queryTrpc.getUserTripsFeed.useQuery(queryParams, {
+      enabled, // This query will run only if 'enabled' is true.
+      refetchOnWindowFocus: false,
+    });
 
   const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
@@ -77,12 +78,13 @@ interface FetchUserTripsPreviewReturn extends PreviewResourceStateWithData {
 export const useUserTripsWithPreview = (
   userId: string,
   searchTerm: string,
+  isPublic?: boolean,
 ): FetchUserTripsPreviewReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
   const { data: previewData, isLoading: isPreviewLoading } = useUserTrips(
     userId,
-    { isPublic: true, searchTerm },
+    { isPublic, isPreview: true, searchTerm },
     true,
   );
 
@@ -96,14 +98,11 @@ export const useUserTripsWithPreview = (
     totalPages,
     hasPrevPage,
     hasNextPage,
-  } = useUserTrips(
-    userId,
-    { isPublic: true, searchTerm: '' },
-    isAllQueryEnabled,
-  );
+  } = useUserTrips(userId, { isPublic, searchTerm: '' }, isAllQueryEnabled);
 
   return {
     ...previewResourceState,
+    resourceName: 'Trips',
     isAllQueryEnabled,
     previewData,
     isPreviewLoading,
