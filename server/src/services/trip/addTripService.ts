@@ -24,9 +24,12 @@ export const addTripService = async (
       end_date: tripData.end_date,
       activity: tripData.activity,
       owner_id: tripData.ownerId,
-      is_public: false,
+      is_public: tripData.is_public === '0',
       trails: tripData.trails ? JSON.parse(tripData.trails) : null,
       parks: tripData.parks ? JSON.parse(tripData.parks) : null,
+      ...(tripData.bounds && {
+        bounds: [tripData.bounds[0], tripData.bounds[1]],
+      }),
     });
 
     await scoreTripService(newTrip.id);

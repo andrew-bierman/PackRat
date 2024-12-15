@@ -22,6 +22,9 @@ export const editTripService = async (
         ? JSON.parse(tripData.trails)
         : selectedTrip.trails,
       parks: tripData.parks ? JSON.parse(tripData.parks) : selectedTrip.parks,
+      ...(tripData.bounds && {
+        bounds: [tripData.bounds[0], tripData.bounds[1]],
+      }),
     });
 
     await scoreTripService(selectedTrip.id);

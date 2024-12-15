@@ -7,7 +7,7 @@ export const addTripForm = z.object({
   name: z.string(),
   description: z.string().optional().nullable(),
   activity: z.enum(tripActivityValues).optional(),
-  is_public: z.union([z.literal('0'), z.literal('1')]),
+  is_public: z.union([z.literal('0'), z.literal('1')]).optional(),
 });
 
 const coordinateSchema = z.lazy(() =>
@@ -47,31 +47,31 @@ export const getTripById = z.object({
 });
 
 export const addTripDetails = z.object({
-  start_date: z.string(),
-  end_date: z.string(),
   activity: z.enum(tripActivityValues).optional(),
-  parks: z.string().optional(),
-  trails: z.string().optional(),
-  packId: z.string(),
+  bounds: z.tuple([z.array(z.number()), z.array(z.number())]).optional(),
+  end_date: z.string(),
   geoJSON: z.string(),
+  packId: z.string(),
+  parks: z.string().optional(),
+  start_date: z.string(),
+  trails: z.string().optional(),
 });
 
-export const addTrip = addTripDetails.merge(addTripForm).omit({
-  is_public: true,
-});
+export const addTrip = addTripDetails.merge(addTripForm);
 export type AddTripType = z.infer<typeof addTrip>;
 
 export const editTrip = z.object({
-  id: z.string().min(1),
-  name: z.string().optional(),
+  activity: z.enum(tripActivityValues).optional(),
+  bounds: z.array(z.array(z.number())).length(2).optional(),
   description: z.string().optional(),
-  start_date: z.string().optional(),
   end_date: z.string().optional(),
+  geoJSON: z.string().optional(),
+  name: z.string().optional(),
   packId: z.string().optional(),
   parks: z.string().optional(),
+  start_date: z.string().optional(),
   trails: z.string().optional(),
-  activity: z.enum(tripActivityValues).optional(),
-  geoJSON: z.string().optional(),
+  id: z.string().min(1),
 });
 
 export type EditTripType = z.infer<typeof editTrip>;
