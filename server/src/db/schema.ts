@@ -419,7 +419,9 @@ export const trip = sqliteTable('trip', {
   pack_id: text('packs_id').references(() => pack.id, {
     onDelete: 'set null',
   }),
-  is_public: integer('is_public', { mode: 'boolean' }),
+  is_public: text('is_public', { enum: ['0', '1'] })
+    .default('0')
+    .$type<'0' | '1'>(),
   activity: text('activity').default('trip'),
   bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
   type: text('type').default('trip'),
