@@ -403,7 +403,8 @@ export const trip = sqliteTable('trip', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
-  description: text('description').notNull(),
+  description: text('description'),
+  // destination: text('destination').notNull(),
   parks: text('parks', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
@@ -412,7 +413,6 @@ export const trip = sqliteTable('trip', {
   >(),
   start_date: text('start_date').notNull(),
   end_date: text('end_date').notNull(),
-  destination: text('destination').notNull(),
   owner_id: text('owner_id').references(() => user.id, {
     onDelete: 'cascade',
   }),

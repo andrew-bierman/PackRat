@@ -1,6 +1,10 @@
 import { eq } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
-import { type InsertTrip, trip as TripTable } from '../../db/schema';
+import {
+  type InsertTrip,
+  type Trip as SelectTrip,
+  trip as TripTable,
+} from '../../db/schema';
 
 export class Trip {
   async update(trip: Partial<InsertTrip>) {
@@ -48,7 +52,7 @@ export class Trip {
 
   async findById(id: string) {
     try {
-      const trip = await DbClient.instance.query.trip.findFirst({
+      return DbClient.instance.query.trip.findFirst({
         where: eq(TripTable.id, id),
         with: {
           owner: {
@@ -59,27 +63,27 @@ export class Trip {
           },
           packs: {
             columns: { id: true, name: true },
-            with: {
-              itemPacks: {
-                columns: { packId: true },
-                with: {
-                  item: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      weight: true,
-                      quantity: true,
-                      unit: true,
-                    },
-                    with: {
-                      category: {
-                        columns: { id: true, name: true },
-                      },
-                    },
-                  },
-                },
-              },
-            },
+            //     with: {
+            //       itemPacks: {
+            //         columns: { packId: true },
+            //         with: {
+            //           item: {
+            //             columns: {
+            //               id: true,
+            //               name: true,
+            //               weight: true,
+            //               quantity: true,
+            //               unit: true,
+            //             },
+            //             with: {
+            //               category: {
+            //                 columns: { id: true, name: true },
+            //               },
+            //             },
+            //           },
+            //         },
+            //       },
+            // },
           },
           tripGeojsons: {
             columns: {},
@@ -89,7 +93,6 @@ export class Trip {
           },
         },
       });
-      return trip;
     } catch (error) {
       throw new Error(`Failed to find trip by id: ${error.message}`);
     }

@@ -29,6 +29,7 @@ import {
   getPublicTripsRoute,
   getTripByIdRoute,
   getTripsRoute,
+  setTripVisibilityRoute,
 } from '../controllers/trip';
 import {
   addTemplateRoute,
@@ -111,6 +112,7 @@ import {
 import { router as trpcRouter } from '../trpc';
 
 import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
+import { setTripVisibility } from '@packrat/validations';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -144,6 +146,7 @@ export const appRouter = trpcRouter({
   getTripById: getTripByIdRoute(),
   addTrip: addTripRoute(),
   editTrip: editTripRoute(),
+  setTripVisibility: setTripVisibilityRoute(),
   deleteTrip: deleteTripRoute(),
   // templates routes
   getPackTemplates: getPackTemplatesRoute(),
