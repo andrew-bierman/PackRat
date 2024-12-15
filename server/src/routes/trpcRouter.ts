@@ -106,11 +106,11 @@ import {
   getPackTemplatesRoute,
   getPackTemplateRoute,
   createPackFromTemplateRoute,
+  addPackTemplateRoute,
+  importPackTemplatesRoute,
 } from '../controllers/packTemplates';
 
 import { router as trpcRouter } from '../trpc';
-
-import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 
 import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 
@@ -151,6 +151,8 @@ export const appRouter = trpcRouter({
   getPackTemplates: getPackTemplatesRoute(),
   getPackTemplate: getPackTemplateRoute(),
   createPackFromTemplate: createPackFromTemplateRoute(),
+  addPackTemplate: addPackTemplateRoute(),
+  addPackTemplates: importPackTemplatesRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),
