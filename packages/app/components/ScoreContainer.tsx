@@ -21,7 +21,7 @@ interface ScoreProgressChartProps {
 
 const ScoreProgressChart: React.FC<ScoreProgressChartProps> = ({
   score,
-  size = 120,
+  size = 150,
   strokeWidth = 10,
 }) => {
   if (!score) return null;
@@ -81,7 +81,7 @@ interface GradingPieChartProps {
 }
 const GradingPieChart: React.FC<GradingPieChartProps> = ({
   scores,
-  size = 120,
+  size = 150,
   strokeWidth = 10,
 }) => {
   if (!scores) return null;
@@ -107,7 +107,7 @@ const GradingPieChart: React.FC<GradingPieChartProps> = ({
   return (
     <RStack style={styles.container}>
       <RStack style={styles.graphWrapper}>
-        <Svg height="120" width="120" viewBox="0 0 180 180">
+        <Svg height="150" width="150" viewBox="0 0 180 180">
           {total === 0 ? (
             <Circle
               cx="50%"
@@ -217,7 +217,10 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
             style={{
               flex: 1,
               flexDirection: media.gtXs ? 'column' : 'row',
-              gap: 15,
+              flexWrap: 'wrap',
+              gap: 30,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <ScoreProgressChart score={totalScore} />
