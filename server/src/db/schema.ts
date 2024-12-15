@@ -404,7 +404,6 @@ export const trip = sqliteTable('trip', {
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   description: text('description'),
-  // destination: text('destination').notNull(),
   parks: text('parks', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
@@ -462,7 +461,6 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
     fields: [trip.pack_id],
     references: [pack.id],
   }),
-  // geojsons: many(tripGeojsons),
   tripGeojsons: many(tripGeojsons),
 }));
 
