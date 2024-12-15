@@ -21,9 +21,7 @@ export const bulkAddItemsGlobalService = async (
     sku?: string;
     productUrl?: string;
     description?: string;
-    productDetails?: {
-      [key: string]: string | number | boolean | null;
-    };
+    productDetails?: Record<string, string | number | boolean | null>;
     seller?: string;
   }>,
   executionCtx: ExecutionContext,

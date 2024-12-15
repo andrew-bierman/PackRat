@@ -47,7 +47,7 @@ router.get(
 );
 
 router.get(
-  '/importNotifiedETL',  
+  '/importNotifiedETL',
   // authTokenMiddleware,
   // zodParser(validator.importNotifiedETL, 'query'),
   tryCatchWrapper(importNotifiedETL),
