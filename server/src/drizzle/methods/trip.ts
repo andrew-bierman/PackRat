@@ -7,7 +7,7 @@ import {
 } from '../../db/schema';
 
 export class Trip {
-  async update(trip: Partial<InsertTrip>) {
+  async update(trip: InsertTrip) {
     try {
       if (!trip.id) {
         throw new Error('Trip id is required for update operation');

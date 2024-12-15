@@ -51,7 +51,7 @@ export const addTripDetails = z.object({
   bounds: z.tuple([z.array(z.number()), z.array(z.number())]).optional(),
   end_date: z.string(),
   geoJSON: z.string(),
-  packId: z.string(),
+  pack_id: z.string(),
   parks: z.string().optional(),
   start_date: z.string(),
   trails: z.string().optional(),
@@ -60,19 +60,11 @@ export const addTripDetails = z.object({
 export const addTrip = addTripDetails.merge(addTripForm);
 export type AddTripType = z.infer<typeof addTrip>;
 
-export const editTrip = z.object({
-  activity: z.enum(tripActivityValues).optional(),
-  bounds: z.array(z.array(z.number())).length(2).optional(),
-  description: z.string().optional(),
-  end_date: z.string().optional(),
-  geoJSON: z.string().optional(),
-  name: z.string().optional(),
-  packId: z.string().optional(),
-  parks: z.string().optional(),
-  start_date: z.string().optional(),
-  trails: z.string().optional(),
-  id: z.string().min(1),
-});
+export const editTrip = addTrip.merge(
+  z.object({
+    id: z.string().min(1),
+  }),
+);
 
 export type EditTripType = z.infer<typeof editTrip>;
 

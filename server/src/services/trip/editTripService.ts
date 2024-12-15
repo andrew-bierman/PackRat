@@ -18,6 +18,7 @@ export const editTripService = async (
       start_date: tripData.start_date || selectedTrip.start_date,
       end_date: tripData.end_date || selectedTrip.end_date,
       activity: tripData.activity || selectedTrip.activity,
+      pack_id: tripData.pack_id || selectedTrip.pack_id,
       trails: tripData.trails
         ? JSON.parse(tripData.trails)
         : selectedTrip.trails,
