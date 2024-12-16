@@ -10,6 +10,7 @@ import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
 import useResponsive from 'app/hooks/useResponsive';
 import { useScreenWidth } from 'app/hooks/common';
 import { ArrowLeft } from '@tamagui/lucide-icons';
+import { useTripOSM } from 'app/screens/trip/useTripOSM';
 
 interface TripSearchCardProps {
   searchRef: any;
@@ -24,10 +25,10 @@ export const TripSearchCard = ({
   onGoBack,
   onLocationSelect,
 }: TripSearchCardProps) => {
-  const [, setGEOLocation] = useGEOLocationSearch();
+  const [, setTripOSM] = useTripOSM();
 
   const handleSelectLocation = (geoJSON) => {
-    setGEOLocation(geoJSON);
+    setTripOSM(geoJSON);
     onLocationSelect();
   };
 

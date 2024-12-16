@@ -1,7 +1,6 @@
 import React from 'react';
-import PackContainer from 'app/components/pack/PackContainer';
-import { TripDetails } from 'app/screens/trip/TripDetails';
-import { DetailsComponent } from 'app/components/details';
+import EditTripScreen from 'app/screens/trip/editTrip';
+
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
@@ -24,7 +23,7 @@ export default function Trip() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <TripDetails />
+      <EditTripScreen />
     </>
   );
 }
