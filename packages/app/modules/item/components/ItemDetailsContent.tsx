@@ -7,6 +7,7 @@ import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
 import { openExternalLink } from 'app/utils';
+import RPrimaryButton from 'app/components/RPrimaryButton';
 
 interface ItemData {
   title: string;
@@ -62,14 +63,12 @@ const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
             Seller: {itemData.seller}
           </RText>
         </RStack>
-        <TouchableOpacity
+        <RPrimaryButton
           onPress={() => {
             openExternalLink(itemData.productUrl);
           }}
-          style={styles.GoToStoreButton}
-        >
-          <RText style={styles.buttonText}>Go to Store</RText>
-        </TouchableOpacity>
+          label="Go to Store"
+        />
       </RStack>
     </RStack>
   );
@@ -82,7 +81,7 @@ const loadStyles = (theme: any) => {
   return {
     container: {
       flex: 1,
-      padding: xxs ? 0 : xs ? 8 : 10,
+      flexWrap: 'wrap',
     },
     detailsContainer: {
       flex: 1,
@@ -93,64 +92,42 @@ const loadStyles = (theme: any) => {
     title: {
       fontSize: xxs ? 16 : xs ? 16 : sm ? 18 : 20,
       fontWeight: 'bold',
-      maxHeight: 60,
+      maxHeight: 30,
       marginVertical: xxs ? 0 : 5,
     },
     infoRow: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: xxs ? 0 : xs ? 3 : 5,
-      flexShrink: 1,
+      flexWrap: 'wrap',
     },
     categoryText: {
-      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
-      fontWeight: '400',
+      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 14,
+      fontWeight: 400,
     },
     weightText: {
       fontSize: xxs ? 16 : xs ? 16 : 18,
-      fontWeight: xxs ? '800' : xs ? '700' : '600',
+      fontWeight: xxs ? 800 : xs ? 700 : 600,
     },
     descriptionSection: {
       maxHeight: 60,
       marginVertical: xxs ? 0 : 5,
-      padding: xxs ? 0 : 5,
+      // padding: xs ? 0 : 5,
     },
     descriptionText: {
-      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
+      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 14,
     },
     skuSellerRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingBottom: xxs ? 0 : 5,
-      height: 30,
+      flexDirection: 'column',
+      flexWrap: 'wrap',
     },
     skuText: {
-      fontSize: xxs ? 9 : 10,
-      fontWeight: '600',
-      flexShrink: 1,
-      maxWidth: '40%',
-      paddingTop: xxs ? 13 : 0,
+      fontSize: xxs ? 10 : 12,
+      fontWeight: 400,
+      maxHeight: 20,
     },
     sellerText: {
-      fontSize: xxs ? 9 : 10,
-      fontWeight: '600',
-      flexGrow: 0,
-      flexShrink: 0,
-    },
-    GoToStoreButton: {
-      backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: xxs ? 4 : 6,
-      paddingHorizontal: xxs ? 0 : 10,
-      borderRadius: 3,
-      alignItems: 'center',
-      marginTop: 5,
-    },
-    buttonText: {
-      color: currentTheme.colors.text,
-      fontWeight: 'bold',
       fontSize: xxs ? 10 : 12,
+      fontWeight: 400,
+      maxHeight: 20,
     },
   };
 };
