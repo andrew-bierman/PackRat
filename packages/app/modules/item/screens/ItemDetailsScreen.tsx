@@ -9,6 +9,7 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import RLink from '@packrat/ui/src/RLink';
+import Layout from 'app/components/layout/Layout';
 
 export function ItemDetailsScreen() {
   const { currentTheme } = useTheme();
@@ -22,13 +23,7 @@ export function ItemDetailsScreen() {
   }
 
   return (
-    <RScrollView
-      style={{
-        marginBottom: 40,
-        flex: 1,
-        backgroundColor: currentTheme.colors.background,
-      }}
-    >
+    <Layout>
       <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
         <RStack style={styles.breadcrumbContainer}>
           {Platform.OS === 'web' ? (
@@ -80,7 +75,7 @@ export function ItemDetailsScreen() {
         </RH3>
         <FeedPreview feedType="similarItems" id={itemId} />
       </LargeCard>
-    </RScrollView>
+    </Layout>
   );
 }
 
