@@ -4,7 +4,6 @@ import { RStack, RScrollView } from '@packrat/ui';
 import { HeroSection, Section, SectionHeader } from '../../components';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import Layout from 'app/components/layout/Layout';
-import { SCREEN_WIDTH } from 'app/constants/breakpoint';
 import { useScreenWidth } from 'app/hooks/common';
 import FAB from 'app/components/Fab/Fab';
 import { FeedPreview } from 'app/modules/feed';
@@ -32,7 +31,7 @@ export const DashboardScreen = () => {
                   flexDirection: 'row',
                   alignItems: 'center',
                   alignSelf: 'flex-end',
-                  paddingRight: 16,
+                  marginTop: 16,
                   gap: 8,
                 }}
               >
@@ -49,11 +48,7 @@ export const DashboardScreen = () => {
             <View style={styles.gridContainer}>
               <View style={styles.gridItem}>
                 <Section>
-                  <SectionHeader
-                    iconName="newspaper-outline"
-                    text="Feed"
-                    textStyle={styles.sectionHeaderText}
-                  />
+                  <SectionHeader iconName="newspaper-outline" text="Feed" />
                   <FeedPreview feedType="public" />
                 </Section>
               </View>
@@ -85,15 +80,13 @@ const loadStyles = (theme) => {
     },
     gridContainer: {
       flexDirection: 'row',
+      marginTop: 32,
       flexWrap: 'wrap',
       justifyContent: 'space-between',
     },
     gridItem: {
       flexBasis: '100%',
       backgroundColor: currentTheme.colors.background,
-    },
-    sectionHeaderText: {
-      color: currentTheme.colors.text,
     },
   };
 };

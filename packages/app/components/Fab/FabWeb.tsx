@@ -46,12 +46,8 @@ const loadStyles = (theme) => {
       alignSelf: 'stretch',
       zIndex: 2,
     },
-    fabIcon: {
-      color: currentTheme.colors.tertiaryBlue,
-    },
     fabText: {
       fontSize: 17,
-      color: currentTheme.colors.tertiaryBlue,
       fontWeight: 'bold',
     },
   };

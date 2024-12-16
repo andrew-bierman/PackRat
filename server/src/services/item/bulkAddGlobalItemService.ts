@@ -1,111 +1,60 @@
 import { type ExecutionContext } from 'hono';
-import { type InsertItemCategory } from '../../db/schema';
-import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { DbClient } from 'src/db/client';
-import {
-  item as ItemTable,
-  itemImage as itemImageTable,
-} from '../../db/schema';
-import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
-import { eq } from 'drizzle-orm';
+import * as validator from '@packrat/validations';
+import { ITEM_TABLE_NAME } from '../../db/schema';
 import { VectorClient } from 'src/vector/client';
+import { addItemGlobalService } from './addItemGlobalService';
+import { summarizeItem } from 'src/utils/item';
 
+/**
+ * Adds a list of items to the global inventory and indexes them in the vector database.
+ * @param {Object} items - The list of items to add.
+ * @param {string} executionCtx - The execution context.
+ * @param {ExecutionContext} callbacks.onItemCreated - A callback function to be called when an item is created.
+ * @param {Function} callbacks.onItemCreationError - A callback function to be called when an item creation fails.
+ * @return {Promise<Array>} A promise that resolves to an array of the created items.
+ */
 export const bulkAddItemsGlobalService = async (
-  items: Array<{
-    name: string;
-    weight: number;
-    unit: string;
-    type: 'Food' | 'Water' | 'Essentials';
-    ownerId: string;
-    image_urls?: string;
-    sku?: string;
-    productUrl?: string;
-    description?: string;
-    productDetails?: {
-      [key: string]: string | number | boolean | null;
-    };
-    seller?: string;
-  }>,
+  items: Iterable<validator.AddItemGlobalType>,
   executionCtx: ExecutionContext,
-) => {
-  const categories = ['Food', 'Water', 'Essentials'];
+  callbacks?: {
+    onItemCreated?: (
+      item: Awaited<ReturnType<typeof addItemGlobalService>>,
+      bulkIndex: number,
+    ) => void;
+    onItemCreationError?: (error: Error, bulkIndex: number) => void;
+  },
+): Promise<Array<Awaited<ReturnType<typeof addItemGlobalService>>>> => {
+  const { onItemCreated, onItemCreationError } = callbacks;
+  const createdItems: Array<Awaited<ReturnType<typeof addItemGlobalService>>> =
+    [];
+  const vectorData = [];
 
-  const itemCategoryClass = new ItemCategory();
-  const insertedItems = [];
-
-  for (const itemData of items) {
-    const { name, weight, unit, type, ownerId, image_urls } = itemData;
-    if (!categories.includes(type)) {
-      throw new Error(`Category must be one of: ${categories.join(', ')}`);
-    }
-
-    let category: InsertItemCategory | null;
-    category =
-      (await itemCategoryClass.findItemCategory({ name: type })) || null;
-    if (!category) {
-      category = await itemCategoryClass.create({ name: type });
-    }
-
-    // Check if item with the same name already exists
-    const existingItem = await DbClient.instance
-      .select()
-      .from(ItemTable)
-      .where(eq(ItemTable.name, name))
-      .get();
-
-    if (existingItem) {
-      continue;
-    }
-
-    const newItem = {
-      name,
-      weight: convertWeight(Number(weight), unit as any, SMALLEST_WEIGHT_UNIT),
-      unit,
-      categoryId: category.id,
-      global: true,
-      ownerId,
-      sku,
-      productUrl,
-      description,
-      productDetails,
-      seller,
-    };
-
-    const item = await DbClient.instance
-      .insert(ItemTable)
-      .values(newItem)
-      .returning()
-      .get();
-
-    executionCtx.waitUntil(
-      VectorClient.instance.syncRecord({
-        id: item.id,
-        content: name,
-        namespace: 'items',
-        metadata: {
-          isPublic: item.global,
-          ownerId,
-        },
-      }),
-    );
-
-    if (image_urls) {
-      const urls = image_urls.split(',');
-      for (const url of urls) {
-        const newItemImage = {
-          itemId: item.id,
-          url,
-        };
-        await DbClient.instance
-          .insert(itemImageTable)
-          .values(newItemImage)
-          .run();
+  let idx = -1;
+  for (const item of items) {
+    idx += 1;
+    try {
+      const createdItem = await addItemGlobalService(item);
+      if (onItemCreated) {
+        onItemCreated(createdItem, idx);
       }
-      console.log('Added image urls for item:', item.id);
-    }
+      createdItems.push(createdItem);
 
-    insertedItems.push(item);
+      vectorData.push({
+        id: createdItem.id,
+        content: summarizeItem(createdItem),
+        namespace: ITEM_TABLE_NAME,
+        metadata: {
+          isPublic: createdItem.global,
+          ownerId: createdItem.ownerId,
+        },
+      });
+    } catch (error) {
+      if (onItemCreationError) {
+        onItemCreationError(error as Error, idx);
+      }
+    }
   }
 
-  return insertedItems;
+  executionCtx.waitUntil(VectorClient.instance.syncRecords(vectorData));
+  return createdItems;
 };

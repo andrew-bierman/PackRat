@@ -8,6 +8,8 @@ import type { PreviewListType } from '../model';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
+  const isAuthUserProfile = !id || id === authUser?.id;
+  console.log('isAuthUserProfile', isAuthUserProfile);
   const userId = id ?? authUser?.id;
   const [searchTerms, setSearchTerms] = useState<
     Record<PreviewListType, string>
@@ -22,10 +24,12 @@ export const useProfile = (id = null) => {
   const userPacksQuery = useUserPacksWithPreview(
     userId as string,
     searchTerms.packs,
+    !isAuthUserProfile ? true : undefined,
   );
   const userTripsQuery = useUserTripsWithPreview(
     userId as string,
     searchTerms.trips,
+    !isAuthUserProfile ? true : undefined,
   );
 
   const onSearchChange = useCallback(
