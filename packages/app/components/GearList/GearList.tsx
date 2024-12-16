@@ -21,7 +21,7 @@ import { useTripPackId } from 'app/screens/trip/useTripPackId';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 
-export const GearList = () => {
+export const GearList = ({ isViewOnlyMode }: { isViewOnlyMode: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
   const [packId, setPackIdParam] = useTripPackId();
@@ -30,31 +30,33 @@ export const GearList = () => {
 
   return (
     <>
-      <LayoutCard title="Your Pack">
+      <LayoutCard title={isViewOnlyMode ? 'Trip Pack' : 'Your Pack'}>
         <YStack style={{ gap: 16 }}>
           <AsyncView isLoading={packId && isLoading} isError={isError}>
-            <RStack
-              style={{
-                alignItems: currentPack ? 'center' : 'flex-start',
-                gap: 16,
-                flexDirection: currentPack ? 'row' : 'column',
-              }}
-            >
-              <View style={{ flex: 1 }}>
-                <PackContainer
-                  emptyStateComponent={
-                    <RText>
-                      Add packs to plan your trip essentials and stay prepared
-                      for any adventure!
-                    </RText>
-                  }
+            {!isViewOnlyMode && (
+              <RStack
+                style={{
+                  alignItems: currentPack ? 'center' : 'flex-start',
+                  gap: 16,
+                  flexDirection: currentPack ? 'row' : 'column',
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <PackContainer
+                    emptyStateComponent={
+                      <RText>
+                        Add packs to plan your trip essentials and stay prepared
+                        for any adventure!
+                      </RText>
+                    }
+                  />
+                </View>
+                <AddPackContainer
+                  onSuccess={setPackIdParam}
+                  isCreatingTrip={true}
                 />
-              </View>
-              <AddPackContainer
-                onSuccess={setPackIdParam}
-                isCreatingTrip={true}
-              />
-            </RStack>
+              </RStack>
+            )}
             {currentPack ? (
               <>
                 <LayoutCard>
@@ -64,46 +66,48 @@ export const GearList = () => {
                     weightUnit={weightUnit}
                   />
                 </LayoutCard>
-                <Accordion
-                  style={{ overflow: 'hidden', width: '100%' }}
-                  type="multiple"
-                >
-                  <Accordion.Item value="details" style={{ width: '100%' }}>
-                    <Accordion.Trigger
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      {({ open }) => (
-                        <>
-                          <Paragraph style={{ fontWeight: 600 }}>
-                            Manage Pack
-                          </Paragraph>
-                          <Square
-                            rotate={open ? '180deg' : '0deg'}
-                            animation="quick"
-                          >
-                            <ChevronDown size={24} />
-                          </Square>
-                        </>
-                      )}
-                    </Accordion.Trigger>
-                    <Accordion.Content
-                      style={{
-                        width: '100%',
-                        flex: 1,
-                        flexShrink: 0,
-                      }}
-                    >
-                      <TableContainerComponent
-                        hideSummary
-                        forceCardLayout
-                        currentPack={currentPack}
-                      />
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion>
+                {!isViewOnlyMode && (
+                  <Accordion
+                    style={{ overflow: 'hidden', width: '100%' }}
+                    type="multiple"
+                  >
+                    <Accordion.Item value="details" style={{ width: '100%' }}>
+                      <Accordion.Trigger
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        {({ open }) => (
+                          <>
+                            <Paragraph style={{ fontWeight: 600 }}>
+                              Manage Pack
+                            </Paragraph>
+                            <Square
+                              rotate={open ? '180deg' : '0deg'}
+                              animation="quick"
+                            >
+                              <ChevronDown size={24} />
+                            </Square>
+                          </>
+                        )}
+                      </Accordion.Trigger>
+                      <Accordion.Content
+                        style={{
+                          width: '100%',
+                          flex: 1,
+                          flexShrink: 0,
+                        }}
+                      >
+                        <TableContainerComponent
+                          hideSummary
+                          forceCardLayout
+                          currentPack={currentPack}
+                        />
+                      </Accordion.Content>
+                    </Accordion.Item>
+                  </Accordion>
+                )}
               </>
             ) : null}
           </AsyncView>

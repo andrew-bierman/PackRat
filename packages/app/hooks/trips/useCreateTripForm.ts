@@ -34,12 +34,12 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
   const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(() => {
     const res = {
       ...store,
-      destination: currentDestination?.properties?.name,
       owner_id: authUser?.id,
       pack_id: packId,
     };
     if (photonDetails) {
       res.geoJSON = photonDetails;
+      res.destination = currentDestination?.properties?.name;
     }
 
     return res;

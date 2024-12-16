@@ -17,6 +17,8 @@ import useResponsive from 'app/hooks/useResponsive';
 import { LayoutCard } from 'app/components/LayoutCard';
 import { MapPin, MapPinned } from '@tamagui/lucide-icons';
 import { type addTripKey } from './createTripStore/store';
+import { useAuthUser } from 'app/modules/auth';
+import { TripInfo } from './TripInfo';
 
 const SECTIONS = {
   MAP: 'MAP',
@@ -30,15 +32,20 @@ export function TripScreen({
   initialBounds,
   initialPlaceName,
   initialState,
+  ownerId,
 }: {
   tripId?: string;
   initialBounds?: any;
   initialPlaceName?: string;
   initialState?: Partial<Record<addTripKey, any>>;
+  ownerId?: string;
 }) {
   const placesAutoCompleteRef = useRef({});
   const [isChangePlaceMode, setIsChangePlaceMode] = useState(false);
   const { gtSm } = useResponsive();
+  const authUser = useAuthUser();
+  const hasPermissionToEdit = ownerId === authUser?.id;
+  const isViewOnlyMode = !hasPermissionToEdit && tripId;
 
   const {
     currentDestination,
@@ -79,7 +86,7 @@ export function TripScreen({
         <WeatherData latLng={latLng} />
       </LayoutCard>
     ) : undefined,
-    [SECTIONS.PACK]: <GearList />,
+    [SECTIONS.PACK]: <GearList isViewOnlyMode={isViewOnlyMode} />,
   });
 
   return (
@@ -104,15 +111,17 @@ export function TripScreen({
             }}
           >
             <RText style={{ fontWeight: 700, fontSize: 24 }}>
-              Plan Your Trip
+              {isViewOnlyMode ? 'Trip Details' : 'Plan Your Trip'}
             </RText>
-            <RSecondaryButton
-              icon={<MapPin />}
-              size={36}
-              borderWidth={2}
-              onPress={() => setIsChangePlaceMode(true)}
-              label="Change Direction"
-            />
+            {!isViewOnlyMode && (
+              <RSecondaryButton
+                icon={<MapPin />}
+                size={36}
+                borderWidth={2}
+                onPress={() => setIsChangePlaceMode(true)}
+                label="Change Direction"
+              />
+            )}
           </XStack>
           <RStack style={{ flexDirection: gtSm ? 'row' : 'column', gap: 16 }}>
             <View style={{ width: gtSm ? 450 : '100%' }}>
@@ -125,19 +134,26 @@ export function TripScreen({
                 renderItem={renderItem}
               />
             </View>
-            <LayoutCard
-              title="Trip Details"
-              style={{ flex: 1, alignSelf: 'flex-start' }}
-            >
-              <TripForm
-                tripId={tripId}
-                isValid={isValid}
-                dateRange={dateRange}
-                initialState={initialState}
-                setDateRange={setDateRange}
-                tripStore={tripStore}
+            {!isViewOnlyMode ? (
+              <LayoutCard
+                title="Trip Details"
+                style={{ flex: 1, alignSelf: 'flex-start' }}
+              >
+                <TripForm
+                  tripId={tripId}
+                  isValid={isValid}
+                  dateRange={dateRange}
+                  initialState={initialState}
+                  setDateRange={setDateRange}
+                  tripStore={tripStore}
+                />
+              </LayoutCard>
+            ) : (
+              <TripInfo
+                tripInfo={initialState}
+                startDate={tripStore.start_date}
               />
-            </LayoutCard>
+            )}
           </RStack>
         </YStack>
       ) : null}

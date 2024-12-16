@@ -17,6 +17,7 @@ export const addTripService = async (
     const newTrip = await tripClass.create({
       name: tripData.name,
       description: tripData.description,
+      destination: tripData.destination,
       start_date: tripData.start_date,
       end_date: tripData.end_date,
       activity: tripData.activity || 'trip',

@@ -6,15 +6,19 @@ import { AsyncView } from 'app/components/AsyncView';
 import { useFetchSingleTrip } from 'app/hooks/singletrips';
 import { type addTripKey } from './createTripStore/store';
 import { useOSM } from 'app/hooks/geojson';
+import { useTripId } from 'app/hooks/trips';
 
-export default function EditTripScreen({ tripId }: { tripId: string }) {
+export default function EditTripScreen() {
+  const [tripId] = useTripId();
   const { isLoading, isError, data } = useFetchSingleTrip(tripId);
+
   return (
     <AsyncView isLoading={isLoading || !data} isError={isError}>
       <TripLoader
         initialState={{
           name: data?.name,
           description: data?.description,
+          destination: data?.destination,
           activity: data?.activity,
           start_date: new Date(data?.start_date),
           end_date: new Date(data?.end_date),
@@ -23,6 +27,7 @@ export default function EditTripScreen({ tripId }: { tripId: string }) {
         packId={data?.pack_id}
         tripId={tripId}
         bounds={data?.bounds}
+        ownerId={data?.owner_id}
       />
     </AsyncView>
   );
@@ -33,10 +38,12 @@ const TripLoader = ({
   packId,
   tripId,
   bounds,
+  ownerId,
 }: {
   initialState: Partial<Record<addTripKey, any>>;
   packId: string;
   tripId: string;
+  ownerId: string;
   bounds: any;
 }) => {
   const tripStore = useCreateTripStore(initialState);
@@ -49,9 +56,8 @@ const TripLoader = ({
         tripId={tripId}
         initialBounds={bounds}
         initialState={initialState}
-        initialPlaceName={
-          initialState?.geoJSON?.features?.[0]?.properties?.['name:en']
-        }
+        initialPlaceName={initialState.destination}
+        ownerId={ownerId}
       />
     </TripProvider>
   );
