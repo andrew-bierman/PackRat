@@ -16,6 +16,7 @@ export const editTripService = async (
       id: tripData?.id,
       name: tripData.name || selectedTrip.name,
       description: tripData.description || selectedTrip.description,
+      destination: tripData.destination || selectedTrip.destination,
       start_date: tripData.start_date || selectedTrip.start_date,
       end_date: tripData.end_date || selectedTrip.end_date,
       activity: tripData.activity || selectedTrip.activity,
