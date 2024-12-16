@@ -12,7 +12,7 @@ import {
 
 export const useFetchUserFavorites = (
   userId: string,
-  { queryEnabled = true, isPreview = false, searchTerm = '' } = {},
+  { queryEnabled = true, isPreview = false, searchTerm = '', isPublic } = {},
 ) => {
   const enabled = !!userId && queryEnabled;
   const [pagination, setPagination] = useState<PaginationParams>(
@@ -21,7 +21,7 @@ export const useFetchUserFavorites = (
 
   const { data, error, isLoading, refetch } =
     queryTrpc.getUserFavorites.useQuery(
-      { userId, pagination, isPreview, searchTerm },
+      { userId, pagination, isPreview, searchTerm, isPublic },
       {
         enabled,
         refetchOnWindowFocus: false,
@@ -64,11 +64,12 @@ interface FetchUserFavoritesReturn extends PreviewResourceStateWithData {
 export const useFetchUserFavoritesWithPreview = (
   userId: string,
   searchTerm: string,
+  isPublic?: boolean,
 ): FetchUserFavoritesReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
   const { data: previewData, isLoading: isPreviewLoading } =
-    useFetchUserFavorites(userId, { isPreview: true });
+    useFetchUserFavorites(userId, { isPreview: true, isPublic });
 
   const {
     data: allQueryData,
@@ -87,6 +88,7 @@ export const useFetchUserFavoritesWithPreview = (
 
   return {
     ...previewResourceState,
+    resourceName: 'Favorites',
     isAllQueryEnabled,
     previewData,
     isPreviewLoading,

@@ -21,7 +21,6 @@ export const LayoutCard: FC<LayoutCardProps> = ({
       style={[
         {
           backgroundColor: currentTheme.colors.card,
-          boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
           borderWidth: 1,
           borderColor: isDark ? '#424242' : '#e5e7eb',
           padding: 24,
