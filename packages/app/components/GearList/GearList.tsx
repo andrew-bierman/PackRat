@@ -16,6 +16,7 @@ import { PackSummary } from 'app/modules/pack/components/PackTable/PackSummary';
 import { type WeightUnit } from 'app/utils/convertWeight';
 import { ChevronDown } from '@tamagui/lucide-icons';
 import { AsyncView } from 'app/components/AsyncView';
+import { useTripPackId } from 'app/screens/trip/useTripPackId';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
@@ -23,8 +24,9 @@ const RText: any = OriginalRText;
 export const GearList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
-  const [packId, setPackIdParam] = usePackId();
+  const [packId, setPackIdParam] = useTripPackId();
   const { data: currentPack, isLoading, isError } = useFetchSinglePack(packId);
+  console.log({ packId });
 
   return (
     <>
@@ -39,14 +41,14 @@ export const GearList = () => {
               }}
             >
               <View style={{ flex: 1 }}>
-                {currentPack ? (
-                  <PackContainer />
-                ) : (
-                  <RText>
-                    Add packs to plan your trip essentials and stay prepared for
-                    any adventure!
-                  </RText>
-                )}
+                <PackContainer
+                  emptyStateComponent={
+                    <RText>
+                      Add packs to plan your trip essentials and stay prepared
+                      for any adventure!
+                    </RText>
+                  }
+                />
               </View>
               <AddPackContainer
                 onSuccess={setPackIdParam}

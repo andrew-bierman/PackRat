@@ -13,6 +13,7 @@ export const editTripService = async (
     const tripClass = new Trip();
     const selectedTrip = await tripClass.findById(tripData.id);
     const updatedTrip = await tripClass.update({
+      id: tripData?.id,
       name: tripData.name || selectedTrip.name,
       description: tripData.description || selectedTrip.description,
       start_date: tripData.start_date || selectedTrip.start_date,

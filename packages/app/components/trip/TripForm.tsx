@@ -7,12 +7,13 @@ import {
   SubmitButton,
 } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
-import { useAddTrip } from 'app/hooks/trips';
+import { useAddTrip, useEditTrips } from 'app/hooks/trips';
 import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 import { TripDateRangeCard } from './TripCards';
 import { getEnumValues } from 'app/utils/getEnumValues';
 import { formatTripActivityLabel } from 'app/utils/tripUtils';
+import { type addTripKey } from 'app/screens/trip/createTripStore/store';
 
 const Form: any = OriginalForm;
 const FormSelect: any = OriginalFormSelect;
@@ -22,6 +23,8 @@ interface TripFormProps {
   dateRange: any;
   setDateRange: (range: any) => void;
   isValid: boolean;
+  initialState?: Partial<Record<addTripKey, any>>;
+  tripId?: string;
 }
 
 const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
@@ -34,8 +37,11 @@ export const TripForm = ({
   dateRange,
   setDateRange,
   isValid,
+  initialState,
+  tripId,
 }: TripFormProps) => {
   const { addTrip, isSuccess, data: response } = useAddTrip();
+  const { editTrips } = useEditTrips();
   const router = useRouter();
 
   const handleCreateTrip = async (values) => {
@@ -44,7 +50,7 @@ export const TripForm = ({
       ...values,
     };
 
-    addTrip(data);
+    tripId ? editTrips({ id: tripId, ...data }) : addTrip(data);
   };
   if (isSuccess && response) {
     router.push(`/trip/${response.id}`);
@@ -54,7 +60,12 @@ export const TripForm = ({
     <Form
       validationSchema={addTripForm}
       onSubmit={handleCreateTrip}
-      defaultValues={{ is_public: '0', activity: ActivityOptions[0].value }}
+      defaultValues={{
+        name: initialState?.name,
+        description: initialState?.description,
+        is_public: initialState?.is_public ? '1' : '0',
+        activity: initialState?.activity || ActivityOptions[0].value,
+      }}
     >
       <YStack style={{ gap: 16 }}>
         <FormInput placeholder="Trip Name" name="name" />
