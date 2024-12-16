@@ -413,6 +413,7 @@ export const trip = sqliteTable('trip', {
   >(),
   start_date: text('start_date').notNull(),
   end_date: text('end_date').notNull(),
+  destination: text('destination').notNull(),
   owner_id: text('owner_id').references(() => user.id, {
     onDelete: 'cascade',
   }),
