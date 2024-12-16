@@ -116,19 +116,20 @@ const loadStyles = (theme: any) => {
     },
     stack: {
       width: '100%',
-      alignItems: 'flex-start', // Align items to the start (left)
+      alignItems: 'flex-start',
+      paddingTop: Platform.OS === 'web' ? 24 : 16,
     },
     title: {
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
-      color: currentTheme.colors.tertiaryBlue,
       textAlign: 'left', // Align text to the left
       width: '100%', // Ensure it takes full width for left alignment
     },
     searchContainer: {
       width: '100%',
       alignItems: 'flex-start',
+      padding: 2,
     },
     searchBar: {
       width: '100%',
