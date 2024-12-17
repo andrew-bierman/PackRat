@@ -4,10 +4,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { ExpandableDetailsSection } from './ExpandableDetailsSection';
 import { useItemPackPicker } from '../hooks/useItemPackPicker';
-
 import ItemDetailsContent from './ItemDetailsContent';
 import useResponsive from 'app/hooks/useResponsive';
-import RadioButtonGroup from 'react-native-paper/lib/typescript/components/RadioButton/RadioButtonGroup';
 import { PlusCircle } from '@tamagui/lucide-icons';
 import { PackPickerOverlay } from 'app/modules/pack';
 
@@ -28,42 +26,24 @@ interface ItemData {
 export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
   const styles = useCustomStyles(loadStyles);
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
-
-  const productDetails = useMemo(() => {
-    try {
-      const parsedDetails = JSON.parse(
-        itemData?.productDetails?.replace?.(/'/g, '"'),
-      );
-      return parsedDetails;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  }, [itemData?.productDetails]);
+  const productDetails = useMemo(
+    () => parseProductDetails(itemData.productDetails),
+    [itemData.productDetails],
+  );
 
   return (
     <RStack style={styles.container}>
       <RStack style={styles.contentContainer}>
-        <View style={styles.imagePlaceholder}>
+        <View style={styles.imageContainer}>
           <RButton
-            style={{
-              position: 'absolute',
-              top: 4,
-              right: 4,
-              padding: 0,
-              backgroundColor: 'transparent',
-              zIndex: 10,
-            }}
-            onPress={(e) => {
-              onTriggerOpen(itemData.id, e);
-            }}
+            style={styles.iconButton}
+            onPress={(e) => onTriggerOpen(itemData.id, e)}
           >
             <PlusCircle />
           </RButton>
-          <ImageGallery
-            images={itemData?.images?.map?.(({ url }) => url) || []}
-          />
+          <ImageGallery images={itemData.images?.map(({ url }) => url) || []} />
         </View>
+
         <RStack style={styles.detailsContainer}>
           <ItemDetailsContent
             itemData={{
@@ -75,19 +55,34 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
               unit: itemData.unit,
               description: itemData.description,
               productUrl: itemData.productUrl,
+              productDetails: itemData.productDetails,
             }}
+            isPrimaryDetails
           />
         </RStack>
       </RStack>
-      {productDetails && (
-        <RStack style={styles.productDetailsSection}>
-          <ExpandableDetailsSection details={productDetails} />
-        </RStack>
-      )}
+
       <PackPickerOverlay {...overlayProps} />
     </RStack>
   );
 }
+
+const parseProductDetails = (details?: string) => {
+  try {
+    return details
+      ? Object.entries(JSON.parse(details.replace(/'/g, '"'))).map(
+          ([key, value]) => ({
+            key,
+            label: key,
+            value: value?.toString() || '',
+          }),
+        )
+      : [];
+  } catch (e) {
+    console.error('Error parsing product details:', e);
+    return [];
+  }
+};
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
@@ -97,31 +92,30 @@ const loadStyles = (theme: any) => {
     container: {
       flex: 1,
       padding: 10,
-      flexDirection: 'column',
       backgroundColor: currentTheme.colors.background,
     },
     contentContainer: {
       flexDirection: xxs ? 'column' : 'row',
     },
+    imageContainer: {
+      flex: 1,
+      height: 400,
+      backgroundColor: currentTheme.colors.border,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: xxs ? 0 : 10,
+      position: 'relative',
+    },
     detailsContainer: {
       flex: 1,
       padding: 10,
     },
-    imagePlaceholder: {
-      flex: 1,
-      overflow: 'hidden',
-      height: 300,
-      backgroundColor: currentTheme.colors.border,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: 10,
-    },
-    productDetailsSection: {
-      width: '100%',
-      padding: 5,
-      marginTop: 20,
-      backgroundColor: currentTheme.colors.background,
-      borderRadius: 5,
+    iconButton: {
+      position: 'absolute',
+      top: 4,
+      right: 4,
+      zIndex: 10,
+      backgroundColor: 'transparent',
     },
   };
 };
