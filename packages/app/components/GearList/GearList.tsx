@@ -15,77 +15,102 @@ import { Accordion, Paragraph, Square } from 'tamagui';
 import { PackSummary } from 'app/modules/pack/components/PackTable/PackSummary';
 import { type WeightUnit } from 'app/utils/convertWeight';
 import { ChevronDown } from '@tamagui/lucide-icons';
+import { AsyncView } from 'app/components/AsyncView';
+import { useTripPackId } from 'app/screens/trip/useTripPackId';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 
-export const GearList = () => {
+export const GearList = ({ isViewOnlyMode }: { isViewOnlyMode: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [weightUnit, setWeightUnit] = useState<WeightUnit>('kg');
-  const [packId, setPackIdParam] = usePackId();
-  const { data: currentPack } = useFetchSinglePack(packId);
+  const [packId, setPackIdParam] = useTripPackId();
+  const { data: currentPack, isLoading, isError } = useFetchSinglePack(packId);
+  console.log({ packId });
 
   return (
     <>
-      <LayoutCard title="Your Pack">
+      <LayoutCard title={isViewOnlyMode ? 'Trip Pack' : 'Your Pack'}>
         <YStack style={{ gap: 16 }}>
-          <XStack style={{ alignItems: 'center' }}>
-            <View style={{ flex: 1 }}>
-              <PackContainer />
-            </View>
-            <AddPackContainer
-              onSuccess={setPackIdParam}
-              isCreatingTrip={true}
-            />
-          </XStack>
-          <LayoutCard>
-            <PackSummary
-              currentPack={currentPack}
-              setWeightUnit={setWeightUnit}
-              weightUnit={weightUnit}
-            />
-          </LayoutCard>
-          <Accordion
-            style={{ overflow: 'hidden', width: '100%' }}
-            type="multiple"
-          >
-            <Accordion.Item value="details" style={{ width: '100%' }}>
-              <Accordion.Trigger
+          <AsyncView isLoading={packId && isLoading} isError={isError}>
+            {!isViewOnlyMode && (
+              <RStack
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
+                  alignItems: currentPack ? 'center' : 'flex-start',
+                  gap: 16,
+                  flexDirection: currentPack ? 'row' : 'column',
                 }}
               >
-                {({ open }) => (
-                  <>
-                    <Paragraph style={{ fontWeight: 600 }}>
-                      Manage Pack
-                    </Paragraph>
-                    <Square rotate={open ? '180deg' : '0deg'} animation="quick">
-                      <ChevronDown size={24} />
-                    </Square>
-                  </>
-                )}
-              </Accordion.Trigger>
-              <Accordion.HeightAnimator
-                animation="quick"
-                style={{ width: '100%' }}
-              >
-                <Accordion.Content
-                  style={{
-                    width: '100%',
-                    flex: 1,
-                  }}
-                >
-                  <TableContainerComponent
-                    hideSummary
-                    forceCardLayout
-                    currentPack={currentPack}
+                <View style={{ flex: 1 }}>
+                  <PackContainer
+                    emptyStateComponent={
+                      <RText>
+                        Add packs to plan your trip essentials and stay prepared
+                        for any adventure!
+                      </RText>
+                    }
                   />
-                </Accordion.Content>
-              </Accordion.HeightAnimator>
-            </Accordion.Item>
-          </Accordion>
+                </View>
+                <AddPackContainer
+                  onSuccess={setPackIdParam}
+                  isCreatingTrip={true}
+                />
+              </RStack>
+            )}
+            {currentPack ? (
+              <>
+                <LayoutCard>
+                  <PackSummary
+                    currentPack={currentPack}
+                    setWeightUnit={setWeightUnit}
+                    weightUnit={weightUnit}
+                  />
+                </LayoutCard>
+                {!isViewOnlyMode && (
+                  <Accordion
+                    style={{ overflow: 'hidden', width: '100%' }}
+                    type="multiple"
+                  >
+                    <Accordion.Item value="details" style={{ width: '100%' }}>
+                      <Accordion.Trigger
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        {({ open }) => (
+                          <>
+                            <Paragraph style={{ fontWeight: 600 }}>
+                              Manage Pack
+                            </Paragraph>
+                            <Square
+                              rotate={open ? '180deg' : '0deg'}
+                              animation="quick"
+                            >
+                              <ChevronDown size={24} />
+                            </Square>
+                          </>
+                        )}
+                      </Accordion.Trigger>
+                      <Accordion.Content
+                        style={{
+                          width: '100%',
+                          flex: 1,
+                          flexShrink: 0,
+                        }}
+                      >
+                        <TableContainerComponent
+                          hideSummary
+                          forceCardLayout
+                          currentPack={currentPack}
+                        />
+                      </Accordion.Content>
+                    </Accordion.Item>
+                  </Accordion>
+                )}
+              </>
+            ) : null}
+          </AsyncView>
         </YStack>
       </LayoutCard>
     </>

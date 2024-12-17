@@ -49,6 +49,7 @@ export const getTripById = z.object({
 export const addTripDetails = z.object({
   activity: z.enum(tripActivityValues).optional(),
   bounds: z.tuple([z.array(z.number()), z.array(z.number())]).optional(),
+  destination: z.string(),
   end_date: z.string(),
   geoJSON: z.string(),
   pack_id: z.string(),

@@ -6,11 +6,13 @@ import { type addTripKey } from 'app/screens/trip/createTripStore/store';
 import { useAuthUser } from 'app/modules/auth';
 import { usePackId } from 'app/modules/pack';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
+import { useCurrentTripStore } from 'app/screens/trip/createTripStore/useCreateTripStore';
+import { useTripPackId } from 'app/screens/trip/useTripPackId';
 
 export const useCreateTripForm = (currentDestination, photonDetails) => {
-  const { store, setTripValue, setDateRange } = useCreateTripStore();
+  const { store, setTripValue, setDateRange } = useCurrentTripStore();
   const authUser = useAuthUser();
-  const [packId] = usePackId();
+  const [packId] = useTripPackId();
 
   const { isValid, validate } = useValidateSchema(
     addTripDetails,
@@ -29,16 +31,19 @@ export const useCreateTripForm = (currentDestination, photonDetails) => {
     setTripValue(name, updatedPlaces);
   };
 
-  const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(
-    () => ({
+  const createTripFormValues = useMemo<Partial<Record<addTripKey, any>>>(() => {
+    const res = {
       ...store,
-      destination: currentDestination?.properties?.name,
       owner_id: authUser?.id,
       pack_id: packId,
-      geoJSON: photonDetails,
-    }),
-    [store, packId, photonDetails, authUser?.id],
-  );
+    };
+    if (photonDetails) {
+      res.geoJSON = photonDetails;
+      res.destination = currentDestination?.properties?.name;
+    }
+
+    return res;
+  }, [store, packId, photonDetails, authUser?.id]);
 
   useEffect(() => {
     validate(createTripFormValues);

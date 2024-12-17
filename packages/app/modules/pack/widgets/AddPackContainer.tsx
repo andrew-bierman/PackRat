@@ -16,7 +16,12 @@ export const AddPackContainer = ({
     <BaseModal
       title="Add Pack"
       triggerComponent={
-        <RPrimaryButton size="$1.25" label="Create" icon={<Plus />} />
+        <RPrimaryButton
+          size="$1.25"
+          label="Create"
+          style={{ alignSelf: 'flex-end' }}
+          icon={<Plus />}
+        />
       }
       footerComponent={undefined}
     >

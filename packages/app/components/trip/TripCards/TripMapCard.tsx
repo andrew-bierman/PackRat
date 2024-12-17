@@ -36,9 +36,9 @@ export const TripMapCard = ({
       >
         <Map
           style={{ width: '100%', height: 320 }}
-          shapeURI={tripId ? getTripGEOURI(tripId) : undefined}
+          shapeURI={tripId && !shape ? getTripGEOURI(tripId) : undefined}
           onVisibleBoundsChange={onVisibleBoundsChange}
-          initialBounds={initialBounds}
+          initialBounds={!shape ? initialBounds : undefined}
           shape={shape}
         />
       </View>
