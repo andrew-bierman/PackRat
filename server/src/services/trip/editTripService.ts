@@ -73,8 +73,9 @@ export const setTripVisibilityService = async (
     const tripClass = new Trip();
     const selectedTrip = await tripClass.findById(tripData.id);
     const updatedTrip = await tripClass.update({
+      ...selectedTrip,
       id: selectedTrip.id,
-      is_public: tripData.is_public === '1',
+      is_public: tripData.is_public,
     });
     return updatedTrip;
   } catch (error) {

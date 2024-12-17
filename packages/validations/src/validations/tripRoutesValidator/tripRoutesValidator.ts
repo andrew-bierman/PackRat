@@ -7,7 +7,7 @@ export const addTripForm = z.object({
   name: z.string(),
   description: z.string().optional().nullable(),
   activity: z.enum(tripActivityValues).optional(),
-  is_public: z.union([z.literal('0'), z.literal('1')]).optional(),
+  is_public: z.boolean().optional(),
 });
 
 const coordinateSchema = z.lazy(() =>
@@ -70,7 +70,7 @@ export type EditTripType = z.infer<typeof editTrip>;
 
 export const setTripVisibility = z.object({
   tripId: z.string().min(1),
-  is_public: z.union([z.literal('0'), z.literal('1')]),
+  is_public: z.boolean(),
 });
 export type SetTripVisibilityType = z.infer<typeof setTripVisibility>;
 
