@@ -20,14 +20,15 @@ export const editTripService = async (
       start_date: tripData.start_date || selectedTrip.start_date,
       end_date: tripData.end_date || selectedTrip.end_date,
       activity: tripData.activity || selectedTrip.activity,
+      is_public: tripData.is_public || selectedTrip.is_public,
       pack_id: tripData.pack_id || selectedTrip.pack_id,
       trails: tripData.trails
         ? JSON.parse(tripData.trails)
         : selectedTrip.trails,
       parks: tripData.parks ? JSON.parse(tripData.parks) : selectedTrip.parks,
-      ...(tripData.bounds && {
-        bounds: [tripData.bounds[0], tripData.bounds[1]],
-      }),
+      bounds: tripData.bounds
+        ? [tripData.bounds[0], tripData.bounds[1]]
+        : selectedTrip.bounds,
     });
 
     await scoreTripService(selectedTrip.id);
@@ -74,8 +75,9 @@ export const setTripVisibilityService = async (
     const tripClass = new Trip();
     const selectedTrip = await tripClass.findById(tripData.id);
     const updatedTrip = await tripClass.update({
+      ...selectedTrip,
       id: selectedTrip.id,
-      is_public: tripData.is_public === '1',
+      is_public: tripData.is_public,
     });
     return updatedTrip;
   } catch (error) {
