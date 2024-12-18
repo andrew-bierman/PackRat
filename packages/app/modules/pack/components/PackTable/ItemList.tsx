@@ -46,6 +46,8 @@ export const ItemList = ({
               fontWeight: 'bold',
               flexBasis: '25%',
             }}
+            numberOfLines={1}
+            ellipsizeMode="tail"
           >
             {item.name}
           </RText>

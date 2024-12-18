@@ -52,7 +52,11 @@ export const ItemCard = ({
             fontWeight: 'bold',
             fontSize: 16,
             color: currentTheme.colors.text,
+            flex: 1,
+            marginRight: 10,
           }}
+          numberOfLines={1}
+          ellipsizeMode="tail"
         >
           {item.name}
         </RText>
