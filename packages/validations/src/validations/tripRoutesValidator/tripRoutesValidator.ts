@@ -3,9 +3,9 @@ import { TripActivity } from './enums';
 
 const tripActivityValues = Object.values(TripActivity) as [string, ...string[]];
 
-export const addTripForm = z.object({
-  name: z.string(),
-  description: z.string().optional().nullable(),
+export const tripForm = z.object({
+  name: z.string().min(2).max(40),
+  description: z.string().min(50).max(200).optional().nullable(),
   activity: z.enum(tripActivityValues).optional(),
   is_public: z.boolean().optional(),
 });
@@ -58,7 +58,7 @@ export const addTripDetails = z.object({
   trails: z.string().optional(),
 });
 
-export const addTrip = addTripDetails.merge(addTripForm);
+export const addTrip = addTripDetails.merge(tripForm);
 export type AddTripType = z.infer<typeof addTrip>;
 
 export const editTrip = addTrip.merge(
