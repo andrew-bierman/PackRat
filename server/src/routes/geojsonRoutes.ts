@@ -18,17 +18,24 @@ router.get(
         params.resourceId,
       );
 
+      if (!object) {
+        return ctx.json(
+          {
+            error: `Resource ${params.resource}/${params.resourceId} not found`,
+          },
+          404,
+        );
+      }
+
       const headers = new Headers();
       object.writeHttpMetadata(headers);
-      headers.set('etag', object.httpEtag);
-      headers.set('Content-Type', 'application/geo+json');
+      ctx.header('etag', object.httpEtag);
+      ctx.header('Content-Type', 'application/geo+json');
       const json = await object.json();
 
-      return new Response(json, {
-        headers,
-      });
+      return ctx.json(json);
     } catch (error) {
-      return ctx.json({ error: error.message }, 400);
+      return ctx.json({ error: error.message }, 500);
     }
   }),
 );
