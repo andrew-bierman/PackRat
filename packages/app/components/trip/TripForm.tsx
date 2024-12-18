@@ -9,7 +9,7 @@ import {
 } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
 import { useAddTrip, useEditTrips } from 'app/hooks/trips';
-import { addTripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
+import { tripForm } from '@packrat/validations/src/validations/tripRoutesValidator';
 import { formatCreateTripValuesForAPI } from 'app/utils/tripUtils';
 import { TripDateRangeCard } from './TripCards';
 import { getEnumValues } from 'app/utils/getEnumValues';
@@ -54,7 +54,7 @@ export const TripForm = ({
 
   return (
     <Form
-      validationSchema={addTripForm}
+      validationSchema={tripForm}
       onSubmit={handleCreateTrip}
       defaultValues={{
         name: initialState?.name,
