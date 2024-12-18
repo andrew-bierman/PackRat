@@ -7,11 +7,11 @@ import { useFetchSingleTrip } from 'app/hooks/singletrips';
 import { type addTripKey } from './createTripStore/store';
 import { useOSM } from 'app/hooks/geojson';
 import { useTripId } from 'app/hooks/trips';
+import { formatTripDate } from 'app/modules/trip/utils';
 
 export default function EditTripScreen() {
   const [tripId] = useTripId();
   const { isLoading, isError, data } = useFetchSingleTrip(tripId);
-
   return (
     <AsyncView isLoading={isLoading || !data} isError={isError}>
       <TripLoader
@@ -20,8 +20,9 @@ export default function EditTripScreen() {
           description: data?.description,
           destination: data?.destination,
           activity: data?.activity,
-          start_date: new Date(data?.start_date),
-          end_date: new Date(data?.end_date),
+          is_public: data?.is_public,
+          start_date: formatTripDate(data?.start_date).toDate(),
+          end_date: formatTripDate(data?.end_date).toDate(),
           geoJSON: data?.geoJSON,
         }}
         packId={data?.pack_id}

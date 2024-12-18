@@ -20,7 +20,10 @@ export const editTripService = async (
       start_date: tripData.start_date || selectedTrip.start_date,
       end_date: tripData.end_date || selectedTrip.end_date,
       activity: tripData.activity || selectedTrip.activity,
-      is_public: tripData.is_public || selectedTrip.is_public,
+      is_public:
+        typeof tripData.is_public === 'boolean'
+          ? tripData.is_public
+          : selectedTrip.is_public,
       pack_id: tripData.pack_id || selectedTrip.pack_id,
       trails: tripData.trails
         ? JSON.parse(tripData.trails)
@@ -73,7 +76,7 @@ export const setTripVisibilityService = async (
 ) => {
   try {
     const tripClass = new Trip();
-    const selectedTrip = await tripClass.findById(tripData.id);
+    const selectedTrip = await tripClass.findById(tripData.tripId);
     const updatedTrip = await tripClass.update({
       ...selectedTrip,
       id: selectedTrip.id,

@@ -31,6 +31,7 @@ interface UserDataContainerProps {
   userId?: string;
   isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
+  isAuthUserProfile?: boolean;
   searchTerm: string;
   onSearchChange: (search: string, type: PreviewListType) => void;
 }
@@ -41,6 +42,7 @@ export const UserDataContainer = memo(function UserDataContainer({
   userId,
   isLoading,
   SkeletonComponent,
+  isAuthUserProfile,
   searchTerm,
   onSearchChange,
 }: UserDataContainerProps) {
@@ -54,7 +56,14 @@ export const UserDataContainer = memo(function UserDataContainer({
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
   const Card = ({ item }) => {
-    return <UserDataCard item={item} cardType="primary" feedType={item.type} />;
+    return (
+      <UserDataCard
+        isAuthUserProfile={isAuthUserProfile}
+        item={item}
+        cardType="primary"
+        feedType={item.type}
+      />
+    );
   };
 
   // Map function to render multiple skeleton cards

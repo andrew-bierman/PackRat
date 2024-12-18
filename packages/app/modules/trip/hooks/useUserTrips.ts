@@ -82,16 +82,15 @@ export const useUserTripsWithPreview = (
 ): FetchUserTripsPreviewReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
-  const { data: previewData, isLoading: isPreviewLoading } = useUserTrips(
-    userId,
-    { isPublic, isPreview: true, searchTerm },
-    true,
-  );
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    totalCount,
+  } = useUserTrips(userId, { isPublic, isPreview: true, searchTerm }, true);
 
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
-    totalCount,
     fetchPrevPage,
     fetchNextPage,
     currentPage,

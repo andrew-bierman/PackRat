@@ -5,6 +5,7 @@ import {
   FormSelect as OriginalFormSelect,
   YStack,
   SubmitButton,
+  FormSwitch,
 } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
 import { useAddTrip, useEditTrips } from 'app/hooks/trips';
@@ -26,11 +27,6 @@ interface TripFormProps {
   initialState?: Partial<Record<addTripKey, any>>;
   tripId?: string;
 }
-
-const isPublicOptions = ['For me only', 'Public'].map((key, index) => ({
-  label: key,
-  value: String(index),
-}));
 
 export const TripForm = ({
   tripStore,
@@ -63,7 +59,7 @@ export const TripForm = ({
       defaultValues={{
         name: initialState?.name,
         description: initialState?.description,
-        is_public: initialState?.is_public ? '1' : '0',
+        is_public: initialState?.is_public,
         activity: initialState?.activity || ActivityOptions[0].value,
       }}
     >
@@ -78,13 +74,7 @@ export const TripForm = ({
           fullWidth
           name="activity"
         />
-        <FormSelect
-          options={isPublicOptions}
-          label="Access"
-          placeholder="Is Public"
-          fullWidth
-          name="is_public"
-        />
+        <FormSwitch labelLeft="Visible For Everyone" name="is_public" />
         <SubmitButton disabled={!isValid} onSubmit={handleCreateTrip}>
           Save Trip
         </SubmitButton>

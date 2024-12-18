@@ -97,19 +97,17 @@ export const useUserPacksWithPreview = (
 ): FetchUserPacksPreviewReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
-  const { data: previewData, isLoading: isPreviewLoading } = useUserPacks(
-    userId,
-    { isPreview: true, isPublic },
-    'Most Recent',
-    true,
-  );
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    totalCount,
+  } = useUserPacks(userId, { isPreview: true, isPublic }, 'Most Recent', true);
 
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
     fetchPrevPage,
     fetchNextPage,
-    totalCount,
     hasPrevPage,
     hasNextPage,
     currentPage,

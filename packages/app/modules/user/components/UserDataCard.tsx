@@ -19,6 +19,7 @@ const cardComponentsByType = {
 
 interface UserDataCardProps {
   feedType: UserDataResource;
+  isAuthUserProfile?: boolean;
   cardType: CardType;
   item: UserData;
 }
@@ -27,6 +28,7 @@ export const UserDataCard: FC<UserDataCardProps> = ({
   item,
   cardType,
   feedType,
+  isAuthUserProfile,
 }) => {
   const { addFavorite } = useAddFavorite();
   const user = useAuthUser();
@@ -56,6 +58,7 @@ export const UserDataCard: FC<UserDataCardProps> = ({
       {...cardProps}
       cardType={cardType}
       toggleFavorite={handleAddToFavorite}
+      isAuthUserProfile={isAuthUserProfile}
     />
   );
 };

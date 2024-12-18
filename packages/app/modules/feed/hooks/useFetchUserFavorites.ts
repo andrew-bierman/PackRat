@@ -12,8 +12,19 @@ import {
 
 export const useFetchUserFavorites = (
   userId: string,
-  { queryEnabled = true, isPreview = false, searchTerm = '', isPublic } = {},
+  options: {
+    queryEnabled: boolean;
+    isPreview: boolean;
+    searchTerm: string;
+    isPublic: boolean;
+  },
 ) => {
+  const {
+    queryEnabled = true,
+    isPreview = false,
+    searchTerm = '',
+    isPublic,
+  } = options || {};
   const enabled = !!userId && queryEnabled;
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
@@ -68,13 +79,15 @@ export const useFetchUserFavoritesWithPreview = (
 ): FetchUserFavoritesReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
-  const { data: previewData, isLoading: isPreviewLoading } =
-    useFetchUserFavorites(userId, { isPreview: true, isPublic });
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    totalCount,
+  } = useFetchUserFavorites(userId, { isPreview: true, isPublic });
 
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
-    totalCount,
     fetchPrevPage,
     fetchNextPage,
     totalPages,
@@ -84,6 +97,7 @@ export const useFetchUserFavoritesWithPreview = (
   } = useFetchUserFavorites(userId, {
     queryEnabled: isAllQueryEnabled,
     searchTerm,
+    isPublic,
   });
 
   return {

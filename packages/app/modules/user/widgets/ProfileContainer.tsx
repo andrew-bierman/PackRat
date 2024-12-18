@@ -168,6 +168,7 @@ export function ProfileContainer({ id = null }) {
     favoritesCount,
     isLoading,
     isCurrentUser,
+    isAuthUserProfile,
     error,
   } = useProfile(id);
 
@@ -196,6 +197,7 @@ export function ProfileContainer({ id = null }) {
             resource={favoritesQuery}
             type="favorites"
             userId={user?.id}
+            isAuthUserProfile={isAuthUserProfile}
             isLoading={isLoading}
             searchTerm={searchTerms.favorites}
             onSearchChange={onSearchChange}
@@ -206,6 +208,7 @@ export function ProfileContainer({ id = null }) {
             resource={userPacksQuery}
             type="packs"
             userId={user?.id}
+            isAuthUserProfile={isAuthUserProfile}
             searchTerm={searchTerms.packs}
             onSearchChange={onSearchChange}
           />
@@ -215,6 +218,7 @@ export function ProfileContainer({ id = null }) {
             resource={userTripsQuery}
             type="trips"
             userId={user?.id}
+            isAuthUserProfile={isAuthUserProfile}
             searchTerm={searchTerms.packs}
             onSearchChange={onSearchChange}
           />
