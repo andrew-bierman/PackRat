@@ -37,6 +37,7 @@ export const editTripService = async (
     await scoreTripService(selectedTrip.id);
 
     const serializedGeoJSON = tripData.geoJSON;
+
     if (!serializedGeoJSON) {
       return updatedTrip;
     }
