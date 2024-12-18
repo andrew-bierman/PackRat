@@ -70,7 +70,7 @@ const styles = {
     padding: 10,
     width: '100%',
     height: xxs ? 250 : 300,
-    minWidth: 250,
+    minWidth: 340,
   }),
   content: {
     flexDirection: 'row',
