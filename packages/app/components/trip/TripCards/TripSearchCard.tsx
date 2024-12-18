@@ -43,7 +43,7 @@ export const TripSearchCard = ({
         maxWidth: 448,
         width: '100%',
         margin: 'auto',
-        paddingBottom: 50,
+        paddingVertical: 50,
       }}
     >
       <RText

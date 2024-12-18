@@ -112,7 +112,7 @@ const ItemDetailsContent: React.FC<ItemDetailsContentProps> = ({
       </RText>
       <RText
         numberOfLines={2}
-        style={{ fontSize: sm ? 12 : 14, maxHeight: sm ? 70 : 80, flex: 1 }}
+        style={{ fontSize: sm ? 12 : 14, maxHeight: sm ? 50 : 60, flex: 1 }}
       >
         {itemData.description}
       </RText>
@@ -124,6 +124,7 @@ const ItemDetailsContent: React.FC<ItemDetailsContentProps> = ({
       {isPrimaryDetails ? renderPrimaryDetails() : renderDefaultInfo()}
       <RPrimaryButton
         label="Go to Store"
+        style={{ marginTop: 'auto' }}
         onPress={() => openExternalLink(itemData.productUrl)}
       />
     </RStack>

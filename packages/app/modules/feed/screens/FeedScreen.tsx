@@ -1,11 +1,5 @@
 import React, { useMemo, useState, useEffect, memo } from 'react';
-import {
-  FlatList,
-  View,
-  Platform,
-  ActivityIndicator,
-  type ViewProps,
-} from 'react-native';
+import { View, type ViewProps } from 'react-native';
 import {
   FeedCard,
   FeedList,
@@ -13,10 +7,8 @@ import {
   SearchProvider,
 } from '../components';
 import { useRouter } from 'app/hooks/router';
-import { fuseSearch } from 'app/utils/fuseSearch';
-import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useFeed } from 'app/modules/feed';
-import { Pagination, RButton, RText } from '@packrat/ui';
+import { Pagination } from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 import { type FeedType } from '../model';
 import { ConnectionGate } from 'app/components/ConnectionGate';
@@ -55,6 +47,7 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
   const {
     data,
     isLoading,
+    isError,
     refetch,
     fetchPrevPage,
     fetchNextPage,
@@ -119,6 +112,7 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
               />
             )}
             isLoading={isLoading}
+            isError={isError}
             separatorHeight={12}
           />
           {totalPages > 1 ? (

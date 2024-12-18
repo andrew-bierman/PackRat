@@ -137,7 +137,7 @@ export function TripScreen({
             {!isViewOnlyMode ? (
               <LayoutCard
                 title="Trip Details"
-                style={{ flex: 1, alignSelf: 'flex-start' }}
+                style={{ flex: 1, alignSelf: 'flex-start', width: '100%' }}
               >
                 <TripForm
                   tripId={tripId}

@@ -41,7 +41,7 @@ export const useUserPacks = (
     }),
     [isPublic, isPreview, searchTerm, pagination, ownerId, itemId, queryString],
   );
-  const { data, error, isLoading, refetch } =
+  const { data, isError, isLoading, refetch } =
     queryTrpc.getUserPacksFeed.useQuery(queryParams, {
       enabled,
       refetchOnWindowFocus: false,
@@ -72,6 +72,7 @@ export const useUserPacks = (
   return {
     data: data?.data || [],
     isLoading,
+    isError,
     totalCount: data?.totalCount,
     refetch,
     fetchPrevPage,

@@ -9,6 +9,7 @@ import {
 import { RText } from '@packrat/ui';
 import useResponsive from 'app/hooks/useResponsive';
 import useTheme from 'app/hooks/useTheme';
+import { AsyncView } from 'app/components/AsyncView';
 
 interface FeedListProps {
   data: any;
@@ -16,6 +17,7 @@ interface FeedListProps {
   refreshing?: boolean;
   onRefresh?: () => void;
   isLoading?: boolean;
+  isError?: boolean;
   errorMessage?: string;
   separatorHeight?: number;
   footerComponent?: JSX.Element;
@@ -29,6 +31,7 @@ export const FeedList = ({
   refreshing = false,
   onRefresh,
   isLoading = false,
+  isError = false,
   errorMessage = 'No Data Available',
   footerComponent,
   style,
@@ -49,9 +52,7 @@ export const FeedList = ({
 
   return (
     <View style={style}>
-      {isLoading ? (
-        <ActivityIndicator size="large" color={currentTheme.colors.text} />
-      ) : (
+      <AsyncView isLoading={isLoading} isError={isError}>
         <FlatList
           key={`flatlist-numColumns-${numColumns}`}
           numColumns={numColumns}
@@ -75,7 +76,7 @@ export const FeedList = ({
           }
           showsVerticalScrollIndicator={false}
         />
-      )}
+      </AsyncView>
     </View>
   );
 };

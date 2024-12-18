@@ -10,6 +10,7 @@ import { TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import RLink from '@packrat/ui/src/RLink';
 import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function ItemDetailsScreen() {
   const { currentTheme } = useTheme();
@@ -52,10 +53,7 @@ export function ItemDetailsScreen() {
             </TouchableOpacity>
           )}
         </RStack>
-        <ItemDetailsSection
-          itemData={item as any}
-          isDescriptionCollapsible={true}
-        />
+        <ItemDetailsSection itemData={item as any} isProductScreen={true} />
       </RStack>
       <LargeCard
         customStyle={{

@@ -50,7 +50,8 @@ export const AddPackScreen = ({
             <RText style={{ textAlign: 'left', lineHeight: 20 }}>
               {ADD_PACK_FORM_DESCRIPTION}
             </RText>
-            <XStack
+            {/* DISABLED PACK TEMPLATES FOR NOW */}
+            {/* <XStack
               gap={4}
               jc="space-between"
               style={{
@@ -81,7 +82,7 @@ export const AddPackScreen = ({
               >
                 Explore Pack Templates
               </Button>
-            </XStack>
+            </XStack> */}
           </YStack>
           <AddPackForm isCreatingTrip={isCreatingTrip} onSuccess={onSuccess} />
         </View>

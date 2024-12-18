@@ -10,9 +10,10 @@ import {
   Form,
   InputWithIcon,
 } from '@packrat/ui';
-import { Search, X } from '@tamagui/lucide-icons';
+import { Plus, Search, X } from '@tamagui/lucide-icons';
 import { useFeedSortOptions } from '../hooks';
 import FilterBadge from 'app/components/FilterBadge';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 const RStack = OriginalRStack;
 const RText = OriginalRText;
@@ -113,12 +114,12 @@ export const FeedSearchFilter = ({
           />
 
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
-            <RButton
+            <RSecondaryButton
               style={{ marginLeft: 'auto', marginTop: 8 }}
+              label="Add new"
+              icon={<Plus />}
               onPress={handleCreateClick}
-            >
-              Create
-            </RButton>
+            />
           )}
         </RStack>
       )}

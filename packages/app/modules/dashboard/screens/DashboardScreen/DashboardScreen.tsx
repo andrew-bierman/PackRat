@@ -36,12 +36,13 @@ export const DashboardScreen = () => {
                 }}
               >
                 <FAB />
-                <Button
+                {/* DISABLED PACK TEMPLATES FOR NOW */}
+                {/* <Button
                   style={{ alignSelf: 'flex-end' }}
                   onPress={() => router.push('/pack-templates')}
                 >
                   Templates
-                </Button>
+                </Button> */}
               </Stack>
             ) : null}
 

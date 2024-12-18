@@ -23,8 +23,15 @@ interface ItemData {
   productUrl: string;
 }
 
-export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
+export function ItemDetailsSection({
+  itemData,
+  isProductScreen,
+}: {
+  itemData: ItemData;
+  isProductScreen?: boolean;
+}) {
   const styles = useCustomStyles(loadStyles);
+  const { gtSm } = useResponsive();
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
   const productDetails = useMemo(
     () => parseProductDetails(itemData.productDetails),
@@ -33,7 +40,14 @@ export function ItemDetailsSection({ itemData }: { itemData: ItemData }) {
 
   return (
     <RStack style={styles.container}>
-      <RStack style={styles.contentContainer}>
+      <RStack
+        style={[
+          styles.contentContainer,
+          isProductScreen
+            ? { flexDirection: gtSm ? 'row' : 'column', gap: 10 }
+            : undefined,
+        ]}
+      >
         <View style={styles.imageContainer}>
           <RButton
             style={styles.iconButton}
@@ -103,7 +117,6 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.border,
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: xxs ? 0 : 10,
       position: 'relative',
     },
     detailsContainer: {

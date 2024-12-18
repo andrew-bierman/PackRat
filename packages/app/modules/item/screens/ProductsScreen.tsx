@@ -88,35 +88,29 @@ export function ProductsScreen() {
           />
         </RStack>
 
-        {isLoading ? (
-          <RText>Loading...</RText>
-        ) : (
-          <>
-            <FeedList
-              data={data}
-              CardComponent={({ item }) => (
-                <ItemCard
-                  cardType="primary"
-                  item={item}
-                  onAddPackPress={onTriggerOpen}
-                />
-              )}
-              isLoading={isLoading}
-              separatorHeight={12}
+        <FeedList
+          data={data}
+          CardComponent={({ item }) => (
+            <ItemCard
+              cardType="primary"
+              item={item}
+              onAddPackPress={onTriggerOpen}
             />
-            {totalPages > 1 && (
-              <RStack style={{ marginTop: 40 }}>
-                <Pagination
-                  isPrevBtnDisabled={!hasPrevPage}
-                  isNextBtnDisabled={!hasNextPage}
-                  onPressPrevBtn={fetchPrevPage}
-                  onPressNextBtn={fetchNextPage}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                />
-              </RStack>
-            )}
-          </>
+          )}
+          isLoading={isLoading}
+          separatorHeight={12}
+        />
+        {totalPages > 1 && (
+          <RStack style={{ marginTop: 40 }}>
+            <Pagination
+              isPrevBtnDisabled={!hasPrevPage}
+              isNextBtnDisabled={!hasNextPage}
+              onPressPrevBtn={fetchPrevPage}
+              onPressNextBtn={fetchNextPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          </RStack>
         )}
       </RStack>
       <PackPickerOverlay {...overlayProps} />

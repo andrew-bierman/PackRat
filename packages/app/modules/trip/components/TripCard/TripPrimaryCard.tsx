@@ -30,7 +30,7 @@ export const TripPrimaryCard: FC<TripCardProps> = (props) => {
       }
       content={
         <YStack>
-          <RText numberOfLines={1} ellipsizeMode="tail">
+          <RText numberOfLines={2} ellipsizeMode="tail">
             {props.details.description}
           </RText>
           <Details
