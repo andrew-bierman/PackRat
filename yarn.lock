@@ -15102,7 +15102,7 @@ __metadata:
     superjson: "npm:^2.0.0"
     tamagui: "npm:1.96.0"
     togpx: "npm:^0.5.4"
-    typescript: "npm:^5.5.3"
+    typescript: "npm:~5.3.3"
     uuid: "npm:3.4.0"
     xmldom: "npm:^0.6.0"
   languageName: unknown
