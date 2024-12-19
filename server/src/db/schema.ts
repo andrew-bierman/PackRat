@@ -408,7 +408,7 @@ export const trip = sqliteTable('trip', {
   parks: text('parks', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
-  trails: text('parks', { mode: 'json' }).$type<
+  trails: text('trails', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
   start_date: text('start_date').notNull(),
