@@ -4,6 +4,7 @@ import useTheme from 'app/hooks/useTheme';
 
 interface RSecondaryButtonProps extends ButtonProps {
   label: string;
+  danger?: boolean;
 }
 
 const StyledSecondaryButton = styled(Button, {
@@ -49,13 +50,14 @@ const RSecondaryButton: React.FC<RSecondaryButtonProps> = ({
   label,
   disabled,
   size,
+  danger,
   ...props
 }) => {
   const { currentTheme } = useTheme();
 
   const dynamicStyle = {
     backgroundColor: currentTheme.colors.background,
-    color: currentTheme.colors.text,
+    color: danger ? 'red' : currentTheme.colors.text,
   };
 
   return (

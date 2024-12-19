@@ -5,7 +5,7 @@ import {
   FormSelect as OriginalFormSelect,
   YStack,
   SubmitButton,
-  FormSwitch,
+  FormSwitch as OriginalSwitch,
 } from '@packrat/ui';
 import { useRouter } from 'app/hooks/router';
 import { useAddTrip, useEditTrips } from 'app/hooks/trips';
@@ -18,12 +18,13 @@ import { type addTripKey } from 'app/screens/trip/createTripStore/store';
 
 const Form: any = OriginalForm;
 const FormSelect: any = OriginalFormSelect;
+const FormSwitch: any = OriginalSwitch;
 
 interface TripFormProps {
   tripStore: any;
   dateRange: any;
+  isDisabled: boolean;
   setDateRange: (range: any) => void;
-  isValid: boolean;
   initialState?: Partial<Record<addTripKey, any>>;
   tripId?: string;
 }
@@ -32,12 +33,12 @@ export const TripForm = ({
   tripStore,
   dateRange,
   setDateRange,
-  isValid,
   initialState,
   tripId,
+  isDisabled,
 }: TripFormProps) => {
   const { addTrip, isSuccess, data: response } = useAddTrip();
-  const { editTrips } = useEditTrips();
+  const { editTrips, isLoading: isSaving } = useEditTrips();
   const router = useRouter();
 
   const handleCreateTrip = async (values) => {
@@ -65,7 +66,12 @@ export const TripForm = ({
     >
       <YStack style={{ gap: 16 }}>
         <FormInput placeholder="Trip Name" name="name" />
-        <FormInput placeholder="Trip Description" name="description" />
+        <FormInput
+          multiline
+          rows={3}
+          placeholder="Trip Description"
+          name="description"
+        />
         <TripDateRangeCard dateRange={dateRange} setDateRange={setDateRange} />
         <FormSelect
           options={ActivityOptions}
@@ -75,7 +81,10 @@ export const TripForm = ({
           name="activity"
         />
         <FormSwitch labelLeft="Visible For Everyone" name="is_public" />
-        <SubmitButton disabled={!isValid} onSubmit={handleCreateTrip}>
+        <SubmitButton
+          disabled={isDisabled || isSaving}
+          onSubmit={handleCreateTrip}
+        >
           Save Trip
         </SubmitButton>
       </YStack>

@@ -19,6 +19,8 @@ import { MapPin, MapPinned } from '@tamagui/lucide-icons';
 import { type addTripKey } from './createTripStore/store';
 import { useAuthUser } from 'app/modules/auth';
 import { TripInfo } from './TripInfo';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useDeleteTrips } from 'app/hooks/trips';
 
 const SECTIONS = {
   MAP: 'MAP',
@@ -42,10 +44,12 @@ export function TripScreen({
 }) {
   const placesAutoCompleteRef = useRef({});
   const [isChangePlaceMode, setIsChangePlaceMode] = useState(false);
+  const [isBoundsChangeInProgress, setIsBoundsChangeInProgress] =
+    useState(false);
   const { gtSm } = useResponsive();
   const authUser = useAuthUser();
   const hasPermissionToEdit = ownerId === authUser?.id;
-  const isViewOnlyMode = !hasPermissionToEdit && tripId;
+  const isViewOnlyMode = !hasPermissionToEdit && !!tripId;
 
   const {
     currentDestination,
@@ -68,6 +72,7 @@ export function TripScreen({
         initialBounds={initialBounds}
         onVisibleBoundsChange={(bounds) => {
           setTripValue('bounds', bounds);
+          setIsBoundsChangeInProgress(false);
         }}
       />
     ),
@@ -96,7 +101,10 @@ export function TripScreen({
           searchRef={placesAutoCompleteRef}
           isChangePlaceMode={isChangePlaceMode}
           onGoBack={() => setIsChangePlaceMode(false)}
-          onLocationSelect={() => setIsChangePlaceMode(false)}
+          onLocationSelect={() => {
+            setIsChangePlaceMode(false);
+            setIsBoundsChangeInProgress(true);
+          }}
         />
       )}
       {latLng || tripId ? (
@@ -114,13 +122,16 @@ export function TripScreen({
               {isViewOnlyMode ? 'Trip Details' : 'Plan Your Trip'}
             </RText>
             {!isViewOnlyMode && (
-              <RSecondaryButton
-                icon={<MapPin />}
-                size={36}
-                borderWidth={2}
-                onPress={() => setIsChangePlaceMode(true)}
-                label="Change Direction"
-              />
+              <XStack gap={8}>
+                <RSecondaryButton
+                  icon={<MapPin />}
+                  size={36}
+                  borderWidth={2}
+                  onPress={() => setIsChangePlaceMode(true)}
+                  label="Change Direction"
+                />
+                {tripId && <DeleteTripButton tripId={tripId} />}
+              </XStack>
             )}
           </XStack>
           <RStack style={{ flexDirection: gtSm ? 'row' : 'column', gap: 16 }}>
@@ -141,7 +152,7 @@ export function TripScreen({
               >
                 <TripForm
                   tripId={tripId}
-                  isValid={isValid}
+                  isDisabled={isBoundsChangeInProgress || !isValid}
                   dateRange={dateRange}
                   initialState={initialState}
                   setDateRange={setDateRange}
@@ -149,10 +160,7 @@ export function TripScreen({
                 />
               </LayoutCard>
             ) : (
-              <TripInfo
-                tripInfo={initialState}
-                startDate={tripStore.start_date}
-              />
+              <TripInfo tripInfo={initialState} />
             )}
           </RStack>
         </YStack>
@@ -160,3 +168,17 @@ export function TripScreen({
     </Layout>
   );
 }
+
+const DeleteTripButton = ({ tripId }: { tripId: string }) => {
+  const { handleDeleteTrip } = useDeleteTrips(tripId);
+  return (
+    <RSecondaryButton
+      icon={<MaterialIcons name="delete" size={20} />}
+      size={36}
+      borderWidth={2}
+      danger
+      onPress={handleDeleteTrip}
+      label="Delete Trip"
+    />
+  );
+};
