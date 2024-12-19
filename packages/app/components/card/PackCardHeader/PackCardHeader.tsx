@@ -3,7 +3,7 @@ import useTheme from 'app/hooks/useTheme';
 import { CustomCardHeader } from '../CustomCardHeader';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useAuthUser } from 'app/modules/auth';
-import { ActionsDropdownComponent } from '@packrat/ui';
+import { ActionsDropdownComponent, RText } from '@packrat/ui';
 import { EditableText } from '@packrat/ui/src/EditableText';
 import RStack from '@packrat/ui/src/RStack';
 import RIconButton from '@packrat/ui/src/RIconButton';
@@ -51,13 +51,7 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
         data={data}
         ownerId={data?.owner_id}
         title={
-          <RStack
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
+          <>
             {Platform.OS === 'web' && (
               <RIconButton
                 backgroundColor="transparent"
@@ -78,13 +72,8 @@ export const PackCardHeader = ({ data, title }: PackCardHeaderProps) => {
               />
             )}
 
-            <EditableText
-              isLoading={isLoading}
-              defaultValue={title}
-              isFocused={isTitleEditMode}
-              onSave={handleSaveTitle}
-            />
-          </RStack>
+            <RText style={{ fontSize: 24, fontWeight: 600 }}>{title}</RText>
+          </>
         }
         actionsComponent={
           user?.id === data.owner_id && (

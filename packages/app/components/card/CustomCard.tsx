@@ -67,6 +67,7 @@ export const CustomCard = ({
             padding: 15,
             paddingBottom: isWeb ? 0 : 10,
             flexDirection: 'row',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: 16,
