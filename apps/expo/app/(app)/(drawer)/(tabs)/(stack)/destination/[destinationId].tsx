@@ -1,7 +1,6 @@
 import React from 'react';
+import { DestinationScreen } from 'app/modules/map/screens/DestinationScreen';
 import { Platform } from 'react-native';
-import { DestinationPage } from 'app/components/destination';
-// import DestinationPage from "../../components/destination";
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 
@@ -22,7 +21,7 @@ export default function Destination() {
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
-      <DestinationPage />
+      <DestinationScreen />
     </>
   );
 }

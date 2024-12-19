@@ -10,10 +10,10 @@ import { PaginationParams } from 'src/helpers/pagination';
  */
 export const getUserFavoritesService = async (
   userId: string,
-  options?: { searchTerm?: string },
+  options?: { searchTerm?: string; isPublic?: boolean },
   pagination?: PaginationParams,
 ) => {
-  const { searchTerm } = options || {};
+  const { searchTerm, isPublic } = options || {};
   const userClass = new User();
   const feedClass = new Feed();
   const user = (await userClass.findUser({
@@ -30,6 +30,7 @@ export const getUserFavoritesService = async (
     {
       includeUserFavoritesOnly: true,
       searchTerm,
+      isPublic,
       ownerId: userId,
     },
     'trips',

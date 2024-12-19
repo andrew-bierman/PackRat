@@ -1,12 +1,11 @@
-// import { prisma } from '../../prisma';
-import { Item } from '../../drizzle/methods/Item';
+import { type ExecutionContext } from 'hono';
+import { Item as ItemClass } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
 import { VectorClient } from '../../vector/client';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
-import { type ExecutionContext } from 'hono';
 
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
@@ -34,7 +33,7 @@ export const addItemService = async (
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
   }
   const itemCategoryClass = new ItemCategory();
-  const itemClass = new Item();
+  const itemClass = new ItemClass();
   const itemOwnersClass = new ItemOwners();
   category = (await itemCategoryClass.findItemCategory({ name: type })) || null;
   if (!category) {

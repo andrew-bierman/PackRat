@@ -19,9 +19,10 @@ export const Details: FC<DetailsProps> = ({ items }) => {
         <YGroup.Item key={key}>
           <ListItem
             {...item}
-            size="$2"
+            size="$4"
             style={{
               display: 'flex',
+              flex: 1,
               justifyContent: 'space-between',
               paddingLeft: 0,
               paddingRight: 0,

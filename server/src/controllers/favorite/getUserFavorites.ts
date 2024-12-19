@@ -22,12 +22,17 @@ export function getUserFavoritesRoute() {
         pagination: z.object({ limit: z.number(), offset: z.number() }),
         searchTerm: z.string().optional(),
         isPreview: z.boolean().optional(),
+        isPublic: z.boolean().optional(),
       }),
     )
     .query(async (opts) => {
-      const { userId, pagination, searchTerm } = opts.input;
+      const { userId, pagination, searchTerm, isPublic } = opts.input;
       const { data, totalCount, currentPagination } =
-        await getUserFavoritesService(userId, { searchTerm }, pagination);
+        await getUserFavoritesService(
+          userId,
+          { searchTerm, isPublic },
+          pagination,
+        );
 
       return {
         data,

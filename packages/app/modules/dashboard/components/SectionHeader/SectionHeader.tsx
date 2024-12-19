@@ -8,14 +8,9 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 interface SectionHeaderProps {
   iconName: keyof typeof Ionicons.glyphMap;
   text: string;
-  textStyle: any;
 }
 
-export const SectionHeader = ({
-  iconName,
-  text,
-  textStyle,
-}: SectionHeaderProps) => {
+export const SectionHeader = ({ iconName, text }: SectionHeaderProps) => {
   const styles = useCustomStyles(loadStyles);
   const navigate = useNavigate();
 
@@ -40,8 +35,7 @@ const loadStyles = (theme: any) => {
       width: '100%',
     },
     text: {
-      color: currentTheme.colors.tertiaryBlue,
-      fontSize: 25,
+      fontSize: 24,
       fontWeight: 'bold',
     },
     icon: {

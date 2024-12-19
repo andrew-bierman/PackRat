@@ -4,46 +4,66 @@ import { ChevronDown } from '@tamagui/lucide-icons';
 import { Details } from '@packrat/ui';
 import { useScreenWidth } from 'app/hooks/common/useScreenWidth';
 
-interface Details {
-  key1: string;
-  key2: string;
-  key3: string;
-}
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ExpandableDetailsSectionProps {
-  details: Details;
+  title: string;
+  data: Array<{ key: string; label: string; value: React.ReactNode }> | string;
+  renderContent?: (
+    data:
+      | Array<{ key: string; label: string; value: React.ReactNode }>
+      | string,
+  ) => React.ReactNode;
 }
 
 export function ExpandableDetailsSection({
-  details,
+  title,
+  data,
+  renderContent,
 }: ExpandableDetailsSectionProps) {
+  const { sm, md, lg, xl, xxl } = useResponsive();
   const { screenWidth } = useScreenWidth();
+
+  const getContentStyle = () => {
+    if (sm) {
+      return {
+        width: screenWidth - 110,
+      };
+    }
+    return { width: screenWidth - 1200 };
+  };
 
   return (
     <Accordion overflow="hidden" width="100%" type="multiple">
       <Accordion.Item value="details">
-        <Accordion.Trigger flexDirection="row" justifyContent="space-between">
+        <Accordion.Trigger
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderWidth: 0,
+            borderBottomWidth: 2,
+            marginBottom: 10,
+          }}
+        >
           {({ open }) => (
             <>
-              <Paragraph>Product Details</Paragraph>
+              <Paragraph style={{ fontWeight: 'bold' }}>{title}</Paragraph>
               <Square rotate={open ? '180deg' : '0deg'} animation="quick">
                 <ChevronDown size="$1" />
               </Square>
             </>
           )}
         </Accordion.Trigger>
+
         <Accordion.HeightAnimator animation="quick">
-          <Accordion.Content
-            style={{
-              width: screenWidth - 50,
-              padding: 20,
-            }}
-          >
-            <Details
-              items={Object.entries(details).map(([key, value]) => {
-                return { key, label: key, value };
-              })}
-            />
+          <Accordion.Content style={getContentStyle()}>
+            {renderContent ? (
+              renderContent(data)
+            ) : typeof data === 'string' ? (
+              <Paragraph>{data}</Paragraph>
+            ) : (
+              <Details items={data} />
+            )}
           </Accordion.Content>
         </Accordion.HeightAnimator>
       </Accordion.Item>

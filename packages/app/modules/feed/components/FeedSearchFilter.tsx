@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import useTheme from 'app/hooks/useTheme';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { View } from 'react-native';
@@ -9,36 +9,32 @@ import {
   RButton,
   Form,
   InputWithIcon,
-  DropdownComponent,
-  RSwitch,
 } from '@packrat/ui';
-import { Search, X } from '@tamagui/lucide-icons';
-import { Switch } from 'tamagui';
+import { Plus, Search, X } from '@tamagui/lucide-icons';
 import { useFeedSortOptions } from '../hooks';
-const RStack: any = OriginalRStack;
-const RText: any = OriginalRText;
-const RSeparator: any = OriginalRSeparator;
+import FilterBadge from 'app/components/FilterBadge';
+import RSecondaryButton from 'app/components/RSecondaryButton';
+
+const RStack = OriginalRStack;
+const RText = OriginalRText;
+const RSeparator = OriginalRSeparator;
 
 interface FeedSearchFilterProps {
   feedType?: string | null;
   isSortHidden?: boolean;
   handleSortChange?: (value: string) => void;
-  handleTogglePack?: () => void;
-  handleToggleTrip?: () => void;
+  handleTypeChange?: (type: string) => void;
   selectedTypes?: { pack: boolean; trip: boolean };
   queryString?: string;
   setSearchQuery?: (query: string) => void;
   handleCreateClick?: () => void;
-  value?: string;
-  onChange?: (value: string) => void;
 }
 
 export const FeedSearchFilter = ({
   feedType,
   isSortHidden,
   handleSortChange,
-  handleTogglePack,
-  handleToggleTrip,
+  handleTypeChange,
   selectedTypes,
   queryString,
   setSearchQuery,
@@ -53,14 +49,13 @@ export const FeedSearchFilter = ({
     selectedTypes?.trip || feedType === 'userTrips',
   );
 
-  // const onSearch = (search) => (setSearchQuery) ? setSearchQuery(search) : null;
   const handleSetSearchValue = (v: string) => {
     setSearchValue(v);
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
     debounceTimerRef.current = setTimeout(() => {
-      setSearchQuery(v);
+      setSearchQuery?.(v);
     }, 600);
   };
 
@@ -82,7 +77,14 @@ export const FeedSearchFilter = ({
     <View style={styles.filterContainer}>
       <View style={styles.searchContainer}>
         <Form>
-          <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+          <RStack
+            style={{
+              flexDirection: 'row',
+              margin: 0,
+              padding: 0,
+              width: '100%',
+            }}
+          >
             <InputWithIcon
               LeftIcon={<Search />}
               RightIcon={<X />}
@@ -94,98 +96,30 @@ export const FeedSearchFilter = ({
         </Form>
       </View>
       <RSeparator />
-      {!isSortHidden && (
-        <RStack
-          // flex={1}
-          flexWrap="wrap"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          padding={2}
-          margin={2}
-        >
-          {feedType === 'public' && (
-            <RStack
-              style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
-            >
-              <RText
-                fontSize={18}
-                fontWeight="bold"
-                color={currentTheme.colors.tertiaryBlue}
-              >
-                Packs
-              </RText>
 
-              <RSwitch
-                id="single-switch"
-                size="$1.5"
-                checked={selectedTypes?.pack ?? false}
-                disabled={!selectedTypes?.trip}
-                onCheckedChange={handleTogglePack}
-              >
-                <Switch.Thumb />
-              </RSwitch>
-              <RText
-                fontSize={18}
-                fontWeight="bold"
-                color={currentTheme.colors.tertiaryBlue}
-              >
-                Trips
-              </RText>
-              <RSwitch
-                id="two-switch"
-                size="$1.5"
-                checked={selectedTypes?.trip ?? false}
-                disabled={!selectedTypes?.pack}
-                onCheckedChange={handleToggleTrip}
-              >
-                <Switch.Thumb />
-              </RSwitch>
-            </RStack>
+      {!isSortHidden && (
+        <RStack style={{ flexDirection: 'row' }}>
+          {feedType === 'public' && (
+            <FilterBadge
+              menuItems={['Packs', 'Trips']}
+              selectedValue={selectedTypes?.pack ? 'Packs' : 'Trips'}
+              onSelect={(value) => handleTypeChange?.(value)}
+            />
           )}
-          {feedType === 'packTemplates' && (
-            <RText
-              fontSize={18}
-              fontWeight="bold"
-              color={currentTheme.colors.text}
-            >
-              Discover our curated pack templates to help you get started.
-            </RText>
-          )}
-          <RStack
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              display: 'flex',
-              gap: 10,
-              width: '100%',
-              marginTop: 15,
-              justifyContent: 'space-between',
-            }}
-          >
-            <RText
-              fontSize={17}
-              fontWeight="bold"
-              color={currentTheme.colors.text}
-            >
-              Sort By:
-            </RText>
-            <View style={{ flex: 1 }}>
-              <DropdownComponent
-                value={queryString}
-                data={sortOptions}
-                onValueChange={handleSortChange}
-                placeholder={queryString}
-              />
-            </View>
-          </RStack>
+
+          <FilterBadge
+            menuItems={sortOptions}
+            selectedValue={queryString}
+            onSelect={handleSortChange}
+          />
+
           {(feedType === 'userPacks' || feedType === 'userTrips') && (
-            <RButton
+            <RSecondaryButton
               style={{ marginLeft: 'auto', marginTop: 8 }}
+              label="Add new"
+              icon={<Plus />}
               onPress={handleCreateClick}
-            >
-              Create
-            </RButton>
+            />
           )}
         </RStack>
       )}
@@ -204,12 +138,6 @@ const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
-    mainContainer: {
-      // flex: 1,
-      backgroundColor: currentTheme.colors.background,
-      fontSize: 18,
-      padding: 15,
-    },
     filterContainer: {
       backgroundColor: currentTheme.colors.card,
       padding: 15,
@@ -226,13 +154,6 @@ const loadStyles = (theme: any) => {
       marginBottom: 10,
       padding: 10,
       borderRadius: 5,
-    },
-
-    cardContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      alignItems: 'center',
     },
   };
 };

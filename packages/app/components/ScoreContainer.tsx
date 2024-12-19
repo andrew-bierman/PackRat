@@ -12,6 +12,7 @@ import {
 } from 'app/hooks/score';
 import { View } from 'react-native';
 import { useMedia } from 'tamagui';
+import useResponsive from 'app/hooks/useResponsive';
 
 interface ScoreProgressChartProps {
   score: number;
@@ -187,6 +188,7 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
 
   const handleScoreClick = useCalculateStore(id, type);
   const media = useMedia();
+  const { sm } = useResponsive();
 
   return (
     <RStack style={styles.box}>
@@ -217,7 +219,10 @@ export const ScoreContainer: React.FC<ScoreContainerProps> = ({
             style={{
               flex: 1,
               flexDirection: media.gtXs ? 'column' : 'row',
-              gap: 15,
+              flexWrap: 'wrap',
+              gap: sm ? 50 : 20,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             <ScoreProgressChart score={totalScore} />
@@ -236,12 +241,9 @@ const loadStyles = (theme: any) => {
       marginVertical: 15,
       padding: 26,
       marginTop: 25,
-      // borderColor: currentTheme.colors.border,
-      // borderWidth: 2,
-      borderColor: currentTheme.colors.border,
+      borderColor: currentTheme.colors.cardBorderPrimary,
       borderWidth: 1,
       borderRadius: 10,
-      boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
       backgroundColor: currentTheme.colors.background,
     },
     hStack: {

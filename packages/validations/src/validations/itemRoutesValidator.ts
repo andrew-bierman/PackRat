@@ -66,9 +66,19 @@ export const addItemGlobal = z.object({
   name: z.string(),
   weight: z.number(),
   unit: z.string(),
-  type: z.string(),
+  type: z.enum(['Food', 'Water', 'Essentials']),
   ownerId: z.string(),
+  sku: z.string().optional(),
+  productUrl: z.string().optional(),
+  description: z.string().optional(),
+  productDetails: z
+    .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+    .optional(),
+  seller: z.string().optional(),
+  image_urls: z.string().optional(),
 });
+
+export type AddItemGlobalType = z.infer<typeof addItemGlobal>;
 
 export const importItemsGlobal = z.object({
   content: z.string(),

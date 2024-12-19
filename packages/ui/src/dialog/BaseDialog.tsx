@@ -16,6 +16,7 @@ interface BaseDialogProps {
   title: string;
   description: string;
   trigger: string;
+  triggerComponent?: React.ReactNode;
   children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
 }
 
@@ -23,6 +24,7 @@ export const BaseDialog = ({
   title,
   description,
   trigger,
+  triggerComponent,
   children,
 }: BaseDialogProps) => {
   const [open, setOpen] = useState(false);
@@ -35,7 +37,7 @@ export const BaseDialog = ({
       }}
     >
       <Dialog.Trigger asChild>
-        <RButton>{trigger}</RButton>
+        {triggerComponent || <RButton>{trigger}</RButton>}
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet zIndex={200000} modal dismissOnSnapToBottom>

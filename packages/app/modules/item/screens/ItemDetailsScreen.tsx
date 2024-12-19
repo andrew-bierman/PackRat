@@ -9,6 +9,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import RLink from '@packrat/ui/src/RLink';
+import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function ItemDetailsScreen() {
   const { currentTheme } = useTheme();
@@ -22,13 +24,7 @@ export function ItemDetailsScreen() {
   }
 
   return (
-    <RScrollView
-      style={{
-        marginBottom: 40,
-        flex: 1,
-        backgroundColor: currentTheme.colors.background,
-      }}
-    >
+    <Layout>
       <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
         <RStack style={styles.breadcrumbContainer}>
           {Platform.OS === 'web' ? (
@@ -57,22 +53,24 @@ export function ItemDetailsScreen() {
             </TouchableOpacity>
           )}
         </RStack>
-        <ItemDetailsSection itemData={item as any} />
+        <ItemDetailsSection itemData={item as any} isProductScreen={true} />
       </RStack>
       <LargeCard
         customStyle={{
-          width: '80%',
-          backgroundColor: currentTheme.colors.secondaryBlue,
+          width: '100%',
+          backgroundColor: currentTheme.colors.background,
           paddingBottom: 24,
           gap: 16,
           paddingTop: 0,
+          borderWidth: 1,
+          borderColor: currentTheme.colors.cardBorderPrimary,
         }}
       >
         <RH3
           style={{
             color: currentTheme.colors.text,
             fontSize: 24,
-            alignSelf: 'center',
+            alignSelf: 'flex-start',
             marginBottom: 20,
           }}
         >
@@ -80,7 +78,7 @@ export function ItemDetailsScreen() {
         </RH3>
         <FeedPreview feedType="similarItems" id={itemId} />
       </LargeCard>
-    </RScrollView>
+    </Layout>
   );
 }
 

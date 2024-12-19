@@ -207,7 +207,7 @@ class VectorClient {
       content: string;
       namespace: string;
       metadata: Metadata;
-    }>
+    }>,
   ) {
     const contentList = [];
     for (const record of records) {

@@ -107,8 +107,7 @@
   },
   "lint-staged": {
     "server/**/*.{js,ts}": [
-      "cd server && yarn run lint",
-      "prettier --write"
+      "yarn workspace server run lint"
     ],
     "**/*.{js,jsx,ts,tsx}": [
       "prettier --write"

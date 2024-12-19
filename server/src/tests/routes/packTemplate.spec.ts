@@ -7,7 +7,7 @@ import type { trpcCaller } from '../testHelpers';
 import {
   type PackTemplate,
   type Item,
-  itemPackTemplates as itemPackTemplatesTable,
+  itemPackTemplate as itemPackTemplatesTable,
   packTemplate as packTemplateTable,
 } from 'src/db/schema';
 import { DbClient } from '../../db/client';
@@ -112,6 +112,23 @@ describe('Pack template routes', () => {
     it('should get pack templates', async () => {
       const packTemplates = await caller.getPackTemplates();
       expect(packTemplates).toMatchObject([
+        { ...packTemplate, items: packTemplateItems },
+      ]);
+    });
+  });
+
+  describe('addPackTemplate', () => {
+    it('should add pack template', async () => {
+      const packTemplate = await caller.addPackTemplate({
+        name: 'test',
+        description: 'pack template description',
+        type: 'pack',
+        itemPackTemplates: packTemplateItems.map((item) => ({
+          itemId: item.id,
+          quantity: 1,
+        })),
+      });
+      expect(packTemplate).toMatchObject([
         { ...packTemplate, items: packTemplateItems },
       ]);
     });

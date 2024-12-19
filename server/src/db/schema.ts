@@ -182,10 +182,10 @@ export const packTemplate = sqliteTable('pack_template', {
 });
 
 export const packTemplateRelations = relations(packTemplate, ({ many }) => ({
-  itemPackTemplates: many(itemPackTemplates),
+  itemPackTemplates: many(itemPackTemplate),
 }));
 
-export const itemPackTemplates = sqliteTable(
+export const itemPackTemplate = sqliteTable(
   'item_pack_templates',
   {
     itemId: text('item_id').references(() => item.id, { onDelete: 'cascade' }),
@@ -205,14 +205,14 @@ export const itemPackTemplates = sqliteTable(
 );
 
 export const itemPackTemplatesRelations = relations(
-  itemPackTemplates,
+  itemPackTemplate,
   ({ one }) => ({
     packTemplate: one(packTemplate, {
-      fields: [itemPackTemplates.packTemplateId],
+      fields: [itemPackTemplate.packTemplateId],
       references: [packTemplate.id],
     }),
     item: one(item, {
-      fields: [itemPackTemplates.itemId],
+      fields: [itemPackTemplate.itemId],
       references: [item.id],
     }),
   }),
@@ -252,9 +252,9 @@ export const item = sqliteTable(ITEM_TABLE_NAME, {
   sku: text('sku'),
   productUrl: text('product_url'),
   description: text('description'),
-  productDetails: text('product_details', { mode: 'json' }).$type<{
-    [key: string]: string | number | boolean | null;
-  }>(),
+  productDetails: text('product_details', { mode: 'json' }).$type<
+    Record<string, string | number | boolean | null>
+  >(),
   seller: text('seller'),
   createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
@@ -369,6 +369,7 @@ export const itemRelations = relations(item, ({ one, many }) => ({
   images: many(itemImage),
   itemOwners: many(itemOwners),
   itemPacks: many(itemPacks),
+  itemPackTemplates: many(itemPackTemplate),
 }));
 
 export const template = sqliteTable('template', {
@@ -403,11 +404,11 @@ export const trip = sqliteTable('trip', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
-  description: text('description').notNull(),
+  description: text('description'),
   parks: text('parks', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
-  trails: text('parks', { mode: 'json' }).$type<
+  trails: text('trails', { mode: 'json' }).$type<
     Array<{ id: string; name: string }>
   >(),
   start_date: text('start_date').notNull(),
@@ -462,7 +463,6 @@ export const tripRelations = relations(trip, ({ one, many }) => ({
     fields: [trip.pack_id],
     references: [pack.id],
   }),
-  // geojsons: many(tripGeojsons),
   tripGeojsons: many(tripGeojsons),
 }));
 
@@ -611,7 +611,11 @@ export const insertTemplateSchema = createInsertSchema(template);
 export const selectTemplateSchema = createSelectSchema(template);
 
 export type PackTemplate = InferSelectModel<typeof packTemplate>;
+export type InsertPackTemplate = InferInsertModel<typeof packTemplate>;
 export const selectPackTemplateSchema = createSelectSchema(packTemplate);
+
+export type ItemPackTemplate = InferSelectModel<typeof itemPackTemplate>;
+export type InsertItemPackTemplate = InferInsertModel<typeof itemPackTemplate>;
 
 export type Pack = InferSelectModel<typeof pack>;
 export type InsertPack = InferInsertModel<typeof pack>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TripDetails } from 'app/screens/trip/TripDetails';
+import EditTripScreen from 'app/screens/trip/editTrip';
 import { AuthWrapper } from 'app/modules/auth';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/trip/$tripId')({
 export default function Trip() {
   return (
     <AuthWrapper>
-      <TripDetails />
+      <EditTripScreen />
     </AuthWrapper>
   );
 }

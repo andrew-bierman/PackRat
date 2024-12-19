@@ -1,6 +1,10 @@
 {
   "extends": "../../tsconfig.base", // not set up yet
-  "include": ["src", "../../apps/expo/app/Bugsnag.ts"],
+  "include": [
+    "src",
+    "../../apps/expo/app/Bugsnag.ts",
+    "../app/components/LayoutCard"
+  ],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx"

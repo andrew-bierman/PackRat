@@ -1,60 +1,46 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { Popover, Button, YStack, Text } from 'tamagui';
+import { useQuickActions } from 'app/modules/dashboard';
+import { QuickActionButton } from 'app/modules/dashboard/components/QuickActionButton/QuickActionButton';
+import { RButton, RText } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
-import { RText } from '@packrat/ui';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { QuickActionsSection } from 'app//modules/dashboard';
+import useTheme from 'app/hooks/useTheme';
 
-const FABWeb = ({ showQuickActions, toggleQuickActions }) => {
-  const styles = useCustomStyles(loadStyles);
+const FABWeb = () => {
+  const { handleActionSelect, quickActionData } = useQuickActions();
+  const { currentTheme } = useTheme();
 
   return (
-    <>
-      {showQuickActions && (
-        <View style={styles.quickActionsContainer}>
-          <QuickActionsSection />
-        </View>
-      )}
-      <TouchableOpacity style={styles.fab} onPress={toggleQuickActions}>
-        <MaterialIcons name="add" size={30} style={styles.fabIcon} />
-        <RText style={styles.fabText}>Create</RText>
-      </TouchableOpacity>
-    </>
+    <Popover>
+      <Popover.Trigger asChild>
+        <RButton
+          style={{
+            flexDirection: 'row',
+            backgroundColor: currentTheme.colors.card,
+            margin: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <MaterialIcons name="add" size={20} />
+          <RText style={{ fontWeight: 'bold', fontSize: 18 }}>Create</RText>
+        </RButton>
+      </Popover.Trigger>
+      <Popover.Content elevate bordered size="$2">
+        <YStack space="$3">
+          {quickActionData.map((action) => (
+            <QuickActionButton
+              key={action.action}
+              onPress={() => handleActionSelect(action.action)}
+              iconName={action.iconName}
+              text={action.text}
+            />
+          ))}
+        </YStack>
+        <Popover.Arrow />
+      </Popover.Content>
+    </Popover>
   );
-};
-
-const loadStyles = (theme) => {
-  const { currentTheme } = theme;
-
-  return {
-    quickActionsContainer: {
-      position: 'absolute',
-      top: 50,
-      left: 10,
-      zIndex: 1,
-      height: 54,
-      width: 150,
-      borderRadius: 5,
-    },
-    fab: {
-      flexDirection: 'row',
-      width: 100,
-      backgroundColor: currentTheme.colors.card,
-      borderRadius: 9,
-      justifyContent: 'center',
-      alignItems: 'center',
-      alignSelf: 'stretch',
-      zIndex: 2,
-    },
-    fabIcon: {
-      color: currentTheme.colors.tertiaryBlue,
-    },
-    fabText: {
-      fontSize: 17,
-      color: currentTheme.colors.tertiaryBlue,
-      fontWeight: 'bold',
-    },
-  };
 };
 
 export default FABWeb;

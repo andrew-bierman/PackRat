@@ -18,6 +18,8 @@ import { Search, X } from '@tamagui/lucide-icons';
 import { PackPickerOverlay } from 'app/modules/pack';
 import { useItemPackPicker } from '../hooks/useItemPackPicker';
 import { FeedList } from 'app/modules/feed/components/FeedList';
+import Layout from 'app/components/layout/Layout';
+import FilterBadge from 'app/components/FilterBadge';
 
 export function ProductsScreen() {
   const sortOptions = useFeedSortOptions('products');
@@ -55,12 +57,19 @@ export function ProductsScreen() {
   const numColumns = getNumColumns();
 
   return (
-    <RScrollView>
+    <Layout>
       <RStack style={styles.mainContainer}>
         <RStack style={styles.filterContainer}>
           <RStack style={styles.searchContainer}>
             <Form>
-              <RStack style={{ flexDirection: 'row', margin: 0, padding: 0 }}>
+              <RStack
+                style={{
+                  flexDirection: 'row',
+                  margin: 0,
+                  padding: 0,
+                  width: '100%',
+                }}
+              >
                 <InputWithIcon
                   LeftIcon={<Search />}
                   RightIcon={<X />}
@@ -71,56 +80,41 @@ export function ProductsScreen() {
               </RStack>
             </Form>
           </RStack>
-          <RStack style={styles.sortContainer}>
-            <RText style={{ fontWeight: 'bold', textWrap: 'nowrap' }}>
-              Sort By:
-            </RText>
-            <RStack style={{ flex: 1 }}>
-              <DropdownComponent
-                value={sortValue}
-                data={sortOptions}
-                onValueChange={handleSortChange}
-                placeholder="Select Sort Option"
-                native={true}
-                zeego={true}
-              />
-            </RStack>
-          </RStack>
+
+          <FilterBadge
+            menuItems={sortOptions}
+            selectedValue={sortValue}
+            onSelect={handleSortChange}
+          />
         </RStack>
 
-        {isLoading ? (
-          <RText>Loading...</RText>
-        ) : (
-          <>
-            <FeedList
-              data={data}
-              CardComponent={({ item }) => (
-                <ItemCard
-                  cardType="primary"
-                  item={item}
-                  onAddPackPress={onTriggerOpen}
-                />
-              )}
-              isLoading={isLoading}
-              separatorHeight={12}
+        <FeedList
+          data={data}
+          CardComponent={({ item }) => (
+            <ItemCard
+              cardType="primary"
+              item={item}
+              onAddPackPress={onTriggerOpen}
             />
-            {totalPages > 1 && (
-              <RStack style={{ marginTop: 40 }}>
-                <Pagination
-                  isPrevBtnDisabled={!hasPrevPage}
-                  isNextBtnDisabled={!hasNextPage}
-                  onPressPrevBtn={fetchPrevPage}
-                  onPressNextBtn={fetchNextPage}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                />
-              </RStack>
-            )}
-          </>
+          )}
+          isLoading={isLoading}
+          separatorHeight={12}
+        />
+        {totalPages > 1 && (
+          <RStack style={{ marginTop: 40 }}>
+            <Pagination
+              isPrevBtnDisabled={!hasPrevPage}
+              isNextBtnDisabled={!hasNextPage}
+              onPressPrevBtn={fetchPrevPage}
+              onPressNextBtn={fetchNextPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          </RStack>
         )}
       </RStack>
       <PackPickerOverlay {...overlayProps} />
-    </RScrollView>
+    </Layout>
   );
 }
 
@@ -146,12 +140,7 @@ const loadStyles = (theme: any) => {
       padding: 30,
       borderRadius: 10,
     },
-    sortContainer: {
-      width: xxs ? '100%' : xs ? '100%' : '20%',
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
+
     cardsContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',

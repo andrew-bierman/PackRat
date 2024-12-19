@@ -1,38 +1,36 @@
-// useTripsData.js
-import useParks from 'app/hooks/parks';
-import useTrails from 'app/hooks/trails';
-import {
-  useCurrentDestination,
-  useGetPhotonDetails,
-} from 'app/hooks/destination';
-import { useGEOLocationSearch } from 'app/hooks/geojson';
+import { useDestination, useGetPhotonDetails } from 'app/hooks/destination';
+import { useTripOSM } from './useTripOSM';
 
 export const useTripsData = () => {
-  const [osm] = useGEOLocationSearch();
-  const { currentDestination, latLng } = useCurrentDestination();
+  const [osm] = useTripOSM();
+  const { currentDestination, latLng } = useDestination(osm);
   const {
     data: photonDetails,
     isError: hasPhotonError,
-    isLoading: isPhotonLoading,
-  } = useGetPhotonDetails({
-    properties: {
-      osm_id: osm?.osmId ?? '',
-      osm_type: osm?.osmType ?? '',
+    isFetching: isPhotonLoading,
+  } = useGetPhotonDetails(
+    {
+      properties: {
+        osm_id: osm?.osmId ?? '',
+        osm_type: osm?.osmType ?? '',
+      },
     },
-  });
+    false,
+  );
 
-  const {
-    error: parksError,
-    isLoading: parksLoading,
-    filteredParks: parksData,
-  } = useParks({
-    latLng,
-  });
+  // TODO: Uncomment this once we have parks and trails data
+  // const {
+  //   error: parksError,
+  //   isLoading: parksLoading,
+  //   filteredParks: parksData,
+  // } = useParks({
+  //   latLng,
+  // });
 
-  const { data, filteredTrails, error, isLoading } = useTrails({
-    latLng,
-    selectedSearch: osm.name,
-  });
+  // const { data, filteredTrails, error, isLoading } = useTrails({
+  //   latLng,
+  //   selectedSearch: osm.name,
+  // });
 
   return {
     osm,
@@ -41,11 +39,5 @@ export const useTripsData = () => {
     photonDetails,
     hasPhotonError,
     isPhotonLoading,
-    parksData,
-    parksError,
-    parksLoading,
-    filteredTrails,
-    trailsError: error,
-    trailsLoading: isLoading,
   };
 };

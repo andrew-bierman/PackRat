@@ -8,15 +8,7 @@ type Request = {
 };
 
 export const useOfflineQueue = () => {
-  const {
-    isConnected,
-    requests,
-    setRequests,
-  }: {
-    isConnected: boolean;
-    requests: Request[];
-    setRequests: React.Dispatch<React.SetStateAction<Request[]>>;
-  } = useOfflineStore();
+  const { connectionStatus, requests, setRequests } = useOfflineStore();
 
   const runQueryItem = useRunQueryItem();
   const processQueue = () => {
@@ -54,7 +46,7 @@ export const useOfflineQueue = () => {
   };
 
   return {
-    isConnected,
+    isConnected: connectionStatus === 'connected',
     addOfflineRequest: handleAddOfflineRequest,
     processQueue,
   };

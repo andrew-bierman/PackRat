@@ -3,8 +3,7 @@ import { useGEOLocationSearch } from 'app/hooks/geojson';
 import { usePhotonDetail } from '../photonDetail';
 import { parseCoordinates } from 'app/utils/coordinatesParser';
 
-export const useCurrentDestination = () => {
-  const [osm] = useGEOLocationSearch();
+export const useDestination = (osm: any) => {
   const { data, isError, isLoading } = usePhotonDetail(osm.name, true);
   const currentDestination = useMemo(() => {
     return data?.find((destination) => {
@@ -23,4 +22,10 @@ export const useCurrentDestination = () => {
   }, [currentDestination]);
 
   return { currentDestination, latLng, isError, isLoading };
+};
+
+export const useCurrentDestination = () => {
+  const [osm] = useGEOLocationSearch();
+
+  return useDestination(osm);
 };

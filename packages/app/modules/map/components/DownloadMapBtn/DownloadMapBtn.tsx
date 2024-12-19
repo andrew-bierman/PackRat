@@ -48,6 +48,7 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
       </MapActionBtn>
       <BaseModal
         title="Download"
+        showTrigger={false}
         onClose={onClose}
         onOpen={onOpen}
         isOpen={isModalOpen}

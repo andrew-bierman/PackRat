@@ -1,12 +1,14 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useMemo } from 'react';
 import { RText, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
-import useTheme from 'app/hooks/useTheme';
-import useResponsive from 'app/hooks/useResponsive';
+import { ExpandableDetailsSection } from './ExpandableDetailsSection';
+import ItemPrimaryDetailsSection from './ItemPrimaryDetailsSection';
+import RPrimaryButton from 'app/components/RPrimaryButton';
 import { openExternalLink } from 'app/utils';
+import useResponsive from 'app/hooks/useResponsive';
+import useTheme from 'app/hooks/useTheme';
 
 interface ItemData {
   title: string;
@@ -17,142 +19,139 @@ interface ItemData {
   unit: string;
   description: string;
   productUrl: string;
+  productDetails?: string;
 }
 
-const ItemDetailsContent = ({ itemData }: { itemData: ItemData }) => {
+interface ItemDetailsContentProps {
+  itemData: ItemData;
+  isPrimaryDetails?: boolean;
+}
+
+const ItemDetailsContent: React.FC<ItemDetailsContentProps> = ({
+  itemData,
+  isPrimaryDetails = false,
+}) => {
   const styles = useCustomStyles(loadStyles);
+  const { sm } = useResponsive();
+  const { currentTheme } = useTheme();
+
+  const productDetails = useMemo(
+    () => parseProductDetails(itemData.productDetails),
+    [itemData.productDetails],
+  );
+
+  const renderPrimaryDetails = () => (
+    <>
+      <RStack
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 20,
+        }}
+      >
+        <RText numberOfLines={2} style={styles.title}>
+          {itemData.title}
+        </RText>
+        <RText
+          style={{
+            marginLeft: 10,
+            backgroundColor: currentTheme.colors.cardBorderPrimary,
+            borderRadius: 15,
+            paddingLeft: 10,
+            paddingRight: 10,
+            width: 'auto',
+            fontSize: 12,
+            textAlign: 'center',
+            fontWeight: 500,
+          }}
+        >
+          {itemData.category}
+        </RText>
+      </RStack>
+      <ItemPrimaryDetailsSection
+        weight={itemData.weight}
+        unit={itemData.unit}
+        sku={itemData.sku}
+        seller={itemData.seller}
+      />
+      <ExpandableDetailsSection
+        title="Description"
+        data={itemData.description}
+      />
+      <ExpandableDetailsSection title="Product Details" data={productDetails} />
+    </>
+  );
+
+  const renderDefaultInfo = () => (
+    <>
+      <RText
+        numberOfLines={2}
+        style={{ fontSize: sm ? 18 : 24, fontWeight: 'bold' }}
+      >
+        {itemData.title}
+      </RText>
+      <RText style={{ fontSize: sm ? 12 : 14, maxHeight: sm ? 20 : 30 }}>
+        {itemData.category}
+      </RText>
+      <RText
+        style={{
+          fontSize: sm ? 12 : 14,
+          maxHeight: sm ? 20 : 30,
+          fontWeight: 'bold',
+        }}
+      >
+        {convertWeight(itemData.weight, SMALLEST_ITEM_UNIT, itemData.unit)}
+        {itemData.unit}
+      </RText>
+      <RText style={{ fontSize: sm ? 10 : 12, maxHeight: sm ? 18 : 30 }}>
+        SKU: {itemData.sku}
+      </RText>
+      <RText style={{ fontSize: sm ? 10 : 12, maxHeight: sm ? 18 : 30 }}>
+        Seller: {itemData.seller}
+      </RText>
+      <RText
+        numberOfLines={2}
+        style={{ fontSize: sm ? 12 : 14, maxHeight: sm ? 50 : 60, flex: 1 }}
+      >
+        {itemData.description}
+      </RText>
+    </>
+  );
 
   return (
     <RStack style={styles.container}>
-      <RStack style={styles.detailsContainer}>
-        <RText numberOfLines={2} ellipsizeMode="tail" style={styles.title}>
-          {itemData.title}
-        </RText>
-        <RStack style={styles.infoRow}>
-          <RStack style={{ flexDirection: 'column' }}>
-            <RText style={styles.categoryText}>{itemData.category}</RText>
-            <RText style={styles.weightText}>
-              {convertWeight(
-                itemData.weight,
-                SMALLEST_ITEM_UNIT,
-                itemData.unit,
-              )}
-              {itemData.unit}
-            </RText>
-          </RStack>
-        </RStack>
-        <RStack style={styles.descriptionSection}>
-          <RText
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            style={styles.descriptionText}
-          >
-            {itemData.description}
-          </RText>
-        </RStack>
-        <RStack style={styles.skuSellerRow}>
-          <RText numberOfLines={1} ellipsizeMode="tail" style={styles.skuText}>
-            SKU: {itemData.sku}
-          </RText>
-          <RText
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={styles.sellerText}
-          >
-            Seller: {itemData.seller}
-          </RText>
-        </RStack>
-        <TouchableOpacity
-          onPress={() => {
-            openExternalLink(itemData.productUrl);
-          }}
-          style={styles.GoToStoreButton}
-        >
-          <RText style={styles.buttonText}>Go to Store</RText>
-        </TouchableOpacity>
-      </RStack>
+      {isPrimaryDetails ? renderPrimaryDetails() : renderDefaultInfo()}
+      <RPrimaryButton
+        label="Go to Store"
+        style={{ marginTop: 'auto' }}
+        onPress={() => openExternalLink(itemData.productUrl)}
+      />
     </RStack>
   );
 };
 
-const loadStyles = (theme: any) => {
-  const { currentTheme } = useTheme();
-  const { xxs, xs, sm } = useResponsive();
-
-  return {
-    container: {
-      flex: 1,
-      padding: xxs ? 0 : xs ? 8 : 10,
-    },
-    detailsContainer: {
-      flex: 1,
-      padding: xxs ? 0 : xs ? 8 : 10,
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    },
-    title: {
-      fontSize: xxs ? 16 : xs ? 16 : sm ? 18 : 20,
-      fontWeight: 'bold',
-      maxHeight: 60,
-      marginVertical: xxs ? 0 : 5,
-    },
-    infoRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginVertical: xxs ? 0 : xs ? 3 : 5,
-      flexShrink: 1,
-    },
-    categoryText: {
-      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
-      fontWeight: '400',
-    },
-    weightText: {
-      fontSize: xxs ? 16 : xs ? 16 : 18,
-      fontWeight: xxs ? '800' : xs ? '700' : '600',
-    },
-    descriptionSection: {
-      maxHeight: 60,
-      marginVertical: xxs ? 0 : 5,
-      padding: xxs ? 0 : 5,
-    },
-    descriptionText: {
-      fontSize: xxs ? 12 : xs ? 12 : sm ? 14 : 16,
-    },
-    skuSellerRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingBottom: xxs ? 0 : 5,
-      height: 30,
-    },
-    skuText: {
-      fontSize: xxs ? 9 : 10,
-      fontWeight: '600',
-      flexShrink: 1,
-      maxWidth: '40%',
-      paddingTop: xxs ? 13 : 0,
-    },
-    sellerText: {
-      fontSize: xxs ? 9 : 10,
-      fontWeight: '600',
-      flexGrow: 0,
-      flexShrink: 0,
-    },
-    GoToStoreButton: {
-      backgroundColor: currentTheme.colors.secondaryBlue,
-      paddingVertical: xxs ? 4 : 6,
-      paddingHorizontal: xxs ? 0 : 10,
-      borderRadius: 3,
-      alignItems: 'center',
-      marginTop: 5,
-    },
-    buttonText: {
-      color: currentTheme.colors.text,
-      fontWeight: 'bold',
-      fontSize: xxs ? 10 : 12,
-    },
-  };
+const parseProductDetails = (details?: string) => {
+  try {
+    return details
+      ? Object.entries(JSON.parse(details.replace(/'/g, '"'))).map(
+          ([key, value]) => ({
+            key,
+            label: key,
+            value: value?.toString() || '',
+          }),
+        )
+      : [];
+  } catch {
+    return [];
+  }
 };
+
+const loadStyles = (theme: any) => ({
+  container: { flex: 1 },
+  title: { fontSize: 24, fontWeight: 'bold', flex: 1 },
+  infoText: { fontSize: 12, marginVertical: 2 },
+  descriptionText: { fontSize: 12, marginVertical: 5 },
+});
 
 export default ItemDetailsContent;

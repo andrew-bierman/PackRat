@@ -10,6 +10,7 @@ import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from 'app/utils/fuseSearch';
 import { BaseDialog, BaseModal, Pagination, RButton } from '@packrat/ui';
 import { type PreviewResourceStateWithData } from 'app/hooks/common';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 interface DataListProps {
   resource: PreviewResourceStateWithData;
@@ -27,20 +28,9 @@ export const UserDataList = ({
   return (
     <>
       {Platform.OS == 'web' ? (
-        <BaseModal
-          title="See all"
-          trigger="See all"
-          isOpen={resource.isSeeAllModalOpen}
-          onOpen={() => resource.setIsSeeAllModalOpen(true)}
-          onClose={() => resource.setIsSeeAllModalOpen(false)}
-          footerButtons={[
-            {
-              label: 'Cancel',
-              color: '#B22222',
-              onClick: (_, closeModal) => closeModal(),
-            },
-          ]}
-          footerComponent={undefined}
+        <BaseDialog
+          title={`${resource.resourceName} List`}
+          triggerComponent={<RSecondaryButton label="View in list" />}
         >
           <View
             style={
@@ -87,19 +77,11 @@ export const UserDataList = ({
               />
             ) : null}
           </View>
-        </BaseModal>
+        </BaseDialog>
       ) : (
         <BaseDialog
-          title="See all"
-          trigger="See all"
-          footerButtons={[
-            {
-              label: 'Cancel',
-              color: '#B22222',
-              onClick: (_, closeModal) => closeModal(),
-            },
-          ]}
-          footerComponent={undefined}
+          title={`${resource.resourceName} List`}
+          triggerComponent={<RSecondaryButton label="View in list" />}
         >
           <FeedSearchFilter
             isSortHidden={true}

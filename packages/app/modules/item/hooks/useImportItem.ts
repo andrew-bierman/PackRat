@@ -36,7 +36,7 @@ export const useImportItem = () => {
         });
       }
 
-      addOfflineRequest('addItemGlobal', newItem);
+      addOfflineRequest('importItemsGlobal', newItem);
 
       // Optionally, handle offline case here if needed
     },

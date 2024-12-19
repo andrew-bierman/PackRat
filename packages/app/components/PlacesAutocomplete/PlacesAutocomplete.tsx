@@ -50,7 +50,19 @@ const PlaceItem = ({ item }: any) => {
       <RText fontWeight="400" color="red">
         {item.properties.name}
       </RText>
-      <RText opacity={100} textTransform={'capitalize'}>
+      <RText
+        style={{
+          backgroundColor: '#e6e6e6',
+          fontWeight: 600,
+          color: '#000000',
+          borderRadius: 8,
+          paddingLeft: 10,
+          paddingRight: 10,
+          width: 'auto',
+          fontSize: 12,
+          textAlign: 'center',
+        }}
+      >
         {item.properties.osm_value}
       </RText>
     </RStack>
