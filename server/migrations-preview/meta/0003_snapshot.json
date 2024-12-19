@@ -1020,13 +1020,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "trails": {
-          "name": "trails",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "start_date": {
           "name": "start_date",
           "type": "text",
