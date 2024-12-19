@@ -31,7 +31,7 @@ export function ItemDetailsSection({
   isProductScreen?: boolean;
 }) {
   const styles = useCustomStyles(loadStyles);
-  const { gtSm } = useResponsive();
+  const { sm } = useResponsive();
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
   const productDetails = useMemo(
     () => parseProductDetails(itemData.productDetails),
@@ -44,7 +44,7 @@ export function ItemDetailsSection({
         style={[
           styles.contentContainer,
           isProductScreen
-            ? { flexDirection: gtSm ? 'row' : 'column', gap: 10 }
+            ? { flexDirection: sm ? 'column' : 'row', gap: 10 }
             : undefined,
         ]}
       >
@@ -57,7 +57,6 @@ export function ItemDetailsSection({
           </RButton>
           <ImageGallery images={itemData.images?.map(({ url }) => url) || []} />
         </View>
-
         <RStack style={styles.detailsContainer}>
           <ItemDetailsContent
             itemData={{
@@ -100,7 +99,7 @@ const parseProductDetails = (details?: string) => {
 
 const loadStyles = (theme: any) => {
   const { currentTheme } = useTheme();
-  const { xxs } = useResponsive();
+  const { sm } = useResponsive();
 
   return {
     container: {
@@ -109,11 +108,12 @@ const loadStyles = (theme: any) => {
       backgroundColor: currentTheme.colors.background,
     },
     contentContainer: {
-      flexDirection: xxs ? 'column' : 'row',
+      alignItems: 'stretch',
     },
     imageContainer: {
       flex: 1,
-      height: 400,
+      minHeight: 400,
+      width: sm ? '100%' : '50%',
       backgroundColor: currentTheme.colors.border,
       justifyContent: 'center',
       alignItems: 'center',
