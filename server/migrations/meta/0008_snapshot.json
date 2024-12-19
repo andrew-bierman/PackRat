@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "463f2375-e852-4541-937a-f1a08337bffa",
-  "prevId": "a70ff809-b028-4fe7-a94c-31e53cbddaae",
+  "id": "978d19f2-b67b-4f6e-8597-fbd2f08aeda9",
+  "prevId": "76e62144-1925-48e1-8815-5f26d57095d9",
   "tables": {
     "conversation": {
       "name": "conversation",
