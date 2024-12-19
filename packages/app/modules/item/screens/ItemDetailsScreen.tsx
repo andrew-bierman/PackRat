@@ -1,5 +1,5 @@
 import React from 'react';
-import { RScrollView, RStack, RH3, RText } from '@packrat/ui';
+import { RStack, RH3, RText } from '@packrat/ui';
 import { useItem, useItemId } from 'app/modules/item';
 import { ItemDetailsSection } from '../components/ItemDetailsSection';
 import useTheme from 'app/hooks/useTheme';
@@ -19,40 +19,46 @@ export function ItemDetailsScreen() {
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
+  const { sm } = useResponsive();
+
   if (isLoading) {
     return null;
   }
 
   return (
     <Layout>
-      <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
-        <RStack style={styles.breadcrumbContainer}>
-          {Platform.OS === 'web' ? (
-            <RLink to="/products">
-              <RText style={styles.breadcrumbLink}>Products</RText>
-            </RLink>
-          ) : (
-            <TouchableOpacity onPress={() => router.push('/products')}>
-              <RText style={styles.breadcrumbLink}>Products</RText>
-            </TouchableOpacity>
-          )}
+      <RStack style={styles.breadcrumbContainer}>
+        {Platform.OS === 'web' ? (
+          <RLink to="/products">
+            <RText style={styles.breadcrumbLink}>Products</RText>
+          </RLink>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/products')}>
+            <RText style={styles.breadcrumbLink}>Products</RText>
+          </TouchableOpacity>
+        )}
 
-          <RText style={styles.breadcrumbSeparator}>/</RText>
+        <RText style={styles.breadcrumbSeparator}>/</RText>
 
-          {Platform.OS === 'web' ? (
-            <RLink to={`/products`}>
-              <RText style={styles.breadcrumbLink}>
-                {item?.category?.name}
-              </RText>
-            </RLink>
-          ) : (
-            <TouchableOpacity onPress={() => router.push('/products')}>
-              <RText style={styles.breadcrumbLink}>
-                {item?.category?.name}
-              </RText>
-            </TouchableOpacity>
-          )}
-        </RStack>
+        {Platform.OS === 'web' ? (
+          <RLink to={`/products`}>
+            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+          </RLink>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/products')}>
+            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+          </TouchableOpacity>
+        )}
+      </RStack>
+      <RStack
+        style={{
+          padding: 10,
+          width: '100%',
+          paddingBottom: 50,
+          flexDirection: sm ? 'column' : 'row',
+          gap: 20,
+        }}
+      >
         <ItemDetailsSection itemData={item as any} isProductScreen={true} />
       </RStack>
       <LargeCard
