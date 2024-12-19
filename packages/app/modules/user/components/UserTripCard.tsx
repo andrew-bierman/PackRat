@@ -1,21 +1,21 @@
-import { Card, RButton, RStack, RSwitch } from '@packrat/ui';
+import { Card, RButton, RStack } from '@packrat/ui';
 import React, { useState, type FC } from 'react';
 import { TripImage } from 'app/modules/trip/components/TripCard/TripImage';
-import { type FeedCardProps } from 'app/modules/feed';
 import { LocationLabel } from 'app/modules/trip/components/LocationLabel/LocationLabel';
 import useTheme from 'app/hooks/useTheme';
 import { type TripDetails } from 'modules/trip/model';
-import { useEditTrips } from 'app/hooks/trips';
+import { useSetTripVisibility } from 'app/hooks/trips/useSetTripVisibility';
+import { Eye, EyeOff } from '@tamagui/lucide-icons';
+import { type UserDataCardProps } from './model';
 
-interface TripCardProps extends FeedCardProps<TripDetails> {}
+interface TripCardProps extends UserDataCardProps<TripDetails> {}
 
 export const UserTripCard: FC<TripCardProps> = (props) => {
-  const { editTrips, isLoading, isError } = useEditTrips();
-  const [isPublic, setIsPublic] = useState(props.is_public);
+  const { setTripVisibility, isLoading, isError } = useSetTripVisibility();
   const updateIsPublic = (value) => {
-    setIsPublic(value);
-    editTrips({ id: props.id, name: props.title, is_public: value });
+    setTripVisibility({ tripId: props.id, is_public: value });
   };
+  const isPublic = props?.isPublic;
   const { currentTheme } = useTheme();
 
   return (
@@ -25,25 +25,30 @@ export const UserTripCard: FC<TripCardProps> = (props) => {
       image={<TripImage />}
       subtitle={<LocationLabel location={props.details.destination} />}
       actions={
-        <RStack style={{ flexDirection: 'row', gap: 12 }}>
-          <RButton
-            style={{
-              backgroundColor: currentTheme.colors.background,
-              borderRadius: 20,
-              height: 20,
-              width: 30,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            <RSwitch
-              checked={isPublic}
-              onCheckedChange={updateIsPublic}
-              size="$1.5"
-            />
-          </RButton>
+        <RStack style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
+          {props.isAuthUserProfile && (
+            <RButton
+              style={{
+                backgroundColor: 'transparent',
+                borderWidth: 0,
+                padding: 0,
+                opacity: isLoading ? 0.4 : 1,
+              }}
+              disabled={isLoading}
+              unstyled
+              onPress={() => updateIsPublic(!isPublic)}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+            >
+              {isPublic ? (
+                <Eye style={{ pointerEvents: 'none' }} />
+              ) : (
+                <EyeOff style={{ pointerEvents: 'none' }} />
+              )}
+            </RButton>
+          )}
         </RStack>
       }
       type={props.cardType}

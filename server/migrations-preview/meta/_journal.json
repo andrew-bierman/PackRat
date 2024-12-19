@@ -22,6 +22,20 @@
       "when": 1729778627679,
       "tag": "0002_luxuriant_gunslinger",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1734381220155,
+      "tag": "0003_condemned_sugar_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1734574623429,
+      "tag": "0004_the_human_professor",
+      "breakpoints": true
     }
   ]
 }

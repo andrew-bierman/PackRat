@@ -49,6 +49,7 @@ export const BaseModal = ({
       <RButton
         onPress={() => setIsModalOpen(true)}
         style={{ backgroundColor: 'transparent' }}
+        unstyled
         backgroundColor={'transparent'}
       >
         {React.cloneElement(triggerComponent, { setIsModalOpen })}

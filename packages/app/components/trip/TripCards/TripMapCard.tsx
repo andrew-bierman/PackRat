@@ -1,14 +1,15 @@
-import { ErrorBoundary, RStack, RText } from '@packrat/ui';
 import { Map } from 'app/modules/map';
-import useTheme from 'app/hooks/useTheme';
-import { TripCardBase } from './TripCardBase';
-import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { getTripGEOURI } from '../utils';
+import { AsyncView } from 'app/components/AsyncView';
+import { View } from 'react-native';
+import useResponsive from 'app/hooks/useResponsive';
+import { Platform } from 'react-native';
 
 interface TripMapCardProps {
   isLoading?: boolean;
   shape?: any;
+  isMapError: boolean;
   onVisibleBoundsChange?: (bounds: number[]) => void;
   tripId?: string;
   initialBounds?: any;
@@ -19,38 +20,29 @@ export const TripMapCard = ({
   shape,
   initialBounds,
   tripId,
+  isMapError,
   onVisibleBoundsChange,
 }: TripMapCardProps) => {
-  const { currentTheme } = useTheme();
+  const { gtSm } = useResponsive();
 
   return (
-    <TripCardBase
-      loadStyles={loadStyles}
-      icon={() => (
-        <FontAwesome5
-          name="route"
-          size={24}
-          color={currentTheme.colors.cardIconColor}
+    <AsyncView isError={isMapError} isLoading={isLoading}>
+      <View
+        style={{
+          flex: gtSm ? 1 : undefined,
+          width: gtSm ? 'auto' : '100%',
+          height: Platform.OS === 'web' ? 'auto' : 300,
+        }}
+      >
+        <Map
+          style={{ width: '100%', height: 320 }}
+          shapeURI={tripId && !shape ? getTripGEOURI(tripId) : undefined}
+          onVisibleBoundsChange={onVisibleBoundsChange}
+          initialBounds={!shape ? initialBounds : undefined}
+          shape={shape}
         />
-      )}
-      title="Map"
-    >
-      {isLoading ? (
-        <RStack>
-          <RText>Loading....</RText>
-        </RStack>
-      ) : (
-        <ErrorBoundary>
-          <Map
-            style={{ width: '100%', height: 320 }}
-            shapeURI={tripId ? getTripGEOURI(tripId) : undefined}
-            onVisibleBoundsChange={onVisibleBoundsChange}
-            initialBounds={initialBounds}
-            shape={shape}
-          />
-        </ErrorBoundary>
-      )}
-    </TripCardBase>
+      </View>
+    </AsyncView>
   );
 };
 

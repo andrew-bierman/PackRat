@@ -30,6 +30,7 @@ const loadStyles = (theme: any) => {
       alignItems: 'center',
       width: '100%',
       borderRadius: 8,
+      padding: 0,
       backgroundColor: currentTheme.colors.background,
     },
   };

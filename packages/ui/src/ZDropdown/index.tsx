@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentProps } from 'react';
 import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
 import { ChevronDown } from '@tamagui/lucide-icons';
-import RButton from '../RButton';
+import { Button } from 'tamagui';
 
 type ContentProps = ComponentProps<typeof ZeegoDropdownMenu.Content>;
 type ItemProps = ComponentProps<typeof ZeegoDropdownMenu.Item>;
@@ -18,7 +18,6 @@ const DropdownMenu = {
           padding: 10,
           borderRadius: 8,
           gap: 10,
-          // boxShadow: '0px 0px 16px -8px #484848',
         }}
       />
     ),
@@ -47,9 +46,17 @@ const RDropdownMenu = ({ menuItems = [], menuName }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <RButton style={{ backgroundColor: '#deddda', color: 'black' }}>
+        <Button
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingRight: 10,
+            borderRadius: 40,
+          }}
+        >
           {menuName}
-        </RButton>
+          <ChevronDown size={14} />
+        </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {menuItems.map(({ label, onSelect = () => {} }) => (

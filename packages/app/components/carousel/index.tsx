@@ -49,7 +49,7 @@ const Carousel: React.FC<CarouselProps> = ({
     <RStack
       style={{
         alignSelf: 'center',
-        width: Platform.OS === 'web' ? '90%' : screenWidth, // Full width on native
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',

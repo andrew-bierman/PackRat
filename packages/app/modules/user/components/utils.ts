@@ -40,7 +40,7 @@ export const UserDataPackCardConverter: Converter<
       (item) => item === currentUserId || item?.userId === currentUserId,
     ),
     favoriteCount: input.favorites_count,
-    is_public: input.is_public,
+    isPublic: input.is_public,
   };
 };
 
@@ -70,5 +70,6 @@ export const UserDataTripCardConverter: Converter<
       activity: input.activity,
     },
     favoriteCount: input.favorites_count,
+    isPublic: input.is_public,
   };
 };

@@ -1,4 +1,4 @@
-type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
+export type WeightUnit = 'g' | 'kg' | 'oz' | 'lb' | 'lbs';
 
 /**
  * Converts a weight from one unit to another.

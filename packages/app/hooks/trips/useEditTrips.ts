@@ -11,6 +11,7 @@ export const useEditTrips = () => {
     mutation.mutate(updatedTrip, {
       onSuccess: () => {
         utils.getTrips.invalidate();
+        utils.getTripById.invalidate({ tripId: updatedTrip.id });
         options?.onSuccess?.(utils);
       },
     });

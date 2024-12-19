@@ -1,44 +1,27 @@
-import { Card, RButton, RStack, RSwitch, RText } from '@packrat/ui';
+import { Card, RButton, RStack, RSwitch, RText, Switch } from '@packrat/ui';
 import React, { useEffect, useState, type FC } from 'react';
 import { PackImage } from 'app/modules/pack/components/PackCard/PackImage';
-import {
-  FavoriteButton,
-  useFetchUserFavorites,
-  type FeedCardProps,
-} from 'app/modules/feed';
+import { FavoriteButton } from 'app/modules/feed';
 import { type PackDetails } from 'app/modules/pack/model';
-import { useEditPack } from 'app/modules/pack/hooks';
 import useTheme from 'app/hooks/useTheme';
 import { useUserPacks } from 'app/modules/pack/hooks';
 import { ScoreLabel } from 'app/components/ScoreLabel';
+import { Eye, EyeOff } from '@tamagui/lucide-icons';
+import { type UserDataCardProps } from './model';
+import { useSetPackVisibility } from 'app/modules/pack/useSetPackVisibility';
 
-interface PackCardProps extends FeedCardProps<PackDetails> {}
+interface PackCardProps extends UserDataCardProps<PackDetails> {}
 
 export const UserPackCard: FC<PackCardProps> = (props) => {
-  const { editPack } = useEditPack();
-  const [isPublic, setIsPublic] = useState(props.is_public);
+  const { setPackVisibility, isLoading } = useSetPackVisibility();
 
   const { currentTheme } = useTheme();
 
   const { refetch } = useUserPacks(props.ownerId, {}, '', true);
-  const { refetch: refetchFavorites } = useFetchUserFavorites(props.ownerId);
 
   const updateIsPublic = (value) => {
-    setIsPublic(value);
-    editPack(
-      { id: props.id, name: props.title, is_public: value },
-      {
-        onSuccess: () => {
-          refetch();
-          refetchFavorites();
-        },
-      },
-    );
+    setPackVisibility({ id: props.id, name: props.title, is_public: value });
   };
-
-  useEffect(() => {
-    setIsPublic(props.is_public);
-  }, [props.is_public]);
 
   return (
     <Card
@@ -55,7 +38,36 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
         />
       }
       actions={
-        <RStack style={{ flexDirection: 'row', gap: 12 }}>
+        <RStack
+          style={{
+            flexDirection: 'row',
+            gap: 12,
+            alignItems: 'center',
+            marginTop: 8,
+          }}
+        >
+          {props.isAuthUserProfile && (
+            <RButton
+              style={{
+                backgroundColor: 'transparent',
+                borderWidth: 0,
+                padding: 0,
+                opacity: isLoading ? 0.4 : 1,
+              }}
+              unstyled
+              onPress={() => updateIsPublic(!props.isPublic)}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+            >
+              {props.isPublic ? (
+                <Eye style={{ pointerEvents: 'none' }} />
+              ) : (
+                <EyeOff style={{ pointerEvents: 'none' }} />
+              )}
+            </RButton>
+          )}
           <FavoriteButton
             count={props.favoriteCount}
             isAuthUserFavorite={props.isUserFavorite}
@@ -66,29 +78,11 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
               refetch();
             }}
           />
-          <RButton
-            style={{
-              backgroundColor: currentTheme.colors.background,
-              borderRadius: 20,
-              height: 20,
-              width: 30,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-          >
-            <RSwitch
-              checked={isPublic}
-              onCheckedChange={updateIsPublic}
-              size="$1.5"
-            />
-          </RButton>
         </RStack>
       }
       type={props.cardType}
       style={{
-        borderColor: isPublic
+        borderColor: props.isPublic
           ? currentTheme.colors.secondaryBlue
           : currentTheme.colors.background,
         borderWidth: 2,

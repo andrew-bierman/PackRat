@@ -39,6 +39,7 @@ export const EditableText = ({
           fontWeight: 'bold',
           color: '#0284c7',
           pointerEvents: 'auto',
+          minWidth: 20,
         }}
         ref={inputRef}
         onChange={handleChange}

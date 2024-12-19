@@ -39,24 +39,13 @@ export const TripDateRangeCard = ({
   };
 
   return (
-    <TripCardBase
-      icon={() => (
-        <FontAwesome5
-          name="calendar"
-          size={20}
-          color={currentTheme.colors.cardIconColor}
-        />
-      )}
-      title="Trip Date Range"
-    >
-      <RangePicker
-        selectedDates={selectedDates}
-        onDatesChange={onDatesChange}
-        offsetDate={offsetDate}
-        onOffsetChange={onOffsetChange}
-        open={open}
-        setOpen={setOpen}
-      />
-    </TripCardBase>
+    <RangePicker
+      selectedDates={selectedDates}
+      onDatesChange={onDatesChange}
+      offsetDate={offsetDate}
+      onOffsetChange={onOffsetChange}
+      open={open}
+      setOpen={setOpen}
+    />
   );
 };

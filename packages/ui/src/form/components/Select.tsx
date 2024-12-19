@@ -2,7 +2,8 @@ import { LmSelectRhf, type LmSelectRhfProps } from '../lib';
 import { StyleProp, ViewStyle } from 'react-native';
 export { LmSelect as Select } from '../lib';
 
-interface Props extends LmSelectRhfProps<{ label: string | number; value: any }> {
+interface Props
+  extends LmSelectRhfProps<{ label: string | number; value: any }> {
   style?: StyleProp<ViewStyle>;
 }
 

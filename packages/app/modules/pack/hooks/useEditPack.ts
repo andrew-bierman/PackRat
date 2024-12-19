@@ -12,6 +12,7 @@ export const useEditPack = () => {
     mutation.mutate(updatedPack, {
       onSuccess: () => {
         utils.getPacks.invalidate();
+        utils.getUserPacksFeed.invalidate();
         options?.onSuccess?.(utils);
       },
     });

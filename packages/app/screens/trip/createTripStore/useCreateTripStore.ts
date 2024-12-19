@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
-import { format } from 'date-fns';
 import {
   createTripInitialState,
   createTripReducer,
@@ -7,14 +6,10 @@ import {
   setTripFormValue,
   type addTripKey,
 } from './store';
-import { useValidateSchema } from 'app/hooks/common';
-import { addTripDetails } from '@packrat/validations';
+import { useTripContext } from 'app/modules/trip/context/tripContext';
 
-export const useCreateTripStore = () => {
-  const [store, dispatch] = useReducer(
-    createTripReducer,
-    createTripInitialState,
-  );
+export const useCreateTripStore = (initialState = createTripInitialState) => {
+  const [store, dispatch] = useReducer(createTripReducer, initialState);
 
   const setTripValue = useCallback(
     (name: addTripKey, value: any) => {
@@ -28,4 +23,9 @@ export const useCreateTripStore = () => {
   };
 
   return { store, setTripValue, setDateRange };
+};
+
+export const useCurrentTripStore = () => {
+  const { tripStore } = useTripContext();
+  return tripStore;
 };

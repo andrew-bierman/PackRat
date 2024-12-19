@@ -8,7 +8,11 @@ export const getPublicPacks = async (c: Context) => {
   const { page, limit } = query;
   try {
     const { queryBy } = query;
-    const packs = await getPublicPacksService(queryBy, Number(page), Number(limit));
+    const packs = await getPublicPacksService(
+      queryBy,
+      Number(page),
+      Number(limit),
+    );
     return c.json(
       { packs, message: 'Public packs retrieved successfully' },
       200,
@@ -23,11 +27,13 @@ export const getPublicPacks = async (c: Context) => {
 
 export function getPublicPacksRoute() {
   return protectedProcedure
-    .input(z.object({
-      queryBy: z.string(),
-      page: z.number().optional(),
-      limit: z.number().optional(),
-    }))
+    .input(
+      z.object({
+        queryBy: z.string(),
+        page: z.number().optional(),
+        limit: z.number().optional(),
+      }),
+    )
     .query(async (opts) => {
       const { queryBy, page, limit } = opts.input;
       const packs = await getPublicPacksService(queryBy, page, limit);

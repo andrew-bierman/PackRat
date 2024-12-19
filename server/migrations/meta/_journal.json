@@ -57,6 +57,13 @@
       "when": 1732718976207,
       "tag": "0007_wealthy_next_avengers",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1734548647270,
+      "tag": "0008_shocking_serpent_society",
+      "breakpoints": true
     }
   ]
 }

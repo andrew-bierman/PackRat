@@ -5,6 +5,7 @@ import {
   ITEM_TABLE_NAME,
   itemPacks,
   item as ItemTable,
+  itemImage as itemImageTable,
 } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
@@ -22,6 +23,22 @@ export class Item {
       return item;
     } catch (error) {
       throw new Error(`Failed to create item: ${error.message}`);
+    }
+  }
+
+  async insertImage(itemId: string, url: string) {
+    try {
+      const itemImage = await DbClient.instance
+        .insert(itemImageTable)
+        .values({
+          itemId,
+          url,
+        })
+        .run();
+
+      return itemImage;
+    } catch (error) {
+      throw new Error(`Failed to update item: ${error.message}`);
     }
   }
 

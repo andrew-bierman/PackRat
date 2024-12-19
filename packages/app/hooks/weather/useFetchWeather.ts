@@ -3,15 +3,7 @@ import { queryTrpc } from '../../trpc';
 import { isToday, getDay } from 'date-fns';
 import { getCurrentUTCDate, getUTCDateFromStr } from 'app/utils/dates';
 
-const weekdays = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-] as const;
+const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 interface WeatherToday {
   date: string;
   temp: number;

@@ -18,6 +18,7 @@ const FAB = () => {
     <FABWeb
       showQuickActions={showQuickActions}
       toggleQuickActions={toggleQuickActions}
+      closeQuickActions={closeQuickActions}
     />
   ) : (
     <FABNative

@@ -12,8 +12,19 @@ import {
 
 export const useFetchUserFavorites = (
   userId: string,
-  { queryEnabled = true, isPreview = false, searchTerm = '' } = {},
+  options: {
+    queryEnabled: boolean;
+    isPreview: boolean;
+    searchTerm: string;
+    isPublic: boolean;
+  },
 ) => {
+  const {
+    queryEnabled = true,
+    isPreview = false,
+    searchTerm = '',
+    isPublic,
+  } = options || {};
   const enabled = !!userId && queryEnabled;
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
@@ -21,7 +32,7 @@ export const useFetchUserFavorites = (
 
   const { data, error, isLoading, refetch } =
     queryTrpc.getUserFavorites.useQuery(
-      { userId, pagination, isPreview, searchTerm },
+      { userId, pagination, isPreview, searchTerm, isPublic },
       {
         enabled,
         refetchOnWindowFocus: false,
@@ -64,16 +75,19 @@ interface FetchUserFavoritesReturn extends PreviewResourceStateWithData {
 export const useFetchUserFavoritesWithPreview = (
   userId: string,
   searchTerm: string,
+  isPublic?: boolean,
 ): FetchUserFavoritesReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
-  const { data: previewData, isLoading: isPreviewLoading } =
-    useFetchUserFavorites(userId, { isPreview: true });
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    totalCount,
+  } = useFetchUserFavorites(userId, { isPreview: true, isPublic });
 
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
-    totalCount,
     fetchPrevPage,
     fetchNextPage,
     totalPages,
@@ -83,10 +97,12 @@ export const useFetchUserFavoritesWithPreview = (
   } = useFetchUserFavorites(userId, {
     queryEnabled: isAllQueryEnabled,
     searchTerm,
+    isPublic,
   });
 
   return {
     ...previewResourceState,
+    resourceName: 'Favorites',
     isAllQueryEnabled,
     previewData,
     isPreviewLoading,

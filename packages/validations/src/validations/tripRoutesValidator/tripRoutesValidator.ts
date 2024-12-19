@@ -3,15 +3,22 @@ import { TripActivity } from './enums';
 
 const tripActivityValues = Object.values(TripActivity) as [string, ...string[]];
 
-export const addTripForm = z.object({
-  name: z.string().nonempty(),
-  description: z.string().nonempty(),
-  is_public: z.union([z.literal('0'), z.literal('1')]),
+export const tripForm = z.object({
+  name: z.string().min(3).max(40),
+  description: z
+    .string()
+    .transform((val) => {
+      return val === '' ? undefined : val;
+    })
+    .pipe(z.string().min(20).max(200).nullable().optional())
+    .optional()
+    .nullable(),
+  activity: z.enum(tripActivityValues).optional(),
+  is_public: z.boolean().optional(),
 });
 
-// @ts-ignore
 const coordinateSchema = z.lazy(() =>
-  z.union([z.number(), z.array(coordinateSchema)]),
+  z.union([z.number(), z.array(z.number())]),
 );
 
 const baseGeometrySchema = z.object({
@@ -47,32 +54,36 @@ export const getTripById = z.object({
 });
 
 export const addTripDetails = z.object({
-  start_date: z.string(),
-  end_date: z.string(),
+  activity: z.enum(tripActivityValues).optional(),
+  bounds: z.tuple([z.array(z.number()), z.array(z.number())]).optional(),
   destination: z.string(),
-  activity: z.enum(tripActivityValues),
-  parks: z.string().optional(),
-  trails: z.string().optional(),
+  end_date: z.string(),
   geoJSON: z.string(),
-  owner_id: z.string(),
   pack_id: z.string(),
-  bounds: z.tuple([z.array(z.number()), z.array(z.number())]),
+  parks: z.string().optional(),
+  start_date: z.string(),
+  trails: z.string().optional(),
 });
 
-export const addTrip = addTripDetails.merge(addTripForm);
+export const addTrip = addTripDetails.merge(tripForm);
+export type AddTripType = z.infer<typeof addTrip>;
 
-export const editTrip = z.object({
-  id: z.string(),
-  name: z.string().optional(),
-  duration: z.string().optional(),
-  start_date: z.string().optional(),
-  end_date: z.string().optional(),
-  destination: z.string().optional(),
-  is_public: z.boolean().optional(),
+export const editTrip = addTrip.merge(
+  z.object({
+    id: z.string().min(1),
+  }),
+);
+
+export type EditTripType = z.infer<typeof editTrip>;
+
+export const setTripVisibility = z.object({
+  tripId: z.string().min(1),
+  is_public: z.boolean(),
 });
+export type SetTripVisibilityType = z.infer<typeof setTripVisibility>;
 
 export const deleteTrip = z.object({
-  tripId: z.string().nonempty(),
+  tripId: z.string().min(1),
 });
 
 export const queryTrip = z.object({

@@ -122,7 +122,8 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     container: {
       width: '100vw',
-      maxWidth: '100%', // Ensure container does not exceed the viewport width
+      maxWidth: 1440,
+      margin: 'auto',
       flex: 1, // Ensure container can grow to fit content
       backgroundColor,
       borderRadius: NavbarStyles.floatingRadius,

@@ -13,7 +13,13 @@ export const ImageGallery: FC<ImageGalleryProps> = ({ images }) => {
   const { activeImageSrc, goPrev, goNext } = useImageGallery(images);
 
   return (
-    <XStack style={{ width: '100%', flex: 1, gap: 10 }}>
+    <XStack
+      style={{
+        width: '100%',
+        flex: 1,
+        gap: 10,
+      }}
+    >
       {images?.length > 1 ? (
         <TouchableOpacity
           style={{

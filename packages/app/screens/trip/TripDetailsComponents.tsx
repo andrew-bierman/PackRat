@@ -7,7 +7,11 @@ import { useFetchSinglePack, TableContainer } from 'app/modules/pack';
 import { RSkeleton, RText } from '@packrat/ui';
 import { AddItemModal } from 'app/modules/item';
 
-const TableContainerComponent = ({ currentPack }) => {
+const TableContainerComponent = ({
+  currentPack,
+  hideSummary = false,
+  forceCardLayout = false,
+}) => {
   const { data, isLoading } = useFetchSinglePack(currentPack.id || currentPack);
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [refetch, setRefetch] = useState(false);
@@ -19,7 +23,6 @@ const TableContainerComponent = ({ currentPack }) => {
 
   return (
     <View>
-      <TableContainer currentPack={data} />
       <AddItemModal
         currentPackId={currentPack.id || ''}
         currentPack={currentPack}
@@ -27,6 +30,11 @@ const TableContainerComponent = ({ currentPack }) => {
         setIsAddItemModalOpen={setIsAddItemModalOpen}
         // refetch={refetch}
         setRefetch={() => setRefetch((prev) => !prev)}
+      />
+      <TableContainer
+        currentPack={data}
+        hideSummary={hideSummary}
+        forceCardLayout={forceCardLayout}
       />
     </View>
   );

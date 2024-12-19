@@ -48,7 +48,7 @@ export class ItemPacks {
 
     let filter;
     if (itemId && packId) {
-      filter = and(itemFilter!, packFilter!);
+      filter = and(itemFilter, packFilter);
     } else if (itemId) {
       filter = itemFilter;
     } else if (packId) {

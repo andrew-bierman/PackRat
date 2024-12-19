@@ -23,16 +23,14 @@ export class GeojsonStorageService {
     resource: ResourceType,
     geojson: string,
     resourceId: string,
-  ): Promise<R2Object> {
-    const object = await this._bucket.put(`${resource}/${resourceId}`, geojson);
-    return object;
+  ): Promise<R2Object | null> {
+    return this._bucket.put(`${resource}/${resourceId}`, geojson);
   }
 
   public static async retrieve(
     resource: ResourceType,
     resourceId: string,
-  ): Promise<R2ObjectBody> {
-    const object = await this._bucket.get(`${resource}/${resourceId}`);
-    return object;
+  ): Promise<R2ObjectBody | null> {
+    return this._bucket.get(`${resource}/${resourceId}`);
   }
 }
