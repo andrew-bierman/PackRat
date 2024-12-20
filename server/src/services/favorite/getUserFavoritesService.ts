@@ -1,6 +1,7 @@
 import { Feed } from '../../modules/feed/model';
 import { User } from '../../drizzle/methods/User';
 import { PaginationParams } from 'src/helpers/pagination';
+import { Modifiers } from 'src/modules/feed/models';
 
 /**
  * Retrieves the favorite packs associated with a specific user.
@@ -10,10 +11,10 @@ import { PaginationParams } from 'src/helpers/pagination';
  */
 export const getUserFavoritesService = async (
   userId: string,
-  options?: { searchTerm?: string; isPublic?: boolean },
+  options?: Modifiers,
   pagination?: PaginationParams,
 ) => {
-  const { searchTerm, isPublic } = options || {};
+  const { searchTerm, isPublic, authenticatedUserId } = options || {};
   const userClass = new User();
   const feedClass = new Feed();
   const user = (await userClass.findUser({
@@ -32,6 +33,7 @@ export const getUserFavoritesService = async (
       searchTerm,
       isPublic,
       ownerId: userId,
+      authenticatedUserId,
     },
     'trips',
     pagination,

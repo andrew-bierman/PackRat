@@ -25,7 +25,12 @@ export function getUserTripsFeedRoute() {
       const { queryBy, searchTerm, ownerId, pagination, isPublic } = opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
         queryBy,
-        { searchTerm, ownerId, isPublic },
+        {
+          searchTerm,
+          ownerId,
+          isPublic,
+          authenticatedUserId: opts.ctx.user.id,
+        },
         'packs',
         pagination,
       );

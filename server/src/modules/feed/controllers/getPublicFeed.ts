@@ -19,7 +19,7 @@ export function getPublicFeedRoute() {
       const { queryBy, searchTerm, excludeType, pagination } = opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
         queryBy,
-        { searchTerm, isPublic: true },
+        { searchTerm, isPublic: true, authenticatedUserId: opts.ctx.user.id },
         excludeType,
         pagination,
       );

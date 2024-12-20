@@ -23,7 +23,13 @@ export function getUserPacksFeedRoute() {
         opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
         queryBy,
-        { searchTerm, ownerId, isPublic, itemId },
+        {
+          searchTerm,
+          ownerId,
+          isPublic,
+          itemId,
+          authenticatedUserId: opts.ctx.user.id,
+        },
         'trips',
         pagination,
       );
