@@ -4,13 +4,12 @@ import { Stack } from 'expo-router';
 import React from 'react';
 
 export default function StackLayout() {
-  const { layoutStackScreenOptionsHeaderSettings } = useRouterSettings();
   return (
     <Stack
       screenOptions={{
         headerRight: () => <DrawerToggleButton />,
-        ...layoutStackScreenOptionsHeaderSettings,
         headerBlurEffect: 'systemChromeMaterial',
+        title: 'Profile',
       }}
     />
   );

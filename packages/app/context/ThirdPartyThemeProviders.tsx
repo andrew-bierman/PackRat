@@ -12,6 +12,12 @@ import {
 import FontLoader from './FontLoader';
 import { setupDev } from 'tamagui';
 import { Toaster } from 'burnt/web';
+import {
+  ThemeProvider as NavigationThemeProvider,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+  useTheme as useNavigationTheme,
+} from '@react-navigation/native';
 
 const ThirdPartyProviders = ({ children, isDark = false }) => {
   setupDev({
@@ -26,16 +32,20 @@ const ThirdPartyProviders = ({ children, isDark = false }) => {
 
   return (
     <FontLoader>
-      <TamaguiProvider config={config} disableRootThemeClass={false}>
-        <TamaguiTheme name={isDark ? 'dark' : 'light'}>
-          <ToastProvider>
-            <RNPaperThemeProvider theme={darkPaperTheme}>
-              {children}
-              <Toaster />
-            </RNPaperThemeProvider>
-          </ToastProvider>
-        </TamaguiTheme>
-      </TamaguiProvider>
+      <NavigationThemeProvider
+        value={isDark ? NavigationDarkTheme : NavigationDefaultTheme}
+      >
+        <TamaguiProvider config={config} disableRootThemeClass={false}>
+          <TamaguiTheme name={isDark ? 'dark' : 'light'}>
+            <ToastProvider>
+              <RNPaperThemeProvider theme={darkPaperTheme}>
+                {children}
+                <Toaster richColors />
+              </RNPaperThemeProvider>
+            </ToastProvider>
+          </TamaguiTheme>
+        </TamaguiProvider>
+      </NavigationThemeProvider>
     </FontLoader>
   );
 };
