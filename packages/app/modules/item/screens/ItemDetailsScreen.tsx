@@ -1,5 +1,5 @@
 import React from 'react';
-import { RScrollView, RStack, RH3, RText } from '@packrat/ui';
+import { RStack, RH3, RText } from '@packrat/ui';
 import { useItem, useItemId } from 'app/modules/item';
 import { ItemDetailsSection } from '../components/ItemDetailsSection';
 import useTheme from 'app/hooks/useTheme';
@@ -9,6 +9,8 @@ import useCustomStyles from 'app/hooks/useCustomStyles';
 import { TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'app/hooks/router';
 import RLink from '@packrat/ui/src/RLink';
+import Layout from 'app/components/layout/Layout';
+import useResponsive from 'app/hooks/useResponsive';
 
 export function ItemDetailsScreen() {
   const { currentTheme } = useTheme();
@@ -17,62 +19,64 @@ export function ItemDetailsScreen() {
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
+  const { sm } = useResponsive();
+
   if (isLoading) {
     return null;
   }
 
   return (
-    <RScrollView
-      style={{
-        marginBottom: 40,
-        flex: 1,
-        backgroundColor: currentTheme.colors.background,
-      }}
-    >
-      <RStack style={{ padding: 10, width: '100%', paddingBottom: 50 }}>
-        <RStack style={styles.breadcrumbContainer}>
-          {Platform.OS === 'web' ? (
-            <RLink to="/products">
-              <RText style={styles.breadcrumbLink}>Products</RText>
-            </RLink>
-          ) : (
-            <TouchableOpacity onPress={() => router.push('/products')}>
-              <RText style={styles.breadcrumbLink}>Products</RText>
-            </TouchableOpacity>
-          )}
+    <Layout>
+      <RStack style={styles.breadcrumbContainer}>
+        {Platform.OS === 'web' ? (
+          <RLink to="/products">
+            <RText style={styles.breadcrumbLink}>Products</RText>
+          </RLink>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/products')}>
+            <RText style={styles.breadcrumbLink}>Products</RText>
+          </TouchableOpacity>
+        )}
 
-          <RText style={styles.breadcrumbSeparator}>/</RText>
+        <RText style={styles.breadcrumbSeparator}>/</RText>
 
-          {Platform.OS === 'web' ? (
-            <RLink to={`/products`}>
-              <RText style={styles.breadcrumbLink}>
-                {item?.category?.name}
-              </RText>
-            </RLink>
-          ) : (
-            <TouchableOpacity onPress={() => router.push('/products')}>
-              <RText style={styles.breadcrumbLink}>
-                {item?.category?.name}
-              </RText>
-            </TouchableOpacity>
-          )}
-        </RStack>
-        <ItemDetailsSection itemData={item as any} />
+        {Platform.OS === 'web' ? (
+          <RLink to={`/products`}>
+            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+          </RLink>
+        ) : (
+          <TouchableOpacity onPress={() => router.push('/products')}>
+            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+          </TouchableOpacity>
+        )}
+      </RStack>
+      <RStack
+        style={{
+          padding: 10,
+          width: '100%',
+          paddingBottom: 50,
+          flexDirection: sm ? 'column' : 'row',
+          gap: 20,
+        }}
+      >
+        <ItemDetailsSection itemData={item as any} isProductScreen={true} />
       </RStack>
       <LargeCard
         customStyle={{
-          width: '80%',
-          backgroundColor: currentTheme.colors.secondaryBlue,
+          width: '100%',
+          backgroundColor: currentTheme.colors.background,
           paddingBottom: 24,
           gap: 16,
           paddingTop: 0,
+          borderWidth: 1,
+          borderColor: currentTheme.colors.cardBorderPrimary,
         }}
       >
         <RH3
           style={{
             color: currentTheme.colors.text,
             fontSize: 24,
-            alignSelf: 'center',
+            alignSelf: 'flex-start',
             marginBottom: 20,
           }}
         >
@@ -80,7 +84,7 @@ export function ItemDetailsScreen() {
         </RH3>
         <FeedPreview feedType="similarItems" id={itemId} />
       </LargeCard>
-    </RScrollView>
+    </Layout>
   );
 }
 

@@ -2,12 +2,13 @@ import React from 'react';
 import { AddPackForm } from '../components';
 import { RText } from '@packrat/ui';
 import { useRouter } from '@packrat/crosspath';
-import { Button, Card, XStack } from 'tamagui';
-import { Backpack } from '@tamagui/lucide-icons';
+import { Button, Card, XStack, YStack } from 'tamagui';
+import { Backpack, Search } from '@tamagui/lucide-icons';
 import Layout from 'app/components/layout/Layout';
 import useResponsive from 'app/hooks/useResponsive';
 import useTheme from 'app/hooks/useTheme';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
+import { ADD_PACK_FORM_DESCRIPTION, ADD_PACK_FORM_TITLE } from '../constants';
 
 export const AddPackScreen = ({
   isCreatingTrip = false,
@@ -34,37 +35,58 @@ export const AddPackScreen = ({
       ]}
     >
       <Card
-        alignSelf="center"
+        bordered
         style={{
-          marginRight: 2,
-          marginLeft: 2,
+          width: '100%',
+          maxWidth: 440,
+          margin: 'auto',
         }}
       >
-        <XStack
-          jc="space-between"
-          ai="center"
-          py="$2"
-          px="$0.5"
-          mx="$2"
-          gap={gtSm ? '$12' : '$3'}
-          fw="wrap"
-        >
-          <XStack ai="center" jc="flex-start" gap="$2">
-            <Backpack size={gtSm ? 'auto' : '$1.5'} />
-            <RText size={gtSm ? 'auto' : '$4'}>
-              Need help getting started?
+        <View style={{ padding: 24 }}>
+          <YStack gap={8} style={{ paddingBottom: 24 }}>
+            <RText style={{ fontWeight: 600, fontSize: 24, lineHeight: 32 }}>
+              {ADD_PACK_FORM_TITLE}
             </RText>
-          </XStack>
-          <Button
-            onPress={() => router.push('/pack-templates')}
-            size={gtSm ? '$3.5' : '$3'}
-            ml="auto"
-          >
-            Browse Templates
-          </Button>
-        </XStack>
+            <RText style={{ textAlign: 'left', lineHeight: 20 }}>
+              {ADD_PACK_FORM_DESCRIPTION}
+            </RText>
+            {/* DISABLED PACK TEMPLATES FOR NOW */}
+            {/* <XStack
+              gap={4}
+              jc="space-between"
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                borderColor: 'ActiveBorder',
+                borderWidth: 1,
+                borderRadius: 8,
+                padding: 12,
+              }}
+            >
+              <RText style={{ fontSize: 14 }}>Looking For Ideas?</RText>
+              <Button
+                onPress={() => router.push('/pack-templates')}
+                icon={<Search size={14} />}
+                style={{
+                  backgroundColor: 'transparent',
+                  height: 'auto',
+                  padding: 0,
+                  fontSize: 14,
+                  fontWeight: 600,
+                }}
+                hoverStyle={{
+                  borderBlockColor: 'transparent',
+                }}
+                space={4}
+                ml="auto"
+              >
+                Explore Pack Templates
+              </Button>
+            </XStack> */}
+          </YStack>
+          <AddPackForm isCreatingTrip={isCreatingTrip} onSuccess={onSuccess} />
+        </View>
       </Card>
-      <AddPackForm isCreatingTrip={isCreatingTrip} onSuccess={onSuccess} />
     </Layout>
   );
 };

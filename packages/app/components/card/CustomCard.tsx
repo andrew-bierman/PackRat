@@ -56,8 +56,6 @@ export const CustomCard = ({
         },
         isWeb && {
           borderRadius: 10,
-          padding: isWeb ? '15 25' : 0,
-          width: '80%',
         },
       ]}
     >
@@ -69,6 +67,7 @@ export const CustomCard = ({
             padding: 15,
             paddingBottom: isWeb ? 0 : 10,
             flexDirection: 'row',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: 16,
@@ -121,7 +120,8 @@ const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: currentTheme.colors.border,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 0,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
@@ -129,6 +129,7 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       marginBottom: 20,
       border: '1',
+      // boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
       alignSelf: 'center',
     },
   };

@@ -39,11 +39,16 @@ export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
             justifyContent: 'space-between',
             width: '100%',
             flexDirection: 'row',
+            gap: 10,
           }}
         >
-          <View style={{ maxWidth: '100%' }}>
+          <View style={{ maxWidth: '100%', flex: 1 }}>
             <RText
-              style={{ fontWeight: 'bold', fontSize: 16, lineHeight: 24 }}
+              style={{
+                fontWeight: 'bold',
+                fontSize: 16,
+                lineHeight: 24,
+              }}
               numberOfLines={1}
               ellipsizeMode="tail"
             >

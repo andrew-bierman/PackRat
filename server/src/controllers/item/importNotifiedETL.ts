@@ -6,8 +6,8 @@ import {
 import { User } from '../../drizzle/methods/User';
 
 export const importNotifiedETL = async (c) => {
-    const params = c.req.query();
-    const file_name = params.file_key;
+  const params = c.req.query();
+  const file_name = params.file_key;
 
   const endpoint = c.env.BUCKET_ENDPOINT;
   const bucket = c.env.BUCKET_NAME;
@@ -56,7 +56,6 @@ export const importNotifiedETL = async (c) => {
       message: 'Items inserted successfully',
       data: insertedItems,
     });
-    
   } catch (err) {
     console.error('Error:', err);
     return c.json({ error: 'An error occurred' });

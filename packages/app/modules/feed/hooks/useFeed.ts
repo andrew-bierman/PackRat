@@ -9,6 +9,7 @@ import { type PaginationReturn } from 'app/hooks/pagination';
 interface UseFeedResult extends Partial<PaginationReturn> {
   data: any[] | null;
   isLoading: boolean;
+  isError?: boolean;
   refetch?: () => void;
   setPage?: (page: number) => void;
 }

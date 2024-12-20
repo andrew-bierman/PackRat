@@ -1,5 +1,8 @@
+import React from 'react';
 import { ImportItem } from './ImportItem';
 import { BaseModal } from '@packrat/ui';
+import useTheme from 'app/hooks/useTheme';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 interface ImportItemModalProps {
   currentPackId: string;
@@ -14,10 +17,17 @@ export const ImportItemModal = ({
   isImportItemModalOpen,
   setIsImportItemModalOpen,
 }: ImportItemModalProps) => {
+  const { currentTheme } = useTheme();
+
   return (
     <BaseModal
       title="Import Item"
-      trigger="Import Item"
+      triggerComponent={
+        <RSecondaryButton
+          label="Import Item"
+          onPress={() => setIsImportItemModalOpen(true)}
+        />
+      }
       footerComponent={undefined}
       isOpen={isImportItemModalOpen}
       onOpen={() => setIsImportItemModalOpen(true)}

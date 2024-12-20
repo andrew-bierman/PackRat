@@ -4,13 +4,11 @@ const loadStyles = (theme: any) => {
     container: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,
-      padding: 20,
       alignItems: 'center',
     },
     containerDark: {
       flex: 1,
       backgroundColor: currentTheme.colors.background,
-      padding: 20,
       alignItems: 'center',
     },
     headerContainer: {
@@ -86,7 +84,6 @@ const loadStyles = (theme: any) => {
       letterSpacing: 1,
       // fontFamily: "sans-serif",
       color: currentTheme.colors.tertiaryBlue,
-      textAlign: 'center',
       marginBottom: 20,
     },
     tertiaryBlue: {
@@ -95,7 +92,6 @@ const loadStyles = (theme: any) => {
       letterSpacing: 1,
       // fontFamily: "sans-serif",
       color: currentTheme.colors.white,
-      textAlign: 'center',
       marginBottom: 20,
     },
     logoContainer: {

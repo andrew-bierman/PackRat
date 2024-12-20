@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
+import { LayoutCard } from 'app/components/LayoutCard';
 
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
@@ -20,55 +21,7 @@ export const TripCardBase = ({
   icon: Icon,
   title,
 }: TripCardBaseProps) => {
-  const { currentTheme } = useTheme();
-  const styles = useCustomStyles(loadTripCardStyles(loadStyles));
-
-  return (
-    <RStack
-      $sm={{
-        borderRadius: 6,
-        flexDirection: 'column',
-        width: '100%',
-      }}
-      $gtSm={{
-        borderRadius: 12,
-        flexDirection,
-        width: '90%',
-      }}
-      style={styles.styles}
-    >
-      <RStack
-        style={{
-          flexDirection: 'row',
-          gap: 15,
-          alignItems: 'center',
-          paddingVertical: 15,
-        }}
-      >
-        <RStack
-          style={{
-            flexDirection: 'row',
-            gap: 15,
-            alignItems: 'center',
-            paddingVertical: 15,
-          }}
-        >
-          <Icon />
-          <RText
-            style={{
-              color: currentTheme.colors.text,
-              fontSize: currentTheme.font.size,
-              fontWeight: 600,
-            }}
-            fontFamily="$body"
-          >
-            {title}
-          </RText>
-        </RStack>
-      </RStack>
-      {children}
-    </RStack>
-  );
+  return <LayoutCard>{children}</LayoutCard>;
 };
 
 const loadTripCardStyles = (loader) => (theme) => ({

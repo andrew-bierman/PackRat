@@ -2,16 +2,14 @@ import { RLink } from '@packrat/ui';
 import { RStack, RText, RButton, RSkeleton } from '@packrat/ui';
 import { Platform, VirtualizedList } from 'react-native';
 import { UserDataCard, UserDataList } from '../components';
-import React, { memo, useEffect, useState } from 'react';
-import LargeCard from 'app/components/card/LargeCard';
+import React, { memo } from 'react';
 import useTheme from 'app/hooks/useTheme';
-import { hexToRGBA } from 'app/utils/colorFunctions';
 import { View } from 'react-native';
 import { useAuthUser } from 'app/modules/auth';
-import Layout from 'app/components/layout/Layout';
 import { SearchProvider } from 'app/modules/feed';
 import { type PreviewResourceStateWithData } from 'app/hooks/common';
 import type { PreviewListType } from '../model';
+import Carousel from 'app/components/carousel';
 
 // Skeleton version of the UserDataCard component
 const SkeletonUserDataCard = () => {
@@ -33,6 +31,7 @@ interface UserDataContainerProps {
   userId?: string;
   isLoading?: boolean;
   SkeletonComponent?: React.ReactElement;
+  isAuthUserProfile?: boolean;
   searchTerm: string;
   onSearchChange: (search: string, type: PreviewListType) => void;
 }
@@ -43,6 +42,7 @@ export const UserDataContainer = memo(function UserDataContainer({
   userId,
   isLoading,
   SkeletonComponent,
+  isAuthUserProfile,
   searchTerm,
   onSearchChange,
 }: UserDataContainerProps) {
@@ -55,8 +55,15 @@ export const UserDataContainer = memo(function UserDataContainer({
   const typeUppercaseSingular = typeUppercase.slice(0, -1);
 
   const differentUser = userId && currentUser && userId !== currentUser.id;
-  const Card = ({ item, index }) => {
-    return <UserDataCard item={item} cardType="primary" feedType={item.type} />;
+  const Card = ({ item }) => {
+    return (
+      <UserDataCard
+        isAuthUserProfile={isAuthUserProfile}
+        item={item}
+        cardType="primary"
+        feedType={item.type}
+      />
+    );
   };
 
   // Map function to render multiple skeleton cards
@@ -81,87 +88,73 @@ export const UserDataContainer = memo(function UserDataContainer({
   }
 
   return (
-    <Layout>
-      <LargeCard
-        type={Platform.OS !== 'web' ? 'mobile' : null}
-        customStyle={{
-          backgroundColor: hexToRGBA(currentTheme.colors.card, 0.2),
-          padding: 0,
+    <>
+      <RStack
+        style={{
+          alignItems: 'center',
+          width: '100%',
         }}
       >
         <RStack
           style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             alignItems: 'center',
             width: '100%',
+            padding: 10,
           }}
         >
-          <RStack
+          <RText
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
-              padding: 10,
+              textTransform: 'capitalize',
+              fontSize: 24,
+              fontWeight: 'bold',
             }}
           >
-            <RText
-              style={{
-                textTransform: 'capitalize',
-                fontSize: 24,
-                fontWeight: 'bold',
-                color: currentTheme.colors.tertiaryBlue,
-              }}
-            >
-              {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
-            </RText>
-            <SearchProvider>
-              <UserDataList
-                resource={resource}
-                search={searchTerm}
-                onSearchChange={(search) => onSearchChange(search, type)}
-              />
-            </SearchProvider>
-          </RStack>
-          <RStack
-            style={{
-              width: '100%',
-              padding: 4,
-            }}
-          >
-            {isLoading ? (
-              skeletonCards
-            ) : resource?.previewData && resource?.previewData.length > 0 ? (
-              <>
-                <VirtualizedList
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  getItemCount={() => resource.previewData.length}
-                  getItem={(data, index) => data[index]}
-                  data={resource.previewData}
-                  keyExtractor={(item) => item.id}
-                  renderItem={Card}
-                  scrollEnabled={true}
-                  maxToRenderPerBatch={2}
-                  horizontal={true}
-                  nestedScrollEnabled={true}
-                  contentContainerStyle={{
-                    paddingHorizontal: 10,
-                  }}
-                  ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
-                />
-              </>
-            ) : currentUser?.id === userId ? (
-              <RLink href="/" style={{ textDecoration: 'none' }}>
-                <RButton style={{ color: currentTheme.colors.white }}>
-                  {`Create your first ${typeUppercaseSingular}`}
-                </RButton>
-              </RLink>
-            ) : (
-              <></>
-            )}
-          </RStack>
+            {differentUser ? `${typeUppercase}` : `Your ${typeUppercase}`}
+          </RText>
+          <SearchProvider>
+            <UserDataList
+              resource={resource}
+              search={searchTerm}
+              onSearchChange={(search) => onSearchChange(search, type)}
+            />
+          </SearchProvider>
         </RStack>
-      </LargeCard>
-    </Layout>
+        <RStack
+          style={{
+            width: '100%',
+            padding: 4,
+          }}
+        >
+          {isLoading ? (
+            skeletonCards
+          ) : resource?.previewData && resource?.previewData.length > 0 ? (
+            <>
+              <Carousel itemWidth={200}>
+                {resource?.previewData?.map((item) => (
+                  <View
+                    key={item.id}
+                    style={{
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Card item={item} />
+                  </View>
+                ))}
+              </Carousel>
+            </>
+          ) : currentUser?.id === userId ? (
+            <RLink href="/" style={{ textDecoration: 'none' }}>
+              <RButton style={{ color: currentTheme.colors.white }}>
+                {`Create your first ${typeUppercaseSingular}`}
+              </RButton>
+            </RLink>
+          ) : (
+            <></>
+          )}
+        </RStack>
+      </RStack>
+    </>
   );
 });

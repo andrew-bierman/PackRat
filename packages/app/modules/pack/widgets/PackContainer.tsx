@@ -1,30 +1,20 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { View } from 'react-native';
-import { AddItemModal } from 'app/modules/item';
 import useCustomStyles from 'app/hooks/useCustomStyles';
-import { useAuthUser } from 'app/modules/auth';
-import {
-  usePackId,
-  useUserPacks,
-  PackPickerOverlay,
-  useFetchSinglePack,
-} from 'app/modules/pack';
-import {
-  DropdownComponent,
-  RButton,
-  RListItem,
-  RStack,
-  useModalState,
-} from '@packrat/ui';
-import { Spinner } from 'tamagui';
-import useTheme from 'app/hooks/useTheme';
-import { TableContainerComponent } from 'app/screens/trip/TripDetailsComponents';
+import { PackPickerOverlay, useFetchSinglePack } from 'app/modules/pack';
+import { RListItem, useModalState } from '@packrat/ui';
 import { Backpack, Edit3 } from '@tamagui/lucide-icons';
+import { useTripPackId } from 'app/screens/trip/useTripPackId';
 
-export default function PackContainer() {
-  const [packIdParam, setPackIdParam] = usePackId();
+interface PackContainerProps {
+  emptyStateComponent?: React.ReactNode;
+}
+export default function PackContainer({
+  emptyStateComponent: EmptyStateComponent,
+}: PackContainerProps) {
+  const [packIdParam, setPackIdParam] = useTripPackId();
   const { isModalOpen, onClose, onOpen } = useModalState();
-  const { data: currentPack } = useFetchSinglePack(packIdParam);
+  const { data: currentPack, isLoading } = useFetchSinglePack(packIdParam);
   const styles = useCustomStyles(loadStyles);
 
   const onSelectPack = (packId: string) => {
@@ -63,15 +53,7 @@ export default function PackContainer() {
           {currentPack?.name}
         </RListItem>
       ) : null}
-      {currentPack ? (
-        <RStack
-          style={{
-            flex: 1,
-          }}
-        >
-          <TableContainerComponent currentPack={currentPack} />
-        </RStack>
-      ) : null}
+      {!isLoading && !currentPack && EmptyStateComponent}
     </View>
   );
 }
@@ -80,8 +62,6 @@ const loadStyles = () => ({
   mainContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 35,
     width: '100%',
-    padding: 20,
   },
 });
