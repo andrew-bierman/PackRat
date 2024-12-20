@@ -1,18 +1,15 @@
-import React, { useMemo, useState, useEffect, memo } from 'react';
-import { View, type ViewProps } from 'react-native';
-import {
-  FeedCard,
-  FeedList,
-  FeedSearchFilter,
-  SearchProvider,
-} from '../components';
-import { useRouter } from 'app/hooks/router';
-import { useFeed } from 'app/modules/feed';
 import { Pagination } from '@packrat/ui';
-import { useAuthUser } from 'app/modules/auth';
-import { type FeedType } from '../model';
 import { ConnectionGate } from 'app/components/ConnectionGate';
 import Layout from 'app/components/layout/Layout';
+import { useRouter } from 'app/hooks/router';
+import { useAuthUser } from 'app/modules/auth';
+import { useFeed } from 'app/modules/feed';
+import React, { memo, useState } from 'react';
+import { View, type ViewProps } from 'react-native';
+import { FeedCard, FeedList, FeedSearchFilter } from '../components';
+import { type FeedType } from '../model';
+import { searchQueryAtom } from 'app/atoms/feed';
+import { useAtom } from 'jotai';
 
 const URL_PATHS = {
   userPacks: '/pack/',
@@ -39,7 +36,8 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
     pack: true,
     trip: false,
   });
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
+
   const [refreshing, setRefreshing] = useState(false);
 
   const user = useAuthUser();
@@ -87,46 +85,44 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
 
   return (
     <Layout>
-      <SearchProvider>
-        <View style={{ width: '100%', backgroundColor: 'transparent' }}>
-          <ConnectionGate mode="connected">
-            <FeedSearchFilter
-              feedType={feedType}
-              handleSortChange={handleSortChange}
-              handleTypeChange={handleTypeChange}
-              selectedTypes={selectedTypes}
-              queryString={queryString}
-              setSearchQuery={setSearchQuery}
-              handleCreateClick={handleCreateClick}
-            />
-          </ConnectionGate>
-          <FeedList
-            data={data}
-            style={listStyle}
-            CardComponent={({ item }) => (
-              <FeedCard
-                key={item?.id}
-                item={item}
-                cardType="primary"
-                feedType={item.type}
-              />
-            )}
-            isLoading={isLoading}
-            isError={isError}
-            separatorHeight={12}
+      <View style={{ width: '100%', backgroundColor: 'transparent' }}>
+        <ConnectionGate mode="connected">
+          <FeedSearchFilter
+            feedType={feedType}
+            handleSortChange={handleSortChange}
+            handleTypeChange={handleTypeChange}
+            selectedTypes={selectedTypes}
+            queryString={queryString}
+            setSearchQuery={setSearchQuery}
+            handleCreateClick={handleCreateClick}
           />
-          {totalPages > 1 ? (
-            <Pagination
-              isPrevBtnDisabled={!hasPrevPage}
-              isNextBtnDisabled={!hasNextPage}
-              onPressPrevBtn={fetchPrevPage}
-              onPressNextBtn={fetchNextPage}
-              currentPage={currentPage}
-              totalPages={totalPages}
+        </ConnectionGate>
+        <FeedList
+          data={data}
+          style={listStyle}
+          CardComponent={({ item }) => (
+            <FeedCard
+              key={item?.id}
+              item={item}
+              cardType="primary"
+              feedType={item.type}
             />
-          ) : null}
-        </View>
-      </SearchProvider>
+          )}
+          isLoading={isLoading}
+          isError={isError}
+          separatorHeight={12}
+        />
+        {totalPages > 1 ? (
+          <Pagination
+            isPrevBtnDisabled={!hasPrevPage}
+            isNextBtnDisabled={!hasNextPage}
+            onPressPrevBtn={fetchPrevPage}
+            onPressNextBtn={fetchNextPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+        ) : null}
+      </View>
     </Layout>
   );
 });

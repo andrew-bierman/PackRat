@@ -11,7 +11,6 @@ export default function StackLayout() {
         headerRight: () => <DrawerToggleButton />,
         ...layoutStackScreenOptionsHeaderSettings,
         headerBlurEffect: 'systemChromeMaterial',
-        title: 'Feed',
       }}
     />
   );
