@@ -13,6 +13,13 @@ class AiClient {
     this.EXECUTE_AI_MODEL_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/ai/run/${this.MODEL_NAME}`;
   }
 
+  /**
+   * @returns The name of the model to use to generate embeddings.
+   */
+  public static get modelName(): string {
+    return AiClient.instance.MODEL_NAME;
+  }
+
   public static get instance(): AiClient {
     if (!AiClient._instance) {
       throw new Error('AiClient instance not initialized.');
@@ -33,13 +40,15 @@ class AiClient {
   }
 
   public async run(text: string | string[]) {
+    const body = JSON.stringify({ text });
+    console.log({ bodySizeKb: body.length / 1024 });
     const response = await fetch(this.EXECUTE_AI_MODEL_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.apiKey}`,
       },
-      body: JSON.stringify({ text }),
+      body,
     });
 
     if (!response.ok) {
@@ -61,7 +70,7 @@ class AiClient {
     contentList: string[],
     transform: (embedding: number[], index: number) => T,
   ): Promise<T[]> {
-    const MAX_BATCH_SIZE = 100; // REF: https://developers.cloudflare.com/workers-ai/models/bge-base-en-v1.5/
+    const MAX_BATCH_SIZE = 25; // 0; // REF: https://developers.cloudflare.com/workers-ai/models/bge-base-en-v1.5/
     const MAX_ROUND = Math.ceil(contentList.length / MAX_BATCH_SIZE);
 
     const result: T[] = [];
@@ -72,9 +81,12 @@ class AiClient {
         (round + 1) * MAX_BATCH_SIZE,
       );
 
+      console.log(`[${round + 1}/${MAX_ROUND}] Batch size: ${batch.length}`);
       const {
         result: { data },
       } = await AiClient.instance.run(batch);
+
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Flatten the result
       for (let idx = 0; idx < batch.length; idx++) {

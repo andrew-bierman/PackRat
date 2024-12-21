@@ -19,13 +19,15 @@ class VectorClient {
   private readonly apiKey: string;
   private readonly indexName: string;
   private readonly accountId: string;
+  private readonly VECTORIZE_INDEX_BASE_URL: string;
   private readonly VECTORIZE_INDEX_URL: string;
 
   private constructor(apiKey: string, indexName: string, accountId: string) {
     this.apiKey = apiKey;
     this.indexName = indexName;
     this.accountId = accountId;
-    this.VECTORIZE_INDEX_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/v2/indexes/${this.indexName}`;
+    this.VECTORIZE_INDEX_BASE_URL = `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/vectorize/v2/indexes`;
+    this.VECTORIZE_INDEX_URL = `${this.VECTORIZE_INDEX_BASE_URL}/${this.indexName}`;
   }
 
   public static get instance(): VectorClient {
@@ -107,6 +109,9 @@ class VectorClient {
       metadata: Metadata;
     }>,
   ) {
+    if (vectors.length === 0) {
+      throw new Error('No vectors provided for upsert.');
+    }
     let ndjsonBody = '';
     for (const vector of vectors) {
       ndjsonBody += `${JSON.stringify(vector)}\n`;
@@ -131,6 +136,80 @@ class VectorClient {
     }
 
     return await response.json();
+  }
+
+  /**
+   * Creates a new vector database based on the environment index name.
+   * @returns A promise that resolves with the result of the vector database creation.
+   */
+  public async createVectorDB() {
+    const response = await fetch(this.VECTORIZE_INDEX_BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+      body: JSON.stringify({
+        name: this.indexName,
+        description: 'Vector database for packrat',
+        config: { preset: AiClient.modelName },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to create vector: ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    const responseData: {
+      success: boolean;
+      result: Record<string, unknown>;
+      errors: Array<{ code: number; message: string }>;
+      messages: Array<{ code: number; message: string }>;
+    } = await response.json();
+    if (!responseData.success) {
+      throw new Error(
+        `Failed to create vector: ${JSON.stringify({ errors: responseData.errors })}`,
+      );
+    }
+
+    return { result: responseData.result, messages: responseData.messages };
+  }
+
+  /**
+   * Deletes the vector database.
+   * @returns A promise that resolves when the vector database is deleted.
+   */
+  public async deleteVectorDB(): Promise<Record<string, unknown>> {
+    const response = await fetch(this.VECTORIZE_INDEX_URL, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to delete vector: ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    const responseData: {
+      success: boolean;
+      result: Record<string, unknown>;
+      errors: Array<{ code: number; message: string }>;
+      messages: Array<{ code: number; message: string }>;
+    } = await response.json();
+    if (!responseData.success) {
+      throw new Error(
+        `Failed to delete vector: ${JSON.stringify({ errors: responseData.errors })}`,
+      );
+    }
+
+    return responseData.result;
   }
 
   public async delete(id: string) {

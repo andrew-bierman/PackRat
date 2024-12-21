@@ -110,6 +110,7 @@ import {
   addPackTemplateRoute,
   importPackTemplatesRoute,
 } from '../controllers/packTemplates';
+import { hardSyncVectorDBRoute } from '../controllers/vectorDB';
 
 import { router as trpcRouter } from '../trpc';
 
@@ -218,6 +219,8 @@ export const appRouter = trpcRouter({
   addToFavorite: addToFavoriteRoute(),
   getUserFavorites: getUserFavoritesRoute(),
   getFavoritePacksByUser: getFavoritePacksByUserRoute(),
+  // Vectorize routes
+  hardSyncVectorDB: hardSyncVectorDBRoute(),
 });
 
 export type AppRouter = typeof appRouter;
