@@ -1,10 +1,10 @@
-import React from 'react';
-import { Platform } from 'react-native';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import useTheme from 'app/hooks/useTheme';
+import { PackTemplateDetailsScreen } from 'app/modules/pack-templates';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import useTheme from 'app/hooks/useTheme';
-import { DrawerToggleButton } from '@react-navigation/drawer';
-import { PackTemplateDetailsScreen } from 'app/modules/pack-templates';
+import React from 'react';
+import { Platform } from 'react-native';
 
 export default function Pack() {
   const { currentTheme } = useTheme();
@@ -21,8 +21,8 @@ export default function Pack() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Pack Template',
-          headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          headerRight: ({ tintColor }) => (
+            <DrawerToggleButton tintColor={tintColor} />
           ),
 
           headerStyle: {

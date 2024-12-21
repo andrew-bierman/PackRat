@@ -35,6 +35,12 @@ export default function HomeScreen() {
       <Stack.Screen
         options={{
           title: 'Home',
+          headerSearchBarOptions: {
+            placeholder: 'Search by park, city, or trail',
+            hideWhenScrolling: false,
+            inputType: 'text',
+            // onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+          },
         }}
       />
       {connectionStatus === 'connected' && (

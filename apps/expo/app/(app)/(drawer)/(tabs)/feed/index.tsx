@@ -26,8 +26,8 @@ export default function FeedNav() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Feed',
-          headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          headerRight: ({ tintColor }) => (
+            <DrawerToggleButton tintColor={tintColor} />
           ),
           headerSearchBarOptions: {
             placeholder: 'Search',
@@ -37,20 +37,6 @@ export default function FeedNav() {
           },
 
           ...stackScreenOptionsHeaderSettings,
-          // headerStyle: {
-          //   // backgroundColor: currentTheme.colors.background,
-          //   // Hack to ensure the collapsed small header shows the shadow / border.
-          //   backgroundColor: "rgba(255,255,255,0.01)",
-          // },
-          // headerTransparent: process.env.EXPO_OS === "ios",
-          // headerTitleStyle: {
-          //   fontSize: 24,
-          // },
-
-          // headerTintColor: currentTheme.colors.tertiaryBlue,
-          // https://reactnavigation.org/docs/headers#adjusting-header-styles
-
-          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
         }}
       />
       <FeedScreen />

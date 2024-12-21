@@ -1,10 +1,10 @@
-import React from 'react';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import useTheme from 'app/hooks/useTheme';
 import { OfflineMapsScreen } from 'app/modules/map/screens/OfflineMapsScreen';
-import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import useTheme from 'app/hooks/useTheme';
-import { DrawerToggleButton } from '@react-navigation/drawer';
+import React from 'react';
+import { Platform } from 'react-native';
 
 export default function MapsScreen() {
   const { currentTheme } = useTheme();
@@ -20,8 +20,8 @@ export default function MapsScreen() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Maps',
-          headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          headerRight: ({ tintColor }) => (
+            <DrawerToggleButton tintColor={tintColor} />
           ),
 
           headerStyle: {
