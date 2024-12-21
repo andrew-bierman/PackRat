@@ -1,4 +1,4 @@
-import { Chip } from '@packrat/ui/src/Bento/elements/chips/components/chipsParts';
+import { Chip } from '@packrat/ui';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { type TextInput } from 'react-native';
 import { Text, XStack } from 'tamagui'; // Ensure proper imports based on imports.md

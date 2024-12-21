@@ -4,12 +4,12 @@ import Layout from 'app/components/layout/Layout';
 import { useRouter } from 'app/hooks/router';
 import { useAuthUser } from 'app/modules/auth';
 import { useFeed } from 'app/modules/feed';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
+import { useAtom } from 'jotai';
 import React, { memo, useState } from 'react';
 import { View, type ViewProps } from 'react-native';
 import { FeedCard, FeedList, FeedSearchFilter } from '../components';
 import { type FeedType } from '../model';
-import { searchQueryAtom } from 'app/atoms/feed';
-import { useAtom } from 'jotai';
 
 const URL_PATHS = {
   userPacks: '/pack/',

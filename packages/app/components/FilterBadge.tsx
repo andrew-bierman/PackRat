@@ -1,7 +1,17 @@
 import { RDropdownMenu, RStack } from '@packrat/ui';
 import React from 'react';
 
-const FilterBadge = ({ menuItems, selectedValue, onSelect }) => {
+interface FilterBadgeProps {
+  menuItems: string[];
+  selectedValue: string;
+  onSelect: (value: string) => void;
+}
+
+const FilterBadge = ({
+  menuItems = [],
+  selectedValue = '',
+  onSelect = () => {},
+}: FilterBadgeProps) => {
   return (
     <RStack
       style={{

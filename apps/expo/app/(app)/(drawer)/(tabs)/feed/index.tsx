@@ -1,8 +1,8 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
-import { searchQueryAtom } from 'app/atoms/feed';
 import { useRouterSettings } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import { FeedScreen } from 'app/modules/feed';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import { useSetAtom } from 'jotai';
