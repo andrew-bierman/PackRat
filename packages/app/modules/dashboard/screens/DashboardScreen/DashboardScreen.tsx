@@ -10,7 +10,7 @@ import { FeedPreview } from 'app/modules/feed';
 import { Button, Stack } from 'tamagui';
 import { useRouter } from '@packrat/crosspath';
 
-export const DashboardScreen = () => {
+const DashboardScreenInner = () => {
   const styles = useCustomStyles(loadStyles);
   const router = useRouter();
 
@@ -59,6 +59,10 @@ export const DashboardScreen = () => {
       </View>
     </Layout>
   );
+};
+
+export const DashboardScreen = () => {
+  return <DashboardScreenInner />;
 };
 
 const loadStyles = (theme) => {
