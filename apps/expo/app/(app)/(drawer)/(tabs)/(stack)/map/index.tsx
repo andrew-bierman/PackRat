@@ -3,6 +3,7 @@ import Map from 'app/screens/map';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import { OfflineMapsScreen } from 'app/modules/map/screens/OfflineMapsScreen';
 
 export default function FeedNav() {
   return (
