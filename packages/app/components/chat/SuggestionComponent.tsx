@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, type ScrollView } from 'react-native';
 import { RButton, RStack } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { loadStyles } from './chat.style';

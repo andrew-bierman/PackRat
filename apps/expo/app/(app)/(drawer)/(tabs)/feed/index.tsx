@@ -1,43 +1,45 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
+import { useRouterSettings } from 'app/hooks/router';
 import useTheme from 'app/hooks/useTheme';
 import { FeedScreen } from 'app/modules/feed';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import { useSetAtom } from 'jotai';
 import React from 'react';
 import { Platform } from 'react-native';
 
-export default function PackTemplates() {
+export default function FeedNav() {
   const { currentTheme } = useTheme();
+  const { stackScreenOptionsHeaderSettings } = useRouterSettings();
+  const setSearchQuery = useSetAtom(searchQueryAtom);
 
   return (
     <>
       {Platform.OS === 'web' && (
         <Head>
-          <title>Pack Templates</title>
+          <title>Feed</title>
         </Head>
       )}
+
       <Stack.Screen
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
-          title: 'Pack Templates',
+          title: 'Feed',
           headerRight: ({ tintColor }) => (
             <DrawerToggleButton tintColor={tintColor} />
           ),
-
-          headerStyle: {
-            backgroundColor: currentTheme.colors.background,
+          headerSearchBarOptions: {
+            placeholder: 'Search',
+            hideWhenScrolling: false,
+            inputType: 'text',
+            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },
-          headerTitleStyle: {
-            fontSize: 24,
-          },
-          headerTintColor: currentTheme.colors.tertiaryBlue,
 
-          // https://reactnavigation.org/docs/headers#adjusting-header-styles
-
-          // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
+          ...stackScreenOptionsHeaderSettings,
         }}
       />
-      <FeedScreen feedType="packTemplates" />
+      <FeedScreen />
     </>
   );
 }

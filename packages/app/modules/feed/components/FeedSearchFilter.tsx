@@ -1,19 +1,19 @@
-import React, { useRef, useEffect, useState } from 'react';
-import useTheme from 'app/hooks/useTheme';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { View } from 'react-native';
 import {
-  RText as OriginalRText,
-  RStack as OriginalRStack,
-  RSeparator as OriginalRSeparator,
-  RButton,
   Form,
   InputWithIcon,
+  RSeparator as OriginalRSeparator,
+  RStack as OriginalRStack,
+  RText as OriginalRText,
+  XStack,
 } from '@packrat/ui';
 import { Plus, Search, X } from '@tamagui/lucide-icons';
-import { useFeedSortOptions } from '../hooks';
 import FilterBadge from 'app/components/FilterBadge';
 import RSecondaryButton from 'app/components/RSecondaryButton';
+import useCustomStyles from 'app/hooks/useCustomStyles';
+import useTheme from 'app/hooks/useTheme';
+import React, { useEffect, useRef, useState } from 'react';
+import { Platform, View } from 'react-native';
+import { useFeedSortOptions } from '../hooks';
 
 const RStack = OriginalRStack;
 const RText = OriginalRText;
@@ -42,7 +42,7 @@ export const FeedSearchFilter = ({
 }: FeedSearchFilterProps) => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState('');
   const debounceTimerRef = useRef(null);
   const sortOptions = useFeedSortOptions(
     feedType,
@@ -73,64 +73,73 @@ export const FeedSearchFilter = ({
     }
   }, [sortOptions, queryString]);
 
-  return (
-    <View style={styles.filterContainer}>
-      <View style={styles.searchContainer}>
-        <Form>
-          <RStack
-            style={{
-              flexDirection: 'row',
-              margin: 0,
-              padding: 0,
-              width: '100%',
-            }}
-          >
-            <InputWithIcon
-              LeftIcon={<Search />}
-              RightIcon={<X />}
-              onChange={handleSetSearchValue}
-              placeholder={`Search ${feedType || 'Feed'}`}
-              value={searchValue}
-            />
-          </RStack>
-        </Form>
-      </View>
-      <RSeparator />
-
-      {!isSortHidden && (
-        <RStack style={{ flexDirection: 'row' }}>
-          {feedType === 'public' && (
-            <FilterBadge
-              menuItems={['Packs', 'Trips']}
-              selectedValue={selectedTypes?.pack ? 'Packs' : 'Trips'}
-              onSelect={(value) => handleTypeChange?.(value)}
-            />
-          )}
-
-          <FilterBadge
-            menuItems={sortOptions}
-            selectedValue={queryString}
-            onSelect={handleSortChange}
-          />
-
-          {(feedType === 'userPacks' || feedType === 'userTrips') && (
-            <RSecondaryButton
-              style={{ marginLeft: 'auto', marginTop: 8 }}
-              label="Add new"
-              icon={<Plus />}
-              onPress={handleCreateClick}
-            />
-          )}
-        </RStack>
+  // Filters Component
+  const Filters = () => (
+    <XStack ai="center" jc="flex-start" gap={'$2'} mb={'$2'}>
+      {feedType === 'public' && (
+        <FilterBadge
+          menuItems={['Packs', 'Trips']}
+          selectedValue={selectedTypes?.pack ? 'Packs' : 'Trips'}
+          onSelect={(value) => handleTypeChange?.(value)}
+        />
       )}
 
-      <RSeparator
-        marginTop={10}
-        marginBottom={10}
-        marginRight={0}
-        marginLeft={0}
+      <FilterBadge
+        menuItems={sortOptions}
+        selectedValue={queryString}
+        onSelect={handleSortChange}
       />
-    </View>
+
+      {(feedType === 'userPacks' || feedType === 'userTrips') && (
+        <RSecondaryButton
+          style={{ marginLeft: 'auto', marginTop: 8 }}
+          label="Add new"
+          icon={<Plus />}
+          onPress={handleCreateClick}
+        />
+      )}
+    </XStack>
+  );
+
+  return (
+    <>
+      {/* Render Filters Outside Container on Native */}
+      {Platform.OS !== 'web' ? (
+        <Filters />
+      ) : (
+        <View style={styles.filterContainer}>
+          {/* Render Search Container Only on Web */}
+          {Platform.OS === 'web' && (
+            <View style={styles.searchContainer}>
+              <Form>
+                <RStack
+                  style={{
+                    flexDirection: 'row',
+                    margin: 0,
+                    padding: 0,
+                    width: '100%',
+                  }}
+                >
+                  <InputWithIcon
+                    LeftIcon={<Search />}
+                    RightIcon={<X />}
+                    onChange={handleSetSearchValue}
+                    placeholder={`Search ${feedType || 'Feed'}`}
+                    value={searchValue}
+                  />
+                </RStack>
+              </Form>
+            </View>
+          )}
+          <RSeparator />
+
+          {/* Render Filters Inside Container on Web */}
+          {Platform.OS === 'web' && !isSortHidden && <Filters />}
+
+          <RSeparator mt={10} mb={10} mr={0} ml={0} />
+        </View>
+      )}
+    </>
   );
 };
 

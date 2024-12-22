@@ -10,14 +10,14 @@ export const getPackById = z.object({
 });
 
 export const addPack = z.object({
-  name: z.string(),
+  name: z.string().min(3).max(40),
   owner_id: z.string(),
   is_public: z.boolean(),
 });
 
 export const editPack = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().min(3).max(40),
   is_public: z.boolean(),
 });
 

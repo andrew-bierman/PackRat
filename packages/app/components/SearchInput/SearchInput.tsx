@@ -19,6 +19,7 @@ import {
 } from '@packrat/ui';
 import { View, Pressable as OriginalPressable } from 'react-native';
 import { Adapt, Popover as OriginalPopover, Button } from 'tamagui';
+import { SearchResults } from './SearchResults';
 
 const Popover = OriginalPopover;
 const RStack = OriginalRStack;
@@ -217,30 +218,12 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               </RIconButton>
             )}
           </RStack>
-          <RStack
-            style={{
-              position: 'relative',
-              display: isVisible ? 'block' : 'none',
-            }}
-          >
-            {showSearchResults && (
-              <RScrollView keyboardShouldPersistTaps="handled">
-                <View role="list" style={{ width: '100%' }}>
-                  {options.map((result, i) => (
-                    <Pressable
-                      key={`result + ${i}`}
-                      role="listitem"
-                      onPress={() => handleSearchResultClick(result)}
-                      paddingHorizontal={16}
-                      paddingVertical={8}
-                    >
-                      {cloneElement(ResultItemComponent, { item: result })}
-                    </Pressable>
-                  ))}
-                </View>
-              </RScrollView>
-            )}
-          </RStack>
+          <SearchResults
+            results={options}
+            onResultClick={handleSearchResultClick}
+            resultItemComponent={ResultItemComponent}
+            isVisible={isVisible}
+          />
         </RStack>
       );
     }

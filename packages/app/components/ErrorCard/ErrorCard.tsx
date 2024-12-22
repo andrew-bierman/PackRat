@@ -30,10 +30,7 @@ export const ErrorCard: FC<ErrorCardProps> = ({
       }}
     >
       <XStack gap={8} style={{ alignItems: 'flex-start', width: 320 }}>
-        <XCircle
-          size={20}
-          style={{ color: currentTheme.colors.error, marginTop: 4 }}
-        />
+        <XCircle size={20} color={currentTheme.colors.error} mt={4} />
         <View style={{ flex: 1 }}>
           <RText style={{ color: currentTheme.colors.error, fontWeight: 600 }}>
             {title}

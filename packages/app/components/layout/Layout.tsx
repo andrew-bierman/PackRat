@@ -1,47 +1,39 @@
 import useTheme from 'app/hooks/useTheme';
 import React from 'react';
-import {
-  Platform,
-  ScrollView,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from 'react-native';
+import { Platform, SafeAreaView } from 'react-native';
+import { ScrollView, Stack, YStack } from 'tamagui';
 
-const Layout = ({
-  children,
-  customStyle = {},
-}: {
+type LayoutProps = {
   children: React.ReactNode;
-  customStyle?: StyleProp<ViewStyle>;
-}) => {
+  customStyle?: Record<string, any>;
+};
+
+const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
   const { currentTheme } = useTheme();
+
   return (
-    <View
-      style={[
-        {
-          display: 'flex',
-          backgroundColor: currentTheme.colors.background,
-          flex: 1,
-          maxWidth: 1440,
-          margin: 'auto',
-          justifyContent: Platform.OS === 'web' ? 'center' : 'flex-start',
-          paddingTop: 20,
-          paddingBottom: Platform.OS !== 'web' ? 44 : undefined,
-          paddingHorizontal: 16,
-          marginBottom: 20,
-          alignItems: 'center',
-          width: '100%',
-        },
-        customStyle,
-      ]}
-    >
-      <View style={{ width: '100%' }}>
-        <ScrollView contentContainerStyle={{ width: '100%' }}>
-          {children}
-        </ScrollView>
-      </View>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <YStack
+        flex={1}
+        backgroundColor={currentTheme.colors.background}
+        maxWidth={1440}
+        margin="auto"
+        alignItems="center"
+        justifyContent="flex-start"
+        paddingTop={Platform.OS === 'web' ? 20 : '$2'}
+        paddingBottom={Platform.OS !== 'web' ? 44 : undefined}
+        paddingHorizontal="$4"
+        marginBottom={Platform.OS === 'web' ? 20 : '$2'}
+        width="100%"
+        {...customStyle}
+      >
+        <Stack width="100%">
+          <ScrollView contentContainerStyle={{ width: '100%' }}>
+            {children}
+          </ScrollView>
+        </Stack>
+      </YStack>
+    </SafeAreaView>
   );
 };
 
