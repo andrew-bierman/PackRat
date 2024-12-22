@@ -1,11 +1,10 @@
-import React from 'react';
-import { ComponentProps } from 'react';
-import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
 import { ChevronDown } from '@tamagui/lucide-icons';
+import React from 'react';
+import { Platform } from 'react-native';
 import { Button } from 'tamagui';
-
-type ContentProps = ComponentProps<typeof ZeegoDropdownMenu.Content>;
-type ItemProps = ComponentProps<typeof ZeegoDropdownMenu.Item>;
+import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
+type ContentProps = React.ComponentProps<typeof ZeegoDropdownMenu.Content>;
+type ItemProps = React.ComponentProps<typeof ZeegoDropdownMenu.Item>;
 
 const DropdownMenu = {
   ...ZeegoDropdownMenu,
@@ -32,9 +31,14 @@ const DropdownMenu = {
           backgroundColor: 'white',
           flexDirection: 'row',
           alignItems: 'center',
-          hoverStyle: {
-            backgroundColor: 'gray',
-          },
+          ...Platform.select({
+            web: {
+              cursor: 'pointer',
+              hoverStyle: {
+                backgroundColor: 'gray',
+              },
+            },
+          }),
         }}
       />
     ),
@@ -42,21 +46,40 @@ const DropdownMenu = {
   ),
 };
 
-const RDropdownMenu = ({ menuItems = [], menuName }) => {
+interface RDropdownMenuItem {
+  label: string;
+  onSelect?: () => void;
+}
+
+interface RDropdownMenuProps {
+  menuItems: RDropdownMenuItem[];
+  menuName: string;
+  trigger?: React.ReactNode;
+}
+
+const RDropdownMenu = ({
+  menuItems = [],
+  menuName,
+  trigger = null,
+}: RDropdownMenuProps) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingRight: 10,
-            borderRadius: 40,
-          }}
-        >
-          {menuName}
-          <ChevronDown size={14} />
-        </Button>
+      <DropdownMenu.Trigger asChild>
+        {React.isValidElement(trigger) ? (
+          trigger
+        ) : (
+          <Button
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingRight: 10,
+              borderRadius: 40,
+            }}
+          >
+            {menuName}
+            <ChevronDown size={14} />
+          </Button>
+        )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {menuItems.map(({ label, onSelect = () => {} }) => (
