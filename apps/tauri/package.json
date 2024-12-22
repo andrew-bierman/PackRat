@@ -23,7 +23,7 @@
     "@packrat/ui": "*",
     "@packrat/validations": "*",
     "@react-native/assets-registry": "0.74.81",
-    "@tamagui/vite-plugin": "^1.120.2",
+    "@tamagui/vite-plugin": "1.96.0",
     "@tanstack/react-router": "^1.16.5",
     "@tanstack/router-devtools": "^1.16.5",
     "@tanstack/router-vite-plugin": "^1.16.5",
