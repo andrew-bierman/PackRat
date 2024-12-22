@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0",
+    "@bugsnag/js": "^8.1.2",
     "@expo/match-media": "^0.4.0",
     "@expo/vector-icons": "^14.0.0",
     "@expo/webpack-config": "^19.0.0",

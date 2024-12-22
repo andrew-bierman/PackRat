@@ -2022,6 +2022,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bugsnag/browser@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "@bugsnag/browser@npm:8.1.2"
+  dependencies:
+    "@bugsnag/core": "npm:^8.1.1"
+  checksum: 10/e15189eef5800f1d4c730355d9c097431d3538ce85f1df9eaf16121231a3e35f477695ec2924f2085afa5c25182c51c1f66f120eca7eccf7682d89b16b8ea04d
+  languageName: node
+  linkType: hard
+
 "@bugsnag/core@npm:^7.19.0":
   version: 7.25.0
   resolution: "@bugsnag/core@npm:7.25.0"
@@ -2032,6 +2041,19 @@ __metadata:
     iserror: "npm:0.0.2"
     stack-generator: "npm:^2.0.3"
   checksum: 10/abecd0881663d1ecbe8304fa7c4e643ec62e05ad7a7d8db451e21966b3b63ea903d9d6b21229de317879a88027ed6ef6fed2bf728f0645d6a5be35bfa12a37fb
+  languageName: node
+  linkType: hard
+
+"@bugsnag/core@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "@bugsnag/core@npm:8.1.1"
+  dependencies:
+    "@bugsnag/cuid": "npm:^3.0.0"
+    "@bugsnag/safe-json-stringify": "npm:^6.0.0"
+    error-stack-parser: "npm:^2.0.3"
+    iserror: "npm:^0.0.2"
+    stack-generator: "npm:^2.0.3"
+  checksum: 10/07d18d9eddcb975a57f192eebc44d28f7c512b00072930fcd74dd61b3d0b60a164d6e0c3b51fbb031781c9a46bc81b5cc0efb6e1147ea54b0e21d6fdfb6c7181
   languageName: node
   linkType: hard
 
@@ -2079,6 +2101,30 @@ __metadata:
     promise: ^8.3.0
     react: "*"
   checksum: 10/342c5f8e8e6e1d066902fdd0a2efca2b9ea2b9b4a1752e0af3f7e42d80d31ee22a5632618ed2aa704e7c15a8190b23c813b6952bbd14a2e4d19d9e85771686b3
+  languageName: node
+  linkType: hard
+
+"@bugsnag/js@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "@bugsnag/js@npm:8.1.2"
+  dependencies:
+    "@bugsnag/browser": "npm:^8.1.2"
+    "@bugsnag/node": "npm:^8.1.1"
+  checksum: 10/4885e71768cf5d46ce9996f6e2b991c035dec9ae4946494fb507779c6bdea9c3eff3d4fa657e53bb57abdd26535361c2ac7deacff29c4d2369932b567b1abaf2
+  languageName: node
+  linkType: hard
+
+"@bugsnag/node@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "@bugsnag/node@npm:8.1.1"
+  dependencies:
+    "@bugsnag/core": "npm:^8.1.1"
+    byline: "npm:^5.0.0"
+    error-stack-parser: "npm:^2.0.3"
+    iserror: "npm:^0.0.2"
+    pump: "npm:^3.0.0"
+    stack-generator: "npm:^2.0.3"
+  checksum: 10/877209db102fab59df2c3f77d8dc67e53b456d5c6f752331caf90777bfa09b80384e7972685c2294cde85a26437e839075d821ce6302c787afc402de138c9516
   languageName: node
   linkType: hard
 
@@ -14747,6 +14793,7 @@ __metadata:
     "@babel/core": "npm:^7.23.7"
     "@babel/preset-typescript": "npm:^7.22.5"
     "@babel/runtime": "npm:^7.21.0"
+    "@bugsnag/js": "npm:^8.1.2"
     "@expo/match-media": "npm:^0.4.0"
     "@expo/vector-icons": "npm:^14.0.0"
     "@expo/webpack-config": "npm:^19.0.0"
@@ -16851,6 +16898,13 @@ __metadata:
   dependencies:
     streamsearch: "npm:^1.1.0"
   checksum: 10/bee10fa10ea58e7e3e7489ffe4bda6eacd540a17de9f9cd21cc37e297b2dd9fe52b2715a5841afaec82900750d810d01d7edb4b2d456427f449b92b417579763
+  languageName: node
+  linkType: hard
+
+"byline@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "byline@npm:5.0.0"
+  checksum: 10/737ca83e8eda2976728dae62e68bc733aea095fab08db4c6f12d3cee3cf45b6f97dce45d1f6b6ff9c2c947736d10074985b4425b31ce04afa1985a4ef3d334a7
   languageName: node
   linkType: hard
 
@@ -26160,7 +26214,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iserror@npm:0.0.2":
+"iserror@npm:0.0.2, iserror@npm:^0.0.2":
   version: 0.0.2
   resolution: "iserror@npm:0.0.2"
   checksum: 10/6ca5e50d779471dbb69455ce6853a8284a2a077ff9b7130133a1d09f071830653274884a1e5271b55a422a33e128790a3a7c3e73b2648cf5398d3cbdeb5ca889
