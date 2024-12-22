@@ -1,16 +1,21 @@
-import React, { useContext } from 'react';
-import { Tabs as ExpoTabs } from 'expo-router/tabs';
-import { TabList } from './TabList';
-import { DrawerToggleButton } from '@react-navigation/drawer';
-import { Stack, usePathname } from 'expo-router';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
-import useTheme from 'app/hooks/useTheme';
-import { StatusBar } from 'expo-status-bar';
+import { Feather } from '@expo/vector-icons';
 import { RIconButton } from '@packrat/ui';
-import ThemeContext from '../../context/theme';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import useTheme from 'app/hooks/useTheme';
+import { usePathname } from 'expo-router';
+import { Tabs as ExpoTabs } from 'expo-router/tabs';
+import { StatusBar } from 'expo-status-bar';
+import {
+  BackpackIcon,
+  HomeIcon,
+  NewspaperIcon,
+  SearchIcon,
+  UserRoundIcon,
+} from 'lucide-react-native';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 import FAB from '../../components/Fab/Fab';
+import ThemeContext from '../../context/theme';
 
 export const Tabs = () => {
   const formatHeaderTitle = () => {
@@ -40,11 +45,6 @@ export const Tabs = () => {
     <>
       <ExpoTabs
         screenOptions={{
-          tabBarStyle: {
-            position: 'absolute',
-            backgroundColor: currentTheme.colors.background,
-            borderTopWidth: 0,
-          },
           headerShown: false,
           headerRight: () => (
             <View
@@ -62,51 +62,47 @@ export const Tabs = () => {
               <DrawerToggleButton tintColor={currentTheme.colors.text} />
             </View>
           ),
-          headerTitleStyle: {
-            fontSize: 24,
-          },
-          headerStyle: {
-            backgroundColor: currentTheme.colors.background,
-          },
-          headerTintColor: currentTheme.colors.tertiaryBlue,
         }}
       >
         <ExpoTabs.Screen
           name="index"
           options={{
-            headerShown: true,
+            headerShown: false,
             tabBarLabel: 'Dashboard',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" size={size} color={color} />
+              <HomeIcon size={size} color={color} />
             ),
           }}
         />
         <ExpoTabs.Screen
-          name="feed/index"
+          name="feed"
           options={{
-            href: null,
-            headerShown: true,
+            href: 'feed',
+            headerShown: false,
             tabBarLabel: 'Feed',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="newspaper"
-                size={size}
-                color={color}
-              />
+            tabBarIcon: ({ color, size, focused }) => (
+              <NewspaperIcon size={size} color={color} />
             ),
           }}
         />
         <ExpoTabs.Screen
-          name="profile/index"
+          name="packs"
           options={{
-            headerShown: true,
+            href: 'packs',
+            headerShown: false,
+            tabBarLabel: 'Packs',
+            tabBarIcon: ({ color, size }) => (
+              <BackpackIcon size={size} color={color} />
+            ),
+          }}
+        />
+        <ExpoTabs.Screen
+          name="profile"
+          options={{
+            headerShown: false,
             tabBarLabel: 'Profile',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account"
-                size={size}
-                color={color}
-              />
+              <UserRoundIcon size={size} color={color} />
             ),
           }}
         />
@@ -125,11 +121,7 @@ export const Tabs = () => {
             headerShown: false,
             tabBarLabel: 'Search',
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="magnify"
-                size={size}
-                color={color}
-              />
+              <SearchIcon size={size} color={color} />
             ),
           }}
         />

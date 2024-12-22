@@ -1,13 +1,13 @@
-import React from 'react';
-import { RStack, RText as OriginalRText, RButton } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Platform, View } from 'react-native';
+import { RText as OriginalRText, RButton, RStack, XStack } from '@packrat/ui';
+import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
+import { useRouter } from 'app/hooks/router';
+import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
 import { useAuthUser } from 'app/modules/auth';
-import { useRouter } from 'app/hooks/router';
 import { first } from 'lodash';
-import useCustomStyles from 'app/hooks/useCustomStyles';
-import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete/PlacesAutocomplete';
+import React from 'react';
+import { Platform, View } from 'react-native';
 
 const RText: any = OriginalRText;
 
@@ -59,7 +59,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
   const firstNameOrUser = first(user?.name?.split(' ')) ?? 'User';
   const bannerText =
     firstNameOrUser !== 'User'
-      ? `Let's find a new trail, ${firstNameOrUser}`
+      ? `Let's find a new trail, ${String(firstNameOrUser)}`
       : "Let's find a new trail";
 
   return (
@@ -74,19 +74,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               style={styles.searchBar}
             />
           </View>
-        ) : (
+        ) : Platform.OS === 'android' ? (
           <RButton
             style={styles.searchButton}
             onPress={() => {
               router.push('/search');
             }}
           >
-            <RStack
-              style={{
-                alignItems: 'center',
-                flexDirection: 'row',
-              }}
-            >
+            <XStack ai="center" jc="flex-start" f={1} gap="$2">
               <MaterialCommunityIcons
                 name="magnify"
                 size={24}
@@ -95,9 +90,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelect }) => {
               <RText color={currentTheme.colors.text} opacity={0.6}>
                 Search by park, city, or trail
               </RText>
-            </RStack>
+            </XStack>
           </RButton>
-        )}
+        ) : null}
       </RStack>
     </View>
   );
@@ -145,7 +140,8 @@ const loadStyles = (theme: any) => {
       minWidth: '100%',
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      padding: 10,
+      padding: 0,
+      paddingHorizontal: 10,
       borderRadius: 5,
     },
   };

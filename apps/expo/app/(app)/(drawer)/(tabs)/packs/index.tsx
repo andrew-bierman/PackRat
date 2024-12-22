@@ -1,10 +1,10 @@
-import React from 'react';
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import useTheme from 'app/hooks/useTheme';
 import { FeedScreen } from 'app/modules/feed';
-import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-import useTheme from 'app/hooks/useTheme';
-import { DrawerToggleButton } from '@react-navigation/drawer';
+import React from 'react';
+import { Platform } from 'react-native';
 
 export default function Packs() {
   const { currentTheme } = useTheme();
@@ -20,17 +20,17 @@ export default function Packs() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Packs',
-          headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          headerRight: ({ tintColor }) => (
+            <DrawerToggleButton tintColor={tintColor} />
           ),
 
-          headerStyle: {
-            backgroundColor: currentTheme.colors.background,
-          },
-          headerTitleStyle: {
-            fontSize: 24,
-          },
-          headerTintColor: currentTheme.colors.tertiaryBlue,
+          // headerStyle: {
+          //   backgroundColor: currentTheme.colors.background,
+          // },
+          // headerTitleStyle: {
+          //   fontSize: 24,
+          // },
+          // headerTintColor: currentTheme.colors.tertiaryBlue,
 
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 

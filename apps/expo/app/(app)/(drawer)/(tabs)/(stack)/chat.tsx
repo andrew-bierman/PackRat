@@ -1,10 +1,10 @@
+import { DrawerToggleButton } from '@react-navigation/drawer';
+import ChatNative from 'app/components/chat/ChatNative';
+import useTheme from 'app/hooks/useTheme';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import React from 'react';
 import { Platform } from 'react-native';
-import ChatNative from 'app/components/chat/ChatNative';
-import useTheme from 'app/hooks/useTheme';
-import { DrawerToggleButton } from '@react-navigation/drawer';
 
 export default function Chat() {
   const { currentTheme } = useTheme();
@@ -19,8 +19,8 @@ export default function Chat() {
       <Stack.Screen
         options={{
           title: 'Chat',
-          headerRight: () => (
-            <DrawerToggleButton tintColor={currentTheme.colors.tertiaryBlue} />
+          headerRight: ({ tintColor }) => (
+            <DrawerToggleButton tintColor={tintColor} />
           ),
 
           headerStyle: {

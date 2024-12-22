@@ -1,17 +1,18 @@
-import React, { useRef, forwardRef, useImperativeHandle, FC } from 'react';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { forwardRef, useImperativeHandle, useRef, type FC } from 'react';
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
+import React from 'react';
 import {
+  Button,
   Form,
   Input,
-  Text as OriginalText,
-  Button,
-  TextArea,
   Label,
+  Text as OriginalText,
   XStack as OriginalXStack,
+  TextArea,
   YStack,
 } from 'tamagui';
-import * as z from 'zod';
+import { type z } from 'zod';
 
 const Text: any = OriginalText;
 const XStack: any = OriginalXStack;
@@ -107,42 +108,46 @@ const ReusableForm = forwardRef<any, ReusableFormProps>((props, ref) => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      {fields.map((field) => (
-        <XStack
-          overflow="hidden"
-          space="$2"
-          margin="$3"
-          padding="$2"
-          key={field.name}
-        >
-          {field.label && <Label htmlFor={field.name}>{field.label}</Label>}
-          <YStack space="$1">
-            <Controller
-              name={field.name}
-              control={control}
-              render={({ field: fieldProps }) => (
-                <RenderInput
-                  field={field}
-                  fieldProps={{
-                    ...fieldProps,
-                    ref: (el) => (inputRefs.current[field.name] = el),
-                  }}
-                />
-              )}
-            />
-            <RenderError
-              error={field.errorMessage}
-              fieldError={errors[field.name]?.message as string | undefined}
-            />
-            <RenderHelperText text={field.helperText} />
-          </YStack>
-        </XStack>
-      ))}
+      {fields &&
+        Array.isArray(fields) &&
+        fields.map((field) => (
+          <XStack
+            overflow="hidden"
+            space="$2"
+            margin="$3"
+            padding="$2"
+            key={field.name}
+          >
+            {field.label && <Label htmlFor={field.name}>{field.label}</Label>}
+            <YStack space="$1">
+              <Controller
+                name={field.name}
+                control={control}
+                render={({ field: fieldProps }) => (
+                  <RenderInput
+                    field={field}
+                    fieldProps={{
+                      ...fieldProps,
+                      ref: (el) => (inputRefs.current[field.name] = el),
+                    }}
+                  />
+                )}
+              />
+              <RenderError
+                error={field.errorMessage}
+                fieldError={errors[field.name]?.message as string | undefined}
+              />
+              <RenderHelperText text={field.helperText} />
+            </YStack>
+          </XStack>
+        ))}
       <Form.Trigger asChild>
         <Button>Submit</Button>
       </Form.Trigger>
     </Form>
   );
 });
+
+ReusableForm.displayName = 'ReusableForm';
 
 export default ReusableForm;

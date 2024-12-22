@@ -2,6 +2,7 @@
   "name": "vite-app",
   "private": true,
   "version": "1.1.1",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "yarn run build:tsc && yarn run build:vite",
@@ -16,7 +17,7 @@
     "@packrat/ui": "*",
     "@packrat/validations": "*",
     "@react-native/assets-registry": "0.74.81",
-    "@tamagui/vite-plugin": "^1.120.2",
+    "@tamagui/vite-plugin": "1.96.0",
     "@tanstack/react-router": "^1.16.5",
     "@tanstack/router-devtools": "^1.16.5",
     "@tanstack/router-vite-plugin": "^1.16.5",
