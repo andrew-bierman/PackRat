@@ -13,7 +13,7 @@ export const getItemById = z.object({
 });
 
 export const addItem = z.object({
-  name: z.string(),
+  name: z.string().min(3).max(40),
   weight: z.number(),
   quantity: z.number().int().positive(),
   unit: z.string(),
@@ -33,7 +33,7 @@ export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({
   id: z.string(),
-  name: z.string().nonempty(),
+  name: z.string().min(3).max(40),
   weight: z.number(),
   quantity: z.number(),
   unit: z.string(),

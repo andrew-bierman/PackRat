@@ -1,9 +1,12 @@
 import { createAnimations } from '@tamagui/animations-react-native';
+import { config as defaultTamaguiConfig } from '@tamagui/config/v3';
 import { createInterFont } from '@tamagui/font-inter';
 import { createMedia } from '@tamagui/react-native-media-driver';
 import { shorthands } from '@tamagui/shorthands';
 import { themes, tokens } from '@tamagui/themes/v2';
 import { createTamagui } from 'tamagui';
+
+// CUSTOM CONFIG
 
 // Define fonts using createInterFont
 const headingFont = createInterFont({
@@ -72,7 +75,7 @@ const animations = createAnimations({
 });
 
 // Create Tamagui config
-export const config = createTamagui({
+export const customConfig = createTamagui({
   defaultTheme: 'dark',
   defaultFont: 'body',
   shouldAddPrefersColorThemes: true,
@@ -108,6 +111,14 @@ export const config = createTamagui({
   }),
   animations,
 });
+
+// DEFAULT CONFIG
+export const defaultConfig = createTamagui(defaultTamaguiConfig);
+
+// Handle export for either config
+const effectiveConfig = defaultConfig;
+
+export const config = effectiveConfig;
 
 // for the compiler to find it
 export default config;
