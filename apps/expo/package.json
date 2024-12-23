@@ -55,7 +55,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
-    "@rnmapbox/maps": "^10.1.29",
+    "@rnmapbox/maps": "^10.1.33",
     "@shopify/flash-list": "1.7.1",
     "@tamagui/animations-react-native": "1.96.0",
     "@tamagui/babel-plugin": "1.96.0",
@@ -186,7 +186,8 @@
   },
   "overrides": {
     "metro": "0.81.0",
-    "metro-resolver": "0.81.0"
+    "metro-resolver": "0.81.0",
+    "metro-config": "0.81.0"
   },
   "private": true,
   "browserslist": {

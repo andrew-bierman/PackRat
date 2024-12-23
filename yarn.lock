@@ -10115,6 +10115,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rnmapbox/maps@npm:^10.1.33":
+  version: 10.1.33
+  resolution: "@rnmapbox/maps@npm:10.1.33"
+  dependencies:
+    "@turf/along": "npm:6.5.0"
+    "@turf/distance": "npm:6.5.0"
+    "@turf/helpers": "npm:6.5.0"
+    "@turf/length": "npm:6.5.0"
+    "@turf/nearest-point-on-line": "npm:6.5.0"
+    "@types/geojson": "npm:^7946.0.7"
+    debounce: "npm:^1.2.0"
+  peerDependencies:
+    expo: ">=47.0.0"
+    mapbox-gl: ^2.9.0
+    react: ">=16.6.1"
+    react-dom: ">= 17.0.0"
+    react-native: ">=0.59.9"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+    mapbox-gl:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10/75b2200e03b6c80c92582d0152027dca14f62268d9c9f0db1e2d5759bb9d780820907c00a24dc3da6a513a72127cb07182b851e8e24213d2da51a1d13845aef3
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-inject@npm:^5.0.4, @rollup/plugin-inject@npm:^5.0.5":
   version: 5.0.5
   resolution: "@rollup/plugin-inject@npm:5.0.5"
@@ -22619,7 +22647,7 @@ __metadata:
     "@reduxjs/toolkit": "npm:^1.9.3"
     "@rneui/base": "npm:^4.0.0-rc.8"
     "@rneui/themed": "npm:^4.0.0-rc.8"
-    "@rnmapbox/maps": "npm:^10.1.29"
+    "@rnmapbox/maps": "npm:^10.1.33"
     "@shopify/flash-list": "npm:1.7.1"
     "@tamagui/animations-react-native": "npm:1.96.0"
     "@tamagui/babel-plugin": "npm:1.96.0"
