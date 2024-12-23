@@ -2,16 +2,17 @@
 
 import { PaginationParams } from '../../../helpers/pagination';
 import { Feed } from '../model';
-import { Modifiers } from '../models';
+import { FeedQueryBy, Modifiers } from '../models';
 
 /**
  * Retrieves public trips based on the given query parameter.
  * @param {PrismaClient} prisma - Prisma client.
+ * @param {string} authenticatedUserId - The authenticated user's ID.
  * @param {string} queryBy - The query parameter to sort the trips.
  * @return {Promise<object[]>} The public trips.
  */
 export const getFeedService = async (
-  queryBy: string,
+  queryBy: FeedQueryBy,
   modifiers?: Modifiers,
   excludeType?: 'trips' | 'packs',
   pagination?: PaginationParams,

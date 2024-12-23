@@ -1,6 +1,7 @@
 export interface Modifiers {
   isPublic?: boolean;
-  ownerId?: string;
+  ownerId: string;
+  authenticatedUserId: string;
   searchTerm?: string;
   itemId?: string;
   includeUserFavoritesOnly?: boolean;

@@ -251,18 +251,19 @@ export class Feed {
     modifiers: Modifiers,
     table: typeof trip | typeof pack,
   ) {
+    const { authenticatedUserId, isPublic, ownerId, searchTerm } = modifiers;
     const conditions = [];
 
-    if (modifiers.isPublic !== undefined) {
-      conditions.push(eq(table.is_public, modifiers.isPublic));
+    if (!authenticatedUserId || isPublic || authenticatedUserId !== ownerId) {
+      conditions.push(eq(table.is_public, true));
     }
 
-    if (modifiers.ownerId) {
-      conditions.push(eq(table.owner_id, modifiers.ownerId));
+    if (ownerId) {
+      conditions.push(eq(table.owner_id, ownerId));
     }
 
-    if (modifiers.searchTerm) {
-      conditions.push(like(table.name, `%${modifiers.searchTerm}%`));
+    if (searchTerm) {
+      conditions.push(like(table.name, `%${searchTerm}%`));
     }
 
     return conditions.length > 0 ? and(...conditions) : undefined;
