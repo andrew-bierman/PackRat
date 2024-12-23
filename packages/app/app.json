@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "expo-font",
+    "expo-router",
+    "expo-secure-store"
+  ]
+}
