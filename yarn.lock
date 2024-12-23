@@ -15394,6 +15394,9 @@ __metadata:
     lodash: "npm:^4.17.21"
     lucide-react-native: "npm:^0.400.0"
     mapbox-gl: "npm:^3.6.0"
+    metro: "npm:^0.81.0"
+    metro-config: "npm:^0.81.0"
+    metro-resolver: "npm:^0.81.0"
     moti: "npm:^0.27.2"
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
@@ -15421,7 +15424,7 @@ __metadata:
     react-native-svg: "npm:15.8.0"
     react-native-table-component: "https://github.com/slice312/react-native-table-component.git"
     react-native-vector-icons: "npm:^10.0.3"
-    react-native-web: "npm:^0.19.10"
+    react-native-web: "npm:~0.19.13"
     react-native-webview: "npm:13.12.5"
     react-redux: "npm:^9.0.4"
     react-responsive: "npm:^9.0.2"
@@ -22697,6 +22700,9 @@ __metadata:
     fuse.js: "npm:^6.6.2"
     lodash: "npm:^4.17.21"
     mapbox-gl: "npm:1.13.3"
+    metro: "npm:^0.81.0"
+    metro-config: "npm:^0.81.0"
+    metro-resolver: "npm:^0.81.0"
     native-base: "npm:^3.4.28"
     normalize-css-color: "npm:^1.0.2"
     osmtogeojson: "npm:^3.0.0-beta.5"
@@ -29624,7 +29630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-resolver@npm:0.81.0":
+"metro-resolver@npm:0.81.0, metro-resolver@npm:^0.81.0":
   version: 0.81.0
   resolution: "metro-resolver@npm:0.81.0"
   dependencies:
