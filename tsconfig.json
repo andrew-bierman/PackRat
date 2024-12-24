@@ -2,7 +2,8 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
-    "module": "commonJS",
+    "module": "node16",
+    "moduleResolution": "node16",
     "paths": {
       "app/*": ["./packages/app/*"],
       "@packrat/api/*": ["./packages/api/*"],
