@@ -34,9 +34,9 @@ export default function AboutRoute() {
             backgroundColor: currentTheme.colors.background,
           },
           headerTitleStyle: {
-            fontSize: 24,
+            fontSize: 20,
           },
-          headerTintColor: currentTheme.colors.tertiaryBlue,
+          headerTintColor: currentTheme.colors.text,
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
 
           // https://reactnavigation.org/docs/headers#replacing-the-title-with-a-custom-component
