@@ -3,10 +3,10 @@ import React from 'react';
 import { Platform, SafeAreaView } from 'react-native';
 import { ScrollView, Stack, YStack } from 'tamagui';
 
-type LayoutProps = {
+interface LayoutProps {
   children: React.ReactNode;
   customStyle?: Record<string, any>;
-};
+}
 
 const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
   const { currentTheme } = useTheme();

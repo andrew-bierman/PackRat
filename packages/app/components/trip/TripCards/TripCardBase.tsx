@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';
@@ -7,13 +7,13 @@ import { LayoutCard } from 'app/components/LayoutCard';
 const RStack: any = OriginalRStack;
 const RText: any = OriginalRText;
 
-type TripCardBaseProps = {
+interface TripCardBaseProps {
   loadStyles?: (theme: any) => any;
   flexDirection?: 'row' | 'column';
   children: ReactNode;
   icon: React.FC;
   title: string;
-};
+}
 export const TripCardBase = ({
   loadStyles = loadStylesBase,
   flexDirection = 'row',
@@ -24,9 +24,9 @@ export const TripCardBase = ({
   return <LayoutCard>{children}</LayoutCard>;
 };
 
-const loadTripCardStyles = (loader) => (theme) => ({
-  styles: loader.apply(null, [theme]),
-});
+// const loadTripCardStyles = (loader) => (theme) => ({
+//   styles: loader.apply(null, [theme]),
+// });
 
 const loadStylesBase = ({ currentTheme }) => {
   return {

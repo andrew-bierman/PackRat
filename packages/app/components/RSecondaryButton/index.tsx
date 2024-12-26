@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled, Button, ButtonProps } from 'tamagui';
+import { styled, Button, type ButtonProps } from 'tamagui';
 import useTheme from 'app/hooks/useTheme';
 
 interface RSecondaryButtonProps extends ButtonProps {

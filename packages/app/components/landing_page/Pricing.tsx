@@ -1,3 +1,4 @@
+import React from 'react';
 import { RButton, RText } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
@@ -15,13 +16,29 @@ export const Pricing = () => {
     <View>
       <View style={styles.mainContainer}>
         <View style={styles.firstContainer}>
-          <RText style={{ fontSize: 28, textAlign: xs || sm || md ? 'center' : 'auto' }}>
+          <RText
+            style={{
+              fontSize: 28,
+              textAlign: xs || sm || md ? 'center' : 'auto',
+            }}
+          >
             Explore PackRat with Our Free Subscription Plan!
           </RText>
-          <RText style={{ fontSize: 25, textAlign: xs || sm || md ? 'center' : 'auto' }}>
+          <RText
+            style={{
+              fontSize: 25,
+              textAlign: xs || sm || md ? 'center' : 'auto',
+            }}
+          >
             Get Started with PackRat—Absolutely Free!
           </RText>
-          <RText style={{ fontSize: 16, width: xs || sm || md ? '100%' : '50%', textAlign: 'center' }}>
+          <RText
+            style={{
+              fontSize: 16,
+              width: xs || sm || md ? '100%' : '50%',
+              textAlign: 'center',
+            }}
+          >
             We’re thrilled to offer you our Free Subscription Plan so you can
             explore and manage your trips with PackRat at no cost! This plan is
             designed to give you full access to a range of features, making your
@@ -29,10 +46,24 @@ export const Pricing = () => {
           </RText>
         </View>
         <View style={styles.card}>
-          <RText style={{ width: '100%', fontSize: 18, textAlign: 'left', color: currentTheme.colors.background }}>
+          <RText
+            style={{
+              width: '100%',
+              fontSize: 18,
+              textAlign: 'left',
+              color: currentTheme.colors.background,
+            }}
+          >
             Free Access
           </RText>
-          <RText style={{ width: '100%', fontSize: 25, textAlign: 'left', color: currentTheme.colors.background }}>
+          <RText
+            style={{
+              width: '100%',
+              fontSize: 25,
+              textAlign: 'left',
+              color: currentTheme.colors.background,
+            }}
+          >
             $0
           </RText>
           <View style={{ width: '100%' }}>
@@ -46,9 +77,10 @@ export const Pricing = () => {
             </RButton>
           </View>
           <View style={{ marginTop: 10 }}>
-            {PricingData.freeVersion.map((index) => {
+            {PricingData.freeVersion.map((index, i) => {
               return (
                 <View
+                  key={i}
                   style={{
                     flexDirection: 'row',
                     gap: 10,
@@ -97,7 +129,6 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       alignItems: 'center',
       justifyContent: 'center',
       gap: 20,
-      
     },
     card: {
       flex: 1,
