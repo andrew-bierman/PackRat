@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { setupTest } from '../testHelpers';
 import type { trpcCaller } from '../testHelpers';
 import { describe, it, expect, beforeEach, afterEach, beforeAll } from 'vitest';

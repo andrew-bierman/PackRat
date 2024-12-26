@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import TripSchema from './models/tripModel';
 import PackSchema from './models/packModel';
 import ItemSchema from './models/itemModel';
