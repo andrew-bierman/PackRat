@@ -40,7 +40,7 @@ export const duplicatePublicPackService = async (
       id: newPack.id,
       content: newPack.name,
       metadata: {
-        isPublic: newPack.is_public,
+        isPublic: newPack.is_public ?? false,
         ownerId,
       },
       namespace: 'packs',
