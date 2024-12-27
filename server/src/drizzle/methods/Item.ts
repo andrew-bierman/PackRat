@@ -9,7 +9,10 @@ import {
 } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
-import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
+import {
+  getPaginationParams,
+  PaginationParams,
+} from '../../helpers/pagination';
 
 export class Item {
   async create(data: InsertItem) {

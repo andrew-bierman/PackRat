@@ -1,9 +1,9 @@
 import { type ExecutionContext } from 'hono';
 import * as validator from '@packrat/validations';
 import { ITEM_TABLE_NAME } from '../../db/schema';
-import { VectorClient } from 'src/vector/client';
+import { VectorClient } from '../../vector/client';
 import { addItemGlobalService } from './addItemGlobalService';
-import { summarizeItem } from 'src/utils/item';
+import { summarizeItem } from '../../utils/item';
 
 /**
  * Adds a list of items to the global inventory and indexes them in the vector database.
@@ -24,10 +24,18 @@ export const bulkAddItemsGlobalService = async (
     onItemCreationError?: (error: Error, bulkIndex: number) => void;
   },
 ): Promise<Array<Awaited<ReturnType<typeof addItemGlobalService>>>> => {
-  const { onItemCreated, onItemCreationError } = callbacks;
+  const { onItemCreated, onItemCreationError } = callbacks || {};
   const createdItems: Array<Awaited<ReturnType<typeof addItemGlobalService>>> =
     [];
-  const vectorData = [];
+  const vectorData: Array<{
+    id: string;
+    content: string;
+    namespace: string;
+    metadata: {
+      isPublic: boolean;
+      ownerId: string;
+    };
+  }> = [];
 
   let idx = -1;
   for (const item of items) {
@@ -44,8 +52,8 @@ export const bulkAddItemsGlobalService = async (
         content: summarizeItem(createdItem),
         namespace: ITEM_TABLE_NAME,
         metadata: {
-          isPublic: createdItem.global,
-          ownerId: createdItem.ownerId,
+          isPublic: createdItem.global || false,
+          ownerId: createdItem.ownerId || '',
         },
       });
     } catch (error) {

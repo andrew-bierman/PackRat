@@ -1,7 +1,7 @@
-import { ITEM_TABLE_NAME, type Item } from 'src/db/schema';
+import { ITEM_TABLE_NAME, type Item } from '../../db/schema';
 import { Item as ItemRepository } from '../../drizzle/methods/Item';
 import { VectorClient } from '../../vector/client';
-import { summarizeItem } from 'src/utils/item';
+import { summarizeItem } from '../../utils/item';
 
 interface SimilarItem extends Item {
   similarityScore: number;
@@ -43,7 +43,7 @@ export async function getSimilarItemsService(
     return [];
   }
 
-  const array = [];
+  const array: string[] = [];
   for (const m of matches) {
     if (m.id == id) continue; // filter current items's id
     array.push(m.id);
@@ -54,7 +54,7 @@ export async function getSimilarItemsService(
   // add similarity score to items result
   const similarItems = similarItemsResult.map((similarItem) => ({
     ...similarItem,
-    similarityScore: matches.find((m) => m.id == similarItem.id).score,
+    similarityScore: matches.find((m) => m.id == similarItem.id)?.score || 0,
   }));
 
   return similarItems;
