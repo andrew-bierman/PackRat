@@ -2,13 +2,15 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
-    "module": "node16",
-    "moduleResolution": "node16",
+    "module": "CommonJS",
     "paths": {
       "app/*": ["./packages/app/*"],
       "@packrat/api/*": ["./packages/api/*"],
       "@packrat/ui/*": ["./packages/ui/*"],
-      "server/*": ["./server/*"]
+      "server/*": ["./server/*"],
+      "@cloudflare/vitest-pool-workers/config": [
+        "./node_modules/@cloudflare/vitest-pool-workers/dist/config"
+      ]
     },
     "plugins": [
       {

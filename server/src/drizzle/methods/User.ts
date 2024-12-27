@@ -355,4 +355,17 @@ export class User {
       throw new Error(`Failed to find user: ${error.message}`);
     }
   }
+
+  async findById(userId: string): Promise<UserType | null> {
+    try {
+      const user = await DbClient.instance
+        .select()
+        .from(UserTable)
+        .where(eq(UserTable.id, userId))
+        .get();
+      return user || null;
+    } catch (error) {
+      throw new Error(`Failed to find user by ID: ${error.message}`);
+    }
+  }
 }

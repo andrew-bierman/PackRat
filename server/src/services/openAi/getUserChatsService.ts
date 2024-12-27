@@ -18,7 +18,10 @@ export const getUserChatsService = async (userId, itemTypeId) => {
   }
 
   const conversation = new Conversation();
-  const conversations = await conversation.findConversation(userId, itemTypeId);
+  const conversations = await conversation.findConversation({
+    userId,
+    itemTypeId,
+  });
 
   return { conversations };
 };

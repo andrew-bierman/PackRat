@@ -48,7 +48,13 @@ export class Conversation {
     }
   }
 
-  async findConversation(userId: string, itemTypeId: string) {
+  async findConversation({
+    userId,
+    itemTypeId,
+  }: {
+    userId: string;
+    itemTypeId: string;
+  }) {
     try {
       const filter = and(
         eq(ConversationTable.userId, userId),

@@ -646,3 +646,8 @@ export type GeoJson = InferSelectModel<typeof geojson>;
 export type InsertGeoJson = InferInsertModel<typeof geojson>;
 export const insertGeoJsonSchema = createInsertSchema(geojson);
 export const selectGeoJsonSchema = createSelectSchema(geojson);
+
+export type Conversation = InferSelectModel<typeof conversation>;
+export type InsertConversation = InferInsertModel<typeof conversation>;
+export const insertConversationSchema = createInsertSchema(conversation);
+export const selectConversationSchema = createSelectSchema(conversation);
