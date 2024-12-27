@@ -25,6 +25,7 @@ export default function Packs() {
           title: 'Packs',
           headerSearchBarOptions: {
             placeholder: 'Search packs',
+            headerIconColor: currentTheme.colors.text,
             hideWhenScrolling: false,
             inputType: 'text',
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),

@@ -5,8 +5,9 @@ import { useAtom } from 'jotai';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
-
+import useTheme from 'app/hooks/useTheme';
 export default function FeedNav() {
+  const { currentTheme } = useTheme();
   const [searchQuery, setSearchQuery] = useAtom(placesAutocompleteSearchAtom);
 
   return (
@@ -22,6 +23,7 @@ export default function FeedNav() {
           title: 'Trips',
           headerSearchBarOptions: {
             placeholder: 'Search trips',
+            headerIconColor: currentTheme.colors.text,
             hideWhenScrolling: false,
             inputType: 'text',
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),

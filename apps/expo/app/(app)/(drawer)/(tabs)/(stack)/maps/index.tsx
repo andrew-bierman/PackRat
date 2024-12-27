@@ -28,6 +28,7 @@ export default function MapsScreen() {
           headerSearchBarOptions: {
             placeholder: 'Search maps',
             hideWhenScrolling: false,
+            headerIconColor: currentTheme.colors.text,
             inputType: 'text',
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },

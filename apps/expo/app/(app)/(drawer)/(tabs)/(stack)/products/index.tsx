@@ -27,6 +27,7 @@ export default function ProductsPage() {
           ),
           headerSearchBarOptions: {
             placeholder: 'Search products',
+            headerIconColor: currentTheme.colors.text,
             hideWhenScrolling: false,
             inputType: 'text',
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
