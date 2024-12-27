@@ -1,16 +1,22 @@
 import * as jwt from 'hono/jwt';
-import { eq, and } from 'drizzle-orm';
+import { verify } from 'hono/jwt';
+import { eq, and, SQL } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
 import {
   type InsertUser,
   user as UserTable,
   refreshTokens,
   userFavoritePacks,
+  type User as UserType,
 } from '../../db/schema';
 import bcrypt from 'bcryptjs';
 
+interface DecodedToken {
+  id: string;
+}
+
 export class User {
-  async save(user) {
+  async save(user: Partial<InsertUser>): Promise<UserType | undefined> {
     if (user.username) {
       return this.getUserByUsername(user.username);
     }
@@ -23,7 +29,7 @@ export class User {
     return this.updateUserWithNewUsername(user, generatedUsername);
   }
 
-  async getUserByUsername(username) {
+  async getUserByUsername(username: string): Promise<UserType | null> {
     return DbClient.instance
       .select()
       .from(UserTable)
@@ -32,7 +38,7 @@ export class User {
       .get();
   }
 
-  async getAdminId() {
+  async getAdminId(): Promise<UserType | null> {
     return DbClient.instance
       .select()
       .from(UserTable)
@@ -41,11 +47,11 @@ export class User {
       .get();
   }
 
-  generateUsernameFromEmail(email) {
+  generateUsernameFromEmail(email: string | undefined): string {
     return email ? email.split('@')[0] : 'defaultuser';
   }
 
-  async doesUsernameExist(username) {
+  async doesUsernameExist(username: string): Promise<boolean> {
     const result: any = await DbClient.instance
       .select()
       .from(UserTable)
@@ -55,13 +61,16 @@ export class User {
     return result.length > 0;
   }
 
-  appendNumberToUsername(username) {
+  appendNumberToUsername(username: string): string {
     const match = username.match(/(\d+)$/);
     const number = match ? parseInt(match[1], 10) + 1 : 1;
     return username.replace(/(\d+)?$/, number.toString());
   }
 
-  async updateUserWithNewUsername(user, username) {
+  async updateUserWithNewUsername(
+    user: Partial<InsertUser>,
+    username: string,
+  ): Promise<UserType | null> {
     return DbClient.instance
       .update(UserTable)
       .set({ ...user, username })
@@ -70,7 +79,7 @@ export class User {
       .get();
   }
 
-  async create(user: InsertUser) {
+  async create(user: InsertUser): Promise<UserType | null> {
     try {
       const createdUser = DbClient.instance
         .insert(UserTable)
@@ -83,7 +92,7 @@ export class User {
     }
   }
 
-  async generateAccessToken(jwtSecret: string, id: string) {
+  async generateAccessToken(jwtSecret: string, id: string): Promise<string> {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     try {
       const token = await jwt.sign(
@@ -96,7 +105,7 @@ export class User {
     }
   }
 
-  async generateRefreshToken(jwtSecret: string, id: string) {
+  async generateRefreshToken(jwtSecret: string, id: string): Promise<string> {
     if (!jwtSecret) throw new Error('jwtSecret is not defined');
     try {
       const token = await jwt.sign(
@@ -112,7 +121,7 @@ export class User {
     }
   }
 
-  async deleteRefreshToken(token: string) {
+  async deleteRefreshToken(token: string): Promise<void> {
     await DbClient.instance
       .delete(refreshTokens)
       .where(eq(refreshTokens.token, token));
@@ -149,7 +158,7 @@ export class User {
   async update(
     data: Partial<InsertUser>,
     filter = data.id ? eq(UserTable.id, data.id) : undefined,
-  ) {
+  ): Promise<UserType[]> {
     try {
       const updatedUser = DbClient.instance
         .update(UserTable)
@@ -162,7 +171,7 @@ export class User {
     }
   }
 
-  async delete(id: string, filter = eq(UserTable.id, id)) {
+  async delete(id: string, filter = eq(UserTable.id, id)): Promise<UserType[]> {
     try {
       return DbClient.instance.delete(UserTable).where(filter).returning();
     } catch (error) {
@@ -170,10 +179,22 @@ export class User {
     }
   }
 
-  async findMany() {
+  async findMany(): Promise<UserType[]> {
     try {
-      const users = DbClient.instance.query.user.findMany({});
-      return users;
+      const users = await DbClient.instance.query.user.findMany();
+      return users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        password: user.password,
+        email: user.email,
+        googleId: user.googleId,
+        code: user.code,
+        is_certified_guide: user.is_certified_guide,
+        passwordResetToken: user.passwordResetToken,
+        passwordResetTokenExpiration: user.passwordResetTokenExpiration,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      })) as UserType[];
     } catch (error) {
       throw new Error(`Failed to get users: ${error.message}`);
     }
@@ -189,7 +210,7 @@ export class User {
     email?: string;
     code?: string;
     includeFavorites?: boolean;
-  }) {
+  }): Promise<UserType | null> {
     try {
       let filter: any = null;
       if (userId) {
@@ -199,7 +220,7 @@ export class User {
       } else if (email) {
         filter = eq(UserTable.email, email);
       }
-      const user = DbClient.instance.query.user.findFirst({
+      const user = await DbClient.instance.query.user.findFirst({
         where: filter,
         ...(includeFavorites && {
           with: {
@@ -216,9 +237,9 @@ export class User {
                             id: true,
                             name: true,
                             weight: true,
-                            quantity: true,
                             unit: true,
-                          },
+                            quantity: true,
+                          } as any,
                         },
                       },
                     },
@@ -231,13 +252,16 @@ export class User {
         }),
       });
 
-      return user;
+      return user as UserType | null;
     } catch (error) {
       throw new Error(`Failed finding user: ${error.message}`);
     }
   }
 
-  async findByCredentials(email: string, password: string) {
+  async findByCredentials(
+    email: string,
+    password: string,
+  ): Promise<UserType | null> {
     try {
       const user = await this.findUser({ email });
       if (!user) return null;
@@ -250,7 +274,7 @@ export class User {
     }
   }
 
-  async findFavorite(userId: string, packId: string) {
+  async findFavorite(userId: string, packId: string): Promise<any> {
     const subQuery = DbClient.instance
       .select()
       .from(userFavoritePacks)
@@ -265,11 +289,17 @@ export class User {
     return isFavorite;
   }
 
-  async validateResetToken(token: string, jwtSecret: string) {
+  async validateResetToken(
+    token: string,
+    jwtSecret: string,
+  ): Promise<UserType | null> {
     try {
       if (!jwtSecret) throw new Error('JwtSecret is not defined');
-      const decoded = await jwt.verify(token, jwtSecret);
-      const user = DbClient.instance
+      const decoded = (await verify(
+        token,
+        jwtSecret,
+      )) as unknown as DecodedToken;
+      const user = await DbClient.instance
         .select()
         .from(UserTable)
         .where(
@@ -282,16 +312,21 @@ export class User {
       if (!user) {
         throw new Error('User not found');
       }
-      return user;
+      return user as UserType;
     } catch (error) {
       throw new Error(`Failed to validate reset token: ${error.message}`);
     }
   }
 
   async findUnique(query: {
-    where: { email?: string; googleId?: string; id?: string; token?: string };
+    where: {
+      email?: string;
+      googleId?: string;
+      id?: string;
+      token?: string;
+    };
     with?: { favoriteDocuments?: boolean; id?: boolean; username?: boolean };
-  }) {
+  }): Promise<UserType | null> {
     try {
       const conditions: any[] = [];
       if (query.where.email) {
@@ -303,8 +338,11 @@ export class User {
       if (query.where.id && query.where.token) {
         conditions.push(
           eq(UserTable.id, query.where.id),
-          eq(UserTable.token, query.where.token),
+          eq(UserTable.passwordResetToken, query.where.token),
         );
+      }
+      if (query.where.token) {
+        conditions.push(eq(UserTable.passwordResetToken, query.where.token));
       }
       const user = await DbClient.instance
         .select()

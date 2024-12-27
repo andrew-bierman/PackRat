@@ -1,4 +1,4 @@
-import { calculateTripScore } from 'src/utils/scoreTrip';
+import { calculateTripScore } from '../../utils/scoreTrip';
 import { Trip } from '../../drizzle/methods/trip';
 
 export async function scoreTripService(tripId: string) {
@@ -12,11 +12,11 @@ export async function scoreTripService(tripId: string) {
     const tripScore = calculateTripScore({
       startDate: trip.start_date,
       endDate: trip.end_date,
-      activity: trip.activity,
+      activity: trip.activity || null,
     });
 
     const updatedPack = await tripClass.update({
-      id: trip.id,
+      ...trip,
       scores: tripScore || null,
     });
 

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import {
   RText,
   RStack,
-  Form as OriginalForm,
+  Form,
   FormInput,
   SubmitButton,
-  FormSelect as OriginalFormSelect,
-  FormRadioGroup as OriginalFormRadioGroup,
+  FormSelect,
+  FormRadioGroup,
   DropdownComponent,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
@@ -14,10 +14,6 @@ import { Platform, View } from 'react-native';
 import { ItemCategoryEnum } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import { type Item } from '@packrat/validations';
-
-const Form: any = OriginalForm;
-const FormSelect: any = OriginalFormSelect;
-const FormRadioGroup: any = OriginalFormRadioGroup;
 
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 
