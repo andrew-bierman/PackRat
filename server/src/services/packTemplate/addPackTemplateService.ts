@@ -4,10 +4,9 @@ import * as validator from '@packrat/validations';
 import { PackTemplate as PackTemplateClass } from '../../drizzle/methods/PackTemplate';
 import * as ItemPackTemplateService from '../itemPackTemplate/itemPackTemplate.service';
 import * as ItemService from '../item/item.service';
-import { ITEM_TABLE_NAME, PackTemplate } from 'src/db/schema';
-import { summarizeItem } from 'src/utils/item';
-import { VectorClient } from 'src/vector/client';
-import { i } from 'vitest/dist/reporters-QGe8gs4b.js';
+import { ITEM_TABLE_NAME, PackTemplate } from '../../db/schema';
+import { summarizeItem } from '../../utils/item';
+import { VectorClient } from '../../vector/client';
 
 /**
  * Adds a new pack template service.
@@ -18,14 +17,21 @@ import { i } from 'vitest/dist/reporters-QGe8gs4b.js';
  * @return {Object} An object containing the created pack.
  */
 export const addPackTemplateService = async (
-  packTemplateData: validator.AddPackTemplateType,
+  packTemplateData: validator.AddPackTemplateType = {
+    name: '',
+    description: '',
+    type: '',
+    itemPackTemplates: [],
+    itemsOwnerId: '',
+  } as validator.AddPackTemplateType,
   executionCtx: ExecutionContext,
 ): Promise<PackTemplate> => {
   const { name, description, type } = packTemplateData;
   console.log({ packTemplateData });
   const packTemplateClass = new PackTemplateClass();
-  let existingPack: PackTemplate | null =
-    await packTemplateClass.findPackTemplate({ name });
+  let existingPack = (await packTemplateClass.findPackTemplate({
+    name,
+  })) as PackTemplate | null;
 
   if (!existingPack) {
     existingPack = await packTemplateClass.create({
@@ -53,13 +59,15 @@ export const addPackTemplateService = async (
       console.error(`Error creating item at ${idx}:`, error);
     },
     onItemCreated: async (createdItem, idx) => {
-      await ItemPackTemplateService.addItemPackTemplate({
-        itemId: createdItem.id,
-        quantity: packTemplateData.itemPackTemplates[idx].quantity,
-        packTemplateId: existingPack.id,
-      });
+      if (existingPack) {
+        await ItemPackTemplateService.addItemPackTemplate({
+          itemId: createdItem.id,
+          quantity: packTemplateData.itemPackTemplates?.[idx]?.quantity ?? 1,
+          packTemplateId: existingPack.id,
+        });
+      }
     },
   });
 
-  return existingPack;
+  return existingPack ?? { type: null, id: '', description: '', name: '' };
 };
