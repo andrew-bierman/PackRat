@@ -26,11 +26,13 @@ export default function FeedNav() {
         options={{
           // https://reactnavigation.org/docs/headers#setting-the-header-title
           title: 'Feed',
-          headerRight: ({ tintColor }) => (
-            <DrawerToggleButton tintColor={tintColor} />
+          headerRight: () => (
+            <DrawerToggleButton tintColor={currentTheme.colors.text} />
           ),
           headerSearchBarOptions: {
             placeholder: 'Search',
+            headerIconColor: currentTheme.colors.text,
+
             hideWhenScrolling: false,
             inputType: 'text',
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
