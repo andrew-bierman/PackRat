@@ -32,7 +32,7 @@ export const FullScreen: FC<FullScreenProps> = ({
 
   return (
     <View
-      ref={Platform.OS === 'web' ? webFullScreen.elementRef : null}
+      ref={Platform.OS === 'web' ? (webFullScreen.elementRef as any) : null}
       style={isFullScreen ? styles.fullScreen : defaultStyles}
     >
       {children}

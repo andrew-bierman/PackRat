@@ -81,7 +81,15 @@ const RDropdownMenu = ({
           </Button>
         )}
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
+      <DropdownMenu.Content
+        side="bottom"
+        align="start"
+        sideOffset={5}
+        alignOffset={0}
+        loop
+        avoidCollisions
+        collisionPadding={5}
+      >
         {menuItems.map(({ label, onSelect = () => {} }) => (
           <DropdownMenu.Item key={label} onSelect={onSelect}>
             <DropdownMenu.ItemTitle>{label}</DropdownMenu.ItemTitle>
