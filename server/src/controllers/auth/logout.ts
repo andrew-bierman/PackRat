@@ -1,6 +1,6 @@
-import { publicProcedure } from 'src/trpc';
+import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import { logoutService as logout } from 'src/services/auth/auth.service';
+import { logoutService as logout } from '../../services/auth/auth.service';
 import { TRPCError } from '@trpc/server';
 
 export function logoutRoute() {

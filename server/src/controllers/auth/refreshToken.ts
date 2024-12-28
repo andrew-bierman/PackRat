@@ -1,6 +1,6 @@
-import { publicProcedure } from 'src/trpc';
+import { publicProcedure } from '../../trpc';
 import { z } from 'zod';
-import { refreshTokenService } from 'src/services/auth/auth.service';
+import { refreshTokenService } from '../../services/auth/auth.service';
 import { TRPCError } from '@trpc/server';
 
 export function refreshTokenRoute() {

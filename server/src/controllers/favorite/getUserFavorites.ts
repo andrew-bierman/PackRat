@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { protectedProcedure } from '../../trpc';
 import { getUserFavoritesService } from '../../services/favorite/favorite.service';
 import { type Context } from 'hono';
-import { getPaginationResponse } from 'src/helpers/pagination';
+import { getPaginationResponse } from '../../helpers/pagination';
 
 export const getUserFavorites = async (c: Context) => {
   try {
@@ -31,7 +31,7 @@ export function getUserFavoritesRoute() {
         await getUserFavoritesService(
           userId,
           { searchTerm, isPublic },
-          pagination,
+          { limit: pagination.limit, offset: pagination.offset },
         );
 
       return {
