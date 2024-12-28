@@ -18,10 +18,10 @@ export const importItems = async (c) => {
             'Quantity',
             'Category',
           ];
-          const parsedHeaders = results.meta.fields;
+          const parsedHeaders = results.meta.fields ?? [];
           try {
             const allHeadersPresent = expectedHeaders.every((header) =>
-              parsedHeaders.includes(header),
+              (parsedHeaders as string[]).includes(header),
             );
             if (!allHeadersPresent) {
               return reject(
@@ -32,18 +32,28 @@ export const importItems = async (c) => {
             for (const [index, item] of results.data.entries()) {
               if (
                 index === results.data.length - 1 &&
-                Object.values(item).every((value) => value === '')
+                Object.values(item as Record<string, unknown>).every(
+                  (value) => value === '',
+                )
               ) {
                 continue;
               }
 
+              const row = item as {
+                Name: string;
+                Weight: string;
+                Quantity: string;
+                Unit: string;
+                Category: string;
+              };
+
               await addItemService(
-                item.Name,
-                item.Weight,
-                item.Quantity,
-                item.Unit,
+                row.Name,
+                Number(row.Weight),
+                Number(row.Quantity),
+                row.Unit,
                 packId,
-                item.Category,
+                row.Category as 'Food' | 'Water' | 'Essentials',
                 ownerId,
                 c.ctx.executionCtx,
               );
@@ -83,10 +93,10 @@ export function importItemsRoute() {
               'Quantity',
               'Category',
             ];
-            const parsedHeaders = results.meta.fields;
+            const parsedHeaders = results.meta.fields ?? [];
             try {
               const allHeadersPresent = expectedHeaders.every((header) =>
-                parsedHeaders.includes(header),
+                (parsedHeaders as string[]).includes(header),
               );
               if (!allHeadersPresent) {
                 return reject(
@@ -99,18 +109,28 @@ export function importItemsRoute() {
               for (const [index, item] of results.data.entries()) {
                 if (
                   index === results.data.length - 1 &&
-                  Object.values(item).every((value) => value === '')
+                  Object.values(item as Record<string, unknown>).every(
+                    (value) => value === '',
+                  )
                 ) {
                   continue;
                 }
 
+                const row = item as {
+                  Name: string;
+                  Weight: string;
+                  Quantity: string;
+                  Unit: string;
+                  Category: string;
+                };
+
                 await addItemService(
-                  item.Name,
-                  item.Weight,
-                  item.Quantity,
-                  item.Unit,
+                  row.Name,
+                  Number(row.Weight),
+                  Number(row.Quantity),
+                  row.Unit,
                   packId,
-                  item.Category,
+                  row.Category as 'Food' | 'Water' | 'Essentials',
                   ownerId,
                   opts.ctx.executionCtx,
                 );

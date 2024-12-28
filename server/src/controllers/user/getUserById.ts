@@ -7,6 +7,9 @@ import { type Context } from 'hono';
 export const getUserById = async (ctx: Context) => {
   try {
     const { userId } = await ctx.req.param();
+    if (!userId) {
+      throw new Error('User ID is required');
+    }
     const user = await getUserByIdService(userId);
 
     ctx.set('data', user);

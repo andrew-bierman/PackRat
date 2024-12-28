@@ -53,7 +53,19 @@ async function importItemsFromBucket(directory, ownerId, env, executionCtx) {
       x_amz_token,
     );
 
-    const itemsToInsert = await parseCSVData(fileData, ownerId);
+    const itemsToInsert = (await parseCSVData(fileData, ownerId)) as Iterable<{
+      name: string;
+      type: 'Food' | 'Water' | 'Essentials';
+      ownerId: string;
+      weight: number;
+      unit: string;
+      description?: string;
+      sku?: string;
+      productUrl?: string;
+      productDetails?: Record<string, string | number | boolean>;
+      seller?: string;
+      image_urls?: string;
+    }>;
     const insertedItems = await bulkAddItemsGlobalService(
       itemsToInsert,
       executionCtx,

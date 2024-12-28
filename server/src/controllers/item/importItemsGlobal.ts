@@ -6,7 +6,7 @@ import {
 import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import Papa from 'papaparse';
-import { ItemCategoryEnum } from 'src/utils/itemCategory';
+import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 export const importItemsGlobal = async (c: Context) => {
   try {
@@ -24,10 +24,10 @@ export const importItemsGlobal = async (c: Context) => {
             'Category',
             'image_urls',
           ];
-          const parsedHeaders = results.meta.fields;
+          const parsedHeaders = results.meta.fields ?? [];
           try {
             const allHeadersPresent = expectedHeaders.every((header) =>
-              parsedHeaders.includes(header),
+              (parsedHeaders as string[]).includes(header),
             );
             if (!allHeadersPresent) {
               return reject(
@@ -36,21 +36,33 @@ export const importItemsGlobal = async (c: Context) => {
             }
 
             for (const [index, item] of results.data.entries()) {
+              const row = item as {
+                Name: string;
+                Weight: string;
+                Unit: string;
+                Category: string;
+                image_urls?: string;
+                sku?: string;
+                product_url?: string;
+                description?: string;
+                seller?: string;
+                techs?: string;
+              };
               if (
                 index === results.data.length - 1 &&
-                Object.values(item).every((value) => value === '')
+                Object.values(row).every((value) => value === '')
               ) {
                 continue;
               }
 
               await addItemGlobalService(
                 {
-                  name: item.Name,
-                  weight: item.Weight,
-                  unit: item.Unit,
-                  type: item.Category,
+                  name: row.Name,
+                  weight: Number(row.Weight),
+                  unit: row.Unit,
+                  type: row.Category as 'Food' | 'Water' | 'Essentials',
                   ownerId,
-                  image_urls: item.image_urls,
+                  image_urls: row.image_urls,
                 },
                 c.executionCtx,
               );
@@ -85,7 +97,7 @@ function* sanitizeItemsIterator(
   for (let idx = 0; idx < csvRawItems.length; idx++) {
     const item = csvRawItems[idx];
 
-    const productDetailsStr = `${item.techs}`
+    const productDetailsStr = String(item?.techs ?? '')
       .replace(/'([^']*)'\s*:/g, '"$1":') // Replace single quotes keys with double quotes.
       .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes values with double quotes.
       .replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
@@ -102,22 +114,22 @@ function* sanitizeItemsIterator(
       parsedProductDetails = JSON.parse(productDetailsStr);
     } catch (e) {
       console.log(
-        `${productDetailsStr}\nFailed to parse product details for item ${item.Name}: ${e.message}`,
+        `${productDetailsStr}\nFailed to parse product details for item ${item?.Name ?? 'unknown'}: ${e.message}`,
       );
       throw e;
     }
 
     const validatedItem: validator.AddItemGlobalType = {
-      name: String(item.Name),
-      weight: Number(item.Weight),
-      unit: String(item.Unit),
-      type: String(item.Category) as ItemCategoryEnum,
+      name: String(item?.Name ?? ''),
+      weight: Number(item?.Weight ?? 0),
+      unit: String(item?.Unit ?? ''),
+      type: String(item?.Category ?? '') as ItemCategoryEnum,
       ownerId,
-      image_urls: item.image_urls && String(item.image_urls),
-      sku: item.sku && String(item.sku),
-      productUrl: item.product_url && String(item.product_url),
-      description: item.description && String(item.description),
-      seller: item.seller && String(item.seller),
+      image_urls: item?.image_urls ? String(item.image_urls) : undefined,
+      sku: item?.sku ? String(item.sku) : undefined,
+      productUrl: item?.product_url ? String(item.product_url) : undefined,
+      description: item?.description ? String(item.description) : undefined,
+      seller: item?.seller ? String(item.seller) : undefined,
     };
 
     if (parsedProductDetails) {
@@ -148,10 +160,10 @@ export function importItemsGlobalRoute() {
         Papa.parse<Record<(typeof expectedHeaders)[number], unknown>>(content, {
           header: true,
           complete: async function (results) {
-            const parsedHeaders = results.meta.fields;
+            const parsedHeaders = results.meta.fields ?? [];
             try {
               const allHeadersPresent = expectedHeaders.every((header) =>
-                parsedHeaders.includes(header),
+                (parsedHeaders as string[]).includes(header),
               );
               if (!allHeadersPresent) {
                 return reject(

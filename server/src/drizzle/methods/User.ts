@@ -124,6 +124,15 @@ export class User {
     }
   }
 
+  async generateAuthToken(
+    jwtSecret: string,
+    id: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const accessToken = await this.generateAccessToken(jwtSecret, id);
+    const refreshToken = await this.generateRefreshToken(jwtSecret, id);
+    return { accessToken, refreshToken };
+  }
+
   async deleteRefreshToken(token: string): Promise<void> {
     await DbClient.instance
       .delete(refreshTokens)
