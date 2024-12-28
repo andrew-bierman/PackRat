@@ -16,7 +16,7 @@ interface DecodedToken {
 }
 
 export class User {
-  async save(user: Partial<InsertUser>): Promise<UserType | undefined> {
+  async save(user: Partial<InsertUser>): Promise<UserType | null> {
     if (user.username) {
       return this.getUserByUsername(user.username);
     }
@@ -30,25 +30,27 @@ export class User {
   }
 
   async getUserByUsername(username: string): Promise<UserType | null> {
-    return DbClient.instance
+    const user = await DbClient.instance
       .select()
       .from(UserTable)
       .where(eq(UserTable.username, username))
       .limit(1)
       .get();
+    return user as UserType | null;
   }
 
   async getAdminId(): Promise<UserType | null> {
-    return DbClient.instance
+    const user = await DbClient.instance
       .select()
       .from(UserTable)
       .where(eq(UserTable.role, 'admin'))
       .limit(1)
       .get();
+    return user as UserType | null;
   }
 
   generateUsernameFromEmail(email: string | undefined): string {
-    return email ? email.split('@')[0] : 'defaultuser';
+    return email?.split('@')[0] ?? 'defaultuser';
   }
 
   async doesUsernameExist(username: string): Promise<boolean> {
@@ -63,7 +65,7 @@ export class User {
 
   appendNumberToUsername(username: string): string {
     const match = username.match(/(\d+)$/);
-    const number = match ? parseInt(match[1], 10) + 1 : 1;
+    const number = parseInt(match?.[1] ?? '0', 10) + 1;
     return username.replace(/(\d+)?$/, number.toString());
   }
 
@@ -71,10 +73,11 @@ export class User {
     user: Partial<InsertUser>,
     username: string,
   ): Promise<UserType | null> {
+    if (!user.id) throw new Error('User id is required');
     return DbClient.instance
       .update(UserTable)
       .set({ ...user, username })
-      .where(eq(UserTable.id, user.id))
+      .where(eq(UserTable.id, user.id!))
       .returning()
       .get();
   }
