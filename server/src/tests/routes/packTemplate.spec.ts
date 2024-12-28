@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { createExecutionContext, env } from 'cloudflare:test';
 import { ItemCategory as ItemCategoryRepository } from '../../drizzle/methods/itemcategory';

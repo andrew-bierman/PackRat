@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { env } from 'cloudflare:test';
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { setupTest, type trpcCaller } from '../utils/testHelpers';

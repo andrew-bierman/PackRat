@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { userSignUp } from '@packrat/validations';
 import { generateMock } from '@anatine/zod-mock';
