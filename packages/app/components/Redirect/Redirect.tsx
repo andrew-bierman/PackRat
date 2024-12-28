@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useRouter } from 'app/hooks/router';
 
-type RedirectProps = {
+interface RedirectProps {
   to: string;
-};
+}
 
 export const Redirect = ({ to }: RedirectProps) => {
   const router = useRouter();

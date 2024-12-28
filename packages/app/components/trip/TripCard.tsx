@@ -114,6 +114,7 @@ export default function TripCard({
               const selectedValue = isTrail ? currentTrail : currentPark;
               return (
                 <RCard
+                  key={item}
                   backgroundColor={
                     item === selectedValue ? theme.colors.background : null
                   }

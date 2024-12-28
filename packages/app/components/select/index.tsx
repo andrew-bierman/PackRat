@@ -1,6 +1,6 @@
 import { Check, ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Adapt,

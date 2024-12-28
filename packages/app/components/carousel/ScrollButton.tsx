@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   View,
   StyleProp,
-  TextStyle,
+  type TextStyle,
+  type ViewStyle,
   TouchableOpacityProps,
-  ViewStyle,
 } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import useTheme from 'app/hooks/useTheme';

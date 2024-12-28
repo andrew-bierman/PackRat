@@ -5,12 +5,15 @@ import { useIsMobileView } from 'app/hooks/common';
 import { View } from 'tamagui';
 import useTheme from '../../../hooks/useTheme';
 
-interface SidebarNavigationList {
-  itemStyle?: any;
-  onItemSelect?: (item: any) => void;
+interface SidebarNavigationListProps {
+  itemStyle?: Record<string, any>;
+  onItemSelect?: (item: unknown) => void;
 }
 
-export const SidebarNavigationList = ({ itemStyle, onItemSelect }) => {
+export const SidebarNavigationList: React.FC<SidebarNavigationListProps> = ({
+  itemStyle,
+  onItemSelect,
+}) => {
   const isMobileView = useIsMobileView();
   const { currentTheme } = useTheme();
   const { navigationItems } = useNavigationList();
