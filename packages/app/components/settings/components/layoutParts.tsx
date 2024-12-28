@@ -10,8 +10,7 @@ export const FormCard = styled(View, {
   alignItems: 'center',
   justifyContent: 'center',
   padding: '$6',
-  '$group-window-gtSm': {
-    
+  $gtSm: {
     shadowColor: '$shadowColor',
     shadowOffset: {
       width: 0,
@@ -24,14 +23,14 @@ export const FormCard = styled(View, {
     borderWidth: 1,
     borderColor: '$borderColor',
   },
-  '$group-window-xs': {
+  $xs: {
     borderWidth: 0,
     borderRadius: 0,
     paddingHorizontal: '$1',
   },
 });
 
-export const Hide = ({
+export const Hide = async ({
   children,
   when = 'sm',
 }: {

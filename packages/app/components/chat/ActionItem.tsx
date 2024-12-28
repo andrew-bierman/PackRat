@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
   FadeIn,
 } from 'react-native-reanimated';
-import { LucideIcon } from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

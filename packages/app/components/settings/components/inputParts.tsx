@@ -2,7 +2,7 @@ import { getFontSized } from '@tamagui/get-font-sized';
 import { getSpace } from '@tamagui/get-token';
 import { User } from '@tamagui/lucide-icons';
 import type { SizeVariantSpreadFunction } from '@tamagui/web';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { ColorTokens, FontSizeTokens } from 'tamagui';
 import {
   Label,
@@ -92,7 +92,7 @@ const InputGroupFrame = styled(XGroup, {
     },
   } as const,
   defaultVariants: {
-    unstyled: process.env.TAMAGUI_HEADLESS === '1' ? true : false,
+    unstyled: process.env.TAMAGUI_HEADLESS === '1',
   },
 });
 
@@ -118,8 +118,7 @@ export const inputSizeVariant: SizeVariantSpreadFunction<any> = (
   val = '$true',
   extras,
 ) => {
-  const radiusToken =
-    extras.tokens.radius[val] ?? extras.tokens.radius['$true'];
+  const radiusToken = extras.tokens.radius[val] ?? extras.tokens.radius.$true;
   const paddingHorizontal = getSpace(val, {
     shift: -1,
     bounds: [2],
@@ -127,7 +126,7 @@ export const inputSizeVariant: SizeVariantSpreadFunction<any> = (
   const fontStyle = getFontSized(val as any, extras);
   // lineHeight messes up input on native
   if (!isWeb && fontStyle) {
-    delete fontStyle['lineHeight'];
+    delete fontStyle.lineHeight;
   }
   return {
     ...fontStyle,
@@ -288,7 +287,7 @@ export const InputInfo = styled(Text, {
         if (!font) return;
         const fontSize = font.size[val].val * 0.8;
         const lineHeight = font.lineHeight?.[val].val * 0.8;
-        const fontWeight = font.weight?.['$2'];
+        const fontWeight = font.weight?.$2;
         const letterSpacing = font.letterSpacing?.[val];
         const textTransform = font.transform?.[val];
         const fontStyle = font.style?.[val];
@@ -311,7 +310,7 @@ const InputXGroup = styled(XGroup, {
   variants: {
     size: {
       '...size': (val, { tokens }) => {
-        const radiusToken = tokens.radius[val] ?? tokens.radius['$true'];
+        const radiusToken = tokens.radius[val] ?? tokens.radius.$true;
         return {
           borderRadius: radiusToken,
         };
