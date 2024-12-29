@@ -20,6 +20,7 @@ type CustomTabBarProps = {
     navigate?: any;
     emit?: any;
   };
+  group?: boolean;
 };
 
 const CustomTabBar = View.styleable<CustomTabBarProps>(
@@ -43,11 +44,12 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
         ref={ref}
       >
         {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
+          const descriptor = descriptors[route.key];
+          const { options } = descriptor ?? {};
           const label =
-            options.tabBarLabel !== undefined
+            options?.tabBarLabel !== undefined
               ? options.tabBarLabel
-              : options.title !== undefined
+              : options?.title !== undefined
                 ? options.title
                 : route.name;
 
@@ -72,7 +74,7 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
 
           return (
             <View
-              group="item"
+              group={true}
               flex={1}
               flexShrink={1}
               width={100}
@@ -190,7 +192,7 @@ export function TabBarSecondExample() {
         justifyContent="center"
       >
         <Text fontSize="$8" fontWeight="$8" lineHeight="$8">
-          {state.routes[state.index].key}
+          {state?.routes?.[state.index]?.key}
         </Text>
       </View>
     </View>

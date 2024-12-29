@@ -106,9 +106,10 @@ function WalkThroughComp({
 
   useEffect(() => {
     if (itemsDim.length !== numberOfSteps) return;
-    popoverRef.current?.anchorTo(
-      itemsDim[activeStep] || itemsDim[numberOfSteps - 1],
-    );
+    const activeRect = itemsDim[activeStep] || itemsDim[numberOfSteps - 1];
+    if (activeRect) {
+      popoverRef.current?.anchorTo(activeRect);
+    }
   }, [activeStep, itemsDim]);
 
   return (

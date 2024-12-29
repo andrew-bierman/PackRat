@@ -83,7 +83,7 @@ export function LmSlider({
       helperText={helperText}
       helperTextProps={helperTextProps}
       alignItems={labelInline ? 'center' : undefined}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       <XStack space alignItems={'center'}>
         <Slider

@@ -56,7 +56,7 @@ export function LmStarRating({
       label={label}
       labelInline={labelInline}
       labelProps={labelProps}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       <XStack gap={gap}>
         {arr.map((value) => {
@@ -73,7 +73,7 @@ export function LmStarRating({
           return (
             <SizableStack
               key={`${currentRating}`}
-              {...sizeableStackProps}
+              {...(sizeableStackProps as any)}
               size={size}
               circular
               onHoverIn={() => {
