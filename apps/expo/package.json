@@ -135,7 +135,7 @@
     "react-native-gesture-handler": "~2.20.2",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-ios-context-menu": "^2.4.1",
-    "react-native-ios-utilities": "^4.3.0",
+    "react-native-ios-utilities": "^4.5.1",
     "react-native-paper": "^5.10.6",
     "react-native-paper-dates": "^0.18.12",
     "react-native-reanimated": "~3.16.1",

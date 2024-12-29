@@ -22746,7 +22746,7 @@ __metadata:
     react-native-gesture-handler: "npm:~2.20.2"
     react-native-google-places-autocomplete: "npm:^2.5.1"
     react-native-ios-context-menu: "npm:^2.4.1"
-    react-native-ios-utilities: "npm:^4.3.0"
+    react-native-ios-utilities: "npm:^4.5.1"
     react-native-paper: "npm:^5.10.6"
     react-native-paper-dates: "npm:^0.18.12"
     react-native-reanimated: "npm:~3.16.1"
@@ -34395,14 +34395,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-ios-utilities@npm:^4.3.0":
-  version: 4.5.0
-  resolution: "react-native-ios-utilities@npm:4.5.0"
+"react-native-ios-utilities@npm:^4.5.1":
+  version: 4.5.1
+  resolution: "react-native-ios-utilities@npm:4.5.1"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 10/68872535c00620ebeb91dd3df312e82880e533afbd783816ed08f70a299b735a9493483d5dcf0aa08e4bdcaa124c0d036f23940612fd39d31f55682a9b5781be
+  checksum: 10/8cafdd1767923fc9791eba8b167a710ff06920c9441ba8dc484a5a7cd6e2ad8f453fd375e3d5750f614f6899b1039bf836313536db636a575f3c2f3ccbd946e9
   languageName: node
   linkType: hard
 
