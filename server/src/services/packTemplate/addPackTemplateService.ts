@@ -23,7 +23,7 @@ export const addPackTemplateService = async (
     type: '',
     itemPackTemplates: [],
     itemsOwnerId: '',
-  } as validator.AddPackTemplateType,
+  } as const,
   executionCtx: ExecutionContext,
 ): Promise<PackTemplate> => {
   const { name, description, type } = packTemplateData;

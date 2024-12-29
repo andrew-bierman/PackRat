@@ -40,7 +40,10 @@ describe('Pack routes', () => {
   let owner: User;
 
   beforeAll(async () => {
-    executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
     owner = (await userClass.create({
       email: 'test@abc.com',

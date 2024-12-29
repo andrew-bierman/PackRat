@@ -14,7 +14,10 @@ describe('Template Routes', () => {
   let createdTemplate: Template;
 
   beforeAll(async () => {
-    const executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
   });
 

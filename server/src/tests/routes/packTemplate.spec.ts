@@ -44,7 +44,10 @@ describe('Pack template routes', () => {
   let packTemplateItems: Item[];
 
   beforeAll(async () => {
-    const executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
 
     vi.resetModules();

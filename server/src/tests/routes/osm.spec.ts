@@ -18,7 +18,10 @@ describe('OSM routes', () => {
   const nodeClass = new NodeClass();
 
   beforeAll(async () => {
-    const executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
   });
 

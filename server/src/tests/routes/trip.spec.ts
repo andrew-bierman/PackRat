@@ -17,7 +17,10 @@ describe('Trip Routes', () => {
   let owner: User;
 
   beforeAll(async () => {
-    const executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
     owner = (await userClass.create({
       email: 'test@abc.com',

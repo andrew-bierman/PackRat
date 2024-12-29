@@ -15,7 +15,10 @@ describe('Favorite routes', () => {
   let pack: Pack;
 
   beforeAll(async () => {
-    const executionCtx = {} as ExecutionContext;
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
     user = (await userClass.create({
       email: 'test@abc.com',
