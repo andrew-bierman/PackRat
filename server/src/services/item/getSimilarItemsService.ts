@@ -3,7 +3,7 @@ import { Item as ItemRepository } from '../../drizzle/methods/Item';
 import { VectorClient } from '../../vector/client';
 import { summarizeItem } from '../../utils/item';
 
-interface SimilarItem extends Item {
+export interface SimilarItem extends Item {
   similarityScore: number;
 }
 

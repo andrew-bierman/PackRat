@@ -2,7 +2,7 @@ import { type Pack } from '../../db/schema';
 import { Pack as PackRepository } from '../../drizzle/methods/pack';
 import { VectorClient } from '../../vector/client';
 
-interface SimilarPack extends Pack {
+export interface SimilarPack extends Pack {
   similarityScore: number;
 }
 

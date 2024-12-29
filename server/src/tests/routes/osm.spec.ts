@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { setupTest } from '../testHelpers';
 import type { trpcCaller } from '../testHelpers';
@@ -20,7 +18,8 @@ describe('OSM routes', () => {
   const nodeClass = new NodeClass();
 
   beforeAll(async () => {
-    caller = await setupTest(env);
+    const executionCtx = {} as ExecutionContext;
+    caller = await setupTest(env, executionCtx);
   });
 
   describe('getPhotonResults', () => {
