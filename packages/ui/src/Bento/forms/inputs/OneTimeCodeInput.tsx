@@ -28,6 +28,8 @@ import {
 } from '@tamagui/lucide-icons';
 import { InputWithLabelDemo } from './InputWithLabel';
 
+const isWeb = typeof window !== 'undefined';
+
 interface CodeConfirmationInputProps {
   id: number;
   size?: SizeTokens;
@@ -94,9 +96,9 @@ function CodeConfirmationInput({
           onKeyPress={(e) => {
             const event = e.nativeEvent;
             if (event.key === 'Backspace') {
-              // Prevent the backspace key from navigating back
-              event.preventDefault();
-
+              if (isWeb && (event as any).preventDefault) {
+                (event as any).preventDefault();
+              }
               if (value !== '') {
                 // Reset input field
                 onChange('');

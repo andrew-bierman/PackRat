@@ -71,19 +71,19 @@ function Calendar({
     propGetters: { dayButton, subtractOffset },
   } = useDatePickerContext();
 
-  const { days, year, month } = calendars[calenderIndex];
+  const { days, year, month } = calendars[calenderIndex] || {};
 
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
-      days.reduce((acc, day, i) => {
+      calendars[calenderIndex]?.days?.reduce((acc, day, i) => {
         if (i % 7 === 0) {
           acc.push([]);
         }
-        acc[acc.length - 1].push(day);
+        acc[acc.length - 1]?.push(day);
         return acc;
-      }, [] as DPDay[][]),
-    [days],
+      }, [] as DPDay[][]) ?? [],
+    [calendars, calenderIndex],
   );
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
@@ -190,52 +190,53 @@ function Calendar({
             ))}
           </View>
           <View flexDirection="column" gap="$1" flexWrap="wrap">
-            {subDays.map((days) => {
-              return (
-                <View flexDirection="row" key={days[0].$date.toString()}>
-                  {days.map((d) => {
-                    return (
-                      <Button
-                        key={d.$date.toString()}
-                        chromeless
-                        circular
-                        padding={0}
-                        minWidth={46}
-                        {...swapOnClick(dayButton(d))}
-                        backgroundColor={
-                          d.selected && d.inCurrentMonth
-                            ? '$background'
-                            : 'transparent'
-                        }
-                        themeInverse={d.selected}
-                        {...RANGE_STYLE[d.range]}
-                        data-range={d.range}
-                        disabled={!d.inCurrentMonth}
-                        {...(d.range === 'in-range' || d.selected
-                          ? {
-                              hoverStyle: {
-                                backgroundColor: 'transparent',
-                              },
-                            }
-                          : {})}
-                      >
-                        <Button.Text
-                          color={
-                            d.selected
-                              ? '$gray12'
-                              : d.inCurrentMonth
-                                ? '$gray11'
-                                : '$gray6'
+            {subDays.map((days) => (
+              <View
+                flexDirection="row"
+                key={days[0]?.$date.toString() ?? `row-${Math.random()}`}
+              >
+                {days.map((d) => {
+                  return (
+                    <Button
+                      key={d.$date.toString()}
+                      chromeless
+                      circular
+                      padding={0}
+                      minWidth={46}
+                      {...swapOnClick(dayButton(d))}
+                      backgroundColor={
+                        d.selected && d.inCurrentMonth
+                          ? '$background'
+                          : 'transparent'
+                      }
+                      themeInverse={d.selected}
+                      {...RANGE_STYLE[d.range]}
+                      data-range={d.range}
+                      disabled={!d.inCurrentMonth}
+                      {...(d.range === 'in-range' || d.selected
+                        ? {
+                            hoverStyle: {
+                              backgroundColor: 'transparent',
+                            },
                           }
-                        >
-                          {d.day}
-                        </Button.Text>
-                      </Button>
-                    );
-                  })}
-                </View>
-              );
-            })}
+                        : {})}
+                    >
+                      <Button.Text
+                        color={
+                          d.selected
+                            ? '$gray12'
+                            : d.inCurrentMonth
+                              ? '$gray11'
+                              : '$gray6'
+                        }
+                      >
+                        {d.day}
+                      </Button.Text>
+                    </Button>
+                  );
+                })}
+              </View>
+            ))}
           </View>
         </View>
       </AnimatePresence>

@@ -101,7 +101,7 @@ function RegionFilterInput(props: RegionFilterInputProps) {
                     setRegionCode(item.name);
                     setOpen(false);
                   }}
-                  group="item"
+                  group
                   borderColor="$borderColor"
                   borderWidth={0}
                   borderBottomWidth={1}

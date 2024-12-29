@@ -23,7 +23,8 @@ const StyledText = styled(Text, {
   lineHeight: '$4',
 });
 
-function Item({ item }: { item: Product }) {
+function Item({ item }: { item: Product | null }) {
+  if (!item) return null;
   return (
     <Link
       flexGrow={1}
@@ -108,9 +109,9 @@ export function ProductListWithFeatures() {
         paddingHorizontal: '$3',
       }}
     >
-      {products.map((item, index) => (
-        <Item key={item.id} item={item} />
-      ))}
+      {products.map(
+        (item, index) => item && <Item key={item.id} item={item} />,
+      )}
       {someSpacers}
     </XStack>
   );

@@ -43,24 +43,7 @@ export function MonthPickerInput() {
   const [open, setOpen] = useState(false);
 
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-      config={{
-        onDatesChange,
-        /** this is the default dates, which means updating this will not update internal date
-         *  and date picker will not be controlled, for manually changing internal date value use `offsetDate`
-         *  */
-        selectedDates,
-        offsetDate,
-        onOffsetChange: (offset) => {
-          setOffsetDate(offset);
-        },
-        calendar: {
-          startDay: 1,
-        },
-      }}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
           placeholder="Select Month"
@@ -79,7 +62,21 @@ export function MonthPickerInput() {
 
       <DatePicker.Content>
         <DatePicker.Content.Arrow />
-        <DatePickerBody />
+        <_DatePickerProvider
+          config={{
+            onDatesChange,
+            selectedDates,
+            offsetDate,
+            onOffsetChange: (offset) => {
+              setOffsetDate(offset);
+            },
+            calendar: {
+              startDay: 1,
+            },
+          }}
+        >
+          <DatePickerBody />
+        </_DatePickerProvider>
       </DatePicker.Content>
     </DatePicker>
   );

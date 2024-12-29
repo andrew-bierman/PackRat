@@ -97,4 +97,4 @@ const AnimatedNumber = styled(Text, {
   '$group-window-xs': {
     fontSize: '$8',
   },
-});
+} as any);

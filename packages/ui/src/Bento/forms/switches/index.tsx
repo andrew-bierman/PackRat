@@ -1,2 +1,2 @@
-export * from './IconTitleSwitch';
+// remove: export * from './IconTitleSwitch';
 export * from './SwitchCustomIcons';

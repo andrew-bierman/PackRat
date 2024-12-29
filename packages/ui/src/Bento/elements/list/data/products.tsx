@@ -59,8 +59,8 @@ export const getProducts = () => {
     .fill(0)
     .map((_, i) => {
       const category = allImages[i % allImages.length];
-      const name = Object.keys(category)[i % 10];
-      const image = category[name];
+      const name = Object.keys(category || {})[i % 10];
+      const image = category && name ? category[name] : '';
       return {
         id: i,
         name,

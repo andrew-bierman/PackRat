@@ -32,27 +32,7 @@ export function YearPickerInput() {
   }, [offsetDate]);
 
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-      config={{
-        onDatesChange,
-        /** this is the default dates, which means updating this will not update internal date
-         *  and date picker will not be controlled, for manually changing internal date value use `offsetDate`
-         *  */
-        selectedDates,
-        offsetDate,
-        onOffsetChange: (offset) => {
-          if (offset) {
-            offset.setMonth(0);
-          }
-          setOffsetDate(offset);
-        },
-        calendar: {
-          startDay: 1,
-        },
-      }}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
           value={
@@ -70,7 +50,24 @@ export function YearPickerInput() {
 
       <DatePicker.Content>
         <DatePicker.Content.Arrow borderWidth={1} borderColor="$borderColor" />
-        <DatePickerBody />
+        <_DatePickerProvider
+          config={{
+            onDatesChange,
+            selectedDates,
+            offsetDate,
+            onOffsetChange: (offset) => {
+              if (offset) {
+                offset.setMonth(0);
+              }
+              setOffsetDate(offset);
+            },
+            calendar: {
+              startDay: 1,
+            },
+          }}
+        >
+          <DatePickerBody />
+        </_DatePickerProvider>
       </DatePicker.Content>
     </DatePicker>
   );
