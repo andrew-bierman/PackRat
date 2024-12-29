@@ -5,11 +5,17 @@ import useAspectRatio from './useAspectRatio';
 const ORIGINAL_WIDTH = 29;
 const ORIGINAL_HEIGHT = 32;
 
+interface SVGLogoProps {
+  width?: number;
+  fill?: string;
+  [key: string]: any;
+}
+
 export default function SVGLogoComponent({
   width = 963.619,
   fill = 'fff',
   ...props
-}) {
+}: SVGLogoProps) {
   const height = useAspectRatio(width, ORIGINAL_WIDTH, ORIGINAL_HEIGHT);
 
   return (

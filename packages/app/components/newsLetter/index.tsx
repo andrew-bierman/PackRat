@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, FormInput, RText, SubmitButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
@@ -6,7 +7,7 @@ import { StyleSheet } from 'react-native';
 
 export const NewsLetter = () => {
   const { currentTheme } = useTheme();
-  const {xs, sm, md} = useResponsive()
+  const { xs, sm, md } = useResponsive();
   const styles = StyleSheet.create(loadStyles(currentTheme, xs, sm, md));
   return (
     <Form>
@@ -18,7 +19,7 @@ export const NewsLetter = () => {
           name="email"
           aria-label="Email"
         />
-        <SubmitButton style={styles.submitButton}>
+        <SubmitButton style={styles.submitButton} onSubmit={() => {}}>
           <RText style={{ color: currentTheme.colors.white }}>
             Join Newsletter
           </RText>
@@ -33,15 +34,14 @@ const loadStyles = (currentTheme, xs, sm, md) => {
     container: {
       width: xs ? '100%' : 'auto',
       flexDirection: xs ? 'column' : 'row',
-      alignItems: xs ? '' : 'center',
+      alignItems: xs ? 'center' : 'center',
       justifyContent: 'center',
       gap: 10,
-
     },
     submitButton: {
       backgroundColor: '#232323',
       color: 'white',
-      width: xs  ? '100%' : 'auto',
+      width: xs ? '100%' : 'auto',
     },
   });
 };

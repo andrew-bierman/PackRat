@@ -1,13 +1,6 @@
-import {
-  AnimatePresence,
-  Button,
-  H1,
-  Label,
-  Spinner,
-  View,
-} from 'tamagui';
+import { AnimatePresence, Button, H1, Label, Spinner, View } from 'tamagui';
 import { Input } from './components/inputParts';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Info } from '@tamagui/lucide-icons';
 import { FormCard } from './components/layoutParts';
 import { useForm, Controller } from 'react-hook-form';
@@ -36,7 +29,7 @@ export function SettingsForm() {
   const [loading, setLoading] = useState(false);
   const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
-  const {xs, sm, md } = useResponsive();
+  const { xs, sm, md } = useResponsive();
 
   const {
     control,
@@ -99,8 +92,8 @@ export function SettingsForm() {
               }}
             >
               <ImageUpload
-                hasProfileImage={control._defaultValues.profilepicture ?  true : false}
-                label={""}
+                hasProfileImage={!!control._defaultValues.profilepicture}
+                label={''}
                 name="profileImage"
                 previewElement={<Avatar size={90} />}
               />
@@ -109,16 +102,16 @@ export function SettingsForm() {
             <FormInput label="Username" name="username" />
             <FormInput label="Email" name="email" />
             <H1
-                style={{
-                  alignSelf: 'center',
-                }}
-                size="$8"
-                $group-window-xs={{
-                  size: '$7',
-                }}
-              >
-                Preferred units
-              </H1>
+              style={{
+                alignSelf: 'center',
+              }}
+              size="$8"
+              $group-window-xs={{
+                size: '$7',
+              }}
+            >
+              Preferred units
+            </H1>
             <View
               style={{
                 flexDirection: sm || xs ? 'column' : 'row',
@@ -130,7 +123,7 @@ export function SettingsForm() {
                 <FormSelect
                   options={weatherOptions}
                   name="preferredWeather"
-                  fullWidth={xs || sm ? true : false}
+                  fullWidth={!!(xs || sm)}
                 />
               </View>
               <View>
@@ -138,7 +131,7 @@ export function SettingsForm() {
                 <FormSelect
                   options={weightOptions}
                   name="preferredWeight"
-                  fullWidth={xs || sm ? true : false}
+                  fullWidth={!!(xs || sm)}
                 />
               </View>
             </View>
@@ -148,7 +141,7 @@ export function SettingsForm() {
                 marginTop: 16,
                 backgroundColor: '#232323',
                 color: 'white',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               disabled={loading}
               onSubmit={(data) => handleEditUser(data)}
@@ -254,7 +247,7 @@ export function SettingsForm() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <H1
@@ -269,14 +262,14 @@ export function SettingsForm() {
               >
                 Delete Account
               </H1>
-              <Label style={{textAlign: 'center'}} size={'$2'}>
+              <Label style={{ textAlign: 'center' }} size={'$2'}>
                 Deleting your account will remove all your information from our
                 database. This cannot be undone
               </Label>
             </View>
             <View>
               <RLabel htmlFor="confirmText">
-                To Confirm This, Type 'delete'
+                To Confirm This, Type &apos;delete&apos;
               </RLabel>
               <FormInput id="confirmText" name="confirmText" />
               <SubmitButton

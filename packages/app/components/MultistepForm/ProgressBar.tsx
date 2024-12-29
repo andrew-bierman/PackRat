@@ -1,3 +1,4 @@
+import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { Svg, Line, Circle } from 'react-native-svg';
 import { View } from 'react-native';

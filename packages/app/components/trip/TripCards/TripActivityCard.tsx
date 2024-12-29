@@ -9,10 +9,10 @@ import { Select as OriginalSelect } from '@packrat/ui';
 
 const Select: any = OriginalSelect;
 
-type TripActivityCardProps = {
+interface TripActivityCardProps {
   onChange: (activity: string) => void;
   selectedValue: string;
-};
+}
 
 export const TripActivityCard = ({
   onChange,

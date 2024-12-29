@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { AnimatePresence, Text, Theme, View, styled } from 'tamagui';
 
@@ -11,10 +11,10 @@ const List = styled(FlatList<Message>, {
 
 const getMessages = (data: Message[]) => data;
 
-type Message = {
+interface Message {
   role: 'user' | 'ai';
   content: string;
-};
+}
 
 const renderItem = ({
   item: message,
