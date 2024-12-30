@@ -10,17 +10,6 @@ export const loadStyles = (theme: any) => {
   const { currentTheme } = theme;
 
   return {
-    container: {
-      flex: 1,
-      padding: 16,
-      position: isWeb ? 'fixed' : 'absolute',
-      right: 50,
-      bottom: 30,
-      width: 60,
-      height: 60,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
     headerText: { fontSize: 24, fontWeight: 'bold' },
     flatList: { flexGrow: 1, justifyContent: 'flex-end' },
     inputContainer: {
@@ -142,10 +131,10 @@ export const loadStyles = (theme: any) => {
       elevation: 3,
     },
     animatedView: {
-      position: 'absolute',
-      bottom: 60,
-      right: 1,
       maxWidth: 350,
+      position: 'absolute',
+      bottom: 10,
+      right: 0,
       backgroundColor: '#fff',
       borderRadius: 10,
       padding: 4,
