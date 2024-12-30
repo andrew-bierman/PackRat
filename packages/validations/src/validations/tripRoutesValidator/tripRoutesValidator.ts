@@ -7,12 +7,10 @@ export const tripForm = z.object({
   name: z.string().min(3).max(40),
   description: z
     .string()
-    .transform((val) => {
-      return val === '' ? undefined : val;
-    })
-    .pipe(z.string().min(20).max(200).nullable().optional())
     .optional()
-    .nullable(),
+    .nullable()
+    .transform((val) => (val === '' ? undefined : val))
+    .pipe(z.string().min(20).max(200).nullable().optional()),
   activity: z.enum(tripActivityValues).optional(),
   is_public: z.boolean().optional(),
 });
