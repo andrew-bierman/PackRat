@@ -7,7 +7,7 @@ export function importPackTemplatesRoute() {
     .input(validator.addPackTemplates)
     .mutation(async (opts) => {
       const array = opts.input;
-      const packTemplates = [];
+      const packTemplates: any[] = [];
       for (let idx = 0; idx < array.length; idx++) {
         const input = array[idx];
         try {

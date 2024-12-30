@@ -6,6 +6,9 @@ import { type Context } from 'hono';
 export const getItemImages = async (c: Context) => {
   try {
     const { id } = await c.req.param();
+    if (!id) {
+      return c.json({ error: 'ID is required' }, 400);
+    }
     const item = await getItemImagesByIdService(id);
     return c.json({ item }, 200);
   } catch (error) {

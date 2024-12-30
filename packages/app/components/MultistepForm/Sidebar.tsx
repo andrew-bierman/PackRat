@@ -1,8 +1,9 @@
+import React from 'react';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { View, Text } from 'react-native';
 
 interface SidebarProps {
-  data: { title?: string; subtext?: string }[];
+  data: Array<{ title?: string; subtext?: string }>;
   currentStep: number;
 }
 
@@ -15,7 +16,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, currentStep }) => {
 
   return (
     <View style={styles.sidebar}>
-      {/* Display your data here */}
       {displayData.map((currentData, index) => {
         if (!currentData) return null;
         const { title, subtext } = currentData;

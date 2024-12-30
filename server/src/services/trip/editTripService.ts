@@ -12,6 +12,9 @@ export const editTripService = async (
   try {
     const tripClass = new Trip();
     const selectedTrip = await tripClass.findById(tripData.id);
+    if (!selectedTrip) {
+      throw new Error('Trip not found');
+    }
     const updatedTrip = await tripClass.update({
       id: tripData?.id,
       name: tripData.name || selectedTrip.name,
@@ -45,7 +48,7 @@ export const editTripService = async (
     const geojsonClass = new GeoJson();
 
     const tripGeoJSONs = selectedTrip.tripGeojsons;
-    if (tripGeoJSONs.length > 0) {
+    if (tripGeoJSONs && tripGeoJSONs.length > 0 && tripGeoJSONs[0]?.geojson) {
       await geojsonClass.update(tripGeoJSONs[0].geojson.id, {
         geoJSON: serializedGeoJSON,
       });
@@ -78,9 +81,15 @@ export const setTripVisibilityService = async (
   try {
     const tripClass = new Trip();
     const selectedTrip = await tripClass.findById(tripData.tripId);
+    if (!selectedTrip) {
+      throw new Error('Trip not found');
+    }
     const updatedTrip = await tripClass.update({
-      ...selectedTrip,
       id: selectedTrip.id,
+      name: selectedTrip.name,
+      start_date: selectedTrip.start_date,
+      end_date: selectedTrip.end_date,
+      destination: selectedTrip.destination,
       is_public: tripData.is_public,
     });
     return updatedTrip;

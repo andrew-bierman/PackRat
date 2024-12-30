@@ -26,7 +26,7 @@ export const FormCard = styled(View, {
     borderRadius: 0,
     paddingHorizontal: '$1',
   },
-});
+} as any);
 
 export const Hide = ({
   children,

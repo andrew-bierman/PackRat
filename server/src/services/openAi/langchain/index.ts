@@ -1,10 +1,11 @@
 import { ChatOpenAI } from 'langchain/chat_models/openai';
 import { AIMessage, HumanMessage, SystemMessage } from 'langchain/schema';
-import Conversation from '../../../models/openai/conversationModel';
+import { Conversation } from '../../../drizzle/methods/Conversation';
 import { getPackByIdService } from '../../pack/getPackByIdService';
 import { getTripByIdService } from '../../trip/getTripByIdService';
 import mongoose from 'mongoose';
-import User from '../../../models/userModel';
+import { User } from '../../../drizzle/methods/User';
+import { User as UserType } from '../../../db/schema';
 
 const chatModel = new ChatOpenAI({
   openAIApiKey: process.env.OPENAI_API_KEY, // Replace with your OpenAI API key
@@ -31,20 +32,18 @@ export const getAIResponseService = async (
   const tripInfo = await getTripInformation(tripId);
 
   // find last conversation if present
-  let conversation = await Conversation.findOne({
+  let conversation = await new Conversation().findConversation({
     userId,
-    // _id: conversationId,
-    itemTypeId,
+    itemTypeId: itemTypeId || '',
   });
 
   // if conversation is not found, create a new one
   if (!conversation) {
-    conversation = new Conversation({
+    conversation = await new Conversation().create({
       userId,
       itemTypeId,
       history: '',
     });
-    await conversation.save();
   }
 
   let conversationHistory = conversation.history || '';
@@ -171,12 +170,12 @@ async function saveConversationHistory(conversation, conversationHistory) {
   return conversation;
 }
 
-export async function validateUser(userId) {
+export async function validateUser(userId: string): Promise<UserType> {
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     throw new Error('Invalid userId');
   }
 
-  const user = await User.findById(userId).exec();
+  const user = await new User().findById(userId);
   if (!user) {
     throw new Error('User not found');
   }

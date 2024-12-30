@@ -1,7 +1,8 @@
-import { getPaginationResponse } from 'src/helpers/pagination';
+import { getPaginationResponse } from '../../../helpers/pagination';
 import { protectedProcedure } from '../../../trpc';
 import { getFeedService } from '../services';
 import { z } from 'zod';
+import { FeedQueryBy, PaginationParams } from '../models';
 
 export function getUserPacksFeedRoute() {
   return protectedProcedure
@@ -22,10 +23,10 @@ export function getUserPacksFeedRoute() {
       const { queryBy, searchTerm, ownerId, pagination, isPublic, itemId } =
         opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
-        queryBy,
+        queryBy as FeedQueryBy,
         { searchTerm, ownerId, isPublic, itemId },
         'trips',
-        pagination,
+        pagination as PaginationParams,
       );
       return {
         data,

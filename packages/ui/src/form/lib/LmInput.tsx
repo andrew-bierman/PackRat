@@ -69,7 +69,7 @@ export const LmInput = forwardRef(function LmInputEl(
       labelInline={labelInline}
       helperText={helperText}
       helperTextProps={helperTextProps}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       {multiline ? (
         <TextArea

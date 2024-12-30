@@ -21,14 +21,14 @@ const Layout: React.FC<LayoutProps> = ({
       <YStack
         flex={1}
         backgroundColor={currentTheme.colors.background}
-        maxWidth={1440}
+        maxWidth={Platform.OS === 'web' ? 1440 : 400}
         margin="auto"
         alignItems="center"
         justifyContent="flex-start"
-        paddingTop={Platform.OS === 'web' ? 20 : '$2'}
+        paddingTop={Platform.OS === 'web' ? 20 : '$1'}
         paddingBottom={Platform.OS !== 'web' ? 44 : undefined}
         paddingHorizontal="$4"
-        marginBottom={Platform.OS === 'web' ? 20 : '$2'}
+        marginBottom={Platform.OS === 'web' ? 20 : '$1'}
         width="100%"
         {...customStyle}
       >

@@ -6,10 +6,14 @@ import {
   itemPacks,
   item as ItemTable,
   itemImage as itemImageTable,
+  type Item as ItemType,
 } from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
-import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
+import {
+  getPaginationParams,
+  PaginationParams,
+} from '../../helpers/pagination';
 
 export class Item {
   async create(data: InsertItem) {
@@ -74,7 +78,7 @@ export class Item {
 
   async createBulk(data: InsertItem[]) {
     try {
-      const insertedItems = [];
+      const insertedItems: ItemType[] = [];
       for (const itemData of data) {
         const item = await DbClient.instance
           .insert(ItemTable)
@@ -110,14 +114,17 @@ export class Item {
 
   async delete(id: string, filter = eq(ItemTable.id, id)) {
     try {
-      const { packId } = await new ItemPacks().find({ itemId: id });
+      const itemPack = await new ItemPacks().find({ itemId: id });
+      const packId = itemPack?.packId;
       const deletedItem = await DbClient.instance
         .delete(ItemTable)
         .where(filter)
         .returning()
         .get();
 
-      await this.updateScoreIfNeeded(packId);
+      if (packId) {
+        await this.updateScoreIfNeeded(packId);
+      }
 
       return deletedItem;
     } catch (error) {
@@ -253,7 +260,7 @@ export class Item {
     try {
       const { pagination, searchTerm, queryBy } = filters;
       const { limit, offset } = getPaginationParams(pagination);
-      const orderByFunction = this.applyFeedOrdersOrders(queryBy);
+      const orderByFunction = this.applyFeedOrdersOrders(queryBy || '');
       const items = await DbClient.instance.query.item.findMany({
         where: and(
           eq(ItemTable.global, true),

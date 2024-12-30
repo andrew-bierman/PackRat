@@ -15,13 +15,17 @@ describe('Favorite routes', () => {
   let pack: Pack;
 
   beforeAll(async () => {
-    caller = await setupTest(env);
-    user = await userClass.create({
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
+    caller = await setupTest(env, executionCtx);
+    user = (await userClass.create({
       email: 'test@abc.com',
       name: 'test',
       username: 'test',
       password: 'test123',
-    });
+    })) as User;
   });
 
   beforeEach(async () => {
@@ -66,10 +70,11 @@ describe('Favorite routes', () => {
       });
       const favorites = await caller.getUserFavorites({
         userId: user.id,
+        pagination: { limit: 10, offset: 0 },
       });
       expect(favorites).toBeDefined();
-      expect(favorites.length).toEqual(1);
-      expect(favorites[0].id).toEqual(pack.id);
+      expect(favorites.data.length).toEqual(1);
+      expect(favorites.data[0].id).toEqual(pack.id);
     });
   });
 

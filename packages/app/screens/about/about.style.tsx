@@ -20,7 +20,7 @@ const loadStyles = (theme: any) => {
     header: {
       fontSize: 24,
       fontWeight: 'bold',
-      color: currentTheme.colors.tertiaryBlue,
+      color: currentTheme.colors.text,
       marginRight: 10,
     },
     headerDark: {
@@ -83,7 +83,7 @@ const loadStyles = (theme: any) => {
       lineHeight: 28,
       letterSpacing: 1,
       // fontFamily: "sans-serif",
-      color: currentTheme.colors.tertiaryBlue,
+      color: currentTheme.colors.text,
       marginBottom: 20,
     },
     tertiaryBlue: {

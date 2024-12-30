@@ -1,7 +1,7 @@
 import { protectedProcedure } from '../../trpc';
 import { z } from 'zod';
 import { type Context } from 'hono';
-import { deleteItemFromPack } from 'src/services/item/deleteItemFromPack';
+import { deleteItemFromPack } from '../../services/item/deleteItemFromPack';
 
 export function deleteItemFromPackRoute() {
   return protectedProcedure

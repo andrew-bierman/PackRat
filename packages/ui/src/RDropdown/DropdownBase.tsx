@@ -64,7 +64,15 @@ const ExampleDropdown = () => {
       <DropdownMenu.Trigger>
         <RButton>Open Dropdown</RButton>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
+      <DropdownMenu.Content
+        side="bottom"
+        align="start"
+        sideOffset={5}
+        alignOffset={0}
+        loop
+        avoidCollisions
+        collisionPadding={5}
+      >
         <DropdownMenu.Item key="1">Item 1</DropdownMenu.Item>
         <DropdownMenu.Item key="2">Item 2</DropdownMenu.Item>
         <DropdownMenu.Item key="3">Item 3</DropdownMenu.Item>

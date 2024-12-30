@@ -4,7 +4,7 @@ import type { trpcCaller } from '../testHelpers';
 import { env } from 'cloudflare:test';
 import { Template as TemplateClass } from '../../drizzle/methods/template';
 import { User as UserClass } from '../../drizzle/methods/User';
-import type { Template } from '../../db/schema';
+import type { Template, User } from '../../db/schema';
 
 describe('Template Routes', () => {
   let caller: trpcCaller;
@@ -14,7 +14,11 @@ describe('Template Routes', () => {
   let createdTemplate: Template;
 
   beforeAll(async () => {
-    caller = await setupTest(env);
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
+    caller = await setupTest(env, executionCtx);
   });
 
   beforeEach(async () => {
@@ -27,12 +31,12 @@ describe('Template Routes', () => {
 
   describe('addTemplate', () => {
     it('should create a template', async () => {
-      const user = await userClass.create({
+      const user = (await userClass.create({
         email: 'test@abc.com',
         name: 'test',
         username: 'test',
         password: 'test123',
-      });
+      })) as User;
       const result = await caller.addTemplate({
         type: 'pack',
         createdBy: user.id,

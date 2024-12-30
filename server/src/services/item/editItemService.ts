@@ -6,7 +6,7 @@ import { Item } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
-import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from '../../utils/convertWeight';
 
 /**
  * Edit an item in the service.
@@ -79,10 +79,10 @@ export const editItemService = async (
     VectorClient.instance.syncRecord(
       {
         id: newItem.id,
-        content: name,
+        content: name || item.name,
         metadata: {
-          isPublic: newItem.global,
-          ownerId: newItem.ownerId,
+          isPublic: newItem.global || false,
+          ownerId: newItem.ownerId || '',
         },
         namespace: 'items',
       },

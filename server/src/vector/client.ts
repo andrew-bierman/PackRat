@@ -209,7 +209,7 @@ class VectorClient {
       metadata: Metadata;
     }>,
   ) {
-    const contentList = [];
+    const contentList: string[] = [];
     for (const record of records) {
       contentList.push(record.content);
     }
@@ -219,10 +219,10 @@ class VectorClient {
       namespace: string;
       metadata: Metadata;
     }>(contentList, (embedding, index) => ({
-      id: records[index].id,
+      id: records[index]!.id,
       values: embedding,
-      namespace: records[index].namespace,
-      metadata: records[index].metadata,
+      namespace: records[index]!.namespace,
+      metadata: records[index]!.metadata,
     }));
 
     await this.upsert(values);

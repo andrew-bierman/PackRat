@@ -5,7 +5,7 @@ import { ItemOwners } from '../../drizzle/methods/ItemOwners';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { type InsertItemCategory } from '../../db/schema';
 import { VectorClient } from '../../vector/client';
-import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from '../../utils/convertWeight';
 
 /**
  * Generates a new item and adds it to a pack based on the given parameters.
@@ -78,7 +78,7 @@ export const addItemService = async (
       content: name,
       namespace: 'items',
       metadata: {
-        isPublic: item.global,
+        isPublic: item.global || false,
         ownerId,
       },
     }),

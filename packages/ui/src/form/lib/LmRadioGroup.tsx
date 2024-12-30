@@ -46,7 +46,7 @@ export function LmRadioGroup({
       labelInline={labelInline}
       helperText={helperText}
       helperTextProps={helperTextProps}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       <RadioGroup
         space={flexDirection === 'row' ? '$4' : '$1'}

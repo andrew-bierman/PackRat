@@ -3,7 +3,7 @@ import { tryCatchWrapper } from '../helpers/tryCatchWrapper';
 import {
   GeojsonStorageService,
   type ResourceType,
-} from 'src/services/geojsonStorage';
+} from '../services/geojsonStorage';
 
 const router = new Hono();
 
@@ -15,7 +15,7 @@ router.get(
 
       const object = await GeojsonStorageService.retrieve(
         params.resource as ResourceType,
-        params.resourceId,
+        params.resourceId as string,
       );
 
       if (!object) {
@@ -33,7 +33,7 @@ router.get(
       ctx.header('Content-Type', 'application/geo+json');
       const json = await object.json();
 
-      return ctx.json(json);
+      return ctx.json(json as any); // Ensure json matches expected type
     } catch (error) {
       return ctx.json({ error: error.message }, 500);
     }

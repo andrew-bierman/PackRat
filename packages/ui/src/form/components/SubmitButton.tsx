@@ -11,12 +11,15 @@ export const SubmitButton = <T extends {}>({
   const safeStyle = typeof style === 'object' && style !== null ? style : {};
   return (
     <LmSubmitButtonRhf
-      $theme-dark={{ color: 'text', backgroundColor: '$colors.background' }}
+      $theme-dark={{
+        ...({ color: 'text', backgroundColor: '$colors.background' } as any),
+      }}
       $theme-light={{
-        color: 'text',
-        backgroundColor: '#232323',
-        color: '#ffffff',
-        fontWeight: 700,
+        ...({
+          color: 'text',
+          backgroundColor: '#232323',
+          fontWeight: 700,
+        } as any),
         hoverStyle: {
           backgroundColor: '#232323',
           opacity: 0.8,

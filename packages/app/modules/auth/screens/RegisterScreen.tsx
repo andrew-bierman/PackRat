@@ -1,30 +1,25 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View, ScrollView } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
 import { useRegisterUser, useGoogleAuth } from 'app/modules/auth';
 import { SignUpScreen } from '@packrat/ui/src/Bento/forms/layouts';
-import { useState } from 'react';
-import { ScrollView } from 'react-native';
+
+function useSignup() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const { registerUser } = useRegisterUser();
+  return {
+    signUpStatus: status,
+    signup: async (data) => {
+      setStatus('loading');
+      await registerUser(data);
+      setStatus('idle');
+    },
+  };
+}
 
 export function RegisterScreen() {
   const { currentTheme } = useTheme();
   const { promptAsync, isGoogleSignInReady } = useGoogleAuth();
-
-  function useSignup() {
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success'>(
-      'idle',
-    );
-    const { registerUser } = useRegisterUser();
-    return {
-      signUpStatus: status,
-      signup: async (data) => {
-        setStatus('loading');
-        await registerUser(data);
-        setStatus('idle');
-      },
-    };
-  }
-
   const { signup, signUpStatus } = useSignup();
 
   return (

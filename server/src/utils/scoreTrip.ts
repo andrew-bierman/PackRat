@@ -3,7 +3,7 @@ import { TripActivity } from '@packrat/validations';
 export function calculateTripScore(trip: {
   startDate: string;
   endDate: string;
-  activity: string;
+  activity: string | null;
 }): { totalScore: number } {
   const { startDate, endDate, activity } = trip;
   const start = new Date(startDate);
@@ -25,7 +25,7 @@ export function calculateTripScore(trip: {
     [TripActivity.SWIMMING]: 7,
   };
 
-  const activityScore = activityScores[activity] || 5;
+  const activityScore = activity ? activityScores[activity] || 5 : 5;
 
   const tripScore = tripDuration * activityScore;
 

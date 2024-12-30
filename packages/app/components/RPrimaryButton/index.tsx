@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled, Button, ButtonProps } from 'tamagui';
+import { styled, Button, type ButtonProps } from 'tamagui';
 
 interface RPrimaryButtonProps extends ButtonProps {
   label: string;

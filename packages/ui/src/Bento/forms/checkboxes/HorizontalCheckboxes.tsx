@@ -60,7 +60,7 @@ export function HorizontalCheckboxes() {
             value={id}
             key={id}
           >
-            <Item id={id} label={label} checked={values[id]} />
+            <Item id={id} label={label} checked={!!values[id]} />
           </Checkboxes.FocusGroup.Item>
         ))}
       </Checkboxes.FocusGroup>

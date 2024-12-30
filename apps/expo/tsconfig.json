@@ -1,9 +1,7 @@
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "lib": [
-      "es2022"
-    ],
+    "lib": ["es2022"],
     "alwaysStrict": false,
     "strictNullChecks": false,
     "strictBindCallApply": false,
@@ -14,10 +12,8 @@
     "useUnknownInCatchVariables": false,
     "baseUrl": ".",
     "paths": {
-      "@packrat/validations": [
-        "../../packages/validations/src"
-      ]
-    },
+      "@packrat/validations": ["../../packages/validations/src"]
+    }
   },
   "exclude": [
     "node_modules",

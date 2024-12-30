@@ -6,9 +6,9 @@ import RText from '../RText';
 type ContentProps = ComponentProps<(typeof ZeegoContextMenu)['Content']>;
 type ItemProps = ComponentProps<(typeof ZeegoContextMenu)['Item']>;
 
-interface MenuItems{
-  label: string,
-  onSelect: () => void,
+interface MenuItems {
+  label: string;
+  onSelect: () => void;
 }
 
 const ContextMenu = {
@@ -57,7 +57,12 @@ const RContextMenu = ({ menuItems = [], menuName }) => {
       <ContextMenu.Trigger>
         <RButton>{menuName}</RButton>
       </ContextMenu.Trigger>
-      <ContextMenu.Content>
+      <ContextMenu.Content
+        alignOffset={0}
+        loop
+        avoidCollisions
+        collisionPadding={5}
+      >
         {menuItems.map(({ label, onSelect = () => {} }) => (
           <ContextMenu.Item key={label} onSelect={onSelect}>
             <ContextMenu.ItemTitle>{label}</ContextMenu.ItemTitle>

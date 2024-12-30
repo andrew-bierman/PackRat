@@ -58,10 +58,10 @@ export const getAIResponseService = async (
       throw new Error(`Invalid type: ${itemTypeId}`);
   }
 
-  let conversation: any = await conversationClass.findConversation(
+  let conversation: any = await conversationClass.findConversation({
     userId,
     itemTypeId,
-  );
+  });
 
   let conversationHistory = conversation ? conversation.history : '';
 

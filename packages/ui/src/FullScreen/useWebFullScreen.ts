@@ -7,24 +7,24 @@ export const useWebFullScreen = () => {
     const element = elementRef.current;
     if (element && element.requestFullscreen) {
       element.requestFullscreen();
-    } else if (element && element.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen();
-    } else if (element && element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element && element.msRequestFullscreen) {
-      element.msRequestFullscreen();
+    } else if (element && (element as any).webkitRequestFullscreen) {
+      (element as any).webkitRequestFullscreen();
+    } else if (element && (element as any).mozRequestFullScreen) {
+      (element as any).mozRequestFullScreen();
+    } else if (element && (element as any).msRequestFullscreen) {
+      (element as any).msRequestFullscreen();
     }
   };
 
   const exitFullScreen = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
+    } else if ((document as any).webkitExitFullscreen) {
+      (document as any).webkitExitFullscreen();
+    } else if ((document as any).mozCancelFullScreen) {
+      (document as any).mozCancelFullScreen();
+    } else if ((document as any).msExitFullscreen) {
+      (document as any).msExitFullscreen();
     }
   };
 

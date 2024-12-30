@@ -9,8 +9,8 @@ import { Item as ItemClass } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
 import { ItemCategory as categories } from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
-import { convertWeight, SMALLEST_WEIGHT_UNIT } from 'src/utils/convertWeight';
-import { summarizeItem } from 'src/utils/item';
+import { convertWeight, SMALLEST_WEIGHT_UNIT } from '../../utils/convertWeight';
+import { summarizeItem } from '../../utils/item';
 
 type ItemWithCategory = Item & { category?: InsertItemCategory };
 
@@ -74,8 +74,8 @@ export const addItemGlobalService = async (
         content: summarizeItem(newItem),
         namespace: ITEM_TABLE_NAME,
         metadata: {
-          isPublic: newItem.global,
-          ownerId: newItem.ownerId,
+          isPublic: newItem.global || false,
+          ownerId: newItem.ownerId || '',
         },
       }),
     );

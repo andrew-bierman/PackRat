@@ -1,13 +1,13 @@
 import { asc, count, desc, eq, like, sql } from 'drizzle-orm';
 import { DbClient } from '../../db/client';
-import { convertWeight, type WeightUnit } from 'src/utils/convertWeight';
+import { convertWeight, type WeightUnit } from '../../utils/convertWeight';
 import {
   packTemplate,
   item,
   itemPackTemplate,
   InsertPackTemplate,
-} from 'src/db/schema';
-import { PaginationParams } from 'src/helpers/pagination';
+} from '../../db/schema';
+import { PaginationParams } from '../../helpers/pagination';
 
 export interface Filter {
   searchQuery?: string;
@@ -69,7 +69,7 @@ export class PackTemplate {
 
     return {
       data,
-      totalCount: totalCountResult[0].count,
+      totalCount: totalCountResult[0]?.count ?? 0,
     };
   }
 
@@ -129,7 +129,7 @@ export class PackTemplate {
     );
     const total_weight = items.reduce((sum, item) => {
       const weightInGrams = convertWeight(
-        item.weight,
+        item.weight ?? 0,
         item.unit as WeightUnit,
         'g',
       );
@@ -138,7 +138,9 @@ export class PackTemplate {
 
     const quantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
-    delete packTemplateResult.itemPackTemplates;
+    if (packTemplateResult?.itemPackTemplates) {
+      packTemplateResult.itemPackTemplates = [];
+    }
 
     return {
       ...packTemplateResult,

@@ -28,7 +28,7 @@ export const editGlobalItemAsDuplicateService = async (
   executionCtx: ExecutionContext,
 ) => {
   let category: InsertItemCategory | null;
-  if (!categories.includes(type)) {
+  if (!categories.includes(type as 'Food' | 'Water' | 'Essentials')) {
     throw new Error(`Category must be one of: ${categories.join(', ')}`);
   }
   const itemClass = new Item();
@@ -72,7 +72,7 @@ export const editGlobalItemAsDuplicateService = async (
       id: newItem.id,
       content: name,
       metadata: {
-        isPublic: newItem.global,
+        isPublic: newItem.global || false,
       },
       namespace: 'items',
     }),

@@ -10,7 +10,7 @@ interface Category {
   name: string;
 }
 
-interface Item {
+interface SuggestionItem {
   id: string;
   name: string;
   ownerId: string;
@@ -21,7 +21,7 @@ interface Item {
 }
 
 interface SuggestionListProps {
-  suggestion: { Items: Item[] } | null;
+  suggestion: { Items: SuggestionItem[] } | null;
   onAddItem: (itemId: string) => void;
 }
 
@@ -57,7 +57,12 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
 
 SuggestionList.fileName = 'List';
 
-function Item({ item, onAddItem }) {
+interface ItemProps {
+  item: SuggestionItem;
+  onAddItem: (itemId: string) => void;
+}
+
+function Item({ item, onAddItem }: ItemProps) {
   const { addPackItem, isLoading } = useAddPackItem();
 
   const handleAddItem = (item) => {
@@ -79,7 +84,7 @@ function Item({ item, onAddItem }) {
         style={{
           borderRadius: 5,
           flexDirection: 'row',
-          aligItems: 'center',
+          alignItems: 'center',
         }}
       >
         <View style={{ flexDirection: 'column', justifyContent: 'center' }}>

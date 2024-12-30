@@ -1,7 +1,7 @@
-import { getPaginationResponse } from 'src/helpers/pagination';
+import { getPaginationResponse } from '../../helpers/pagination';
 import { protectedProcedure } from '../../trpc';
 import { z } from 'zod';
-import { getItemsFeedService } from 'src/services/item/getItemsFeedService';
+import { getItemsFeedService } from '../../services/item/getItemsFeedService';
 
 export function getItemsFeedRoute() {
   return protectedProcedure
@@ -16,14 +16,17 @@ export function getItemsFeedRoute() {
     )
     .query(async (opts) => {
       const { queryBy, searchTerm, pagination } = opts.input;
+      const validPagination = pagination
+        ? { limit: pagination.limit || 0, offset: pagination.offset || 0 }
+        : { limit: 0, offset: 0 };
       const { data, totalCount } = await getItemsFeedService({
         queryBy,
         searchTerm,
-        pagination,
+        pagination: validPagination,
       });
       return {
         data,
-        ...getPaginationResponse(pagination, totalCount as number),
+        ...getPaginationResponse(validPagination, totalCount as number),
       };
     });
 }

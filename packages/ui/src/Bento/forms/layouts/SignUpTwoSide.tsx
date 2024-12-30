@@ -304,9 +304,9 @@ function CountrySelect({ data, id }: { data: typeof countries; id: string }) {
           justifyContent="center"
           alignItems="center"
         >
-          <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
-          <Text marginRight="auto">{`${selectedItem.name} ${
-            selectedItem.shortName ? `(${selectedItem.shortName})` : ''
+          <Image source={{ uri: selectedItem?.flag }} width={20} height={20} />
+          <Text marginRight="auto">{`${selectedItem?.name} ${
+            selectedItem?.shortName ? `(${selectedItem?.shortName})` : ''
           }`}</Text>
         </View>
       </Select.Trigger>

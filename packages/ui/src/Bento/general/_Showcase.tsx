@@ -311,11 +311,11 @@ const MessagesFrame = (props: {
 const PHONE_SCALE = 0.75;
 
 const PhoneFrame = (props: any) => {
-  const query = useRouter().query;
+  // const query = useRouter().query;
 
   return (
     <YStack
-      group="window"
+      group
       focusable
       className="ms300 all ease-out"
       borderRadius={43}
@@ -473,7 +473,7 @@ const ResizableBox = XStack.styleable<ResizableBoxExtraProps>(
       >
         <XStack
           alignItems="center"
-          group="window"
+          group
           ref={containerRef as any}
           width={width as any}
         >
@@ -592,7 +592,7 @@ export const WithSize = ({ children }: { children: any }) => {
   return React.cloneElement(children, { size });
 };
 
-export const SizeController = YGroup.styleable((props, ref) => {
+const SizeController = YGroup.styleable((props, ref) => {
   const { size, sizes, setSize, showController } = useSize();
   if (!showController) return null;
   return (
@@ -612,7 +612,9 @@ export const SizeController = YGroup.styleable((props, ref) => {
           py="$6"
           onPress={() => {
             const index = sizes.indexOf(size);
-            setSize(sizes[index + 1 >= sizes.length ? 4 : index + 1]);
+            const newSize =
+              sizes[index + 1 >= sizes.length ? 4 : index + 1] || '$4';
+            setSize(newSize);
           }}
         >
           <Button.Icon>
@@ -627,7 +629,8 @@ export const SizeController = YGroup.styleable((props, ref) => {
           py="$6"
           onPress={() => {
             const index = sizes.indexOf(size);
-            setSize(sizes[index - 1 < 0 ? 0 : index - 1]);
+            const newSize = sizes[index - 1 < 0 ? 0 : index - 1] || '$4';
+            setSize(newSize);
           }}
         >
           <Button.Icon>
