@@ -86,7 +86,7 @@ export const SizableText = styled(Text, {
 /** ------ EXAMPLE ------ */
 export function ProductWithReview() {
   const [selectedPicture, setSelectedPicture] = useState(
-    product.pictures[0].picture,
+    product.pictures?.[0]?.picture || '',
   );
   const [tempPicture, setTempPicture] = useState<string | null>(null);
   const setDebounceTempPicture = debounce(setTempPicture, 100);

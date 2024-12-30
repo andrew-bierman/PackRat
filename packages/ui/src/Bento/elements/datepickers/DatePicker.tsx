@@ -1,4 +1,7 @@
-import { useDatePickerContext } from '@rehookify/datepicker';
+import {
+  useDatePickerContext,
+  DatePickerProvider as _DatePickerProvider,
+} from '@rehookify/datepicker';
 import type { DPDay } from '@rehookify/datepicker';
 import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useState } from 'react';
@@ -21,7 +24,9 @@ function CalendarHeader() {
     propGetters: { subtractOffset },
   } = useDatePickerContext();
   const { type: header, setHeader } = useHeaderType();
-  const { year, month } = calendars[0];
+  const calendar = calendars[0];
+  if (!calendar) return null;
+  const { year, month } = calendar;
 
   if (header === 'year') {
     return <YearRangeSlider />;
@@ -125,21 +130,29 @@ export function useDateAnimation({
 
   useEffect(() => {
     if (listenTo === 'month') {
-      if (currentMonth !== calendars[0].month) {
-        setCurrentMonth(calendars[0].month);
+      const calendar = calendars[0];
+      if (!calendar) return;
+      if (currentMonth !== calendar.month) {
+        setCurrentMonth(calendar.month);
       }
     }
-  }, [calendars[0][listenTo], currentMonth]);
+  }, [calendars[0]?.[listenTo], currentMonth]);
 
   useEffect(() => {
     if (listenTo === 'year') {
-      if (currentYear !== calendars[0].year) {
-        setCurrentYear(calendars[0].year);
+      const calendar = calendars[0];
+      if (!calendar) return;
+      if (currentYear !== calendar.year) {
+        setCurrentYear(calendar.year);
       }
     }
-  }, [calendars[0][listenTo], currentYear]);
+  }, [calendars[0]?.[listenTo], currentYear]);
 
   const prevNextAnimation = () => {
+    const c0 = calendars[0];
+    if (!c0) {
+      return { enterStyle: { opacity: 0 } };
+    }
     if (listenTo === 'years') {
       if (currentYearsSum === null) return { enterStyle: { opacity: 0 } };
 
@@ -149,19 +162,19 @@ export function useDateAnimation({
       };
     }
     if (listenTo === 'month') {
-      if (currentMonth === null) return { enterStyle: { opacity: 0 } };
-      const newDate = new Date(
-        `${calendars[0][listenTo]} 1, ${calendars[0].year}`,
+      if (!c0 || currentMonth === null) return { enterStyle: { opacity: 0 } };
+      const newDate = new Date(`${c0.month} 1, ${c0.year}`);
+      const currentDate = new Date(
+        `${currentMonth ?? c0.month} 1, ${currentYear ?? c0.year}`,
       );
-      const currentDate = new Date(`${currentMonth} 1, ${calendars[0].year}`);
 
-      if (currentMonth === 'December' && calendars[0].month === 'January') {
+      if (currentMonth === 'December' && c0.month === 'January') {
         return {
           enterStyle: { opacity: 0, x: 15 },
           exitStyle: { opacity: 0, x: 15 },
         };
       }
-      if (currentMonth === 'January' && calendars[0].month === 'December') {
+      if (currentMonth === 'January' && c0.month === 'December') {
         return {
           enterStyle: { opacity: 0, x: -15 },
           exitStyle: { opacity: 0, x: -15 },
@@ -174,8 +187,8 @@ export function useDateAnimation({
     }
     if (listenTo === 'year') {
       if (currentYear === null) return { enterStyle: { opacity: 0 } };
-      const newDate = new Date(`${calendars[0].month} 1, ${calendars[0].year}`);
-      const currentDate = new Date(`${calendars[0].month} 1, ${currentYear}`);
+      const newDate = new Date(`${c0.month} 1, ${c0.year}`);
+      const currentDate = new Date(`${c0.month} 1, ${currentYear ?? c0.year}`);
 
       return {
         enterStyle: { opacity: 0, x: newDate < currentDate ? -15 : 15 },
@@ -186,7 +199,7 @@ export function useDateAnimation({
   return {
     prevNextAnimation,
     prevNextAnimationKey:
-      listenTo === 'years' ? sumYears() : calendars[0][listenTo],
+      listenTo === 'years' ? sumYears() : calendars[0]?.[listenTo],
   };
 }
 
@@ -196,7 +209,7 @@ function DayPicker() {
     propGetters: { dayButton },
   } = useDatePickerContext();
 
-  const { days } = calendars[0];
+  const { days = [] } = calendars[0] || {};
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'month',
@@ -205,14 +218,14 @@ function DayPicker() {
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
-      days.reduce((acc, day, i) => {
+      calendars[0]?.days?.reduce((acc, day, i) => {
         if (i % 7 === 0) {
           acc.push([]);
         }
-        acc[acc.length - 1].push(day);
+        acc[acc.length - 1]?.push(day);
         return acc;
-      }, [] as DPDay[][]),
-    [days],
+      }, [] as DPDay[][]) ?? [],
+    [calendars],
   );
 
   return (
@@ -228,7 +241,11 @@ function DayPicker() {
         <View flexDirection="column" gap="$1" flexWrap="wrap">
           {subDays.map((days) => {
             return (
-              <View flexDirection="row" key={days[0].$date.toString()} gap="$1">
+              <View
+                flexDirection="row"
+                key={days[0]?.$date.toString() ?? 'row-fallback'}
+                gap="$1"
+              >
                 {days.map((d) => (
                   <Button
                     key={d.$date.toString()}
@@ -295,17 +312,7 @@ export function DatePickerExample() {
   }, [selectedDates]);
 
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-      config={{
-        selectedDates,
-        onDatesChange,
-        calendar: {
-          startDay: 1,
-        },
-      }}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
           placeholder="Select Date"
@@ -316,7 +323,17 @@ export function DatePickerExample() {
       </DatePicker.Trigger>
       <DatePicker.Content>
         <DatePicker.Content.Arrow />
-        <DatePickerBody />
+        <_DatePickerProvider
+          config={{
+            selectedDates,
+            onDatesChange,
+            calendar: {
+              startDay: 1,
+            },
+          }}
+        >
+          <DatePickerBody />
+        </_DatePickerProvider>
       </DatePicker.Content>
     </DatePicker>
   );

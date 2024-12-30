@@ -159,7 +159,7 @@ export async function listBucketContents(
 
 export async function parseCSVData(fileData: string, ownerId: string) {
   return new Promise<CSVType[]>((resolve, reject) => {
-    const itemsToInsert = [];
+    const itemsToInsert: CSVType[] = [];
 
     Papa.parse(fileData, {
       header: true,
@@ -168,27 +168,31 @@ export async function parseCSVData(fileData: string, ownerId: string) {
           for (const [index, item] of results.data.entries()) {
             if (
               index === results.data.length - 1 &&
-              Object.values(item).every((value) => value === '')
+              Object.values(item as any).every((value) => value === '')
             ) {
               continue;
             }
 
-            if (isNaN(Number(item.weight)) || Number(item.weight) <= 0) {
+            if (
+              isNaN(Number((item as any).weight)) ||
+              Number((item as any).weight) <= 0
+            ) {
               continue;
             }
 
             itemsToInsert.push({
-              name: item.name,
-              weight: item.weight || 0,
-              unit: item.weight_unit || 'g',
+              name: (item as any).name,
+              weight: (item as any).weight || 0,
+              unit: (item as any).weight_unit || 'g',
               type: 'Essentials',
               ownerId,
-              image_urls: item.image_urls,
-              sku: item.sku,
-              productUrl: item.product_url,
-              description: item.description,
-              productDetails: item.techs,
-              seller: item.seller,
+              image_urls: (item as any).image_urls,
+              sku: (item as any).sku,
+              productUrl: (item as any).product_url,
+              description: (item as any).description,
+              productDetails: (item as any).techs,
+              seller: (item as any).seller,
+              quantity: (item as any).quantity || 1,
             });
           }
           resolve(itemsToInsert);

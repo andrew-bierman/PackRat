@@ -15,7 +15,7 @@ import {
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { createId } from '@paralleldrive/cuid2';
 
-interface OfflineMap {
+export interface OfflineMapMetadata {
   name: string;
   styleURL: string;
   bounds: [number[], number[]];
@@ -43,7 +43,7 @@ export const user = sqliteTable('user', {
     mode: 'timestamp',
   }),
   offlineMaps: text('offline_maps', { mode: 'json' }).$type<
-    Record<string, OfflineMap>
+    Record<string, OfflineMapMetadata>
   >(),
   role: text('role', { enum: ['admin', 'user'] })
     .default('user')
@@ -145,7 +145,7 @@ export const pack = sqliteTable('pack', {
 //       pkWithCustomName: primaryKey({
 //         name: 'id',
 //         columns: [table.packId, table.ownerId],
-//       }),
+// }),
 //     };
 //   },
 // );
@@ -279,11 +279,13 @@ export const offlineMap = sqliteTable(
       .primaryKey()
       .$defaultFn(() => createId()),
     name: text('name').notNull(),
-    bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+    bounds: text('bounds', { mode: 'json' }).$type<
+      OfflineMapMetadata['bounds']
+    >(),
     minZoom: integer('minZoom').notNull(),
     maxZoom: integer('maxZoom').notNull(),
     metadata: text('metadata', { mode: 'json' }).$type<
-      OfflineMap['metadata']
+      OfflineMapMetadata['metadata']
     >(),
     owner_id: text('owner_id').references(() => user.id, {
       onDelete: 'cascade',
@@ -422,7 +424,9 @@ export const trip = sqliteTable('trip', {
   }),
   is_public: integer('is_public', { mode: 'boolean' }),
   activity: text('activity').default('trip'),
-  bounds: text('bounds', { mode: 'json' }).$type<OfflineMap['bounds']>(),
+  bounds: text('bounds', { mode: 'json' }).$type<
+    OfflineMapMetadata['bounds']
+  >(),
   type: text('type').default('trip'),
   scores: text('scores', { mode: 'json' })
     .$type<Object>()
@@ -646,3 +650,11 @@ export type GeoJson = InferSelectModel<typeof geojson>;
 export type InsertGeoJson = InferInsertModel<typeof geojson>;
 export const insertGeoJsonSchema = createInsertSchema(geojson);
 export const selectGeoJsonSchema = createSelectSchema(geojson);
+
+export type Conversation = InferSelectModel<typeof conversation>;
+export type InsertConversation = InferInsertModel<typeof conversation>;
+export const insertConversationSchema = createInsertSchema(conversation);
+export const selectConversationSchema = createSelectSchema(conversation);
+
+export type OfflineMap = InferSelectModel<typeof offlineMap>;
+export type InsertOfflineMap = InferInsertModel<typeof offlineMap>;

@@ -27,7 +27,7 @@ describe('Get weather information', () => {
       lat: 20.5937,
       lon: 78.9629,
     };
-    const weather = await caller.getWeatherWeek(coordinates);
+    const weather = await caller.getWeather(coordinates);
     expect(weather).toBeDefined();
     expect(weather?.coord?.lon).toEqual(coordinates?.lon);
     expect(weather?.coord?.lat).toEqual(coordinates?.lat);

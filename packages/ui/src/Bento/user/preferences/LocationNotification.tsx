@@ -54,14 +54,18 @@ const countries = [
 ];
 
 const languagesArray = Array.from({ length: 10 }, (_, i) => ({
-  name: languages[i].name,
-  shortcut: languages[i].shortcut,
-  flag: `https://flagsapi.com/${languages[i].flag}/flat/64.png`,
+  name: languages[i]?.name || '',
+  shortcut: languages[i]?.shortcut,
+  flag: languages[i]
+    ? `https://flagsapi.com/${languages[i]?.flag}/flat/64.png`
+    : '',
 }));
 
 const locationsArray = Array.from({ length: 10 }, (_, i) => ({
-  name: countries[i].name,
-  flag: `https://flagsapi.com/${countries[i].flag}/flat/64.png`,
+  name: countries[i]?.name || '',
+  flag: countries[i]
+    ? `https://flagsapi.com/${countries[i]?.flag}/flat/64.png`
+    : '',
 }));
 
 type DataItem = {
@@ -90,10 +94,18 @@ function GeneralSelect({ data, ...rest }: SelectProps & { data: DataItem[] }) {
           justifyContent="center"
           alignItems="center"
         >
-          <Image source={{ uri: selectedItem.flag }} width={20} height={20} />
-          <SizableText marginRight="auto">{`${selectedItem.name} ${
-            selectedItem.shortcut ? `(${selectedItem.shortcut})` : ''
-          }`}</SizableText>
+          {selectedItem && (
+            <>
+              <Image
+                source={{ uri: selectedItem.flag }}
+                width={20}
+                height={20}
+              />
+              <SizableText marginRight="auto">{`${selectedItem.name} ${
+                selectedItem.shortcut ? `(${selectedItem.shortcut})` : ''
+              }`}</SizableText>
+            </>
+          )}
         </View>
       </Select.Trigger>
 
@@ -348,7 +360,7 @@ const radioData = [
 ];
 
 function RadioList() {
-  const [value, setValue] = useState(radioData[0].title);
+  const [value, setValue] = useState(radioData[0]?.title || '');
   return (
     <RadioGroup value={value} onValueChange={setValue}>
       <View flexDirection="column" gap="$3">

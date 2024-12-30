@@ -1,4 +1,4 @@
-import { PaginationParams } from 'src/helpers/pagination';
+import { PaginationParams } from '../../helpers/pagination';
 import { Item } from '../../drizzle/methods/Item';
 
 interface GetItemsFeedParams {

@@ -76,7 +76,24 @@ export function editUserRoute() {
       ...(profileImage && { profileImage }),
       ...(preferredWeather && { preferredWeather }),
       ...(preferredWeight && { preferredWeight }),
-      ...(offlineMaps && { offlineMaps }),
+      ...(offlineMaps && {
+        offlineMaps: Object.fromEntries(
+          Object.entries(offlineMaps).map(([key, value]) => [
+            key,
+            {
+              ...value,
+              bounds: value.bounds.slice(0, 2) as [number[], number[]],
+              name: value.name || '',
+              styleURL: value.styleURL || '',
+              metadata: {
+                shape: value.metadata?.shape || '',
+              },
+              minZoom: value.minZoom || 0,
+              maxZoom: value.maxZoom || 0,
+            },
+          ]),
+        ),
+      }),
     };
     const editedUser = await userClass.update(data);
     return editedUser;

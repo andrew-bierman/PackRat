@@ -2,11 +2,11 @@ import {
   PackTemplate,
   type Filter,
   type ORDER_BY,
-} from 'src/drizzle/methods/PackTemplate';
+} from '../../drizzle/methods/PackTemplate';
 import {
   type PaginationParams,
   getPaginationResponse,
-} from 'src/helpers/pagination';
+} from '../../helpers/pagination';
 
 export async function getPackTemplatesService(
   pagination: PaginationParams,
@@ -22,7 +22,6 @@ export async function getPackTemplatesService(
 
   return {
     data,
-    totalCount,
     ...getPaginationResponse(pagination, totalCount),
   };
 }

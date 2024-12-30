@@ -7,6 +7,9 @@ export const userSignIn = async (c) => {
     const { email, password } = await c.req.json();
     const userClass = new User();
     const user = await userClass.findByCredentials(email, password);
+    if (!user) {
+      throw new Error('Wrong email or password');
+    }
     await userClass.generateAccessToken(c.env.JWT_SECRET, user.id);
     return c.json({ user }, 200);
   } catch (error) {

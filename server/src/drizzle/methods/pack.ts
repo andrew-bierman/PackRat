@@ -156,7 +156,7 @@ export class Pack {
         page,
         limit,
       } = options;
-      const filterConditions = [];
+      const filterConditions: any[] = [];
 
       if (ownerId) {
         filterConditions.push(eq(PackTable.owner_id, ownerId));
@@ -191,7 +191,7 @@ export class Pack {
         favorites_count: this.computeFavouritesCount(pack),
         total_score: this.computeTotalScores(pack),
         items: pack.itemPacks.map((itemPack) => itemPack.item),
-        total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${item.quantity}), 0) as total_weight`,
+        total_weight: sql`COALESCE(SUM(DISTINCT ${item.weight} * ${itemPacks.quantity}), 0) as total_weight`,
       }));
     } catch (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);

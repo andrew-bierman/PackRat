@@ -1,6 +1,6 @@
 import { Feed } from '../../modules/feed/model';
 import { User } from '../../drizzle/methods/User';
-import { PaginationParams } from 'src/helpers/pagination';
+import { PaginationParams } from '../../helpers/pagination';
 
 /**
  * Retrieves the favorite packs associated with a specific user.

@@ -36,7 +36,10 @@ export class OfflineMap {
     try {
       const newOfflineMap = await DbClient.instance
         .insert(offlineMapTable)
-        .values(data)
+        .values({
+          ...data,
+          metadata: data.metadata as any,
+        })
         .returning()
         .get();
       return newOfflineMap;

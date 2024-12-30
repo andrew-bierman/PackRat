@@ -57,7 +57,7 @@ export const ItemPickerOverlay: FC<ItemPickerOverlayProps> = ({
       >
         <Form defaultValues={{ search: searchTerm }}>
           <FormInput
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e) => onSearchChange((e.target as any).value)}
             autoFocus
             style={{ marginBottom: 16 }}
             name="search"

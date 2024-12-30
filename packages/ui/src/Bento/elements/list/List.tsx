@@ -117,7 +117,7 @@ function Item({ person }: { person: PersonList[number] }) {
             zIndex={1}
             size={12}
             position="absolute"
-            backgroundColor={person.status.color as ColorTokens}
+            backgroundColor={person.status?.color as ColorTokens}
           />
         </View>
         <View flexDirection="column" flexShrink={1} justifyContent="center">
@@ -129,7 +129,7 @@ function Item({ person }: { person: PersonList[number] }) {
             fontWeight="$2"
             theme="alt1"
           >
-            {person.status.status}
+            {person.status?.status}
           </Text>
         </View>
         <Button marginLeft="auto" circular size="$4" scaleIcon={1.5}>

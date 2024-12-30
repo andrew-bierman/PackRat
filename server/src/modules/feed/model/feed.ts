@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, like, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, like, sql, SQL } from 'drizzle-orm';
 import { DbClient } from '../../../db/client';
 import {
   item,
@@ -7,7 +7,7 @@ import {
   trip,
   userFavoritePacks,
 } from '../../../db/schema';
-import { literal } from 'src/drizzle/helpers';
+import { literal } from '../../../drizzle/helpers';
 import {
   getPaginationParams,
   getPrevOffset,
@@ -66,7 +66,7 @@ export class Feed {
     pagination?: PaginationParams,
   ) {
     try {
-      let packsQuery = DbClient.instance
+      let packsQuery: any = DbClient.instance
         .select({
           id: pack.id,
           createdAt: sql`${pack.createdAt} as createdAt`,
@@ -82,12 +82,12 @@ export class Feed {
           quantity: sql`COALESCE(SUM(${itemPacks.quantity}), 0)`,
           userFavorites: sql`GROUP_CONCAT(DISTINCT ${userFavoritePacks.userId}) as userFavorites`,
           total_weight: sql`COALESCE(SUM(${item.weight} * ${itemPacks.quantity}), 0) as total_weight`,
-          hasItem: modifiers.itemId
+          hasItem: modifiers?.itemId
             ? sql`CASE WHEN COUNT(DISTINCT CASE WHEN ${itemPacks.itemId} = ${modifiers.itemId} THEN 1 ELSE NULL END) > 0 THEN TRUE ELSE FALSE END as hasItem`
-            : literal(null),
-          activity: literal(null),
-          start_date: literal(null),
-          end_date: literal(null),
+            : sql`NULL as hasItem`,
+          activity: sql`NULL as activity`,
+          start_date: sql`NULL as start_date`,
+          end_date: sql`NULL as end_date`,
         })
         .from(pack)
         .leftJoin(userFavoritePacks, eq(pack.id, userFavoritePacks.packId))
@@ -95,19 +95,22 @@ export class Feed {
         .leftJoin(item, eq(itemPacks.itemId, item.id))
         .groupBy(pack.id);
 
-      if (modifiers.includeUserFavoritesOnly) {
-        packsQuery = packsQuery.having(
-          this.generateHavingConditions(modifiers, pack),
-        );
+      if (modifiers?.includeUserFavoritesOnly) {
+        // Cast or conditionally apply .having() only if we have valid conditions
+        const havingConditions = this.generateHavingConditions(modifiers, pack);
+        if (havingConditions) {
+          packsQuery = (packsQuery as any).having(havingConditions as any);
+        }
       }
 
       if (modifiers) {
-        packsQuery = packsQuery.where(
-          this.generateWhereConditions(modifiers, pack),
-        );
+        const whereConditions = this.generateWhereConditions(modifiers, pack);
+        if (whereConditions) {
+          packsQuery = (packsQuery as any).where(whereConditions as any);
+        }
       }
 
-      let tripsQuery = DbClient.instance
+      let tripsQuery: any = DbClient.instance
         .select({
           id: trip.id,
           createdAt: sql`${trip.createdAt} as createdAt`,
@@ -120,10 +123,10 @@ export class Feed {
           description: trip.description,
           destination: trip.destination,
           favorites_count: literal('0'),
-          quantity: literal(null),
+          quantity: sql`NULL as quantity`,
           userFavorites: literal('[]'),
           total_weight: literal('0'),
-          hasItem: literal(null),
+          hasItem: sql`NULL as hasItem`,
           activity: trip.activity,
           start_date: trip.start_date,
           end_date: trip.end_date,
@@ -137,10 +140,10 @@ export class Feed {
       }
 
       if (excludeType === 'packs') {
-        packsQuery = null;
+        packsQuery = null as any;
       }
       if (excludeType === 'trips') {
-        tripsQuery = null;
+        tripsQuery = null as any;
       }
 
       packsQuery = this.applyPackOrders(
@@ -149,9 +152,9 @@ export class Feed {
         tripsQuery === null,
       );
 
-      let feedQuery = null;
+      let feedQuery: any = null;
       if (packsQuery && tripsQuery) {
-        feedQuery = packsQuery.union(tripsQuery);
+        feedQuery = (packsQuery as any).union(tripsQuery as any);
       } else if (packsQuery) {
         feedQuery = packsQuery;
       } else if (tripsQuery) {
@@ -170,7 +173,9 @@ export class Feed {
           queryBy === 'Most Recent'
             ? desc(sql`createdAt`)
             : asc(sql`createdAt`);
-        feedQuery = feedQuery.orderBy(order);
+        if (feedQuery) {
+          feedQuery = feedQuery.orderBy(order);
+        }
       }
 
       const feedData = await feedQuery.limit(limit).offset(offset).all();
@@ -251,17 +256,17 @@ export class Feed {
     modifiers: Modifiers,
     table: typeof trip | typeof pack,
   ) {
-    const conditions = [];
+    const conditions: SQL<unknown>[] = [];
 
-    if (modifiers.isPublic !== undefined) {
+    if (modifiers?.isPublic !== undefined) {
       conditions.push(eq(table.is_public, modifiers.isPublic));
     }
 
-    if (modifiers.ownerId) {
+    if (modifiers?.ownerId) {
       conditions.push(eq(table.owner_id, modifiers.ownerId));
     }
 
-    if (modifiers.searchTerm) {
+    if (modifiers?.searchTerm) {
       conditions.push(like(table.name, `%${modifiers.searchTerm}%`));
     }
 
@@ -272,9 +277,9 @@ export class Feed {
     modifiers: Modifiers,
     table: typeof trip | typeof pack,
   ) {
-    const conditions = [];
+    const conditions: SQL<unknown>[] = [];
 
-    if (modifiers.ownerId && modifiers.includeUserFavoritesOnly) {
+    if (modifiers?.ownerId && modifiers.includeUserFavoritesOnly) {
       conditions.push(
         sql`userFavorites LIKE CONCAT('%', ${modifiers.ownerId}, '%')`,
       );

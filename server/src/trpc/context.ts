@@ -4,7 +4,7 @@ import { DbClient } from '../db/client';
 import { VectorClient } from '../vector/client';
 import { AiClient } from '../integrations/ai/client';
 import { type R2Bucket } from '@cloudflare/workers-types';
-import { GeojsonStorageService } from 'src/services/geojsonStorage';
+import { GeojsonStorageService } from '../services/geojsonStorage';
 
 let DB: D1Database;
 

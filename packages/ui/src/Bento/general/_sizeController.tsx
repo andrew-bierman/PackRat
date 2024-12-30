@@ -32,7 +32,7 @@ export const SizeController = YGroup.styleable<{
               size="$3"
               onPress={() => {
                 const index = sizes.indexOf(size);
-                setSize(sizes[index - 1 < 0 ? 0 : index - 1]);
+                setSize(sizes[index - 1 < 0 ? 0 : index - 1] ?? '$4');
               }}
             >
               <Button.Icon>
@@ -45,7 +45,9 @@ export const SizeController = YGroup.styleable<{
               size="$3"
               onPress={() => {
                 const index = sizes.indexOf(size);
-                setSize(sizes[index + 1 >= sizes.length ? 4 : index + 1]);
+                setSize(
+                  sizes[index + 1 >= sizes.length ? 4 : index + 1] ?? '$4',
+                );
               }}
             >
               <Button.Icon>

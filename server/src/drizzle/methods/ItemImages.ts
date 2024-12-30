@@ -19,9 +19,19 @@ export class ItemImages {
 
   async createBulk(data: any[]) {
     try {
-      const insertedItemImages = [];
+      const insertedItemImages: Array<{
+        id: string;
+        createdAt: string | null;
+        url: string;
+        itemId: string;
+      }> = [];
       for (const itemImageData of data) {
-        const itemImage = await DbClient.instance
+        const itemImage: {
+          id: string;
+          createdAt: string | null;
+          url: string;
+          itemId: string;
+        } = await DbClient.instance
           .insert(itemImageTable)
           .values(itemImageData)
           .returning()

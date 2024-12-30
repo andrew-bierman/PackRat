@@ -1,5 +1,5 @@
 import * as jwt from 'hono/jwt';
-import { User as UserRepository } from 'src/drizzle/methods/User';
+import { User as UserRepository } from '../../drizzle/methods/User';
 
 export const refreshTokenService = async (
   jwtSecret: string,

@@ -25,7 +25,7 @@ export const importNotifiedETL = async (c) => {
 
   let ownerId = '';
 
-  if (users && users.length > 0) {
+  if (Array.isArray(users) && users.length > 0) {
     ownerId = users[0].id;
     console.log('User ID:', ownerId);
   } else {
@@ -48,7 +48,7 @@ export const importNotifiedETL = async (c) => {
     const itemsToInsert = await parseCSVData(fileData, ownerId);
 
     const insertedItems = await bulkAddItemsGlobalService(
-      itemsToInsert,
+      itemsToInsert as any,
       c.executionCtx,
     );
 

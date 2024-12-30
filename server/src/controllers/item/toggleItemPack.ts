@@ -1,6 +1,6 @@
 import { protectedProcedure } from '../../trpc';
 import { z } from 'zod';
-import { toggleItemPackService } from 'src/services/item/toggleItemPackService';
+import { toggleItemPackService } from '../../services/item/toggleItemPackService';
 
 export function toggleItemPack() {
   return protectedProcedure

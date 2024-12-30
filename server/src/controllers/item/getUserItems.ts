@@ -1,6 +1,6 @@
 import { protectedProcedure } from '../../trpc';
 import { z } from 'zod';
-import { getUserItemsService } from 'src/services/item/getUserItemsService';
+import { getUserItemsService } from '../../services/item/getUserItemsService';
 export function getUserItemsRoute() {
   return protectedProcedure
     .input(
@@ -14,7 +14,7 @@ export function getUserItemsRoute() {
     .query(async (opts) => {
       const { limit, page, searchString, ownerId } = opts.input;
       const result = await getUserItemsService(limit, page, {
-        searchString,
+        searchString: searchString || '',
         ownerId,
       });
       return {

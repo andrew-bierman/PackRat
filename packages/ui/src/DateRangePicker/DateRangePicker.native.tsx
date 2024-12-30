@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { View, Text, Modal } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { extendMoment } from 'moment-range';
-import Moment from 'moment';
+import { extendMoment, DateRange } from 'moment-range';
+import moment from 'moment';
 import { Button } from 'tamagui';
 import { DatePickerInput } from '../Bento/elements/datepickers/common/dateParts';
 import RButton from '../RButton';
 
-const moment = extendMoment(Moment);
-type RangeDate = ReturnType<typeof moment>;
+const extendedMoment = extendMoment(moment as any);
+type RangeDate = ReturnType<typeof extendedMoment>;
 
 interface RangePickerProps {
   selectedDates: Date[];
@@ -30,23 +30,38 @@ const DateRangePicker = ({
       return [];
     }
 
-    return selectedDates.map((date) => moment(date)) as [RangeDate, RangeDate];
+    return selectedDates.map((date) => extendedMoment(date)) as [
+      RangeDate,
+      RangeDate,
+    ];
   });
 
   const onDayPress = (day) => {
-    const selectedDay = moment(day.dateString, 'YYYY-MM-DD');
+    const selectedDay = extendedMoment(day.dateString, 'YYYY-MM-DD');
     if (range.length < 1 || selectedDay.isSame(range[0], 'day')) {
       return setRange([selectedDay]);
     }
-    const newRange = moment.range(range[0], selectedDay);
-    let rangeResult = [moment(newRange.start), moment(newRange.end)];
-    if (rangeResult[0].isAfter(rangeResult[1])) {
-      rangeResult = [rangeResult[1], rangeResult[0]];
-    }
+    if (range && range[0] && selectedDay) {
+      const newRange = extendedMoment.range(range[0], selectedDay);
+      let rangeResult = [
+        extendedMoment(newRange.start),
+        extendedMoment(newRange.end),
+      ];
+      if (
+        rangeResult[0] &&
+        rangeResult[1] &&
+        rangeResult[0].isAfter(rangeResult[1])
+      ) {
+        rangeResult = [rangeResult[1], rangeResult[0]];
+      }
 
-    setRange(rangeResult);
-    onDatesChange([range[0]?.toDate(), range[1]?.toDate()]);
-    setOpen(false);
+      setRange([rangeResult[0], rangeResult[1]]);
+      onDatesChange([
+        range[0]?.toDate() || new Date(),
+        range[1]?.toDate() || new Date(),
+      ]);
+      setOpen(false);
+    }
   };
 
   const markedDates = useMemo(() => {
@@ -60,28 +75,30 @@ const DateRangePicker = ({
     const [start, end] = range;
 
     if (start) {
-      const dateString = moment(start).format('YYYY-MM-DD');
+      const dateString = extendedMoment(start).format('YYYY-MM-DD');
       result[dateString] = { ...period, startingDay: true };
     }
 
     if (end) {
-      const dateString = moment(end).format('YYYY-MM-DD');
+      const dateString = extendedMoment(end).format('YYYY-MM-DD');
       result[dateString] = {
         ...period,
         endingDay: true,
       };
 
       // Mark all dates between start and end
-      const dates = Array.from(moment.range(start, end).by('day'));
-      dates.forEach((date) => {
-        const dateString = date.format('YYYY-MM-DD');
-        if (
-          dateString !== moment(start).format('YYYY-MM-DD') &&
-          dateString !== moment(end).format('YYYY-MM-DD')
-        ) {
-          result[dateString] = period;
-        }
-      });
+      if (start && end) {
+        const dates = Array.from(extendedMoment.range(start, end).by('day'));
+        dates.forEach((date) => {
+          const dateString = date.format('YYYY-MM-DD');
+          if (
+            dateString !== extendedMoment(start).format('YYYY-MM-DD') &&
+            dateString !== extendedMoment(end).format('YYYY-MM-DD')
+          ) {
+            result[dateString] = period;
+          }
+        });
+      }
     }
 
     return result;
@@ -98,7 +115,7 @@ const DateRangePicker = ({
         <View>
           <Calendar
             markingType={'period'}
-            current={(range?.[0] || moment()).format('YYYY-MM-DD')}
+            current={(range?.[0] || extendedMoment()).format('YYYY-MM-DD')}
             markedDates={markedDates}
             onDayPress={onDayPress}
           />

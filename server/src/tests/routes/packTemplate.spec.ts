@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest';
-import { createExecutionContext, env } from 'cloudflare:test';
+import { env } from 'cloudflare:test';
 import { ItemCategory as ItemCategoryRepository } from '../../drizzle/methods/itemcategory';
 import { Item as ItemRepository } from '../../drizzle/methods/Item';
 import { setupTest } from '../testHelpers';
@@ -9,7 +9,7 @@ import {
   type Item,
   itemPackTemplate as itemPackTemplatesTable,
   packTemplate as packTemplateTable,
-} from 'src/db/schema';
+} from '../../db/schema';
 import { DbClient } from '../../db/client';
 
 const { mockSyncRecord, mockDeleteVector, mockSearchVector } = vi.hoisted(
@@ -37,7 +37,6 @@ vi.mock('../../vector/client', async (importOriginal) => {
 
 describe('Pack template routes', () => {
   let caller: trpcCaller;
-  let executionCtx: ExecutionContext;
   const itemCategoryRepository = new ItemCategoryRepository();
   const itemRepository = new ItemRepository();
 
@@ -45,7 +44,10 @@ describe('Pack template routes', () => {
   let packTemplateItems: Item[];
 
   beforeAll(async () => {
-    executionCtx = createExecutionContext();
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
     caller = await setupTest(env, executionCtx);
 
     vi.resetModules();
@@ -110,7 +112,9 @@ describe('Pack template routes', () => {
 
   describe('getPackTemplates', () => {
     it('should get pack templates', async () => {
-      const packTemplates = await caller.getPackTemplates();
+      const packTemplates = await caller.getPackTemplates({
+        pagination: { limit: 10, offset: 0 },
+      });
       expect(packTemplates).toMatchObject([
         { ...packTemplate, items: packTemplateItems },
       ]);
@@ -123,9 +127,15 @@ describe('Pack template routes', () => {
         name: 'test',
         description: 'pack template description',
         type: 'pack',
+        itemsOwnerId: 'default_owner_id',
         itemPackTemplates: packTemplateItems.map((item) => ({
-          itemId: item.id,
           quantity: 1,
+          item: {
+            name: item.name,
+            type: 'Food' as const,
+            weight: item.weight,
+            unit: item.unit,
+          },
         })),
       });
       expect(packTemplate).toMatchObject([
@@ -139,7 +149,7 @@ describe('Pack template routes', () => {
       const packTemplateResult = await caller.getPackTemplate({
         id: packTemplate.id,
       });
-      expect(packTemplateResult.id).toEqual(packTemplate.id);
+      expect(packTemplateResult?.id).toEqual(packTemplate.id);
     });
   });
 

@@ -1,4 +1,4 @@
-import { User as UserRepository } from 'src/drizzle/methods/User';
+import { User as UserRepository } from '../../drizzle/methods/User';
 
 export const logoutService = async (refreshToken: string) => {
   const userRepository = new UserRepository();

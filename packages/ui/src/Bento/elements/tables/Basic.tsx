@@ -38,19 +38,24 @@ export function BasicTable<T extends object>({
               gap="$3"
               p="$3"
             >
-              {row.getVisibleCells().map((cell) => (
-                <View key={cell.id} fd="row" justifyContent="space-between">
-                  <Text color="$gray10">
-                    {flexRender(
-                      cell.column.columnDef.header,
-                      headerGroup.headers[cell.column.getIndex()].getContext(),
-                    )}
-                  </Text>
-                  <Text color="$gray11">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Text>
-                </View>
-              ))}
+              {row.getVisibleCells().map((cell) => {
+                const headerCtx =
+                  headerGroup.headers[cell.column.getIndex()]?.getContext() ??
+                  {};
+                return (
+                  <View key={cell.id} fd="row" justifyContent="space-between">
+                    <Text color="$gray10">
+                      {flexRender(cell.column.columnDef.header, headerCtx)}
+                    </Text>
+                    <Text color="$gray11">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
           );
         })}

@@ -390,14 +390,8 @@ const SchemaForm: typeof _SchemaForm = ({ ...props }) => {
 
   return (
     <_SchemaForm {...props} renderAfter={renderAfter}>
-      {(
-        fields: Record<string, ReturnType<typeof useTsController>>,
-        context: any,
-      ) => {
-        //@ts-ignore
-        return props.children
-          ? props.children(fields, context)
-          : Object.values(fields);
+      {(fields /* , context */) => {
+        return props.children ? props.children(fields) : Object.values(fields);
       }}
     </_SchemaForm>
   );

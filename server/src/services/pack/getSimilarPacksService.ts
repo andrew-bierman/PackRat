@@ -1,8 +1,8 @@
-import { type Pack } from 'src/db/schema';
+import { type Pack } from '../../db/schema';
 import { Pack as PackRepository } from '../../drizzle/methods/pack';
 import { VectorClient } from '../../vector/client';
 
-interface SimilarPack extends Pack {
+export interface SimilarPack extends Pack {
   similarityScore: number;
 }
 
@@ -37,7 +37,7 @@ export async function getSimilarPacksService(
     return [];
   }
 
-  const array = [];
+  const array: string[] = [];
   for (const m of matches) {
     if (m.id == id) continue; // filter current pack's id
     array.push(m.id);
@@ -48,7 +48,7 @@ export async function getSimilarPacksService(
   // add similarity score to packs result
   const similarPacks = similarPacksResult.map((similarPack) => ({
     ...similarPack,
-    similarityScore: matches.find((m) => m.id == similarPack.id).score,
+    similarityScore: matches.find((m) => m.id == similarPack.id)?.score ?? 0,
   }));
 
   return similarPacks;

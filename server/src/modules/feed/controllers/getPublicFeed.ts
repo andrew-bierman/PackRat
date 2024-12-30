@@ -1,7 +1,11 @@
-import { getNextOffset, getPaginationResponse } from 'src/helpers/pagination';
+import {
+  getNextOffset,
+  getPaginationResponse,
+} from '../../../helpers/pagination';
 import { protectedProcedure } from '../../../trpc';
 import { getFeedService } from '../services';
 import { z } from 'zod';
+import { FeedQueryBy, PaginationParams } from '../models';
 
 export function getPublicFeedRoute() {
   return protectedProcedure
@@ -18,10 +22,10 @@ export function getPublicFeedRoute() {
     .query(async (opts) => {
       const { queryBy, searchTerm, excludeType, pagination } = opts.input;
       const { data, totalCount, currentPagination } = await getFeedService(
-        queryBy,
+        queryBy as FeedQueryBy,
         { searchTerm, isPublic: true },
         excludeType,
-        pagination,
+        pagination as PaginationParams,
       );
       return {
         data,
