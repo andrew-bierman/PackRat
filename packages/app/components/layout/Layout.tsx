@@ -1,14 +1,19 @@
 import useTheme from 'app/hooks/useTheme';
 import React from 'react';
-import { Platform, SafeAreaView } from 'react-native';
+import { Platform, SafeAreaView, View } from 'react-native';
 import { ScrollView, Stack, YStack } from 'tamagui';
 
-type LayoutProps = {
+interface LayoutProps {
   children: React.ReactNode;
   customStyle?: Record<string, any>;
-};
+  bottomRightComponent?: React.ReactNode;
+}
 
-const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  bottomRightComponent,
+  customStyle = {},
+}) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -31,6 +36,28 @@ const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
           <ScrollView contentContainerStyle={{ width: '100%' }}>
             {children}
           </ScrollView>
+          {bottomRightComponent && (
+            <View
+              style={
+                Platform.OS !== 'web'
+                  ? {
+                      position: 'absolute',
+                      width: '100%',
+                      maxWidth: 390,
+                      bottom: 10,
+                      right: 10,
+                      zIndex: 1000,
+                    }
+                  : {
+                      position: 'fixed',
+                      bottom: 20,
+                      right: 20,
+                    }
+              }
+            >
+              {bottomRightComponent}
+            </View>
+          )}
         </Stack>
       </YStack>
     </SafeAreaView>

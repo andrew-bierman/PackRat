@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 import { AnimatePresence, Text, Theme, View, styled } from 'tamagui';
 
@@ -32,16 +32,9 @@ export function SuggestionDescription({ data }: { data: Message[] }) {
     setMessages(getMessages(data)); // Reverse the messages array
   }, [data]);
 
-  return (
-    <List
-      $group-window-gtXs={{
-        padding: '$10',
-      }}
-      data={messages}
-      renderItem={renderItem}
-      style={{ backgroundColor: '$background' }}
-    />
-  );
+  return messages.map((item) => (
+    <ChatItem item={item} index={0} key={item.content} />
+  ));
 }
 
 SuggestionDescription.fileName = 'ChatList';
@@ -68,51 +61,23 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
   }, [start, showDelay]);
 
   return (
-    <AnimatePresence>
+    <>
       {showMessage && (
         <View
           style={{
-            padding: '5px 5px',
-            background: isDark ? '#333' : 'white',
-            flexDirection: 'row',
+            flexDirection: 'column',
             alignItems: 'flex-start',
-            alignSelf: 'self-start',
-            maxWidth: '100%',
-            minWidth: '100%',
+            justifyContent: 'center',
+            width: '100%',
+            flexShrink: 1,
           }}
-          gap="$4"
+          gap="$2"
         >
-          <View
-            style={{
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              flexShrink: 1,
-            }}
-            gap="$2"
-            // maxWidth={400}
-          >
-            <Theme name={'blue'}>
-              <View
-                backgroundColor="$color2"
-                padding="$4"
-                paddingVertical="$3"
-                borderRadius="$5"
-                flexShrink={1}
-              >
-                <Text
-                  fontSize="$3"
-                  fontWeight="$3"
-                  lineHeight="$3"
-                  flexShrink={1}
-                >
-                  {item.content}
-                </Text>
-              </View>
-            </Theme>
-          </View>
+          <Text fontSize="$3" fontWeight="$3" lineHeight="$3" width="100%">
+            {item.content}
+          </Text>
         </View>
       )}
-    </AnimatePresence>
+    </>
   );
 }
