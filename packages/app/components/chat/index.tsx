@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, ScrollView } from 'react-native';
 import { RButton, RIconButton } from '@packrat/ui';
 import { X } from '@tamagui/lucide-icons';
 import { MessageCircle, Settings } from 'lucide-react-native';
@@ -35,10 +35,7 @@ const actionItems = [
   },
 ];
 
-const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
-  itemTypeId,
-  type,
-}) => {
+const Chat: React.FC<ChatModalTriggerProps> = ({ itemTypeId, type }) => {
   const styles = useCustomStyles(loadStyles);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isItemOpen, setIsItemOpen] = useState(false);
@@ -53,48 +50,19 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
     }).start();
   }, [isChatOpen]);
   const { currentTheme } = useTheme();
+  const isOpen = isChatOpen || isSuggestionsOpen || isItemOpen;
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          width: 50,
-          height: 50,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <RIconButton
-          backgroundColor="transparent"
-          style={{
-            width: 50,
-            height: 50,
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 0,
-          }}
-          icon={
-            <Ionicons
-              name="chatbubble-ellipses-sharp"
-              size={50}
-              color={currentTheme.colors.iconColor}
-            />
-          }
-          onPress={() => {
-            if (isChatOpen || isSuggestionsOpen) {
-              setIsItemOpen(false);
-              setIsChatOpen(false);
-              setIsSuggestionsOpen(false);
-            } else {
-              setIsItemOpen(!isItemOpen);
-            }
-          }}
-        />
-      </View>
-
-      {isItemOpen && (
-        <Animated.View style={{ ...styles.animatedView, width: 308 }}>
-          <View style={{ width: 300 }}>
+    <View style={{ width: '100%', maxWidth: 390, position: 'relative' }}>
+      <View style={{ width: '100%', maxWidth: 390 }}>
+        {isItemOpen && (
+          <View
+            style={{
+              width: '100%',
+              backgroundColor: currentTheme.colors.background,
+              marginBottom: 10,
+            }}
+          >
             {actionItems.map((item, index) => {
               const { icon, color, title, description, type } = item;
               return (
@@ -112,44 +80,65 @@ const ChatModalTrigger: React.FC<ChatModalTriggerProps> = ({
               );
             })}
           </View>
-        </Animated.View>
-      )}
-      {isChatOpen && (
-        <Animated.View style={{ ...styles.animatedView, width: 450 }}>
-          <RButton
-            position="absolute"
-            backgroundColor="$background"
-            color="$color"
-            top="$2"
-            right="$2"
-            size="$2"
-            circular
-            icon={X}
-            onPress={() => setIsChatOpen(false)}
-            style={{ zIndex: 1001 }}
-          />
-          <ChatComponent itemTypeId={itemTypeId} type={type} />
-        </Animated.View>
-      )}
-      {isSuggestionsOpen && (
-        <Animated.View style={styles.animatedView}>
-          <RButton
-            position="absolute"
-            backgroundColor="$background"
-            color="$color"
-            top="$2"
-            right="$2"
-            size="$2"
-            circular
-            icon={X}
-            onPress={() => setIsSuggestionsOpen(false)}
-            style={{ zIndex: 1001 }}
-          />
-          <SuggestionComponent itemTypeId={itemTypeId} type={type} />
-        </Animated.View>
-      )}
+        )}
+        {isChatOpen && (
+          <Animated.View
+            style={{ ...styles.animatedView, width: '100%', height: 400 }}
+          >
+            <ChatComponent itemTypeId={itemTypeId} type={type} />
+          </Animated.View>
+        )}
+        {isSuggestionsOpen && (
+          <Animated.View
+            style={{ ...styles.animatedView, width: '100%', height: 400 }}
+          >
+            <SuggestionComponent itemTypeId={itemTypeId} type={type} />
+          </Animated.View>
+        )}
+      </View>
+      <View
+        style={{
+          marginLeft: 'auto',
+          marginTop: 'auto',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <RIconButton
+          backgroundColor={
+            isOpen ? currentTheme.colors.tertiaryBlue : 'transparent'
+          }
+          style={{
+            width: 50,
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 0,
+          }}
+          icon={
+            isOpen ? (
+              <X size={24} />
+            ) : (
+              <Ionicons
+                name="chatbubble-ellipses-sharp"
+                size={50}
+                color={currentTheme.colors.tertiaryBlue}
+              />
+            )
+          }
+          onPress={() => {
+            if (isChatOpen || isSuggestionsOpen) {
+              setIsItemOpen(false);
+              setIsChatOpen(false);
+              setIsSuggestionsOpen(false);
+            } else {
+              setIsItemOpen(!isItemOpen);
+            }
+          }}
+        />
+      </View>
     </View>
   );
 };
 
-export default ChatModalTrigger;
+export default Chat;

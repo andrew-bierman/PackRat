@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Separator, Text, View, YGroup } from 'tamagui';
-import { RButton } from '@packrat/ui';
+import { RIconButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useAddPackItem } from 'app/modules/pack';
-import { ScrollView } from 'react-native';
+import { PlusCircle } from '@tamagui/lucide-icons';
 
 interface Category {
   id: string;
@@ -26,15 +26,13 @@ interface SuggestionListProps {
 }
 
 export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
-  const [itemsList, setItemsList] = useState<SuggestionItem[]>([]);
   const { isDark } = useTheme();
 
-  useEffect(() => {
-    if (suggestion?.Items) {
-      setItemsList(suggestion.Items);
-    } else {
-      setItemsList([]);
+  const itemsList = useMemo(() => {
+    if (!suggestion?.Items) {
+      return [];
     }
+    return suggestion.Items;
   }, [suggestion]);
 
   return (
@@ -47,20 +45,12 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
         flex: 1,
       }}
     >
-      <ScrollView
-        style={{
-          minWidth: 300,
-          height: '100%',
-          overflow: 'scroll',
-        }}
-      >
-        {itemsList.map((item, i) => (
-          <React.Fragment key={item.id}>
-            <Item item={item} onAddItem={onAddItem} />
-            {i < itemsList.length - 1 && <Separator />}
-          </React.Fragment>
-        ))}
-      </ScrollView>
+      {itemsList.map((item, i) => (
+        <React.Fragment key={item.id}>
+          <Item item={item} onAddItem={onAddItem} />
+          {i < itemsList.length - 1 && <Separator />}
+        </React.Fragment>
+      ))}
     </YGroup>
   );
 }
@@ -110,15 +100,21 @@ function Item({ item, onAddItem }: ItemProps) {
             {item.unit}, {item.quantity}pcs
           </Text>
         </View>
-        <RButton
+        <RIconButton
           onPress={() => {
             handleAddItem(item);
           }}
-          style={{ borderRadius: 5, marginLeft: 'auto' }}
+          style={{
+            borderRadius: 5,
+            marginLeft: 'auto',
+            alignSelf: 'center',
+            borderWidth: 0,
+            backgroundColor: 'transparent',
+          }}
           disabled={isLoading}
-        >
-          Add
-        </RButton>
+          unstyled
+          icon={<PlusCircle size={20} />}
+        />
       </View>
     </YGroup.Item>
   );
