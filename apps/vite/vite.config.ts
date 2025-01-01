@@ -89,6 +89,9 @@ export default defineConfig(({ mode }) => {
           __dirname,
           '../../node_modules/react-native-web/dist/modules/AssetRegistry',
         ),
+        // Alias next/link and next/router to the empty mock file
+        'next/link': resolve(__dirname, 'src/mocks/emptyMock.ts'),
+        'next/router': resolve(__dirname, 'src/mocks/emptyMock.ts'),
       },
     },
     optimizeDeps: {
@@ -112,6 +115,7 @@ export default defineConfig(({ mode }) => {
     build: {
       commonjsOptions: { transformMixedEsModules: true },
       rollupOptions: {
+        external: ['next/link', 'next/router'],
         plugins: [
           rollupPlugin([
             /react-native-vector-icons/,

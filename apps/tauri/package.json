@@ -31,14 +31,14 @@
     "@vitejs/plugin-react-swc": "^3.6.0",
     "app": "*",
     "esbuild-plugin-flow": "^0.3.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.73.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.5",
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1",
-    "@types/react": "~18.2.55",
+    "@types/react": "~18.3.12",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
