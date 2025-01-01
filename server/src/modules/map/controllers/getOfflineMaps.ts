@@ -1,4 +1,7 @@
-import { getPaginationResponse } from '../../../helpers/pagination';
+import {
+  getPaginationResponse,
+  PaginationParams,
+} from '../../../helpers/pagination';
 import { protectedProcedure } from '../../../trpc';
 import { getOfflineMapsService } from '../services';
 import { z } from 'zod';
@@ -23,7 +26,10 @@ export function getOfflineMapsRoute() {
         );
         return {
           data: offlineMaps,
-          ...getPaginationResponse(pagination, Number(totalCount)),
+          ...getPaginationResponse(
+            pagination as PaginationParams,
+            Number(totalCount),
+          ),
         };
       },
     );

@@ -64,7 +64,7 @@ const RDropdownMenu = ({
 }: RDropdownMenuProps) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
+      <DropdownMenu.Trigger>
         {React.isValidElement(trigger) ? (
           trigger
         ) : (
