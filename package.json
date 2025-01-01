@@ -43,7 +43,7 @@
     "dev:next": "cd apps/next && yarn dev",
     "dev:server": "cd server && yarn start",
     "expo:export": "cd apps/expo && cp app.example.json app.json && npx expo export --platform web",
-    "expo": "cd apps/expo && yarn start",
+    "expo:start": "cd apps/expo && yarn start",
     "find:unused:deps": "node packages/cli/src/findUnusedDependencies.js",
     "fix": "manypkg fix",
     "format:all": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
@@ -53,7 +53,7 @@
     "lint:expo": "cd apps/expo && yarn lint",
     "lint:server": "cd server && yarn lint",
     "lint": "yarn lint:all",
-    "next": "cd apps/next && yarn dev",
+    "next:start": "cd apps/next && yarn dev",
     "prebuild:expo": "cd apps/expo && yarn run prebuild:clean",
     "postinstall": "yarn build-ui && yarn build:validations && yarn build-crosspath && yarn setup:env && yarn fix:packages",
     "preinstall:yarn": "npx only-allow yarn",
@@ -146,10 +146,7 @@
     "packing planner app"
   ],
   "resolutions": {
-    "@react-native/assets-registry": "0.74.81",
-    "metro": "^0.81.0",
-    "metro-resolver": "^0.81.0",
-    "metro-config": "^0.81.0"
+    "@react-native/assets-registry": "0.74.81"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.7"
@@ -164,6 +161,11 @@
           }
         }
       ]
-    ]
+    ],
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false
+      }
+    }
   }
 }
