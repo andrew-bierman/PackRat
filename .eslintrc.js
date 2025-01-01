@@ -37,7 +37,12 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['react', 'react-native', '@typescript-eslint', 'prettier'],
+  plugins: [
+    'react',
+    'react-native',
+    '@typescript-eslint/eslint-plugin',
+    'prettier',
+  ],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',

@@ -7,5 +7,4 @@ module.exports = {
     '**/ios/**',
     '**/web/**',
   ],
-  root: false,
 };
