@@ -32,6 +32,8 @@ interface Location {
 
 interface WeatherCardProps extends WeatherResult {
   location?: Location;
+  weatherToday: any;
+  weatherWeek: any;
 }
 
 export default function WeatherCard({

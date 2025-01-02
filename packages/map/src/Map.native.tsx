@@ -7,6 +7,10 @@ import {
   Alert,
   Linking,
   StyleSheet,
+  ViewStyle,
+  TextStyle,
+  ImageStyle,
+  StyleProp,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Mapbox from '@rnmapbox/maps';
@@ -39,6 +43,7 @@ import { DOMParser } from 'xmldom';
 import { type MapPropsLegacy } from './models';
 import { useUserQuery } from 'app/modules/auth';
 import { useUpdateUser } from 'app/modules/user';
+import { FlexAlignType } from 'react-native';
 
 interface GeoJsonProperties {
   name?: string;
@@ -75,7 +80,7 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
   const { user, refetch } = useUserQuery();
   console.log({ user });
   const updateUser = useUpdateUser();
-  const styles = StyleSheet.create(loadStyles);
+  const styles = loadStyles;
   const {
     camera,
     mapViewRef,
@@ -130,6 +135,7 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
   };
 
   const handleDownloadMap = async () => {
+    if (!user || !mapName) return;
     const bounds = mapViewRef.current
       ? await mapViewRef.current.getVisibleBounds()
       : null;
@@ -202,7 +208,7 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
       validateCoordinates(bounds);
       validCenterCoordinate = bounds;
     } else if (isLineString(shape)) {
-      const firstCoord = shape.features[0].geometry.coordinates[0];
+      const firstCoord = shape?.features[0]?.geometry?.coordinates[0];
       validateCoordinates(firstCoord);
       validCenterCoordinate = firstCoord;
     } else {
@@ -351,7 +357,7 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
             setShowMapNameInputDialog(true);
           }
         }}
-        handleGpxUpload={shouldEnableDownload && handleShapeUpload}
+        handleGpxUpload={shouldEnableDownload ? handleShapeUpload : undefined}
         progress={progress}
       />
     </View>
@@ -386,7 +392,12 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
                   placeholder="map name"
                   w="100%"
                 />
-                <RText style={styles.mapNameFieldErrorMessage}>
+                <RText
+                  color="#ff0000"
+                  fontStyle="italic"
+                  fontSize={12}
+                  marginTop={4}
+                >
                   {mapNameErrorMessage}
                 </RText>
               </AlertDialog.Body>
@@ -428,28 +439,28 @@ const NativeMap: React.FC<MapPropsLegacy> = ({
   );
 };
 
-const loadStyles = {
+const loadStyles = StyleSheet.create({
   page: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
+  } as ViewStyle,
   container: {
     width: '100%',
     backgroundColor: 'white',
     marginBottom: 20,
     paddingHorizontal: 5,
-  },
+  } as ViewStyle,
   map: {
     flex: 1,
-  },
+  } as ViewStyle,
   lineLayer: {
     lineColor: '#16b22d',
     lineWidth: 4,
     lineOpacity: 1,
-  },
+  } as ViewStyle,
   headerView: {
     position: 'absolute',
     marginTop: 20,
@@ -457,13 +468,13 @@ const loadStyles = {
     alignItems: 'center',
     justifyContent: 'space-evenly',
     width: 100,
-  },
+  } as ViewStyle,
   headerBtnView: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 32,
     backgroundColor: 'white',
-  },
+  } as ViewStyle,
   button: {
     position: 'absolute',
     bottom: 10,
@@ -474,11 +485,16 @@ const loadStyles = {
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  mapNameFieldErrorMessage: {
-    color: 'red', // theme.colors.error,
+  } as ViewStyle,
+});
+
+// Alternatively, create a separate style object for Tamagui components
+const tamaguiStyles = {
+  errorText: {
+    color: '#ff0000',
     fontStyle: 'italic',
     fontSize: 12,
+    marginTop: 4,
   },
 };
 

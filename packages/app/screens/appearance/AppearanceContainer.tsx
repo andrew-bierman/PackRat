@@ -19,7 +19,12 @@ export default function AppearanceContainer() {
   return (
     <ScrollView style={{ height: '100%' }}>
       <AppearanceLayout
-        navigationList={<NavigationList onRouteChange={setActiveRoute} />}
+        navigationList={
+          <NavigationList
+            onRouteChange={setActiveRoute}
+            onPressItem={() => {}}
+          />
+        }
         currentRoute={<ActiveComponent />}
       />
     </ScrollView>

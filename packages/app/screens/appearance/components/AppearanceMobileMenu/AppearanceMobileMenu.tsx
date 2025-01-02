@@ -1,11 +1,11 @@
-import React, { cloneElement } from 'react';
+import React, { cloneElement, ReactElement } from 'react';
 import { ChevronDown } from '@tamagui/lucide-icons';
 import { Adapt, Button, Popover, Text } from 'tamagui';
 
 export function AppearanceMobileMenu({
   navigationList,
 }: {
-  navigationList: React.ReactNode;
+  navigationList: ReactElement;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   return (

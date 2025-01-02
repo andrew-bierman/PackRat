@@ -9,26 +9,42 @@ import { useOSM } from 'app/hooks/geojson';
 import { useTripId } from 'app/hooks/trips';
 import { formatTripDate } from 'app/modules/trip/utils';
 
+// Add the TripData type definition
+interface TripData {
+  name?: string;
+  description?: string;
+  destination?: string;
+  activity?: string;
+  is_public?: boolean;
+  start_date?: string;
+  end_date?: string;
+  geoJSON?: any;
+  pack_id?: string;
+  bounds?: any;
+  owner_id?: string;
+}
+
 export default function EditTripScreen() {
   const [tripId] = useTripId();
   const { isLoading, isError, data } = useFetchSingleTrip(tripId);
+  const tripData = data as TripData; // Ensure data is typed correctly
   return (
-    <AsyncView isLoading={isLoading || !data} isError={isError}>
+    <AsyncView isLoading={isLoading || !tripData} isError={isError}>
       <TripLoader
         initialState={{
-          name: data?.name,
-          description: data?.description,
-          destination: data?.destination,
-          activity: data?.activity,
-          is_public: data?.is_public,
-          start_date: formatTripDate(data?.start_date).toDate(),
-          end_date: formatTripDate(data?.end_date).toDate(),
-          geoJSON: data?.geoJSON,
+          name: tripData?.name,
+          description: tripData?.description,
+          destination: tripData?.destination,
+          activity: tripData?.activity,
+          is_public: tripData?.is_public,
+          start_date: formatTripDate(tripData?.start_date || '').toDate(),
+          end_date: formatTripDate(tripData?.end_date || '').toDate(),
+          geoJSON: tripData?.geoJSON,
         }}
-        packId={data?.pack_id}
+        packId={tripData?.pack_id || ''}
         tripId={tripId}
-        bounds={data?.bounds}
-        ownerId={data?.owner_id}
+        bounds={tripData?.bounds}
+        ownerId={tripData?.owner_id || ''} // Ensure ownerId is a string
       />
     </AsyncView>
   );
