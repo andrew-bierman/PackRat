@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   DatePickerProvider,
   DatePickerProvider as _DatePickerProvider,
@@ -91,7 +92,17 @@ function Calendar({
   });
 
   return (
-    <View flexDirection="column" gap="$4">
+    <View
+      flexDirection="column"
+      gap="$4"
+      {...Platform.select({
+        native: {
+          alignItems: 'center',
+          width: '100%',
+          paddingLeft: '$2',
+        },
+      })}
+    >
       <View
         flexDirection="row"
         minWidth="100%"
@@ -131,9 +142,12 @@ function Calendar({
             selectable
             tabIndex={0}
             cursor="pointer"
-            size="$6"
+            size={Platform.select({
+              web: '$6',
+              native: '$5',
+            })}
             color="$gray12"
-            fontWeight="600"
+            fontWeight="700"
             lineHeight="$1"
             hoverStyle={{
               color: '$gray10',
@@ -182,14 +196,27 @@ function Calendar({
                 theme="alt1"
                 key={day}
                 ta="center"
-                width={45}
+                width={Platform.select({
+                  web: 45,
+                  native: 46,
+                })}
                 size="$4"
+                textAlign="center"
               >
                 {day}
               </SizableText>
             ))}
           </View>
-          <View flexDirection="column" gap="$1" flexWrap="wrap">
+          <View
+            flexDirection="column"
+            gap="$1"
+            flexWrap="wrap"
+            {...Platform.select({
+              native: {
+                paddingRight: '$2',
+              },
+            })}
+          >
             {subDays.map((days) => (
               <View
                 flexDirection="row"
@@ -203,6 +230,12 @@ function Calendar({
                       circular
                       padding={0}
                       minWidth={46}
+                      height={Platform.select({
+                        web: undefined,
+                        native: 46,
+                      })}
+                      alignItems="center"
+                      justifyContent="center"
                       {...swapOnClick(dayButton(d))}
                       backgroundColor={
                         d.selected && d.inCurrentMonth
@@ -229,6 +262,7 @@ function Calendar({
                               ? '$gray11'
                               : '$gray6'
                         }
+                        textAlign="center"
                       >
                         {d.day}
                       </Button.Text>
