@@ -21,15 +21,15 @@ export const importNotifiedETL = async (c) => {
   const x_amz_token = c.env.X_AMZ_SECURITY_TOKEN;
 
   const userClass = new User();
-  const users = await userClass.getAdminId();
+  const user = await userClass.getAdminId();
 
   let ownerId = '';
 
-  if (Array.isArray(users) && users.length > 0) {
-    ownerId = users[0].id;
+  if (user) {
+    ownerId = user.id;
     console.log('User ID:', ownerId);
   } else {
-    console.log('No users found.');
+    console.log('No user found.');
   }
 
   try {
