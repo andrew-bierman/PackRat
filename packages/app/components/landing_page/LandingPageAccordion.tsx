@@ -9,20 +9,24 @@ import useTheme from 'app/hooks/useTheme';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
 import React, { useEffect, useState } from 'react';
 import useResponsive from 'app/hooks/useResponsive';
-import { Platform } from 'react-native';
+import { Platform, ImageSourcePropType } from 'react-native';
 
 const RButton: any = OriginalRButton;
 
+interface MaterialIconName {
+  name: keyof typeof MaterialIcons.glyphMap;
+}
+
 interface LandingPageAccordionProps {
-  title: string;
-  content: string;
-  iconName: string;
+  title?: string;
+  content?: string;
+  iconName?: MaterialIconName['name'];
 }
 
 export const LandingPageAccordion = ({
   title,
   content,
-  iconName,
+  iconName = 'info', // provide a default icon
 }: LandingPageAccordionProps) => {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
@@ -73,15 +77,17 @@ export const LandingPageAccordion = ({
                 gap: 10,
               }}
             >
-              <RText style={styles.cardContent}>{data.content}</RText>
-              <RImage
-                src={data.frameLink}
-                style={{
-                  backgroundColor: 'transparent',
-                  width: 330,
-                  height: 600,
-                }}
-              />
+              <RText style={styles.cardContent}>{data?.content}</RText>
+              {data?.frameLink && (
+                <RImage
+                  source={data.frameLink as ImageSourcePropType}
+                  style={{
+                    backgroundColor: 'transparent',
+                    width: 330,
+                    height: 600,
+                  }}
+                />
+              )}
             </View>
             <View>
               <RButton onClick={panDown} style={styles.panButton}>
@@ -102,7 +108,7 @@ export const LandingPageAccordion = ({
       ) : (
         <RCard style={styles.card}>
           <View style={styles.cardHeader}>
-            <MaterialIcons name={iconName} style={styles.icon} />
+            <MaterialIcons name={iconName || 'info'} style={styles.icon} />
             <View style={{ flex: 1 }}>
               <RText style={styles.featureText}>{title}</RText>
             </View>

@@ -74,7 +74,7 @@ export const useUserInOfflineMode = () => {
   const { connectionStatus } = useOfflineStore();
   const userFromStorage = useMemo(() => {
     try {
-      const parsedUserFromStorage = JSON.parse(userFromStorageStr as String);
+      const parsedUserFromStorage = JSON.parse(userFromStorageStr as string);
       return parsedUserFromStorage;
     } catch {
       return null;

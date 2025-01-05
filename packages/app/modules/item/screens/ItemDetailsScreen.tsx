@@ -42,11 +42,11 @@ export function ItemDetailsScreen() {
 
         {Platform.OS === 'web' ? (
           <RLink to={`/products`}>
-            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+            <RText style={styles.breadcrumbLink}>{item?.categoryId}</RText>
           </RLink>
         ) : (
           <TouchableOpacity onPress={() => router.push('/products')}>
-            <RText style={styles.breadcrumbLink}>{item?.category?.name}</RText>
+            <RText style={styles.breadcrumbLink}>{item?.categoryId}</RText>
           </TouchableOpacity>
         )}
       </RStack>

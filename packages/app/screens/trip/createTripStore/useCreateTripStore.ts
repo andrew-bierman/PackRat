@@ -8,7 +8,15 @@ import {
 } from './store';
 import { useTripContext } from 'app/modules/trip/context/tripContext';
 
-export const useCreateTripStore = (initialState = createTripInitialState) => {
+export type TripStore = {
+  store: typeof createTripInitialState;
+  setTripValue: (name: addTripKey, value: any) => void;
+  setDateRange: (dateRange: any) => void;
+};
+
+export const useCreateTripStore = (
+  initialState = createTripInitialState,
+): TripStore => {
   const [store, dispatch] = useReducer(createTripReducer, initialState);
 
   const setTripValue = useCallback(

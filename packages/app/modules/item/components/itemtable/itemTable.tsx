@@ -28,7 +28,7 @@ interface ItemType {
 }
 
 interface GroupedData {
-  [type: string]: ItemType[];
+  [type: string]: Required<ItemType>[];
 }
 
 interface ItemsTableProps {
@@ -65,13 +65,15 @@ export const ItemsTable = ({
   const { xs, xxxs } = useResponsive();
   const { isDark } = useTheme();
 
-  const groupByType = (items: ItemType[]): Record<string, ItemType[]> => {
+  const groupByType = (
+    items: ItemType[],
+  ): Record<string, Required<ItemType>[]> => {
     return items.reduce((acc, item) => {
       const { type } = item;
       if (!acc[type]) {
         acc[type] = [];
       }
-      acc[type].push(item);
+      acc[type].push(item as Required<ItemType>);
       return acc;
     }, {} as GroupedData);
   };
@@ -85,10 +87,18 @@ export const ItemsTable = ({
       global,
       ...filteredItem
     } = item;
-    return filteredItem;
+    return {
+      ...filteredItem,
+      category: item.category ?? { id: '', name: '' },
+      categoryId,
+      createdAt,
+      updatedAt,
+      ownerId,
+      global,
+    };
   });
 
-  const groupedData = groupByType(filteredData);
+  const groupedData = groupByType(filteredData) as GroupedData;
 
   return (
     <View
@@ -113,12 +123,12 @@ export const ItemsTable = ({
             ) : (
               <PaginatedSortedTable
                 groupedData={groupedData}
-                handleCheckboxChange={handleCheckboxChange}
-                onDelete={onDelete}
-                hasPermissions={hasPermissions}
+                handleCheckboxChange={handleCheckboxChange ?? (() => {})}
+                onDelete={onDelete ?? (() => {})}
+                hasPermissions={hasPermissions ?? false}
                 currentPack={currentPack}
-                refetch={refetch}
-                setRefetch={setRefetch}
+                refetch={refetch ?? (() => {})}
+                setRefetch={setRefetch ?? (() => {})}
                 totalPages={totalPages}
                 page={page}
                 setPage={setPage}

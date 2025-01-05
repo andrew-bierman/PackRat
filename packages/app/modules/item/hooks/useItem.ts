@@ -5,7 +5,7 @@ export const useItem = (itemId?: string) => {
   const user = useAuthUser();
   const { refetch, data, error, isLoading, isError } =
     queryTrpc.getItemById.useQuery(
-      { id: itemId },
+      { id: itemId ?? '' },
       {
         enabled: !!itemId, // to ensure the query runs only when packId is available
         refetchOnWindowFocus: true,

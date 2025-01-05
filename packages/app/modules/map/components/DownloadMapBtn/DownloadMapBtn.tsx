@@ -63,7 +63,8 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
       >
         <View style={{ paddingVertical: 10, minWidth: 250 }}>
           <Form defaultValues={{ mapName: '' }}>
-            <RStack gap={16} direction="vertical">
+            {/* <RStack gap={16} direction="vertical"> */}
+            <RStack gap={16} style={{ flexDirection: 'column' }}>
               <FormInput
                 placeholder="Map name"
                 name="mapName"
@@ -73,6 +74,7 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
                 Save
               </SubmitButton>
             </RStack>
+            {/* </RStack> */}
           </Form>
         </View>
       </BaseModal>

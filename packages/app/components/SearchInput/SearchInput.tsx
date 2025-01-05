@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Platform, type TextInput } from 'react-native';
+import { Platform, type TextInput, StyleSheet } from 'react-native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
@@ -23,7 +23,7 @@ import { SearchResults } from './SearchResults';
 
 const Popover = OriginalPopover;
 const RStack = OriginalRStack;
-const RInput = OriginalRInput;
+const RInput: any = OriginalRInput;
 const RScrollView = OriginalRScrollView;
 const RButton = OriginalRButton;
 const Pressable = OriginalPressable;
@@ -33,7 +33,7 @@ interface SearchInputProps {
   onCreate: (result: any, index: number) => void;
   results: any[];
   onChange: (text: string) => void;
-  searchString?: string;
+  searchString: string;
   placeholder?: string;
   canCreateNewItem?: boolean;
   resultItemComponent: React.ReactElement;
@@ -97,15 +97,17 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               {searchString && (
                 <MaterialIcons
                   name="close"
-                  style={{
-                    position: 'absolute',
-                    right: 12,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    fontSize: 20,
-                    color: currentTheme.colors.text,
-                    cursor: 'pointer',
-                  }}
+                  style={
+                    {
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      fontSize: 20,
+                      color: currentTheme.colors.text,
+                      cursor: 'pointer',
+                    } as any
+                  }
                   onClick={handleClearSearch}
                 />
               )}
@@ -255,3 +257,14 @@ const useSearchOptions = (
         ];
   }, [results]);
 };
+
+const styles = StyleSheet.create({
+  webInput: {
+    width: '100%',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    fontSize: 16,
+  },
+});

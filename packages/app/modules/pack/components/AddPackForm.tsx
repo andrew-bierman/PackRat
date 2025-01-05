@@ -60,13 +60,13 @@ export const AddPackForm = ({
     } catch {}
   };
 
-  const handleOnValueChange = () => {
-    setIsPublic((prevIsPublic) => {
-      const newIsPublic = !prevIsPublic;
-      console.log('isPublic:', newIsPublic);
-      return newIsPublic;
-    });
-  };
+  // const handleOnValueChange = () => {
+  //   setIsPublic((prevIsPublic) => {
+  //     const newIsPublic = !prevIsPublic;
+  //     console.log('isPublic:', newIsPublic);
+  //     return newIsPublic;
+  //   });
+  // };
 
   return (
     <View style={styles.container}>
@@ -104,7 +104,7 @@ export const AddPackForm = ({
               </XStack>
               <RSwitch
                 checked={isPublic}
-                onCheckedChange={handleOnValueChange}
+                onCheckedChange={() => setIsPublic(!isPublic)}
                 size="$2"
                 style={{ backgroundColor: '#e4e4e7' }}
               >

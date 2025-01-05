@@ -77,11 +77,12 @@ export function PackDetailsScreen() {
         loadingComponent={<RSpinner />}
         errorComponentProps={{
           title: 'Error Loading Pack',
-          message: error?.message,
+          message: error?.message ?? 'Error Loading Pack',
         }}
       >
         <View style={{ minHeight: '100%', paddingBottom: 80 }}>
           <DetailsComponent
+            isLoading={isLoading}
             type="pack"
             data={currentPack}
             additionalComps={
@@ -106,6 +107,7 @@ export function PackDetailsScreen() {
                         }}
                       >
                         <AddItemModal
+                          showTrigger={true}
                           currentPackId={currentPackId || ''}
                           currentPack={currentPack}
                           isAddItemModalOpen={isAddItemModalOpen}

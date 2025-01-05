@@ -12,7 +12,7 @@ export interface UserRemoteMap {
   metadata: {
     userId: string;
     id?: string;
-    shape?: string;
+    shape: string;
   };
 }
 
@@ -30,7 +30,7 @@ export const useDownloadMap = (onDownload) => {
       owner_id: authUser.id,
       metadata: {
         userId: authUser?.id,
-        shape: JSON.stringify(shape),
+        shape: JSON.stringify(shape) || '',
       },
     };
 

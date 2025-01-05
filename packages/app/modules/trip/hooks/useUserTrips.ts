@@ -22,7 +22,7 @@ export const useUserTrips = (
   const { searchTerm, isPublic, isPreview } = params || {};
   const queryParams = useMemo(
     () => ({
-      ownerId,
+      ownerId: ownerId ?? '',
       searchTerm,
       queryBy: 'Most Recent',
       pagination,

@@ -8,6 +8,7 @@ import { usePlacesAutoComplete } from './usePlacesAutoComplete';
 interface PlacesAutocompleteProps {
   onSelect?: (geoJSON: any) => void;
   placeholder?: string;
+  style?: any;
 }
 
 export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(

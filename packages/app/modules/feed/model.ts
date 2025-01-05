@@ -28,7 +28,7 @@ export interface BaseFeedItem {
   ga;
 }
 
-interface PackFeedItem extends BaseFeedItem {
+export interface PackFeedItem extends BaseFeedItem {
   type: 'pack';
   similarityScore?: number;
   quantity?: number;

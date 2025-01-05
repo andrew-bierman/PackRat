@@ -5,6 +5,7 @@ import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import useResponsive from 'app/hooks/useResponsive';
+import { type WeightUnit } from 'app/utils/convertWeight';
 
 interface ItemPrimaryDetailsSectionProps {
   weight: number;
@@ -27,7 +28,7 @@ const ItemPrimaryDetailsSection: React.FC<ItemPrimaryDetailsSectionProps> = ({
         <RStack style={styles.keyValueItem}>
           <RText style={styles.keyText}>Weight:</RText>
           <RText style={styles.valueText}>
-            {convertWeight(weight, SMALLEST_ITEM_UNIT, unit)}
+            {convertWeight(weight, SMALLEST_ITEM_UNIT, unit as WeightUnit)}
             {unit}
           </RText>
         </RStack>

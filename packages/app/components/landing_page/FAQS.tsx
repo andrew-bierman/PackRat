@@ -1,5 +1,6 @@
-import { RImage, RText } from '@packrat/ui';
+import { RImage as OriginalRImage, RText } from '@packrat/ui';
 import { View } from 'tamagui';
+import { ImageSourcePropType } from 'react-native';
 import PakRat_FAQS from 'app/assets/PakRat_FAQS.png';
 import { StyleSheet } from 'react-native';
 import useTheme from 'app/hooks/useTheme';
@@ -7,6 +8,8 @@ import useResponsive from 'app/hooks/useResponsive';
 import { FaqList } from 'app/constants/FAQS';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
+
+const RImage: any = OriginalRImage;
 
 export const FAQS = () => {
   const { currentTheme } = useTheme();
@@ -56,7 +59,7 @@ export const FAQS = () => {
       </View>
       <View style={styles.faqSecondContainer}>
         <RImage
-          src={PakRat_FAQS}
+          source={PakRat_FAQS as ImageSourcePropType}
           style={{
             backgroundColor: 'transparent',
             width: xs || sm || md ? 359 : 650,
@@ -80,13 +83,13 @@ const loadStyles = (currentTheme, xs, sm, md) =>
       maxWidth: '100vw',
       paddingTop: 20,
       paddingBottom: 20,
-    },
+    } as any,
     faqFirstContainer: {
       alignItems: 'center',
     },
     faqBox: {
       width: xs || sm || md ? '100%' : '24vw',
-    },
+    } as any,
     faqMainTitle: {
       fontSize: xs || sm || md ? 20 : 26,
       textAlign: xs || sm || md ? 'center' : 'auto',
@@ -110,6 +113,6 @@ const loadStyles = (currentTheme, xs, sm, md) =>
       width: xs || sm || md ? '100%' : '24vw',
       marginLeft: xs || sm || md ? 10 : 0,
       marginRight: xs || sm || md ? 10 : 0,
-    },
+    } as any,
     faqSecondContainer: {},
   });

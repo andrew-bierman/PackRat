@@ -31,23 +31,23 @@ export const useFeed = ({
 }> = {}): UseFeedResult => {
   const publicFeed = usePublicFeed(
     queryString,
-    searchQuery,
+    searchQuery ?? '',
     selectedTypes,
     feedType === 'public',
   );
   const userPacks = useUserPacks(
-    ownerId || undefined,
-    { searchTerm: searchQuery },
+    ownerId || '',
+    { searchTerm: searchQuery ?? '' },
     queryString,
     feedType === 'userPacks',
   );
   const userTrips = useUserTrips(
-    ownerId || undefined,
-    { searchTerm: searchQuery },
+    ownerId || '',
+    { searchTerm: searchQuery ?? '' },
     feedType === 'userTrips',
   );
-  const similarPacks = useSimilarPacks(id, feedType === 'similarPacks');
-  const similarItems = useSimilarItems(id, feedType === 'similarItems');
+  const similarPacks = useSimilarPacks(id || '', feedType === 'similarPacks');
+  const similarItems = useSimilarItems(id || '', feedType === 'similarItems');
   const packTemplates = usePackTemplates(
     { searchQuery, orderBy: queryString },
     feedType === 'packTemplates',
@@ -61,11 +61,11 @@ export const useFeed = ({
     case 'userTrips':
       return userTrips;
     case 'similarPacks':
-      return similarPacks;
+      return similarPacks as unknown as UseFeedResult;
     case 'similarItems':
-      return similarItems;
+      return similarItems as unknown as UseFeedResult;
     case 'packTemplates':
-      return packTemplates;
+      return packTemplates as unknown as UseFeedResult;
     default:
       return { data: null, isLoading: true };
   }

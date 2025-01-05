@@ -53,7 +53,7 @@ interface UseAddNewPackResult {
 export const useAddNewPack = (): UseAddNewPackResult => {
   const user = useAuthUser();
   const [name, setName] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState<boolean>(false);
   const utils = queryTrpc.useContext();
 
   const packSelectOptions = [
@@ -120,10 +120,13 @@ export const useAddNewPack = (): UseAddNewPackResult => {
           ownerId: packData.owner_id,
           queryBy: '',
         },
-        () => ({
-          ...newQueryData,
-          message: oldQueryData?.message,
-        }),
+        (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...newQueryData,
+            message: oldData.message ?? '',
+          };
+        },
       );
 
       setName('');

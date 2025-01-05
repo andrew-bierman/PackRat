@@ -6,7 +6,17 @@ import useTheme from 'app/hooks/useTheme';
 import { QuickActionButton } from 'app/modules/dashboard/components/QuickActionButton/QuickActionButton';
 import { RButton } from '@packrat/ui';
 
-const FABNative = () => {
+interface FABProps {
+  showQuickActions: boolean;
+  toggleQuickActions: () => void;
+  closeQuickActions: () => void;
+}
+
+const FABNative: React.FC<FABProps> = ({
+  showQuickActions,
+  toggleQuickActions,
+  closeQuickActions,
+}) => {
   const { handleActionSelect, quickActionData } = useQuickActions();
   const { currentTheme } = useTheme();
 

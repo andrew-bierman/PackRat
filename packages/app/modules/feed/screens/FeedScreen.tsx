@@ -61,6 +61,8 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
     searchQuery,
   });
 
+  const safeTotalPages = totalPages ?? 1;
+
   const onRefresh = () => {
     setRefreshing(true);
     refetch && refetch();
@@ -112,14 +114,14 @@ const Feed = memo(function Feed({ feedType = 'public', listStyle }: FeedProps) {
           isError={isError}
           separatorHeight={12}
         />
-        {totalPages > 1 ? (
+        {safeTotalPages > 1 ? (
           <Pagination
             isPrevBtnDisabled={!hasPrevPage}
             isNextBtnDisabled={!hasNextPage}
-            onPressPrevBtn={fetchPrevPage}
-            onPressNextBtn={fetchNextPage}
-            currentPage={currentPage}
-            totalPages={totalPages}
+            onPressPrevBtn={fetchPrevPage ?? (() => {})}
+            onPressNextBtn={fetchNextPage ?? (() => {})}
+            currentPage={currentPage ?? 1}
+            totalPages={safeTotalPages}
           />
         ) : null}
       </View>

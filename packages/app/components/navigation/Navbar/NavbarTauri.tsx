@@ -97,9 +97,9 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
           width: Platform.OS === 'web' ? '100vw' : '100%',
         },
       }),
-    },
+    } as any,
     container: {
-      width: '100vw',
+      width: '100%',
       maxWidth: '100%', // Ensure container does not exceed the viewport width
       flex: 1, // Ensure container can grow to fit content
       backgroundColor,
@@ -124,13 +124,11 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
     },
     logo: {
       marginRight: 10,
-      cursor: 'pointer',
     },
     logoText: {
       color: currentTheme.colors.text,
       fontSize: 38,
       fontWeight: '900',
-      cursor: 'pointer',
     },
     menuBar: {
       flexDirection: 'row',

@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 import { ChevronDown } from '@tamagui/lucide-icons';
 import { BaseAlert } from '@packrat/ui';
 import React from 'react';
-import { type Item } from '../../model';
+import { type Item } from '../../../item/model';
 
 type ModalName = 'edit' | 'delete';
 
@@ -102,7 +102,7 @@ export default function ActionButtons({
             disabled: false,
           },
         ]}
-        footerComponent={null}
+        footerComponent={undefined}
       >
         <RText> Are you sure you want to delete this item?</RText>
       </BaseAlert>

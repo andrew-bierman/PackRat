@@ -3,7 +3,7 @@ import React, { type FC } from 'react';
 import { TripImage } from './TripImage';
 import { CreatedAtLabel, type FeedCardProps } from 'app/modules/feed';
 import { DuplicateIcon } from 'app/assets/icons';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from 'app/modules/trip/model';
 import { LocationLabel } from '../LocationLabel';
 
 interface TripCardProps extends FeedCardProps<TripDetails> {}

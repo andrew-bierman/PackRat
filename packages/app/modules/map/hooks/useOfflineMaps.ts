@@ -9,20 +9,20 @@ import { useAuthUser } from 'app/modules/auth';
 
 // Add the OfflineMapsResponse interface with nextOffset
 interface OfflineMapsResponse {
-  data?: {
-    id?: string;
-    name?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    owner_id?: string;
-    bounds?: [number[], number[]];
-    minZoom?: number;
-    maxZoom?: number;
-    metadata?: {
-      shape?: string;
-    };
+  data: {
+    id: string;
+    name: string;
+    createdAt: string | null;
+    updatedAt: string | null;
+    owner_id: string | null;
+    bounds: [number[], number[]] | null;
+    minZoom: number;
+    maxZoom: number;
+    metadata: {
+      shape: string;
+    } | null;
   }[];
-  totalCount?: number;
+  totalCount: number;
   nextOffset?: number;
 }
 

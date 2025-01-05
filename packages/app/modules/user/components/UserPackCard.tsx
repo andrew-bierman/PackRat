@@ -31,6 +31,7 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
       subtitle={
         <ScoreLabel
           score={
+            props.details.similarityScore !== undefined &&
             !isNaN(props.details.similarityScore)
               ? props.details.similarityScore
               : Number(props.details.score)
@@ -70,11 +71,11 @@ export const UserPackCard: FC<PackCardProps> = (props) => {
           )}
           <FavoriteButton
             count={props.favoriteCount}
-            isAuthUserFavorite={props.isUserFavorite}
+            isAuthUserFavorite={props.isUserFavorite ?? false}
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              props.toggleFavorite();
+              props.toggleFavorite?.();
               refetch();
             }}
           />

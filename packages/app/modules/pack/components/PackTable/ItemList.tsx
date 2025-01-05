@@ -97,7 +97,7 @@ export const ItemList = ({
                 <RInput
                   value={String(value)}
                   onChangeText={(text) => setValue(Number(text))}
-                  onBlur={(e) => submit(Number(e.target.value))}
+                  onBlur={(e) => submit(Number(value))}
                   style={{
                     width: 40,
                     padding: 0,

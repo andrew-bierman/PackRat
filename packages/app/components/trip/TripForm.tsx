@@ -61,7 +61,7 @@ export const TripForm = ({
         name: initialState?.name,
         description: initialState?.description,
         is_public: initialState?.is_public,
-        activity: initialState?.activity || ActivityOptions[0].value,
+        activity: initialState?.activity || ActivityOptions[0]?.value,
       }}
     >
       <YStack style={{ gap: 16 }}>
@@ -92,7 +92,7 @@ export const TripForm = ({
   );
 };
 
-enum TripActivity {
+export enum TripActivity {
   TRIP = 'trip',
   RUNNING = 'running',
   BIKING = 'biking',

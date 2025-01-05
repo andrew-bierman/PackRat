@@ -4,24 +4,28 @@ import { useItemWeightUnit } from 'app/modules/item';
 import { convertWeight } from 'app/utils/convertWeight';
 import { roundNumber } from 'app/utils';
 import { PackImage } from 'app/modules/pack';
-import { RouterOutput } from 'trpc';
+import { RouterOutput } from 'app/trpc';
 
-export const PackTemplatePrimaryCard: FC<RouterOutput['getPackTemplate']> = (
-  props,
-) => {
+type CardType = 'primary' | 'secondary';
+type PackTemplateWithExtras = RouterOutput['getPackTemplate'] & {
+  totalWeight?: number;
+  quantity?: number;
+};
+
+export const PackTemplatePrimaryCard: FC<PackTemplateWithExtras> = (props) => {
   const [weightUnit] = useItemWeightUnit();
 
   return (
     <Card
-      title={props.name}
-      link={`/pack-templates/${props.id}`}
+      title={props.name ?? 'Untitled'}
+      link={`/pack-templates/${props.id ?? ''}`}
       image={<PackImage />}
-      subtitle={<RText>{props.description}</RText>}
+      subtitle={<RText>{props.description ?? ''}</RText>}
       content={
         <Details
           items={Object.entries({
-            weight: props.total_weight,
-            quantity: props.quantity,
+            weight: props.totalWeight ?? 0,
+            quantity: props.quantity ?? 0,
           })
             .filter(([key]) => key !== 'similarityScore')
             .map(([key, value]) => ({
@@ -34,7 +38,7 @@ export const PackTemplatePrimaryCard: FC<RouterOutput['getPackTemplate']> = (
             }))}
         />
       }
-      type={props.cardType}
+      type={(props.type as CardType) ?? 'primary'}
     />
   );
 };

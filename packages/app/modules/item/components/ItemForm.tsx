@@ -74,7 +74,7 @@ export const ItemForm = ({
       <Form
         validationSchema={validationSchema}
         defaultValues={defaultValues}
-        onSubmit={handleSubmit}
+        onSubmit={(data) => handleSubmit(data as unknown as Item)}
       >
         <RStack style={{ gap: 8 }}>
           <FormInput
@@ -97,7 +97,7 @@ export const ItemForm = ({
               (Platform.OS === 'web' ? (
                 <FormSelect
                   options={data}
-                  name="unit"
+                  name="value.unit"
                   placeholder={'Unit'}
                   width="100"
                 />
@@ -121,7 +121,7 @@ export const ItemForm = ({
             isNumeric
             style={{ width: '100%' }}
           />
-          <FormRadioGroup name="type" options={radioOptions} />
+          <FormRadioGroup name="value.type" options={radioOptions} />
 
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>

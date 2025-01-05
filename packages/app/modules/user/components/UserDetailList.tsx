@@ -30,19 +30,68 @@ export const UserDataList = ({
       {Platform.OS == 'web' ? (
         <BaseDialog
           title={`${resource.resourceName} List`}
+          description=""
+          trigger=""
           triggerComponent={<RSecondaryButton label="View in list" />}
         >
-          <View
-            style={
-              {
-                width: '100vw',
-                paddingBottom: 10,
-                maxWidth: 992,
-                height: windowHeight * 0.8,
-                flexDirection: 'column',
-              } as any
-            }
-          >
+          <>
+            <View
+              style={
+                {
+                  width: '100vw',
+                  paddingBottom: 10,
+                  maxWidth: 992,
+                  height: windowHeight * 0.8,
+                  flexDirection: 'column',
+                } as any
+              }
+            >
+              <FeedSearchFilter
+                isSortHidden={true}
+                queryString={search}
+                setSearchQuery={onSearchChange}
+              />
+              <View style={{ flex: 1 }}>
+                <FlatList
+                  data={resource.allQueryData}
+                  horizontal={false}
+                  keyExtractor={(item) => item?.id}
+                  ItemSeparatorComponent={() => (
+                    <View style={{ marginTop: 8 }} />
+                  )}
+                  renderItem={({ item }) => (
+                    <FeedCard
+                      key={item?._id}
+                      item={item}
+                      cardType="primary"
+                      feedType={item.type}
+                    />
+                  )}
+                  showsVerticalScrollIndicator={false}
+                  maxToRenderPerBatch={2}
+                />
+              </View>
+              {resource.totalPages && resource.totalPages > 1 ? (
+                <Pagination
+                  currentPage={resource.currentPage ?? 0}
+                  totalPages={resource.totalPages ?? 0}
+                  isPrevBtnDisabled={!resource.hasPrevPage}
+                  isNextBtnDisabled={!resource.hasNextPage}
+                  onPressPrevBtn={resource.fetchPrevPage ?? (() => {})}
+                  onPressNextBtn={resource.fetchNextPage ?? (() => {})}
+                />
+              ) : null}
+            </View>
+          </>
+        </BaseDialog>
+      ) : (
+        <BaseDialog
+          title={`${resource.resourceName} List`}
+          description=""
+          trigger=""
+          triggerComponent={<RSecondaryButton label="View in list" />}
+        >
+          <>
             <FeedSearchFilter
               isSortHidden={true}
               queryString={search}
@@ -52,7 +101,7 @@ export const UserDataList = ({
               <FlatList
                 data={resource.allQueryData}
                 horizontal={false}
-                keyExtractor={(item) => item?.id}
+                keyExtractor={(item) => item?._id}
                 ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
                 renderItem={({ item }) => (
                   <FeedCard
@@ -66,49 +115,12 @@ export const UserDataList = ({
                 maxToRenderPerBatch={2}
               />
             </View>
-            {resource.totalPages > 1 ? (
-              <Pagination
-                currentPage={resource.currentPage}
-                totalPages={resource.totalPages}
-                isPrevBtnDisabled={!resource.hasPrevPage}
-                isNextBtnDisabled={!resource.hasNextPage}
-                onPressPrevBtn={resource.fetchPrevPage}
-                onPressNextBtn={resource.fetchNextPage}
-              />
-            ) : null}
-          </View>
-        </BaseDialog>
-      ) : (
-        <BaseDialog
-          title={`${resource.resourceName} List`}
-          triggerComponent={<RSecondaryButton label="View in list" />}
-        >
-          <FeedSearchFilter
-            isSortHidden={true}
-            queryString={search}
-            setSearchQuery={onSearchChange}
-          />
-          <View style={{ flex: 1 }}>
-            <FlatList
-              data={resource.allQueryData}
-              horizontal={false}
-              keyExtractor={(item) => item?._id}
-              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-              renderItem={({ item }) => (
-                <FeedCard
-                  key={item?._id}
-                  item={item}
-                  cardType="primary"
-                  feedType={item.type}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              maxToRenderPerBatch={2}
-            />
-          </View>
-          {resource.nextPage ? (
-            <RButton onPress={resource.fetchNextPage}>Load more</RButton>
-          ) : null}
+            {resource.nextPage ? (
+              <RButton onPress={resource.fetchNextPage}>Load more</RButton>
+            ) : (
+              ''
+            )}
+          </>
         </BaseDialog>
       )}
     </>
