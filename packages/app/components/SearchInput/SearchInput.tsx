@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { Platform, type TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import useSearchInput from './useSearchInput';
 import useTheme from 'app/hooks/useTheme';
@@ -37,6 +38,7 @@ interface SearchInputProps {
   placeholder?: string;
   canCreateNewItem?: boolean;
   resultItemComponent: React.ReactElement;
+  shouldNavigateBackOnClear?: boolean;
 }
 
 export const SearchInput = forwardRef<TextInput, SearchInputProps>(
@@ -50,11 +52,14 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
       onChange,
       searchString,
       canCreateNewItem = false,
+      shouldNavigateBackOnClear = false,
     },
     inputRef,
   ) {
     const inputContainerRef = useRef<HTMLDivElement | null>(null);
     const [inputWidth, setInputWidth] = useState<number | undefined>(undefined);
+    const [isFocused, setIsFocused] = useState(false);
+    const navigation = Platform.OS === 'web' ? null : useNavigation();
 
     useLayoutEffect(() => {
       if (inputContainerRef.current) {
@@ -73,6 +78,16 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
 
     const options = useSearchOptions(results, searchString, canCreateNewItem);
     const { isDark, currentTheme } = useTheme();
+
+    const handleFocus = () => setIsFocused(true);
+    const handleBlur = () => setIsFocused(false);
+
+    const handleClearSearchWithOptionalNavigation = () => {
+      handleClearSearch();
+      if (shouldNavigateBackOnClear && navigation?.canGoBack()) {
+        navigation.goBack();
+      }
+    };
 
     if (Platform.OS === 'web') {
       return (
@@ -93,8 +108,10 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 placeholder={placeholder ?? 'Search'}
                 value={searchString}
                 onChange={(e) => handleSearchChange(e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
               />
-              {searchString && (
+              {(searchString || isFocused) && (
                 <MaterialIcons
                   name="close"
                   style={{
@@ -192,6 +209,8 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               lightTheme
               showCancel={true}
               selectTextOnFocus
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               style={{
                 backgroundColor: 'transparent',
                 borderRightWidth: 0,
@@ -205,9 +224,9 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
                 fontSize: 20,
               }}
             />
-            {searchString && searchString.trim().length > 0 && (
+            {(searchString || isFocused) && (
               <RIconButton
-                onPress={handleClearSearch}
+                onPress={handleClearSearchWithOptionalNavigation}
                 style={{ backgroundColor: 'transparent' }}
               >
                 <MaterialIcons
