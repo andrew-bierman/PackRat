@@ -118,7 +118,7 @@ export function LmSelect({
         </Select.Trigger>
         {/*@ts-ignore*/}
         <Select.Adapt when="sm">
-          <Select.Sheet modal dismissOnSnapToBottom>
+          <Select.Sheet modal dismissOnSnapToBottom snapPointsMode="fit">
             <Select.Sheet.Frame>
               <Select.Sheet.ScrollView>
                 <Select.Adapt.Contents />
