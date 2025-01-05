@@ -52,24 +52,24 @@ function MyApp({ Component, pageProps }: SolitoAppProps) {
   );
 }
 
-function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useRootTheme();
+// function ThemeProvider({ children }: { children: React.ReactNode }) {
+//   const [theme, setTheme] = useRootTheme();
 
-  return (
-    <NextThemeProvider
-      onChangeTheme={(next) => {
-        setTheme(next as any);
-      }}
-    >
-      <TamaguiProvider
-        disableRootThemeClass
-        defaultTheme={theme}
-        config={config}
-      >
-        {children}
-      </TamaguiProvider>
-    </NextThemeProvider>
-  );
-}
+//   return (
+//     <NextThemeProvider
+//       onChangeTheme={(next) => {
+//         setTheme(next as any);
+//       }}
+//     >
+//       <TamaguiProvider
+//         disableRootThemeClass
+//         defaultTheme={theme}
+//         config={config}
+//       >
+//         {children}
+//       </TamaguiProvider>
+//     </NextThemeProvider>
+//   );
+// }
 
 export default MyApp;

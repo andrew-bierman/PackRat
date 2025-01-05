@@ -38,7 +38,7 @@ const main = new Hono()
 
 serve(
   {
-    fetch: main.fetch,
+    // fetch: main.fetch,
     port: 8085,
     ...main,
   },
