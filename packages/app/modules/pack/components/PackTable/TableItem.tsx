@@ -8,7 +8,10 @@ import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
 import { AddItem } from 'app/modules/item';
 import { loadStyles } from './packtable.style';
-import { RText } from '@packrat/ui';
+import {
+  RText,
+  // ZDropdown
+} from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 
 type ModalName = 'edit' | 'delete' | null;
@@ -84,8 +87,10 @@ const TableItem = ({
       window.innerWidth < 900
     ) {
       // Remove ZDropdown usage
+      // rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
     } else {
       // Remove ZDropdown usage
+      // rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
 

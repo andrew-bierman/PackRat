@@ -97,7 +97,8 @@ export const ItemForm = ({
               (Platform.OS === 'web' ? (
                 <FormSelect
                   options={data}
-                  name="value.unit"
+                  name={'unit' as any}
+                  defaultValue={selectedUnit}
                   placeholder={'Unit'}
                   width="100"
                 />
@@ -121,7 +122,7 @@ export const ItemForm = ({
             isNumeric
             style={{ width: '100%' }}
           />
-          <FormRadioGroup name="value.type" options={radioOptions} />
+          <FormRadioGroup name={'type' as any} options={radioOptions} />
 
           {showSubmitButton && (
             <SubmitButton onSubmit={handleSubmit}>
