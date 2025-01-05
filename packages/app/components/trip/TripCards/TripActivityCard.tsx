@@ -10,10 +10,12 @@ import { Select as OriginalSelect } from '@packrat/ui';
 
 const Select: any = OriginalSelect;
 
-const ActivityOptions = Object.values(TripActivity).map((activity) => ({
-  label: formatTripActivityLabel(activity),
-  value: activity,
-}));
+const ActivityOptions = TripActivity
+  ? Object.values(TripActivity).map((activity) => ({
+      label: formatTripActivityLabel(activity),
+      value: activity,
+    }))
+  : [];
 
 interface TripActivityCardProps {
   onChange: (activity: string) => void;
