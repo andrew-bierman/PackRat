@@ -276,14 +276,3 @@ const useSearchOptions = (
         ];
   }, [results]);
 };
-
-const styles = StyleSheet.create({
-  webInput: {
-    width: '100%',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    fontSize: 16,
-  },
-});

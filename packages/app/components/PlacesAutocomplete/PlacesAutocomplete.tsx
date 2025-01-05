@@ -9,6 +9,7 @@ interface PlacesAutocompleteProps {
   onSelect?: (geoJSON: any) => void;
   placeholder?: string;
   shouldNavigateBackOnClear?: any;
+  style?: any;
 }
 
 export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
