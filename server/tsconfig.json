@@ -7,7 +7,7 @@
     "lib": ["es6", "DOM"],
     "allowJs": true,
     "outDir": "dist",
-    "rootDir": "src",
+    // "rootDir": "src",
     "strict": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -30,9 +30,9 @@
     "./src/**/*.ts",
     "./src/**/*.test.ts",
     "./src/**/*.spec.ts",
-    "./src/drizzle.config.ts",
-    "./src/vitest.config.ts",
-    "./src/vitest.config.d.ts",
-    "./src/worker-configuration.d.ts"
+    "./drizzle.config.ts",
+    "./vitest.config.ts",
+    "./vitest.config.d.ts",
+    "./worker-configuration.d.ts"
   ]
 }
