@@ -77,6 +77,7 @@ const loadStyles = (theme: any) => {
     },
     textContainer: {
       marginBottom: 20,
+      padding: 40,
     },
     text: {
       fontSize: 18,
