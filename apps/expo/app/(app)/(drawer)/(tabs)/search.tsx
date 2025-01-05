@@ -83,6 +83,7 @@ export default function Search() {
           onSelect={handleSearchSelect}
           placeholder="Search for a place"
           ref={ref}
+          shouldNavigateBackOnClear={Platform.OS !== 'web'}
         />
       </SafeAreaView>
       {/* Add search virtual list for feed, packs, trips, places with prop to determine which to display */}
