@@ -118,7 +118,7 @@ export function TripScreen({
               flexWrap: 'wrap',
             }}
           >
-            <RText style={{ fontWeight: 700, fontSize: 24 }}>
+            <RText style={{ fontWeight: 700, fontSize: 24, marginTop: 32 }}>
               {isViewOnlyMode ? 'Trip Details' : 'Plan Your Trip'}
             </RText>
             {!isViewOnlyMode && (
