@@ -59,7 +59,7 @@ export const GearList = ({ isViewOnlyMode }: { isViewOnlyMode: boolean }) => {
             )}
             {currentPack ? (
               <>
-                <LayoutCard style={{ padding: 5 }}>
+                <LayoutCard style={{ padding: 3 }}>
                   <PackSummary
                     currentPack={currentPack}
                     setWeightUnit={setWeightUnit}
