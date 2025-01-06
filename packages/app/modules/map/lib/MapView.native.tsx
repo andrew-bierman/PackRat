@@ -16,7 +16,7 @@ export const MapView: FC<MapViewProps> = ({
   initialBounds,
   onVisibleBoundsChange,
 }) => {
-  const mapView = useRef<MapboxGL.MapView>();
+  const mapView = useRef<MapboxGL.MapView>(null);
   const bounds = Array.isArray(initialBounds)
     ? flat(initialBounds)
     : getBoundingBoxFromShape(shape);
@@ -27,7 +27,7 @@ export const MapView: FC<MapViewProps> = ({
   return (
     <View style={{ flexDirection: 'row', width: '100%', height: '100%' }}>
       <MapboxGL.MapView
-        ref={mapView}
+        ref={mapView as any}
         styleURL={mapStyle}
         compassEnabled={false}
         style={{ flex: 1 }}

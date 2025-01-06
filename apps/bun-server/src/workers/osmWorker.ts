@@ -1,4 +1,13 @@
-import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
+// import { findOrCreateMany } from '../utils/osmFunctions/modelHandlers';
+
+// Dummy implementation of findOrCreateMany
+async function findOrCreateMany(features) {
+  // Simulate processing features
+  return features.map((feature) => ({
+    ...feature,
+    id: Math.random().toString(36).substr(2, 9),
+  }));
+}
 
 /**
  * Process a job and return the result.

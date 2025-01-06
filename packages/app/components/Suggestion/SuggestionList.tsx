@@ -21,7 +21,7 @@ interface SuggestionItem {
 }
 
 interface SuggestionListProps {
-  suggestion: { Items: SuggestionItem[] } | null;
+  suggestion: SuggestionItem[];
   onAddItem: (itemId: string) => void;
 }
 
@@ -29,10 +29,7 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
   const { isDark } = useTheme();
 
   const itemsList = useMemo(() => {
-    if (!suggestion?.Items) {
-      return [];
-    }
-    return suggestion.Items;
+    return suggestion || [];
   }, [suggestion]);
 
   return (

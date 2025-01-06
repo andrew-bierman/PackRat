@@ -1,6 +1,12 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, ScrollView, View, Text } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  View,
+  Text,
+  ImageSourcePropType,
+} from 'react-native';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
 import PackRatPreviewLeft from 'app/assets/PackRat Preview_Left.jpg';
 import PackRatPreviewRight from 'app/assets/PackRat Preview_Right.jpg';
@@ -36,10 +42,11 @@ const LandingPage = () => {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const { xs, sm, md, lg, xl, xxl } = useResponsive();
+  const isWeb = Platform.OS === 'web';
 
   return (
     <ScrollView>
-      {Platform.OS === 'web' ? (
+      {isWeb ? (
         <RStack style={styles.container}>
           <View style={styles.firstMainContainer as any}>
             <View>
@@ -81,23 +88,26 @@ const LandingPage = () => {
                     >
                       <RLink>
                         <View
-                          style={{
-                            width: 150,
-                            height: 45,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 8,
-                            backgroundColor: currentTheme.colors.textPrimary,
-                            color: currentTheme.colors.textPrimary,
-                            borderWidth: 1,
-                            borderColor: currentTheme.colors.cardBorderPrimary,
-                            overflow: 'hidden',
-                            paddingHorizontal: 8,
-                            borderRadius: 8,
-                            fontSize: 16,
-                            fontWeight: 'normal',
-                          }}
+                          style={
+                            {
+                              width: 150,
+                              height: 45,
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: 8,
+                              backgroundColor: currentTheme.colors.textPrimary,
+                              color: currentTheme.colors.textPrimary,
+                              borderWidth: 1,
+                              borderColor:
+                                currentTheme.colors.cardBorderPrimary,
+                              overflow: 'hidden',
+                              paddingHorizontal: 8,
+                              borderRadius: 8,
+                              fontSize: 16,
+                              fontWeight: 'normal',
+                            } as any
+                          }
                         >
                           <View>
                             <MaterialCommunityIcons
@@ -141,23 +151,26 @@ const LandingPage = () => {
                       </RLink>
                       <RLink>
                         <View
-                          style={{
-                            width: 160,
-                            height: 45,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 8,
-                            backgroundColor: currentTheme.colors.textPrimary,
-                            color: currentTheme.colors.textPrimary,
-                            borderWidth: 1,
-                            borderColor: currentTheme.colors.cardBorderPrimary,
-                            overflow: 'hidden',
-                            paddingHorizontal: 8,
-                            borderRadius: 8,
-                            fontSize: 16,
-                            fontWeight: 'normal',
-                          }}
+                          style={
+                            {
+                              width: 160,
+                              height: 45,
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: 8,
+                              backgroundColor: currentTheme.colors.textPrimary,
+                              color: currentTheme.colors.textPrimary,
+                              borderWidth: 1,
+                              borderColor:
+                                currentTheme.colors.cardBorderPrimary,
+                              overflow: 'hidden',
+                              paddingHorizontal: 8,
+                              borderRadius: 8,
+                              fontSize: 16,
+                              fontWeight: 'normal',
+                            } as any
+                          }
                         >
                           <View>
                             <MaterialCommunityIcons
@@ -213,26 +226,25 @@ const LandingPage = () => {
               >
                 <RLink href="/register">
                   <View
-                    style={{
-                      width: 150,
-                      height: 65,
-                      flexDirection: 'row-reverse',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
-                      backgroundColor: 'transparent',
-                      color: currentTheme.colors.textPrimary,
-                      borderWidth: 1,
-                      borderColor: currentTheme.colors.cardBorderPrimary,
-                      overflow: 'hidden',
-                      borderRadius: 4,
-                      fontSize: 16,
-                      fontWeight: 'normal',
-                      paddingHorizontal: 8,
-                      borderRadius: 8,
-                      fontSize: 16,
-                      fontWeight: 'normal',
-                    }}
+                    style={
+                      {
+                        width: 150,
+                        height: 65,
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        backgroundColor: 'transparent',
+                        color: currentTheme.colors.textPrimary,
+                        borderWidth: 1,
+                        borderColor: currentTheme.colors.cardBorderPrimary,
+                        overflow: 'hidden',
+                        borderRadius: 4,
+                        fontSize: 16,
+                        fontWeight: 'normal',
+                        paddingHorizontal: 8,
+                      } as any
+                    }
                   >
                     <View>
                       <MaterialCommunityIcons
@@ -264,17 +276,17 @@ const LandingPage = () => {
             <View style={styles.featureImage}>
               <View style={styles.featureImageContainer}>
                 <RImage
-                  src={PackRatPreviewLeft}
+                  source={PackRatPreviewLeft as ImageSourcePropType}
                   style={styles.featureLeftImage}
                   alt="PackRat Logo"
                 />
                 <RImage
-                  src={PackRatPreview}
+                  source={PackRatPreview as ImageSourcePropType}
                   style={styles.featureCenterImage}
                   alt="PackRat Logo"
                 />
                 <RImage
-                  src={PackRatPreviewRight}
+                  source={PackRatPreviewRight as ImageSourcePropType}
                   style={styles.featureRightImage}
                   alt="PackRat Logo"
                 />
@@ -315,7 +327,7 @@ const LandingPage = () => {
                 alignItems: 'center',
                 textAlign: 'center',
                 paddingVertical: 18,
-                marginTop: Platform.OS !== 'web' ? 25 : 1,
+                marginTop: isWeb ? 1 : 25,
                 flex: 1,
               } as any
             }
@@ -443,7 +455,7 @@ const LandingPage = () => {
                     key={index}
                     title={item.title}
                     content={item.content}
-                    iconName={item.iconName}
+                    iconName={item.iconName as any}
                   />
                 ))}
               </RStack>

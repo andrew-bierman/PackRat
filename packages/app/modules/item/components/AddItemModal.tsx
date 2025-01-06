@@ -10,8 +10,8 @@ interface AddItemModalProps {
   isAddItemModalOpen: boolean;
   setIsAddItemModalOpen: any;
   setRefetch?: () => void;
-  showTrigger: boolean;
-  initialData: any;
+  showTrigger?: boolean;
+  initialData?: any;
 }
 
 export const AddItemModal = ({

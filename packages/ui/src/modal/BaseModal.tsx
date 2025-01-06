@@ -17,7 +17,7 @@ export interface BaseModalProps {
   children: React.ReactNode;
   buttonColor?: string;
   footerButtons?: any[];
-  triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
+  triggerComponent?: React.ReactElement;
   footerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   isOpen?: Boolean;
   onOpen?: () => void;

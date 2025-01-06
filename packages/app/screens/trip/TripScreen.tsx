@@ -57,7 +57,13 @@ export function TripScreen({
     isPhotonLoading,
     hasPhotonError,
     latLng,
-  } = useTripsData();
+  } = useTripsData() as {
+    currentDestination: any;
+    photonDetails: any;
+    isPhotonLoading: boolean;
+    hasPhotonError: boolean;
+    latLng: any;
+  };
 
   const { isValid, dateRange, setDateRange, tripStore, setTripValue } =
     useCreateTripForm(currentDestination, photonDetails);
@@ -88,7 +94,7 @@ export function TripScreen({
     ),
     [SECTIONS.WEATHER]: !tripId ? (
       <LayoutCard>
-        <WeatherData latLng={latLng} />
+        <WeatherData latLng={latLng || undefined} />
       </LayoutCard>
     ) : undefined,
     [SECTIONS.PACK]: <GearList isViewOnlyMode={isViewOnlyMode} />,
@@ -142,7 +148,9 @@ export function TripScreen({
                 ItemSeparatorComponent={() => (
                   <View style={{ width: '100%', height: 16 }} />
                 )}
-                renderItem={renderItem}
+                renderItem={({ item }) =>
+                  renderItem({ item }) as React.ReactElement
+                }
               />
             </View>
             {!isViewOnlyMode ? (

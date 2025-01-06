@@ -12,7 +12,7 @@ export const useOfflineMapShape = (offlineMapName?: string) => {
       }
       try {
         const offlineMapPack = await offlineManager.getPack(offlineMapName);
-        if (isMounted) {
+        if (offlineMapPack?.metadata?.shape && isMounted) {
           setShape(offlineMapPack.metadata.shape);
         }
       } finally {

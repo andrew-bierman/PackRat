@@ -49,10 +49,13 @@ export const useUserPacks = (
       cacheTime: 60 * 60 * 24,
       networkMode: 'offlineFirst',
     });
-  utils.getPacks.setData({
-    ownerId: ownerId || '',
-    queryBy: queryString,
-  });
+  utils.getPacks.setData(
+    {
+      ownerId: ownerId || '',
+      queryBy: queryString,
+    },
+    (oldData) => oldData,
+  );
 
   const { fetchPrevPage, fetchNextPage } = usePagination(
     refetch,
@@ -73,7 +76,7 @@ export const useUserPacks = (
     data: data?.data || [],
     isLoading,
     isError,
-    totalCount: data?.totalCount,
+    totalCount: data?.totalCount ?? 0, // ensure it's a number
     refetch,
     fetchPrevPage,
     fetchNextPage,

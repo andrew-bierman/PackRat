@@ -24,7 +24,7 @@ import { SearchResults } from './SearchResults';
 
 const Popover = OriginalPopover;
 const RStack = OriginalRStack;
-const RInput = OriginalRInput;
+const RInput: any = OriginalRInput;
 const RScrollView = OriginalRScrollView;
 const RButton = OriginalRButton;
 const Pressable = OriginalPressable;
@@ -34,7 +34,7 @@ interface SearchInputProps {
   onCreate: (result: any, index: number) => void;
   results: any[];
   onChange: (text: string) => void;
-  searchString?: string;
+  searchString: string;
   placeholder?: string;
   canCreateNewItem?: boolean;
   resultItemComponent: React.ReactElement;
@@ -114,15 +114,17 @@ export const SearchInput = forwardRef<TextInput, SearchInputProps>(
               {(searchString || isFocused) && (
                 <MaterialIcons
                   name="close"
-                  style={{
-                    position: 'absolute',
-                    right: 12,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    fontSize: 20,
-                    color: currentTheme.colors.text,
-                    cursor: 'pointer',
-                  }}
+                  style={
+                    {
+                      position: 'absolute',
+                      right: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      fontSize: 20,
+                      color: currentTheme.colors.text,
+                      cursor: 'pointer',
+                    } as any
+                  }
                   onClick={handleClearSearch}
                 />
               )}

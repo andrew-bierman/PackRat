@@ -6,7 +6,7 @@ import { useUserTripsWithPreview } from 'app/modules/trip/hooks/useUserTrips';
 import { useCallback, useState } from 'react';
 import type { PreviewListType } from '../model';
 
-export const useProfile = (id = null) => {
+export const useProfile = (id: string | null = null) => {
   const authUser = useAuthUser();
   const isAuthUserProfile = !id || id === authUser?.id;
   const userId = id ?? authUser?.id;
@@ -42,6 +42,8 @@ export const useProfile = (id = null) => {
   const { data: userData, isLoading: userIsLoading } = useGetUser(
     userId as string,
   );
+
+  console.log('userData', userPacksQuery);
 
   const user = !isCurrentUser ? userData : authUser;
 

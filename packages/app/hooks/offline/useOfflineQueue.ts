@@ -8,7 +8,11 @@ type Request = {
 };
 
 export const useOfflineQueue = () => {
-  const { connectionStatus, requests, setRequests } = useOfflineStore();
+  const { connectionStatus, requests, setRequests } = useOfflineStore() as {
+    connectionStatus: string;
+    requests: Request[];
+    setRequests: React.Dispatch<React.SetStateAction<Request[]>>;
+  };
 
   const runQueryItem = useRunQueryItem();
   const processQueue = () => {
@@ -41,8 +45,8 @@ export const useOfflineQueue = () => {
     runMutation(queuePromises[0]);
   };
 
-  const handleAddOfflineRequest = (method, data) => {
-    setRequests((prev) => [...prev, { method, data }]);
+  const handleAddOfflineRequest = (method: string, data: any) => {
+    setRequests((prev: Request[]) => [...prev, { method, data }]);
   };
 
   return {

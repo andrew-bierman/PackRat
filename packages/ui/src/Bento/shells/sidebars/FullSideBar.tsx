@@ -249,7 +249,7 @@ function Sidebar() {
   );
 }
 
-function FloatingSideBar({
+export function FloatingSideBar({
   open,
   setOpen,
 }: {

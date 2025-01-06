@@ -11,6 +11,7 @@ interface MapPreviewCardProps {
   id: string;
   item: OfflineMap;
   onShowMapClick: (id: string) => void;
+  isDownloaded?: boolean;
 }
 
 export const MapPreviewCard: FC<MapPreviewCardProps> = ({

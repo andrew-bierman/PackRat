@@ -97,7 +97,7 @@ export const useFetchWeather = (latLng, isDisabled = false) => {
       { weatherToday: [], weatherWeek: {}, currentWeekDay: null },
     );
 
-    const weekDayListData = [];
+    const weekDayListData: WeatherWeekData[] = [];
 
     const nextWeekDay = getDay(getCurrentUTCDate()) + 1;
     for (let i = nextWeekDay; i < weekdays.length; i++) {
@@ -105,7 +105,7 @@ export const useFetchWeather = (latLng, isDisabled = false) => {
         break;
       }
       weekDayListData.push({
-        day: weekdays[i],
+        day: weekdays[i] as (typeof weekdays)[number],
         avgTemp: result.weatherWeek[i],
       });
     }

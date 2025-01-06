@@ -5,18 +5,23 @@ storageEvents.setMaxListeners(20);
 
 type UseStateHook<T> = [[boolean, T | null], (value?: T | null) => void];
 
-const useAsyncState = (initialValue) => {
-  return useReducer((state = null, action) => [false, action], initialValue);
-};
+function useAsyncState<T>(initialValue: T) {
+  return useReducer<React.Reducer<[boolean, T], T>>(
+    (state, action) => [false, action],
+    [true, initialValue],
+  );
+}
 
 export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
-  const [state, setState] = useAsyncState(initialValue || '');
+  const [[_, storedValue], setStoredValue] = useAsyncState<T | null>(
+    initialValue ?? null,
+  );
 
   useEffect(() => {
     (async () => {
       try {
         const value = await Storage.getItem(key);
-        setState(value);
+        setStoredValue(value as T);
       } catch (e) {
         console.error('Local storage is unavailable:', e);
       }
@@ -24,12 +29,12 @@ export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
 
     const handleChange = (evt) => {
       if (evt.key !== key) return;
-      setState(evt.value);
+      setStoredValue(evt.value as T);
     };
 
     const handleRemove = (evt) => {
       if (evt.key !== key) return;
-      setState(null);
+      setStoredValue(null);
     };
 
     storageEvents.on('change', handleChange);
@@ -43,11 +48,11 @@ export function useStorage<T>(key: string, initialValue?: T): UseStateHook<T> {
 
   // Set
   const setValue = useCallback(
-    (value: string | null) => {
-      Storage.setItem(key, value);
+    (value?: T | null) => {
+      Storage.setItem(key, value as unknown as string);
     },
     [key],
   );
 
-  return [state, setValue];
+  return [[false, storedValue], setValue];
 }

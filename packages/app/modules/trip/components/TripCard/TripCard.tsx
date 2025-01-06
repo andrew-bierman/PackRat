@@ -2,7 +2,7 @@ import React, { type FC } from 'react';
 import { type FeedCardProps } from 'app/modules/feed';
 import { TripPrimaryCard } from './TripPrimaryCard';
 import { TripSecondaryCard } from './TripSecondaryCard';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from 'app/modules/trip/model';
 
 interface TripCardProps extends FeedCardProps<TripDetails> {}
 

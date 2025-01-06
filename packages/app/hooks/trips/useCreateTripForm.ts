@@ -10,7 +10,8 @@ import { useCurrentTripStore } from 'app/screens/trip/createTripStore/useCreateT
 import { useTripPackId } from 'app/screens/trip/useTripPackId';
 
 export const useCreateTripForm = (currentDestination, photonDetails) => {
-  const { store, setTripValue, setDateRange } = useCurrentTripStore();
+  const tripStore = useCurrentTripStore()!;
+  const { store, setTripValue, setDateRange } = tripStore;
   const authUser = useAuthUser();
   const [packId] = useTripPackId();
 

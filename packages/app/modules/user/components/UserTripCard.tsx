@@ -3,7 +3,7 @@ import React, { useState, type FC } from 'react';
 import { TripImage } from 'app/modules/trip/components/TripCard/TripImage';
 import { LocationLabel } from 'app/modules/trip/components/LocationLabel/LocationLabel';
 import useTheme from 'app/hooks/useTheme';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from 'app/modules/trip/model';
 import { useSetTripVisibility } from 'app/hooks/trips/useSetTripVisibility';
 import { Eye, EyeOff } from '@tamagui/lucide-icons';
 import { type UserDataCardProps } from './model';

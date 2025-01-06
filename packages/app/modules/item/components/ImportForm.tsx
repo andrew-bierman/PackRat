@@ -56,7 +56,7 @@ export const ImportForm: FC<ImportFormProps> = ({
   const [isImporting, setIsImporting] = useState(false);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: NodeJS.Timeout | undefined;
     if (isImporting) {
       interval = setInterval(() => {
         setButtonText((prev) => {
@@ -69,10 +69,16 @@ export const ImportForm: FC<ImportFormProps> = ({
       }, 500);
     } else {
       setButtonText('Import Item');
-      clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     }
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [isImporting]);
 
   const handleSelectChange = (selectedValue: string) => {
@@ -100,32 +106,50 @@ export const ImportForm: FC<ImportFormProps> = ({
         if (Platform.OS === 'web') {
           if (res.assets && res.assets.length > 0) {
             const file = res.assets[0];
-            const base64Content = file.uri.split(',')[1];
-            fileContent = atob(base64Content);
+            if (file) {
+              const base64Content = file.uri.split(',')[1];
+              if (base64Content) {
+                fileContent = atob(base64Content);
+              } else {
+                throw new Error('No file content available');
+              }
+            } else {
+              throw new Error('No file content available');
+            }
           } else {
             throw new Error('No file content available');
           }
         } else {
-          const response = await fetch(res.uri);
+          const response = await fetch(
+            (res as DocumentPicker.DocumentPickerSuccessResult).assets?.[0]
+              ?.uri || '',
+          );
           fileContent = await response.text();
         }
 
         if (currentpage === 'items') {
-          handleImportNewItems({ content: fileContent, ownerId }, () => {
-            setIsImporting(false);
-            closeModalHandler();
-          });
+          handleImportNewItems(
+            { content: fileContent, ownerId: ownerId! },
+            () => {
+              setIsImporting(false);
+              closeModalHandler?.();
+            },
+          );
         } else {
-          importPackItem({ content: fileContent, packId, ownerId });
+          importPackItem({
+            content: fileContent,
+            packId: packId!,
+            ownerId: ownerId!,
+          });
           setIsImporting(false);
-          closeModalHandler();
+          closeModalHandler?.();
         }
       } else {
         handleImportFromBucket(
-          { directory: selectedType.value, ownerId },
+          { directory: selectedType.value, ownerId: ownerId! },
           () => {
             setIsImporting(false);
-            closeModalHandler();
+            closeModalHandler?.();
           },
         );
       }

@@ -13,12 +13,13 @@ import { type ItemUnit } from '../model';
 import { convertWeight } from 'app/utils/convertWeight';
 import { SMALLEST_ITEM_UNIT } from '../constants';
 import { useItemWeightUnit } from '../hooks';
+import { WeightUnit } from 'app/utils/convertWeight';
 
 interface AddItemProps {
   id?: string;
   isEdit?: boolean;
   initialData?: {
-    global: string;
+    global?: string;
     id: string;
     name?: string;
     weight?: number;
@@ -76,9 +77,9 @@ export const AddItem = ({
       name: initialData.name || '',
       weight: initialData.unit
         ? convertWeight(
-            initialData.weight,
+            initialData.weight ?? 0,
             SMALLEST_ITEM_UNIT,
-            initialData.unit,
+            initialData.unit as WeightUnit,
           )
         : undefined,
       quantity: initialData.quantity,

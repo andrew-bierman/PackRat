@@ -7,7 +7,7 @@ interface DetailsComponentProps {
   type: string;
   data: any; // Need type for this
   isLoading: boolean;
-  error: Error;
+  error?: Error;
   additionalComps: React.JSX.Element;
   link: string;
 }

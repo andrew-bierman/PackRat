@@ -41,11 +41,11 @@ export const PackPrimaryCard: FC<PackCardProps> = (props) => {
           <RStack style={{ flexDirection: 'row', gap: 12 }}>
             <FavoriteButton
               count={props.favoriteCount}
-              isAuthUserFavorite={props.isUserFavorite}
+              isAuthUserFavorite={props.isUserFavorite || false}
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                props.toggleFavorite();
+                props.toggleFavorite?.();
               }}
             />
             <>

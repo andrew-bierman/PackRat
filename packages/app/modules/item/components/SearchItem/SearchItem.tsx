@@ -8,7 +8,11 @@ import { useFetchSinglePack, usePackId } from 'app/modules/pack';
 
 const RText: any = OriginalRText;
 
-export const SearchItem = () => {
+interface SearchItemProps {
+  onSelect?: (item: any) => void;
+}
+
+export const SearchItem: React.FC<SearchItemProps> = () => {
   const { searchString, handleSearchResultClick, results, setSearchString } =
     useSearchItem();
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);

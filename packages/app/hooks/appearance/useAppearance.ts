@@ -6,7 +6,7 @@ const useAppearance = () => {
   const [[, isEnabledString], setIsEnabled] = useStorageState('isEnabled');
 
   // Convert string to boolean
-  const isEnabled = JSON.parse(isEnabledString);
+  const isEnabled = isEnabledString ? JSON.parse(isEnabledString) : false;
 
   const toggleSwitch = async () => {
     const newIsEnabledValue = !isEnabled ? 'true' : 'false';

@@ -63,9 +63,10 @@ export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
       <RScrollView nestedScrollEnabled={true} mt={50} mb={50}>
         {offlineMaps ? (
           <RStack
-            direction="horizontal"
+            // direction="horizontal"
             space={16}
             style={{
+              flexDirection: 'row',
               paddingHorizontal: 16,
               paddingBottom: 20,
               alignItems: 'center',
@@ -104,15 +105,15 @@ const useOfflineMapPacks = (authUserId: string) => {
         try {
           const offlineMapPacksRes = await offlineManager.getPacks();
           const userOfflineMap = offlineMapPacksRes
-            .map(({ pack, _metadata }) => {
+            .map((pack) => {
               try {
                 const metadata = JSON.parse(pack.metadata);
                 return {
                   id: metadata.id,
-                  name: _metadata.name,
-                  bounds: pack.bounds,
+                  name: pack.name,
+                  bounds: JSON.parse(pack.bounds),
                   styleURL: OFFLINE_MAP_STYLE_URL,
-                  userId: _metadata.userId,
+                  userId: metadata.userId,
                   downloaded: true,
                 };
               } catch {
@@ -125,7 +126,10 @@ const useOfflineMapPacks = (authUserId: string) => {
               }
 
               return offlineMap.userId === authUserId;
-            });
+            })
+            .filter(
+              (offlineMap): offlineMap is OfflineMap => offlineMap !== null,
+            );
           setOfflineMapPacks(userOfflineMap);
         } catch (e) {
           console.log(e);

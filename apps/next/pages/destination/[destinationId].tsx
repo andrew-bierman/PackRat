@@ -1,4 +1,4 @@
-import { DestinationScreen } from 'app/modules/Map/screens/DestinationScreen';
+import { DestinationScreen } from 'app/modules/map/screens/DestinationScreen';
 import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge';

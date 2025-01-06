@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse, AxiosRequestHeaders } from 'axios';
 import { toast } from 'app/utils/ToastUtils';
 import { logoutAuthUser } from 'app/utils/userUtils';
 import { getErrorMessageFromError } from 'app/utils/apiUtils';
@@ -21,6 +21,7 @@ const axiosInstance = axios.create();
 
 const responseInterceptor = (response: AxiosResponse) => {
   if (
+    !response.config?.url ||
     response.config.method === 'get' ||
     REQUESTS_TO_SKIP_SUCCESS_MESSAGE.some((url) =>
       response.config.url?.includes?.(url),
@@ -41,6 +42,8 @@ const responseInterceptor = (response: AxiosResponse) => {
 const responseErrorInterceptor = async (
   error: AxiosError<TRPCErrorResponse>,
 ) => {
+  if (!error.config?.url) return Promise.reject(error);
+
   const data = error?.response?.data;
   const isUnauthorized = (item) => item?.error?.data?.httpStatus === 401;
   // check auth error in both single or multiple objects response
@@ -59,9 +62,11 @@ const responseErrorInterceptor = async (
       await Storage.setItem('token', tokens.accessToken);
       await Storage.setItem('refreshToken', tokens.refreshToken);
 
-      // rety request
-      error.config.headers.Authorization = 'Bearer ' + tokens.accessToken;
-      return await axios.request(error.config);
+      // retry request with new token
+      const config = { ...error.config };
+      config.headers = { ...error.config.headers } as AxiosRequestHeaders;
+      config.headers.Authorization = 'Bearer ' + tokens.accessToken;
+      return await axios.request(config);
     } catch (error) {
       // refreshToken has also expired. Logout user.
       if (error instanceof TRPCClientError && error.data.code == 'UNAUTHORIZED')
@@ -73,10 +78,10 @@ const responseErrorInterceptor = async (
   if (
     error.config.method === 'get' ||
     REQUESTS_TO_SKIP_ERROR_MESSAGE.some((url) =>
-      error.config.url?.includes?.(url),
+      error.config?.url?.includes?.(url),
     )
   ) {
-    return error;
+    return Promise.reject(error);
   }
 
   const responseMessage = getErrorMessageFromError(error);

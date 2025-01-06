@@ -21,7 +21,7 @@ const FilterBadge = ({
       }))}
       menuName={selectedValue}
       trigger={
-        <Chip rounded theme="primary" size="small" key={selectedValue}>
+        <Chip rounded size="small" key={selectedValue}>
           <Chip.Text>{selectedValue}</Chip.Text>
           <Chip.Icon>
             <ChevronDown size={14} />

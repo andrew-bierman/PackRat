@@ -22,10 +22,12 @@ export const SidebarNavigationList: React.FC<SidebarNavigationListProps> = ({
     <>
       {navigationItems
         ?.filter(
-          ({ href, type }) =>
-            href !== '/profile' && href !== '/logout' && type !== 'divider',
+          (item: any) =>
+            item.href !== '/profile' &&
+            item.href !== '/logout' &&
+            item.type !== 'divider',
         )
-        .map(({ type, ...Item }, index) => {
+        .map(({ type, ...Item }: any, index) => {
           const item = Item as any;
           return (
             <View
@@ -44,7 +46,7 @@ export const SidebarNavigationList: React.FC<SidebarNavigationListProps> = ({
               {type === 'link' ? (
                 <NavigationItem
                   item={item}
-                  itemStyle={itemStyle}
+                  itemStyle={itemStyle as any}
                   key={item.href + index}
                   onSelect={onItemSelect}
                   isMobileView={isMobileView}

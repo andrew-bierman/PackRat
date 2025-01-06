@@ -1,14 +1,24 @@
 import { queryTrpc } from 'app/trpc';
 
+interface NewItem {
+  packId: string;
+  ownerId: string;
+  content: string;
+  id?: string;
+  type?: string;
+}
+
 export const useImportPackItem = () => {
   const utils = queryTrpc.useContext();
   const mutation = queryTrpc.importItems.useMutation({
-    onMutate: async (newItem) => {
+    onMutate: async (newItem: NewItem | void) => {
       if (!newItem) {
         throw new Error('Item data is not available.');
       }
     },
-    onSuccess: (data, newItem, context) => {
+    onSuccess: (data, newItem: NewItem | void, context) => {
+      if (!newItem) return;
+
       const previousPack = utils.getPackById.getData({
         packId: newItem.packId,
       });

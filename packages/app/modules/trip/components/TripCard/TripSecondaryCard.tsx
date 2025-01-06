@@ -2,7 +2,7 @@ import { Card, RStack, RText } from '@packrat/ui';
 import React, { type FC } from 'react';
 import { TripImage } from './TripImage';
 import { type FeedCardProps } from 'app/modules/feed';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from 'app/modules/trip/model';
 import { LocationLabel } from '../LocationLabel';
 import { ScoreLabel } from 'app/components/ScoreLabel';
 

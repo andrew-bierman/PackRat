@@ -9,7 +9,7 @@ interface WeatherDataProps {
 
 export const WeatherData = ({
   latLng,
-  fallback,
+  fallback = <></>,
 }: WeatherDataProps): JSX.Element => {
   const { weatherToday, weatherWeek, location } = useFetchWeather(latLng);
 

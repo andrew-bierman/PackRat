@@ -23,18 +23,18 @@ import FilterBadge from 'app/components/FilterBadge';
 
 export function ProductsScreen() {
   const sortOptions = useFeedSortOptions('products');
-  const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const [sortValue, setSortValue] = useState<string>(sortOptions[0] || '');
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState<string>('');
   const {
     data,
     isLoading,
     hasNextPage,
     fetchNextPage,
     fetchPrevPage,
-    currentPage,
+    currentPage = 1,
     hasPrevPage,
-    totalPages,
+    totalPages = 1,
   } = useItemsFeed(sortValue, searchValue);
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();

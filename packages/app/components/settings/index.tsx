@@ -82,7 +82,10 @@ export function SettingsForm() {
         >
           <Form
             validationSchema={userSettingsSchema}
-            defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+            defaultValues={{
+              ...(user ?? {}),
+              profileImage: user?.profileImage || '',
+            }}
           >
             <View
               style={{
@@ -122,7 +125,7 @@ export function SettingsForm() {
                 <RLabel>Weather: </RLabel>
                 <FormSelect
                   options={weatherOptions}
-                  name="preferredWeather"
+                  name="value.preferredWeather"
                   fullWidth={!!(xs || sm)}
                 />
               </View>
@@ -130,7 +133,7 @@ export function SettingsForm() {
                 <RLabel>Weight: </RLabel>
                 <FormSelect
                   options={weightOptions}
-                  name="preferredWeight"
+                  name="value.preferredWeight"
                   fullWidth={!!(xs || sm)}
                 />
               </View>

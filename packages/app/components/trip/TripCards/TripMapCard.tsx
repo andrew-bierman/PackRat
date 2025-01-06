@@ -26,7 +26,7 @@ export const TripMapCard = ({
   const { gtSm } = useResponsive();
 
   return (
-    <AsyncView isError={isMapError} isLoading={isLoading}>
+    <AsyncView isError={isMapError} isLoading={isLoading ?? false}>
       <View
         style={{
           flex: gtSm ? 1 : undefined,

@@ -13,7 +13,7 @@ export interface BaseAlertProps {
   buttonColor?: string;
   footerButtons?: any[];
   triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
-  footerComponent: React.DetailedReactHTMLElement<any, HTMLElement>;
+  footerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   hideIcon?: boolean;
   isOpen?: boolean | undefined;
   toggle?: any;
@@ -35,10 +35,10 @@ export const BaseAlert = ({
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   useEffect(() => {
-    if(isOpen !== undefined) {
-      setIsAlertOpen(isOpen)
+    if (isOpen !== undefined) {
+      setIsAlertOpen(isOpen);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   const triggerElement = useMemo(() => {
     return triggerComponent ? (
@@ -67,9 +67,9 @@ export const BaseAlert = ({
       <RButton
         key={index}
         onPress={withAlertCloseHandler(onClick, () => {
-          setIsAlertOpen(false)
-          if(toggle) {
-            toggle()
+          setIsAlertOpen(false);
+          if (toggle) {
+            toggle();
           }
         })}
         backgroundColor={color}
@@ -96,7 +96,9 @@ export const BaseAlert = ({
         setIsAlertOpen(open);
       }}
     >
-     {!hideIcon && <AlertDialog.Trigger asChild>{triggerElement}</AlertDialog.Trigger>}
+      {!hideIcon && (
+        <AlertDialog.Trigger asChild>{triggerElement}</AlertDialog.Trigger>
+      )}
       <AlertDialog.Portal>
         <AlertDialog.Overlay
           key="overlay"

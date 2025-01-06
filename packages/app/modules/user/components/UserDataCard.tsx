@@ -6,6 +6,11 @@ import { useAddFavorite } from 'app/modules/feed';
 import { useAuthUser } from 'app/modules/auth';
 import { UserTripCard } from './UserTripCard';
 import { UserPackCard } from './UserPackCard';
+import { type FeedCardProps } from 'app/modules/feed';
+import { type PackDetails } from 'app/modules/pack/model';
+import { type TripDetails } from 'app/modules/trip/model';
+interface PackCardProps extends FeedCardProps<PackDetails> {}
+interface TripCardProps extends FeedCardProps<TripDetails> {}
 
 const convertersByType = {
   pack: UserDataPackCardConverter,
@@ -51,14 +56,27 @@ export const UserDataCard: FC<UserDataCardProps> = ({
     return null;
   }
 
-  const CardComponent = cardComponentsByType[feedType];
+  if (feedType === 'trip') {
+    return (
+      <UserTripCard
+        {...(cardProps as TripCardProps)}
+        cardType={cardType}
+        toggleFavorite={handleAddToFavorite}
+        isAuthUserProfile={isAuthUserProfile}
+      />
+    );
+  }
 
-  return (
-    <CardComponent
-      {...cardProps}
-      cardType={cardType}
-      toggleFavorite={handleAddToFavorite}
-      isAuthUserProfile={isAuthUserProfile}
-    />
-  );
+  if (feedType === 'pack') {
+    return (
+      <UserPackCard
+        {...(cardProps as PackCardProps)}
+        cardType={cardType}
+        toggleFavorite={handleAddToFavorite}
+        isAuthUserProfile={isAuthUserProfile}
+      />
+    );
+  }
+
+  return null;
 };

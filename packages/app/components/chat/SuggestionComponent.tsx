@@ -140,20 +140,13 @@ const SuggestionComponent: React.FC<SuggestionComponentProps> = ({
   };
 
   const removeItem = (id) => {
-    console.log('remove item', id);
     setSuggestions((prevSuggestion) => {
-      if (
-        prevSuggestion &&
-        prevSuggestion.suggestion &&
-        prevSuggestion.suggestion.Items
-      ) {
+      if (prevSuggestion && prevSuggestion.suggestion) {
         return {
           ...prevSuggestion,
-          suggestion: {
-            Items: prevSuggestion.suggestion.Items.filter(
-              (item) => String(item.id) !== String(id),
-            ),
-          },
+          suggestion: prevSuggestion.suggestion.filter(
+            (item) => String(item.id) !== String(id),
+          ),
         };
       } else {
         return prevSuggestion;
@@ -170,7 +163,7 @@ const SuggestionComponent: React.FC<SuggestionComponentProps> = ({
         padding: 16,
       }}
     >
-      {!suggestions.suggestion.Items ? (
+      {!suggestions.suggestion.length ? (
         <Text style={{ width: 500, color: currentTheme.colors.text }}>
           Allow me to analyze your pack and help!
         </Text>

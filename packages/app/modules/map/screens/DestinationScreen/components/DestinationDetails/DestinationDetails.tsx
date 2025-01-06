@@ -48,22 +48,22 @@ export const DestinationDetails: FC<DestinationDetailsProps> = ({
         <RStack style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 16 }}>
           <DestinationDetail
             label="Country"
-            value={details.country}
+            value={details?.country}
             icon={<Globe size={20} />}
           />
           <DestinationDetail
             label="State"
-            value={details.state}
+            value={details?.state}
             icon={<MapPin size={20} />}
           />
           <DestinationDetail
             label="Locality"
-            value={details.locality}
+            value={details?.locality}
             icon={<Building2 size={20} />}
           />
           <DestinationDetail
             label="OSM ID"
-            value={details.osmId}
+            value={details?.osmId}
             icon={<Hash size={20} />}
           />
         </RStack>
