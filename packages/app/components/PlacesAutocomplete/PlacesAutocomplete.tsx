@@ -1,13 +1,9 @@
+import { Chip } from '@packrat/ui';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { type TextInput } from 'react-native';
+import { Text, XStack } from 'tamagui'; // Ensure proper imports based on imports.md
 import { SearchInput } from '../SearchInput';
-import { RStack as OriginalRStack, RText as OriginalRText } from '@packrat/ui';
-import useTheme from 'app/hooks/useTheme';
-
 import { usePlacesAutoComplete } from './usePlacesAutoComplete';
-
-const RStack: any = OriginalRStack;
-const RText: any = OriginalRText;
 
 interface PlacesAutocompleteProps {
   onSelect?: (geoJSON: any) => void;
@@ -31,6 +27,7 @@ export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
 
     return (
       <SearchInput
+        onCreate={() => {}}
         onSelect={handleSelect}
         placeholder={placeholder}
         results={data}
@@ -43,16 +40,27 @@ export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
   },
 );
 
-const PlaceItem = ({ item }: any) => {
-  const { currentTheme } = useTheme();
+export const PlaceItem = ({ item, onPress = () => {} }: any) => {
   return (
-    <RStack style={{ flexDirection: 'row' }}>
-      <RText fontWeight="400" color="red">
+    <XStack
+      ai="center"
+      p="$3"
+      br="$4"
+      bg="$background"
+      hoverStyle={{
+        bg: '$gray2',
+      }}
+      pressStyle={{
+        bg: '$gray3',
+      }}
+      onPress={onPress}
+    >
+      <Text color="$color" fontSize="$4" flex={1}>
         {item.properties.name}
-      </RText>
-      <RText opacity={100} textTransform={'capitalize'}>
-        {item.properties.osm_value}
-      </RText>
-    </RStack>
+      </Text>
+      <Chip rounded theme="blue" size="small" key="blue">
+        <Chip.Text>{item.properties.osm_value}</Chip.Text>
+      </Chip>
+    </XStack>
   );
 };

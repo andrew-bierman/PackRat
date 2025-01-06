@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import { CustomCard } from '../card';
 import { RStack } from '@packrat/ui';
 
-interface DetailsComponent {
+interface DetailsComponentProps {
   type: string;
   data: any; // Need type for this
   isLoading: boolean;
@@ -19,7 +19,7 @@ export const DetailsComponent = ({
   error,
   additionalComps,
   link,
-}: DetailsComponent) => {
+}: DetailsComponentProps) => {
   const renderDetails = () => {
     switch (type) {
       case 'pack':
@@ -45,6 +45,17 @@ export const DetailsComponent = ({
               type="pack"
             />
           </>
+        );
+      case 'packTemplate':
+        return (
+          <CustomCard
+            data={data}
+            title={data.name}
+            link={link}
+            content={additionalComps}
+            footer={null}
+            type="packTemplate"
+          />
         );
       case 'trip':
         // Add trip-specific logic here

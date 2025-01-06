@@ -29,6 +29,7 @@ import {
   getPublicTripsRoute,
   getTripByIdRoute,
   getTripsRoute,
+  setTripVisibilityRoute,
 } from '../controllers/trip';
 import {
   addTemplateRoute,
@@ -75,6 +76,11 @@ import {
   searchItemsByNameRoute,
   getSimilarItemsRoute,
   importFromBucketRoute,
+  getItemsFeedRoute,
+  deleteItemFromPackRoute,
+  toggleItemPack,
+  setItemQuantityRoute,
+  getUserItemsRoute,
 } from '../controllers/item';
 import { getTrailsRoute } from '../controllers/getTrail';
 import { getParksRoute } from '../controllers/getParks';
@@ -92,15 +98,23 @@ import {
   getTrailsOSMRoute,
   postSingleGeoJSONRoute,
 } from '../controllers/getOsm';
-
-import { router as trpcRouter } from '../trpc';
 import {
   getPublicFeedRoute,
   getUserPacksFeedRoute,
   getUserTripsFeedRoute,
 } from '../modules/feed';
+import {
+  getPackTemplatesRoute,
+  getPackTemplateRoute,
+  createPackFromTemplateRoute,
+  addPackTemplateRoute,
+  importPackTemplatesRoute,
+} from '../controllers/packTemplates';
+
+import { router as trpcRouter } from '../trpc';
 
 import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
+import { setTripVisibility } from '@packrat/validations';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -134,8 +148,14 @@ export const appRouter = trpcRouter({
   getTripById: getTripByIdRoute(),
   addTrip: addTripRoute(),
   editTrip: editTripRoute(),
+  setTripVisibility: setTripVisibilityRoute(),
   deleteTrip: deleteTripRoute(),
   // templates routes
+  getPackTemplates: getPackTemplatesRoute(),
+  getPackTemplate: getPackTemplateRoute(),
+  createPackFromTemplate: createPackFromTemplateRoute(),
+  addPackTemplate: addPackTemplateRoute(),
+  addPackTemplates: importPackTemplatesRoute(),
   getTemplates: getTemplatesRoute(),
   getTemplateById: getTemplateByIdRoute(),
   addTemplate: addTemplateRoute(),
@@ -178,11 +198,16 @@ export const appRouter = trpcRouter({
   addItemGlobal: addItemGlobalRoute(), // Done
   importItemsGlobal: importItemsGlobalRoute(), // Done
   getItemsGlobally: getItemsGloballyRoute(), // Done
+  getUserItems: getUserItemsRoute(), // Done
   addGlobalItemToPack: addGlobalItemToPackRoute(), // Done
   editGlobalItemAsDuplicate: editGlobalItemAsDuplicateRoute(), // Not Implemented
   deleteGlobalItem: deleteGlobalItemRoute(), // Done,
+  deleteItemFromPack: deleteItemFromPackRoute(),
   getSimilarItems: getSimilarItemsRoute(),
   importFromBucket: importFromBucketRoute(),
+  getItemsFeed: getItemsFeedRoute(),
+  toggleItemPack: toggleItemPack(),
+  setItemQuantity: setItemQuantityRoute(),
   // trails routes
   getTrails: getTrailsRoute(),
   // // parks route

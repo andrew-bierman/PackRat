@@ -10,6 +10,7 @@ interface PreviewResourceState {
 export interface PreviewResourceStateWithData
   extends PreviewResourceState,
     Partial<PaginationReturn> {
+  resourceName: string;
   isPreviewLoading: boolean;
   previewData: any;
   isAllQueryLoading: boolean;

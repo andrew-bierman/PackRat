@@ -10,8 +10,9 @@ interface OfflineMapProps {
 export const OfflineMapComponent: FC<OfflineMapProps> = ({ map, onClose }) => {
   return (
     <Map
-      shapeURI={!map.downloaded ? getMapGEOURI(map.id) : undefined}
+      shapeURI={map.downloaded ? getMapGEOURI(map.id) : undefined}
       offlineMapName={map.name}
+      isFullScreenModeByDefault
       shouldEnableDownload={!map.downloaded}
       onExitFullScreen={onClose}
       initialBounds={map.bounds}

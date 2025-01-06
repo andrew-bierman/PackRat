@@ -40,7 +40,7 @@ export default function ChatNative() {
         style={{ width: 370, position: 'absolute', bottom: 90, left: 5 }}
       >
         <RButton
-          backgroundColor="$background"
+          bg="$background"
           color="$color"
           size="$4"
           circular

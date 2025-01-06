@@ -6,6 +6,7 @@ import { useCopyClipboard } from 'app/hooks/common';
 import { useAuthUser } from 'app/modules/auth';
 import useTheme from '../../hooks/useTheme';
 import { CopyPackModal } from 'app/modules/pack';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface CustomCardHeaderProps {
   ownerId: string;
@@ -35,40 +36,49 @@ export const CustomCardHeader = ({
 
   return (
     <>
-      <RStack style={{ flex: 1 }}>
+      <RStack style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
         {typeof title === 'string' ? <RText>{title}</RText> : title}
       </RStack>
-      <View>
-        <RLink href={`/profile/${ownerId}`} style={{ textDecoration: 'none' }}>
-          <RText>
-            {user?.id === ownerId
-              ? 'Your Profile'
-              : `View ${
-                  data.owners && data.owners?.length
-                    ? data.owners[0]?.name
-                    : 'Profile'
-                }`}
-          </RText>
-        </RLink>
-      </View>
-      {user?.id !== ownerId && COPY_TYPES.includes(data.type) && (
-        <RButton
-          onPress={() => {
-            setIsCopyPackModalOpen(true);
+      <RStack style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+        {data.type != 'packTemplate' && (
+          <ConnectionGate mode="connected">
+            <View>
+              <RLink
+                href={`/profile/${ownerId}`}
+                style={{ textDecoration: 'none' }}
+              >
+                <RText>
+                  {user?.id === ownerId
+                    ? 'Your Profile'
+                    : `View ${
+                        data.owners && data.owners?.length
+                          ? data.owners[0]?.name
+                          : 'Profile'
+                      }`}
+                </RText>
+              </RLink>
+            </View>
+            {user?.id !== ownerId && COPY_TYPES.includes(data.type) && (
+              <RButton
+                onPress={() => {
+                  setIsCopyPackModalOpen(true);
+                }}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <RText style={{ color: 'black' }}>Copy Pack</RText>
+              </RButton>
+            )}
+          </ConnectionGate>
+        )}
+        {actionsComponent}
+        <CopyPackModal
+          currentPack={data}
+          isOpen={isCopyPackModalOpen}
+          onClose={() => {
+            setIsCopyPackModalOpen(false);
           }}
-          style={{ backgroundColor: 'transparent' }}
-        >
-          <RText style={{ color: 'black' }}>Copy Pack</RText>
-        </RButton>
-      )}
-      {actionsComponent}
-      <CopyPackModal
-        currentPack={data}
-        isOpen={isCopyPackModalOpen}
-        onClose={() => {
-          setIsCopyPackModalOpen(false);
-        }}
-      />
+        />
+      </RStack>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useState } from 'react';
+import React, { ReactNode, createContext, useContext, useState } from 'react';
 
 // Define the context type
 interface SearchContextType {
@@ -23,4 +23,12 @@ const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   );
 };
 
-export { SearchContext, SearchProvider };
+const useSearchContext = () => {
+  const context = useContext(SearchContext);
+  if (!context) {
+    throw new Error('useSearchContext must be used within a SearchProvider');
+  }
+  return context;
+};
+
+export { SearchContext, SearchProvider, useSearchContext };

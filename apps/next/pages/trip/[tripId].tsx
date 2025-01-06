@@ -1,4 +1,4 @@
-import { TripDetails } from 'app/screens/trip/TripDetails';
+import EditTripScreen from 'app/screens/trip/editTrip';
 import { AuthWrapper } from 'app/modules/auth';
 
 // export const runtime = 'experimental-edge'
@@ -6,7 +6,7 @@ import { AuthWrapper } from 'app/modules/auth';
 export default function Trip() {
   return (
     <>
-      <TripDetails />
+      <EditTripScreen />
     </>
   );
 }

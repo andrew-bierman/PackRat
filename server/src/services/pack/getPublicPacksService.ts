@@ -10,7 +10,11 @@ import { SORT_OPTIONS, DEFAULT_SORT, sortFunction } from '../../utils/pack';
  * @return {Promise<any[]>} An array of public packs.
  */
 
-export async function getPublicPacksService(queryBy: string = 'createdAt', page: number, limit: number) {
+export async function getPublicPacksService(
+  queryBy: string = 'createdAt',
+  page: number,
+  limit: number,
+) {
   try {
     const packClass = new Pack();
     const sortOption = queryBy ? SORT_OPTIONS[queryBy] : DEFAULT_SORT;

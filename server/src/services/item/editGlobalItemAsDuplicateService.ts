@@ -23,7 +23,6 @@ export const editGlobalItemAsDuplicateService = async (
   packId: string,
   name: string,
   weight: number,
-  quantity: number,
   unit: string,
   type: string,
   executionCtx: ExecutionContext,
@@ -45,7 +44,6 @@ export const editGlobalItemAsDuplicateService = async (
     name,
     weight,
     unit,
-    quantity,
     global: false,
     categoryId: category.id,
   });

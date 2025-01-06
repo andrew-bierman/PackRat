@@ -6,16 +6,16 @@ import { Navbar } from 'app/components/navigation';
 import { Provider } from 'app/provider';
 import { NODE_ENV } from '@packrat/config';
 import ThemeContext from '../../../../packages/app/context/theme';
+import Footer from 'app/components/footer/Footer';
 
 const ThemedMainContentWeb = () => {
   const { isDark } = useContext(ThemeContext);
 
-  const backgroundColor = isDark ? '#050505' : '#fdfbff';
-
   return (
-    <MainContentWeb style={{ backgroundColor, paddingTop: 80 }}>
+    <MainContentWeb isDark={!!isDark}>
       <Navbar />
       <Outlet />
+      <Footer />
     </MainContentWeb>
   );
 };

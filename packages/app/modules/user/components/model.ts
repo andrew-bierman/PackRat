@@ -56,5 +56,7 @@ export interface UserDataCardProps<Details> {
   ownerId: string;
   favoriteCount: number;
   isUserFavorite?: boolean;
+  isPublic?: boolean;
+  isAuthUserProfile?: boolean;
   toggleFavorite?: () => void;
 }

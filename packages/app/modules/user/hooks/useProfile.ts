@@ -8,6 +8,7 @@ import type { PreviewListType } from '../model';
 
 export const useProfile = (id = null) => {
   const authUser = useAuthUser();
+  const isAuthUserProfile = !id || id === authUser?.id;
   const userId = id ?? authUser?.id;
   const [searchTerms, setSearchTerms] = useState<
     Record<PreviewListType, string>
@@ -18,14 +19,17 @@ export const useProfile = (id = null) => {
   const favoritesQuery = useFetchUserFavoritesWithPreview(
     userId as string,
     searchTerms.favorites,
+    !isAuthUserProfile ? true : undefined,
   );
   const userPacksQuery = useUserPacksWithPreview(
     userId as string,
     searchTerms.packs,
+    !isAuthUserProfile ? true : undefined,
   );
   const userTripsQuery = useUserTripsWithPreview(
     userId as string,
     searchTerms.trips,
+    !isAuthUserProfile ? true : undefined,
   );
 
   const onSearchChange = useCallback(
@@ -54,6 +58,7 @@ export const useProfile = (id = null) => {
     favoritesQuery,
     userPacksQuery,
     userTripsQuery,
+    isAuthUserProfile,
     tripsCount: userTripsQuery.totalCount,
     packsCount: userPacksQuery.totalCount,
     favoritesCount: favoritesQuery.totalCount,

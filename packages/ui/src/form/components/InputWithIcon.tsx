@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import type { SizeTokens } from 'tamagui';
 import { View } from 'tamagui';
 import { Input } from './inputsParts';
@@ -32,7 +32,7 @@ export function InputWithIcon({
   };
 
   return (
-    <View justifyContent="center" alignItems="center">
+    <View justifyContent="center" alignItems="center" width="100%">
       <Input size={size} minWidth="100%">
         <Input.Box>
           <Input.Icon {...focusTrigger}>{LeftIcon}</Input.Icon>

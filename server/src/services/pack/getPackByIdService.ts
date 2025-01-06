@@ -2,6 +2,7 @@ import { Pack } from '../../drizzle/methods/pack';
 
 interface ItemPack {
   item: any;
+  quantity: number;
 }
 
 interface PackWithItemPacks {
@@ -48,7 +49,10 @@ export const getPackByIdService = async (packId: string): Promise<PackData> => {
       total_weight: 0,
       favorites_count: packClass.computeFavouritesCount(pack),
       total_score: packClass.computeTotalScores(pack),
-      items: pack.itemPacks.map((itemPack) => itemPack.item),
+      items: pack.itemPacks.map((itemPack) => ({
+        ...itemPack.item,
+        quantity: itemPack.quantity,
+      })),
     };
     return packData;
   } catch (error) {

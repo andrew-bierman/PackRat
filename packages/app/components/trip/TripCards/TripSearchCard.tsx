@@ -1,62 +1,68 @@
+import React from 'react';
+import { RText, YStack } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
-import { TripCardBase } from './TripCardBase';
 import { useGEOLocationSearch } from 'app/hooks/geojson';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'react-native';
 import { PlacesAutocomplete } from 'app/components/PlacesAutocomplete';
 import useResponsive from 'app/hooks/useResponsive';
 import { useScreenWidth } from 'app/hooks/common';
+import { ArrowLeft } from '@tamagui/lucide-icons';
+import { useTripOSM } from 'app/screens/trip/useTripOSM';
 
-
-type TripSearchCardProps = {
+interface TripSearchCardProps {
   searchRef: any;
-};
+  isChangePlaceMode: boolean;
+  onGoBack: () => void;
+  onLocationSelect: () => void;
+}
 
-export const TripSearchCard = ({ searchRef }: TripSearchCardProps) => {
-  const {screenWidth} = useScreenWidth()
-  const { currentTheme } = useTheme();
-  const [, setGEOLocation] = useGEOLocationSearch();
+export const TripSearchCard = ({
+  searchRef,
+  isChangePlaceMode,
+  onGoBack,
+  onLocationSelect,
+}: TripSearchCardProps) => {
+  const [, setTripOSM] = useTripOSM();
 
   const handleSelectLocation = (geoJSON) => {
-    setGEOLocation(geoJSON);
+    setTripOSM(geoJSON);
+    onLocationSelect();
   };
-  const { xs } = useResponsive();
+
+  const formTitle = isChangePlaceMode
+    ? 'Looking for another place?'
+    : 'Where are you heading?';
 
   return (
-    <TripCardBase
-      loadStyles={loadStyles}
-      icon={() => (
-        <FontAwesome
-          name="map"
-          size={20}
-          color={currentTheme.colors.cardIconColor}
+    <YStack
+      style={{
+        gap: 16,
+        maxWidth: 448,
+        width: '100%',
+        margin: 'auto',
+        paddingVertical: 50,
+      }}
+    >
+      <RText
+        style={{
+          fontWeight: 700,
+          fontSize: 24,
+          textAlign: 'center',
+        }}
+      >
+        {formTitle}
+      </RText>
+      <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
+      {isChangePlaceMode && (
+        <RSecondaryButton
+          icon={<ArrowLeft />}
+          onPress={onGoBack}
+          label="Go Back to Trip Planning"
         />
       )}
-      title="Where are you heading?"
-    >
-      <View style={{ width: xs ? screenWidth * 0.5 : screenWidth * 0.3 }}>
-        <PlacesAutocomplete ref={searchRef} onSelect={handleSelectLocation} />
-      </View>
-    </TripCardBase>
+    </YStack>
   );
-};
-
-const loadStyles = (theme) => {
-  const { xxs } = useResponsive();
-
-  const { currentTheme } = theme;
-
-  return {
-    backgroundColor: currentTheme.colors.card,
-    padding: currentTheme.size.mobilePadding,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 10,
-    flex: 1,
-    paddingHorizontal: 60,
-    paddingVertical: 20,
-    height: xxs ? '100%' : 450,
-    alignSelf: 'center',
-  };
 };

@@ -1,6 +1,7 @@
-import { type Item } from 'src/db/schema';
+import { ITEM_TABLE_NAME, type Item } from 'src/db/schema';
 import { Item as ItemRepository } from '../../drizzle/methods/Item';
 import { VectorClient } from '../../vector/client';
+import { summarizeItem } from 'src/utils/item';
 
 interface SimilarItem extends Item {
   similarityScore: number;
@@ -28,9 +29,14 @@ export async function getSimilarItemsService(
 
   const {
     result: { matches },
-  } = await VectorClient.instance.search(item.name, 'items', limit, {
-    isPublic: true,
-  });
+  } = await VectorClient.instance.search(
+    summarizeItem(item),
+    ITEM_TABLE_NAME,
+    limit,
+    {
+      isPublic: true,
+    },
+  );
 
   // passing empty array to the db query below throws
   if (!matches.length) {
@@ -46,12 +52,10 @@ export async function getSimilarItemsService(
   const similarItemsResult = await itemRepository.findAllInArray(array);
 
   // add similarity score to items result
-  const similarItems = similarItemsResult.map((similarItem) => {
-    return {
-      ...similarItem,
-      similarityScore: matches.find((m) => m.id == similarItem.id).score,
-    };
-  });
+  const similarItems = similarItemsResult.map((similarItem) => ({
+    ...similarItem,
+    similarityScore: matches.find((m) => m.id == similarItem.id).score,
+  }));
 
   return similarItems;
 }

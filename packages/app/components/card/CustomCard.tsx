@@ -7,13 +7,15 @@ import { TripCardHeader } from './TripCardHeader';
 import { PackCardHeader } from './PackCardHeader';
 import { ItemCardHeader } from './ItemCardHeader';
 import { useAuthUser } from 'app/modules/auth';
+import { PackTemplateHeader } from 'app/modules/pack-templates';
+import { ConnectionGate } from 'app/components/ConnectionGate';
 
 interface CustomCardProps {
   title: string;
   content: React.ReactNode;
   footer: React.ReactNode;
   link?: string;
-  type: 'pack' | 'trip' | 'item';
+  type: 'pack' | 'trip' | 'item' | 'packTemplate';
   destination?: string;
   data: {
     owner_id?: string;
@@ -25,6 +27,7 @@ const HEADER_COMPONENTS = {
   trip: TripCardHeader,
   pack: PackCardHeader,
   item: ItemCardHeader,
+  packTemplate: PackTemplateHeader,
 };
 
 export const CustomCard = ({
@@ -53,8 +56,6 @@ export const CustomCard = ({
         },
         isWeb && {
           borderRadius: 10,
-          padding: isWeb ? '15 25' : 0,
-          width: '80%',
         },
       ]}
     >
@@ -66,6 +67,7 @@ export const CustomCard = ({
             padding: 15,
             paddingBottom: isWeb ? 0 : 10,
             flexDirection: 'row',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: 16,
@@ -74,25 +76,27 @@ export const CustomCard = ({
           <Header data={data} title={title} link={link} />
         </View>
         <RSeparator />
-        {type === 'pack' && authUser?.id === data.owner_id ? (
-          <>
-            <View
-              style={
-                {
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingRight: 16,
-                  paddingLeft: 16,
-                  position: 'relative',
-                  zIndex: 1,
-                } as any
-              }
-            >
-              <SearchItem />
-            </View>
-            <RSeparator />
-          </>
-        ) : null}
+        <ConnectionGate mode="connected">
+          {type === 'pack' && authUser?.id === data.owner_id ? (
+            <>
+              <View
+                style={
+                  {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingRight: 16,
+                    paddingLeft: 16,
+                    position: 'relative',
+                    zIndex: 1,
+                  } as any
+                }
+              >
+                <SearchItem />
+              </View>
+              <RSeparator />
+            </>
+          ) : null}
+        </ConnectionGate>
         <View
           style={{
             paddingRight: 16,
@@ -116,7 +120,8 @@ const loadStyles = (theme) => {
   const { isDark, currentTheme } = theme;
   return {
     mainContainer: {
-      backgroundColor: currentTheme.colors.border,
+      borderColor: currentTheme.colors.border,
+      borderWidth: 0,
       flex: 1,
       gap: 45,
       justifyContent: 'space-between',
@@ -124,6 +129,7 @@ const loadStyles = (theme) => {
       alignItems: 'center',
       marginBottom: 20,
       border: '1',
+      // boxShadow: '0px 4px 8px rgba(0,0,0,0.1)',
       alignSelf: 'center',
     },
   };

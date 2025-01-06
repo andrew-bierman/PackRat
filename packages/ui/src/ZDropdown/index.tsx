@@ -1,11 +1,10 @@
-import React from 'react';
-import { ComponentProps } from 'react';
-import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
 import { ChevronDown } from '@tamagui/lucide-icons';
-import RButton from '../RButton';
-
-type ContentProps = ComponentProps<typeof ZeegoDropdownMenu.Content>;
-type ItemProps = ComponentProps<typeof ZeegoDropdownMenu.Item>;
+import React from 'react';
+import { Platform } from 'react-native';
+import { Button } from 'tamagui';
+import * as ZeegoDropdownMenu from 'zeego/dropdown-menu';
+type ContentProps = React.ComponentProps<typeof ZeegoDropdownMenu.Content>;
+type ItemProps = React.ComponentProps<typeof ZeegoDropdownMenu.Item>;
 
 const DropdownMenu = {
   ...ZeegoDropdownMenu,
@@ -18,7 +17,6 @@ const DropdownMenu = {
           padding: 10,
           borderRadius: 8,
           gap: 10,
-          // boxShadow: '0px 0px 16px -8px #484848',
         }}
       />
     ),
@@ -33,9 +31,14 @@ const DropdownMenu = {
           backgroundColor: 'white',
           flexDirection: 'row',
           alignItems: 'center',
-          hoverStyle: {
-            backgroundColor: 'gray',
-          },
+          ...Platform.select({
+            web: {
+              cursor: 'pointer',
+              hoverStyle: {
+                backgroundColor: 'gray',
+              },
+            },
+          }),
         }}
       />
     ),
@@ -43,13 +46,40 @@ const DropdownMenu = {
   ),
 };
 
-const RDropdownMenu = ({ menuItems = [], menuName }) => {
+interface RDropdownMenuItem {
+  label: string;
+  onSelect?: () => void;
+}
+
+interface RDropdownMenuProps {
+  menuItems: RDropdownMenuItem[];
+  menuName: string;
+  trigger?: React.ReactNode;
+}
+
+const RDropdownMenu = ({
+  menuItems = [],
+  menuName,
+  trigger = null,
+}: RDropdownMenuProps) => {
   return (
     <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <RButton style={{ backgroundColor: '#deddda', color: 'black' }}>
-          {menuName}
-        </RButton>
+      <DropdownMenu.Trigger asChild>
+        {React.isValidElement(trigger) ? (
+          trigger
+        ) : (
+          <Button
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingRight: 10,
+              borderRadius: 40,
+            }}
+          >
+            {menuName}
+            <ChevronDown size={14} />
+          </Button>
+        )}
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>
         {menuItems.map(({ label, onSelect = () => {} }) => (

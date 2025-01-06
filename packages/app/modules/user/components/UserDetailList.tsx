@@ -10,6 +10,7 @@ import { FeedCard, FeedSearchFilter } from 'app/modules/feed';
 import { fuseSearch } from 'app/utils/fuseSearch';
 import { BaseDialog, BaseModal, Pagination, RButton } from '@packrat/ui';
 import { type PreviewResourceStateWithData } from 'app/hooks/common';
+import RSecondaryButton from 'app/components/RSecondaryButton';
 
 interface DataListProps {
   resource: PreviewResourceStateWithData;
@@ -27,20 +28,9 @@ export const UserDataList = ({
   return (
     <>
       {Platform.OS == 'web' ? (
-        <BaseModal
-          title="See all"
-          trigger="See all"
-          isOpen={resource.isSeeAllModalOpen}
-          onOpen={() => resource.setIsSeeAllModalOpen(true)}
-          onClose={() => resource.setIsSeeAllModalOpen(false)}
-          footerButtons={[
-            {
-              label: 'Cancel',
-              color: '#B22222',
-              onClick: (_, closeModal) => closeModal(),
-            },
-          ]}
-          footerComponent={undefined}
+        <BaseDialog
+          title={`${resource.resourceName} List`}
+          triggerComponent={<RSecondaryButton label="View in list" />}
         >
           <View
             style={
@@ -87,49 +77,39 @@ export const UserDataList = ({
               />
             ) : null}
           </View>
-        </BaseModal>
+        </BaseDialog>
       ) : (
-        <View style={{ width: '30%', alignSelf: 'center' }}>
-          <BaseDialog
-            title="See all"
-            trigger="See all"
-            footerButtons={[
-              {
-                label: 'Cancel',
-                color: '#B22222',
-                onClick: (_, closeModal) => closeModal(),
-              },
-            ]}
-            footerComponent={undefined}
-          >
-            <FeedSearchFilter
-              isSortHidden={true}
-              queryString={search}
-              setSearchQuery={onSearchChange}
+        <BaseDialog
+          title={`${resource.resourceName} List`}
+          triggerComponent={<RSecondaryButton label="View in list" />}
+        >
+          <FeedSearchFilter
+            isSortHidden={true}
+            queryString={search}
+            setSearchQuery={onSearchChange}
+          />
+          <View style={{ flex: 1 }}>
+            <FlatList
+              data={resource.allQueryData}
+              horizontal={false}
+              keyExtractor={(item) => item?._id}
+              ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
+              renderItem={({ item }) => (
+                <FeedCard
+                  key={item?._id}
+                  item={item}
+                  cardType="primary"
+                  feedType={item.type}
+                />
+              )}
+              showsVerticalScrollIndicator={false}
+              maxToRenderPerBatch={2}
             />
-            <View style={{ flex: 1 }}>
-              <FlatList
-                data={resource.allQueryData}
-                horizontal={false}
-                keyExtractor={(item) => item?._id}
-                ItemSeparatorComponent={() => <View style={{ marginTop: 8 }} />}
-                renderItem={({ item }) => (
-                  <FeedCard
-                    key={item?._id}
-                    item={item}
-                    cardType="primary"
-                    feedType={item.type}
-                  />
-                )}
-                showsVerticalScrollIndicator={false}
-                maxToRenderPerBatch={2}
-              />
-            </View>
-            {resource.nextPage ? (
-              <RButton onPress={resource.fetchNextPage}>Load more</RButton>
-            ) : null}
-          </BaseDialog>
-        </View>
+          </View>
+          {resource.nextPage ? (
+            <RButton onPress={resource.fetchNextPage}>Load more</RButton>
+          ) : null}
+        </BaseDialog>
       )}
     </>
   );

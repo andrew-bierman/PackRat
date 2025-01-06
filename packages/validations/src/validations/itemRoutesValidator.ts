@@ -13,9 +13,9 @@ export const getItemById = z.object({
 });
 
 export const addItem = z.object({
-  name: z.string(),
+  name: z.string().min(3).max(40),
   weight: z.number(),
-  quantity: z.number(),
+  quantity: z.number().int().positive(),
   unit: z.string(),
   packId: z.string(),
   type: z.string(),
@@ -33,17 +33,19 @@ export type Item = z.infer<typeof addItem>;
 
 export const editItem = z.object({
   id: z.string(),
-  name: z.string().nonempty(),
+  name: z.string().min(3).max(40),
   weight: z.number(),
   quantity: z.number(),
   unit: z.string(),
   type: z.string(),
+  packId: z.string(),
 });
 
 export const addGlobalItemToPack = z.object({
   packId: z.string(),
   itemId: z.string(),
   ownerId: z.string(),
+  quantity: z.number().int().positive(),
 });
 
 export const deleteGlobalItem = z.object({
@@ -63,11 +65,20 @@ export const deleteItem = z.object({
 export const addItemGlobal = z.object({
   name: z.string(),
   weight: z.number(),
-  quantity: z.number(),
   unit: z.string(),
-  type: z.string(),
+  type: z.enum(['Food', 'Water', 'Essentials']),
   ownerId: z.string(),
+  sku: z.string().optional(),
+  productUrl: z.string().optional(),
+  description: z.string().optional(),
+  productDetails: z
+    .record(z.string(), z.union([z.string(), z.number(), z.boolean()]))
+    .optional(),
+  seller: z.string().optional(),
+  image_urls: z.string().optional(),
 });
+
+export type AddItemGlobalType = z.infer<typeof addItemGlobal>;
 
 export const importItemsGlobal = z.object({
   content: z.string(),

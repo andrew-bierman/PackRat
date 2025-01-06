@@ -1,13 +1,18 @@
 import { DbClient } from '../../db/client';
-import { and, count, eq, inArray, like, sql } from 'drizzle-orm';
-import { type InsertItem, item as ItemTable } from '../../db/schema';
-import { and, count, eq, like, sql } from 'drizzle-orm';
-import { type InsertItem, itemPacks, item as ItemTable } from '../../db/schema';
+import { and, asc, count, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
+import {
+  type InsertItem,
+  ITEM_TABLE_NAME,
+  itemPacks,
+  item as ItemTable,
+  itemImage as itemImageTable,
+} from '../../db/schema';
 import { scorePackService } from '../../services/pack/scorePackService';
 import { ItemPacks } from './ItemPacks';
+import { getPaginationParams, PaginationParams } from 'src/helpers/pagination';
 
 export class Item {
-  async create(data: InsertItem, packId?: string) {
+  async create(data: InsertItem) {
     try {
       const item = await DbClient.instance
         .insert(ItemTable)
@@ -15,16 +20,56 @@ export class Item {
         .returning()
         .get();
 
-      if (packId) {
-        const itemPacksClass = new ItemPacks();
-        await itemPacksClass.create({ itemId: item.id, packId });
-        await this.updateScoreIfNeeded(packId);
-      }
-
       return item;
     } catch (error) {
       throw new Error(`Failed to create item: ${error.message}`);
     }
+  }
+
+  async insertImage(itemId: string, url: string) {
+    try {
+      const itemImage = await DbClient.instance
+        .insert(itemImageTable)
+        .values({
+          itemId,
+          url,
+        })
+        .run();
+
+      return itemImage;
+    } catch (error) {
+      throw new Error(`Failed to update item: ${error.message}`);
+    }
+  }
+
+  async createPackItem(data: InsertItem, packId: string, quantity: number) {
+    // TODO wrap in transaction
+    const item = await this.create(data);
+
+    const itemPacksClass = new ItemPacks();
+    await itemPacksClass.create({ itemId: item.id, packId, quantity });
+    await this.updateScoreIfNeeded(packId);
+
+    return item;
+  }
+
+  async updatePackItem(
+    id: string,
+    data: Partial<InsertItem>,
+    packId: string,
+    quantity?: number,
+  ) {
+    const item = await this.update(id, data);
+
+    if (quantity)
+      await DbClient.instance
+        .update(itemPacks)
+        .set({ quantity })
+        .where(and(eq(itemPacks.packId, packId), eq(itemPacks.itemId, id)));
+
+    await this.updateScoreIfNeeded(packId);
+
+    return item;
   }
 
   async createBulk(data: InsertItem[]) {
@@ -56,15 +101,6 @@ export class Item {
         .where(filter)
         .returning()
         .get();
-      const packIds = await DbClient.instance
-        .select()
-        .from(itemPacks)
-        .where(eq(itemPacks.itemId, item.id))
-        .all();
-
-      for (const { packId } of packIds) {
-        await this.updateScoreIfNeeded(packId);
-      }
 
       return item;
     } catch (error) {
@@ -72,8 +108,9 @@ export class Item {
     }
   }
 
-  async delete(id: string, filter = eq(ItemTable.id, id), packId?: string) {
+  async delete(id: string, filter = eq(ItemTable.id, id)) {
     try {
+      const { packId } = await new ItemPacks().find({ itemId: id });
       const deletedItem = await DbClient.instance
         .delete(ItemTable)
         .where(filter)
@@ -96,6 +133,11 @@ export class Item {
       const item = await DbClient.instance.query.item.findFirst({
         where: filter,
         with: {
+          images: {
+            columns: {
+              url: true,
+            },
+          },
           category: {
             columns: {
               id: true,
@@ -141,11 +183,44 @@ export class Item {
     }
   }
 
+  async findUserItems(
+    ownerId: string,
+    searchString: string,
+    { limit, offset }: { limit: number; offset: number },
+  ) {
+    try {
+      const items = await DbClient.instance.query.item.findMany({
+        where: and(
+          or(eq(ItemTable.global, true), eq(ItemTable.ownerId, ownerId)),
+          like(ItemTable.name, `%${searchString}%`),
+        ),
+        with: {
+          category: {
+            columns: { id: true, name: true },
+          },
+        },
+        offset,
+        limit,
+        orderBy: (item, { desc }) => desc(item.createdAt),
+      });
+      return items;
+    } catch (error) {
+      throw new Error(`Failed to find user items: ${error.message}`);
+    }
+  }
+
   async findAllInArray(arr: string[]) {
-    return await DbClient.instance
-      .select()
-      .from(ItemTable)
-      .where(inArray(ItemTable.id, arr));
+    return await DbClient.instance.query.item.findMany({
+      where: inArray(ItemTable.id, arr),
+      with: {
+        category: {
+          columns: { id: true, name: true },
+        },
+        images: {
+          columns: { url: true },
+        },
+      },
+    });
   }
 
   async findGlobal(limit: number, offset: number, searchString: string) {
@@ -165,6 +240,52 @@ export class Item {
         orderBy: (item, { desc }) => desc(item.createdAt),
       });
       return items;
+    } catch (error) {
+      throw new Error(`Failed to find global items: ${error.message}`);
+    }
+  }
+
+  async findFeed(filters: {
+    pagination?: PaginationParams;
+    searchTerm?: string;
+    queryBy?: string;
+  }) {
+    try {
+      const { pagination, searchTerm, queryBy } = filters;
+      const { limit, offset } = getPaginationParams(pagination);
+      const orderByFunction = this.applyFeedOrdersOrders(queryBy);
+      const items = await DbClient.instance.query.item.findMany({
+        where: and(
+          eq(ItemTable.global, true),
+          like(ItemTable.name, `%${searchTerm}%`),
+        ),
+        with: {
+          category: {
+            columns: { id: true, name: true },
+          },
+          images: {
+            columns: { url: true },
+          },
+        },
+        offset,
+        limit,
+        orderBy: orderByFunction,
+      });
+
+      const totalCountQuery = await DbClient.instance
+        .select({
+          totalCount: sql`COUNT(*)`,
+        })
+        .from(ItemTable)
+        .where(
+          and(
+            eq(ItemTable.global, true),
+            like(ItemTable.name, `%${searchTerm}%`),
+          ),
+        )
+        .all();
+
+      return { data: items, totalCount: totalCountQuery?.[0]?.totalCount || 0 };
     } catch (error) {
       throw new Error(`Failed to find global items: ${error.message}`);
     }
@@ -207,5 +328,18 @@ export class Item {
     if (!packId) return;
 
     await scorePackService(packId);
+  }
+
+  applyFeedOrdersOrders(queryBy: string) {
+    if (!['Most Recent', 'Oldest'].includes(queryBy)) {
+      return desc(ItemTable.createdAt);
+    }
+
+    const orderConfig = {
+      'Most Recent': desc(ItemTable.createdAt),
+      Oldest: asc(ItemTable.createdAt),
+    };
+
+    return orderConfig[queryBy];
   }
 }

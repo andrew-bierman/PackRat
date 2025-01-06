@@ -1,6 +1,6 @@
 import React, { type FC } from 'react';
 import { type BaseCardProps } from './model';
-import { Card, View, XStack, YStack } from 'tamagui';
+import { Card, View, XStack, YStack, useTheme } from 'tamagui';
 import RText from '../RText';
 
 interface SecondaryCardProps extends Omit<BaseCardProps, 'content'> {
@@ -8,21 +8,30 @@ interface SecondaryCardProps extends Omit<BaseCardProps, 'content'> {
 }
 
 export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
+  const theme = useTheme();
+
   return (
     <Card
       elevate
       size="$4"
       bordered
-      style={{ height: 120, width: props.isFullWidth ? '100%' : 200 }}
+      style={{
+        height: 120,
+        width: props.isFullWidth ? '100%' : 200,
+        overflow: 'hidden',
+      }}
       {...props}
     >
       <Card.Background>{props.image}</Card.Background>
       <YStack
         style={{
           justifyContent: 'flex-end',
-          height: '100%',
-          paddingLeft: 10,
-          paddingRight: 10,
+          alignItems: 'flex-end',
+          marginTop: 'auto',
+          height: 'auto',
+          padding: 10,
+          paddingBottom: 5,
+          backgroundColor: theme.shadowColorPress.val,
         }}
       >
         <XStack
@@ -30,25 +39,30 @@ export const SecondaryCard: FC<SecondaryCardProps> = (props) => {
             justifyContent: 'space-between',
             width: '100%',
             flexDirection: 'row',
+            gap: 10,
           }}
         >
-          <View style={{ maxWidth: 120 }}>
+          <View style={{ maxWidth: '100%', flex: 1 }}>
             <RText
-              style={{ fontWeight: 'bold', fontSize: 16 }}
+              style={{
+                fontWeight: 'bold',
+                fontSize: 16,
+                lineHeight: 24,
+              }}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {props.title}
             </RText>
             <RText
-              style={{ color: 'CaptionText', fontSize: 12 }}
+              style={{ fontSize: 12, textAlign: 'left', lineHeight: 26 }}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
               {props.subtitle}
             </RText>
           </View>
-          <View>{props.actions}</View>
+          {props.actions ? <View>{props.actions}</View> : null}
         </XStack>
       </YStack>
     </Card>

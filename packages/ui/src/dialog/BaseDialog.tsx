@@ -7,6 +7,7 @@ import {
   Dialog as OriginalDialog,
   Sheet as OriginalSheet,
 } from 'tamagui';
+import RButton from '../RButton';
 
 const Dialog: any = OriginalDialog;
 const Sheet: any = OriginalSheet;
@@ -15,6 +16,7 @@ interface BaseDialogProps {
   title: string;
   description: string;
   trigger: string;
+  triggerComponent?: React.ReactNode;
   children: string | JSX.Element | JSX.Element[] | (() => JSX.Element);
 }
 
@@ -22,6 +24,7 @@ export const BaseDialog = ({
   title,
   description,
   trigger,
+  triggerComponent,
   children,
 }: BaseDialogProps) => {
   const [open, setOpen] = useState(false);
@@ -34,7 +37,7 @@ export const BaseDialog = ({
       }}
     >
       <Dialog.Trigger asChild>
-        <Button>{trigger}</Button>
+        {triggerComponent || <RButton>{trigger}</RButton>}
       </Dialog.Trigger>
       <Adapt when="sm" platform="touch">
         <Sheet zIndex={200000} modal dismissOnSnapToBottom>

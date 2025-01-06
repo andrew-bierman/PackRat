@@ -8,12 +8,13 @@ import {
   type PreviewResourceStateWithData,
   usePreviewResourceState,
 } from 'app/hooks/common';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface QueryOptions {
   isPublic?: boolean;
   isPreview?: boolean;
   searchTerm?: string;
+  itemId?: string;
 }
 
 export const useUserPacks = (
@@ -22,27 +23,32 @@ export const useUserPacks = (
   queryString = '',
   queryEnabled = false,
 ) => {
-  const { isPublic, searchTerm, isPreview } = options;
+  const { isPublic, searchTerm, isPreview, itemId } = options;
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
   const utils = queryTrpc.useContext();
   const enabled = queryEnabled && !!ownerId;
-  const { data, error, isLoading, refetch } =
-    queryTrpc.getUserPacksFeed.useQuery(
-      {
-        ownerId,
-        isPublic,
-        queryBy: queryString,
-        pagination,
-        searchTerm,
-        isPreview,
-      },
-      {
-        enabled,
-        refetchOnWindowFocus: false,
-      },
-    );
+  const queryParams = useMemo(
+    () => ({
+      ownerId,
+      isPublic,
+      queryBy: queryString,
+      pagination,
+      searchTerm,
+      isPreview,
+      itemId,
+    }),
+    [isPublic, isPreview, searchTerm, pagination, ownerId, itemId, queryString],
+  );
+  const { data, isError, isLoading, refetch } =
+    queryTrpc.getUserPacksFeed.useQuery(queryParams, {
+      enabled,
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60,
+      cacheTime: 60 * 60 * 24,
+      networkMode: 'offlineFirst',
+    });
   utils.getPacks.setData({
     ownerId: ownerId || '',
     queryBy: queryString,
@@ -66,6 +72,7 @@ export const useUserPacks = (
   return {
     data: data?.data || [],
     isLoading,
+    isError,
     totalCount: data?.totalCount,
     refetch,
     fetchPrevPage,
@@ -87,30 +94,30 @@ interface FetchUserPacksPreviewReturn extends PreviewResourceStateWithData {
 export const useUserPacksWithPreview = (
   userId: string,
   searchTerm: string,
+  isPublic?: boolean,
 ): FetchUserPacksPreviewReturn => {
   const { isAllQueryEnabled, ...previewResourceState } =
     usePreviewResourceState();
-  const { data: previewData, isLoading: isPreviewLoading } = useUserPacks(
-    userId,
-    { isPublic: true, isPreview: true },
-    'Most Recent',
-    true,
-  );
+  const {
+    data: previewData,
+    isLoading: isPreviewLoading,
+    totalCount,
+  } = useUserPacks(userId, { isPreview: true, isPublic }, 'Most Recent', true);
 
   const {
     data: allQueryData,
     isLoading: isAllQueryLoading,
     fetchPrevPage,
     fetchNextPage,
-    totalCount,
     hasPrevPage,
     hasNextPage,
     currentPage,
     totalPages,
-  } = useUserPacks(userId, { isPublic: true, searchTerm }, 'Most Recent', true);
+  } = useUserPacks(userId, { isPublic, searchTerm }, 'Most Recent', true);
 
   return {
     ...previewResourceState,
+    resourceName: 'Packs',
     isAllQueryEnabled,
     previewData,
     isPreviewLoading,
