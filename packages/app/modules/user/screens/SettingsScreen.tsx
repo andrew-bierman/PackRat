@@ -27,6 +27,7 @@ import {
 import { Platform, View } from 'react-native';
 import { useNavigate } from 'app/hooks/navigation';
 import { SettingsForm } from 'app/components/settings';
+import Layout from 'app/components/layout/Layout';
 
 const weatherOptions = ['celsius', 'fahrenheit'].map((key) => ({
   label: key,
@@ -46,21 +47,18 @@ export function SettingsScreen() {
   const navigate = useNavigate();
 
   return user ? (
-    <RScrollView style={{ backgroundColor: isDark ? '#1A1A1D' : 'white' }}>
+    <Layout customStyle={{ backgroundColor: isDark ? '#1A1A1D' : '#f6f6f6' }}>
       <RStack
         // gap={8}
         width="fit-content"
         maw="100%"
         style={{
-          paddingTop: 10,
-          paddingBottom: 100,
           paddingLeft: 20,
           paddingRight: 20,
         }}
         marginHorizontal="auto"
         marginVertical="auto"
       >
-        
         {/* <RStack
           style={{
             display: 'flex',
@@ -87,7 +85,7 @@ export function SettingsScreen() {
           />
           <RH2>Profile</RH2>
         </RStack> */}
-        <SettingsForm/>
+        <SettingsForm />
         {/* <Form
           validationSchema={userSettingsSchema}
           defaultValues={{ ...user, profileImage: user.profileImage || '' }}
@@ -218,6 +216,6 @@ export function SettingsScreen() {
           </RStack>
         </Form> */}
       </RStack>
-    </RScrollView>
+    </Layout>
   ) : null;
 }
