@@ -8,6 +8,7 @@ export const useAddTrip = () => {
     mutation.mutate(newTrip, {
       onSuccess: (result) => {
         utils.getTrips.invalidate();
+        utils.getUserTripsFeed.invalidate();
       },
     });
   };
