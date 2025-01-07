@@ -35,6 +35,8 @@ export default function FeedNav() {
 
             hideWhenScrolling: false,
             inputType: 'text',
+            textColor:
+              Platform.OS === 'android' ? currentTheme.colors.text : undefined,
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },
 

@@ -30,6 +30,8 @@ export default function MapsScreen() {
             hideWhenScrolling: false,
             headerIconColor: currentTheme.colors.text,
             inputType: 'text',
+            textColor:
+              Platform.OS === 'android' ? currentTheme.colors.text : undefined,
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },
           headerStyle: {
