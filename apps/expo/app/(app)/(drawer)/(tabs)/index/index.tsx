@@ -36,6 +36,16 @@ export default function HomeScreen() {
       <Stack.Screen
         options={{
           title: 'Home',
+          headerSearchBarOptions:
+            Platform.OS === 'ios'
+              ? {
+                  placeholder: 'Search maps',
+                  hideWhenScrolling: false,
+                  headerIconColor: currentTheme.colors.text,
+                  inputType: 'text',
+                  onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+                }
+              : undefined,
         }}
       />
       {connectionStatus === 'connected' && (
