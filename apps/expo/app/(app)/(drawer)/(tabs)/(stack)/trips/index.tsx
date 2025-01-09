@@ -26,6 +26,8 @@ export default function FeedNav() {
             headerIconColor: currentTheme.colors.text,
             hideWhenScrolling: false,
             inputType: 'text',
+            textColor:
+              Platform.OS === 'android' ? currentTheme.colors.text : undefined,
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },
           // https://reactnavigation.org/docs/headers#adjusting-header-styles
