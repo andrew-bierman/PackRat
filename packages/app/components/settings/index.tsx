@@ -1,6 +1,6 @@
 import { AnimatePresence, Button, H1, Label, Spinner, View } from 'tamagui';
 import { Input } from './components/inputParts';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Info } from '@tamagui/lucide-icons';
 import { FormCard } from './components/layoutParts';
 import { useForm, Controller } from 'react-hook-form';
@@ -10,12 +10,16 @@ import {
   FormSelect,
   ImageUpload,
   RH5,
+  RIconButton,
   RLabel,
   RStack,
   SubmitButton,
+  RText,
 } from '@packrat/ui';
 import Avatar from '../Avatar/Avatar';
 import { useProfileSettings } from 'app/modules/user/hooks';
+import Feather from '@expo/vector-icons/Feather';
+
 import {
   deleteUserForm,
   passwordChangeSchema,
@@ -23,6 +27,8 @@ import {
 } from '@packrat/validations';
 import { useDeleteProfile } from 'app/modules/user/hooks';
 import useResponsive from 'app/hooks/useResponsive';
+import ThemeContext from '../../context/theme';
+import { Platform } from 'react-native';
 
 export function SettingsForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -30,6 +36,17 @@ export function SettingsForm() {
   const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
   const { xs, sm, md } = useResponsive();
+  const { isDark, enableDarkMode, enableLightMode } = useContext(ThemeContext);
+
+  const iconName = isDark ? 'moon' : 'sun';
+  const iconColor = isDark ? 'white' : 'black';
+  const handlePress = () => {
+    if (isDark) {
+      enableLightMode();
+    } else {
+      enableDarkMode();
+    }
+  };
 
   const {
     control,
@@ -177,6 +194,26 @@ export function SettingsForm() {
               Update Profile
             </SubmitButton>
           </Form>
+          {Platform.OS !== 'web' && (
+            <RStack
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+
+                padding: 5,
+              }}
+            >
+              <RText style={{ fontWeight: 'bold', fontSize: 16 }}>
+                Toggle theme
+              </RText>
+              <RIconButton
+                backgroundColor="transparent"
+                icon={<Feather name={iconName} size={24} color={iconColor} />}
+                onPress={handlePress}
+              />
+            </RStack>
+          )}
 
           <Form validationSchema={passwordChangeSchema}>
             <View
