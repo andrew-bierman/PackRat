@@ -21,7 +21,14 @@ const FABNative: React.FC<FABProps> = ({
   const { currentTheme } = useTheme();
 
   return (
-    <Popover>
+    <Popover
+      open={showQuickActions}
+      onOpenChange={(open) => {
+        if (!open) {
+          closeQuickActions();
+        }
+      }}
+    >
       <Popover.Trigger asChild>
         <RButton
           style={{
@@ -37,6 +44,7 @@ const FABNative: React.FC<FABProps> = ({
             bottom: 20,
             alignSelf: 'center',
           }}
+          onPress={toggleQuickActions}
         >
           <MaterialIcons
             name="add"
@@ -63,7 +71,10 @@ const FABNative: React.FC<FABProps> = ({
           {quickActionData.map((action) => (
             <QuickActionButton
               key={action.action}
-              onPress={() => handleActionSelect(action.action)}
+              onPress={() => {
+                handleActionSelect(action.action);
+                closeQuickActions();
+              }}
               iconName={action.iconName}
               text={action.text}
             />
