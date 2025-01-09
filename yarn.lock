@@ -22068,6 +22068,7 @@ __metadata:
     eslint-plugin-react-native: "npm:^4.0.0"
     expo: "npm:~51.0.39"
     expo-application: "npm:~5.9.1"
+    expo-asset: "npm:~10.0.10"
     expo-auth-session: "npm:~5.5.2"
     expo-blur: "npm:~13.0.2"
     expo-build-properties: "npm:~0.12.5"

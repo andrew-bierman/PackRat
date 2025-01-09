@@ -86,6 +86,7 @@
     "eslint-plugin-react-native": "^4.0.0",
     "expo": "~51.0.39",
     "expo-application": "~5.9.1",
+    "expo-asset": "~10.0.10",
     "expo-auth-session": "~5.5.2",
     "expo-blur": "~13.0.2",
     "expo-build-properties": "~0.12.5",
