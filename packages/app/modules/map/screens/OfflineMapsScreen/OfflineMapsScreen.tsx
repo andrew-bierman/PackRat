@@ -8,7 +8,6 @@ import React, {
   type FC,
 } from 'react';
 import useTheme from 'app/hooks/useTheme';
-import { RScrollView, RStack } from '@packrat/ui';
 import { MapPreviewCard } from 'app/modules/map/components/MapPreviewCard';
 import { useOfflineMaps } from '../../hooks/useOfflineMaps';
 import { OfflineMapComponent } from './OfflineMap';
@@ -16,6 +15,8 @@ import { useFocusEffect } from 'expo-router';
 import { useAuthUser } from 'app/modules/auth';
 import { OFFLINE_MAP_STYLE_URL } from 'app/modules/map/constants';
 import { useOfflineStore } from 'app/atoms';
+import { FeedList } from 'app/modules/feed/components';
+import Layout from 'app/components/layout/Layout';
 
 export interface OfflineMap {
   id: string;
@@ -43,56 +44,36 @@ export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
     offlineMapPacks,
     remoteOfflineMaps,
   );
+  console.log(offlineMapPacks, '22');
   const selectedMap = useMemo(() => {
     return offlineMaps?.find?.((map) => map?.id === selectedMapId);
   }, [offlineMaps, selectedMapId]);
 
   return (
-    <View
-      style={{
-        backgroundColor: currentTheme.colors.background,
-        height: '100%',
-      }}
-    >
+    <>
       {selectedMap ? (
         <OfflineMapComponent
           map={selectedMap}
           onClose={() => setSelectedMapId('')}
         />
       ) : null}
-      <RScrollView nestedScrollEnabled={true} mt={50} mb={50}>
-        {offlineMaps ? (
-          <RStack
-            // direction="horizontal"
-            space={16}
-            style={{
-              flexDirection: 'row',
-              paddingHorizontal: 16,
-              paddingBottom: 20,
-              alignItems: 'center',
-            }}
-          >
-            {offlineMaps.map((offlineMap) => {
-              return (
-                <View style={{ maxWidth: 300 }} key={offlineMap.id}>
-                  <MapPreviewCard
-                    id={offlineMap.id}
-                    onShowMapClick={setSelectedMapId}
-                    item={offlineMap}
-                    isDownloaded={offlineMap.downloaded}
-                  />
-                </View>
-              );
-            })}
-            {offlineMaps.length === 0 && fallback}
-          </RStack>
-        ) : (
-          <RStack>
-            <Text>loading...</Text>
-          </RStack>
-        )}
-      </RScrollView>
-    </View>
+      <Layout>
+        <FeedList
+          data={offlineMaps}
+          CardComponent={({ item }) => (
+            <MapPreviewCard
+              key={item?.id}
+              id={item.id}
+              item={item}
+              onShowMapClick={setSelectedMapId}
+            />
+          )}
+          isLoading={false}
+          isError={false}
+          separatorHeight={12}
+        />
+      </Layout>
+    </>
   );
 };
 
@@ -104,8 +85,8 @@ const useOfflineMapPacks = (authUserId: string) => {
       (async () => {
         try {
           const offlineMapPacksRes = await offlineManager.getPacks();
-          const userOfflineMap = offlineMapPacksRes
-            .map((pack) => {
+          console.log({
+            offlineMapPacksRes: offlineMapPacksRes.map((pack) => {
               try {
                 const metadata = JSON.parse(pack.metadata);
                 return {
@@ -117,6 +98,25 @@ const useOfflineMapPacks = (authUserId: string) => {
                   downloaded: true,
                 };
               } catch {
+                return null;
+              }
+            }),
+            userId: authUserId,
+          });
+          const userOfflineMap = offlineMapPacksRes
+            .map((pack) => {
+              console.log('metadata', pack.metadata, authUserId, pack.bounds);
+              try {
+                return {
+                  id: pack.metadata.id,
+                  name: pack.name,
+                  bounds: pack.bounds,
+                  styleURL: OFFLINE_MAP_STYLE_URL,
+                  userId: pack.metadata.userId,
+                  downloaded: true,
+                };
+              } catch (e) {
+                console.log(e);
                 return null;
               }
             })

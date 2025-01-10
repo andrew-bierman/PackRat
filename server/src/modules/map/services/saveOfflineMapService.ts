@@ -28,7 +28,9 @@ export const saveOfflineMapService = async (
 
     return newOfflineMap;
   } catch (error) {
-    console.error(error);
-    throw new Error('Trips cannot be found');
+    if (error.message.includes('SQLITE_CONSTRAINT')) {
+      throw new Error('Map with the following name already exists');
+    }
+    throw new Error('Unable to save offline map');
   }
 };
