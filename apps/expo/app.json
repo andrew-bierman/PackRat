@@ -49,7 +49,7 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "13.4",
+            "deploymentTarget": "15.1",
             "buildNumber": "3",
             "infoPlist": {
               "ITSAppUsesNonExemptEncryption": false
