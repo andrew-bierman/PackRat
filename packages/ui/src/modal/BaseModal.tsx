@@ -139,12 +139,14 @@ export const BaseModal = ({
             {children}
           </ModalProvider>
 
-          <RStack
-            style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
-            gap="$4"
-          >
-            {memoFooterButtons}
-          </RStack>
+          {!!memoFooterButtons?.length && (
+            <RStack
+              style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+              gap="$2"
+            >
+              {memoFooterButtons}
+            </RStack>
+          )}
           {footerElement}
           <Dialog.Close asChild>
             <Button

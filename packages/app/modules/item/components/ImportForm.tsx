@@ -6,6 +6,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { useImportItem, useImportFromBucket } from '../hooks';
 import { useImportPackItem } from '../../pack/hooks';
 import useResponsive from 'app/hooks/useResponsive';
+import RPrimaryButton from 'app/components/RPrimaryButton';
 
 interface ImportFormProps {
   showSubmitButton?: boolean;
@@ -183,9 +184,11 @@ export const ImportForm: FC<ImportFormProps> = ({
           style={{ width: '100%' }}
         />
       </View>
-      <RButton onClick={handleItemImport} disabled={isImporting}>
-        <RText style={{ color: currentTheme.colors.text }}>{buttonText}</RText>
-      </RButton>
+      <RPrimaryButton
+        onPress={handleItemImport}
+        disabled={isImporting}
+        label={buttonText}
+      />
     </View>
   );
 };

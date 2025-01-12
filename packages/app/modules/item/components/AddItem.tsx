@@ -102,6 +102,7 @@ export const AddItem = ({
       <ItemForm
         validationSchema={isEdit ? editItemSchema : addItemSchema}
         handleSubmit={handleSubmit}
+        closeModalHandler={closeModalHandler}
         defaultValues={defaultValues}
         isLoading={isLoading}
         isEdit={isEdit}

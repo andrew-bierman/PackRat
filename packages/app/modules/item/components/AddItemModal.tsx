@@ -35,13 +35,6 @@ export const AddItemModal = ({
         />
       }
       showTrigger={showTrigger}
-      footerButtons={[
-        {
-          label: 'Cancel',
-          color: '#B22222',
-          onClick: (_, closeModal) => closeModal(),
-        },
-      ]}
       footerComponent={undefined}
       isOpen={isAddItemModalOpen}
       onOpen={() => setIsAddItemModalOpen(true)}

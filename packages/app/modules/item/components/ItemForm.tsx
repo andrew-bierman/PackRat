@@ -8,6 +8,8 @@ import {
   FormSelect,
   FormRadioGroup,
   DropdownComponent,
+  RButton,
+  XStack,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 
@@ -28,6 +30,7 @@ interface ItemFormProps {
   isEdit?: boolean;
   defaultValues: Partial<Item>;
   validationSchema: any;
+  closeModalHandler?: () => void;
   currentPack?: {
     items: Array<{
       category: {
@@ -39,6 +42,7 @@ interface ItemFormProps {
 
 export const ItemForm = ({
   handleSubmit,
+  closeModalHandler,
   showSubmitButton = true,
   isLoading,
   isEdit,
@@ -123,14 +127,24 @@ export const ItemForm = ({
             style={{ width: '100%' }}
           />
           <FormRadioGroup name={'type' as any} options={radioOptions} />
-
-          {showSubmitButton && (
-            <SubmitButton onSubmit={handleSubmit}>
-              <RText style={{ color: currentTheme.colors.white }}>
-                {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
-              </RText>
-            </SubmitButton>
-          )}
+          <XStack style={{ justifyContent: 'flex-end', gap: 8 }}>
+            {showSubmitButton && (
+              <SubmitButton onSubmit={handleSubmit}>
+                <RText style={{ color: currentTheme.colors.white }}>
+                  {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
+                </RText>
+              </SubmitButton>
+            )}
+            {closeModalHandler && (
+              <RButton
+                backgroundColor="#B22222"
+                onPress={closeModalHandler}
+                label="Cancel"
+              >
+                <RText style={{ color: '#fff' }}>Cancel</RText>
+              </RButton>
+            )}
+          </XStack>
         </RStack>
       </Form>
     </View>

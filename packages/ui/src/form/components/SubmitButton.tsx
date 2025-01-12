@@ -12,11 +12,10 @@ export const SubmitButton = <T extends {}>({
   return (
     <LmSubmitButtonRhf
       $theme-dark={{
-        ...({ color: 'text', backgroundColor: '$colors.background' } as any),
+        ...({ backgroundColor: '$colors.background' } as any),
       }}
       $theme-light={{
         ...({
-          color: 'text',
           backgroundColor: '#232323',
           fontWeight: 700,
         } as any),
@@ -27,6 +26,7 @@ export const SubmitButton = <T extends {}>({
       }}
       disabledStyle={{ opacity: 0.6 }}
       style={{
+        color: '#fff',
         ...safeStyle,
       }}
       {...props}
