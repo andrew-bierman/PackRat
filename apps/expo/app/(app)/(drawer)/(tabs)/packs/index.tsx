@@ -1,7 +1,7 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
-import { placesAutocompleteSearchAtom } from 'app/components/PlacesAutocomplete/usePlacesAutoComplete';
 import useTheme from 'app/hooks/useTheme';
 import { FeedScreen } from 'app/modules/feed';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import { useAtom } from 'jotai';
@@ -10,7 +10,7 @@ import { Platform } from 'react-native';
 
 export default function Packs() {
   const { currentTheme } = useTheme();
-  const [searchQuery, setSearchQuery] = useAtom(placesAutocompleteSearchAtom);
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
 
   return (
     <>

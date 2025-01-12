@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
 export function BootstrapApp({ children }: { children: React.ReactNode }) {
   useAttachListeners();
   // Prefetch Offline maps for offline mode
-  useOfflineMaps(Platform.OS !== 'web');
+  useOfflineMaps({ enabled: Platform.OS !== 'web' });
 
   return <>{children}</>;
 }

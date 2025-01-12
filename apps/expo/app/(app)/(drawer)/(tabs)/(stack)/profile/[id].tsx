@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 import { ProfileScreen, useProfile, useProfileId } from 'app/modules/user';
 import Head from 'expo-router/head';
+import { useRouterSettings } from 'app/hooks/router';
 
 const Profile = () => {
   const [id] = useProfileId();
   const { user } = useProfile(id);
   const userRealName = user?.name ?? null;
+  const { stackScreenOptionsHeaderSettings } = useRouterSettings();
 
   return (
     <>
@@ -21,6 +23,7 @@ const Profile = () => {
       <Stack.Screen
         options={{
           title: userRealName ? `${userRealName}'s Profile` : '',
+          ...stackScreenOptionsHeaderSettings,
         }}
       />
       <ProfileScreen userId={id} />

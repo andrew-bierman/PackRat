@@ -9,5 +9,8 @@ import { Platform } from 'react-native';
  */
 
 // use this for android emulator
-// export const api = Platform.OS === 'web' ? API_URL : 'http://10.0.2.2:8787/api';
-export const api = API_URL;
+export const api =
+  Platform.OS === 'web'
+    ? API_URL
+    : 'https://6916-5-77-200-104.ngrok-free.app/api';
+// export const api = API_URL;

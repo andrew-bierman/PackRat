@@ -12,6 +12,7 @@ export function getOfflineMapsRoute() {
     .input(
       z.object({
         ownerId: z.string(),
+        search: z.string().optional(),
         pagination: z
           .object({ limit: z.number(), offset: z.number() })
           .strict(),
@@ -19,9 +20,10 @@ export function getOfflineMapsRoute() {
     )
     .query(
       async (opts): Promise<{ data: OfflineMap[]; totalCount: number }> => {
-        const { pagination, ownerId } = opts.input;
+        const { pagination, ownerId, search = '' } = opts.input;
         const { offlineMaps, totalCount } = await getOfflineMapsService(
           ownerId,
+          search,
           pagination as { limit: number; offset: number },
         );
         return {

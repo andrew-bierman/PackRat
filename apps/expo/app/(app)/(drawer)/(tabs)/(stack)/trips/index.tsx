@@ -1,14 +1,14 @@
 import React from 'react';
 import { FeedScreen } from 'app/modules/feed';
-import { placesAutocompleteSearchAtom } from 'app/components/PlacesAutocomplete/usePlacesAutoComplete';
 import { useAtom } from 'jotai';
 import { Platform } from 'react-native';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import useTheme from 'app/hooks/useTheme';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
 export default function FeedNav() {
   const { currentTheme } = useTheme();
-  const [searchQuery, setSearchQuery] = useAtom(placesAutocompleteSearchAtom);
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
 
   return (
     <>

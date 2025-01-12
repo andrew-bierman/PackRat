@@ -26,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({
         margin="auto"
         alignItems="center"
         justifyContent="flex-start"
-        paddingTop={Platform.OS === 'web' ? 20 : '$1'}
+        paddingTop={Platform.OS === 'web' ? 20 : '$4'}
         paddingBottom={Platform.OS !== 'web' ? 44 : undefined}
         paddingHorizontal="$4"
         marginBottom={Platform.OS === 'web' ? 20 : '$1'}

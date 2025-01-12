@@ -92,7 +92,7 @@ export const FeedSearchFilter = ({
 
       {(feedType === 'userPacks' || feedType === 'userTrips') && (
         <RSecondaryButton
-          style={{ marginLeft: 'auto', marginTop: 8 }}
+          style={{ marginLeft: 'auto' }}
           label="Add new"
           icon={<Plus />}
           onPress={handleCreateClick}

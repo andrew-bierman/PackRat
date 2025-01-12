@@ -6,14 +6,17 @@ import useTheme from 'app/hooks/useTheme';
 
 export default function StackLayout() {
   const { currentTheme } = useTheme();
+  const { layoutStackScreenOptionsHeaderSettings } = useRouterSettings();
+
   return (
     <Stack
       screenOptions={{
         headerRight: () => (
           <DrawerToggleButton tintColor={currentTheme.colors.text} />
         ),
-        headerBlurEffect: 'systemChromeMaterial',
+        ...layoutStackScreenOptionsHeaderSettings,
         title: 'Profile',
+        headerBlurEffect: 'systemChromeMaterial',
       }}
     />
   );

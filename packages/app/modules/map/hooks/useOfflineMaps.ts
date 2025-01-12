@@ -26,7 +26,8 @@ interface OfflineMapsResponse {
   nextOffset?: number;
 }
 
-export const useOfflineMaps = (enabled = true) => {
+export const useOfflineMaps = ({ enabled = true, search = '' } = {}) => {
+  console.log({ search });
   const [pagination, setPagination] = useState<PaginationParams>(
     getPaginationInitialParams(),
   );
@@ -35,6 +36,7 @@ export const useOfflineMaps = (enabled = true) => {
     queryTrpc.getOfflineMaps.useQuery<OfflineMapsResponse>(
       {
         ownerId: authUser?.id,
+        search,
         pagination,
       },
       {
