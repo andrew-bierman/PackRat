@@ -1,13 +1,17 @@
+import * as validator from '@packrat/validations';
 import {
   bulkAddItemsGlobalService,
   parseCSVData,
   fetchFromS3,
 } from '../../services/item/item.service';
 import { User } from '../../drizzle/methods/User';
+import { Context } from 'hono';
 
-export const importNotifiedETL = async (c) => {
-  const params = c.req.query();
-  const file_name = params.file_key;
+export const importNotifiedETL = async (c: Context) => {
+  const body = await c.req.json<validator.ImportNotifiedETL>();
+  const file_name = body.file_key;
+  const bucket_name = body.bucket_name;
+  const spider_name = body.spider_name;
 
   const endpoint = c.env.BUCKET_ENDPOINT;
   const bucket = c.env.BUCKET_NAME;
@@ -34,7 +38,7 @@ export const importNotifiedETL = async (c) => {
 
   try {
     const fileData = await fetchFromS3(
-      `${endpoint}/${bucket}/${file_name}`,
+      `${endpoint}/${bucket_name}/${file_name}`,
       method,
       service,
       region,
