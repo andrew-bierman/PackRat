@@ -26,12 +26,12 @@
     "esbuild-plugin-flow": "^0.3.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.74.5",
+    "react-native": "0.73.6",
     "react-native-web": "^0.19.10"
   },
   "devDependencies": {
     "@types/react": "~18.2.55",
-    "@types/react-dom": "~18.2.25",
+    "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^4.2.1",
@@ -42,7 +42,7 @@
     "rollup-plugin-polyfill-node": "^0.13.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "tslib": "^2.6.2",
-    "typescript": "~5.3.3",
+    "typescript": "^5.5.3",
     "vite": "^5.3.1",
     "vite-plugin-node-polyfills": "^0.21.0"
   }
