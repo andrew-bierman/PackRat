@@ -13,7 +13,9 @@
       "backgroundColor": "#ffffff",
       "scheme": "myapp"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.andrewbierman.packrat"
@@ -52,7 +54,7 @@
             "buildToolsVersion": "34.0.0"
           },
           "ios": {
-            "deploymentTarget": "15.1"
+            "deploymentTarget": "13.4"
           }
         }
       ]

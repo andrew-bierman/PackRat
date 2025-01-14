@@ -26,7 +26,7 @@
     "@tamagui/next-plugin": "1.96.0",
     "@tamagui/next-theme": "1.96.0",
     "app": "*",
-    "babel-preset-expo": "~11.0.0",
+    "babel-preset-expo": "^10.0.1",
     "babel-preset-react-native": "^4.0.1",
     "metro-react-native-babel-preset": "^0.77.0",
     "metro-react-native-babel-transformer": "^0.77.0",
