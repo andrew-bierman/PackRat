@@ -34,7 +34,9 @@ export async function getSimilarItemsService(
     ITEM_TABLE_NAME,
     limit,
     {
-      isPublic: true,
+      isPublic: {
+        $eq: true,
+      },
     },
   );
 

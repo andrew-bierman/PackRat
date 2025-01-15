@@ -29,7 +29,9 @@ export async function getSimilarPacksService(
   const {
     result: { matches },
   } = await VectorClient.instance.search(pack.name, 'packs', limit, {
-    isPublic: true,
+    isPublic: {
+      $eq: true,
+    },
   });
 
   // passing empty array to the db query below throws
