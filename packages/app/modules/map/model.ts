@@ -13,4 +13,5 @@ export interface OfflineMap {
   maxZoom?: number;
   bounds: [number[], number[]];
   downloaded: boolean;
+  fileName?: string;
 }

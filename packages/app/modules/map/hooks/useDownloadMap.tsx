@@ -1,6 +1,8 @@
 import { useAuthUser } from 'app/modules/auth';
 import { queryTrpc } from 'app/trpc';
 import { OFFLINE_MAP_STYLE_URL } from '../constants';
+import { writeFile } from 'app/utils/fileSystemNative';
+import { v4 as uuid } from 'uuid';
 
 export interface UserRemoteMap {
   name: string;
@@ -37,13 +39,22 @@ export const useDownloadMap = (onDownload) => {
     // Save the map under user profile.
     mutateAsync(downloadOptions)
       .then((data) => {
-        onDownload({
-          ...downloadOptions,
-          metadata: {
-            ...data.metadata,
-            id: data.id,
-          },
-        });
+        (async () => {
+          const fileName = uuid();
+          await writeFile({
+            directory: 'maps',
+            filename: fileName,
+            data: JSON.stringify(shape),
+          });
+          onDownload({
+            ...downloadOptions,
+            metadata: {
+              ...data.metadata,
+              id: data.id,
+              fileName,
+            },
+          });
+        })();
       })
       .catch((e) => {});
   };

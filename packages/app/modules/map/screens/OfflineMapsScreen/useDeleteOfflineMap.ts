@@ -4,6 +4,7 @@ import { offlineMapPacksAtom } from 'app/modules/map/atoms';
 import type { OfflineMap } from 'app/modules/map/model';
 
 import { queryTrpc } from 'app/trpc';
+import { deleteFile } from 'app/utils/fileSystemNative';
 
 export const useDeleteOfflineMap = () => {
   const [_, setOfflineMapPacks] = useAtom(offlineMapPacksAtom);

@@ -34,6 +34,7 @@ export const useOfflineMapPacks = (
                   styleURL: OFFLINE_MAP_STYLE_URL,
                   userId: pack.metadata.userId,
                   downloaded: true,
+                  fileName: pack.metadata.fileName,
                 };
               } catch (e) {
                 console.log(e);

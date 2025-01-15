@@ -11,9 +11,10 @@ import {
   FormInput,
   RStack,
   RText,
-  SubmitButton,
+  useFormSubmitTrigger,
   useModalState,
 } from '@packrat/ui';
+import { mapFormSchema } from '@packrat/validations';
 
 interface MapStylePickerProps {
   currentBounds: any;
@@ -28,12 +29,14 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
 }) => {
   const styles = useCustomStyles(loadStyles);
   const { isModalOpen, onClose, onOpen } = useModalState();
+  const [formRef, triggerSubmit] = useFormSubmitTrigger();
+
   const { downloadMap, isDownloading, progress } = useDownloadMapProgress();
   const { handleDownloadMap, isSaving } = useDownloadMap(downloadMap);
   const formattedProgress = !isNaN(progress) ? Math.round(progress) : 0;
 
-  const handleSubmit = ({ mapName }) => {
-    handleDownloadMap({ mapName, bounds: currentBounds.current, shape });
+  const handleSubmit = async (_, { name }) => {
+    handleDownloadMap({ mapName: name, bounds: currentBounds.current, shape });
     onClose();
   };
 
@@ -54,25 +57,35 @@ export const DownloadMapBtn: FC<MapStylePickerProps> = ({
         isOpen={isModalOpen}
         footerButtons={[
           {
+            label: 'Save',
+            color: '#232323',
+            onClick: (_, closeModal) => {
+              if (typeof triggerSubmit === 'function') {
+                triggerSubmit(closeModal);
+              }
+            },
+          },
+          {
             label: 'Cancel',
             color: '#B22222',
-            onClick: (_, closeModal) => closeModal(),
+            onClick: (_, closeModal) => {
+              closeModal();
+              onClose?.();
+            },
           },
         ]}
         footerComponent={undefined}
       >
         <View style={{ paddingVertical: 10, minWidth: 250 }}>
-          <Form defaultValues={{ mapName: '' }}>
+          <Form
+            ref={formRef}
+            defaultValues={{ mapName: '' }}
+            validationSchema={mapFormSchema}
+            onSubmit={handleSubmit}
+          >
             {/* <RStack gap={16} direction="vertical"> */}
             <RStack gap={16} style={{ flexDirection: 'column' }}>
-              <FormInput
-                placeholder="Map name"
-                name="mapName"
-                label="Map name"
-              />
-              <SubmitButton style={styles.button} onSubmit={handleSubmit}>
-                Save
-              </SubmitButton>
+              <FormInput placeholder="Map name" name="name" label="Map name" />
             </RStack>
             {/* </RStack> */}
           </Form>
