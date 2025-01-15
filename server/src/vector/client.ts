@@ -187,7 +187,7 @@ class VectorClient {
         vector,
         topK,
         namespace,
-        // ...(filter ? { filter } : {}),
+        ...(filter ? { filter } : {}),
       }),
     });
 
