@@ -3,7 +3,7 @@ name: EAS Local Build
 on:
   workflow_dispatch:
   push:
-    branches: [ "**" ]
+    branches: ['**']
     paths:
       - 'packages/app/**'
       - 'apps/expo/**'
@@ -11,7 +11,7 @@ on:
       - 'packages/config/**'
       - 'packages/crosspath/**'
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
     paths:
       - 'packages/app/**'
       - 'apps/expo/**'
@@ -47,7 +47,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: ./.github/actions/find-or-create-comment
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Standard Environment
         uses: ./.github/actions/setup-standard-environment
@@ -69,19 +69,18 @@ jobs:
           EXPO_PUBLIC_ANDROID_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_ANDROID_CLIENT_ID }}
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: /home/runner/work/PackRat/PackRat/apps/expo/build-*.apk
-      
+
       - name: Update build status
         if: always() && github.event_name == 'pull_request'
         uses: ./.github/actions/update-native-preview-build-status
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            build-outcome: ${{ steps.build.outcome }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          build-outcome: ${{ steps.build.outcome }}
 
-        
   build-ios:
     runs-on: macos-latest
 
@@ -97,7 +96,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: ./.github/actions/find-or-create-comment
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Standard Environment
         uses: ./.github/actions/setup-standard-environment
@@ -119,15 +118,14 @@ jobs:
           EXPO_PUBLIC_IOS_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_IOS_CLIENT_ID }}
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
           path: /Users/runner/work/PackRat/PackRat/apps/expo/build-*.ipa
-      
+
       - name: Update build status
         if: always() && github.event_name == 'pull_request'
         uses: ./.github/actions/update-native-preview-build-status
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            build-outcome: ${{ steps.build.outcome }}
-
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          build-outcome: ${{ steps.build.outcome }}
