@@ -4,3 +4,10 @@ export enum ItemCategoryEnum {
   WATER = 'Water',
   ESSENTIALS = 'Essentials',
 }
+
+export function getCategoryOrDefault(category: string): ItemCategoryEnum {
+  if (ItemCategory.includes(category as any)) {
+    return category as ItemCategoryEnum;
+  }
+  return ItemCategoryEnum.ESSENTIALS;
+}

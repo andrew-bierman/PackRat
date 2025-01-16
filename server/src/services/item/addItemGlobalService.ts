@@ -7,7 +7,10 @@ import {
 } from '../../db/schema';
 import { Item as ItemClass } from '../../drizzle/methods/Item';
 import { ItemCategory } from '../../drizzle/methods/itemcategory';
-import { ItemCategory as categories } from '../../utils/itemCategory';
+import {
+  ItemCategory as categories,
+  getCategoryOrDefault,
+} from '../../utils/itemCategory';
 import { VectorClient } from '../../vector/client';
 import { convertWeight, SMALLEST_WEIGHT_UNIT } from '../../utils/convertWeight';
 import { summarizeItem } from '../../utils/item';
@@ -24,20 +27,14 @@ export const addItemGlobalService = async (
   item: validator.AddItemGlobalType,
   executionCtx?: ExecutionContext,
 ): Promise<ItemWithCategory> => {
-  let category: InsertItemCategory | null;
-  if (!categories.includes(item.type)) {
-    const error = new Error(
-      `[${item.sku}#${item.name}]: Category must be one of: ${categories.join(', ')}`,
-    );
-    throw error;
-  }
+  const categoryType = getCategoryOrDefault(item.type);
 
   const itemClass = new ItemClass();
   const itemCategoryClass = new ItemCategory();
-  category =
-    (await itemCategoryClass.findItemCategory({ name: item.type })) || null;
+  let category =
+    (await itemCategoryClass.findItemCategory({ name: categoryType })) || null;
   if (!category) {
-    category = await itemCategoryClass.create({ name: item.type });
+    category = await itemCategoryClass.create({ name: categoryType });
   }
 
   const newItem = (await itemClass.create({

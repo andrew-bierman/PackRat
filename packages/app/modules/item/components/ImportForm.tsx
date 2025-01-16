@@ -89,6 +89,16 @@ export const ImportForm: FC<ImportFormProps> = ({
     if (newValue) setSelectedType(newValue);
   };
 
+  const stripBOM = (content: string) => {
+    if (content.startsWith('\uFEFF')) {
+      console.log('BOM detected and removed');
+    }
+    const cleanedContent = content
+      .replace(/^\uFEFF/, '')
+      .replace(/^\xEF\xBB\xBF/, '');
+    return cleanedContent;
+  };
+
   const handleItemImport = async () => {
     setIsImporting(true);
     try {
@@ -110,7 +120,7 @@ export const ImportForm: FC<ImportFormProps> = ({
             if (file) {
               const base64Content = file.uri.split(',')[1];
               if (base64Content) {
-                fileContent = atob(base64Content);
+                fileContent = stripBOM(atob(base64Content));
               } else {
                 throw new Error('No file content available');
               }
@@ -125,7 +135,7 @@ export const ImportForm: FC<ImportFormProps> = ({
             (res as DocumentPicker.DocumentPickerSuccessResult).assets?.[0]
               ?.uri || '',
           );
-          fileContent = await response.text();
+          fileContent = stripBOM(await response.text());
         }
 
         if (currentpage === 'items') {
