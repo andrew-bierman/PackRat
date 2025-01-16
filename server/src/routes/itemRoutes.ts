@@ -46,10 +46,9 @@ router.get(
   tryCatchWrapper(importFromBucket),
 );
 
-router.get(
+router.post(
   '/importNotifiedETL',
-  // authTokenMiddleware,
-  // zodParser(validator.importNotifiedETL, 'query'),
+  zodParser(validator.importNotifiedETL, 'body'),
   tryCatchWrapper(importNotifiedETL),
 );
 
