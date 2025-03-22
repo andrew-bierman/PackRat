@@ -1,5 +1,16 @@
 import { Trip } from '../../drizzle/methods/trip';
 
+interface TripResult {
+  id: string;
+  name: string;
+  packs?: {
+    itemPacks?: { item: any }[];
+  };
+  tripGeojsons?: {
+    geojson?: { geoJSON?: string };
+  }[];
+}
+
 /**
  * Retrieves a trip by its ID and returns the trip details.
  * @param {PrismaClient} prisma - Prisma client.
@@ -9,7 +20,7 @@ import { Trip } from '../../drizzle/methods/trip';
 export const getTripByIdService = async (tripId: string): Promise<object> => {
   try {
     const tripClass = new Trip();
-    const trip = await tripClass.findById(tripId);
+    const trip = (await tripClass.findById(tripId)) as TripResult;
     if (!trip) {
       throw new Error('Trip cannot be found');
     }

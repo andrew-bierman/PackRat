@@ -1,67 +1,78 @@
 import { type Context } from 'hono';
-import {
-  addItemGlobalService,
-  bulkAddItemsGlobalService,
-} from '../../services/item/item.service';
+import { bulkAddItemsGlobalService } from '../../services/item/item.service';
 import { protectedProcedure } from '../../trpc';
 import * as validator from '@packrat/validations';
 import Papa from 'papaparse';
-import { ItemCategoryEnum } from 'src/utils/itemCategory';
+import { ItemCategoryEnum } from '../../utils/itemCategory';
 
 export const importItemsGlobal = async (c: Context) => {
   try {
     const { content, ownerId } = await c.req.json();
+    const validHeaders = [
+      'name',
+      'weight',
+      'weight_unit',
+      'category',
+      'image_urls',
+      'sku',
+      'product_url',
+      'description',
+      'techs',
+      'seller',
+    ] as const;
 
     return new Promise((resolve, reject) => {
-      Papa.parse(content, {
+      Papa.parse<Record<string, unknown>>(content, {
         header: true,
         complete: async function (results) {
-          const expectedHeaders = [
-            'Name',
-            'Weight',
-            'Unit',
-            'Quantity',
-            'Category',
-            'image_urls',
-          ];
-          const parsedHeaders = results.meta.fields;
+          const parsedHeaders = results.meta.fields ?? [];
           try {
-            const allHeadersPresent = expectedHeaders.every((header) =>
-              parsedHeaders.includes(header),
+            const presentValidHeaders = parsedHeaders.filter((header) =>
+              validHeaders.includes(header as (typeof validHeaders)[number]),
             );
-            if (!allHeadersPresent) {
+
+            const invalidHeaders = presentValidHeaders.filter(
+              (header) =>
+                !validHeaders.includes(header as (typeof validHeaders)[number]),
+            );
+
+            if (invalidHeaders.length > 0) {
               return reject(
-                new Error('CSV does not contain all the expected Item headers'),
+                new Error(
+                  `Invalid header format for: ${invalidHeaders.join(', ')}`,
+                ),
               );
             }
 
-            for (const [index, item] of results.data.entries()) {
-              if (
-                index === results.data.length - 1 &&
-                Object.values(item).every((value) => value === '')
-              ) {
-                continue;
-              }
+            const lastRawItem = results.data[results.data.length - 1];
+            if (
+              lastRawItem &&
+              Object.values(lastRawItem).every((value) => value === '')
+            ) {
+              results.data.pop();
+            }
 
-              await addItemGlobalService(
-                {
-                  name: item.Name,
-                  weight: item.Weight,
-                  unit: item.Unit,
-                  type: item.Category,
-                  ownerId,
-                  image_urls: item.image_urls,
+            const errors: Error[] = [];
+            const createdItems = await bulkAddItemsGlobalService(
+              sanitizeItemsIterator(results.data, ownerId),
+              c.executionCtx,
+              {
+                onItemCreationError: (error) => {
+                  errors.push(error);
                 },
-                c.executionCtx,
-              );
-            }
-            resolve('items');
+              },
+            );
+
+            return resolve({
+              status: 'success',
+              items: createdItems,
+              errorsCount: errors.length,
+              errors,
+            });
           } catch (error) {
+            console.error(error);
             reject(new Error(`Failed to add items: ${error.message}`));
           }
-        },
-        error: function (error) {
-          reject(new Error(`Error parsing CSV file: ${error.message}`));
         },
       });
     })
@@ -85,7 +96,12 @@ function* sanitizeItemsIterator(
   for (let idx = 0; idx < csvRawItems.length; idx++) {
     const item = csvRawItems[idx];
 
-    const productDetailsStr = `${item.techs}`
+    // Ignore items with weight -1
+    if (Number(item?.weight) === -1) {
+      continue;
+    }
+
+    const productDetailsStr = String(item?.techs ?? '')
       .replace(/'([^']*)'\s*:/g, '"$1":') // Replace single quotes keys with double quotes.
       .replace(/:\s*'([^']*)'/g, ': "$1"') // Replace single quotes values with double quotes.
       .replace(/\\x([0-9A-Fa-f]{2})/g, (match, hex) => {
@@ -94,7 +110,6 @@ function* sanitizeItemsIterator(
         return String.fromCharCode(codePoint);
       });
 
-    console.log(`${idx} / ${csvRawItems.length}`);
     let parsedProductDetails:
       | validator.AddItemGlobalType['productDetails']
       | null = null;
@@ -102,22 +117,22 @@ function* sanitizeItemsIterator(
       parsedProductDetails = JSON.parse(productDetailsStr);
     } catch (e) {
       console.log(
-        `${productDetailsStr}\nFailed to parse product details for item ${item.Name}: ${e.message}`,
+        `${productDetailsStr}\nFailed to parse product details for item ${item?.name ?? 'unknown'}: ${e.message}`,
       );
       throw e;
     }
 
     const validatedItem: validator.AddItemGlobalType = {
-      name: String(item.Name),
-      weight: Number(item.Weight),
-      unit: String(item.Unit),
-      type: String(item.Category) as ItemCategoryEnum,
+      name: String(item?.name ?? ''),
+      weight: Number(item?.weight ?? 0),
+      unit: String(item?.weight_unit ?? ''),
+      type: String(item?.category ?? '') as ItemCategoryEnum,
       ownerId,
-      image_urls: item.image_urls && String(item.image_urls),
-      sku: item.sku && String(item.sku),
-      productUrl: item.product_url && String(item.product_url),
-      description: item.description && String(item.description),
-      seller: item.seller && String(item.seller),
+      image_urls: item?.image_urls ? String(item.image_urls) : undefined,
+      sku: item?.sku ? String(item.sku) : undefined,
+      productUrl: item?.product_url ? String(item.product_url) : undefined,
+      description: item?.description ? String(item.description) : undefined,
+      seller: item?.seller ? String(item.seller) : undefined,
     };
 
     if (parsedProductDetails) {
@@ -127,12 +142,13 @@ function* sanitizeItemsIterator(
     yield validatedItem;
   }
 }
+
 export function importItemsGlobalRoute() {
-  const expectedHeaders = [
-    'Name',
-    'Weight',
-    'Unit',
-    'Category',
+  const validHeaders = [
+    'name',
+    'weight',
+    'weight_unit',
+    'category',
     'image_urls',
     'sku',
     'product_url',
@@ -140,23 +156,34 @@ export function importItemsGlobalRoute() {
     'techs',
     'seller',
   ] as const;
+
   return protectedProcedure
     .input(validator.importItemsGlobal)
     .mutation(async (opts) => {
       const { content, ownerId } = opts.input;
       return new Promise((resolve, reject) => {
-        Papa.parse<Record<(typeof expectedHeaders)[number], unknown>>(content, {
+        Papa.parse<Record<string, unknown>>(content, {
           header: true,
           complete: async function (results) {
-            const parsedHeaders = results.meta.fields;
+            const parsedHeaders = results.meta.fields ?? [];
             try {
-              const allHeadersPresent = expectedHeaders.every((header) =>
-                parsedHeaders.includes(header),
+              // Only validate headers that are present in our validHeaders list
+              const presentValidHeaders = parsedHeaders.filter((header) =>
+                validHeaders.includes(header as (typeof validHeaders)[number]),
               );
-              if (!allHeadersPresent) {
+
+              // Check if any present valid headers are malformed
+              const invalidHeaders = presentValidHeaders.filter(
+                (header) =>
+                  !validHeaders.includes(
+                    header as (typeof validHeaders)[number],
+                  ),
+              );
+
+              if (invalidHeaders.length > 0) {
                 return reject(
                   new Error(
-                    'CSV does not contain all the expected Item headers',
+                    `Invalid header format for: ${invalidHeaders.join(', ')}`,
                   ),
                 );
               }

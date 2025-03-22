@@ -48,6 +48,7 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
 
   return (
     <ItemPickerOverlay
+      title={title}
       searchTerm={searchTerm}
       data={packs}
       ListEmptyComponent={() => <RText>No Packs Found</RText>}
@@ -72,6 +73,7 @@ export const PackPickerOverlay: FC<PackPickerOverlayProps> = ({
         onClose: handleClose,
         isOpen,
         showTrigger: false,
+        children: null,
       }}
     />
   );

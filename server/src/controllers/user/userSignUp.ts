@@ -25,7 +25,10 @@ export const userSignup = async (c) => {
       name,
     });
 
-    await userClass.generateAuthToken(JWT_SECRET, user.id);
+    if (!user) {
+      throw new Error('User creation failed');
+    }
+
     await sendWelcomeEmail(
       user.email,
       user.name,
@@ -57,6 +60,11 @@ export function signUpRoute() {
       password,
       name,
     });
+
+    if (!user) {
+      throw new Error('User creation failed');
+    }
+
     await sendWelcomeEmail(
       user.email,
       user.name,

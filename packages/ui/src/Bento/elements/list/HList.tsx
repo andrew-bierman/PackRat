@@ -37,7 +37,7 @@ HList.fileName = 'HList';
 function HListItem({ item }: { item: Data[number] }) {
   return (
     <HListFrame>
-      <HListInner group="listitem">
+      <HListInner group>
         <View flexDirection="column">
           <Image width="100%" height={200} source={{ uri: item.image }} />
         </View>

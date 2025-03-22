@@ -43,11 +43,12 @@ const CustomTabBar = View.styleable<CustomTabBarProps>(
         ref={ref}
       >
         {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key];
+          const descriptor = descriptors[route.key];
+          const { options } = descriptor ?? {};
           const label =
-            options.tabBarLabel !== undefined
+            options?.tabBarLabel !== undefined
               ? options.tabBarLabel
-              : options.title !== undefined
+              : options?.title !== undefined
                 ? options.title
                 : route.name;
 
@@ -165,7 +166,7 @@ export function Tabbar() {
         justifyContent="center"
       >
         <Text fontSize="$8" fontWeight="$8" lineHeight="$8">
-          {state.routes[state.index].key}
+          {state?.routes?.[state.index]?.key}
         </Text>
       </View>
       <CustomTabBar

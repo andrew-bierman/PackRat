@@ -3,7 +3,7 @@ import {
   useSearch,
 } from '@tanstack/react-router';
 import { useRouter } from './useRouter';
-import { CreateParam, CreateParamOptions } from '../../model';
+import type { CreateParam, CreateParamOptions } from '../../model';
 
 export const createParam: CreateParam = <T>() => ({
   useParam: useParam<T>,
@@ -45,7 +45,7 @@ const useParams = <T>(): {
   const params = { ...screenParams, ...searchParams };
 
   const setParams = (value: Partial<T>) => {
-    if (Object.keys(value).some((key) => screenParams.hasOwnProperty(key))) {
+    if (Object.keys(value).some((key) => !!screenParams[key])) {
       return console.error("You can't update screen params");
     }
 

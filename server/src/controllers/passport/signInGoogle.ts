@@ -52,11 +52,11 @@ export const signInGoogle = async (c: Context) => {
         username,
       });
 
-      await userClass.generateAuthToken(c.env.JWT_SECRET, user.id);
+      await userClass.generateAuthToken(c.env.JWT_SECRET, user!.id);
 
       sendWelcomeEmail(
-        user.email,
-        user.name,
+        user!.email,
+        user!.name,
         c.env.STMP_EMAIL,
         c.env.SEND_GRID_API_KEY,
       );
@@ -68,7 +68,7 @@ export const signInGoogle = async (c: Context) => {
 
       await userClass.generateAuthToken(
         c.env.JWT_SECRET,
-        alreadyGoogleSignin.id,
+        alreadyGoogleSignin!.id,
       );
 
       if (!alreadyGoogleSignin.googleId) {
@@ -140,11 +140,11 @@ export function googleSigninRoute() {
             username,
           });
 
-          await userClass.generateAuthToken(env.JWT_SECRET, user.id);
+          await userClass.generateAuthToken(env.JWT_SECRET, user!.id);
 
           sendWelcomeEmail(
-            user.email,
-            user.name,
+            user!.email,
+            user!.name,
             env.STMP_EMAIL,
             env.SEND_GRID_API_KEY,
           );
@@ -157,7 +157,7 @@ export function googleSigninRoute() {
 
           await userClass.generateAuthToken(
             env.JWT_SECRET,
-            alreadyGoogleSignin.id,
+            alreadyGoogleSignin!.id,
           );
 
           if (!alreadyGoogleSignin.googleId) {

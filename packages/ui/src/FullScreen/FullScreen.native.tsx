@@ -7,6 +7,7 @@ import {
   type ViewProps,
   Dimensions,
   Modal,
+  SafeAreaView,
 } from 'react-native';
 
 interface FullScreenProps {
@@ -25,7 +26,15 @@ export const FullScreen: FC<FullScreenProps> = ({
   }, [isFullScreen]);
   const content = <View>{children}</View>;
 
-  return isFullScreen ? <Modal visible>{content}</Modal> : content;
+  return isFullScreen ? (
+    <Modal visible>
+      <SafeAreaView style={{ flex: 1, position: 'relative' }}>
+        {content}
+      </SafeAreaView>
+    </Modal>
+  ) : (
+    content
+  );
 };
 
 const styles = StyleSheet.create({

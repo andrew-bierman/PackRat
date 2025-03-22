@@ -233,7 +233,8 @@ const Item = ({ item }: { item: Items[number] }) => {
             borderRadius="$12"
             theme="green"
           >
-            <Text htmlFor={'remove-product' + item.id}>Remove</Text>
+            {/* <Text htmlFor={'remove-product' + item.id}>Remove</Text> */}
+            <Text>Remove</Text>
           </Button>
           <Button
             flexGrow={1}
@@ -243,7 +244,8 @@ const Item = ({ item }: { item: Items[number] }) => {
             size="$3"
             borderRadius="$12"
           >
-            <Text htmlFor="add-favorite">Favorite</Text>
+            {/* <Text htmlFor="add-favorite">Favorite</Text> */}
+            <Text>Favorite</Text>
           </Button>
         </View>
       </View>

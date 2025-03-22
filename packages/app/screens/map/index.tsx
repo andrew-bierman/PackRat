@@ -15,7 +15,11 @@ import { ErrorBoundary } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 
 interface MapViewRef {
-  current: Mapbox.MapView | null;
+  fitBounds: (bounds: any, options: any) => void;
+  setCamera: (options: any) => void;
+  getCenter: () => [number, number];
+  zoomLevel: number;
+  getZoomForBounds: (bounds: any, options: any) => number;
 }
 
 Mapbox.setAccessToken(MAPBOX_ACCESS_TOKEN);
@@ -28,7 +32,7 @@ export default function Map() {
 
   // sourcery skip: avoid-function-declarations-in-blocks
   function CustomizedMap() {
-    const mapViewRef = useRef<MapViewRef>(null);
+    const mapViewRef = useRef<Mapbox.MapView>(null);
 
     const [style, setStyle] = React.useState(
       'mapbox://styles/mapbox/outdoors-v11',
@@ -130,28 +134,36 @@ export default function Map() {
                 [-77.033643, 38.899926],
               ],
             },
+            properties: {}, // Add properties field
           },
         ],
       };
 
       const bounds = getShapeSourceBounds(shape);
 
-      mapViewRef.current.fitBounds(bounds, {
-        edgePadding: {
-          top: 5,
-          right: 5,
-          bottom: 5,
-          left: 5,
-        },
-      });
+      if (mapViewRef.current) {
+        (mapViewRef.current as unknown as MapViewRef).fitBounds(bounds, {
+          edgePadding: {
+            top: 5,
+            right: 5,
+            bottom: 5,
+            left: 5,
+          },
+        });
 
-      mapViewRef.current.setCamera({
-        centerCoordinate: mapViewRef.current.getCenter(),
-        zoomLevel: Math.min(
-          mapViewRef.current.zoomLevel,
-          mapViewRef.current.getZoomForBounds(bounds, { padding: 50 }),
-        ),
-      });
+        (mapViewRef.current as unknown as MapViewRef).setCamera({
+          centerCoordinate: (
+            mapViewRef.current as unknown as MapViewRef
+          ).getCenter(),
+          zoomLevel: Math.min(
+            (mapViewRef.current as unknown as MapViewRef).zoomLevel,
+            (mapViewRef.current as unknown as MapViewRef).getZoomForBounds(
+              bounds,
+              { padding: 50 },
+            ),
+          ),
+        });
+      }
     }
 
     // function handleMapIdle() {
@@ -201,9 +213,6 @@ export default function Map() {
           style={{ flex: 1 }}
           // styleURL={style}
           // zoomLevel={10}
-          centerCoordinate={[lng, lat]}
-          x={0}
-          y={0}
           onLayout={handleMapViewLayout}
           // compassEnabled={true}
           // logoEnabled={false}
@@ -212,7 +221,7 @@ export default function Map() {
           ref={mapViewRef}
         >
           <Mapbox.Camera
-            centerCoordinate={[-77.035, 38.875]}
+            centerCoordinate={[lng, lat]}
             // zoomLevel={12}
           />
 
@@ -220,7 +229,9 @@ export default function Map() {
             coordinate={[-77.044211, 38.852924]}
             id="pt-ann"
             title={'this is a point annotation'}
-          ></Mapbox.PointAnnotation>
+          >
+            <View />
+          </Mapbox.PointAnnotation>
 
           <Mapbox.MarkerView
             id={'test-marker'}
@@ -230,7 +241,9 @@ export default function Map() {
               id={'test-marker-pointer'}
               title={'this is a marker view'}
               coordinate={[-77.044211, 38.852924]}
-            />
+            >
+              <View />
+            </Mapbox.PointAnnotation>
           </Mapbox.MarkerView>
 
           <Mapbox.ShapeSource
@@ -260,9 +273,9 @@ export default function Map() {
                   [-77.033643, 38.899926],
                 ],
               },
+              properties: {}, // Add properties field
             }}
             onPress={handleShapePress}
-            onLoad={handleShapeSourceLoad}
           >
             <Mapbox.LineLayer id="layer1" style={styles.lineLayer} />
           </Mapbox.ShapeSource>

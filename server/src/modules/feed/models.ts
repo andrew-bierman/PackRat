@@ -12,3 +12,8 @@ export type FeedQueryBy =
   | 'Lightest'
   | 'Heaviest'
   | 'Oldest';
+
+export interface PaginationParams {
+  limit: number;
+  offset: number;
+}

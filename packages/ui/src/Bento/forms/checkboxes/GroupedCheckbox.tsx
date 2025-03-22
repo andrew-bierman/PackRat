@@ -58,7 +58,7 @@ export function GroupedCheckbox() {
         <Checkboxes.Group orientation="vertical" flexShrink={1} minWidth="100%">
           {items.map((item) => (
             <Checkboxes.FocusGroup.Item value={item.id} key={item.id}>
-              <Item checked={values[item.id]} key={item.id} item={item} />
+              <Item checked={!!values[item.id]} key={item.id} item={item} />
             </Checkboxes.FocusGroup.Item>
           ))}
         </Checkboxes.Group>

@@ -3,7 +3,11 @@ import { Context } from 'hono';
 import { addTripService } from '../../services/trip/trip.service';
 import * as validator from '@packrat/validations';
 
-export const addTrip = async (c: Context) => {
+interface UserContext extends Context {
+  user: { id: string };
+}
+
+export const addTrip = async (c: UserContext) => {
   try {
     const requestData = (await c.req.json()) satisfies validator.AddTripType;
     const tripData = { ...requestData, ownerId: c.user.id };
@@ -16,7 +20,11 @@ export const addTrip = async (c: Context) => {
 
 export function addTripRoute() {
   return protectedProcedure.input(validator.addTrip).mutation(async (opts) => {
-    const tripData = { ownerId: opts.ctx.user.id, ...opts.input };
+    const user = opts.ctx.user as { id: string } | null; // Type assertion with null check
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
+    const tripData = { ownerId: user.id, ...opts.input };
     return await addTripService(tripData, opts.ctx.executionCtx);
   });
 }

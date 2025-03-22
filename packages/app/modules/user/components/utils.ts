@@ -2,7 +2,7 @@ import { type UserDataCardProps, type UserData } from './model';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { type PackDetails } from 'app/modules/pack';
 import { truncateString } from 'app/utils/truncateString';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from 'app/modules/trip/model';
 import { roundNumber } from 'app/utils';
 
 type Converter<Input, Result> = (
@@ -16,7 +16,7 @@ export const UserDataPackCardConverter: Converter<
 > = (input, currentUserId) => {
   if (input.type !== 'pack') {
     console.error('Expected input to be of type pack');
-    return null;
+    return null as any;
   }
   return {
     id: input.id,
@@ -30,9 +30,10 @@ export const UserDataPackCardConverter: Converter<
         : input.owner_id?.id || '',
     details: {
       score: !isNaN(input.total_score) ? roundNumber(input.total_score) : 0,
-      similarityScore: !isNaN(input.similarityScore)
-        ? roundNumber(input.similarityScore)
-        : undefined,
+      similarityScore:
+        input.similarityScore !== undefined && !isNaN(input.similarityScore)
+          ? roundNumber(input.similarityScore)
+          : undefined,
       weight: input.total_weight,
       quantity: input.quantity,
     },
@@ -50,7 +51,7 @@ export const UserDataTripCardConverter: Converter<
 > = (input, currentUserId) => {
   if (input.type !== 'trip') {
     console.error('Expected input to be of type trip');
-    return null;
+    return null as any;
   }
   return {
     id: input.id,
@@ -68,6 +69,7 @@ export const UserDataTripCardConverter: Converter<
       startDate: input.start_date,
       endDate: input.end_date,
       activity: input.activity,
+      score: 0,
     },
     favoriteCount: input.favorites_count,
     isPublic: input.is_public,

@@ -12,17 +12,16 @@ import {
 import useResponsive from 'app/hooks/useResponsive';
 import { FlatList, Platform, View } from 'react-native';
 import ScoreContainer from '../../../components/ScoreContainer';
-import { TextLink } from '@packrat/crosspath';
 import { DetailsComponent } from '../../../components/details';
 import { ImportItemModal, AddItemModal } from 'app/modules/item';
 import { FeedPreview } from 'app/modules/feed';
 import LargeCard from 'app/components/card/LargeCard';
 import useTheme from 'app/hooks/useTheme';
-import ChatModalTrigger from 'app/components/chat';
-import { Ionicons } from '@expo/vector-icons';
+import Chat from 'app/components/chat';
 import { useRouter } from 'app/hooks/router';
 import { ConnectionGate } from 'app/components/ConnectionGate';
 import { AsyncView } from 'app/components/AsyncView/AsyncView';
+import { TextLink } from 'solito/link';
 
 const SECTION = {
   TABLE: 'TABLE',
@@ -57,18 +56,33 @@ export function PackDetailsScreen() {
   // check if user is owner of pack, and that pack and user exists
   const isOwner = currentPack && user && currentPack.owner_id === user.id;
   return (
-    <Layout customStyle={{ alignItems: 'stretch' }}>
+    <Layout
+      customStyle={{ alignItems: 'stretch' }}
+      bottomRightComponent={
+        isAuthUserPack && (
+          <ConnectionGate mode="connected">
+            <Chat
+              itemTypeId={currentPackId}
+              type="pack"
+              title="Chat"
+              trigger="Open Chat"
+            />
+          </ConnectionGate>
+        )
+      }
+    >
       <AsyncView
         isLoading={isLoading}
         isError={!!error}
         loadingComponent={<RSpinner />}
         errorComponentProps={{
           title: 'Error Loading Pack',
-          message: error?.message,
+          message: error?.message ?? 'Error Loading Pack',
         }}
       >
         <View style={{ minHeight: '100%', paddingBottom: 80 }}>
           <DetailsComponent
+            isLoading={isLoading}
             type="pack"
             data={currentPack}
             additionalComps={
@@ -93,6 +107,7 @@ export function PackDetailsScreen() {
                         }}
                       >
                         <AddItemModal
+                          showTrigger={true}
                           currentPackId={currentPackId || ''}
                           currentPack={currentPack}
                           isAddItemModalOpen={isAddItemModalOpen}
@@ -217,64 +232,6 @@ export function PackDetailsScreen() {
           />
         </View>
       </AsyncView>
-
-      <ConnectionGate mode="connected">
-        {Platform.OS === 'web' ? (
-          <View
-            style={{
-              position: 'absolute',
-              right: -40,
-              bottom: 20,
-              flexDirection: 'row',
-              alignSelf: 'flex-end',
-            }}
-          >
-            <ChatModalTrigger
-              itemTypeId={currentPackId}
-              title="Chat"
-              trigger="Open Chat"
-              type="pack"
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              position: 'absolute',
-              right: 40,
-              bottom: 40,
-              flexDirection: 'row',
-              alignSelf: 'flex-end',
-            }}
-          >
-            <RIconButton
-              backgroundColor="transparent"
-              style={{
-                width: 50,
-                height: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 0,
-              }}
-              icon={
-                <Ionicons
-                  name="chatbubble-ellipses-sharp"
-                  size={50}
-                  color={currentTheme.colors.iconColor}
-                />
-              }
-              onPress={() => {
-                router.push({
-                  pathname: '/chat',
-                  query: {
-                    itemTypeId: currentPackId,
-                    type: 'pack',
-                  },
-                });
-              }}
-            />
-          </View>
-        )}
-      </ConnectionGate>
     </Layout>
   );
 }

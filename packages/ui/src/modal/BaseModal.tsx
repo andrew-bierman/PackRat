@@ -17,7 +17,7 @@ export interface BaseModalProps {
   children: React.ReactNode;
   buttonColor?: string;
   footerButtons?: any[];
-  triggerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
+  triggerComponent?: React.ReactElement;
   footerComponent?: React.DetailedReactHTMLElement<any, HTMLElement>;
   isOpen?: Boolean;
   onOpen?: () => void;
@@ -139,12 +139,14 @@ export const BaseModal = ({
             {children}
           </ModalProvider>
 
-          <RStack
-            style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
-            gap="$4"
-          >
-            {memoFooterButtons}
-          </RStack>
+          {!!memoFooterButtons?.length && (
+            <RStack
+              style={{ alignSelf: 'flex-end', flexDirection: 'row' }}
+              gap="$2"
+            >
+              {memoFooterButtons}
+            </RStack>
+          )}
           {footerElement}
           <Dialog.Close asChild>
             <Button

@@ -215,7 +215,7 @@ const loadStyles = (currentTheme, xs, sm, md) => {
       backgroundColor: currentTheme.colors.tertiaryBlue,
       borderRadius: 10,
       cursor: 'pointer',
-    },
+    } as any,
     navLinks: {
       flexDirection: 'row',
       flexWrap: 'wrap',

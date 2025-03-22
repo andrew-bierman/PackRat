@@ -43,7 +43,7 @@ export const FeedSearchFilter = ({
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const [searchValue, setSearchValue] = useState('');
-  const debounceTimerRef = useRef(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sortOptions = useFeedSortOptions(
     feedType,
     selectedTypes?.trip || feedType === 'userTrips',
@@ -68,8 +68,8 @@ export const FeedSearchFilter = ({
   }, []);
 
   useEffect(() => {
-    if (!sortOptions.includes(queryString) && handleSortChange) {
-      handleSortChange(sortOptions[0]);
+    if (queryString && !sortOptions.includes(queryString) && handleSortChange) {
+      handleSortChange?.(sortOptions?.[0] ?? '');
     }
   }, [sortOptions, queryString]);
 
@@ -86,13 +86,13 @@ export const FeedSearchFilter = ({
 
       <FilterBadge
         menuItems={sortOptions}
-        selectedValue={queryString}
-        onSelect={handleSortChange}
+        selectedValue={queryString ?? sortOptions?.[0] ?? ''}
+        onSelect={handleSortChange ?? (() => {})}
       />
 
       {(feedType === 'userPacks' || feedType === 'userTrips') && (
         <RSecondaryButton
-          style={{ marginLeft: 'auto', marginTop: 8 }}
+          style={{ marginLeft: 'auto' }}
           label="Add new"
           icon={<Plus />}
           onPress={handleCreateClick}

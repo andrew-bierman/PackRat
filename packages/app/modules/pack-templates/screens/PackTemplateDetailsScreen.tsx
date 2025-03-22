@@ -30,7 +30,7 @@ export const PackTemplateDetailsScreen = () => {
 
   return (
     <Layout customStyle={{ alignItems: 'stretch' }}>
-      {!isError && (
+      {!isError && packTemplate && (
         <View
           style={{
             minHeight: '100%',
@@ -52,7 +52,27 @@ export const PackTemplateDetailsScreen = () => {
                   {packTemplate.description}
                 </RText>
                 <RSeparator style={{ marginRight: -16, marginLeft: -16 }} />
-                <PackTemplateTable items={packTemplate.items} />
+                <PackTemplateTable
+                  items={packTemplate.itemPackTemplates
+                    .map((itemPackTemplate) => {
+                      const item = itemPackTemplate.item;
+                      if (!item || !item.category) return null;
+                      return {
+                        ...item,
+                        id: item.id,
+                        name: item.name,
+                        weight: item.weight,
+                        unit: item.unit,
+                        category: {
+                          id: item.category.id,
+                          name: item.category.name,
+                        },
+                        quantity: itemPackTemplate.quantity,
+                        ownerId: item.ownerId ?? '',
+                      };
+                    })
+                    .filter((item) => item !== null)}
+                />
               </RStack>
             }
             link={link}

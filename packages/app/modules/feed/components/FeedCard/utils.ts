@@ -1,15 +1,20 @@
-import { type FeedCardProps, type FeedItem } from 'modules/feed/model';
+import {
+  type FeedCardProps,
+  type FeedItem,
+  type TripFeedItem,
+  type PackFeedItem,
+} from '../../model';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { type PackDetails } from 'app/modules/pack';
 import { truncateString } from 'app/utils/truncateString';
-import { type TripDetails } from 'modules/trip/model';
+import { type TripDetails } from '../../../trip/model';
 import { roundNumber } from 'app/utils';
 import { type RouterOutput } from 'app/trpc';
 
 type Converter<Input, Result> = (
   input: Input,
   currentUserId?: string | number,
-) => Result;
+) => Result | null;
 
 export const feedItemPackCardConverter: Converter<
   FeedItem,
@@ -24,7 +29,7 @@ export const feedItemPackCardConverter: Converter<
     createdAt: formatDistanceToNowStrict(new Date(input.createdAt), {
       addSuffix: false,
     }),
-    is_public: input.is_public,
+    is_public: input.is_public ?? false,
     title: truncateString(input.name, 25),
     ownerId:
       typeof input.owner_id === 'string'
@@ -32,16 +37,18 @@ export const feedItemPackCardConverter: Converter<
         : input.owner_id?.id || '',
     details: {
       score: !isNaN(input.total_score) ? roundNumber(input.total_score) : 0,
-      similarityScore: !isNaN(input.similarityScore)
-        ? roundNumber(input.similarityScore)
-        : undefined,
+      similarityScore:
+        typeof input.similarityScore === 'number' &&
+        !isNaN(input.similarityScore)
+          ? roundNumber(input.similarityScore)
+          : 0,
       weight: input.total_weight,
-      quantity: input.quantity,
+      quantity: input.quantity ?? 0,
     },
     isUserFavorite: input?.userFavoritePacks?.some?.(
       (userId) => userId === currentUserId,
     ),
-    favoriteCount: input.favorites_count,
+    favoriteCount: input.favorites_count ?? 0,
   };
 };
 
@@ -59,7 +66,7 @@ export const feedItemTripCardConverter: Converter<
       addSuffix: false,
     }),
     title: truncateString(input.name, 25),
-    is_public: input.is_public,
+    is_public: input.is_public ?? false,
     ownerId:
       typeof input.owner_id === 'string'
         ? input.owner_id
@@ -72,20 +79,62 @@ export const feedItemTripCardConverter: Converter<
       activity: input.activity,
       score: !isNaN(input.total_score) ? roundNumber(input.total_score) : 0,
     },
-    favoriteCount: input.favorites_count,
+    favoriteCount: input.favorites_count ?? 0,
   };
 };
 
 export const feedItemCardConverter: Converter<
   FeedItem,
-  RouterOutput['getPackTemplates'][0]
+  RouterOutput['getPackTemplates']['data'][number]
 > = (input) => {
-  return { item: input };
+  if (input.type === 'pack') {
+    const packInput = input as PackFeedItem;
+    return {
+      id: packInput.id,
+      name: packInput.name,
+      description: '',
+      type: packInput.type,
+      quantity: packInput.quantity,
+      total_weight: packInput.total_weight,
+    };
+  } else if (input.type === 'trip') {
+    const tripInput = input as TripFeedItem;
+    return {
+      id: tripInput.id,
+      name: tripInput.name,
+      description: tripInput.description,
+      type: tripInput.type,
+      quantity: 0,
+      total_weight: 0,
+    };
+  }
+  return null;
 };
 
 export const feedItemPackTemplateCardConverter: Converter<
   FeedItem,
-  RouterOutput['getPackTemplates'][0]
+  RouterOutput['getPackTemplates']['data'][number]
 > = (input) => {
-  return input;
+  if (input.type === 'pack') {
+    const packInput = input as PackFeedItem;
+    return {
+      id: packInput.id,
+      name: packInput.name,
+      description: '',
+      type: packInput.type,
+      quantity: packInput.quantity,
+      total_weight: packInput.total_weight,
+    };
+  } else if (input.type === 'trip') {
+    const tripInput = input as TripFeedItem;
+    return {
+      id: tripInput.id,
+      name: tripInput.name,
+      description: tripInput.description,
+      type: tripInput.type,
+      quantity: 0,
+      total_weight: 0,
+    };
+  }
+  return null;
 };

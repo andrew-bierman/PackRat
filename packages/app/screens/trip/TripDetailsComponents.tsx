@@ -28,8 +28,9 @@ const TableContainerComponent = ({
         currentPack={currentPack}
         isAddItemModalOpen={isAddItemModalOpen}
         setIsAddItemModalOpen={setIsAddItemModalOpen}
-        // refetch={refetch}
         setRefetch={() => setRefetch((prev) => !prev)}
+        showTrigger={true}
+        initialData={{}}
       />
       <TableContainer
         currentPack={data}
@@ -40,10 +41,18 @@ const TableContainerComponent = ({
   );
 };
 
-const WeatherCardComponent = ({ weatherObject, weatherWeek, data }) => (
+const WeatherCardComponent = ({
+  weatherObject,
+  weatherWeek,
+  data,
+}: {
+  weatherObject: any;
+  weatherWeek: any;
+  data: { weather?: string };
+}) => (
   <View style={{ marginTop: '5%', marginBottom: '1%' }}>
     <WeatherCard
-      weatherObject={data?.weather ? JSON?.parse(data?.weather) : weatherObject}
+      weatherToday={data?.weather ? JSON?.parse(data?.weather) : weatherObject}
       weatherWeek={weatherWeek}
     />
   </View>

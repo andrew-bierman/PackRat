@@ -18,7 +18,7 @@ export const useSetItemQuantity = () => {
       { itemId, packId, quantity },
       {
         onSuccess: () => {
-          utils.getPacksFeed.invalidate();
+          utils.getUserPacksFeed.invalidate();
         },
       },
     );

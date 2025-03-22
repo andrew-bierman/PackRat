@@ -1,21 +1,17 @@
-import { Text, View } from 'react-native';
-import { offlineManager } from '@rnmapbox/maps';
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  type ReactNode,
-  type FC,
-} from 'react';
+import React, { useState, useMemo, type ReactNode, type FC } from 'react';
 import useTheme from 'app/hooks/useTheme';
-import { RScrollView, RStack } from '@packrat/ui';
 import { MapPreviewCard } from 'app/modules/map/components/MapPreviewCard';
 import { useOfflineMaps } from '../../hooks/useOfflineMaps';
 import { OfflineMapComponent } from './OfflineMap';
-import { useFocusEffect } from 'expo-router';
 import { useAuthUser } from 'app/modules/auth';
 import { OFFLINE_MAP_STYLE_URL } from 'app/modules/map/constants';
 import { useOfflineStore } from 'app/atoms';
+import { FeedList } from 'app/modules/feed/components';
+import Layout from 'app/components/layout/Layout';
+import { useAtom } from 'jotai';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
+import { useDeleteOfflineMap } from './useDeleteOfflineMap';
+import { useOfflineMapPacks } from './useOfflineMapPacks';
 
 export interface OfflineMap {
   id: string;
@@ -26,6 +22,7 @@ export interface OfflineMap {
   maxZoom?: number;
   bounds: [number[], number[]];
   downloaded: boolean;
+  fileName?: string;
 }
 
 interface OfflineMapScreenProps {
@@ -34,11 +31,13 @@ interface OfflineMapScreenProps {
 
 export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
   const [selectedMapId, setSelectedMapId] = useState('');
+  const [searchQuery] = useAtom(searchQueryAtom);
+  const handleDeleteMap = useDeleteOfflineMap();
   const { enableDarkMode, enableLightMode, isDark, isLight, currentTheme } =
     useTheme();
   const authUser = useAuthUser();
-  const offlineMapPacks = useOfflineMapPacks(authUser?.id);
-  const { data: remoteOfflineMaps } = useOfflineMaps();
+  const offlineMapPacks = useOfflineMapPacks(authUser?.id, searchQuery);
+  const { data: remoteOfflineMaps } = useOfflineMaps({ search: searchQuery });
   const offlineMaps = useOfflineMapsSyncWithAccount(
     offlineMapPacks,
     remoteOfflineMaps,
@@ -48,93 +47,32 @@ export const OfflineMapsScreen: FC<OfflineMapScreenProps> = ({ fallback }) => {
   }, [offlineMaps, selectedMapId]);
 
   return (
-    <View
-      style={{
-        backgroundColor: currentTheme.colors.background,
-        height: '100%',
-      }}
-    >
+    <>
       {selectedMap ? (
         <OfflineMapComponent
           map={selectedMap}
           onClose={() => setSelectedMapId('')}
         />
       ) : null}
-      <RScrollView nestedScrollEnabled={true} mt={50} mb={50}>
-        {offlineMaps ? (
-          <RStack
-            direction="horizontal"
-            space={16}
-            style={{
-              paddingHorizontal: 16,
-              paddingBottom: 20,
-              alignItems: 'center',
-            }}
-          >
-            {offlineMaps.map((offlineMap) => {
-              return (
-                <View style={{ maxWidth: 300 }} key={offlineMap.id}>
-                  <MapPreviewCard
-                    id={offlineMap.id}
-                    onShowMapClick={setSelectedMapId}
-                    item={offlineMap}
-                    isDownloaded={offlineMap.downloaded}
-                  />
-                </View>
-              );
-            })}
-            {offlineMaps.length === 0 && fallback}
-          </RStack>
-        ) : (
-          <RStack>
-            <Text>loading...</Text>
-          </RStack>
-        )}
-      </RScrollView>
-    </View>
+      <Layout>
+        <FeedList
+          data={offlineMaps}
+          CardComponent={({ item }) => (
+            <MapPreviewCard
+              key={item?.id}
+              id={item.id}
+              item={item}
+              onDelete={handleDeleteMap}
+              onShowMapClick={setSelectedMapId}
+            />
+          )}
+          isLoading={false}
+          isError={false}
+          separatorHeight={12}
+        />
+      </Layout>
+    </>
   );
-};
-
-const useOfflineMapPacks = (authUserId: string) => {
-  const [offlineMapPacks, setOfflineMapPacks] = useState<OfflineMap[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      (async () => {
-        try {
-          const offlineMapPacksRes = await offlineManager.getPacks();
-          const userOfflineMap = offlineMapPacksRes
-            .map(({ pack, _metadata }) => {
-              try {
-                const metadata = JSON.parse(pack.metadata);
-                return {
-                  id: metadata.id,
-                  name: _metadata.name,
-                  bounds: pack.bounds,
-                  styleURL: OFFLINE_MAP_STYLE_URL,
-                  userId: _metadata.userId,
-                  downloaded: true,
-                };
-              } catch {
-                return null;
-              }
-            })
-            .filter((offlineMap) => {
-              if (!offlineMap) {
-                return false;
-              }
-
-              return offlineMap.userId === authUserId;
-            });
-          setOfflineMapPacks(userOfflineMap);
-        } catch (e) {
-          console.log(e);
-        }
-      })();
-    }, []),
-  );
-
-  return offlineMapPacks;
 };
 
 const useOfflineMapsSyncWithAccount = (

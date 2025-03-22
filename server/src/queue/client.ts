@@ -18,6 +18,6 @@ export class Queue {
   }
 
   async addTask<T>(task: QueueTask<T>): Promise<T> {
-    return this.queue.add(task);
+    return this.queue.add(task) as Promise<T>;
   }
 }

@@ -1,4 +1,4 @@
-import User from '../../models/userModel';
+import { User } from '../../drizzle/methods/User';
 
 /**
  * Retrieves a user by their ID from the database.
@@ -7,7 +7,8 @@ import User from '../../models/userModel';
  */
 export const getUserByTokenService = async (token: string): Promise<object> => {
   try {
-    const user: any = await User.findOne({ token }).lean();
+    const userInstance = new User();
+    const user: any = await userInstance.findUnique({ where: { token } });
 
     return user;
   } catch (error) {

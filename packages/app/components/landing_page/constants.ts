@@ -18,7 +18,6 @@ export const FAQ_ITEMS = [
       'PackRat integrates with OpenStreetMap to provide users with accurate maps and directions to their destinations.',
     iconName: 'map',
     frameLink: PackRatPreviewLeft,
-
   },
   {
     index: 2,
@@ -27,7 +26,6 @@ export const FAQ_ITEMS = [
       'The app suggests popular outdoor activities based on the location and season of the trip.',
     iconName: 'landscape',
     frameLink: PackRatPreview_Right,
-
   },
   {
     index: 3,
@@ -36,7 +34,6 @@ export const FAQ_ITEMS = [
       'Users can create and manage packing lists for their trips to ensure they have everything they need.',
     iconName: 'backpack',
     frameLink: PackRatPreview,
-
   },
   {
     index: 4,
@@ -53,6 +50,5 @@ export const FAQ_ITEMS = [
       'User authentication ensures privacy and data security, while enabling you to save and sync your hikes and packs between devices.',
     iconName: 'lock',
     frameLink: PackRatPreview_Right,
-
   },
 ];

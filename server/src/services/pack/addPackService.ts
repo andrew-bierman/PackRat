@@ -31,7 +31,7 @@ export const addPackService = async (
       id: createdPack.id,
       content: name,
       metadata: {
-        isPublic: createdPack.is_public,
+        isPublic: createdPack.is_public ?? false,
         ownerId: owner_id,
       },
       namespace: 'packs',

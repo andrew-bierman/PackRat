@@ -13,7 +13,9 @@ const MAP_STYLES = [
 ];
 
 export const useMapStyles = () => {
-  const [selectedStyle, setSelectedStyle] = useState(MAP_STYLES[0].style);
+  const [selectedStyle, setSelectedStyle] = useState(
+    MAP_STYLES[0]?.style || '',
+  );
 
   const onStyleChange = (style: string) => setSelectedStyle(style);
 

@@ -9,7 +9,7 @@ import { getBoundingBoxFromShape } from '../utils';
 MapLib.accessToken = MAPBOX_ACCESS_TOKEN;
 export const dataLayer = {
   id: 'data',
-  type: 'fill',
+  type: 'fill' as 'fill',
   paint: {
     'fill-color': {
       property: 'percentile',
@@ -36,11 +36,12 @@ export const MapView: FC<MapViewProps> = ({
   initialBounds,
   isInteractive = true,
 }) => {
-  const mapRef = useRef<Map>(null);
+  const mapRef = useRef<Map | null>(null);
 
   const updateVisibleBounds = useCallback(() => {
     if (mapRef.current) {
-      onVisibleBoundsChange(mapRef.current.getBounds().toArray());
+      const bounds = mapRef.current.getBounds()?.toArray();
+      if (bounds) onVisibleBoundsChange(bounds);
     }
   }, [onVisibleBoundsChange]);
 
@@ -63,7 +64,7 @@ export const MapView: FC<MapViewProps> = ({
   return (
     <MapContainer
       onLoad={onMapLoad}
-      ref={mapRef}
+      ref={mapRef as any}
       mapStyle={mapStyle}
       touchZoomRotate={isInteractive}
       scrollZoom={isInteractive}
@@ -71,7 +72,7 @@ export const MapView: FC<MapViewProps> = ({
       dragPan={isInteractive}
     >
       <Source type="geojson" data={shapeURI || shape}>
-        <Layer {...dataLayer} />
+        <Layer {...(dataLayer as any)} />
       </Source>
     </MapContainer>
   );

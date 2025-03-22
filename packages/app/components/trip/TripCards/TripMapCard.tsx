@@ -26,7 +26,7 @@ export const TripMapCard = ({
   const { gtSm } = useResponsive();
 
   return (
-    <AsyncView isError={isMapError} isLoading={isLoading}>
+    <AsyncView isError={isMapError} isLoading={isLoading ?? false}>
       <View
         style={{
           flex: gtSm ? 1 : undefined,
@@ -38,6 +38,7 @@ export const TripMapCard = ({
           style={{ width: '100%', height: 320 }}
           shapeURI={tripId && !shape ? getTripGEOURI(tripId) : undefined}
           onVisibleBoundsChange={onVisibleBoundsChange}
+          shouldEnableDownload={!initialBounds}
           initialBounds={!shape ? initialBounds : undefined}
           shape={shape}
         />

@@ -5,19 +5,28 @@ import { useIsMobileView } from 'app/hooks/common';
 import { View } from 'tamagui';
 import useTheme from '../../../hooks/useTheme';
 
-interface ProfileNavigationList {
-  itemStyle?: any;
-  onItemSelect?: (item: any) => void;
+interface NavigationItemType {
+  href: string;
+  type: string;
+  [key: string]: any;
 }
 
-export const ProfileNavigationList = ({ itemStyle, onItemSelect }) => {
+interface ProfileNavigationListProps {
+  itemStyle?: string;
+  onItemSelect?: (item: unknown) => void;
+}
+
+export const ProfileNavigationList: React.FC<ProfileNavigationListProps> = ({
+  itemStyle,
+  onItemSelect,
+}) => {
   const isMobileView = useIsMobileView();
   const { currentTheme } = useTheme();
   const { navigationItems } = useNavigationList();
 
   return (
     <>
-      {navigationItems
+      {(navigationItems as NavigationItemType[])
         ?.filter(({ href }) => href === '/profile' || href === '/logout')
         .map(({ type, ...Item }, index) => {
           const item = Item as any;

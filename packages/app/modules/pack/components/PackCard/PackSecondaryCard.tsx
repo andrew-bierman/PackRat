@@ -29,7 +29,9 @@ export const PackSecondaryCard: FC<PackCardProps> = (props) => {
           }}
         >
           <RText>
-            {!isNaN(props.details.similarityScore) ? 'Similarity' : 'Score'}
+            {!isNaN(props.details.similarityScore ?? NaN)
+              ? 'Similarity'
+              : 'Score'}
           </RText>
           <RStack
             style={{
@@ -40,7 +42,7 @@ export const PackSecondaryCard: FC<PackCardProps> = (props) => {
           >
             <StarIcon size={16} />
             <RText>
-              {!isNaN(props.details.similarityScore)
+              {!isNaN(props.details.similarityScore ?? NaN)
                 ? props.details.similarityScore
                 : props.details.score}
             </RText>

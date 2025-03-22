@@ -119,7 +119,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
           width: Platform.OS === 'web' ? '100vw' : '100%',
         },
       }),
-    },
+    } as any,
     container: {
       width: '100vw',
       maxWidth: 1440,
@@ -133,7 +133,7 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       flexWrap: 'wrap', // Allow items to wrap
       height: 60, // Ensure container takes full height of its container
       padding: 16,
-    },
+    } as any,
     header: {
       flexDirection: 'row', // Keep flexDirection as row for initial alignment
       alignItems: 'center',
@@ -150,13 +150,13 @@ const loadStyles = (currentTheme, isScrolled, screenWidth) => {
       cursor: 'pointer',
       backgroundColor: currentTheme.colors.tertiaryBlue,
       borderRadius: 10,
-    },
+    } as any,
     logoText: {
       color: currentTheme.colors.tertiaryBlue,
       fontSize: 38,
       fontWeight: '900',
       cursor: 'pointer',
-    },
+    } as any,
     menuBar: {
       flexDirection: 'row',
       alignItems: 'center',

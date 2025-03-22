@@ -12,7 +12,12 @@ const RButton: any = OriginalRButton;
 const RStack: any = OriginalRStack;
 const RH5: any = OriginalRH5;
 
-export const ImageUpload = ({ hasProfileImage, previewElement, name, label }) => {
+export const ImageUpload = ({
+  hasProfileImage,
+  previewElement,
+  name,
+  label,
+}) => {
   const { pickImage, removeImage, src } = useImageUpload(name);
   const [hasImage, setHasImage] = useState(hasProfileImage);
 
@@ -36,13 +41,19 @@ export const ImageUpload = ({ hasProfileImage, previewElement, name, label }) =>
       padding="$4"
       borderRadius="$3"
       space
-      style={{ flexDirection: 'column', alignItems: "center", justifyContent: "center" }}
+      style={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <RStack>{cloneElement(previewElement, { src })}</RStack>
-      <RStack style={{
-        alignItems: 'center',
-        justifyContent: "center"
-      }} >
+      <RStack
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <RH5 fontWeight="medium">{label}</RH5>
         <RStack
           space="$2"
@@ -58,11 +69,10 @@ export const ImageUpload = ({ hasProfileImage, previewElement, name, label }) =>
               </Button.Icon>
             }
             color="white"
-            size="$3"
             style={{
               backgroundColor: '#232323',
               color: 'white',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
             onPress={handlePickImage}
           >
@@ -81,7 +91,7 @@ export const ImageUpload = ({ hasProfileImage, previewElement, name, label }) =>
               style={{
                 backgroundColor: '#232323',
                 color: 'white',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               onPress={handleRemoveImage}
             >

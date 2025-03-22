@@ -1,14 +1,20 @@
 import useTheme from 'app/hooks/useTheme';
+import { platform } from 'os';
 import React from 'react';
-import { Platform, SafeAreaView } from 'react-native';
+import { Platform, SafeAreaView, View } from 'react-native';
 import { ScrollView, Stack, YStack } from 'tamagui';
 
-type LayoutProps = {
+interface LayoutProps {
   children: React.ReactNode;
   customStyle?: Record<string, any>;
-};
+  bottomRightComponent?: React.ReactNode;
+}
 
-const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  bottomRightComponent,
+  customStyle = {},
+}) => {
   const { currentTheme } = useTheme();
 
   return (
@@ -16,14 +22,14 @@ const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
       <YStack
         flex={1}
         backgroundColor={currentTheme.colors.background}
-        maxWidth={1440}
+        maxWidth={Platform.OS === 'web' ? 1440 : 400}
         margin="auto"
         alignItems="center"
         justifyContent="flex-start"
-        paddingTop={Platform.OS === 'web' ? 20 : '$2'}
+        paddingTop={Platform.OS === 'web' ? 20 : '$4'}
         paddingBottom={Platform.OS !== 'web' ? 44 : undefined}
         paddingHorizontal="$4"
-        marginBottom={Platform.OS === 'web' ? 20 : '$2'}
+        marginBottom={Platform.OS === 'web' ? 20 : '$1'}
         width="100%"
         {...customStyle}
       >
@@ -31,6 +37,28 @@ const Layout: React.FC<LayoutProps> = ({ children, customStyle = {} }) => {
           <ScrollView contentContainerStyle={{ width: '100%' }}>
             {children}
           </ScrollView>
+          {bottomRightComponent && (
+            <View
+              style={
+                Platform.OS !== 'web'
+                  ? ({
+                      position: 'absolute',
+                      width: '100%',
+                      maxWidth: 390,
+                      bottom: 10,
+                      right: 10,
+                      zIndex: 1000,
+                    } as any)
+                  : ({
+                      position: 'fixed',
+                      bottom: 20,
+                      right: 20,
+                    } as any)
+              }
+            >
+              {bottomRightComponent}
+            </View>
+          )}
         </Stack>
       </YStack>
     </SafeAreaView>

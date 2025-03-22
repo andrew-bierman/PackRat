@@ -146,7 +146,7 @@ export function PaginatedSortedTable({
                       <Text>
                         {flexRender(
                           cell.column.columnDef.header,
-                          cell.getContext(),
+                          cell.getContext() as any,
                         )}
                       </Text>
                       <Text color="$gray10">{value}</Text>
@@ -202,7 +202,7 @@ export function PaginatedSortedTable({
         cellWidth="$18"
         cellHeight="$5"
         borderWidth={0.5}
-        maxWidth={getTokenValue('$25') * columns.length}
+        maxWidth={getTokenValue('$25' as any) * columns.length}
       >
         <Table.Head>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -213,7 +213,7 @@ export function PaginatedSortedTable({
             >
               {headerGroup.headers.map((header) => (
                 <Table.HeaderCell key={header.id}>
-                  <Text onClick={() => header.column.getToggleSortingHandler()}>
+                  <Text onPress={() => header.column.getToggleSortingHandler()}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),

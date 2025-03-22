@@ -137,6 +137,7 @@ export function TripDetails() {
                             <TripMapCard
                               tripId={data.id}
                               initialBounds={data.bounds}
+                              isMapError={false}
                             />
                           </RStack>
                         );

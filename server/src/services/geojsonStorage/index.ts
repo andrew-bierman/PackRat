@@ -13,7 +13,7 @@ export class GeojsonStorageService {
   }
 
   public static get instance(): R2Bucket {
-    if (!GeojsonStorageService._instance) {
+    if (!GeojsonStorageService._instance || !GeojsonStorageService._bucket) {
       throw new Error('GeojsonStorageService instance not initialized.');
     }
     return GeojsonStorageService._bucket;
@@ -24,6 +24,9 @@ export class GeojsonStorageService {
     geojson: string,
     resourceId: string,
   ): Promise<R2Object | null> {
+    if (!this._bucket) {
+      throw new Error('GeojsonStorageService bucket not initialized.');
+    }
     return this._bucket.put(`${resource}/${resourceId}`, geojson);
   }
 
@@ -31,6 +34,9 @@ export class GeojsonStorageService {
     resource: ResourceType,
     resourceId: string,
   ): Promise<R2ObjectBody | null> {
+    if (!this._bucket) {
+      throw new Error('GeojsonStorageService bucket not initialized.');
+    }
     return this._bucket.get(`${resource}/${resourceId}`);
   }
 }

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import {
   RText,
   RStack,
-  Form as OriginalForm,
+  Form,
   FormInput,
   SubmitButton,
-  FormSelect as OriginalFormSelect,
-  FormRadioGroup as OriginalFormRadioGroup,
+  FormSelect,
+  FormRadioGroup,
   DropdownComponent,
+  RButton,
+  XStack,
 } from '@packrat/ui';
 import { Platform, View } from 'react-native';
 
@@ -15,9 +17,9 @@ import { ItemCategoryEnum } from '../constants';
 import useTheme from 'app/hooks/useTheme';
 import { type Item } from '@packrat/validations';
 
-const Form: any = OriginalForm;
-const FormSelect: any = OriginalFormSelect;
-const FormRadioGroup: any = OriginalFormRadioGroup;
+// const Form: any = OriginalForm;
+// const FormSelect: any = OriginalFormSelect;
+// const FormRadioGroup: any = OriginalFormRadioGroup;
 
 const data = ['lb', 'oz', 'kg', 'g'].map((key) => ({ label: key, value: key }));
 
@@ -28,6 +30,7 @@ interface ItemFormProps {
   isEdit?: boolean;
   defaultValues: Partial<Item>;
   validationSchema: any;
+  closeModalHandler?: () => void;
   currentPack?: {
     items: Array<{
       category: {
@@ -39,6 +42,7 @@ interface ItemFormProps {
 
 export const ItemForm = ({
   handleSubmit,
+  closeModalHandler,
   showSubmitButton = true,
   isLoading,
   isEdit,
@@ -74,7 +78,7 @@ export const ItemForm = ({
       <Form
         validationSchema={validationSchema}
         defaultValues={defaultValues}
-        onSubmit={handleSubmit}
+        onSubmit={(data) => handleSubmit(data as unknown as Item)}
       >
         <RStack style={{ gap: 8 }}>
           <FormInput
@@ -97,7 +101,8 @@ export const ItemForm = ({
               (Platform.OS === 'web' ? (
                 <FormSelect
                   options={data}
-                  name="unit"
+                  name={'unit' as any}
+                  defaultValue={selectedUnit}
                   placeholder={'Unit'}
                   width="100"
                 />
@@ -121,15 +126,25 @@ export const ItemForm = ({
             isNumeric
             style={{ width: '100%' }}
           />
-          <FormRadioGroup name="type" options={radioOptions} />
-
-          {showSubmitButton && (
-            <SubmitButton onSubmit={handleSubmit}>
-              <RText style={{ color: currentTheme.colors.white }}>
-                {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
-              </RText>
-            </SubmitButton>
-          )}
+          <FormRadioGroup name={'type' as any} options={radioOptions} />
+          <XStack style={{ justifyContent: 'flex-end', gap: 8 }}>
+            {showSubmitButton && (
+              <SubmitButton onSubmit={handleSubmit}>
+                <RText style={{ color: currentTheme.colors.white }}>
+                  {isLoading ? 'Loading..' : isEdit ? 'Edit item' : 'Add Item'}
+                </RText>
+              </SubmitButton>
+            )}
+            {closeModalHandler && (
+              <RButton
+                backgroundColor="#B22222"
+                onPress={closeModalHandler}
+                label="Cancel"
+              >
+                <RText style={{ color: '#fff' }}>Cancel</RText>
+              </RButton>
+            )}
+          </XStack>
         </RStack>
       </Form>
     </View>

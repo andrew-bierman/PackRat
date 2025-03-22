@@ -10,8 +10,8 @@ interface AddItemModalProps {
   isAddItemModalOpen: boolean;
   setIsAddItemModalOpen: any;
   setRefetch?: () => void;
-  showTrigger: boolean;
-  initialData: any;
+  showTrigger?: boolean;
+  initialData?: any;
 }
 
 export const AddItemModal = ({
@@ -35,13 +35,6 @@ export const AddItemModal = ({
         />
       }
       showTrigger={showTrigger}
-      footerButtons={[
-        {
-          label: 'Cancel',
-          color: '#B22222',
-          onClick: (_, closeModal) => closeModal(),
-        },
-      ]}
       footerComponent={undefined}
       isOpen={isAddItemModalOpen}
       onOpen={() => setIsAddItemModalOpen(true)}

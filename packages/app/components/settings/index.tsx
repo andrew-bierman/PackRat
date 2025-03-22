@@ -1,13 +1,6 @@
-import {
-  AnimatePresence,
-  Button,
-  H1,
-  Label,
-  Spinner,
-  View,
-} from 'tamagui';
+import { AnimatePresence, Button, H1, Label, Spinner, View } from 'tamagui';
 import { Input } from './components/inputParts';
-import { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Info } from '@tamagui/lucide-icons';
 import { FormCard } from './components/layoutParts';
 import { useForm, Controller } from 'react-hook-form';
@@ -17,12 +10,16 @@ import {
   FormSelect,
   ImageUpload,
   RH5,
+  RIconButton,
   RLabel,
   RStack,
   SubmitButton,
+  RText,
 } from '@packrat/ui';
 import Avatar from '../Avatar/Avatar';
 import { useProfileSettings } from 'app/modules/user/hooks';
+import Feather from '@expo/vector-icons/Feather';
+
 import {
   deleteUserForm,
   passwordChangeSchema,
@@ -30,13 +27,26 @@ import {
 } from '@packrat/validations';
 import { useDeleteProfile } from 'app/modules/user/hooks';
 import useResponsive from 'app/hooks/useResponsive';
+import ThemeContext from '../../context/theme';
+import { Platform } from 'react-native';
 
 export function SettingsForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { user, handleEditUser, handleUpdatePassword } = useProfileSettings();
   const { deleteProfile, isLoading } = useDeleteProfile();
-  const {xs, sm, md } = useResponsive();
+  const { xs, sm, md } = useResponsive();
+  const { isDark, enableDarkMode, enableLightMode } = useContext(ThemeContext);
+
+  const iconName = isDark ? 'moon' : 'sun';
+  const iconColor = isDark ? 'white' : 'black';
+  const handlePress = () => {
+    if (isDark) {
+      enableLightMode();
+    } else {
+      enableDarkMode();
+    }
+  };
 
   const {
     control,
@@ -89,7 +99,10 @@ export function SettingsForm() {
         >
           <Form
             validationSchema={userSettingsSchema}
-            defaultValues={{ ...user, profileImage: user.profileImage || '' }}
+            defaultValues={{
+              ...(user ?? {}),
+              profileImage: user?.profileImage || '',
+            }}
           >
             <View
               style={{
@@ -99,8 +112,8 @@ export function SettingsForm() {
               }}
             >
               <ImageUpload
-                hasProfileImage={control._defaultValues.profilepicture ?  true : false}
-                label={""}
+                hasProfileImage={!!control._defaultValues.profilepicture}
+                label={''}
                 name="profileImage"
                 previewElement={<Avatar size={90} />}
               />
@@ -109,16 +122,16 @@ export function SettingsForm() {
             <FormInput label="Username" name="username" />
             <FormInput label="Email" name="email" />
             <H1
-                style={{
-                  alignSelf: 'center',
-                }}
-                size="$8"
-                $group-window-xs={{
-                  size: '$7',
-                }}
-              >
-                Preferred units
-              </H1>
+              style={{
+                alignSelf: 'center',
+              }}
+              size="$8"
+              $group-window-xs={{
+                size: '$7',
+              }}
+            >
+              Preferred units
+            </H1>
             <View
               style={{
                 flexDirection: sm || xs ? 'column' : 'row',
@@ -129,16 +142,16 @@ export function SettingsForm() {
                 <RLabel>Weather: </RLabel>
                 <FormSelect
                   options={weatherOptions}
-                  name="preferredWeather"
-                  fullWidth={xs || sm ? true : false}
+                  name="value.preferredWeather"
+                  fullWidth={!!(xs || sm)}
                 />
               </View>
               <View>
                 <RLabel>Weight: </RLabel>
                 <FormSelect
                   options={weightOptions}
-                  name="preferredWeight"
-                  fullWidth={xs || sm ? true : false}
+                  name="value.preferredWeight"
+                  fullWidth={!!(xs || sm)}
                 />
               </View>
             </View>
@@ -148,7 +161,7 @@ export function SettingsForm() {
                 marginTop: 16,
                 backgroundColor: '#232323',
                 color: 'white',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
               disabled={loading}
               onSubmit={(data) => handleEditUser(data)}
@@ -181,6 +194,26 @@ export function SettingsForm() {
               Update Profile
             </SubmitButton>
           </Form>
+          {Platform.OS !== 'web' && (
+            <RStack
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+
+                padding: 5,
+              }}
+            >
+              <RText style={{ fontWeight: 'bold', fontSize: 16 }}>
+                Toggle theme
+              </RText>
+              <RIconButton
+                backgroundColor="transparent"
+                icon={<Feather name={iconName} size={24} color={iconColor} />}
+                onPress={handlePress}
+              />
+            </RStack>
+          )}
 
           <Form validationSchema={passwordChangeSchema}>
             <View
@@ -254,7 +287,7 @@ export function SettingsForm() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                textAlign: 'center'
+                textAlign: 'center',
               }}
             >
               <H1
@@ -269,14 +302,14 @@ export function SettingsForm() {
               >
                 Delete Account
               </H1>
-              <Label style={{textAlign: 'center'}} size={'$2'}>
+              <Label style={{ textAlign: 'center' }} size={'$2'}>
                 Deleting your account will remove all your information from our
                 database. This cannot be undone
               </Label>
             </View>
             <View>
               <RLabel htmlFor="confirmText">
-                To Confirm This, Type 'delete'
+                To Confirm This, Type &apos;delete&apos;
               </RLabel>
               <FormInput id="confirmText" name="confirmText" />
               <SubmitButton

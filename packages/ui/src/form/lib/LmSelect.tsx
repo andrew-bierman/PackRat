@@ -35,6 +35,7 @@ export type LmSelectProps = SelectProps &
     placeholder?: string;
     dropDownLabel?: string; // above the items list
     fullWidth?: boolean;
+    style?: any; // add style prop
   };
 
 export function LmSelect({
@@ -56,6 +57,7 @@ export function LmSelect({
   defaultValue,
   onValueChange,
   containerProps,
+  style, // add style
   ...rest
 }: LmSelectProps) {
   const [selectVal, setSelectVal] = useState<string>(
@@ -98,7 +100,7 @@ export function LmSelect({
       labelInline={labelInline}
       helperText={helperText}
       helperTextProps={helperTextProps}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       <Select
         id={id}
@@ -106,6 +108,7 @@ export function LmSelect({
         {...rest}
         value={selectVal}
         onValueChange={handleChange}
+        style={style} // forward style
       >
         <Select.Trigger
           width={fullWidth ? '100%' : width}
@@ -115,7 +118,7 @@ export function LmSelect({
         </Select.Trigger>
         {/*@ts-ignore*/}
         <Select.Adapt when="sm">
-          <Select.Sheet modal dismissOnSnapToBottom>
+          <Select.Sheet modal dismissOnSnapToBottom snapPointsMode="fit">
             <Select.Sheet.Frame>
               <Select.Sheet.ScrollView>
                 <Select.Adapt.Contents />

@@ -1,5 +1,4 @@
-import React from 'react';
-import { DestinationScreen } from 'app/modules/Map/screens/DestinationScreen';
+import { DestinationScreen } from 'app/modules/map/screens/DestinationScreen';
 import { AuthWrapper } from 'app/modules/auth';
 // import DestinationPage from "../../components/destination";
 import { createLazyFileRoute } from '@tanstack/react-router';

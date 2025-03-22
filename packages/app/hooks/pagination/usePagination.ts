@@ -34,19 +34,22 @@ export const usePagination = (
     }
     setPaginationParams((prev) => ({
       ...prev,
-      offset: prevPage,
+      offset: typeof prevPage === 'number' ? prevPage : prev.offset,
     }));
   };
 
   const fetchNextPage = () => {
+    if (nextPage === false) {
+      return;
+    }
     setPaginationParams((prev) => ({
       ...prev,
-      offset: nextPage,
+      offset: typeof nextPage === 'number' ? nextPage : prev.offset,
     }));
   };
 
   useEffect(() => {
-    const run = () => {
+    const run = async () => {
       if (!initialRender.current) {
         initialRender.current = true;
         return;
@@ -55,7 +58,11 @@ export const usePagination = (
         return;
       }
 
-      fetchFunction();
+      try {
+        await fetchFunction();
+      } catch (error) {
+        console.error('Error fetching pagination data:', error);
+      }
     };
 
     run();

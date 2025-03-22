@@ -17,13 +17,17 @@ describe('Trip Routes', () => {
   let owner: User;
 
   beforeAll(async () => {
-    caller = await setupTest(env);
-    owner = await userClass.create({
+    const executionCtx: ExecutionContext = {
+      waitUntil: () => {},
+      passThroughOnException: () => {},
+    };
+    caller = await setupTest(env, executionCtx);
+    owner = (await userClass.create({
       email: 'test@abc.com',
       name: 'test',
       username: 'test',
       password: 'test123',
-    });
+    })) as User;
     const pack = await packClass.create({
       name: 'test',
       owner_id: owner.id,
@@ -32,8 +36,6 @@ describe('Trip Routes', () => {
     trip = await tripClass.create({
       name: 'test',
       description: 'test',
-      duration: '1h',
-      weather: 'sunny',
       start_date: new Date().toDateString(),
       end_date: new Date().toDateString(),
       destination: 'test',
@@ -73,7 +75,16 @@ describe('Trip Routes', () => {
         start_date: trip.start_date,
         end_date: trip.end_date,
         is_public: true,
+        geoJSON: '',
         name: nameToBeUpdated,
+        pack_id: trip.pack_id ?? 'default_pack_id',
+        bounds: trip.bounds ?? [
+          [0, 0],
+          [0, 0],
+        ],
+        activity: trip.activity ?? '',
+        parks: trip.parks ? JSON.stringify(trip.parks) : undefined,
+        trails: trip.trails ? JSON.stringify(trip.trails) : undefined,
       });
       expect(updatedTrip.name).toEqual(nameToBeUpdated);
     });

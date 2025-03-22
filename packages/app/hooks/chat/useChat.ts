@@ -5,7 +5,7 @@ import { useAuthUser } from 'app/modules/auth';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Reasoning {
-  role: string;
+  role: 'user' | 'ai'; // Update role type
   content: string;
 }
 
@@ -14,7 +14,12 @@ interface Suggestion {
   weight: number;
   unit: string;
   quantity: number;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  id: string;
+  ownerId: string;
 }
 
 interface Suggestions {
@@ -23,8 +28,8 @@ interface Suggestions {
 }
 
 interface TypeId {
-  itemTypeId: string;
-  type: string;
+  itemTypeId: string | null;
+  type: string | null;
 }
 
 export const useChat = (itemTypeId: TypeId | null = null) => {
@@ -43,7 +48,7 @@ export const useChat = (itemTypeId: TypeId | null = null) => {
 
   const { data: chatsData, refetch } = useGetUserChats(
     user.id,
-    typeId.itemTypeId,
+    typeId?.itemTypeId ?? '',
   );
 
   const { getAIResponse } = useGetAIResponse();
@@ -87,8 +92,8 @@ export const useChat = (itemTypeId: TypeId | null = null) => {
     await getAIResponse({
       userId: user.id,
       userInput: userMessage,
-      itemTypeId: typeId.itemTypeId,
-      type: typeId.type,
+      itemTypeId: typeId?.itemTypeId ?? '',
+      type: typeId?.type ?? '',
     });
     await refetch();
     setIsLoading(false);
@@ -97,28 +102,27 @@ export const useChat = (itemTypeId: TypeId | null = null) => {
   const handleSubmitAnalysis = async () => {
     try {
       setIsAnalysisLoading(true);
-      const response = await getAISuggestions({
+      const response: any = await getAISuggestions({
         userId: user.id,
-        itemTypeId: typeId.itemTypeId,
-        type: typeId.type,
+        itemTypeId: typeId?.itemTypeId ?? '',
+        type: typeId?.type ?? '',
       });
 
       setSuggestions({
-        reasoning: [{ role: 'ai', content: response.aiResponse }],
-        suggestion: {
-          ...response.refined,
-          Items: response.refined.Items.map((item) => {
-            const modifiedItem = {
-              ...item,
-              ownerId: user.id,
-              packId: itemTypeId.itemTypeId,
-              type: item.category,
+        reasoning: [{ role: 'ai', content: response?.aiResponse }],
+        suggestion: response?.refined?.Items.map((item) => {
+          const modifiedItem = {
+            ...item,
+            ownerId: user.id, // Set ownerId
+            packId: typeId?.itemTypeId ?? '',
+            category: {
               id: uuidv4(),
-            };
-            delete modifiedItem.category;
-            return modifiedItem;
-          }),
-        },
+              name: item.category,
+            },
+            id: uuidv4(),
+          };
+          return modifiedItem;
+        }),
       });
 
       console.log(response);

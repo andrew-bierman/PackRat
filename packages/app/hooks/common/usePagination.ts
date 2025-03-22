@@ -5,7 +5,7 @@ type ParamsType = { limit: string; page: string };
 const { useParams } = createParam<ParamsType>();
 
 export const usePagination = () => {
-  const { params, setParams } = useParams();
+  const { params, setParams } = useParams('limit');
   const { limit, page } = params;
 
   return {

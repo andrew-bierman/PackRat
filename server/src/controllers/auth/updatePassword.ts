@@ -4,6 +4,7 @@ import * as validator from '@packrat/validations';
 import { hashPassword } from '../../utils/user';
 import { type Context } from 'hono';
 import { User } from '../../drizzle/methods/User';
+import { z } from 'zod';
 
 export const updatePassword = async (c: Context) => {
   try {
@@ -23,9 +24,13 @@ export const updatePassword = async (c: Context) => {
 
 export function updatePasswordRoute() {
   return protectedProcedure
-    .input(validator.updatePassword)
+    .input(
+      validator.updatePassword.extend({
+        oldPassword: z.string().nonempty(),
+      }),
+    )
     .mutation(async (opts) => {
-      const { email, oldPassword, password } = opts.rawInput;
+      const { email, oldPassword, password } = opts.input;
       const { env }: any = opts.ctx;
       const JWT_SECRET = env.JWT_SECRET;
       const userClass = new User();

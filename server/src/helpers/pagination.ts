@@ -16,12 +16,13 @@ const defaultPaginationParams: PaginationParams = {
   limit: 20,
 };
 
-export function getPaginationParams(params?: PaginationParams) {
-  if (!params) {
-    return defaultPaginationParams;
-  }
-
-  return params;
+export function getPaginationParams(
+  params?: Partial<PaginationParams>,
+): PaginationParams {
+  return {
+    limit: params?.limit ?? defaultPaginationParams.limit,
+    offset: params?.offset ?? defaultPaginationParams.offset,
+  };
 }
 
 export function getNextOffset(

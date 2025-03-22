@@ -3,12 +3,14 @@ import { OfflineMap } from '../model';
 
 export const getOfflineMapsService = async (
   owner_id: string,
+  search?: string,
   pagination?: PaginationParams,
 ) => {
   try {
     const offlineMapClass = new OfflineMap();
     const { offlineMaps, totalCount } = await offlineMapClass.findByOwnerId(
       owner_id,
+      search,
       pagination,
     );
     return { offlineMaps, totalCount };

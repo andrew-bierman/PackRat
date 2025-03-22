@@ -12,6 +12,8 @@ interface VectorsQueryResponse {
   messages: Array<{ code: number; message: string }>;
 }
 
+type VectorFilter = Record<string, Record<'$eq', string | number | boolean>>;
+
 type Metadata = Record<string, string | number | boolean>;
 
 class VectorClient {
@@ -173,7 +175,7 @@ class VectorClient {
     content: string,
     namespace: string,
     topK: number = 3,
-    filter?: Record<string, string | number | boolean>,
+    filter?: VectorFilter,
   ): Promise<VectorsQueryResponse> {
     const vector = await AiClient.getEmbedding(content);
     const url = `${this.VECTORIZE_INDEX_URL}/query`;
@@ -209,7 +211,7 @@ class VectorClient {
       metadata: Metadata;
     }>,
   ) {
-    const contentList = [];
+    const contentList: string[] = [];
     for (const record of records) {
       contentList.push(record.content);
     }
@@ -219,10 +221,10 @@ class VectorClient {
       namespace: string;
       metadata: Metadata;
     }>(contentList, (embedding, index) => ({
-      id: records[index].id,
+      id: records[index]!.id,
       values: embedding,
-      namespace: records[index].namespace,
-      metadata: records[index].metadata,
+      namespace: records[index]!.namespace,
+      metadata: records[index]!.metadata,
     }));
 
     await this.upsert(values);

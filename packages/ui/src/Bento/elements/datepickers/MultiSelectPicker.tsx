@@ -33,19 +33,19 @@ function Calendar({
     propGetters: { dayButton, subtractOffset },
   } = useDatePickerContext();
 
-  const { days, year, month } = calendars[calenderIndex];
+  const { days, year, month } = calendars[calenderIndex] || {};
 
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
-      days.reduce((acc, day, i) => {
+      calendars[calenderIndex]?.days?.reduce((acc, day, i) => {
         if (i % 7 === 0) {
           acc.push([]);
         }
-        acc[acc.length - 1].push(day);
+        acc[acc.length - 1]?.push(day);
         return acc;
-      }, [] as DPDay[][]),
-    [days],
+      }, [] as DPDay[][]) ?? [],
+    [calendars, calenderIndex],
   );
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
@@ -153,7 +153,7 @@ function Calendar({
               return (
                 <View
                   flexDirection="row"
-                  key={days[0].$date.toString()}
+                  key={days[0]?.$date.toString() ?? `row-${Math.random()}`}
                   gap="$1"
                 >
                   {days.map((d) => (
@@ -256,27 +256,7 @@ export function MultiSelectPicker() {
   //   const D = now.getDate()
 
   return (
-    <DatePicker
-      open={open}
-      onOpenChange={setOpen}
-      config={{
-        selectedDates,
-        onDatesChange,
-        offsetDate,
-        onOffsetChange,
-        dates: {
-          mode: 'multiple',
-          limit: 2,
-          // limit years to 2 years before and after current year
-          //   minDate: new Date(Y, M - 2, 1),
-          //   maxDate: new Date(Y, M + 2, 0),
-          toggle: true,
-        },
-        calendar: {
-          offsets: [-1, 1],
-        },
-      }}
-    >
+    <DatePicker open={open} onOpenChange={setOpen}>
       <DatePicker.Trigger asChild>
         <DatePickerInput
           width={250}
@@ -295,7 +275,24 @@ export function MultiSelectPicker() {
 
       <DatePicker.Content>
         <DatePicker.Content.Arrow />
-        <DatePickerBody />
+        <_DatePickerProvider
+          config={{
+            selectedDates,
+            onDatesChange,
+            offsetDate,
+            onOffsetChange,
+            dates: {
+              mode: 'multiple',
+              limit: 2,
+              toggle: true,
+            },
+            calendar: {
+              offsets: [-1, 1],
+            },
+          }}
+        >
+          <DatePickerBody />
+        </_DatePickerProvider>
       </DatePicker.Content>
     </DatePicker>
   );

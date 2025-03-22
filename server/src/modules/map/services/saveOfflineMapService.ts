@@ -1,7 +1,4 @@
-// services/tripService.ts
-
-import { GeojsonStorageService } from 'src/services/geojsonStorage';
-import { PaginationParams } from '../../../helpers/pagination';
+import { GeojsonStorageService } from '../../../services/geojsonStorage';
 import { OfflineMap } from '../model';
 import { OfflineMap as IOfflineMap } from '../models';
 
@@ -10,13 +7,14 @@ export const saveOfflineMapService = async (
   executionCtx: ExecutionContext,
 ) => {
   try {
-    const {
-      metadata: { shape, ...metadata },
-      ...offlineMapData
-    } = offlineMap;
+    const { metadata, ...offlineMapData } = offlineMap;
+    const { shape, ...restMetadata } = metadata as {
+      shape: string;
+      userId: string;
+    };
     const offlineMapClass = new OfflineMap();
     const newOfflineMap = await offlineMapClass.create({
-      metadata,
+      metadata: restMetadata,
       ...offlineMapData,
     });
 
@@ -30,7 +28,9 @@ export const saveOfflineMapService = async (
 
     return newOfflineMap;
   } catch (error) {
-    console.error(error);
-    throw new Error('Trips cannot be found');
+    if (error.message.includes('SQLITE_CONSTRAINT')) {
+      throw new Error('Map with the following name already exists');
+    }
+    throw new Error('Unable to save offline map');
   }
 };

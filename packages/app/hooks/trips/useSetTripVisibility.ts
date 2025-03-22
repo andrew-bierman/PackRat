@@ -12,8 +12,8 @@ export const useSetTripVisibility = () => {
       onSuccess: () => {
         utils.getTrips.invalidate();
         utils.getUserTripsFeed.invalidate();
-        utils.getSingleTrip.invalidate();
-        utils.getUserTrips.invalidate();
+        // utils.getSingleTrip.invalidate();
+        utils.getUserTripsFeed.invalidate();
         options?.onSuccess?.(utils);
       },
     });

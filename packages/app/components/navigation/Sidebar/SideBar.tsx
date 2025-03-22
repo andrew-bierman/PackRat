@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { View, useMedia, styled } from 'tamagui';
 import { RIconButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
@@ -13,7 +13,7 @@ export function FullSideBar() {
   return (
     <View flexDirection="row" height="100%" width="100%">
       {!sm && <Sidebar />}
-      {sm && <FloatingSideBar open={openDrawer} setOpen={setOpenDrawer} />}
+      {/* {sm && <FloatingSideBar open={openDrawer} setOpen={setOpenDrawer} />} */}
       <ProfileDrawer open={openDrawer} setOpen={setOpenDrawer} />
     </View>
   );
@@ -30,7 +30,7 @@ function Sidebar() {
       height="300vh"
       width={300}
       backgroundColor={currentTheme.colors.background}
-      position="fixed"
+      position="absolute"
       left={0}
       top={75}
     >
@@ -53,7 +53,7 @@ function ProfileDrawer({
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onItemSelect: (item: any) => void;
+  onItemSelect?: (item: any) => void;
 }) {
   const { currentTheme } = useTheme();
 
@@ -83,11 +83,13 @@ function ProfileDrawer({
           }}
         >
           <ProfileNavigationList
-            itemStyle={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingVertical: 8,
-            }}
+            itemStyle={
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 8,
+              } as any
+            }
             onItemSelect={onItemSelect}
           />
         </View>

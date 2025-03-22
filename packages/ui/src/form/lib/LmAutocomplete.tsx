@@ -100,7 +100,7 @@ export function LmAutocomplete({
     if (multiple) {
       const has = isSelected(item);
       newVal = has
-        ? (selection as Option[])?.filter((i) => i.value !== item.value) ?? []
+        ? ((selection as Option[])?.filter((i) => i.value !== item.value) ?? [])
         : [...((selection as Option[]) ?? []), item];
     } else {
       newVal = isSelected(item) ? null : item;
@@ -139,7 +139,7 @@ export function LmAutocomplete({
       helperText={helperText}
       helperTextProps={helperTextProps}
       size={size}
-      {...containerProps}
+      {...(containerProps as any)}
     >
       <XGroup ref={inputRef}>
         <XGroup.Item>

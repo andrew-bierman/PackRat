@@ -7,6 +7,8 @@
  Due to that we don't generate migration automatically and it has to be done manually
 */
 /* MANUAL MIGRATION */
+PRAGMA defer_foreign_keys = on;
+
 CREATE TABLE `trip_new` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
@@ -34,3 +36,4 @@ DROP TABLE trip;
 ALTER TABLE trip_new RENAME TO trip;
 
 ALTER TABLE trip ADD `trails` text;
+PRAGMA defer_foreign_keys = off;

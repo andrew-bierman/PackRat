@@ -1,4 +1,4 @@
-import { ItemPacks } from 'src/drizzle/methods/ItemPacks';
+import { ItemPacks } from '../../drizzle/methods/ItemPacks';
 
 interface GetItemsFeedParams {
   itemId: string;

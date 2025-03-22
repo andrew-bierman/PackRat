@@ -50,6 +50,10 @@ export const PackTemplateTable = ({ items }: { items: Item[] }) => {
   const tableRows = table.getRowModel().rows;
   const footerGroup = table.getFooterGroups()[0];
 
+  if (!headerGroup) {
+    return null;
+  }
+
   let totalBaseWeight = 0;
   let totalFoodWeight = 0;
   let totalWaterWeight = 0;

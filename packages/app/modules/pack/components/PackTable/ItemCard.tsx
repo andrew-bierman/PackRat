@@ -14,6 +14,7 @@ interface ItemCardProps {
   hasError: boolean;
   handleDeleteItem: (itemId: string) => void;
   isActionsEnabled: boolean;
+  onSubmitQuantity?: (id: string, value: number) => void;
 }
 
 export const ItemCard = ({
@@ -110,7 +111,7 @@ export const ItemCard = ({
               <RInput
                 value={String(value)}
                 onChangeText={(text) => setValue(Number(text))}
-                onBlur={(e) => submit(Number(e.target.value))}
+                onBlur={() => submit(value)} // removed e.target.value
                 style={{
                   width: 50,
                   padding: 0,

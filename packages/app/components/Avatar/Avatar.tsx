@@ -1,3 +1,4 @@
+import React from 'react';
 import { RImage } from '@packrat/ui';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 export interface AvatarProps {

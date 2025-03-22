@@ -7,13 +7,27 @@ import loadStyles from './landingpage.style';
 import { FAQ_ITEMS } from './constants';
 import useTheme from 'app/hooks/useTheme';
 import PackRatPreview from 'app/assets/PackRat Preview.jpg';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useResponsive from 'app/hooks/useResponsive';
-import { Platform } from 'react-native';
+import { Platform, ImageSourcePropType } from 'react-native';
 
 const RButton: any = OriginalRButton;
 
-export const LandingPageAccordion = ({ title, content, iconName }) => {
+interface MaterialIconName {
+  name: keyof typeof MaterialIcons.glyphMap;
+}
+
+interface LandingPageAccordionProps {
+  title?: string;
+  content?: string;
+  iconName?: MaterialIconName['name'];
+}
+
+export const LandingPageAccordion = ({
+  title,
+  content,
+  iconName = 'info', // provide a default icon
+}: LandingPageAccordionProps) => {
   const styles = useCustomStyles(loadStyles);
   const { currentTheme } = useTheme();
   const [index, setIndex] = useState(0);
@@ -43,72 +57,79 @@ export const LandingPageAccordion = ({ title, content, iconName }) => {
   };
   return (
     <View>
-      {
-        Platform.OS === 'web' ? (
-          <View style={styles.landingPageAccordionContainer}>
-            <View style={styles.landingPageAccordationSecondContainer}>
-              <View>
-                <RButton onClick={panUp} style={styles.panButton}>
-                  <MaterialCommunityIcons
-                    name="arrow-left-thin"
-                    size={30}
-                    color={currentTheme.colors.textPrimary}
-                  />
-                </RButton>
-              </View>
-              <View style={{ flexDirection: xs || sm || md ? 'column' : 'row', alignItems: 'center', justifyContent: 'center', gap: 10, }}>
-                <RText style={styles.cardContent}>{data.content}</RText>
+      {Platform.OS === 'web' ? (
+        <View style={styles.landingPageAccordionContainer}>
+          <View style={styles.landingPageAccordationSecondContainer}>
+            <View>
+              <RButton onClick={panUp} style={styles.panButton}>
+                <MaterialCommunityIcons
+                  name="arrow-left-thin"
+                  size={30}
+                  color={currentTheme.colors.textPrimary}
+                />
+              </RButton>
+            </View>
+            <View
+              style={{
+                flexDirection: xs || sm || md ? 'column' : 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 10,
+              }}
+            >
+              <RText style={styles.cardContent}>{data?.content}</RText>
+              {data?.frameLink && (
                 <RImage
-                  src={data.frameLink}
+                  source={data.frameLink as ImageSourcePropType}
                   style={{
                     backgroundColor: 'transparent',
                     width: 330,
                     height: 600,
                   }}
                 />
-              </View>
-              <View>
-                <RButton onClick={panDown} style={styles.panButton}>
-                  <MaterialCommunityIcons
-                    name="arrow-right-thin"
-                    size={30}
-                    color={currentTheme.colors.textPrimary}
-                    style={
-                      {
-                        // width: '100%',
-                      }
-                    }
-                  />
-                </RButton>
-              </View>
+              )}
             </View>
-          </View>
-        ) : (
-          <RCard style={styles.card}>
-            <View style={styles.cardHeader}>
-              <MaterialIcons name={iconName} style={styles.icon} />
-              <View style={{ flex: 1 }}>
-                <RText style={styles.featureText}>{title}</RText>
-              </View>
-              <RButton
-                backgroundColor="transparent"
-                style={styles.transparentButton}
-                onPress={toggleExpanded}
-              >
-                <MaterialIcons
-                  name={expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
-                  style={styles.icon}
+            <View>
+              <RButton onClick={panDown} style={styles.panButton}>
+                <MaterialCommunityIcons
+                  name="arrow-right-thin"
+                  size={30}
+                  color={currentTheme.colors.textPrimary}
+                  style={
+                    {
+                      // width: '100%',
+                    }
+                  }
                 />
               </RButton>
             </View>
-            {expanded && (
-              <RCard.Header>
-                <RText style={styles.cardContent}>{content}</RText>
-              </RCard.Header>
-            )}
-          </RCard>
-        )
-      }
+          </View>
+        </View>
+      ) : (
+        <RCard style={styles.card}>
+          <View style={styles.cardHeader}>
+            <MaterialIcons name={iconName || 'info'} style={styles.icon} />
+            <View style={{ flex: 1 }}>
+              <RText style={styles.featureText}>{title}</RText>
+            </View>
+            <RButton
+              backgroundColor="transparent"
+              style={styles.transparentButton}
+              onPress={toggleExpanded}
+            >
+              <MaterialIcons
+                name={expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+                style={styles.icon}
+              />
+            </RButton>
+          </View>
+          {expanded && (
+            <RCard.Header>
+              <RText style={styles.cardContent}>{content}</RText>
+            </RCard.Header>
+          )}
+        </RCard>
+      )}
     </View>
   );
 };

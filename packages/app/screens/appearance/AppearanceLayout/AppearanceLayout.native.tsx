@@ -1,4 +1,4 @@
-import React, { Suspense, type ReactNode } from 'react';
+import React, { Suspense, type ReactElement } from 'react';
 import { Text, View } from 'tamagui';
 import { AppearanceMobileMenu } from '../components/AppearanceMobileMenu';
 
@@ -6,8 +6,8 @@ export const AppearanceLayout = ({
   navigationList,
   currentRoute,
 }: {
-  navigationList: ReactNode;
-  currentRoute: ReactNode;
+  navigationList: ReactElement;
+  currentRoute: ReactElement;
 }) => {
   return (
     <>

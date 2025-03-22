@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   FadeIn,
 } from 'react-native-reanimated';
-import { LucideIcon } from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -54,14 +60,7 @@ export const ActionItem: React.FC<ActionItemProps> = ({
   };
 
   return (
-    <AnimatedPressable
-      entering={FadeIn.duration(100)}
-      onPressIn={() => {
-        setScale(0.95);
-      }}
-      onPressOut={handlePressOut}
-      style={[styles.actionItem, actionItemAStyle]}
-    >
+    <TouchableOpacity style={styles.actionItem} onPress={handlePressOut}>
       <View
         style={{
           ...styles.iconContainer,
@@ -74,7 +73,7 @@ export const ActionItem: React.FC<ActionItemProps> = ({
         <Text style={styles.actionTitle}>{title}</Text>
         <Text style={styles.actionDescription}>{description}</Text>
       </View>
-    </AnimatedPressable>
+    </TouchableOpacity>
   );
 };
 
@@ -85,10 +84,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(44, 44, 46, 0.6)',
     borderRadius: 10,
     padding: 8,
+    flex: 1,
     borderWidth: 1.3, // Adding border
     borderColor: '#3a3a3c', // Slightly lighter border color
     height: 80,
-    width: 300,
+    width: '100%',
     marginBottom: 2,
   },
   iconContainer: {

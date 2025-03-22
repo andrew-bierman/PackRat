@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Separator, Text, View, YGroup } from 'tamagui';
-import { RButton } from '@packrat/ui';
+import { RIconButton } from '@packrat/ui';
 import useTheme from 'app/hooks/useTheme';
 import { useAddPackItem } from 'app/modules/pack';
-import { ScrollView } from 'react-native';
+import { PlusCircle } from '@tamagui/lucide-icons';
 
 interface Category {
   id: string;
   name: string;
 }
 
-interface Item {
+interface SuggestionItem {
   id: string;
   name: string;
   ownerId: string;
@@ -21,20 +21,15 @@ interface Item {
 }
 
 interface SuggestionListProps {
-  suggestion: { Items: Item[] } | null;
+  suggestion: SuggestionItem[];
   onAddItem: (itemId: string) => void;
 }
 
 export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
-  const [itemsList, setItemsList] = useState<Item[]>([]);
   const { isDark } = useTheme();
 
-  useEffect(() => {
-    if (suggestion?.Items) {
-      setItemsList(suggestion.Items);
-    } else {
-      setItemsList([]);
-    }
+  const itemsList = useMemo(() => {
+    return suggestion || [];
   }, [suggestion]);
 
   return (
@@ -47,27 +42,24 @@ export function SuggestionList({ suggestion, onAddItem }: SuggestionListProps) {
         flex: 1,
       }}
     >
-      <ScrollView
-        style={{
-          minWidth: 300,
-          height: '100%',
-          overflow: 'auto',
-        }}
-      >
-        {itemsList.map((item, i) => (
-          <React.Fragment key={item.id}>
-            <Item item={item} onAddItem={onAddItem} />
-            {i < itemsList.length - 1 && <Separator />}
-          </React.Fragment>
-        ))}
-      </ScrollView>
+      {itemsList.map((item, i) => (
+        <React.Fragment key={item.id}>
+          <Item item={item} onAddItem={onAddItem} />
+          {i < itemsList.length - 1 && <Separator />}
+        </React.Fragment>
+      ))}
     </YGroup>
   );
 }
 
 SuggestionList.fileName = 'List';
 
-function Item({ item, onAddItem }) {
+interface ItemProps {
+  item: SuggestionItem;
+  onAddItem: (itemId: string) => void;
+}
+
+function Item({ item, onAddItem }: ItemProps) {
   const { addPackItem, isLoading } = useAddPackItem();
 
   const handleAddItem = (item) => {
@@ -89,7 +81,7 @@ function Item({ item, onAddItem }) {
         style={{
           borderRadius: 5,
           flexDirection: 'row',
-          aligItems: 'center',
+          alignItems: 'center',
         }}
       >
         <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
@@ -105,15 +97,21 @@ function Item({ item, onAddItem }) {
             {item.unit}, {item.quantity}pcs
           </Text>
         </View>
-        <RButton
+        <RIconButton
           onPress={() => {
             handleAddItem(item);
           }}
-          style={{ borderRadius: 5, marginLeft: 'auto' }}
+          style={{
+            borderRadius: 5,
+            marginLeft: 'auto',
+            alignSelf: 'center',
+            borderWidth: 0,
+            backgroundColor: 'transparent',
+          }}
           disabled={isLoading}
-        >
-          Add
-        </RButton>
+          unstyled
+          icon={<PlusCircle size={20} />}
+        />
       </View>
     </YGroup.Item>
   );

@@ -49,10 +49,11 @@ export const getPackByIdService = async (packId: string): Promise<PackData> => {
       total_weight: 0,
       favorites_count: packClass.computeFavouritesCount(pack),
       total_score: packClass.computeTotalScores(pack),
-      items: pack.itemPacks.map((itemPack) => ({
-        ...itemPack.item,
-        quantity: itemPack.quantity,
-      })),
+      items:
+        pack.itemPacks?.map((itemPack) => ({
+          ...itemPack.item,
+          quantity: itemPack.quantity,
+        })) ?? [],
     };
     return packData;
   } catch (error) {

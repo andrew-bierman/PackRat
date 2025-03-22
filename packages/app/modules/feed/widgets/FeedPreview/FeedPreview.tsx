@@ -50,7 +50,7 @@ const FeedPreviewScroll: React.FC<FeedPreviewScrollProps> = ({
 };
 
 interface FeedPreviewProps {
-  feedType: string;
+  feedType: FeedType;
   id?: string;
 }
 

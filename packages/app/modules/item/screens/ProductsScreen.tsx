@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FlatList, View } from 'react-native';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import {
   DropdownComponent,
@@ -20,22 +19,25 @@ import { useItemPackPicker } from '../hooks/useItemPackPicker';
 import { FeedList } from 'app/modules/feed/components/FeedList';
 import Layout from 'app/components/layout/Layout';
 import FilterBadge from 'app/components/FilterBadge';
+import { searchQueryAtom } from 'app/modules/feed/atoms';
+import { useAtom } from 'jotai';
+import { Platform } from 'react-native';
 
 export function ProductsScreen() {
   const sortOptions = useFeedSortOptions('products');
-  const [sortValue, setSortValue] = useState(sortOptions[0]);
+  const [sortValue, setSortValue] = useState<string>(sortOptions[0] || '');
   const { overlayProps, onTriggerOpen } = useItemPackPicker();
-  const [searchValue, setSearchValue] = useState();
+  const [searchQuery, setSearchQuery] = useAtom(searchQueryAtom);
   const {
     data,
     isLoading,
     hasNextPage,
     fetchNextPage,
     fetchPrevPage,
-    currentPage,
+    currentPage = 1,
     hasPrevPage,
-    totalPages,
-  } = useItemsFeed(sortValue, searchValue);
+    totalPages = 1,
+  } = useItemsFeed(sortValue, searchQuery);
   const styles = useCustomStyles(loadStyles);
   const { xxs, xs, sm, md, lg } = useResponsive();
 
@@ -43,76 +45,51 @@ export function ProductsScreen() {
     setSortValue(newSortValue);
   };
 
-  const handleSetSearchValue = (v: string) => {
-    setSearchValue(v);
-  };
-
-  const getNumColumns = () => {
-    if (xxs || xs) return 1;
-    if (sm) return 2;
-    if (md) return 3;
-    return 4;
-  };
-
-  const numColumns = getNumColumns();
-
   return (
     <Layout>
-      <RStack style={styles.mainContainer}>
-        <RStack style={styles.filterContainer}>
-          <RStack style={styles.searchContainer}>
-            <Form>
-              <RStack
-                style={{
-                  flexDirection: 'row',
-                  margin: 0,
-                  padding: 0,
-                  width: '100%',
-                }}
-              >
-                <InputWithIcon
-                  LeftIcon={<Search />}
-                  RightIcon={<X />}
-                  onChange={handleSetSearchValue}
-                  placeholder={`Search ItemsFeed`}
-                  value={searchValue}
-                />
-              </RStack>
-            </Form>
-          </RStack>
-
-          <FilterBadge
-            menuItems={sortOptions}
-            selectedValue={sortValue}
-            onSelect={handleSortChange}
+      {Platform.OS === 'web' && (
+        <RStack style={{ marginBottom: 10 }}>
+          <InputWithIcon
+            LeftIcon={<Search />}
+            RightIcon={<X />}
+            onChange={setSearchQuery}
+            placeholder={`Search ItemsFeed`}
+            value={searchQuery}
           />
         </RStack>
-
-        <FeedList
-          data={data}
-          CardComponent={({ item }) => (
-            <ItemCard
-              cardType="primary"
-              item={item}
-              onAddPackPress={onTriggerOpen}
-            />
-          )}
-          isLoading={isLoading}
-          separatorHeight={12}
+      )}
+      <RStack style={styles.filterContainer}>
+        <FilterBadge
+          menuItems={sortOptions}
+          selectedValue={sortValue}
+          onSelect={handleSortChange}
         />
-        {totalPages > 1 && (
-          <RStack style={{ marginTop: 40 }}>
-            <Pagination
-              isPrevBtnDisabled={!hasPrevPage}
-              isNextBtnDisabled={!hasNextPage}
-              onPressPrevBtn={fetchPrevPage}
-              onPressNextBtn={fetchNextPage}
-              currentPage={currentPage}
-              totalPages={totalPages}
-            />
-          </RStack>
-        )}
       </RStack>
+
+      <FeedList
+        data={data}
+        CardComponent={({ item }) => (
+          <ItemCard
+            cardType="primary"
+            item={item}
+            onAddPackPress={onTriggerOpen}
+          />
+        )}
+        isLoading={isLoading}
+        separatorHeight={12}
+      />
+      {totalPages > 1 && (
+        <RStack style={{ marginTop: 40 }}>
+          <Pagination
+            isPrevBtnDisabled={!hasPrevPage}
+            isNextBtnDisabled={!hasNextPage}
+            onPressPrevBtn={fetchPrevPage}
+            onPressNextBtn={fetchNextPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+          />
+        </RStack>
+      )}
       <PackPickerOverlay {...overlayProps} />
     </Layout>
   );
@@ -123,14 +100,6 @@ const loadStyles = (theme: any) => {
   const { xxs, xs } = useResponsive();
 
   return {
-    mainContainer: {
-      flexDirection: 'column',
-      height: '100%',
-      padding: 10,
-      alignItems: 'center',
-      backgroundColor: currentTheme.colors.background,
-      marginBottom: 50,
-    },
     container: {
       backgroundColor: currentTheme.colors.card,
       flexDirection: xs || xxs ? 'column' : 'row',
@@ -149,13 +118,9 @@ const loadStyles = (theme: any) => {
       padding: 10,
     },
     filterContainer: {
-      backgroundColor: currentTheme.colors.card,
-      padding: 15,
-      fontSize: 18,
       width: '100%',
-      borderRadius: 10,
-      marginTop: 20,
-      marginBottom: 8,
+      paddingBottom: 10,
+      flexDirection: 'row',
     },
     searchContainer: {
       flexDirection: 'row',

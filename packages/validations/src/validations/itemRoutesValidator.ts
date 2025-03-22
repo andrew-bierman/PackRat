@@ -95,6 +95,13 @@ export const getSimilarItems = z.object({
   limit: z.number(),
 });
 
+export const importNotifiedETL = z.object({
+  bucket_name: z.string(),
+  file_key: z.string(),
+  spider_name: z.string(),
+});
+export type ImportNotifiedETL = z.infer<typeof importNotifiedETL>;
+
 export const importItemHeaders = z.object({
   Name: z.string(),
   Weight: z.string(),

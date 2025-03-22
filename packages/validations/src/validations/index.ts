@@ -14,3 +14,4 @@ export * from './packTemplateRoutesValidator';
 export * from './weatherRoutesValidator';
 export * from './roleValidator';
 export * from './authTokenValidator';
+export * from './mapRoutesValidator';

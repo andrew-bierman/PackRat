@@ -43,7 +43,7 @@ const Link = styled(Text, {
   '$group-window-xs': {
     paddingVertical: '$2.5',
   },
-});
+} as any);
 
 /** ------ EXAMPLE ------ */
 export function FullSideBar() {
@@ -220,7 +220,7 @@ const DropDownItem = styled(View, {
     paddingHorizontal: '$2',
     paddingVertical: '$1',
   },
-});
+} as any);
 
 const DropDownText = styled(Text, {
   fontWeight: '$2',
@@ -231,7 +231,7 @@ const DropDownText = styled(Text, {
     fontSize: '$1',
     lineHeight: '$1',
   },
-});
+} as any);
 
 /** SIDEBAR AND DRAWER */
 function Sidebar() {
@@ -249,7 +249,7 @@ function Sidebar() {
   );
 }
 
-function FloatingSideBar({
+export function FloatingSideBar({
   open,
   setOpen,
 }: {

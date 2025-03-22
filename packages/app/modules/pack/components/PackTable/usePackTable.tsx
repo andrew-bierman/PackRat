@@ -3,7 +3,15 @@ import { useAuthUser } from 'app/modules/auth';
 import { useDuplicatePackItem } from '../../hooks/useDuplicatePackItem';
 import { useItemWeightUnit } from 'app/modules/item';
 
-export const usePackTable = ({ currentPack, copy }) => {
+interface UsePackTableProps {
+  currentPack: any;
+  selectedPack?: any;
+  refetch?: boolean;
+  setRefetch?: React.Dispatch<React.SetStateAction<boolean>>;
+  copy?: boolean;
+}
+
+export const usePackTable = ({ currentPack, copy }: UsePackTableProps) => {
   const user = useAuthUser();
   const duplicatePackItem = useDuplicatePackItem();
   let ids = [];

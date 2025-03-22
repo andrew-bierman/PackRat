@@ -9,6 +9,7 @@ import RPrimaryButton from 'app/components/RPrimaryButton';
 import { openExternalLink } from 'app/utils';
 import useResponsive from 'app/hooks/useResponsive';
 import useTheme from 'app/hooks/useTheme';
+import { type WeightUnit } from 'app/utils/convertWeight';
 
 interface ItemData {
   title: string;
@@ -101,7 +102,11 @@ const ItemDetailsContent: React.FC<ItemDetailsContentProps> = ({
           fontWeight: 'bold',
         }}
       >
-        {convertWeight(itemData.weight, SMALLEST_ITEM_UNIT, itemData.unit)}
+        {convertWeight(
+          itemData.weight,
+          SMALLEST_ITEM_UNIT,
+          itemData.unit as WeightUnit,
+        )}
         {itemData.unit}
       </RText>
       <RText style={{ fontSize: sm ? 10 : 12, maxHeight: sm ? 18 : 30 }}>

@@ -9,6 +9,7 @@ import ItemPlaceholder from 'app/assets/item-placeholder.png';
 import ItemDetailsContent from '../ItemDetailsContent';
 import type { ItemCardProps } from './model';
 import { useRouter } from 'app/hooks/router';
+import { GestureResponderEvent, ViewStyle, ImageStyle } from 'react-native';
 
 export const ItemPrimaryCard: React.FC<ItemCardProps> = ({
   item,
@@ -18,7 +19,7 @@ export const ItemPrimaryCard: React.FC<ItemCardProps> = ({
   const router = useRouter();
   const { xxs } = useResponsive();
 
-  const handlePress = (e: React.MouseEvent) => {
+  const handlePress = (e: GestureResponderEvent) => {
     e.stopPropagation();
     router.push({ pathname: `/item/${item.id}`, query: { itemId: item.id } });
   };
@@ -26,17 +27,17 @@ export const ItemPrimaryCard: React.FC<ItemCardProps> = ({
   return (
     <TouchableOpacity onPress={handlePress}>
       <Card elevate bordered style={styles.card(currentTheme, xxs)}>
-        <RStack style={styles.content}>
-          <View style={styles.imageContainer(currentTheme)}>
+        <RStack style={styles.content as ViewStyle}>
+          <View style={styles.imageContainer(currentTheme) as ViewStyle}>
             <Image
               source={{ uri: item?.images?.[0]?.url }}
-              defaultSource={ItemPlaceholder}
+              defaultSource={ItemPlaceholder as any}
               resizeMode="contain"
-              style={styles.image}
+              style={styles.image as ImageStyle}
             />
             <RButton
-              style={styles.addButton}
-              onPress={(e) => onAddPackPress(item.id, e)}
+              style={styles.addButton as ViewStyle}
+              onPress={(e) => onAddPackPress?.(item.id, e)}
             >
               <PlusCircle />
             </RButton>
@@ -49,7 +50,7 @@ export const ItemPrimaryCard: React.FC<ItemCardProps> = ({
                 sku: item.sku,
                 seller: item.seller,
                 category: item?.category?.name,
-                productUrl: item.productUrl,
+                productUrl: item.productUrl ?? '',
                 weight: item.weight,
                 unit: item.unit,
                 description: item.description,

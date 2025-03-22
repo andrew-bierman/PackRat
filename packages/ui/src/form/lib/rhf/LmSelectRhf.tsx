@@ -3,13 +3,16 @@ import { Controller, FieldValues } from 'react-hook-form';
 import { LmRhfProps } from './lmRhfProps';
 
 export type LmSelectRhfProps<T extends FieldValues> = LmSelectProps &
-  LmRhfProps<T> & {};
+  LmRhfProps<T> & {
+    style?: any; // allow style
+  };
 
 export function LmSelectRhf<T extends FieldValues>({
   name,
   control,
   rules = {},
   defaultValue,
+  style, // newly added
   ...inputProps
 }: LmSelectRhfProps<T>) {
   if (inputProps.required) {
@@ -27,6 +30,7 @@ export function LmSelectRhf<T extends FieldValues>({
       }) => (
         <LmSelect
           {...inputProps}
+          style={style}
           value={value ?? ''}
           error={invalid}
           onValueChange={onChange}

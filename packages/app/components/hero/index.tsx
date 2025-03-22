@@ -1,6 +1,6 @@
 import React from 'react';
 import { RStack, RImage } from '@packrat/ui';
-import { ImageSourcePropType, Platform, View } from 'react-native';
+import { type ImageSourcePropType, Platform, View } from 'react-native';
 import { theme } from '../../theme';
 import { isObjectEmpty } from '../../utils/isObjectEmpty';
 import useCustomStyles from 'app/hooks/useCustomStyles';

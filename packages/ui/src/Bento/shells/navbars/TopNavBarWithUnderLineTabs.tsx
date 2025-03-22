@@ -320,7 +320,7 @@ const DropDownItem = styled(View, {
     paddingHorizontal: '$2',
     paddingVertical: '$1',
   },
-});
+} as any);
 
 const DropDownText = styled(Text, {
   fontWeight: '$2',
@@ -331,7 +331,7 @@ const DropDownText = styled(Text, {
     fontSize: '$1',
     lineHeight: '$1',
   },
-});
+} as any);
 
 const NavLink = View.styleable<{ href: string }>(
   ({ children, href = '#', ...rest }, ref) => {

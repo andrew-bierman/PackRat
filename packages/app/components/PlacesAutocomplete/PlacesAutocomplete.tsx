@@ -8,10 +8,15 @@ import { usePlacesAutoComplete } from './usePlacesAutoComplete';
 interface PlacesAutocompleteProps {
   onSelect?: (geoJSON: any) => void;
   placeholder?: string;
+  shouldNavigateBackOnClear?: any;
+  style?: any;
 }
 
 export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
-  function PlacesAutoComplete({ onSelect, placeholder }, ref) {
+  function PlacesAutoComplete(
+    { onSelect, placeholder, shouldNavigateBackOnClear = false },
+    ref,
+  ) {
     const { data, handleSelect, search, setSearch } =
       usePlacesAutoComplete(onSelect);
     const inputRef = useRef<TextInput>(null);
@@ -35,6 +40,7 @@ export const PlacesAutocomplete = forwardRef<any, PlacesAutocompleteProps>(
         onChange={setSearch}
         searchString={search}
         ref={inputRef}
+        shouldNavigateBackOnClear={shouldNavigateBackOnClear}
       />
     );
   },

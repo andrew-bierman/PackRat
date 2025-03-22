@@ -13,7 +13,7 @@ export const useGEOLocationSearch = (): [
   GeoSearchParams,
   (geoJSON: any) => void,
 ] => {
-  const { params: osm, setParams } = useParams();
+  const { params: osm, setParams } = useParams('osmId');
 
   const setGEOLocation = (geoJSON) => {
     const newSearchParams: GeoSearchParams = {};

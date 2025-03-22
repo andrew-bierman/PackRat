@@ -18,7 +18,7 @@ const useResponsive = () => {
     tall,
     hoverNone,
     pointerCoarse,
-  } = useMedia();
+  }: any = useMedia();
 
   return {
     xxxs,

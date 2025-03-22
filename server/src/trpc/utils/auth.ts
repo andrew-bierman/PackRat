@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { User as UserRepository } from '../../drizzle/methods/User';
-import { type User } from 'src/db/schema';
+import { type User } from '../../db/schema';
 import * as jwt from 'hono/jwt';
 
 // import * as jwt from 'hono/jwt';
@@ -35,13 +35,17 @@ const extractToken = (req: Request): string | null => {
  * @param {string} jwtSecret - The JWT secret.
  * @returns {Promise<User>} - The user associated with the token. Resolves to null if token couldn't be verified or user is not found.
  */
-const findUser = async (token: string, jwtSecret: string): Promise<User> => {
+const findUser = async (
+  token: string,
+  jwtSecret: string,
+): Promise<User | null> => {
   const userRepository = new UserRepository();
-  let user: User = null;
-  // const user: any = await userClass.validateResetToken(token, jwtSecret);
+  let user: User | null = null;
   try {
     const decoded = await jwt.verify(token, jwtSecret);
-    user = await userRepository.findUser({ userId: decoded.id as string });
+    user = (await userRepository.findUser({
+      userId: decoded.id as string,
+    })) as User;
   } catch {
     // pass
   }

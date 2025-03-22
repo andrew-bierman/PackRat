@@ -1,4 +1,4 @@
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, like, sql } from 'drizzle-orm';
 import { DbClient } from '../../../db/client';
 import { offlineMap, offlineMap as offlineMapTable } from '../../../db/schema';
 
@@ -9,11 +9,18 @@ import {
 } from '../../../helpers/pagination';
 
 export class OfflineMap {
-  async findByOwnerId(ownerId: string, pagination?: PaginationParams) {
+  async findByOwnerId(
+    ownerId: string,
+    search?: string,
+    pagination?: PaginationParams,
+  ) {
     try {
       const paginationParams = getPaginationParams(pagination);
       const offlineMaps = await DbClient.instance.query.offlineMap.findMany({
-        where: eq(offlineMap.owner_id, ownerId),
+        where: and(
+          eq(offlineMap.owner_id, ownerId),
+          like(offlineMap.name, `%${search}%`),
+        ),
         limit: paginationParams.limit,
         offset: paginationParams.offset,
       });
@@ -36,12 +43,29 @@ export class OfflineMap {
     try {
       const newOfflineMap = await DbClient.instance
         .insert(offlineMapTable)
-        .values(data)
+        .values({
+          ...data,
+          metadata: data.metadata as any,
+        })
         .returning()
         .get();
       return newOfflineMap;
     } catch (error) {
       throw new Error(`Failed to create offline map: ${error.message}`);
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const deletedItem = await DbClient.instance
+        .delete(offlineMapTable)
+        .where(eq(offlineMap.id, id))
+        .returning()
+        .get();
+
+      return deletedItem;
+    } catch (error) {
+      throw new Error(`Failed to delete offline map: ${error.message}`);
     }
   }
 }

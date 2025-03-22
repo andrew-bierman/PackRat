@@ -18,7 +18,8 @@ type Product = ReturnType<typeof getProducts>[0];
 const premiums = [3, 6, 12, 15, 20, 25];
 const bestSellers = [1, 5, 10, 13, 18, 23];
 
-function Item({ item, index }: { item: Product; index: number }) {
+function Item({ item, index }: { item: Product | null; index: number }) {
+  if (!item) return null;
   const isPremium = premiums.includes(index);
   const isBestSeller = bestSellers.includes(index);
   const showLabel = isPremium || isBestSeller;
@@ -121,9 +122,10 @@ export function ProductListWithLabel() {
         paddingHorizontal: '$3',
       }}
     >
-      {products.map((item, index) => (
-        <Item index={index} key={item.id} item={item} />
-      ))}
+      {products.map(
+        (item, index) =>
+          item && <Item index={index} key={item.id} item={item} />,
+      )}
       {someSpacers}
     </XStack>
   );

@@ -206,7 +206,7 @@ export function YearPicker({
     data: { years, calendars },
     propGetters: { yearButton },
   } = useDatePickerContext();
-  const selectedYear = calendars[0].year;
+  const selectedYear = calendars?.[0]?.year;
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'years',
@@ -273,7 +273,7 @@ export function YearRangeSlider() {
       </Button>
       <View y={2} flexDirection="column" alignItems="center">
         <SizableText size="$5">
-          {`${years[0].year} - ${years[years.length - 1].year}`}
+          {`${years?.[0]?.year} - ${years?.[years.length - 1]?.year}`}
         </SizableText>
       </View>
       <Button circular size="$4" {...swapOnClick(nextYearsButton())}>
@@ -291,7 +291,7 @@ export function YearSlider() {
     propGetters: { subtractOffset },
   } = useDatePickerContext();
   const { type: header, setHeader } = useHeaderType();
-  const { year } = calendars[0];
+  const { year } = calendars?.[0] || {};
   return (
     <View
       flexDirection="row"

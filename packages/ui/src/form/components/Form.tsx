@@ -12,7 +12,7 @@ export { useFormContext as useAppFormContext } from 'react-hook-form';
 interface Props extends Omit<UseFormProps, 'resolver'> {
   validationSchema?: any;
   formRef?: any;
-  onSubmit?: FormSubmitHandler<FieldValues>;
+  onSubmit?: any;
   children: ReactNode;
 }
 
@@ -23,17 +23,13 @@ export const Form = forwardRef<any, Props>(
       resolver: validationSchema ? zodResolver(validationSchema) : undefined,
     });
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          submit: (...params) =>
-            typeof onSubmit === 'function' &&
-            form.handleSubmit(onSubmit.bind(null, ...params))(),
-        };
-      },
-      [form, onSubmit],
-    );
+    useImperativeHandle(ref, () => {
+      return {
+        submit: (...params) =>
+          typeof onSubmit === 'function' &&
+          form.handleSubmit(onSubmit.bind(null, ...params))(),
+      };
+    }, [form, onSubmit]);
 
     return (
       <FormProvider {...form}>

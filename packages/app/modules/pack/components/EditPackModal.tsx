@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BaseModal } from '../../../../ui/src/modal/BaseModal';
-import RButton from '@packrat/ui/src/RButton';
-import RInput from '@packrat/ui/src/RInput';
 import { useEditPack } from '../hooks/useEditPack';
 import RStack from '@packrat/ui/src/RStack';
 import RText from '@packrat/ui/src/RText';
-import { Switch } from 'tamagui';
-import RSwitch from '@packrat/ui/src/RSwitch';
+import { Form, FormInput, FormSwitch, useFormSubmitTrigger } from '@packrat/ui';
+import { editPack as editPackSchema } from '@packrat/validations';
 
 interface EditPackModalProps {
   isOpen?: boolean;
@@ -23,14 +21,16 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
 }) => {
   const [packName, setPackName] = useState(currentPack?.name ?? '');
   const [isPublic, setIsPublic] = useState(currentPack?.is_public ?? true);
+  const [formRef, triggerSubmit] = useFormSubmitTrigger();
   const { editPack, isLoading, isError } = useEditPack();
 
-  const handleEditPack = async () => {
+  const handleEditPack = async (closeModal, { name: packName, is_public }) => {
     try {
       editPack(
-        { id: currentPack.id, name: packName, is_public: isPublic },
+        { id: currentPack.id, name: packName, is_public },
         {
           onSuccess: () => {
+            closeModal();
             onClose?.();
             refetch?.();
           },
@@ -54,6 +54,15 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
       title="Edit Pack"
       footerButtons={[
         {
+          label: 'Save',
+          color: '#232323',
+          onClick: (_, closeModal) => {
+            if (typeof triggerSubmit === 'function') {
+              triggerSubmit(closeModal);
+            }
+          },
+        },
+        {
           label: 'Cancel',
           color: '#B22222',
           onClick: (_, closeModal) => {
@@ -65,31 +74,21 @@ export const EditPackModal: React.FC<EditPackModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <RInput
-        placeholder="Pack Name"
-        value={packName}
-        onChangeText={(t) => setPackName(t)}
-        style={{ width: 200 }}
-      />
-      <RStack
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <RText>Public </RText>
-        <RSwitch
-          checked={isPublic}
-          onCheckedChange={() => setIsPublic((prev) => !prev)}
-          size="$1.5"
+      <RStack style={{ width: 320, gap: 8 }}>
+        <Form
+          ref={formRef}
+          onSubmit={handleEditPack}
+          validationSchema={editPackSchema}
+          defaultValues={{
+            id: currentPack?.id,
+            name: currentPack?.name,
+            is_public: currentPack?.is_public,
+          }}
         >
-          <Switch.Thumb />
-        </RSwitch>
+          <FormInput label="Name" name="name" />
+          <FormSwitch name="is_public" labelLeft="Is public" size="$2.5" />
+        </Form>
       </RStack>
-      <RButton onPress={handleEditPack} disabled={isLoading}>
-        {isLoading ? 'Saving...' : 'Save'}
-      </RButton>
       {isError && (
         <RStack>
           <RText style={{ color: 'red' }}>Failed to save changes</RText>

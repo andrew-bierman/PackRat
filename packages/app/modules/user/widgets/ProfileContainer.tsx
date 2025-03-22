@@ -153,7 +153,11 @@ const Header = ({
   );
 };
 
-export function ProfileContainer({ id = null }) {
+export interface ProfileContainerProps {
+  id?: string | null;
+}
+
+export function ProfileContainer({ id = null }: ProfileContainerProps) {
   const { currentTheme } = useTheme();
   const styles = useCustomStyles(loadStyles);
   const {
@@ -172,12 +176,12 @@ export function ProfileContainer({ id = null }) {
     error,
   } = useProfile(id);
 
-  useEffect(() => {
-    console.log('mount');
-    return () => {
-      console.log('unmount');
-    };
-  }, [user]);
+  // useEffect(() => {
+  //   console.log('mount');
+  //   return () => {
+  //     console.log('unmount');
+  //   };
+  // }, [user]);
 
   return (
     <Layout>

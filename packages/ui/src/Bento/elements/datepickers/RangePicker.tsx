@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   DatePickerProvider,
   DatePickerProvider as _DatePickerProvider,
@@ -71,19 +72,19 @@ function Calendar({
     propGetters: { dayButton, subtractOffset },
   } = useDatePickerContext();
 
-  const { days, year, month } = calendars[calenderIndex];
+  const { days, year, month } = calendars[calenderIndex] || {};
 
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
-      days.reduce((acc, day, i) => {
+      calendars[calenderIndex]?.days?.reduce((acc, day, i) => {
         if (i % 7 === 0) {
           acc.push([]);
         }
-        acc[acc.length - 1].push(day);
+        acc[acc.length - 1]?.push(day);
         return acc;
-      }, [] as DPDay[][]),
-    [days],
+      }, [] as DPDay[][]) ?? [],
+    [calendars, calenderIndex],
   );
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
@@ -91,7 +92,17 @@ function Calendar({
   });
 
   return (
-    <View flexDirection="column" gap="$4">
+    <View
+      flexDirection="column"
+      gap="$4"
+      {...Platform.select({
+        native: {
+          alignItems: 'center',
+          width: '100%',
+          paddingLeft: '$2',
+        },
+      })}
+    >
       <View
         flexDirection="row"
         minWidth="100%"
@@ -131,9 +142,12 @@ function Calendar({
             selectable
             tabIndex={0}
             cursor="pointer"
-            size="$6"
+            size={Platform.select({
+              web: '$6',
+              native: '$5',
+            })}
             color="$gray12"
-            fontWeight="600"
+            fontWeight="700"
             lineHeight="$1"
             hoverStyle={{
               color: '$gray10',
@@ -182,60 +196,81 @@ function Calendar({
                 theme="alt1"
                 key={day}
                 ta="center"
-                width={45}
+                width={Platform.select({
+                  web: 45,
+                  native: 46,
+                })}
                 size="$4"
+                textAlign="center"
               >
                 {day}
               </SizableText>
             ))}
           </View>
-          <View flexDirection="column" gap="$1" flexWrap="wrap">
-            {subDays.map((days) => {
-              return (
-                <View flexDirection="row" key={days[0].$date.toString()}>
-                  {days.map((d) => {
-                    return (
-                      <Button
-                        key={d.$date.toString()}
-                        chromeless
-                        circular
-                        padding={0}
-                        minWidth={46}
-                        {...swapOnClick(dayButton(d))}
-                        backgroundColor={
-                          d.selected && d.inCurrentMonth
-                            ? '$background'
-                            : 'transparent'
-                        }
-                        themeInverse={d.selected}
-                        {...RANGE_STYLE[d.range]}
-                        data-range={d.range}
-                        disabled={!d.inCurrentMonth}
-                        {...(d.range === 'in-range' || d.selected
-                          ? {
-                              hoverStyle: {
-                                backgroundColor: 'transparent',
-                              },
-                            }
-                          : {})}
-                      >
-                        <Button.Text
-                          color={
-                            d.selected
-                              ? '$gray12'
-                              : d.inCurrentMonth
-                                ? '$gray11'
-                                : '$gray6'
-                          }
-                        >
-                          {d.day}
-                        </Button.Text>
-                      </Button>
-                    );
-                  })}
-                </View>
-              );
+          <View
+            flexDirection="column"
+            gap="$1"
+            flexWrap="wrap"
+            {...Platform.select({
+              native: {
+                paddingRight: '$2',
+              },
             })}
+          >
+            {subDays.map((days) => (
+              <View
+                flexDirection="row"
+                key={days[0]?.$date.toString() ?? `row-${Math.random()}`}
+              >
+                {days.map((d) => {
+                  return (
+                    <Button
+                      key={d.$date.toString()}
+                      chromeless
+                      circular
+                      padding={0}
+                      minWidth={46}
+                      height={Platform.select({
+                        web: undefined,
+                        native: 46,
+                      })}
+                      alignItems="center"
+                      justifyContent="center"
+                      {...swapOnClick(dayButton(d))}
+                      backgroundColor={
+                        d.selected && d.inCurrentMonth
+                          ? '$background'
+                          : 'transparent'
+                      }
+                      themeInverse={d.selected}
+                      {...RANGE_STYLE[d.range]}
+                      data-range={d.range}
+                      disabled={!d.inCurrentMonth}
+                      {...(d.range === 'in-range' || d.selected
+                        ? {
+                            hoverStyle: {
+                              backgroundColor: 'transparent',
+                            },
+                          }
+                        : {})}
+                    >
+                      <Button.Text
+                        color={
+                          d.selected
+                            ? '$gray12'
+                            : d.inCurrentMonth
+                              ? '$gray11'
+                              : '$gray6'
+                        }
+                        textAlign="center"
+                      >
+                        {d.day}
+                      </Button.Text>
+                    </Button>
+                  );
+                })}
+              </View>
+            ))}
           </View>
         </View>
       </AnimatePresence>

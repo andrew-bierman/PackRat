@@ -1,22 +1,25 @@
 import React, { useEffect, useState, type FC } from 'react';
 import { StatusLabel } from './StatusLabel';
-import { View, RText, Card } from '@packrat/ui';
+import { View, RText, Card, RStack } from '@packrat/ui';
 import { TouchableOpacity } from 'react-native';
 import { MapImage } from './MapImage';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import { useDownloadMapProgress } from 'app/modules/map/hooks/useDownloadMapProgress';
 import { type OfflineMap } from 'app/modules/map/screens/OfflineMapsScreen';
 
 interface MapPreviewCardProps {
   id: string;
   item: OfflineMap;
+  onDelete: (item: OfflineMap) => void;
   onShowMapClick: (id: string) => void;
+  isDownloaded?: boolean;
 }
 
 export const MapPreviewCard: FC<MapPreviewCardProps> = ({
   id,
   onShowMapClick,
   item,
+  onDelete,
 }) => {
   const [isDownloaded, setIsDownloaded] = useState(item.downloaded);
   const { downloadMap, isDownloading, progress } = useDownloadMapProgress(() =>
@@ -72,9 +75,17 @@ export const MapPreviewCard: FC<MapPreviewCardProps> = ({
       isFullWidth
       type="secondary"
       actions={
-        <TouchableOpacity onPress={() => onShowMapClick(id)}>
-          <RText>Show map</RText>
-        </TouchableOpacity>
+        <RStack>
+          <TouchableOpacity onPress={() => onShowMapClick(id)}>
+            <RText>Show map</RText>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', justifyContent: 'flex-end' }}
+            onPress={() => onDelete(item)}
+          >
+            <MaterialIcons style={{ color: 'red' }} name="delete" size={20} />
+          </TouchableOpacity>
+        </RStack>
       }
     />
   );

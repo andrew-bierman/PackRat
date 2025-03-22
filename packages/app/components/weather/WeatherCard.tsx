@@ -18,7 +18,7 @@ import {
 } from '@packrat/ui';
 import useCustomStyles from 'app/hooks/useCustomStyles';
 import { useDate } from 'app/hooks/weather/useDate';
-import { type WeatherResult } from 'hooks/weather';
+import { type WeatherResult } from '../../hooks/weather';
 import { getCurrentUTCDate, getUTCDateFromStr } from 'app/utils/dates';
 import { format, isAfter, isEqual } from 'date-fns';
 import { Separator } from 'tamagui';
@@ -32,6 +32,8 @@ interface Location {
 
 interface WeatherCardProps extends WeatherResult {
   location?: Location;
+  weatherToday: any;
+  weatherWeek: any;
 }
 
 export default function WeatherCard({
@@ -63,7 +65,7 @@ export default function WeatherCard({
           <XStack style={{ gap: 8 }}>
             <RImage
               source={{
-                uri: getWeatherIconURI(currentWeather.icon),
+                uri: getWeatherIconURI(currentWeather?.icon ?? ''),
                 width: 36,
                 height: 36,
               }}
@@ -76,14 +78,14 @@ export default function WeatherCard({
                   fontWeight: 600,
                 }}
               >
-                {convertToCelsius(currentWeather.temp)}
+                {convertToCelsius(currentWeather?.temp ?? 0)}
               </RText>
               <RText
                 style={{
                   color: currentTheme.colors.textSecondary,
                 }}
               >
-                {currentWeather.description}
+                {currentWeather?.description}
               </RText>
             </YStack>
           </XStack>
@@ -93,12 +95,12 @@ export default function WeatherCard({
               size={16}
               color={currentTheme.colors.text}
             />
-            <RText style={{ fontSize: 16 }}>{currentWeather.humidity}%</RText>
+            <RText style={{ fontSize: 16 }}>{currentWeather?.humidity}%</RText>
           </XStack>
           <XStack style={{ alignItems: 'center', gap: 4 }}>
             <Feather name="wind" size={16} color={currentTheme.colors.text} />
             <RText style={{ fontSize: 16 }}>
-              {convertToKmh(currentWeather.wind)}
+              {convertToKmh(currentWeather?.wind ?? 0)}
             </RText>
           </XStack>
         </XStack>
@@ -202,6 +204,9 @@ const separateCurrentSegment = (
 
       return result;
     },
-    { currentWeather: null, restSegments: [] },
+    {
+      currentWeather: null as WeatherResult['weatherToday'][number] | null,
+      restSegments: [] as WeatherResult['weatherToday'],
+    },
   );
 };

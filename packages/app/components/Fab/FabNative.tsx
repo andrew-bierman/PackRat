@@ -6,12 +6,29 @@ import useTheme from 'app/hooks/useTheme';
 import { QuickActionButton } from 'app/modules/dashboard/components/QuickActionButton/QuickActionButton';
 import { RButton } from '@packrat/ui';
 
-const FABNative = () => {
+interface FABProps {
+  showQuickActions: boolean;
+  toggleQuickActions: () => void;
+  closeQuickActions: () => void;
+}
+
+const FABNative: React.FC<FABProps> = ({
+  showQuickActions,
+  toggleQuickActions,
+  closeQuickActions,
+}) => {
   const { handleActionSelect, quickActionData } = useQuickActions();
   const { currentTheme } = useTheme();
 
   return (
-    <Popover>
+    <Popover
+      open={showQuickActions}
+      onOpenChange={(open) => {
+        if (!open) {
+          closeQuickActions();
+        }
+      }}
+    >
       <Popover.Trigger asChild>
         <RButton
           style={{
@@ -27,6 +44,7 @@ const FABNative = () => {
             bottom: 20,
             alignSelf: 'center',
           }}
+          onPress={toggleQuickActions}
         >
           <MaterialIcons
             name="add"
@@ -53,7 +71,10 @@ const FABNative = () => {
           {quickActionData.map((action) => (
             <QuickActionButton
               key={action.action}
-              onPress={() => handleActionSelect(action.action)}
+              onPress={() => {
+                handleActionSelect(action.action);
+                closeQuickActions();
+              }}
               iconName={action.iconName}
               text={action.text}
             />

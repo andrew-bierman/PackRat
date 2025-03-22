@@ -24,7 +24,8 @@ const StyledText = styled(Text, {
 
 type Product = ReturnType<typeof getProducts>[0];
 
-function Item({ item }: { item: Product }) {
+function Item({ item }: { item: Product | null }) {
+  if (!item) return null;
   return (
     // Note: you can also use `Link` from solito/link
     <Link
@@ -110,9 +111,9 @@ export function ProductListBestItems() {
         padding: 28,
       }}
     >
-      {products.map((item, index) => (
-        <Item key={item.id} item={item} />
-      ))}
+      {products.map(
+        (item, index) => item && <Item key={item.id} item={item} />,
+      )}
     </ScrollView>
   );
 }

@@ -2,7 +2,12 @@ import mongoose, { Schema, type Document, type Model } from 'mongoose';
 import myDB from './dbConnection';
 import bcrypt from 'bcryptjs';
 import * as jwt from 'hono/jwt';
-import { JWT_SECRET, CLIENT_URL } from '../config';
+// import { JWT_SECRET, CLIENT_URL } from '../config';
+
+// Dummy implementation of config
+const JWT_SECRET = 'dummy_jwt_secret';
+const CLIENT_URL = 'http://localhost:4200';
+
 import validator from 'validator';
 
 export interface IUser extends Document {

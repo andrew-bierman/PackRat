@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useStorage } from 'app/hooks/storage/useStorage';
 import { queryTrpc } from 'app/trpc';
 import { useLogout } from './useLogout';
 import { useDeepCompareEffect } from 'app/hooks/common/useDeepCompareEffect';
 import { Storage } from 'app/utils/storage';
 import { useOfflineStore } from 'app/atoms';
+const USER_LOADING_TIMEOUT = 5000;
 
 export const useAuthUserToken = () => {
   const [[isLoading, token]] = useStorage<string>('token');
@@ -51,7 +52,21 @@ export const useUserLoader = () => {
     notifyOnChangeProps: 'all',
   });
 
-  return { user, isLoading };
+  const [isLoadingTimeout, setIsLoadingTimeout] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setIsLoadingTimeout(true);
+      }
+    }, USER_LOADING_TIMEOUT);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [isLoading]);
+
+  return { user, isLoading: isLoadingTimeout ? false : isLoading };
 };
 
 export const useUserInOfflineMode = () => {
@@ -59,7 +74,7 @@ export const useUserInOfflineMode = () => {
   const { connectionStatus } = useOfflineStore();
   const userFromStorage = useMemo(() => {
     try {
-      const parsedUserFromStorage = JSON.parse(userFromStorageStr as String);
+      const parsedUserFromStorage = JSON.parse(userFromStorageStr as string);
       return parsedUserFromStorage;
     } catch {
       return null;

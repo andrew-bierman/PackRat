@@ -1,13 +1,16 @@
 import { type useOSM } from 'app/hooks/geojson';
 import React, { createContext, useContext, type ReactNode } from 'react';
-import { type useCurrentTripStore } from 'app/screens/trip/createTripStore/useCreateTripStore';
+import {
+  type useCurrentTripStore,
+  type TripStore,
+} from 'app/screens/trip/createTripStore/useCreateTripStore';
 
 interface TripContextType {
   tripId?: string;
   // used in edit mode
   tripPack?: [packId: string, setPackId: (packId: string) => void];
   tripOSM?: ReturnType<typeof useOSM>;
-  tripStore?: ReturnType<typeof useCurrentTripStore>;
+  tripStore?: TripStore;
 }
 const TripContext = createContext<TripContextType>({});
 

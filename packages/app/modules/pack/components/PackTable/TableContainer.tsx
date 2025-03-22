@@ -65,7 +65,7 @@ export const TableContainer = ({
     deletePackItem({ packId: currentPack.id, itemId });
   };
 
-  if (isLoading) return <RSkeleton />;
+  if (isLoading) return <RSkeleton style={{}} />;
   if (error) return <ErrorMessage message={String(error)} />;
 
   return (

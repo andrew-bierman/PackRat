@@ -115,6 +115,7 @@ import { router as trpcRouter } from '../trpc';
 
 import { getOfflineMapsRoute, saveOfflineMapRoute } from '../modules/map';
 import { setTripVisibility } from '@packrat/validations';
+import { deleteOfflineMapRoute } from 'src/modules/map/controllers';
 
 export const appRouter = trpcRouter({
   getUserById: getUserByIdRoute(),
@@ -142,6 +143,7 @@ export const appRouter = trpcRouter({
   // map routes
   getOfflineMaps: getOfflineMapsRoute(),
   saveOfflineMap: saveOfflineMapRoute(),
+  deleteOfflineMap: deleteOfflineMapRoute(),
   // trips routes
   getPublicTripsRoute: getPublicTripsRoute(),
   getTrips: getTripsRoute(),

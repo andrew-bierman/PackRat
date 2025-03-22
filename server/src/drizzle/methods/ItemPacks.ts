@@ -4,7 +4,7 @@ import {
   itemPacks as ItemPacksTable,
   type InsertItemPack,
 } from '../../db/schema';
-import { scorePackService } from 'src/services/pack/scorePackService';
+import { scorePackService } from '../../services/pack/scorePackService';
 
 export class ItemPacks {
   async create(itemPack: InsertItemPack) {
@@ -14,7 +14,7 @@ export class ItemPacks {
         .values(itemPack)
         .returning()
         .get();
-      await this.updateScoreIfNeeded(itemPack.packId);
+      await this.updateScoreIfNeeded(itemPack.packId as string);
 
       return record;
     } catch (error) {

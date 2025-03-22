@@ -6,9 +6,12 @@ import { Row } from 'react-native-table-component';
 import { DeletePackItemModal } from './DeletePackItemModal';
 import { EditPackItemModal } from './EditPackItemModal';
 import { formatNumber } from 'app/utils/formatNumber';
-import { AddItem } from '../item/AddItem';
-import loadStyles from './packtable.style';
-import { RText, ZDropdown } from '@packrat/ui';
+import { AddItem } from 'app/modules/item';
+import { loadStyles } from './packtable.style';
+import {
+  RText,
+  // ZDropdown
+} from '@packrat/ui';
 import { useAuthUser } from 'app/modules/auth';
 
 type ModalName = 'edit' | 'delete' | null;
@@ -83,9 +86,11 @@ const TableItem = ({
       Platform.OS === 'ios' ||
       window.innerWidth < 900
     ) {
-      rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
+      // Remove ZDropdown usage
+      // rowData.push(<ZDropdown.Native dropdownItems={rowActionItems} />);
     } else {
-      rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
+      // Remove ZDropdown usage
+      // rowData.push(<ZDropdown.Web dropdownItems={rowActionItems} />);
     }
   }
 

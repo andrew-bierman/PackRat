@@ -105,7 +105,7 @@ export const DestinationScreen = () => {
         <DestinationDetails destinationProperties={destinationProperties} />
       </AsyncView>
       <LayoutCard>
-        <WeatherData latLng={latLng} />
+        <WeatherData latLng={latLng || undefined} />
       </LayoutCard>
     </YStack>
   );

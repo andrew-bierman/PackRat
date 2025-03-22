@@ -6,7 +6,17 @@ import { RButton, RText } from '@packrat/ui';
 import { MaterialIcons } from '@expo/vector-icons';
 import useTheme from 'app/hooks/useTheme';
 
-const FABWeb = () => {
+interface FABProps {
+  showQuickActions: boolean;
+  toggleQuickActions: () => void;
+  closeQuickActions: () => void;
+}
+
+const FABWeb: React.FC<FABProps> = ({
+  showQuickActions,
+  toggleQuickActions,
+  closeQuickActions,
+}) => {
   const { handleActionSelect, quickActionData } = useQuickActions();
   const { currentTheme } = useTheme();
 

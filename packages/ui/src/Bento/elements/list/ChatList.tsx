@@ -97,7 +97,7 @@ function ChatItem({ item, index }: { item: Message; index: number }) {
           alignSelf={itsMe ? 'flex-end' : 'flex-start'}
           maxWidth="100%"
           minWidth="100%"
-          style={{ padding: '5px 5px', background: isDark ? '#333' : 'white' }}
+          style={{ padding: 10, background: isDark ? '#333' : 'white' }}
         >
           <Button
             animation="quick"
