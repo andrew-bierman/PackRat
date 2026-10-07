@@ -45,6 +45,12 @@ separate screen and never an alert.
 | No reports | An invitation to be the first to report |
 | Trip has no destination | Nothing. There is no place to have conditions about |
 
+A trip that names its trail shows that trail's reports. A trip with only a
+destination shows reports from trails close to it, nearest first, each
+labelled with its trail so the user can tell theirs from its neighbours.
+Planning a trip offers the same trail picker as writing a report, so naming
+the trail is one step.
+
 A report counts as recent for two weeks. Past that it is still shown, still
 dated, and labelled as older.
 
@@ -58,7 +64,8 @@ hike already walked are history, not a warning.
 Searching for a trail in Trail conditions finds trails and places, not words
 inside other people's notes. Choosing one opens its trail page: every report
 for it, newest first, with photos. The answer to "what is it like now" is the
-first thing on screen and the history is underneath.
+first thing on screen and the history is underneath. A trail nobody has
+reported on yet still has a page, which invites the first report.
 
 Reports that disagree are both shown. PackRat doesn't average them into one
 verdict, because the disagreement is useful to the reader.
@@ -68,7 +75,7 @@ From a trail page the user can write a report about it or start a trip to it.
 ## The recent feed
 
 A reverse-chronological list of the latest reports from everyone, reachable
-from the dashboard. It is for browsing, for the hiker with no particular trail
+from the dashboard and the sidebar. It is for browsing, for the hiker with no particular trail
 in mind. Searching from the feed opens a trail page rather than filtering the
 list.
 
@@ -115,8 +122,8 @@ it.
 
 ## Being told without asking
 
-When a new report lands on a trail at the destination of someone's upcoming or
-in-progress trip, they get a notification naming the trip and the condition.
+When a new report lands on the trail of someone's upcoming or in-progress trip,
+or on a trail close to its destination when the trip names none, they get a notification naming the trip and the condition.
 Tapping it opens the trip. One trip gets at most one of these a day, and a
 report they've already read in the app doesn't notify them.
 
@@ -155,6 +162,9 @@ which they never see that hiker's reports.
 - **Hiker-created trails.** Unmapped places get a pin, not a new trail.
 - **Editing a report** after it's submitted.
 - **Notifications for anything but your trips.** Not for trails nearby,
-  popular trails, or trails you reported on before.
+  popular trails, or trails you reported on before, and no "follow this
+  trail" option. Planning a trip is how you say you care about a trail.
+- **Notifications for pinned reports.** A pin has no trail to be attached to a
+  trip by, so it shows on the map and near trips but never notifies.
 - **Video**, and photos beyond five per report.
 - **Comments or replies** on reports.
