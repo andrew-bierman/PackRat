@@ -310,7 +310,8 @@ struct TrailConditionDetailView: View {
             }
             .padding(.bottom)
         }
-        .navigationTitle(report.trailName)
+        // The trail name is the heading above; repeating it here doubled it.
+        .navigationTitle("Report")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
