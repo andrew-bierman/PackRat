@@ -42,10 +42,11 @@ export const trailConditionRoutes = new Elysia()
     '/',
     async ({ query }) => {
       const db = createDb();
-      const { trailName, limit } = query;
+      const { trailId, trailName, limit } = query;
 
       try {
         const conditions = [eq(trailConditionReports.deleted, false)];
+        if (trailId) conditions.push(eq(trailConditionReports.trailId, trailId));
         if (trailName) {
           const normalized = trailName.trim();
           if (normalized.length > 0) {
@@ -71,13 +72,20 @@ export const trailConditionRoutes = new Elysia()
           error: error,
           operation: 'trailConditions.list',
           tags: { feature: 'trailConditions' },
-          extra: { trailName, limit, httpStatus: 500, errorCode: 'TRAIL_CONDITIONS_LIST_ERROR' },
+          extra: {
+            trailId,
+            trailName,
+            limit,
+            httpStatus: 500,
+            errorCode: 'TRAIL_CONDITIONS_LIST_ERROR',
+          },
         });
         return status(500, { error: 'Failed to list trail condition reports' });
       }
     },
     {
       query: z.object({
+        trailId: z.string().uuid().optional(),
         trailName: z.string().optional(),
         // Handler defaults to 50 via `?? 50`; keep schema truly optional.
         limit: z.coerce.number().int().min(1).max(100).optional(),
@@ -102,8 +110,11 @@ export const trailConditionRoutes = new Elysia()
           .insert(trailConditionReports)
           .values({
             id: data.id,
+            trailId: data.trailId ?? null,
             trailName: data.trailName,
             trailRegion: data.trailRegion ?? null,
+            latitude: data.latitude ?? null,
+            longitude: data.longitude ?? null,
             surface: data.surface,
             overallCondition: data.overallCondition,
             hazards: data.hazards ?? [],

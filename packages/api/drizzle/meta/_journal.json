@@ -435,6 +435,13 @@
       "when": 1791453734665,
       "tag": "0061_reapply_trip_goal_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1791454782858,
+      "tag": "0062_flashy_stingray",
+      "breakpoints": true
     }
   ]
 }

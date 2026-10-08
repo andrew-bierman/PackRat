@@ -566,8 +566,15 @@ export const trailConditionReports = pgTable(
   'trail_condition_reports',
   {
     id: text('id').primaryKey(),
+    // `trails.id` on the trail database (OSM_DATABASE_URL), so no FK. Null for
+    // a pinned report, where the hiker dropped a pin on an unmapped place.
+    trailId: text('trail_id'),
+    // Display name: the trail's name when picked, the pin's label otherwise.
     trailName: text('trail_name').notNull(),
     trailRegion: text('trail_region'),
+    // Where the report was written; for a pinned report, the pin.
+    latitude: doublePrecision('latitude'),
+    longitude: doublePrecision('longitude'),
     surface: text('surface').notNull(),
     overallCondition: text('overall_condition').notNull(),
     hazards: jsonb('hazards').$type<string[]>().notNull().default([]),
@@ -592,6 +599,9 @@ export const trailConditionReports = pgTable(
       table.createdAt.desc(),
     ),
     trailNameIdx: index('trail_condition_reports_trail_name_idx').on(table.trailName),
+    trailIdCreatedIdx: index('trail_condition_reports_trail_id_created_idx')
+      .on(table.trailId, table.createdAt.desc())
+      .where(sql`${table.trailId} IS NOT NULL AND ${table.deleted} = false`),
     tripIdIdx: index('trail_condition_reports_trip_id_idx')
       .on(table.tripId)
       .where(sql`${table.tripId} IS NOT NULL`),

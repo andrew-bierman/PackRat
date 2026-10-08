@@ -11,8 +11,11 @@ export const WaterCrossingDifficultySchema = z.enum(['easy', 'moderate', 'diffic
 
 export const TrailConditionReportSchema = z.object({
   id: z.string(),
+  trailId: z.string().nullable().optional(),
   trailName: z.string(),
   trailRegion: z.string().nullable().optional(),
+  latitude: z.number().nullable().optional(),
+  longitude: z.number().nullable().optional(),
   surface: TrailSurfaceSchema,
   overallCondition: OverallConditionSchema,
   hazards: z.array(z.string()),
@@ -31,10 +34,18 @@ export const TrailConditionReportSchema = z.object({
 
 export type TrailConditionReport = z.infer<typeof TrailConditionReportSchema>;
 
-export const CreateTrailConditionReportRequestSchema = z.object({
+const TrailConditionReportFieldsSchema = z.object({
   id: z.string().describe('Client-generated report ID'),
-  trailName: z.string().min(1),
+  trailId: z
+    .string()
+    .uuid()
+    .optional()
+    .nullable()
+    .describe('Picked trail (trail-conditions/trails). Omit for a pinned report.'),
+  trailName: z.string().min(1).describe("The trail's name, or the pin's label"),
   trailRegion: z.string().optional().nullable(),
+  latitude: z.number().min(-90).max(90).optional().nullable(),
+  longitude: z.number().min(-180).max(180).optional().nullable(),
   surface: TrailSurfaceSchema,
   overallCondition: OverallConditionSchema,
   hazards: z.array(z.string()).optional(),
@@ -47,12 +58,26 @@ export const CreateTrailConditionReportRequestSchema = z.object({
   localUpdatedAt: z.string().datetime(),
 });
 
-export const UpdateTrailConditionReportRequestSchema = CreateTrailConditionReportRequestSchema.omit(
-  {
-    id: true,
-    localCreatedAt: true,
-  },
-).partial();
+const hasBothOrNeither = (r: { latitude?: number | null; longitude?: number | null }) =>
+  (r.latitude == null) === (r.longitude == null);
+
+// A report is about a picked trail or a dropped pin; never a typed name alone.
+export const CreateTrailConditionReportRequestSchema = TrailConditionReportFieldsSchema.refine(
+  hasBothOrNeither,
+  { message: 'latitude and longitude go together', path: ['latitude'] },
+).refine((r) => r.trailId != null || r.latitude != null, {
+  message: 'Pick a trail or drop a pin',
+  path: ['trailId'],
+});
+
+// The trail and the place are what the report is about; they don't change.
+export const UpdateTrailConditionReportRequestSchema = TrailConditionReportFieldsSchema.omit({
+  id: true,
+  localCreatedAt: true,
+  trailId: true,
+  latitude: true,
+  longitude: true,
+}).partial();
 
 // ── Trails (PackRat-owned trail table on the trail database) ─────────
 
