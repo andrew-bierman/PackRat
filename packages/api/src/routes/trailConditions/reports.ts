@@ -1,5 +1,6 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import type { NewTrailConditionReport } from '@packrat/db/schema';
 import { trailConditionReports } from '@packrat/db/schema';
@@ -68,7 +69,12 @@ export const trailConditionRoutes = new Elysia()
           .orderBy(desc(trailConditionReports.localCreatedAt))
           .limit(limit ?? 50);
 
-        return reports.map(toReportResponse);
+        // The feed signs each report, like the trip section and trail page.
+        const authorName = await reportAuthorNames({ db, userIds: reports.map((r) => r.userId) });
+        return reports.map((r) => ({
+          ...toReportResponse(r),
+          authorName: authorName.get(r.userId) ?? null,
+        }));
       } catch (error) {
         captureApiException({
           error: error,
