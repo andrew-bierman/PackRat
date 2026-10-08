@@ -53,3 +53,22 @@ export const UpdateTrailConditionReportRequestSchema = CreateTrailConditionRepor
     localCreatedAt: true,
   },
 ).partial();
+
+// ── Trails (PackRat-owned trail table on the trail database) ─────────
+
+export const TrailRowSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  length_m: z.number(),
+  center_lat: z.number(),
+  center_lon: z.number(),
+  bbox: z.string(),
+  distance_m: z.number().nullable(),
+});
+
+export const TrailDetailRowSchema = TrailRowSchema.extend({
+  geometry: z.string(),
+});
+
+export type TrailRow = z.infer<typeof TrailRowSchema>;
+export type TrailDetailRow = z.infer<typeof TrailDetailRowSchema>;
