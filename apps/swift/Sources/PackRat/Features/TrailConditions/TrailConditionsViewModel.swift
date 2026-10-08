@@ -47,19 +47,28 @@ final class TrailConditionsViewModel {
         }
     }
 
+    /// Submits a report about `place`. `writtenAt` is where the device was when
+    /// the hiker wrote it; for a pin, the pin itself is the place.
     func submitReport(
-        trailName: String,
-        trailRegion: String?,
+        place: ReportPlace,
+        writtenAt: (latitude: Double, longitude: Double)?,
         surface: String?,
         overallCondition: String,
         hazards: [String],
         notes: String?
     ) async throws {
+        let coordinate: (latitude: Double, longitude: Double)? = switch place {
+        case .trail: writtenAt
+        case .pin(_, let latitude, let longitude): (latitude, longitude)
+        }
         let report: TrailConditionReport
         do {
             report = try await service.createReport(
-                trailName: trailName,
-                trailRegion: trailRegion,
+                trailId: place.trailId,
+                trailName: place.displayName,
+                trailRegion: nil,
+                latitude: coordinate?.latitude,
+                longitude: coordinate?.longitude,
                 surface: surface,
                 overallCondition: overallCondition,
                 hazards: hazards,
@@ -67,8 +76,8 @@ final class TrailConditionsViewModel {
             )
         } catch {
             report = makeLocalReport(
-                trailName: trailName,
-                trailRegion: trailRegion,
+                place: place,
+                coordinate: coordinate,
                 surface: surface,
                 overallCondition: overallCondition,
                 hazards: hazards,
@@ -90,8 +99,8 @@ final class TrailConditionsViewModel {
     }
 
     private func makeLocalReport(
-        trailName: String,
-        trailRegion: String?,
+        place: ReportPlace,
+        coordinate: (latitude: Double, longitude: Double)?,
         surface: String?,
         overallCondition: String,
         hazards: [String],
@@ -100,8 +109,11 @@ final class TrailConditionsViewModel {
         let now = Date.iso8601Now()
         return TrailConditionReport(
             id: "local-\(UUID().uuidString.lowercased())",
-            trailName: trailName,
-            trailRegion: trailRegion,
+            trailId: place.trailId,
+            trailName: place.displayName,
+            trailRegion: nil,
+            latitude: coordinate?.latitude,
+            longitude: coordinate?.longitude,
             surface: surface ?? "unknown",
             overallCondition: overallCondition,
             hazards: hazards,

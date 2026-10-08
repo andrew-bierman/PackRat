@@ -138,7 +138,7 @@ struct TrailConditionsListView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("watch_trail_draft_row_\(draft.id)")
-                    .accessibilityHint("Add a trail name to finish this report")
+                    .accessibilityHint("Choose the trail to finish this report")
                     .swipeActions(edge: .trailing) {
                         Button("Discard", systemImage: "trash", role: .destructive) {
                             draftStore.remove(draft.id)
@@ -171,7 +171,7 @@ private struct WatchTrailDraftRow: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
-                Text("Needs a trail name")
+                Text("Needs a trail")
                     .font(.caption2)
                     .foregroundStyle(.orange)
             }
@@ -336,8 +336,8 @@ struct SubmitTrailConditionView: View {
     private let onSubmitted: (() -> Void)?
     @Environment(\.dismiss) private var dismiss
 
-    @State private var trailName = ""
-    @State private var trailRegion = ""
+    @State private var place: ReportPlace?
+    @State private var location = TrailReportLocationProvider()
     @State private var surface = TrailSurface.dirt.rawValue
     @State private var condition: String
     @State private var selectedHazards: Set<String> = []
@@ -345,12 +345,9 @@ struct SubmitTrailConditionView: View {
     @State private var isSubmitting = false
     @State private var error: String?
     @FocusState private var isInputFocused: Bool
-    /// Separate from `isInputFocused`, which every field in the form shares —
-    /// setting that one focuses whichever field registered last (the notes box),
-    /// scrolling the trail name off-screen instead of onto it.
-    @FocusState private var isTrailNameFocused: Bool
-    /// True when the form opened from a watch capture, so the trail field can
-    /// take focus immediately — it is the one thing the draft cannot carry.
+    @State private var showingTrailPicker = false
+    /// True when the form opened from a watch capture, so the trail picker can
+    /// open immediately — the trail is the one thing the draft cannot carry.
     private let isCompletingWatchDraft: Bool
 
     init(viewModel: TrailConditionsViewModel) {
@@ -380,27 +377,24 @@ struct SubmitTrailConditionView: View {
     #endif
 
     private let hazardOptions = ["Downed trees", "Muddy sections", "Ice", "High water", "Rock slides", "Wildlife", "Washed out trail"]
-    private var isValid: Bool { !trailName.trimmingCharacters(in: .whitespaces).isEmpty }
+    private var isValid: Bool { place != nil }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Trail", text: $trailName)
-                        .focused($isTrailNameFocused)
-                        .submitLabel(.done)
-                        .onSubmit { isTrailNameFocused = false }
-                        .accessibilityIdentifier("trail_report_name")
-                    TextField("Region", text: $trailRegion)
-                        .focused($isInputFocused)
-                        .submitLabel(.done)
-                        .onSubmit { isInputFocused = false }
-                        .accessibilityIdentifier("trail_report_region")
+                    Button {
+                        showingTrailPicker = true
+                    } label: {
+                        ReportPlaceRow(place: place)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("trail_report_choose_trail")
                 } header: {
                     Text("Trail")
                 } footer: {
                     if isCompletingWatchDraft {
-                        Text("Condition and notes came from your Apple Watch. Add the trail name to submit.")
+                        Text("Condition and notes came from your Apple Watch. Choose the trail to submit.")
                     }
                 }
                 Section("Conditions") {
@@ -437,17 +431,20 @@ struct SubmitTrailConditionView: View {
             .dismissesKeyboardOnScroll()
             // One keyboard toolbar only — a second `keyboardDoneButton` renders a
             // duplicate "Done". Clears whichever of the two focus flags is set.
-            .keyboardDoneButton {
-                isInputFocused = false
-                isTrailNameFocused = false
-            }
+            .keyboardDoneButton { isInputFocused = false }
             .navigationTitle(isCompletingWatchDraft ? "Finish Watch Report" : "Submit Report")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
-            // The trail name is the only field a watch capture cannot fill, so
-            // put the cursor there rather than making the user hunt for it.
-            .task { if isCompletingWatchDraft { isTrailNameFocused = true } }
+            .navigationDestination(isPresented: $showingTrailPicker) {
+                TrailPickerView(place: $place, location: location)
+            }
+            // Fixes early so the picker opens on the nearest trails, and the
+            // report records where it was written.
+            .task { location.start() }
+            // The trail is the only thing a watch capture cannot fill, so go
+            // straight to choosing it rather than making the user hunt for it.
+            .task { if isCompletingWatchDraft { showingTrailPicker = true } }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
@@ -461,15 +458,15 @@ struct SubmitTrailConditionView: View {
     }
 
     private func submit() {
-        guard isValid, !isSubmitting else { return }
+        guard let place, !isSubmitting else { return }
         isSubmitting = true
         error = nil
         Task {
             defer { isSubmitting = false }
             do {
                 try await viewModel.submitReport(
-                    trailName: trailName,
-                    trailRegion: trailRegion.isEmpty ? nil : trailRegion,
+                    place: place,
+                    writtenAt: location.coordinate.map { ($0.latitude, $0.longitude) },
                     surface: surface,
                     overallCondition: condition,
                     hazards: Array(selectedHazards),
@@ -480,6 +477,49 @@ struct SubmitTrailConditionView: View {
                 onSubmitted?()
                 dismiss()
             } catch { self.error = error.localizedDescription }
+        }
+    }
+}
+
+/// The form's trail row: what the report is about, or a prompt to choose.
+private struct ReportPlaceRow: View {
+    let place: ReportPlace?
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: symbol)
+                .foregroundStyle(place == nil ? Color.secondary : Color.accentColor)
+                .frame(width: 24)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(place?.displayName ?? "Choose Trail")
+                    .foregroundStyle(place == nil ? Color.accentColor : Color.primary)
+                if let detail {
+                    Text(detail).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            Spacer(minLength: 0)
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.tertiary)
+                .accessibilityHidden(true)
+        }
+        .contentShape(Rectangle())
+    }
+
+    private var symbol: String {
+        switch place {
+        case .pin: "mappin.and.ellipse"
+        case .trail: "figure.hiking"
+        case nil: "magnifyingglass"
+        }
+    }
+
+    private var detail: String? {
+        switch place {
+        case .trail(let trail): trail.lengthText
+        case .pin: "Pinned location"
+        case nil: nil
         }
     }
 }

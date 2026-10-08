@@ -210,8 +210,11 @@ struct CatalogItem: Codable, Identifiable, Sendable {
 
 struct TrailConditionReport: Codable, Identifiable, Sendable {
     let id: String
+    let trailId: String?
     let trailName: String
     let trailRegion: String?
+    let latitude: Double?
+    let longitude: Double?
     let surface: String
     let overallCondition: String
     let hazards: [String]

@@ -464,8 +464,11 @@ final class OutboxService {
                 let payload: TrailConditionReportMutationPayload = try decode(mutation.payload)
                 _ = try await trailConditionsService.createReport(
                     id: mutation.entityId,
+                    trailId: payload.trailId,
                     trailName: payload.trailName,
                     trailRegion: payload.trailRegion,
+                    latitude: payload.latitude,
+                    longitude: payload.longitude,
                     surface: payload.surface,
                     overallCondition: payload.overallCondition,
                     hazards: payload.hazards ?? [],

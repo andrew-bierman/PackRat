@@ -217,8 +217,11 @@ struct PackTemplateItemMutationPayload: Codable, Sendable {
 
 /// Field set for a queued trail-condition-report create/update.
 struct TrailConditionReportMutationPayload: Codable, Sendable {
+    var trailId: String?
     var trailName: String
     var trailRegion: String?
+    var latitude: Double?
+    var longitude: Double?
     var surface: String?
     var overallCondition: String
     var hazards: [String]?
@@ -229,8 +232,11 @@ struct TrailConditionReportMutationPayload: Codable, Sendable {
     var tripId: String?
 
     init(
+        trailId: String? = nil,
         trailName: String,
         trailRegion: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
         surface: String? = nil,
         overallCondition: String,
         hazards: [String]? = nil,
@@ -240,8 +246,11 @@ struct TrailConditionReportMutationPayload: Codable, Sendable {
         photos: [String]? = nil,
         tripId: String? = nil
     ) {
+        self.trailId = trailId
         self.trailName = trailName
         self.trailRegion = trailRegion
+        self.latitude = latitude
+        self.longitude = longitude
         self.surface = surface
         self.overallCondition = overallCondition
         self.hazards = hazards

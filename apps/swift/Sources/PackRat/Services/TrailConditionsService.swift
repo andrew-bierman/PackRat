@@ -14,9 +14,26 @@ final class TrailConditionsService: Sendable {
         return try await api.send(endpoint)
     }
 
+    /// Trails for the picker: names matching `query`, nearest to `near` first
+    /// when given. With no query, the trails around `near`.
+    func searchTrails(query: String?, near: (latitude: Double, longitude: Double)?, limit: Int = 20) async throws -> [TrailSummary] {
+        var params: [String: String?] = ["limit": "\(limit)"]
+        if let query, !query.isEmpty { params["q"] = query }
+        if let near {
+            params["lat"] = "\(near.latitude)"
+            params["lon"] = "\(near.longitude)"
+        }
+        let endpoint = Endpoint(.get, "/api/trail-conditions/trails", query: params)
+        let response: TrailSearchResponse = try await api.send(endpoint)
+        return response.trails
+    }
+
     func createReport(
+        trailId: String?,
         trailName: String,
         trailRegion: String?,
+        latitude: Double?,
+        longitude: Double?,
         surface: String?,
         overallCondition: String,
         hazards: [String],
@@ -24,8 +41,11 @@ final class TrailConditionsService: Sendable {
     ) async throws -> TrailConditionReport {
         try await createReport(
             id: UUID().uuidString.lowercased(),
+            trailId: trailId,
             trailName: trailName,
             trailRegion: trailRegion,
+            latitude: latitude,
+            longitude: longitude,
             surface: surface,
             overallCondition: overallCondition,
             hazards: hazards,
@@ -37,8 +57,11 @@ final class TrailConditionsService: Sendable {
     /// id the device already recorded.
     func createReport(
         id: String,
+        trailId: String?,
         trailName: String,
         trailRegion: String?,
+        latitude: Double?,
+        longitude: Double?,
         surface: String?,
         overallCondition: String,
         hazards: [String],
@@ -47,8 +70,11 @@ final class TrailConditionsService: Sendable {
         let now = Date.iso8601Now()
         let body = CreateTrailConditionRequest(
             id: id,
+            trailId: trailId,
             trailName: trailName,
             trailRegion: trailRegion,
+            latitude: latitude,
+            longitude: longitude,
             surface: surface,
             overallCondition: overallCondition,
             hazards: hazards.isEmpty ? nil : hazards,
