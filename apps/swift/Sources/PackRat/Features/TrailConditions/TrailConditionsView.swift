@@ -437,7 +437,10 @@ struct SubmitTrailConditionView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .navigationDestination(isPresented: $showingTrailPicker) {
-                TrailPickerView(place: $place, location: location)
+                TrailPickerView(place: place, location: location) { picked in
+                    place = picked
+                    showingTrailPicker = false
+                }
             }
             // Fixes early so the picker opens on the nearest trails, and the
             // report records where it was written.

@@ -4,10 +4,14 @@ import SwiftUI
 /// Picks the trail a report is about. Trails near the hiker come first; typing
 /// narrows by name. When the trail isn't in PackRat, the hiker drops a pin.
 struct TrailPickerView: View {
-    @Binding var place: ReportPlace?
+    /// The current choice, so the picker can mark it.
+    let place: ReportPlace?
     let location: TrailReportLocationProvider
+    /// Called with the hiker's choice. The presenter closes the picker: a
+    /// `dismiss()` from here, with the pin screen pushed on top, dismissed the
+    /// whole report sheet instead of popping back to the form.
+    let onPick: (ReportPlace) -> Void
 
-    @Environment(\.dismiss) private var dismiss
     @State private var query = ""
     @State private var trails: [TrailSummary] = []
     @State private var isLoading = false
@@ -50,8 +54,7 @@ struct TrailPickerView: View {
         .task(id: searchKey) { await search() }
         .navigationDestination(isPresented: $showingPinDrop) {
             TrailPinDropView(start: location.coordinate) { pin in
-                place = pin
-                dismiss()
+                onPick(pin)
             }
         }
     }
@@ -106,8 +109,7 @@ struct TrailPickerView: View {
             Section {
                 ForEach(trails) { trail in
                     Button {
-                        place = .trail(trail)
-                        dismiss()
+                        onPick(.trail(trail))
                     } label: {
                         TrailPickerRow(trail: trail, isSelected: place?.trailId == trail.id)
                     }
