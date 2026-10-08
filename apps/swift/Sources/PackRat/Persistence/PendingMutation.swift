@@ -294,6 +294,9 @@ struct TripMutationPayload: Codable, Sendable {
     }
     var log: TripLog? = nil
     var excludedFromStats: Bool? = nil
+    /// Optional so payloads queued before trips named a trail still decode.
+    var trailId: String? = nil
+    var trailName: String? = nil
 
     var location: TripLocationBody? {
         guard let latitude, let longitude else { return nil }

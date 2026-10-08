@@ -70,9 +70,24 @@ struct TrailSummary: Codable, Identifiable, Hashable, Sendable {
     let id: String
     let name: String
     let lengthM: Int
-    let center: Center
+    /// Nil for a trail known only by id and name, such as a trip's trail.
+    let center: Center?
     /// Distance from the point the search was made around, when there was one.
     let distanceM: Int?
+
+    /// A trail known only by id and name (a trip's trail), without the
+    /// geometry details a search result carries.
+    init(id: String, name: String) {
+        self.init(id: id, name: name, lengthM: 0, center: nil, distanceM: nil)
+    }
+
+    init(id: String, name: String, lengthM: Int, center: Center?, distanceM: Int?) {
+        self.id = id
+        self.name = name
+        self.lengthM = lengthM
+        self.center = center
+        self.distanceM = distanceM
+    }
 
     var lengthText: String {
         Measurement(value: Double(lengthM), unit: UnitLength.meters)
@@ -85,6 +100,37 @@ struct TrailSummary: Codable, Identifiable, Hashable, Sendable {
                 .formatted(.measurement(width: .abbreviated, usage: .road))
         }
     }
+}
+
+/// A report as a trip's conditions section shows it: with how far its trail
+/// is from the destination (nearby scope) and who wrote it.
+struct TripConditionReport: Decodable, Identifiable, Sendable {
+    let report: TrailConditionReport
+    let distanceM: Int?
+    let authorName: String?
+
+    var id: String { report.id }
+
+    private enum CodingKeys: String, CodingKey { case distanceM, authorName }
+
+    init(from decoder: any Decoder) throws {
+        report = try TrailConditionReport(from: decoder)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        distanceM = try container.decodeIfPresent(Int.self, forKey: .distanceM)
+        authorName = try container.decodeIfPresent(String.self, forKey: .authorName)
+    }
+
+    init(report: TrailConditionReport, distanceM: Int?, authorName: String?) {
+        self.report = report
+        self.distanceM = distanceM
+        self.authorName = authorName
+    }
+}
+
+struct TripConditionsResponse: Decodable, Sendable {
+    enum Scope: String, Decodable, Sendable { case trail, nearby, none }
+    let scope: Scope
+    let reports: [TripConditionReport]
 }
 
 struct TrailSearchResponse: Decodable, Sendable {
@@ -145,6 +191,7 @@ struct CreateTrailConditionRequest: Encodable {
     let overallCondition: String
     let hazards: [String]?
     let notes: String?
+    var tripId: String? = nil
     let localCreatedAt: String
     let localUpdatedAt: String
 }

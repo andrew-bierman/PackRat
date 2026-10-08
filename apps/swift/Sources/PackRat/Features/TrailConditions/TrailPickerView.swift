@@ -4,9 +4,14 @@ import SwiftUI
 /// Picks the trail a report is about. Trails near the hiker come first; typing
 /// narrows by name. When the trail isn't in PackRat, the hiker drops a pin.
 struct TrailPickerView: View {
-    /// The current choice, so the picker can mark it.
-    let place: ReportPlace?
+    /// The trail currently chosen, so the picker can mark it.
+    let selectedTrailId: String?
     let location: TrailReportLocationProvider
+    /// Where "near" means. Nil uses the device's location; a trip passes its
+    /// destination, since the hiker is planning from somewhere else.
+    var origin: CLLocationCoordinate2D? = nil
+    /// Off for trips: a trip names a trail, it has no use for a pin.
+    var allowsPin = true
     /// Called with the hiker's choice. The presenter closes the picker: a
     /// `dismiss()` from here, with the pin screen pushed on top, dismissed the
     /// whole report sheet instead of popping back to the form.
@@ -21,27 +26,21 @@ struct TrailPickerView: View {
     private let service = TrailConditionsService.shared
 
     private var trimmedQuery: String { query.trimmingCharacters(in: .whitespaces) }
+    private var nearCoordinate: CLLocationCoordinate2D? { origin ?? location.coordinate }
     private var near: (latitude: Double, longitude: Double)? {
-        location.coordinate.map { ($0.latitude, $0.longitude) }
+        nearCoordinate.map { ($0.latitude, $0.longitude) }
     }
 
     /// Re-runs the search whenever the query or the fix changes.
     private var searchKey: String {
-        let fix = location.coordinate.map { "\(($0.latitude * 1000).rounded()),\(($0.longitude * 1000).rounded())" }
+        let fix = nearCoordinate.map { "\(($0.latitude * 1000).rounded()),\(($0.longitude * 1000).rounded())" }
         return "\(trimmedQuery)|\(fix ?? "-")"
     }
 
     var body: some View {
         List {
-            Section {
-                Button {
-                    showingPinDrop = true
-                } label: {
-                    Label("Drop a Pin Instead", systemImage: "mappin.and.ellipse")
-                }
-                .accessibilityIdentifier("trail_picker_drop_pin")
-            } footer: {
-                Text("For a stretch with no name, or a trail PackRat doesn't have yet.")
+            if allowsPin {
+                pinSection
             }
             results
         }
@@ -59,6 +58,19 @@ struct TrailPickerView: View {
         }
     }
 
+    private var pinSection: some View {
+        Section {
+            Button {
+                showingPinDrop = true
+            } label: {
+                Label("Drop a Pin Instead", systemImage: "mappin.and.ellipse")
+            }
+            .accessibilityIdentifier("trail_picker_drop_pin")
+        } footer: {
+            Text("For a stretch with no name, or a trail PackRat doesn't have yet.")
+        }
+    }
+
     @ViewBuilder
     private var results: some View {
         if loadFailed && trails.isEmpty {
@@ -66,7 +78,7 @@ struct TrailPickerView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Couldn't load trails")
                         .font(.headline)
-                    Text("Check your connection and try again, or drop a pin.")
+                    Text(allowsPin ? "Check your connection and try again, or drop a pin." : "Check your connection and try again.")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                     Button("Try Again") { Task { await search() } }
@@ -95,13 +107,13 @@ struct TrailPickerView: View {
                     hint(
                         "No Trails Nearby",
                         systemImage: "map",
-                        detail: "Search by name, or drop a pin where you are."
+                        detail: allowsPin ? "Search by name, or drop a pin where you are." : "Search by name."
                     )
                 } else {
                     hint(
                         "No Trails Named “\(trimmedQuery)”",
                         systemImage: "magnifyingglass",
-                        detail: "Try part of the name, or drop a pin if it isn't mapped."
+                        detail: allowsPin ? "Try part of the name, or drop a pin if it isn't mapped." : "Try part of the name."
                     )
                 }
             }
@@ -111,14 +123,14 @@ struct TrailPickerView: View {
                     Button {
                         onPick(.trail(trail))
                     } label: {
-                        TrailPickerRow(trail: trail, isSelected: place?.trailId == trail.id)
+                        TrailPickerRow(trail: trail, isSelected: selectedTrailId == trail.id)
                     }
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("trail_picker_row_\(trail.id)")
                 }
             } header: {
                 HStack {
-                    Text(trimmedQuery.isEmpty ? "Near You" : "Trails")
+                    Text(trimmedQuery.isEmpty ? (origin == nil ? "Near You" : "Near Destination") : "Trails")
                     if isLoading {
                         Spacer()
                         ProgressView().controlSize(.small)

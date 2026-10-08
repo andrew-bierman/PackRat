@@ -55,7 +55,8 @@ final class TrailConditionsViewModel {
         surface: String?,
         overallCondition: String,
         hazards: [String],
-        notes: String?
+        notes: String?,
+        tripId: String? = nil
     ) async throws {
         let coordinate: (latitude: Double, longitude: Double)? = switch place {
         case .trail: writtenAt
@@ -72,7 +73,8 @@ final class TrailConditionsViewModel {
                 surface: surface,
                 overallCondition: overallCondition,
                 hazards: hazards,
-                notes: notes
+                notes: notes,
+                tripId: tripId
             )
         } catch {
             report = makeLocalReport(

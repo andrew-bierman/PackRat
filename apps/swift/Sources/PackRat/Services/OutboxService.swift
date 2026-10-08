@@ -384,7 +384,9 @@ final class OutboxService {
                     packId: payload.packId,
                     checklist: payload.checklist,
                     log: payload.log,
-                    excludedFromStats: payload.excludedFromStats ?? false
+                    excludedFromStats: payload.excludedFromStats ?? false,
+                    trailId: payload.trailId,
+                    trailName: payload.trailName
                 )
             case (.trip, .update):
                 let payload: TripMutationPayload = try decode(mutation.payload)
@@ -403,7 +405,9 @@ final class OutboxService {
                     completedAt: payload.completedAt,
                     plannedRoute: payload.plannedRoute,
                     log: payload.log,
-                    excludedFromStats: payload.excludedFromStats ?? false
+                    excludedFromStats: payload.excludedFromStats ?? false,
+                    trailId: payload.trailId,
+                    trailName: payload.trailName
                 )
             case (.trip, .delete):
                 try await tripService.deleteTrip(mutation.entityId)

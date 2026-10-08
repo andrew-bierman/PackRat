@@ -359,10 +359,26 @@ struct SubmitTrailConditionView: View {
     /// open immediately — the trail is the one thing the draft cannot carry.
     private let isCompletingWatchDraft: Bool
 
+    /// Reports written from a trip are linked to it.
+    private let tripId: String?
+
     init(viewModel: TrailConditionsViewModel) {
         self.viewModel = viewModel
         self.onSubmitted = nil
         self.isCompletingWatchDraft = false
+        self.tripId = nil
+        _condition = State(initialValue: "good")
+        _notes = State(initialValue: "")
+    }
+
+    /// Opens the form from a trip: its trail filled in when it has one, and the
+    /// report linked to the trip.
+    init(viewModel: TrailConditionsViewModel, tripId: String, trail: TrailSummary?, onSubmitted: @escaping () -> Void) {
+        self.viewModel = viewModel
+        self.onSubmitted = onSubmitted
+        self.isCompletingWatchDraft = false
+        self.tripId = tripId
+        _place = State(initialValue: trail.map { .trail($0) })
         _condition = State(initialValue: "good")
         _notes = State(initialValue: "")
     }
@@ -378,6 +394,7 @@ struct SubmitTrailConditionView: View {
         self.viewModel = viewModel
         self.onSubmitted = onSubmitted
         self.isCompletingWatchDraft = true
+        self.tripId = nil
         _condition = State(
             initialValue: TrailConditionLevel(rawValue: draft.condition)?.rawValue ?? "good"
         )
@@ -446,7 +463,7 @@ struct SubmitTrailConditionView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .navigationDestination(isPresented: $showingTrailPicker) {
-                TrailPickerView(place: place, location: location) { picked in
+                TrailPickerView(selectedTrailId: place?.trailId, location: location) { picked in
                     place = picked
                     showingTrailPicker = false
                 }
@@ -482,7 +499,8 @@ struct SubmitTrailConditionView: View {
                     surface: surface,
                     overallCondition: condition,
                     hazards: Array(selectedHazards),
-                    notes: notes.isEmpty ? nil : notes
+                    notes: notes.isEmpty ? nil : notes,
+                    tripId: tripId
                 )
                 // Only now — a draft cleared on a failed submit would lose the
                 // capture with nothing to show for it.
@@ -529,7 +547,7 @@ private struct ReportPlaceRow: View {
 
     private var detail: String? {
         switch place {
-        case .trail(let trail): trail.lengthText
+        case .trail(let trail): trail.lengthM > 0 ? trail.lengthText : nil
         case .pin: "Pinned location"
         case nil: nil
         }

@@ -28,6 +28,12 @@ final class TrailConditionsService: Sendable {
         return response.trails
     }
 
+    /// The conditions section of a trip: its trail's reports, or those of
+    /// trails near its destination.
+    func tripConditions(tripId: String) async throws -> TripConditionsResponse {
+        try await api.send(Endpoint(.get, "/api/trail-conditions/trip/\(tripId)"))
+    }
+
     func createReport(
         trailId: String?,
         trailName: String,
@@ -37,7 +43,8 @@ final class TrailConditionsService: Sendable {
         surface: String?,
         overallCondition: String,
         hazards: [String],
-        notes: String?
+        notes: String?,
+        tripId: String? = nil
     ) async throws -> TrailConditionReport {
         try await createReport(
             id: UUID().uuidString.lowercased(),
@@ -49,7 +56,8 @@ final class TrailConditionsService: Sendable {
             surface: surface,
             overallCondition: overallCondition,
             hazards: hazards,
-            notes: notes
+            notes: notes,
+            tripId: tripId
         )
     }
 
@@ -65,7 +73,8 @@ final class TrailConditionsService: Sendable {
         surface: String?,
         overallCondition: String,
         hazards: [String],
-        notes: String?
+        notes: String?,
+        tripId: String? = nil
     ) async throws -> TrailConditionReport {
         let now = Date.iso8601Now()
         let body = CreateTrailConditionRequest(
@@ -79,6 +88,7 @@ final class TrailConditionsService: Sendable {
             overallCondition: overallCondition,
             hazards: hazards.isEmpty ? nil : hazards,
             notes: notes,
+            tripId: tripId,
             localCreatedAt: now,
             localUpdatedAt: now
         )
