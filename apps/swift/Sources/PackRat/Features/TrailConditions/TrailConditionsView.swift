@@ -206,11 +206,14 @@ private struct TrailReportRow: View {
         .padding(.vertical, 2)
     }
 
+    // An HStack, not a Label: inside a List row a Label takes the row's
+    // icon-column spacing, which left a wide gap between icon and word.
     private var conditionBadge: some View {
-        Label(
-            report.overallCondition.capitalized,
-            systemImage: report.conditionSymbol
-        )
+        HStack(spacing: 4) {
+            Image(systemName: report.conditionSymbol)
+            Text(report.overallCondition.capitalized)
+        }
+        .accessibilityElement(children: .combine)
         .font(.caption.bold())
         .foregroundStyle(conditionColor)
         .padding(.horizontal, 8).padding(.vertical, 3)
