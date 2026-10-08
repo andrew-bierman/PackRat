@@ -198,7 +198,13 @@ private struct TrailReportRow: View {
             }
             HStack(spacing: 8) {
                 if let region = report.trailRegion {
-                    Label(region, systemImage: "mappin").font(.caption).foregroundStyle(.secondary)
+                    HStack(spacing: 2) {
+                        Image(systemName: "mappin")
+                        Text(region)
+                    }
+                    .accessibilityElement(children: .combine)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
                 Text(report.timeAgo).font(.caption).foregroundStyle(.secondary)
             }
