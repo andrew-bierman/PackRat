@@ -476,7 +476,9 @@ final class OutboxService {
                     surface: payload.surface,
                     overallCondition: payload.overallCondition,
                     hazards: payload.hazards ?? [],
-                    notes: payload.notes
+                    notes: payload.notes,
+                    tripId: payload.tripId,
+                    writtenAt: mutation.createdAt
                 )
             case (.trailConditionReport, .delete):
                 try await trailConditionsService.deleteReport(mutation.entityId)

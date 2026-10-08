@@ -16,6 +16,8 @@ const LIKE_ESCAPE_BACKSLASH = /\\/g;
 const LIKE_ESCAPE_PERCENT = /%/g;
 const LIKE_ESCAPE_UNDERSCORE = /_/g;
 
+const earliest = (a: Date, b: Date) => (a.getTime() <= b.getTime() ? a : b);
+
 export function toReportResponse(row: Record<string, unknown>): Record<string, unknown> {
   return {
     ...row,
@@ -63,7 +65,7 @@ export const trailConditionRoutes = new Elysia()
           .select()
           .from(trailConditionReports)
           .where(and(...conditions))
-          .orderBy(desc(trailConditionReports.createdAt))
+          .orderBy(desc(trailConditionReports.localCreatedAt))
           .limit(limit ?? 50);
 
         return reports.map(toReportResponse);
@@ -125,7 +127,10 @@ export const trailConditionRoutes = new Elysia()
             userId: user.userId,
             tripId: data.tripId ?? null,
             deleted: false,
-            localCreatedAt: new Date(data.localCreatedAt),
+            // When it was written, which is what readers judge it by: a report
+            // sent late from no signal keeps its age. Clamped so a phone with
+            // its clock ahead can't post a report from the future.
+            localCreatedAt: earliest(new Date(data.localCreatedAt), new Date()),
             localUpdatedAt: new Date(data.localUpdatedAt),
           })
           .returning();
@@ -191,7 +196,7 @@ export const trailConditionRoutes = new Elysia()
           .select()
           .from(trailConditionReports)
           .where(and(...conditions))
-          .orderBy(desc(trailConditionReports.createdAt));
+          .orderBy(desc(trailConditionReports.localCreatedAt));
 
         return reports.map(toReportResponse);
       } catch (error) {

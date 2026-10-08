@@ -170,7 +170,7 @@ private struct TripConditionRow: View {
     private var report: TrailConditionReport { item.report }
 
     private var isOlder: Bool {
-        guard let created = report.createdAt?.toDate() else { return false }
+        guard let created = report.writtenAt?.toDate() else { return false }
         return Date().timeIntervalSince(created) > TripTrailConditionsSection.recentWindow
     }
 
@@ -193,16 +193,18 @@ private struct TripConditionRow: View {
                 .background(color.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 3) {
+                // The trail name gets its own line and wraps: truncated, two
+                // neighbouring trails with long names were indistinguishable.
+                if showsTrail {
+                    Text(report.trailName)
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 HStack(spacing: 6) {
                     Text(report.overallCondition.capitalized)
                         .font(.callout.weight(.semibold))
                         .foregroundStyle(color)
-                    if showsTrail {
-                        Text(report.trailName)
-                            .font(.callout)
-                            .foregroundStyle(.primary)
-                            .lineLimit(1)
-                    }
                     if isOlder {
                         Text("Older")
                             .font(.caption2.weight(.semibold))

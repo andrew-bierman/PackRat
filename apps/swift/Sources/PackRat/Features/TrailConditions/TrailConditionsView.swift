@@ -245,6 +245,14 @@ struct TrailConditionDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                // The trail's name in full: a navigation title truncates long
+                // names ("Use trail to Mirror Lake…") with no way to read the rest.
+                Text(report.trailName)
+                    .font(.title.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal)
+                    .accessibilityAddTraits(.isHeader)
+
                 // Condition header
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
@@ -304,7 +312,7 @@ struct TrailConditionDetailView: View {
         }
         .navigationTitle(report.trailName)
         #if os(iOS)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         #endif
     }
 
@@ -564,6 +572,9 @@ private extension String {
 
 // MARK: - Flow Layout helper
 
+/// Lays chips out left to right, wrapping onto new lines, each at its own
+/// width. (A LazyVGrid with adaptive columns centred every chip in a fixed
+/// cell, so a short chip like "Ice" sat indented from the section edge.)
 struct FlowLayout<Data: RandomAccessCollection, Content: View>: View where Data.Element: Hashable {
     let data: Data
     let content: (Data.Element) -> Content
@@ -574,11 +585,58 @@ struct FlowLayout<Data: RandomAccessCollection, Content: View>: View where Data.
     }
 
     var body: some View {
-        // Simple wrapping HStack approximation
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 6)], spacing: 6) {
+        WrappingStack(spacing: 6) {
             ForEach(Array(data), id: \.self) { item in
                 content(item)
             }
         }
+    }
+}
+
+private struct WrappingStack: Layout {
+    var spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let rows = arrange(subviews, width: proposal.width ?? .infinity)
+        let width = rows.map(\.width).max() ?? 0
+        let height = rows.map(\.height).reduce(0, +) + spacing * CGFloat(max(rows.count - 1, 0))
+        return CGSize(width: width, height: height)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        var y = bounds.minY
+        for row in arrange(subviews, width: bounds.width) {
+            var x = bounds.minX
+            for index in row.indices {
+                let size = subviews[index].sizeThatFits(.unspecified)
+                subviews[index].place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+                x += size.width + spacing
+            }
+            y += row.height + spacing
+        }
+    }
+
+    private struct Row {
+        var indices: [Int] = []
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+    }
+
+    private func arrange(_ subviews: Subviews, width maxWidth: CGFloat) -> [Row] {
+        var rows: [Row] = []
+        var row = Row()
+        for index in subviews.indices {
+            let size = subviews[index].sizeThatFits(.unspecified)
+            let needed = row.indices.isEmpty ? size.width : row.width + spacing + size.width
+            if needed > maxWidth, !row.indices.isEmpty {
+                rows.append(row)
+                row = Row()
+            }
+            row.width = row.indices.isEmpty ? size.width : row.width + spacing + size.width
+            row.height = max(row.height, size.height)
+            row.indices.append(index)
+        }
+        if !row.indices.isEmpty { rows.append(row) }
+        return rows
     }
 }

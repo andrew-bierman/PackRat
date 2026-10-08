@@ -74,9 +74,12 @@ final class TrailConditionsService: Sendable {
         overallCondition: String,
         hazards: [String],
         notes: String?,
-        tripId: String? = nil
+        tripId: String? = nil,
+        writtenAt: Date? = nil
     ) async throws -> TrailConditionReport {
         let now = Date.iso8601Now()
+        // A replayed report keeps the time it was written, not the time it sent.
+        let written = writtenAt?.iso8601String() ?? now
         let body = CreateTrailConditionRequest(
             id: id,
             trailId: trailId,
@@ -89,8 +92,8 @@ final class TrailConditionsService: Sendable {
             hazards: hazards.isEmpty ? nil : hazards,
             notes: notes,
             tripId: tripId,
-            localCreatedAt: now,
-            localUpdatedAt: now
+            localCreatedAt: written,
+            localUpdatedAt: written
         )
         let endpoint = Endpoint(.post, "/api/trail-conditions", body: body)
         return try await api.send(endpoint)

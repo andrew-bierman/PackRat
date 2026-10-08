@@ -23,7 +23,10 @@ extension TrailConditionReport {
         }
     }
 
-    var timeAgo: String { createdAt?.timeAgo ?? "" }
+    /// When the report was written, falling back to when it reached the server.
+    var writtenAt: String? { localCreatedAt ?? createdAt }
+
+    var timeAgo: String { writtenAt?.timeAgo ?? "" }
 
     /// A report on a dropped pin rather than a picked trail.
     var isPinned: Bool { trailId == nil && latitude != nil }

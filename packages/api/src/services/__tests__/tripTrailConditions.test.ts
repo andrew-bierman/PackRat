@@ -64,7 +64,7 @@ describe('rankNearbyReports', () => {
     ]);
   });
 
-  it('puts the newer report first when two are the same distance away', () => {
+  it('puts the more recently written report first when two are the same distance away', () => {
     const ranked = rankNearbyReports({
       origin: YOSEMITE_VALLEY,
       trailDistances: new Map([
@@ -72,8 +72,8 @@ describe('rankNearbyReports', () => {
         ['b', 500],
       ]),
       trailReports: [
-        report({ id: 'older', trailId: 'a', createdAt: new Date('2026-09-01T00:00:00Z') }),
-        report({ id: 'newer', trailId: 'b', createdAt: new Date('2026-10-05T00:00:00Z') }),
+        report({ id: 'older', trailId: 'a', localCreatedAt: new Date('2026-09-01T00:00:00Z') }),
+        report({ id: 'newer', trailId: 'b', localCreatedAt: new Date('2026-10-05T00:00:00Z') }),
       ],
       pinReports: [],
     });

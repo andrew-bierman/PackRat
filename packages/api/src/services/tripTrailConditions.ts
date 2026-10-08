@@ -70,7 +70,10 @@ export function rankNearbyReports({
     return d <= TRIP_NEARBY_RADIUS_M ? [{ ...r, distanceM: Math.round(d) }] : [];
   });
   return [...fromTrails, ...fromPins]
-    .sort((a, b) => a.distanceM - b.distanceM || b.createdAt.getTime() - a.createdAt.getTime())
+    .sort(
+      (a, b) =>
+        a.distanceM - b.distanceM || b.localCreatedAt.getTime() - a.localCreatedAt.getTime(),
+    )
     .slice(0, limit);
 }
 
@@ -109,7 +112,7 @@ export async function getTripTrailConditions({
       .select()
       .from(trailConditionReports)
       .where(and(active, eq(trailConditionReports.trailId, trip.trailId)))
-      .orderBy(desc(trailConditionReports.createdAt))
+      .orderBy(desc(trailConditionReports.localCreatedAt))
       .limit(TRIP_REPORT_LIMIT);
     return { scope: 'trail', reports: reports.map((r) => ({ ...r, distanceM: null })) };
   }
@@ -140,7 +143,7 @@ export async function getTripTrailConditions({
           .selectDistinctOn([trailConditionReports.trailId])
           .from(trailConditionReports)
           .where(and(active, inArray(trailConditionReports.trailId, trailIds)))
-          .orderBy(trailConditionReports.trailId, desc(trailConditionReports.createdAt));
+          .orderBy(trailConditionReports.trailId, desc(trailConditionReports.localCreatedAt));
 
   const dLat = TRIP_NEARBY_RADIUS_M / METERS_PER_DEGREE_LAT;
   const dLon =
@@ -158,7 +161,7 @@ export async function getTripTrailConditions({
         between(trailConditionReports.longitude, origin.longitude - dLon, origin.longitude + dLon),
       ),
     )
-    .orderBy(desc(trailConditionReports.createdAt))
+    .orderBy(desc(trailConditionReports.localCreatedAt))
     .limit(50);
 
   return {

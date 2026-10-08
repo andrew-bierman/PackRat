@@ -230,6 +230,9 @@ struct TrailConditionReport: Codable, Identifiable, Sendable {
     let deleted: Bool
     let createdAt: String?
     let updatedAt: String?
+    /// When the hiker wrote it, which can be well before `createdAt` for a
+    /// report sent after a stretch with no signal.
+    var localCreatedAt: String? = nil
 }
 
 struct SeasonSuggestionItem: Codable, Sendable {
