@@ -6,7 +6,7 @@ import SwiftUI
 /// packs already loaded into `AppState`; nothing here fetches on its own.
 ///
 /// Layout follows big picture → story → detail: the lifetime grid, this year against the same stretch of last year, the monthly
-/// chart, highlights, the map, parks and peaks, then gear. A section with nothing to show is
+/// chart, highlights, the map, countries and states, parks and peaks, then gear. A section with nothing to show is
 /// left out rather than rendered as zeros.
 struct TripStatsView: View {
     @Environment(AppState.self) private var appState
@@ -266,6 +266,11 @@ struct TripStatsView: View {
             }
         }
 
+        let places = TripPlaces(finished: stats.finished, lifetime: stats.allFinished)
+        if !places.isEmpty {
+            PlacesCard(places: places, scope: scope)
+        }
+
         if isAll {
             ParksCard(record: record, unit: distanceUnit)
             PeaksCard(record: record, unit: distanceUnit)
@@ -276,12 +281,19 @@ struct TripStatsView: View {
             TopGearCard(gear: stats.topGear)
         }
 
+        if isAll {
+            let idle = IdleGear(finished: stats.allFinished, packs: appState.packsVM.packs)
+            if !idle.isEmpty {
+                IdleGearCard(gear: idle, unit: weightUnit)
+            }
+        }
+
         if stats.packWeights.count >= 2 {
             PackWeightCard(points: stats.packWeights, unit: weightUnit)
         }
 
         if !isAll {
-            Text("Goals, parks, peaks and long trails show under All Time.")
+            Text("Goals, parks, peaks, long trails and gear not packed in a year show under All Time.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)
