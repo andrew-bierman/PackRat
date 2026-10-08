@@ -136,6 +136,48 @@ struct TripConditionsResponse: Decodable, Sendable {
     let reports: [TripConditionReport]
 }
 
+/// A trail page's reports, each signed with its author's first name.
+struct TrailReportsResponse: Decodable, Sendable {
+    let reports: [TripConditionReport]
+}
+
+/// One trail with its line, for the trail page's map. The server sends the
+/// geometry as GeoJSON, a LineString or a MultiLineString.
+struct TrailDetail: Decodable, Sendable {
+    let summary: TrailSummary
+    /// Each continuous stretch of the trail as [longitude, latitude] pairs.
+    let lines: [[[Double]]]
+
+    private enum CodingKeys: String, CodingKey { case geometry }
+    private struct Geometry: Decodable {
+        let type: String
+        let coordinates: GeoJSONCoordinates
+    }
+    private enum GeoJSONCoordinates: Decodable {
+        case line([[Double]])
+        case multiLine([[[Double]]])
+
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            if let multi = try? container.decode([[[Double]]].self) {
+                self = .multiLine(multi)
+            } else {
+                self = .line(try container.decode([[Double]].self))
+            }
+        }
+    }
+
+    init(from decoder: any Decoder) throws {
+        summary = try TrailSummary(from: decoder)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        switch try container.decodeIfPresent(Geometry.self, forKey: .geometry)?.coordinates {
+        case .line(let line): lines = [line]
+        case .multiLine(let multi): lines = multi
+        case nil: lines = []
+        }
+    }
+}
+
 struct TrailSearchResponse: Decodable, Sendable {
     let trails: [TrailSummary]
 }

@@ -180,7 +180,7 @@ struct TrailPickerView: View {
     }
 }
 
-private struct TrailPickerRow: View {
+struct TrailPickerRow: View {
     let trail: TrailSummary
     let isSelected: Bool
 

@@ -8,6 +8,8 @@ struct TrailConditionsListView: View {
     var showsGuestLimitInList = true
     @Environment(AuthManager.self) private var authManager
     @State private var showingSubmitSheet = false
+    /// Ranks trail search results nearest first, when location is already allowed.
+    @State private var searchLocation = TrailReportLocationProvider()
     #if os(iOS)
     /// Drafts captured on the paired watch, waiting for a trail name (#2721).
     @State private var draftStore = WatchTrailDraftStore.shared
@@ -34,6 +36,9 @@ struct TrailConditionsListView: View {
                 } else {
                     Color.clear
                 }
+            } else if isSearching {
+                // Searching finds trails and places to open, not report text.
+                TrailSearchResultsView(query: viewModel.searchText, location: searchLocation)
             } else if viewModel.isLoading && viewModel.reports.isEmpty {
                 ProgressView("Loading reports…").frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = viewModel.error, viewModel.reports.isEmpty {
@@ -51,7 +56,7 @@ struct TrailConditionsListView: View {
             }
         }
         .navigationTitle("Trail Conditions")
-        .searchable(text: $viewModel.searchText, prompt: "Search trails")
+        .searchable(text: $viewModel.searchText, prompt: "Search trails and places")
         .toolbar {
             if authManager.isAuthenticated {
                 ToolbarItem(placement: .primaryAction) {
@@ -101,6 +106,10 @@ struct TrailConditionsListView: View {
         }
     }
 
+    private var isSearching: Bool {
+        !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
     /// Whether the paired watch has captures waiting. Always false off iOS,
     /// where there is no paired watch.
     private var hasWatchDrafts: Bool {
@@ -116,19 +125,17 @@ struct TrailConditionsListView: View {
             #if os(iOS)
             watchDraftsSection
             #endif
-            ForEach(viewModel.filteredReports) { report in
+            ForEach(viewModel.reports) { report in
                 reportRow(report)
             }
         }
     }
 
     #if os(iOS)
-    /// Watch captures sit above the reports, and outside the search filter —
-    /// they carry no trail name to match on yet, so filtering them would make
-    /// them vanish the moment someone typed in the search field.
+    /// Watch captures sit above the reports, waiting for a trail.
     @ViewBuilder
     private var watchDraftsSection: some View {
-        if draftStore.hasDrafts && viewModel.searchText.isEmpty {
+        if draftStore.hasDrafts {
             Section("From Apple Watch") {
                 ForEach(draftStore.drafts) { draft in
                     Button {
@@ -380,9 +387,9 @@ struct SubmitTrailConditionView: View {
         _notes = State(initialValue: "")
     }
 
-    /// Opens the form from a trip: its trail filled in when it has one, and the
-    /// report linked to the trip.
-    init(viewModel: TrailConditionsViewModel, tripId: String, trail: TrailSummary?, onSubmitted: @escaping () -> Void) {
+    /// Opens the form with its trail filled in: from a trip (the report is then
+    /// linked to it) or from a trail page.
+    init(viewModel: TrailConditionsViewModel, tripId: String? = nil, trail: TrailSummary?, onSubmitted: @escaping () -> Void) {
         self.viewModel = viewModel
         self.onSubmitted = onSubmitted
         self.isCompletingWatchDraft = false

@@ -28,6 +28,19 @@ final class TrailConditionsService: Sendable {
         return response.trails
     }
 
+    /// One trail with its line, for the trail page.
+    func trail(id: String) async throws -> TrailDetail {
+        try await api.send(Endpoint(.get, "/api/trail-conditions/trails/\(id)"))
+    }
+
+    /// Every report on a trail, newest first, signed with the author's first name.
+    func trailReports(trailId: String) async throws -> [TripConditionReport] {
+        let response: TrailReportsResponse = try await api.send(
+            Endpoint(.get, "/api/trail-conditions/trails/\(trailId)/reports")
+        )
+        return response.reports
+    }
+
     /// The conditions section of a trip: its trail's reports, or those of
     /// trails near its destination.
     func tripConditions(tripId: String) async throws -> TripConditionsResponse {

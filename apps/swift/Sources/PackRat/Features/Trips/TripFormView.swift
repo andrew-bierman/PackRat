@@ -36,10 +36,19 @@ struct TripFormView: View {
     private var isValid: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
     private var availablePacks: [Pack] { (packsViewModel ?? appState.packsVM).packs }
 
-    init(viewModel: TripsViewModel, existingTrip: Trip? = nil, packsViewModel: PacksViewModel? = nil) {
+    /// A new trip started from a trail page: named after the trail, headed to it.
+    private let startingTrail: TrailSummary?
+
+    init(
+        viewModel: TripsViewModel,
+        existingTrip: Trip? = nil,
+        packsViewModel: PacksViewModel? = nil,
+        startingTrail: TrailSummary? = nil
+    ) {
         self.viewModel = viewModel
         self.existingTrip = existingTrip
         self.packsViewModel = packsViewModel
+        self.startingTrail = startingTrail
     }
 
     var body: some View {
@@ -215,7 +224,18 @@ struct TripFormView: View {
     }
 
     private func prefill() {
-        guard let trip = existingTrip else { return }
+        guard let trip = existingTrip else {
+            if let startingTrail {
+                trail = (startingTrail.id, startingTrail.name)
+                name = startingTrail.name
+                if let center = startingTrail.center {
+                    locationName = startingTrail.name
+                    locationLat = center.latitude
+                    locationLon = center.longitude
+                }
+            }
+            return
+        }
         if let id = trip.trailId { trail = (id, trip.trailName ?? "Trail") }
         name = trip.name
         description = trip.description ?? ""

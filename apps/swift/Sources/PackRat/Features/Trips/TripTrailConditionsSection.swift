@@ -162,7 +162,7 @@ struct TripTrailConditionsSection: View {
     }
 }
 
-private struct TripConditionRow: View {
+struct TripConditionRow: View {
     let item: TripConditionReport
     /// Nearby reports name their trail so the hiker can tell theirs from its neighbours.
     let showsTrail: Bool

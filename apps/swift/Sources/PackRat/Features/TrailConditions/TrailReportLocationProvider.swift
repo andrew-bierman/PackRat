@@ -44,6 +44,13 @@ final class TrailReportLocationProvider: NSObject, CLLocationManagerDelegate {
         }
     }
 
+    /// Requests a fix only if the hiker already allowed location. For screens
+    /// where location is a nicety, like ranking search results, not worth a prompt.
+    func startIfAllowed() {
+        guard manager.authorizationStatus != .notDetermined else { return }
+        start()
+    }
+
     // MARK: - CLLocationManagerDelegate
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

@@ -15,15 +15,6 @@ final class TrailConditionsViewModel {
         self.service = service
     }
 
-    var filteredReports: [TrailConditionReport] {
-        guard !searchText.isEmpty else { return reports }
-        return reports.filter {
-            $0.trailName.localizedCaseInsensitiveContains(searchText)
-            || ($0.trailRegion?.localizedCaseInsensitiveContains(searchText) ?? false)
-            || ($0.notes?.localizedCaseInsensitiveContains(searchText) ?? false)
-        }
-    }
-
     func load() async {
         if VisualSampleData.isEnabled && !reports.isEmpty {
             isLoading = false
