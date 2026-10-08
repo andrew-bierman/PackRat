@@ -29,7 +29,6 @@ struct TrailPickerView: View {
 
     var body: some View {
         List {
-            results
             Section {
                 Button {
                     showingPinDrop = true
@@ -40,6 +39,7 @@ struct TrailPickerView: View {
             } footer: {
                 Text("For a stretch with no name, or a trail PackRat doesn't have yet.")
             }
+            results
         }
         .navigationTitle("Choose Trail")
         #if os(iOS)
