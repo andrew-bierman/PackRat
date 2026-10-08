@@ -1,8 +1,15 @@
-import { createOsmDb } from '@packrat/api/db';
+import { createDb, createOsmDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
 import { getTrail, searchTrails } from '@packrat/api/services/trailIndex';
+import { trailConditionReports } from '@packrat/db/schema';
+import { and, desc, eq } from 'drizzle-orm';
 import { Elysia, status } from 'elysia';
 import { z } from 'zod';
+import { toReportResponse } from './reports';
+
+/** Reports a trail page shows: enough history to see a pattern, not an archive. */
+const TRAIL_PAGE_REPORT_LIMIT = 50;
 
 const isNotConfigured = (error: unknown) =>
   error instanceof Error && error.message.includes('not configured');
@@ -74,6 +81,47 @@ export const trailIndexRoutes = new Elysia({ prefix: '/trails' })
       detail: {
         tags: ['Trail Conditions'],
         summary: 'Get a trail with its geometry',
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  /**
+   * GET /api/trail-conditions/trails/:trailId/reports
+   *
+   * The trail page: every report on the trail, newest first, signed with the
+   * author's first name. Served from the main database, so it works even when
+   * the trail database is unavailable.
+   */
+  .get(
+    '/:trailId/reports',
+    async ({ params }) => {
+      const db = createDb();
+      const reports = await db
+        .tag('trailConditions.trailReports')
+        .select()
+        .from(trailConditionReports)
+        .where(
+          and(
+            eq(trailConditionReports.deleted, false),
+            eq(trailConditionReports.trailId, params.trailId),
+          ),
+        )
+        .orderBy(desc(trailConditionReports.localCreatedAt))
+        .limit(TRAIL_PAGE_REPORT_LIMIT);
+      const authorName = await reportAuthorNames({ db, userIds: reports.map((r) => r.userId) });
+      return {
+        reports: reports.map((r) => ({
+          ...toReportResponse(r),
+          authorName: authorName.get(r.userId) ?? null,
+        })),
+      };
+    },
+    {
+      params: z.object({ trailId: z.string().uuid() }),
+      isAuthenticated: true,
+      detail: {
+        tags: ['Trail Conditions'],
+        summary: "A trail's reports, newest first",
         security: [{ bearerAuth: [] }],
       },
     },
