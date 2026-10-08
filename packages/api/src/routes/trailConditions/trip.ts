@@ -2,11 +2,13 @@ import { createDb, createOsmDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
 import type { TrailDb } from '@packrat/api/services/trailIndex';
 import { getTripTrailConditions } from '@packrat/api/services/tripTrailConditions';
-import { trips } from '@packrat/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { trips, users } from '@packrat/db/schema';
+import { and, eq, inArray } from 'drizzle-orm';
 import { Elysia, status } from 'elysia';
 import { z } from 'zod';
 import { toReportResponse } from './reports';
+
+const WHITESPACE = /\s+/;
 
 /** The trail database, or null when this server has none configured. */
 function trailDbOrNull(): TrailDb | null {
@@ -42,9 +44,27 @@ export const tripTrailConditionRoutes = new Elysia().use(authPlugin).get(
           : null,
       },
     });
+    // Who wrote each report, first name only: enough for "Sam, 2 days ago".
+    const authorIds = [...new Set(result.reports.map((r) => r.userId))];
+    const authors =
+      authorIds.length === 0
+        ? []
+        : await db
+            .tag('tripTrailConditions.authors')
+            .select({ id: users.id, firstName: users.firstName, name: users.name })
+            .from(users)
+            .where(inArray(users.id, authorIds));
+    const authorName = new Map(
+      authors.map((a) => [a.id, a.firstName?.trim() || a.name.trim().split(WHITESPACE)[0] || null]),
+    );
+
     return {
       scope: result.scope,
-      reports: result.reports.map((r) => ({ ...toReportResponse(r), distanceM: r.distanceM })),
+      reports: result.reports.map((r) => ({
+        ...toReportResponse(r),
+        distanceM: r.distanceM,
+        authorName: authorName.get(r.userId) ?? null,
+      })),
     };
   },
   {
