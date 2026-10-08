@@ -647,6 +647,11 @@ export const trips = pgTable('trips', {
     .notNull(),
   packId: text('pack_id').references(() => packs.id, { onDelete: 'set null' }),
   trailOsmId: bigint('trail_osm_id', { mode: 'bigint' }),
+  // The trail the trip is for: `trails.id` on the trail database
+  // (OSM_DATABASE_URL), so no FK. The name is kept so the trip can show it
+  // without a trail-database round trip.
+  trailId: text('trail_id'),
+  trailName: text('trail_name'),
   // Lifecycle: a trip is planned until the user starts it, and complete once
   // they mark themselves safe (or finish it without a safety check-in).
   status: text('status', { enum: ['planned', 'in_progress', 'complete'] })

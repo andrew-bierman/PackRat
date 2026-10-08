@@ -16,7 +16,7 @@ const LIKE_ESCAPE_BACKSLASH = /\\/g;
 const LIKE_ESCAPE_PERCENT = /%/g;
 const LIKE_ESCAPE_UNDERSCORE = /_/g;
 
-function toReportResponse(row: Record<string, unknown>): Record<string, unknown> {
+export function toReportResponse(row: Record<string, unknown>): Record<string, unknown> {
   return {
     ...row,
     createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
