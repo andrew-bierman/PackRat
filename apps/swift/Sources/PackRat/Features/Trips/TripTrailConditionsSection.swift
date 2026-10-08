@@ -84,7 +84,7 @@ struct TripTrailConditionsSection: View {
                     ForEach(Array(response.reports.enumerated()), id: \.element.id) { index, item in
                         if index > 0 { Divider().padding(.leading, 44) }
                         NavigationLink {
-                            TrailConditionDetailView(report: item.report)
+                            TrailConditionDetailView(report: item.report, authorName: item.authorName)
                         } label: {
                             TripConditionRow(item: item, showsTrail: response.scope == .nearby)
                         }

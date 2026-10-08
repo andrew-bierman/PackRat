@@ -6,7 +6,9 @@ final class TrailConditionsService: Sendable {
 
     init(api: APIClient = .shared) { self.api = api }
 
-    func listReports(page: Int = 1, limit: Int = 20) async throws -> [TrailConditionReport] {
+    /// The recent feed: everyone's latest reports, newest first, each signed
+    /// with its author's first name.
+    func listReports(page: Int = 1, limit: Int = 20) async throws -> [TripConditionReport] {
         let endpoint = Endpoint(.get, "/api/trail-conditions", query: [
             "page": "\(page)",
             "limit": "\(limit)",

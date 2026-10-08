@@ -105,7 +105,7 @@ struct TrailPageView: View {
             if let latest = reports.first {
                 sectionTitle("Latest")
                 NavigationLink {
-                    TrailConditionDetailView(report: latest.report)
+                    TrailConditionDetailView(report: latest.report, authorName: latest.authorName, showsTrailLink: false)
                 } label: {
                     LatestReportCard(item: latest)
                 }
@@ -119,7 +119,7 @@ struct TrailPageView: View {
                         ForEach(Array(earlier.enumerated()), id: \.element.id) { index, item in
                             if index > 0 { Divider().padding(.leading, 56) }
                             NavigationLink {
-                                TrailConditionDetailView(report: item.report)
+                                TrailConditionDetailView(report: item.report, authorName: item.authorName, showsTrailLink: false)
                             } label: {
                                 TripConditionRow(item: item, showsTrail: false)
                             }

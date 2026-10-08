@@ -88,12 +88,12 @@ struct TrailConditionsListView: View {
         Group {
             if isCompact {
                 NavigationLink {
-                    TrailConditionDetailView(report: report)
+                    TrailConditionDetailView(report: report, authorName: viewModel.authorNames[report.id])
                 } label: {
-                    TrailReportRow(report: report)
+                    TrailReportRow(report: report, authorName: viewModel.authorNames[report.id])
                 }
             } else {
-                TrailReportRow(report: report)
+                TrailReportRow(report: report, authorName: viewModel.authorNames[report.id])
             }
         }
         .tag(report.id)
@@ -194,29 +194,39 @@ private struct WatchTrailDraftRow: View {
 
 private struct TrailReportRow: View {
     let report: TrailConditionReport
+    let authorName: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            HStack {
+            HStack(alignment: .firstTextBaseline) {
                 Text(report.trailName).font(.headline)
+                    .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("trail_report_title_\(report.trailName)")
                 Spacer()
                 conditionBadge
             }
-            HStack(spacing: 8) {
-                if let region = report.trailRegion {
-                    HStack(spacing: 2) {
-                        Image(systemName: "mappin")
-                        Text(region)
-                    }
-                    .accessibilityElement(children: .combine)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            HStack(spacing: 4) {
+                // A pinned report has no trail page to open; say so up front.
+                if report.isPinned {
+                    Image(systemName: "mappin")
+                        .accessibilityLabel("Dropped pin")
                 }
-                Text(report.timeAgo).font(.caption).foregroundStyle(.secondary)
+                Text(byline)
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            if let notes = report.notes, !notes.isEmpty {
+                Text(notes)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
             }
         }
         .padding(.vertical, 2)
+    }
+
+    private var byline: String {
+        [authorName, report.timeAgo].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · ")
     }
 
     // An HStack, not a Label: inside a List row a Label takes the row's
@@ -248,6 +258,9 @@ private struct TrailReportRow: View {
 
 struct TrailConditionDetailView: View {
     let report: TrailConditionReport
+    var authorName: String? = nil
+    /// Off on the trail page itself, where a link back to it would loop.
+    var showsTrailLink = true
 
     var body: some View {
         ScrollView {
@@ -267,12 +280,32 @@ struct TrailConditionDetailView: View {
                             Label(region, systemImage: "mappin")
                                 .font(.callout).foregroundStyle(.secondary)
                         }
-                        Text(report.timeAgo).font(.caption).foregroundStyle(.secondary)
+                        Text([authorName, report.timeAgo].compactMap { $0 }.joined(separator: " · "))
+                            .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
                     conditionCard
                 }
                 .padding(.horizontal)
+
+                if showsTrailLink, let trailId = report.trailId {
+                    NavigationLink {
+                        TrailPageView(trail: TrailSummary(id: trailId, name: report.trailName))
+                    } label: {
+                        HStack {
+                            Label("All Reports for This Trail", systemImage: "figure.hiking")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(14)
+                        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal)
+                    .accessibilityIdentifier("trail_report_view_trail")
+                }
 
                 if !report.surface.isEmpty {
                     labeledSection("Surface") {

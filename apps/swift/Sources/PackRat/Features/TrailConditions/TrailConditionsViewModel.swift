@@ -8,6 +8,9 @@ final class TrailConditionsViewModel {
     var isLoading = false
     var error: String?
     var searchText = ""
+    /// Who wrote each feed report, by report id. Absent for the hiker's own
+    /// unsent reports.
+    var authorNames: [String: String] = [:]
 
     private let service: TrailConditionsService
 
@@ -32,7 +35,12 @@ final class TrailConditionsViewModel {
         error = nil
         defer { isLoading = false }
         do {
-            reports = try await service.listReports()
+            let feed = try await service.listReports()
+            reports = feed.map(\.report)
+            authorNames = Dictionary(
+                feed.compactMap { item in item.authorName.map { (item.id, $0) } },
+                uniquingKeysWith: { first, _ in first }
+            )
         } catch {
             self.error = error.localizedDescription
         }
