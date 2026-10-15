@@ -68,6 +68,10 @@ final class TrailReportModeration {
         if let userId = report.userId { blockedAuthorIds.insert(userId) }
     }
 
+    func unhideBlocked(userId: String) {
+        blockedAuthorIds.remove(userId)
+    }
+
     func hideDeleted(_ report: TrailConditionReport) {
         deletedReportIds.insert(report.id)
     }
@@ -129,7 +133,7 @@ final class TrailReportActions {
                     title: "\(target.hikerName) Is Blocked",
                     message: FeatureFlagStore.shared.isEnabled("enableFeed")
                         ? "You won't see their trail reports anymore. You can unblock them in Settings, under Feed & Sharing."
-                        : "You won't see their trail reports anymore.",
+                        : "You won't see their trail reports anymore. You can unblock them in Settings, under Blocked People.",
                     onDismiss: { [moderation] in
                         onHidden?()
                         moderation.hideBlocked(authorOf: target.report)
