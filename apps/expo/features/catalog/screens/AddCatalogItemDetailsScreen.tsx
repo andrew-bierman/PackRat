@@ -226,7 +226,9 @@ export function AddCatalogItemDetailsScreen() {
               accessibilityLabel={t('catalog.quantity')}
               className="w-12 text-center text-lg font-medium text-foreground"
               value={quantity}
-              onChangeText={(text) => setQuantity(text.replace(/[^0-9]/g, ''))}
+              onChangeText={(text) =>
+                setQuantity([...text].filter((char) => char >= '0' && char <= '9').join(''))
+              }
               onBlur={() => setQuantity(String(quantityValue))}
               keyboardType="number-pad"
               selectTextOnFocus
