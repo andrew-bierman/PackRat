@@ -222,9 +222,12 @@ struct TripConditionRow: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
+                if !report.photos.isEmpty {
+                    ReportPhotoPreviewRow(photos: report.photos, size: 56)
+                        .padding(.top, 5)
+                }
             }
             Spacer(minLength: 0)
-            ReportPhotoThumbnail(photos: report.photos, size: 48)
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.tertiary)

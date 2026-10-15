@@ -6,36 +6,6 @@ enum ReportPhotoLimit {
     static let max = 5
 }
 
-/// A report's first photo, square, for list rows. Shows how many more there
-/// are so a reader knows the report has more to see.
-struct ReportPhotoThumbnail: View {
-    let photos: [String]
-    var size: CGFloat = 56
-
-    var body: some View {
-        if let first = photos.first {
-            RemoteImage(url: first, contentMode: .fill) {
-                Rectangle().fill(.fill.secondary)
-            }
-            .frame(width: size, height: size)
-            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            .overlay(alignment: .bottomTrailing) {
-                if photos.count > 1 {
-                    Text("+\(photos.count - 1)")
-                        .font(.caption2.weight(.semibold).monospacedDigit())
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 1)
-                        .background(.black.opacity(0.6), in: Capsule())
-                        .padding(3)
-                }
-            }
-            .accessibilityElement()
-            .accessibilityLabel(photos.count == 1 ? "1 photo" : "\(photos.count) photos")
-        }
-    }
-}
-
 /// The first few of a report's photos, small and side by side, for list rows
 /// that are themselves links. The last tile counts any that didn't fit.
 struct ReportPhotoPreviewRow: View {
