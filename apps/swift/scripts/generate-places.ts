@@ -30,7 +30,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { safeJsonStringify } from '@packrat/utils';
+import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const outputPath = resolve(__dir, '../Resources/Places.json');
@@ -63,7 +63,7 @@ async function load(file: string): Promise<Feature[]> {
     if (!response.ok) throw new Error(`${file}: Natural Earth returned ${response.status}`);
     writeFileSync(cached, await response.text());
   }
-  return (JSON.parse(readFileSync(cached, 'utf8')) as { features: Feature[] }).features;
+  return safeJsonParse<{ features: Feature[] }>(readFileSync(cached, 'utf8')).features;
 }
 
 function rings(geometry: Geometry | null): Ring[] {
