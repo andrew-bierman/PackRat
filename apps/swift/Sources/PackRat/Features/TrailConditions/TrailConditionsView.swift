@@ -1,3 +1,4 @@
+import MapKit
 import Sentry
 import SwiftUI
 
@@ -46,7 +47,7 @@ struct TrailConditionsListView: View {
                 ProgressView("Loading reports…").frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = viewModel.error, viewModel.reports.isEmpty {
                 ErrorView(error, retry: { await viewModel.load() })
-            } else if viewModel.reports.isEmpty && !hasWatchDrafts {
+            } else if visibleReports.isEmpty && !hasWatchDrafts {
                 EmptyStateView(
                     "No Trail Reports Yet",
                     subtitle: "Be the first to report conditions on a trail",
@@ -107,6 +108,11 @@ struct TrailConditionsListView: View {
         }
     }
 
+    /// Reports minus any the hiker flagged, deleted, or whose author they blocked.
+    private var visibleReports: [TrailConditionReport] {
+        viewModel.reports.filter { !moderation.hides($0) }
+    }
+
     private var isSearching: Bool {
         !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty
     }
@@ -126,7 +132,7 @@ struct TrailConditionsListView: View {
             #if os(iOS)
             watchDraftsSection
             #endif
-            ForEach(viewModel.reports.filter { !moderation.hides($0) }) { report in
+            ForEach(visibleReports) { report in
                 reportRow(report)
             }
         }
@@ -207,28 +213,34 @@ private struct TrailReportRow: View {
                 ReportPhotoPreviewRow(photos: report.photos)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 4)
     }
 
+    /// Scan order for a list: which trail and its verdict, whose word and how
+    /// fresh, what could turn you back, then a taste of the account.
     private var details: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 5) {
             HStack(alignment: .firstTextBaseline) {
                 Text(report.trailName).font(.headline)
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("trail_report_title_\(report.trailName)")
                 Spacer()
-                conditionBadge
+                ConditionPill(report: report)
             }
-            HStack(spacing: 4) {
-                // A pinned report has no trail page to open; say so up front.
-                if report.isPinned {
-                    Image(systemName: "mappin")
-                        .accessibilityLabel("Dropped pin")
+            HStack(spacing: 6) {
+                HStack(spacing: 4) {
+                    // A pinned report has no trail page to open; say so up front.
+                    if report.isPinned {
+                        Image(systemName: "mappin")
+                            .accessibilityLabel("Dropped pin")
+                    }
+                    Text(byline)
                 }
-                Text(byline)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                if report.isOlder { OlderPill() }
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            HazardLine(hazards: report.hazards)
             if let notes = report.notes, !notes.isEmpty {
                 Text(notes)
                     .font(.callout)
@@ -241,34 +253,15 @@ private struct TrailReportRow: View {
     private var byline: String {
         [authorName, report.timeAgo].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · ")
     }
-
-    // An HStack, not a Label: inside a List row a Label takes the row's
-    // icon-column spacing, which left a wide gap between icon and word.
-    private var conditionBadge: some View {
-        HStack(spacing: 4) {
-            Image(systemName: report.conditionSymbol)
-            Text(report.overallCondition.capitalized)
-        }
-        .accessibilityElement(children: .combine)
-        .font(.caption.bold())
-        .foregroundStyle(conditionColor)
-        .padding(.horizontal, 8).padding(.vertical, 3)
-        .background(conditionColor.opacity(0.12), in: Capsule())
-    }
-
-    private var conditionColor: Color {
-        switch report.overallCondition {
-        case "excellent": return .green
-        case "good":      return .blue
-        case "fair":      return .orange
-        case "poor":      return .red
-        default:          return .secondary
-        }
-    }
 }
 
 // MARK: - Detail View
 
+/// One report, ordered by what decides a hike: the evidence (photos), whose
+/// word it is and how fresh, the verdict, what could turn you back, the ground
+/// underfoot, then the writer's own account. Researched against WTA trip
+/// reports and Trailforks condition reports, where age and hazards are what
+/// readers look for first.
 struct TrailConditionDetailView: View {
     let report: TrailConditionReport
     var authorName: String? = nil
@@ -278,105 +271,43 @@ struct TrailConditionDetailView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
     @State private var actions = TrailReportActions()
+    @State private var photoIndex = 0
+    @State private var viewerStart: PhotoViewerStart?
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // The trail's name in full: a navigation title truncates long
-                // names ("Use trail to Mirror Lake…") with no way to read the rest.
-                Text(report.trailName)
-                    .font(.title.bold())
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.horizontal)
-                    .accessibilityAddTraits(.isHeader)
-
-                // Condition header
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        if let region = report.trailRegion {
-                            Label(region, systemImage: "mappin")
-                                .font(.callout).foregroundStyle(.secondary)
-                        }
-                        Text([authorName, report.timeAgo].compactMap { $0 }.joined(separator: " · "))
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    conditionCard
-                }
-                .padding(.horizontal)
-
-                if showsTrailLink, let trailId = report.trailId {
-                    NavigationLink {
-                        TrailPageView(trail: TrailSummary(id: trailId, name: report.trailName))
-                    } label: {
-                        HStack {
-                            Label("All Reports for This Trail", systemImage: "figure.hiking")
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(.tertiary)
-                        }
-                        .padding(14)
-                        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.horizontal)
-                    .accessibilityIdentifier("trail_report_view_trail")
-                }
-
+            VStack(alignment: .leading, spacing: 24) {
                 if !report.photos.isEmpty {
-                    ReportPhotoStrip(photos: report.photos, size: 140)
-                        .contentMargins(.horizontal, 16, for: .scrollContent)
-                        .accessibilityIdentifier("trail_report_photos")
+                    PhotoCarousel(images: report.photos, selection: $photoIndex) { index in
+                        viewerStart = PhotoViewerStart(index: index)
+                    }
+                    .frame(maxHeight: 420)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .accessibilityIdentifier("trail_report_photos")
                 }
 
-                if !report.surface.isEmpty {
-                    labeledSection("Surface") {
-                        Label(report.surface.capitalized, systemImage: TrailSurface(rawValue: report.surface)?.symbol ?? "road.lanes")
-                            .font(.callout)
-                    }
-                }
-
-                if report.waterCrossings > 0 {
-                    labeledSection("Water Crossings") {
-                        HStack {
-                            Text("\(report.waterCrossings) crossing\(report.waterCrossings == 1 ? "" : "s")")
-                            if let diff = report.waterCrossingDifficulty {
-                                Text("· \(diff.capitalized)").foregroundStyle(.secondary)
-                            }
-                        }
-                        .font(.callout)
-                    }
-                }
-
-                if !report.hazards.isEmpty {
-                    labeledSection("Hazards") {
-                        FlowLayout(report.hazards) { hazard in
-                            Text(hazard.capitalized)
-                                .font(.caption)
-                                .padding(.horizontal, 10).padding(.vertical, 4)
-                                .background(.orange.opacity(0.12), in: Capsule())
-                                .foregroundStyle(.orange)
-                        }
-                    }
-                }
-
-                if let notes = report.notes, !notes.isEmpty {
-                    labeledSection("Notes") {
-                        Text(notes)
-                            .font(.body)
-                            .padding(14)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.fill.secondary, in: RoundedRectangle(cornerRadius: 10))
-                    }
-                }
+                header
+                verdict
+                hazardsSection
+                underfootSection
+                notesSection
+                placeSection
             }
-            .padding(.bottom)
+            .padding(.horizontal)
+            .padding(.bottom, 32)
         }
-        // The trail name is the heading above; repeating it here doubled it.
+        // The trail name is the heading below; repeating it here doubled it.
         .navigationTitle("Report")
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        .fullScreenCover(item: $viewerStart) { start in
+            PhotoViewer(images: report.photos, selection: start.index)
+        }
+        #else
+        .sheet(item: $viewerStart) { start in
+            PhotoViewer(images: report.photos, selection: start.index)
+                .frame(minWidth: 640, minHeight: 640)
+        }
         #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -391,37 +322,240 @@ struct TrailConditionDetailView: View {
         .trailReportActionDialogs(actions, onHidden: close)
     }
 
+    // MARK: Header
+
+    /// Trail name, then who wrote it and when: a reader judges a report by its
+    /// author and its age, so both sit right under the name.
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                // The name in full: a navigation title truncates long names
+                // ("Use trail to Mirror Lake…") with no way to read the rest.
+                Text(report.trailName)
+                    .font(.title2.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                if report.isPinned {
+                    Label("Dropped pin", systemImage: "mappin")
+                        .labelStyle(TightLabelStyle())
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                } else if let region = report.trailRegion, !region.isEmpty {
+                    Text(region).font(.subheadline).foregroundStyle(.secondary)
+                }
+            }
+
+            HStack(spacing: 10) {
+                Text(String((authorName ?? "?").prefix(1)).uppercased())
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.tint)
+                    .frame(width: 34, height: 34)
+                    .background(.tint.opacity(0.14), in: Circle())
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(authorName ?? "A hiker")
+                        .font(.subheadline.weight(.semibold))
+                    Text([report.timeAgo, report.writtenDateText].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · "))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .accessibilityElement(children: .combine)
+        }
+    }
+
+    // MARK: Verdict
+
+    private var verdict: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 14) {
+                Image(systemName: report.conditionSymbol)
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(report.conditionTint)
+                    .frame(width: 48, height: 48)
+                    .background(report.conditionTint.opacity(0.15), in: Circle())
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(report.overallCondition.capitalized)
+                        .font(.title3.bold())
+                        .foregroundStyle(report.conditionTint)
+                    Text(report.conditionMeaning)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(16)
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier("trail_report_verdict")
+
+            // Trail conditions change within days; an old report says so here,
+            // next to the verdict it qualifies, not in a footnote.
+            if report.isOlder {
+                Divider().padding(.leading, 16)
+                Label("Written \(report.timeAgo). Conditions may have changed since.", systemImage: "clock.arrow.circlepath")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .accessibilityIdentifier("trail_report_older_notice")
+            }
+        }
+        .background(report.conditionTint.opacity(0.08), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+
+    // MARK: Hazards
+
+    /// What could turn a hiker back. "None reported" is said outright: it's
+    /// information too, and an absent section reads as a missing one.
+    private var hazardsSection: some View {
+        section("Hazards") {
+            if report.hazards.isEmpty {
+                Label("None reported", systemImage: "checkmark.shield")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(report.hazards.enumerated()), id: \.offset) { index, hazard in
+                        if index > 0 { Divider().padding(.leading, 52) }
+                        HStack(spacing: 12) {
+                            Image(systemName: HazardStyle.symbol(for: hazard))
+                                .font(.callout.weight(.semibold))
+                                .foregroundStyle(.orange)
+                                .frame(width: 28, height: 28)
+                                .background(.orange.opacity(0.14), in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+                                .accessibilityHidden(true)
+                            Text(hazard.capitalized)
+                                .font(.body)
+                            Spacer(minLength: 0)
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                    }
+                }
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .accessibilityIdentifier("trail_report_hazards")
+            }
+        }
+    }
+
+    // MARK: Underfoot
+
+    private var underfootSection: some View {
+        section("On the Trail") {
+            HStack(spacing: 10) {
+                factTile(
+                    symbol: report.surfaceStyle?.symbol ?? "road.lanes",
+                    value: report.surfaceStyle?.label ?? (report.surface == "unknown" ? "Not noted" : report.surface.capitalized),
+                    caption: "Surface"
+                )
+                factTile(
+                    symbol: "water.waves",
+                    value: report.waterCrossings == 0
+                        ? "None"
+                        : "\(report.waterCrossings) crossing\(report.waterCrossings == 1 ? "" : "s")",
+                    caption: report.waterCrossingDifficulty.map { "Water · \($0.capitalized)" } ?? "Water crossings"
+                )
+            }
+        }
+    }
+
+    private func factTile(symbol: String, value: String, caption: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Image(systemName: symbol)
+                .font(.title3)
+                .foregroundStyle(.tint)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(value).font(.headline)
+                Text(caption).font(.caption).foregroundStyle(.secondary)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .accessibilityElement(children: .combine)
+    }
+
+    // MARK: Notes
+
+    /// The writer's own account, set as reading text rather than boxed.
+    @ViewBuilder
+    private var notesSection: some View {
+        if let notes = report.notes, !notes.isEmpty {
+            section(authorName.map { "From \($0)" } ?? "Notes") {
+                Text(notes)
+                    .font(.body)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+                    .accessibilityIdentifier("trail_report_notes")
+            }
+        }
+    }
+
+    // MARK: Place
+
+    @ViewBuilder
+    private var placeSection: some View {
+        if showsTrailLink, let trailId = report.trailId {
+            NavigationLink {
+                TrailPageView(trail: TrailSummary(id: trailId, name: report.trailName))
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "figure.hiking")
+                        .font(.callout.weight(.semibold))
+                        .foregroundStyle(.tint)
+                        .frame(width: 32, height: 32)
+                        .background(.tint.opacity(0.14), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("All Reports for This Trail").font(.body)
+                        Text(report.trailName).font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                    }
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(12)
+                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("trail_report_view_trail")
+        } else if report.isPinned, let lat = report.latitude, let lon = report.longitude {
+            section("Where") {
+                Map(initialPosition: .region(MKCoordinateRegion(
+                    center: CLLocationCoordinate2D(latitude: lat, longitude: lon),
+                    latitudinalMeters: 1_500, longitudinalMeters: 1_500
+                ))) {
+                    Marker(report.trailName, coordinate: CLLocationCoordinate2D(latitude: lat, longitude: lon))
+                }
+                .frame(height: 170)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .allowsHitTesting(false)
+                .accessibilityLabel("Map of the dropped pin")
+                .accessibilityIdentifier("trail_report_pin_map")
+            }
+        }
+    }
+
+    private func section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+                .font(.headline)
+                .accessibilityAddTraits(.isHeader)
+            content()
+        }
+    }
+
     /// Leaves a report that's gone: pops it on a phone, clears the iPad detail column.
     private func close() {
         if appState.selectedReportId == report.id { appState.selectedReportId = nil }
         dismiss()
-    }
-
-    private var conditionCard: some View {
-        let color: Color = switch report.overallCondition {
-        case "excellent": .green
-        case "good": .blue
-        case "fair": .orange
-        default: .red
-        }
-        return VStack(spacing: 4) {
-            Image(systemName: report.conditionSymbol)
-                .font(.title2)
-                .foregroundStyle(color)
-            Text(report.overallCondition.capitalized)
-                .font(.caption.bold())
-                .foregroundStyle(color)
-        }
-        .padding(14)
-        .background(color.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
-    }
-
-    private func labeledSection(_ title: String, @ViewBuilder content: () -> some View) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.caption.uppercaseSmallCaps()).foregroundStyle(.secondary)
-            content()
-        }
-        .padding(.horizontal)
     }
 }
 

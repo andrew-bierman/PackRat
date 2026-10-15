@@ -176,20 +176,9 @@ struct TripConditionRow: View {
 
     private var report: TrailConditionReport { item.report }
 
-    private var isOlder: Bool {
-        guard let created = report.writtenAt?.toDate() else { return false }
-        return Date().timeIntervalSince(created) > TripTrailConditionsSection.recentWindow
-    }
+    private var isOlder: Bool { report.isOlder }
 
-    private var color: Color {
-        switch report.overallCondition {
-        case "excellent": .green
-        case "good": .blue
-        case "fair": .orange
-        case "poor": .red
-        default: .secondary
-        }
-    }
+    private var color: Color { report.conditionTint }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -212,17 +201,12 @@ struct TripConditionRow: View {
                     Text(report.overallCondition.capitalized)
                         .font(.callout.weight(.semibold))
                         .foregroundStyle(color)
-                    if isOlder {
-                        Text("Older")
-                            .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(.fill.tertiary, in: Capsule())
-                    }
+                    if isOlder { OlderPill() }
                 }
                 Text(byline)
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                HazardLine(hazards: report.hazards)
                 if let notes = report.notes, !notes.isEmpty {
                     Text(notes)
                         .font(.caption)

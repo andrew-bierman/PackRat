@@ -113,7 +113,7 @@ final class TrailReportActions {
                     }
                 )
             } catch {
-                alert = TrailReportAlert(title: "Couldn't Flag Report", message: error.localizedDescription)
+                alert = TrailReportAlert(title: "Couldn't Flag Report", message: FeedErrorCopy.message(for: error, fallback: "Something went wrong on our end. Please try again."))
             }
         }
     }
@@ -136,7 +136,7 @@ final class TrailReportActions {
                     }
                 )
             } catch {
-                alert = TrailReportAlert(title: "Couldn't Block \(target.hikerName)", message: error.localizedDescription)
+                alert = TrailReportAlert(title: "Couldn't Block \(target.hikerName)", message: FeedErrorCopy.message(for: error, fallback: "Something went wrong on our end. Please try again."))
             }
         }
     }
@@ -148,7 +148,7 @@ final class TrailReportActions {
                 onHidden?()
                 moderation.hideDeleted(target.report)
             } catch {
-                alert = TrailReportAlert(title: "Couldn't Delete Report", message: error.localizedDescription)
+                alert = TrailReportAlert(title: "Couldn't Delete Report", message: FeedErrorCopy.message(for: error, fallback: "Something went wrong on our end. Please try again."))
             }
         }
     }

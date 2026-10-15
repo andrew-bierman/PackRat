@@ -229,20 +229,9 @@ private struct LatestReportCard: View {
 
     private var report: TrailConditionReport { item.report }
 
-    private var isOlder: Bool {
-        guard let created = report.writtenAt?.toDate() else { return false }
-        return Date().timeIntervalSince(created) > TripTrailConditionsSection.recentWindow
-    }
+    private var isOlder: Bool { report.isOlder }
 
-    private var color: Color {
-        switch report.overallCondition {
-        case "excellent": .green
-        case "good": .blue
-        case "fair": .orange
-        case "poor": .red
-        default: .secondary
-        }
-    }
+    private var color: Color { report.conditionTint }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -258,13 +247,7 @@ private struct LatestReportCard: View {
                         Text(report.overallCondition.capitalized)
                             .font(.title3.weight(.semibold))
                             .foregroundStyle(color)
-                        if isOlder {
-                            Text("Older")
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 6).padding(.vertical, 2)
-                                .background(.fill.tertiary, in: Capsule())
-                        }
+                        if isOlder { OlderPill() }
                     }
                     Text(byline)
                         .font(.caption)
@@ -279,8 +262,9 @@ private struct LatestReportCard: View {
 
             if !report.hazards.isEmpty {
                 FlowLayout(report.hazards) { hazard in
-                    Text(hazard.capitalized)
-                        .font(.caption)
+                    Label(hazard.capitalized, systemImage: HazardStyle.symbol(for: hazard))
+                        .labelStyle(TightLabelStyle())
+                        .font(.caption.weight(.medium))
                         .padding(.horizontal, 10).padding(.vertical, 4)
                         .background(.orange.opacity(0.12), in: Capsule())
                         .foregroundStyle(.orange)
