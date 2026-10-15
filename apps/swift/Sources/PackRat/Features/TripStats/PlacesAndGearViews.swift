@@ -175,7 +175,7 @@ struct PlacesListView: View {
 
             Section {
             } footer: {
-                Text("A trip counts in every country and state its location or route passes through. States and provinces are listed for the United States, Canada and Australia. Boundaries from Natural Earth.")
+                Text("A trip counts in every country and state its location or route passes through. States and provinces are listed for the United States, Canada and Australia.")
             }
         }
         .overlay {
@@ -426,7 +426,7 @@ struct IdleGearListView: View {
             }
             Section {
             } footer: {
-                Text("Based on what each trip's linked pack holds now, since PackRat doesn't keep a history of pack contents. Food and other consumables are left out. Gear added in the last year shows up once it has had a year to come along.")
+                Text("Based on the packs linked to your trips. Food and other consumables aren't counted.")
             }
         }
         .overlay {
@@ -443,9 +443,10 @@ struct IdleGearListView: View {
     }
 
     private func row(_ item: IdleGear.Item) -> some View {
-        Button {
-            appState.selectedPackId = item.packId
-            appState.navItem = .packs
+        NavigationLink {
+            if let pack = appState.packsVM.packs.first(where: { $0.id == item.packId }) {
+                PackDetailView(pack: pack, viewModel: appState.packsVM)
+            }
         } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 2) {
@@ -459,11 +460,8 @@ struct IdleGearListView: View {
                         .monospacedDigit()
                         .foregroundStyle(.secondary)
                 }
-                Image(systemName: "chevron.right").font(.caption.weight(.semibold)).foregroundStyle(.tertiary)
             }
-            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
         .accessibilityIdentifier("idle_gear_row_\(item.id)")
     }
 
