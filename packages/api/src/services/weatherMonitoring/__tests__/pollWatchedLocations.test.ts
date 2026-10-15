@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => {
     fetchLocationAlerts: vi.fn(),
     notifyWatchers: vi.fn(),
     captureApiException: vi.fn(),
+    clearHasWatchers: vi.fn(),
     createDbClient: vi.fn(() => {
       const db = {
         tag: (label: string) => {
@@ -40,6 +41,7 @@ const mocks = vi.hoisted(() => {
 vi.mock('@packrat/api/db', () => ({ createDbClient: mocks.createDbClient }));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('../fetchLocationAlerts', () => ({ fetchLocationAlerts: mocks.fetchLocationAlerts }));
+vi.mock('../watcherPresence', () => ({ clearHasWatchers: mocks.clearHasWatchers }));
 vi.mock('../../push/notifyWatchers', () => ({ notifyWatchers: mocks.notifyWatchers }));
 vi.mock('@packrat/db/schema', () => ({
   weatherWatchedLocations: { weatherLocationId: 'weatherLocationId' },
@@ -54,7 +56,8 @@ vi.mock('@packrat/db/schema', () => ({
 
 import { pollWatchedLocations } from '../pollWatchedLocations';
 
-const env = {} as ValidatedEnv;
+const AUTH_KV = {} as KVNamespace;
+const env = { AUTH_KV } as ValidatedEnv;
 
 const NOW = new Date('2026-01-01T12:00:00Z');
 const MINUTE = 60 * 1000;
@@ -127,6 +130,35 @@ describe('pollWatchedLocations', () => {
     expect(mocks.fetchLocationAlerts).toHaveBeenCalledTimes(0);
   });
 
+  it('clears the has-watchers marker when no location is watched, so later ticks skip Postgres', async () => {
+    watching();
+
+    await pollWatchedLocations({ env });
+
+    expect(mocks.clearHasWatchers).toHaveBeenCalledWith(AUTH_KV);
+    expect(mocks.selectFrom).toHaveBeenCalledTimes(0);
+  });
+
+  it('keeps the marker while any location is watched', async () => {
+    await pollWatchedLocations({ env });
+
+    expect(mocks.clearHasWatchers).toHaveBeenCalledTimes(0);
+  });
+
+  it('polls a baseline location a few seconds early, since cron ticks drift', async () => {
+    withState({
+      weatherLocationId: 42,
+      lastAlertIds: [],
+      pollTier: 'baseline',
+      lastPolledAt: new Date(NOW.getTime() - 30 * MINUTE + 5000),
+      activeSince: null,
+    });
+
+    const result = await pollWatchedLocations({ env });
+
+    expect(result).toMatchObject({ checked: 1, skipped: 0 });
+  });
+
   it('polls a location that has never been polled before', async () => {
     const result = await pollWatchedLocations({ env });
 
@@ -143,12 +175,12 @@ describe('pollWatchedLocations', () => {
     expect(result.checked).toBe(2);
   });
 
-  it('skips a baseline location polled less than 20 minutes ago', async () => {
+  it('skips a baseline location polled less than 30 minutes ago', async () => {
     withState({
       weatherLocationId: 42,
       lastAlertIds: [],
       pollTier: 'baseline',
-      lastPolledAt: new Date(NOW.getTime() - 19 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 28 * MINUTE),
       activeSince: null,
     });
 
@@ -158,12 +190,12 @@ describe('pollWatchedLocations', () => {
     expect(mocks.fetchLocationAlerts).toHaveBeenCalledTimes(0);
   });
 
-  it('polls a baseline location once its 20-minute interval has elapsed', async () => {
+  it('polls a baseline location once its 30-minute interval has elapsed', async () => {
     withState({
       weatherLocationId: 42,
       lastAlertIds: [],
       pollTier: 'baseline',
-      lastPolledAt: new Date(NOW.getTime() - 21 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 31 * MINUTE),
       activeSince: null,
     });
 
@@ -172,12 +204,12 @@ describe('pollWatchedLocations', () => {
     expect(result).toMatchObject({ checked: 1, skipped: 0 });
   });
 
-  it('polls an alerting location on the tighter 5-minute interval', async () => {
+  it('polls an alerting location on the tighter 15-minute interval', async () => {
     withState({
       weatherLocationId: 42,
       lastAlertIds: [FLOOD_WARNING_ID],
       pollTier: 'elevated',
-      lastPolledAt: new Date(NOW.getTime() - 6 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 16 * MINUTE),
       activeSince: new Date(NOW.getTime() - 60 * MINUTE),
     });
 
@@ -186,12 +218,12 @@ describe('pollWatchedLocations', () => {
     expect(result).toMatchObject({ checked: 1, skipped: 0 });
   });
 
-  it('skips an alerting location inside its 5-minute interval', async () => {
+  it('skips an alerting location inside its 15-minute interval', async () => {
     withState({
       weatherLocationId: 42,
       lastAlertIds: [FLOOD_WARNING_ID],
       pollTier: 'elevated',
-      lastPolledAt: new Date(NOW.getTime() - 4 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 13 * MINUTE),
       activeSince: new Date(NOW.getTime() - 60 * MINUTE),
     });
 
@@ -235,7 +267,7 @@ describe('pollWatchedLocations', () => {
       weatherLocationId: 42,
       lastAlertIds: [FLOOD_WARNING_ID],
       pollTier: 'elevated',
-      lastPolledAt: new Date(NOW.getTime() - 6 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 16 * MINUTE),
       activeSince: originalActiveSince,
     });
     mocks.fetchLocationAlerts.mockResolvedValue([alert('Flood Warning')]);
@@ -250,7 +282,7 @@ describe('pollWatchedLocations', () => {
       weatherLocationId: 42,
       lastAlertIds: [FLOOD_WARNING_ID],
       pollTier: 'elevated',
-      lastPolledAt: new Date(NOW.getTime() - 6 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 16 * MINUTE),
       activeSince: new Date(NOW.getTime() - 60 * MINUTE),
     });
     mocks.fetchLocationAlerts.mockResolvedValue([alert('Flood Warning')]);
@@ -266,7 +298,7 @@ describe('pollWatchedLocations', () => {
       weatherLocationId: 42,
       lastAlertIds: [FLOOD_WARNING_ID],
       pollTier: 'elevated',
-      lastPolledAt: new Date(NOW.getTime() - 6 * MINUTE),
+      lastPolledAt: new Date(NOW.getTime() - 16 * MINUTE),
       activeSince: new Date(NOW.getTime() - 60 * MINUTE),
     });
     mocks.fetchLocationAlerts.mockResolvedValue([]);

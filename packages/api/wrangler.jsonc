@@ -129,7 +129,7 @@
   // 5-minute granularity; baseline-tier locations are simply skipped inside
   // the handler when not yet due). Handled by the `scheduled` arm in src/index.ts.
   "triggers": {
-    "crons": ["0 9 * * *", "*/5 * * * *"]
+    "crons": ["0 9 * * *", "*/15 * * * *"]
   },
   // OSM / trail database — dedicated Postgres instance with PostGIS.
   // Add a Hyperdrive binding when ready:
@@ -266,7 +266,7 @@
         }
       ],
       "triggers": {
-        "crons": ["0 9 * * *", "*/5 * * * *"]
+        "crons": ["0 9 * * *", "*/15 * * * *"]
       },
       "containers": [
         {

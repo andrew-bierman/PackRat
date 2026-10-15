@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => {
     deleteWhere,
     deleteReturning,
     captureApiException: vi.fn(),
+    markHasWatchers: vi.fn(),
     createDb: vi.fn(() => {
       const db = {
         tag: (label: string) => {
@@ -50,6 +51,9 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
+const AUTH_KV = {} as KVNamespace;
+vi.mock('@packrat/api/utils/env-validation', () => ({ getEnv: () => ({ AUTH_KV }) }));
+vi.mock('../watcherPresence', () => ({ markHasWatchers: mocks.markHasWatchers }));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('@packrat/db/schema', () => ({
   weatherWatchedLocations: {
@@ -195,6 +199,48 @@ describe('addWatchedLocation', () => {
         userId: 'user-1',
         extra: { weatherLocationId: 42 },
       }),
+    );
+  });
+});
+
+describe('has-watchers marker', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.markHasWatchers.mockResolvedValue(undefined);
+  });
+
+  it('is set when a location is added, so the polling cron picks it up', async () => {
+    mocks.insertReturning.mockResolvedValue([storedRow]);
+
+    await addWatchedLocation({ userId: 'user-1', request });
+
+    expect(mocks.markHasWatchers).toHaveBeenCalledWith(AUTH_KV);
+  });
+
+  it('is re-asserted when a non-empty watch list is read', async () => {
+    mocks.selectWhere.mockResolvedValue([storedRow]);
+
+    await listWatchedLocations('user-1');
+
+    expect(mocks.markHasWatchers).toHaveBeenCalledWith(AUTH_KV);
+  });
+
+  it('is left alone when the watch list is empty', async () => {
+    mocks.selectWhere.mockResolvedValue([]);
+
+    await listWatchedLocations('user-1');
+
+    expect(mocks.markHasWatchers).toHaveBeenCalledTimes(0);
+  });
+
+  it('does not fail the add when the marker write fails, but reports it', async () => {
+    mocks.insertReturning.mockResolvedValue([storedRow]);
+    const error = new Error('kv down');
+    mocks.markHasWatchers.mockRejectedValue(error);
+
+    await expect(addWatchedLocation({ userId: 'user-1', request })).resolves.toEqual(storedRow);
+    expect(mocks.captureApiException).toHaveBeenCalledWith(
+      expect.objectContaining({ error, operation: 'weatherMonitoring.markHasWatchers' }),
     );
   });
 });
