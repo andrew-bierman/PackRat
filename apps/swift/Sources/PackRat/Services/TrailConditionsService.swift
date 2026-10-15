@@ -59,6 +59,7 @@ final class TrailConditionsService: Sendable {
         overallCondition: String,
         hazards: [String],
         notes: String?,
+        photos: [String] = [],
         tripId: String? = nil
     ) async throws -> TrailConditionReport {
         try await createReport(
@@ -72,6 +73,7 @@ final class TrailConditionsService: Sendable {
             overallCondition: overallCondition,
             hazards: hazards,
             notes: notes,
+            photos: photos,
             tripId: tripId
         )
     }
@@ -89,6 +91,7 @@ final class TrailConditionsService: Sendable {
         overallCondition: String,
         hazards: [String],
         notes: String?,
+        photos: [String] = [],
         tripId: String? = nil,
         writtenAt: Date? = nil
     ) async throws -> TrailConditionReport {
@@ -106,6 +109,7 @@ final class TrailConditionsService: Sendable {
             overallCondition: overallCondition,
             hazards: hazards.isEmpty ? nil : hazards,
             notes: notes,
+            photos: photos.isEmpty ? nil : photos,
             tripId: tripId,
             localCreatedAt: written,
             localUpdatedAt: written

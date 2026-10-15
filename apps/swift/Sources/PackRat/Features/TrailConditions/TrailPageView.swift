@@ -280,6 +280,11 @@ private struct LatestReportCard: View {
                     .lineLimit(6)
                     .fixedSize(horizontal: false, vertical: true)
             }
+
+            // Part of the link to the report, which is where they open full screen.
+            if !report.photos.isEmpty {
+                ReportPhotoStrip(photos: report.photos, size: 88, opensViewer: false)
+            }
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)

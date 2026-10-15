@@ -477,6 +477,9 @@ final class OutboxService {
                     overallCondition: payload.overallCondition,
                     hazards: payload.hazards ?? [],
                     notes: payload.notes,
+                    // Uploaded keys only: a report migrated from the Expo app
+                    // can still name photos by their path on that device.
+                    photos: (payload.photos ?? []).filter { !$0.hasPrefix("file:") },
                     tripId: payload.tripId,
                     writtenAt: mutation.createdAt
                 )

@@ -224,6 +224,7 @@ struct TripConditionRow: View {
                 }
             }
             Spacer(minLength: 0)
+            ReportPhotoThumbnail(photos: report.photos, size: 48)
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.tertiary)

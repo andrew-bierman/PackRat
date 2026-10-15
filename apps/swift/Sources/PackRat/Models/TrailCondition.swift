@@ -236,6 +236,8 @@ struct CreateTrailConditionRequest: Encodable {
     let overallCondition: String
     let hazards: [String]?
     let notes: String?
+    /// R2 object keys of photos already uploaded.
+    var photos: [String]? = nil
     var tripId: String? = nil
     let localCreatedAt: String
     let localUpdatedAt: String

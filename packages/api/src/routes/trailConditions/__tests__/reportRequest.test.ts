@@ -47,6 +47,22 @@ describe('CreateTrailConditionReportRequestSchema', () => {
   it('rejects a trail id that is not a trail-table uuid', () => {
     expect(issues({ ...base, trailId: 'Half Dome' })).toHaveLength(1);
   });
+
+  it('accepts up to five photos', () => {
+    const photos = ['a', 'b', 'c', 'd', 'e'].map((k) => `user-${k}.jpg`);
+    expect(issues({ ...base, trailId: TRAIL_ID, photos })).toEqual([]);
+  });
+
+  it('rejects a sixth photo', () => {
+    const photos = ['a', 'b', 'c', 'd', 'e', 'f'].map((k) => `user-${k}.jpg`);
+    const result = CreateTrailConditionReportRequestSchema.safeParse({
+      ...base,
+      trailId: TRAIL_ID,
+      photos,
+    });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues.map((i) => i.path.join('.'))).toEqual(['photos']);
+  });
 });
 
 describe('UpdateTrailConditionReportRequestSchema', () => {

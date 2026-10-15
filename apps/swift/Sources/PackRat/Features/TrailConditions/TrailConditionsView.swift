@@ -1,3 +1,4 @@
+import Sentry
 import SwiftUI
 
 // MARK: - List Column
@@ -197,6 +198,14 @@ private struct TrailReportRow: View {
     let authorName: String?
 
     var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            details
+            ReportPhotoThumbnail(photos: report.photos)
+        }
+        .padding(.vertical, 2)
+    }
+
+    private var details: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline) {
                 Text(report.trailName).font(.headline)
@@ -222,7 +231,6 @@ private struct TrailReportRow: View {
                     .lineLimit(2)
             }
         }
-        .padding(.vertical, 2)
     }
 
     private var byline: String {
@@ -305,6 +313,12 @@ struct TrailConditionDetailView: View {
                     .buttonStyle(.plain)
                     .padding(.horizontal)
                     .accessibilityIdentifier("trail_report_view_trail")
+                }
+
+                if !report.photos.isEmpty {
+                    ReportPhotoStrip(photos: report.photos, size: 140)
+                        .contentMargins(.horizontal, 16, for: .scrollContent)
+                        .accessibilityIdentifier("trail_report_photos")
                 }
 
                 if !report.surface.isEmpty {
@@ -393,6 +407,7 @@ struct SubmitTrailConditionView: View {
     /// draft only once the report actually exists (#2721).
     private let onSubmitted: (() -> Void)?
     @Environment(\.dismiss) private var dismiss
+    @Environment(AuthManager.self) private var authManager
 
     @State private var place: ReportPlace?
     @State private var location = TrailReportLocationProvider()
@@ -400,6 +415,9 @@ struct SubmitTrailConditionView: View {
     @State private var condition: String
     @State private var selectedHazards: Set<String> = []
     @State private var notes: String
+    @State private var photos: [DraftPhoto] = []
+    /// "Uploading photo 2 of 3" while photos go up; nil otherwise.
+    @State private var uploadProgress: (completed: Int, total: Int)?
     @State private var isSubmitting = false
     @State private var error: String?
     @FocusState private var isInputFocused: Bool
@@ -500,6 +518,18 @@ struct SubmitTrailConditionView: View {
                         .focused($isInputFocused)
                         .accessibilityIdentifier("trail_report_notes")
                 }
+                ReportPhotoPickerSection(photos: $photos, isLocked: isSubmitting)
+                if let uploadProgress {
+                    Section {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Uploading photo \(min(uploadProgress.completed + 1, uploadProgress.total)) of \(uploadProgress.total)…")
+                                .font(.callout)
+                            ProgressView(value: Double(uploadProgress.completed), total: Double(max(uploadProgress.total, 1)))
+                        }
+                        .padding(.vertical, 4)
+                        .accessibilityIdentifier("trail_report_upload_progress")
+                    }
+                }
                 if let error { Section { InlineErrorView(message: error) } }
             }
             .packRatFormStyle()
@@ -540,7 +570,24 @@ struct SubmitTrailConditionView: View {
         isSubmitting = true
         error = nil
         Task {
-            defer { isSubmitting = false }
+            defer {
+                isSubmitting = false
+                uploadProgress = nil
+            }
+            let photoKeys: [String]
+            do {
+                photoKeys = try await uploadPhotos()
+            } catch {
+                SentrySDK.capture(error: error) { scope in
+                    scope.setTag(value: "trailConditions", key: "feature")
+                    scope.setTag(value: "uploadReportPhotos", key: "action")
+                    scope.setExtra(value: photos.count, key: "photoCount")
+                }
+                // Photos that made it keep their key, so trying again only
+                // sends the rest.
+                self.error = "Your photos didn't upload. Check your connection and try again. Nothing you entered was lost."
+                return
+            }
             do {
                 try await viewModel.submitReport(
                     place: place,
@@ -549,6 +596,7 @@ struct SubmitTrailConditionView: View {
                     overallCondition: condition,
                     hazards: Array(selectedHazards),
                     notes: notes.isEmpty ? nil : notes,
+                    photos: photoKeys,
                     tripId: tripId
                 )
                 // Only now — a draft cleared on a failed submit would lose the
@@ -557,6 +605,39 @@ struct SubmitTrailConditionView: View {
                 dismiss()
             } catch { self.error = error.localizedDescription }
         }
+    }
+
+    /// Uploads the photos not yet uploaded and returns every photo's key, in
+    /// the order the hiker added them.
+    private func uploadPhotos() async throws -> [String] {
+        let pending = photos.filter { $0.uploadedKey == nil }
+        guard !pending.isEmpty else { return photos.compactMap(\.uploadedKey) }
+        guard let userId = authManager.currentUser?.id else { throw PackRatError.unauthorized }
+        var completed = photos.count - pending.count
+        uploadProgress = (completed, photos.count)
+        try await withThrowingTaskGroup(of: (UUID, String).self) { group in
+            for photo in pending {
+                let id = photo.id
+                let jpeg = photo.jpeg
+                group.addTask {
+                    // The presign route requires keys to start with `{userId}-`.
+                    let key = try await UploadService.shared.upload(
+                        data: jpeg,
+                        fileName: "\(userId)-\(UUID().uuidString).jpg",
+                        mimeType: "image/jpeg"
+                    )
+                    return (id, key)
+                }
+            }
+            for try await (id, key) in group {
+                if let index = photos.firstIndex(where: { $0.id == id }) {
+                    photos[index].uploadedKey = key
+                }
+                completed += 1
+                uploadProgress = (completed, photos.count)
+            }
+        }
+        return photos.compactMap(\.uploadedKey)
     }
 }
 

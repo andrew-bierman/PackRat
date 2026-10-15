@@ -55,6 +55,7 @@ final class TrailConditionsViewModel {
         overallCondition: String,
         hazards: [String],
         notes: String?,
+        photos: [String] = [],
         tripId: String? = nil
     ) async throws {
         let coordinate: (latitude: Double, longitude: Double)? = switch place {
@@ -73,6 +74,7 @@ final class TrailConditionsViewModel {
                 overallCondition: overallCondition,
                 hazards: hazards,
                 notes: notes,
+                photos: photos,
                 tripId: tripId
             )
         } catch {
@@ -82,7 +84,8 @@ final class TrailConditionsViewModel {
                 surface: surface,
                 overallCondition: overallCondition,
                 hazards: hazards,
-                notes: notes
+                notes: notes,
+                photos: photos
             )
         }
         searchText = ""
@@ -105,7 +108,8 @@ final class TrailConditionsViewModel {
         surface: String?,
         overallCondition: String,
         hazards: [String],
-        notes: String?
+        notes: String?,
+        photos: [String]
     ) -> TrailConditionReport {
         let now = Date.iso8601Now()
         return TrailConditionReport(
@@ -121,7 +125,7 @@ final class TrailConditionsViewModel {
             waterCrossings: 0,
             waterCrossingDifficulty: nil,
             notes: notes,
-            photos: [],
+            photos: photos,
             userId: nil,
             tripId: nil,
             deleted: false,

@@ -52,7 +52,7 @@ const TrailConditionReportFieldsSchema = z.object({
   waterCrossings: z.number().int().min(0).max(20).optional(),
   waterCrossingDifficulty: WaterCrossingDifficultySchema.optional().nullable(),
   notes: z.string().optional().nullable(),
-  photos: z.array(z.string()).optional(),
+  photos: z.array(z.string().min(1)).max(5).optional(),
   tripId: z.string().optional().nullable(),
   localCreatedAt: z.string().datetime(),
   localUpdatedAt: z.string().datetime(),
