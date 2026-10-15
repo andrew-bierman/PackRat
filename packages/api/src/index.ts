@@ -31,6 +31,7 @@ import { sweepInvalidItemLogs } from '@packrat/api/services/retention/invalidLog
 import { sweepSafetyCheckIns } from '@packrat/api/services/safetyCheckIn/sweep';
 import { pollTripDestinations } from '@packrat/api/services/weatherMonitoring/pollTripDestinations';
 import { pollWatchedLocations } from '@packrat/api/services/weatherMonitoring/pollWatchedLocations';
+import { hasWatchers } from '@packrat/api/services/weatherMonitoring/watcherPresence';
 import type { Env } from '@packrat/api/utils/env-validation';
 import { getEnv, setWorkerEnv } from '@packrat/api/utils/env-validation';
 import {
@@ -567,9 +568,10 @@ const workerHandler = {
           }
           return;
         }
-        if (controller.cron === '*/5 * * * *') {
+        if (controller.cron === '*/15 * * * *') {
           const flags = await listEffectiveFeatureFlags();
-          if (flags[FeatureFlag.EnableWeatherMonitoring]) {
+          // KV marker first: skips the watch-list queries when nobody watches anything.
+          if (flags[FeatureFlag.EnableWeatherMonitoring] && (await hasWatchers(env.AUTH_KV))) {
             const result = await record({
               operation: 'weatherMonitoring.poll',
               tags: { trigger: 'cron' },

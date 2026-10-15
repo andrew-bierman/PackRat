@@ -5,9 +5,15 @@ import { weatherLocationAlertState, weatherWatchedLocations } from '@packrat/db/
 import { notifyWatchers } from '../push/notifyWatchers';
 import { diffAlerts } from './diffAlerts';
 import { fetchLocationAlerts } from './fetchLocationAlerts';
+import { clearHasWatchers } from './watcherPresence';
 
-const BASELINE_INTERVAL_MS = 20 * 60 * 1000;
-const ELEVATED_INTERVAL_MS = 5 * 60 * 1000;
+// Multiples of the 15-minute cron: Neon suspends after 5 idle minutes, so a
+// cron any tighter keeps the database awake around the clock.
+const BASELINE_INTERVAL_MS = 30 * 60 * 1000;
+const ELEVATED_INTERVAL_MS = 15 * 60 * 1000;
+// Cron ticks can land a few seconds early; without slack a location polled on
+// one tick would read as not-yet-due on the next and silently skip a cycle.
+const TICK_SLACK_MS = 60 * 1000;
 
 export type PollResult = {
   /** Distinct watched locations considered this run. */
@@ -39,6 +45,14 @@ export async function pollWatchedLocations({ env }: { env: ValidatedEnv }): Prom
     .selectDistinct({ weatherLocationId: weatherWatchedLocations.weatherLocationId })
     .from(weatherWatchedLocations);
 
+  const result: PollResult = { checked: 0, skipped: 0, failed: 0, notified: 0 };
+
+  // Nobody is watching anything: drop the marker so later runs skip Postgres.
+  if (distinctLocations.length === 0) {
+    await clearHasWatchers(env.AUTH_KV);
+    return result;
+  }
+
   const states = await db
     .tag('weatherMonitoring.listAlertState')
     .select({
@@ -51,12 +65,12 @@ export async function pollWatchedLocations({ env }: { env: ValidatedEnv }): Prom
     .from(weatherLocationAlertState);
   const stateByLocation = new Map(states.map((s) => [s.weatherLocationId, s]));
 
-  const result: PollResult = { checked: 0, skipped: 0, failed: 0, notified: 0 };
-
   for (const { weatherLocationId } of distinctLocations) {
     const state = stateByLocation.get(weatherLocationId);
     const intervalMs = state?.pollTier === 'elevated' ? ELEVATED_INTERVAL_MS : BASELINE_INTERVAL_MS;
-    const dueAt = state?.lastPolledAt ? state.lastPolledAt.getTime() + intervalMs : 0;
+    const dueAt = state?.lastPolledAt
+      ? state.lastPolledAt.getTime() + intervalMs - TICK_SLACK_MS
+      : 0;
 
     if (now.getTime() < dueAt) {
       result.skipped++;
