@@ -12,7 +12,7 @@ export interface SweepResult {
 }
 
 /**
- * Runs every five minutes. Once a check-in's expected return plus grace has
+ * Runs every fifteen minutes. Once a check-in's expected return plus grace has
  * passed, sends the overdue alert to every contact. Runs on the server so the
  * alert goes out even if the phone is dead. (The hour-before reminder is a
  * local notification on the phone, so it arrives with no signal.)
