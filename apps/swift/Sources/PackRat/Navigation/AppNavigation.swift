@@ -266,7 +266,7 @@ struct AppNavigation: View {
     private var sidebar: some View {
         @Bindable var state = appState
         // Trip Stats leaves the sidebar once the user turns it off; Settings turns it back on.
-        let items = NavItem.allCases.filter { $0.isFeatureEnabled && !($0 == .tripStats && appState.tripGoalsVM.isTurnedOff) }
+        let items = NavItem.allCases.filter { $0.isFeatureEnabled }
         return List(items) { item in
             Button {
                 state.navItem = item

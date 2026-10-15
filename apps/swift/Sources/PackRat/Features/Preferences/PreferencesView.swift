@@ -91,7 +91,6 @@ struct PreferencesView: View {
             unitsSection
             notificationSection
             safetySection
-            TripStatsSettingsSection()
             communitySection
             advancedSection
             aboutSection

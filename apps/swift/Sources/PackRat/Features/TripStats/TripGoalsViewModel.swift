@@ -31,11 +31,6 @@ final class TripGoalsViewModel {
             ?? TripStatsSettings()
     }
 
-    /// On once the user says so.
-    var isEnabled: Bool { settings.enabled == true }
-    /// Said no: entry points hide, the logs stay.
-    var isTurnedOff: Bool { settings.enabled == false }
-
     private var canUseRemote: Bool {
         NetworkMonitor.shared.isConnected && KeychainService.shared.sessionToken != nil
     }
@@ -184,12 +179,6 @@ final class TripGoalsViewModel {
     }
 
     // MARK: - Settings
-
-    func setEnabled(_ enabled: Bool, context: ModelContext?) async {
-        var next = settings
-        next.enabled = enabled
-        await saveSettings(next, context: context)
-    }
 
     /// Sets, or with nil clears, why the user was away before the comeback
     /// that started with `tripId`.

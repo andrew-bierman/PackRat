@@ -30,9 +30,7 @@ struct TripStatsView: View {
     var body: some View {
         let stats = stats
         Group {
-            if !appState.tripGoalsVM.isEnabled {
-                TripStatsOptInView()
-            } else if !stats.hasTrips {
+            if !stats.hasTrips {
                 EmptyStateView(
                     "Your Record Starts Here",
                     subtitle: "Once a trip's end date passes, it counts here: nights out, days outdoors, the places you've been and the gear that came along.",
@@ -48,27 +46,19 @@ struct TripStatsView: View {
         }
         .navigationTitle("Trip Stats")
         .toolbar {
-            if appState.tripGoalsVM.isEnabled {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
-                        if let review = yearInReview(stats) {
-                            Button { reviewing = review } label: {
-                                Label("\(String(review.year)) in Review", systemImage: "sparkles")
-                            }
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
+                    if let review = yearInReview(stats) {
+                        Button { reviewing = review } label: {
+                            Label("\(String(review.year)) in Review", systemImage: "sparkles")
                         }
-                        exportMenu
-                        Divider()
-                        Button(role: .destructive) {
-                            Task { await appState.tripGoalsVM.setEnabled(false, context: modelContext) }
-                        } label: {
-                            Label("Turn Off Trip Stats", systemImage: "eye.slash")
-                        }
-                    } label: {
-                        Label("More", systemImage: "ellipsis.circle")
                     }
-                    .accessibilityIdentifier("trip_stats_menu")
+                    exportMenu
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
                 }
+                .accessibilityIdentifier("trip_stats_menu")
             }
         }
         .sheet(item: $sharing) { request in
