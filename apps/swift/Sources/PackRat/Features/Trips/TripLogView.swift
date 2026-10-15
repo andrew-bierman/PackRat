@@ -182,6 +182,7 @@ struct TripLogEditor: View {
     @State private var source: TripLog.Source?
     @State private var summits: [TripSummit] = []
     @State private var trails: [TripTrail] = []
+    @State private var landscape: TripLandscape?
     @State private var showingPeakPicker = false
     @State private var showingTrailPicker = false
     @State private var showingImporter = false
@@ -319,6 +320,18 @@ struct TripLogEditor: View {
                     Text("Total for the whole trip. Leave blank if you don't know.")
                 }
 
+                Section {
+                    Picker("Landscape", selection: $landscape) {
+                        Text(automaticLandscapeLabel).tag(TripLandscape?.none)
+                        ForEach(TripLandscape.allCases) { option in
+                            Label(option.label, systemImage: option.symbol).tag(Optional(option))
+                        }
+                    }
+                    .accessibilityIdentifier("trip_log_landscape")
+                } footer: {
+                    Text("Where this trip counts in Landscapes.")
+                }
+
                 if trip.log != nil {
                     Section {
                         Button("Clear Trip Log", role: .destructive) { confirmingClear = true }
@@ -447,9 +460,24 @@ struct TripLogEditor: View {
         source = log.source
         summits = log.summits
         trails = log.trails
+        landscape = log.landscape
         if log.source == .trail, let length = log.trails.first?.lengthMeters, let distance = log.distanceMeters {
             trailLeg = TrailLeg.allCases.first { abs(Self.distance(length, $0) - distance) < length * 0.01 }
         }
+    }
+
+    /// "Automatic (Mountain)": what the trip reads as with the figures entered so far.
+    private var automaticLandscapeLabel: String {
+        var draft = trip
+        draft.log = TripLog(
+            activities: activities,
+            distanceMeters: parse(distanceText).map(unit.metres(fromDistance:)),
+            elevationGainMeters: parse(elevationText).map(unit.metres(fromElevation:)),
+            route: route,
+            summits: summits
+        )
+        guard let automatic = TripLandscapes.landscape(of: draft) else { return "Automatic" }
+        return "Automatic (\(automatic.label))"
     }
 
     static func distance(_ trailLength: Double, _ leg: TrailLeg) -> Double {
@@ -510,7 +538,8 @@ struct TripLogEditor: View {
             route: route,
             source: source ?? .manual,
             summits: summits,
-            trails: trails
+            trails: trails,
+            landscape: landscape
         )
         Task {
             await viewModel.saveLog(log, for: trip.id, context: modelContext)

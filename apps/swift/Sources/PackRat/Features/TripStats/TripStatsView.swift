@@ -261,6 +261,11 @@ struct TripStatsView: View {
             PlacesCard(places: places, scope: scope)
         }
 
+        let landscapes = TripLandscapes(finished: stats.finished)
+        if !landscapes.isEmpty {
+            LandscapesCard(landscapes: landscapes, scope: scope)
+        }
+
         if isAll {
             ParksCard(record: record, unit: distanceUnit)
             PeaksCard(record: record, unit: distanceUnit)
