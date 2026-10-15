@@ -269,6 +269,7 @@ struct TripStatsView: View {
         if isAll {
             ParksCard(record: record, unit: distanceUnit)
             PeaksCard(record: record, unit: distanceUnit)
+            TrailsCard(record: TripTrailsRecord(finished: stats.finished), unit: distanceUnit)
             LongTrailsCard(progress: trails, unit: distanceUnit) { _ in followingTrail = true }
         }
 
