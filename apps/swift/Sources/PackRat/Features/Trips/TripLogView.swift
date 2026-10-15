@@ -185,12 +185,21 @@ struct TripLogEditor: View {
     @State private var showingPeakPicker = false
     @State private var showingTrailPicker = false
     @State private var showingImporter = false
+    @State private var showingDrawing = false
+    /// How a trail-filled distance was walked; nil once the distance comes from elsewhere.
+    @State private var trailLeg: TrailLeg?
     @State private var importError: String?
     @State private var isSaving = false
     @State private var confirmingClear = false
     @FocusState private var focusedField: Field?
 
     private enum Field { case distance, elevation }
+
+    enum TrailLeg: String, CaseIterable, Identifiable {
+        case oneWay = "One Way"
+        case outAndBack = "Out and Back"
+        var id: String { rawValue }
+    }
 
     private var unit: TripDistanceUnit { TripDistanceUnit(speedUnit: speedUnit) }
     private var routeCoordinates: [CLLocationCoordinate2D] { route.map(Polyline.decode) ?? [] }
@@ -219,6 +228,10 @@ struct TripLogEditor: View {
                         Button("Replace Track", systemImage: "arrow.triangle.2.circlepath") {
                             showingImporter = true
                         }
+                        if source == .manual {
+                            Button("Edit Route on Map", systemImage: "scribble") { showingDrawing = true }
+                                .accessibilityIdentifier("trip_log_edit_route")
+                        }
                         Button("Remove Route", systemImage: "trash", role: .destructive) {
                             route = nil
                             if source == .track { source = .manual }
@@ -230,6 +243,12 @@ struct TripLogEditor: View {
                             Label("Import GPS Track", systemImage: "square.and.arrow.down")
                         }
                         .accessibilityIdentifier("trip_log_import_track")
+                        Button {
+                            showingDrawing = true
+                        } label: {
+                            Label("Draw on Map", systemImage: "scribble")
+                        }
+                        .accessibilityIdentifier("trip_log_draw_route")
                     }
                     if let importError {
                         Text(importError).font(.footnote).foregroundStyle(.red)
@@ -237,7 +256,7 @@ struct TripLogEditor: View {
                 } header: {
                     Text("Route")
                 } footer: {
-                    Text("Export a GPX file from your watch, Strava, AllTrails, Gaia GPS or another app. PackRat reads the distance, climbing and route from it.")
+                    Text("Export a GPX file from your watch, Strava, AllTrails, Gaia GPS or another app. PackRat reads the distance, climbing and route from it. Or tap out the way you went on the map.")
                 }
 
                 Section {
@@ -277,6 +296,19 @@ struct TripLogEditor: View {
                 }
 
                 Section {
+                    if trailLeg != nil, let length = trails.first?.lengthMeters {
+                        Picker("Trail", selection: Binding(
+                            get: { trailLeg ?? .oneWay },
+                            set: { leg in
+                                trailLeg = leg
+                                distanceText = format(unit.distanceValue(Self.distance(length, leg)), digits: 1)
+                            }
+                        )) {
+                            ForEach(TrailLeg.allCases) { Text($0.rawValue).tag($0) }
+                        }
+                        .pickerStyle(.segmented)
+                        .accessibilityIdentifier("trip_log_trail_leg")
+                    }
                     numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
                         .accessibilityIdentifier("trip_log_distance")
                     numberField("Elevation gain", text: $elevationText, symbol: unit.elevationSymbol, field: .elevation)
@@ -348,6 +380,18 @@ struct TripLogEditor: View {
                     Task { await fillFromTrail(picked) }
                 }
             }
+            .sheet(isPresented: $showingDrawing) {
+                RouteDrawingView(
+                    initial: source == .manual ? routeCoordinates : [],
+                    center: trip.location.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) },
+                    unit: unit
+                ) { points in
+                    route = Polyline.encode(points)
+                    source = .manual
+                    trailLeg = nil
+                    distanceText = format(unit.distanceValue(RouteDrawing.distance(points)), digits: 1)
+                }
+            }
             .onAppear(perform: prefill)
         }
         .formSheetSize(minWidth: 520, minHeight: 640)
@@ -403,14 +447,22 @@ struct TripLogEditor: View {
         source = log.source
         summits = log.summits
         trails = log.trails
+        if log.source == .trail, let length = log.trails.first?.lengthMeters, let distance = log.distanceMeters {
+            trailLeg = TrailLeg.allCases.first { abs(Self.distance(length, $0) - distance) < length * 0.01 }
+        }
+    }
+
+    static func distance(_ trailLength: Double, _ leg: TrailLeg) -> Double {
+        leg == .outAndBack ? trailLength * 2 : trailLength
     }
 
     /// The first trail picked on an empty log supplies the route and length,
-    /// which the user can still correct (an out-and-back walks it twice).
+    /// walked one way until the user says it was out and back.
     private func fillFromTrail(_ trail: TripTrail) async {
         guard route == nil, parse(distanceText) == nil else { return }
         if let length = trail.lengthMeters {
             distanceText = format(unit.distanceValue(length), digits: 1)
+            trailLeg = .oneWay
         }
         guard let detail = try? await TrailRegistryService.shared.trail(id: trail.id),
               route == nil, let line = TrailRoute.encoded(detail.parts) else { return }
@@ -439,6 +491,7 @@ struct TripLogEditor: View {
             guard let summary = TrackSummary(points: points) else { throw GPXParser.Failure.noPoints }
             route = summary.route
             source = .track
+            trailLeg = nil
             distanceText = format(unit.distanceValue(summary.distanceMeters), digits: 1)
             if let gain = summary.elevationGainMeters {
                 elevationText = format(unit.elevationValue(gain), digits: 0)
