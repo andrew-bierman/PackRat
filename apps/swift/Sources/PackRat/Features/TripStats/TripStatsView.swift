@@ -6,7 +6,7 @@ import SwiftUI
 /// packs already loaded into `AppState`; nothing here fetches on its own.
 ///
 /// Layout follows big picture → story → detail: the lifetime grid, this year against the same stretch of last year, the monthly
-/// chart, highlights, the map, parks and peaks, then gear. A section with nothing to show is
+/// chart, highlights, the map, countries and states, parks and peaks, then gear. A section with nothing to show is
 /// left out rather than rendered as zeros.
 struct TripStatsView: View {
     @Environment(AppState.self) private var appState
@@ -30,9 +30,7 @@ struct TripStatsView: View {
     var body: some View {
         let stats = stats
         Group {
-            if !appState.tripGoalsVM.isEnabled {
-                TripStatsOptInView()
-            } else if !stats.hasTrips {
+            if !stats.hasTrips {
                 EmptyStateView(
                     "Your Record Starts Here",
                     subtitle: "Once a trip's end date passes, it counts here: nights out, days outdoors, the places you've been and the gear that came along.",
@@ -48,27 +46,19 @@ struct TripStatsView: View {
         }
         .navigationTitle("Trip Stats")
         .toolbar {
-            if appState.tripGoalsVM.isEnabled {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
-                        if let review = yearInReview(stats) {
-                            Button { reviewing = review } label: {
-                                Label("\(String(review.year)) in Review", systemImage: "sparkles")
-                            }
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
+                    if let review = yearInReview(stats) {
+                        Button { reviewing = review } label: {
+                            Label("\(String(review.year)) in Review", systemImage: "sparkles")
                         }
-                        exportMenu
-                        Divider()
-                        Button(role: .destructive) {
-                            Task { await appState.tripGoalsVM.setEnabled(false, context: modelContext) }
-                        } label: {
-                            Label("Turn Off Trip Stats", systemImage: "eye.slash")
-                        }
-                    } label: {
-                        Label("More", systemImage: "ellipsis.circle")
                     }
-                    .accessibilityIdentifier("trip_stats_menu")
+                    exportMenu
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
                 }
+                .accessibilityIdentifier("trip_stats_menu")
             }
         }
         .sheet(item: $sharing) { request in
@@ -266,6 +256,11 @@ struct TripStatsView: View {
             }
         }
 
+        let places = TripPlaces(finished: stats.finished, lifetime: stats.allFinished)
+        if !places.isEmpty {
+            PlacesCard(places: places, scope: scope)
+        }
+
         if isAll {
             ParksCard(record: record, unit: distanceUnit)
             PeaksCard(record: record, unit: distanceUnit)
@@ -277,12 +272,19 @@ struct TripStatsView: View {
             TopGearCard(gear: stats.topGear)
         }
 
+        if isAll {
+            let idle = IdleGear(finished: stats.allFinished, packs: appState.packsVM.packs)
+            if !idle.isEmpty {
+                IdleGearCard(gear: idle, unit: weightUnit)
+            }
+        }
+
         if stats.packWeights.count >= 2 {
             PackWeightCard(points: stats.packWeights, unit: weightUnit)
         }
 
         if !isAll {
-            Text("Goals, parks, peaks and long trails show under All Time.")
+            Text("Goals, parks, peaks, long trails and gear not packed in a year show under All Time.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .center)

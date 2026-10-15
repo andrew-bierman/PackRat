@@ -1,85 +1,5 @@
 import SwiftUI
 
-// MARK: - Opt-in
-
-/// The first visit to Trip Stats, and any visit while it's off: what the
-/// screen shows, who sees it, and one action to turn it on.
-struct TripStatsOptInView: View {
-    @Environment(AppState.self) private var appState
-    @Environment(\.modelContext) private var modelContext
-
-    var body: some View {
-        let goalsVM = appState.tripGoalsVM
-        ScrollView {
-            VStack(spacing: 28) {
-                VStack(spacing: 12) {
-                    Image(systemName: "chart.bar.xaxis")
-                        .font(.system(size: 44, weight: .semibold))
-                        .foregroundStyle(Color.accentColor)
-                        .frame(width: 88, height: 88)
-                        .background(Color.accentColor.opacity(0.12), in: Circle())
-                        .accessibilityHidden(true)
-                    Text("Your Trip Stats")
-                        .font(.largeTitle.weight(.bold))
-                    Text("See what your trips add up to, and set goals for the year ahead.")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-
-                VStack(alignment: .leading, spacing: 18) {
-                    feature("square.grid.2x2.fill", "Your record", "Trips, nights out, days outdoors, distance and climbing, with this year beside last.")
-                    feature("target", "Goals", "Set a target for the year or any stretch of dates, and see if you're ahead of pace.")
-                    feature("map.fill", "Where you've been", "Every finished trip and logged route on one map.")
-                    feature("backpack.fill", "Your gear", "What you pack most, from the packs linked to your trips.")
-                }
-                .frame(maxWidth: 440, alignment: .leading)
-
-                Label {
-                    Text(goalsVM.isTurnedOff
-                        ? "Your trip logs were kept while stats were off. Only you see your stats."
-                        : "Only you see your stats. Nothing is shared unless you share it.")
-                } icon: {
-                    Image(systemName: "lock.fill")
-                }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .frame(maxWidth: 440, alignment: .leading)
-
-                Button {
-                    Task { await goalsVM.setEnabled(true, context: modelContext) }
-                } label: {
-                    Text("Turn On Trip Stats")
-                        .font(.headline)
-                        .frame(maxWidth: 440, minHeight: 50)
-                }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle(radius: 14))
-                .accessibilityIdentifier("trip_stats_turn_on")
-            }
-            .padding(24)
-            .padding(.top, 24)
-            .frame(maxWidth: .infinity)
-        }
-        .accessibilityIdentifier("trip_stats_opt_in")
-    }
-
-    private func feature(_ symbol: String, _ title: String, _ detail: String) -> some View {
-        HStack(alignment: .top, spacing: 14) {
-            Image(systemName: symbol)
-                .font(.title3)
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 32)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.headline)
-                Text(detail).font(.subheadline).foregroundStyle(.secondary)
-            }
-        }
-        .accessibilityElement(children: .combine)
-    }
-}
-
 // MARK: - Goals
 
 /// Current goals as cards, with a quiet invitation when there are none.
@@ -787,28 +707,5 @@ struct ComebackCard: View {
 
     private func rate(_ value: Double) -> String {
         value.formatted(.number.precision(.fractionLength(0...1)))
-    }
-}
-
-// MARK: - Settings
-
-/// The on/off switch in Settings, for turning stats back on after turning
-/// them off from the stats screen. Off keeps every trip log.
-struct TripStatsSettingsSection: View {
-    @Environment(AppState.self) private var appState
-    @Environment(\.modelContext) private var modelContext
-
-    var body: some View {
-        if NavItem.tripStats.isFeatureEnabled {
-            Section {
-                Toggle("Trip Stats", isOn: Binding(
-                    get: { appState.tripGoalsVM.isEnabled },
-                    set: { enabled in Task { await appState.tripGoalsVM.setEnabled(enabled, context: modelContext) } }
-                ))
-                .accessibilityIdentifier("settings_trip_stats_toggle")
-            } footer: {
-                Text("Totals, goals and the map of your finished trips. Turning this off hides them and keeps your trip logs.")
-            }
-        }
     }
 }

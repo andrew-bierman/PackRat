@@ -131,6 +131,8 @@ struct TripStats: Sendable {
     let hasTrips: Bool
     /// Finished trips inside the scope.
     let finished: [FinishedTrip]
+    /// Every finished trip, whatever the scope, oldest first.
+    let allFinished: [FinishedTrip]
     let totals: Totals
     let thisYear: Totals
     /// The same 1 January → today stretch of last year, or nil when the user
@@ -172,6 +174,7 @@ struct TripStats: Sendable {
         .sorted { $0.start < $1.start }
         self.scope = scope
         self.hasTrips = !everyFinished.isEmpty
+        self.allFinished = everyFinished
         self.availableYears = Set(everyFinished.map { calendar.component(.year, from: $0.start) }).sorted(by: >)
         let logged = Set(everyFinished.flatMap { $0.trip.log?.activities ?? [] })
         self.availableActivities = TripActivity.allCases.filter(logged.contains)
@@ -274,7 +277,7 @@ struct TripStats: Sendable {
 
     /// Catalog items are one thing however they're named; hand-typed items
     /// match by name.
-    private static func gearKey(_ item: PackItem) -> String {
+    static func gearKey(_ item: PackItem) -> String {
         if let catalogId = item.catalogItemId { return "catalog:\(catalogId)" }
         return "name:" + item.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }

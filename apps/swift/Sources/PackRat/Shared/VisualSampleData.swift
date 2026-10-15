@@ -392,7 +392,11 @@ enum VisualSampleData {
         // A trip history for Trip Stats, added only when that screen is being
         // exercised so the store screenshots' trip list stays as it was.
         if ProcessInfo.processInfo.arguments.contains("--enable-flag=enableTripStats") {
-            appState.tripsVM.trips += pastTrips(userId: userId, alpinePackId: alpinePack.id, desertPackId: desertPack.id, now: now)
+            let (winterPack, closetPack) = statsPacks(userId: userId, now: now)
+            appState.packsVM.packs += [winterPack, closetPack]
+            appState.tripsVM.trips += pastTrips(
+                userId: userId, alpinePackId: alpinePack.id, desertPackId: desertPack.id, winterPackId: winterPack.id, now: now
+            )
             appState.tripGoalsVM.applySample(goals: sampleGoals(), entries: sampleEntries())
         }
         appState.tripsVM.isCacheLoaded = true
@@ -664,7 +668,8 @@ enum VisualSampleData {
         quantity: Int = 1,
         category: String,
         consumable: Bool = false,
-        worn: Bool = false
+        worn: Bool = false,
+        createdAt: String = Date.iso8601Now()
     ) -> PackItem {
         PackItem(
             id: id,
@@ -684,7 +689,7 @@ enum VisualSampleData {
             deleted: false,
             isAIGenerated: false,
             templateItemId: nil,
-            createdAt: Date.iso8601Now(),
+            createdAt: createdAt,
             updatedAt: Date.iso8601Now()
         )
     }
@@ -825,7 +830,39 @@ enum VisualSampleData {
         ]
     }
 
-    private static func pastTrips(userId: String?, alpinePackId: String, desertPackId: String, now: String) -> [Trip] {
+    /// Gear for "Not Packed in a Year": a winter kit last out on a trip
+    /// twenty months ago, and a packrafting kit that has never been on one
+    /// (added two years ago), plus new poles too recent to judge.
+    private static func statsPacks(userId: String?, now: String) -> (winter: Pack, closet: Pack) {
+        let twoYearsAgo = Calendar.current.date(byAdding: .year, value: -2, to: Date())?.iso8601String() ?? now
+        let winter = Pack(
+            id: "visual-pack-winter", userId: userId, name: "Winter Overnight",
+            description: "Snow camping kit.", category: .winter, isPublic: false, image: nil,
+            tags: ["winter"], templateId: nil, deleted: false, isAIGenerated: false,
+            items: [
+                packItem("visual-item-snowshoes", packId: "visual-pack-winter", name: "Snowshoes", weight: 1_840, category: "travel", createdAt: twoYearsAgo),
+                packItem("visual-item-zero-bag", packId: "visual-pack-winter", name: "0°F Sleeping Bag", weight: 1_380, category: "sleep", createdAt: twoYearsAgo),
+                packItem("visual-item-parka", packId: "visual-pack-winter", name: "Insulated Parka", weight: 620, category: "clothing", createdAt: twoYearsAgo),
+                packItem("visual-item-winter-stove", packId: "visual-pack-winter", name: "Titanium Stove", weight: 74, category: "kitchen", createdAt: twoYearsAgo),
+            ],
+            totalWeight: 3_914, baseWeight: 3_914, wornWeight: 0, consumableWeight: 0, createdAt: twoYearsAgo, updatedAt: now
+        )
+        let closet = Pack(
+            id: "visual-pack-packraft", userId: userId, name: "Packrafting Kit",
+            description: "For the river trip that keeps getting postponed.", category: .waterSports, isPublic: false, image: nil,
+            tags: ["water"], templateId: nil, deleted: false, isAIGenerated: false,
+            items: [
+                packItem("visual-item-packraft", packId: "visual-pack-packraft", name: "Packraft", weight: 1_300, category: "water", createdAt: twoYearsAgo),
+                packItem("visual-item-paddle", packId: "visual-pack-packraft", name: "Four-Piece Paddle", weight: 900, category: "water", createdAt: twoYearsAgo),
+                packItem("visual-item-pfd", packId: "visual-pack-packraft", name: "Inflatable PFD", weight: 600, category: "safety", createdAt: twoYearsAgo),
+                packItem("visual-item-poles", packId: "visual-pack-packraft", name: "Carbon Trekking Poles", weight: 290, category: "travel"),
+            ],
+            totalWeight: 3_090, baseWeight: 3_090, wornWeight: 0, consumableWeight: 0, createdAt: twoYearsAgo, updatedAt: now
+        )
+        return (winter, closet)
+    }
+
+    private static func pastTrips(userId: String?, alpinePackId: String, desertPackId: String, winterPackId: String, now: String) -> [Trip] {
         let samples: [(String, String, Double, Double, Int, Int, String?)] = [
             ("Mount Rainier Wonderland", "Ashford, WA", 46.786, -121.735, -20, 4, alpinePackId),
             // Three months and more before Rainier, so the stats screen shows a comeback.
@@ -837,6 +874,10 @@ enum VisualSampleData {
             ("North Cascades Day Hike", "Marblemount, WA", 48.771, -121.298, -420, 0, nil),
             ("Torres del Paine W Trek", "Puerto Natales, Chile", -50.942, -73.406, -500, 4, alpinePackId),
             ("PCT: Snoqualmie to Stevens Pass", "Snoqualmie Pass, WA", 47.425, -121.414, -70, 5, alpinePackId),
+            // Canada, and the winter kit's last outing.
+            ("Lake O'Hara Snowshoe Huts", "Yoho, BC", 51.355, -116.334, -600, 2, winterPackId),
+            // A loop over the state line, so the route counts in two states.
+            ("Tahoe Rim Trail: Stateline Loop", "Stateline, NV", 38.962, -119.940, -230, 3, alpinePackId),
         ]
         // Logs for most trips, leaving two unlogged so the screen shows
         // figures that count only the trips holding them.
@@ -855,6 +896,8 @@ enum VisualSampleData {
             ]),
             nil,
             trailSectionLog("PCT", fromLatitude: 47.39, toLatitude: 47.75, gain: 4_900),
+            sampleLog([.camping], km: 16, gain: 450, lat: 51.355, lon: -116.334),
+            sampleLog([.backpacking], km: 52, gain: 2_100, lat: 38.962, lon: -119.940),
         ]
         return samples.enumerated().map { index, sample in
             let start = Calendar.current.date(byAdding: .day, value: sample.4, to: Date())
