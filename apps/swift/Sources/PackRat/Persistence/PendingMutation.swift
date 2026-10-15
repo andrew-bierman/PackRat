@@ -228,8 +228,13 @@ struct TrailConditionReportMutationPayload: Codable, Sendable {
     var waterCrossings: Bool?
     var waterCrossingDifficulty: String?
     var notes: String?
+    /// Uploaded keys, and `pending-photo:` entries for photos still on the
+    /// device (see `PendingReportPhotos`), in the order the hiker added them.
     var photos: [String]?
     var tripId: String?
+    /// Who owns the pending photos. Upload keys must start with it, and the
+    /// outbox has no signed-in user of its own to ask.
+    var photoOwnerId: String? = nil
 
     init(
         trailId: String? = nil,
@@ -244,8 +249,10 @@ struct TrailConditionReportMutationPayload: Codable, Sendable {
         waterCrossingDifficulty: String? = nil,
         notes: String? = nil,
         photos: [String]? = nil,
-        tripId: String? = nil
+        tripId: String? = nil,
+        photoOwnerId: String? = nil
     ) {
+        self.photoOwnerId = photoOwnerId
         self.trailId = trailId
         self.trailName = trailName
         self.trailRegion = trailRegion

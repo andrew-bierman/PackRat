@@ -171,7 +171,7 @@ struct TrailReportMenuItems: View {
     private var target: TrailReportActions.Target { .init(report: report, authorName: authorName) }
 
     private var isMine: Bool {
-        report.id.hasPrefix("local-") || report.userId == authManager.currentUser?.id
+        report.userId == authManager.currentUser?.id
     }
 
     var body: some View {

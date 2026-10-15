@@ -85,6 +85,18 @@ struct OlderPill: View {
     }
 }
 
+/// A report saved on the device that goes out once there's signal.
+struct WaitingToSendPill: View {
+    var body: some View {
+        Label("Waiting to send", systemImage: "icloud.slash")
+            .font(.caption2.weight(.semibold))
+            .foregroundStyle(.orange)
+            .padding(.horizontal, 6).padding(.vertical, 2)
+            .background(.orange.opacity(0.12), in: Capsule())
+            .accessibilityIdentifier("trail_report_waiting_to_send")
+    }
+}
+
 /// A row's hazards on one line, so a list can be scanned for what would turn
 /// someone back before opening anything.
 struct HazardLine: View {

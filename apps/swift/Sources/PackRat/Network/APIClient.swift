@@ -48,6 +48,8 @@ actor APIClient {
     static func resolvedImageURL(_ value: String?) -> URL? {
         guard let value, !value.isEmpty else { return nil }
         if value.hasPrefix("http") { return URL(string: value) }
+        // Photos of a report still waiting to send live on the device.
+        if value.hasPrefix("file:") { return URL(string: value) }
         return URL(string: "\(r2PublicURL)/\(value)")
     }
 

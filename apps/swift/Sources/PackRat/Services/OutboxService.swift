@@ -465,7 +465,7 @@ final class OutboxService {
                 try await templateService.deleteItem(mutation.entityId)
 
             case (.trailConditionReport, .create):
-                let payload: TrailConditionReportMutationPayload = try decode(mutation.payload)
+                let payload = try await uploadPendingPhotos(of: mutation)
                 _ = try await trailConditionsService.createReport(
                     id: mutation.entityId,
                     trailId: payload.trailId,
@@ -483,8 +483,10 @@ final class OutboxService {
                     tripId: payload.tripId,
                     writtenAt: mutation.createdAt
                 )
+                PendingReportPhotos.remove(reportId: mutation.entityId)
             case (.trailConditionReport, .delete):
                 try await trailConditionsService.deleteReport(mutation.entityId)
+                PendingReportPhotos.remove(reportId: mutation.entityId)
             case (.trailConditionReport, .update):
                 // No update endpoint exists on the Swift client, and nothing enqueues
                 // one — reports are create-or-delete here. Dropping rather than
@@ -519,6 +521,41 @@ final class OutboxService {
         } catch {
             return classify(error, operation: operation)
         }
+    }
+
+    /// Uploads a queued report's photos that are still on the device, writing
+    /// each key back into the queued payload as it lands so a retry only sends
+    /// the rest. A photo whose file is gone is dropped rather than failing the
+    /// whole report.
+    private func uploadPendingPhotos(of mutation: PendingMutation) async throws -> TrailConditionReportMutationPayload {
+        var payload: TrailConditionReportMutationPayload = try decode(mutation.payload)
+        guard let photos = payload.photos, photos.contains(where: PendingReportPhotos.isPending) else {
+            return payload
+        }
+        var sent: [String] = []
+        for entry in photos {
+            guard PendingReportPhotos.isPending(entry) else {
+                sent.append(entry)
+                continue
+            }
+            guard let jpeg = PendingReportPhotos.data(for: entry) else { continue }
+            guard let ownerId = payload.photoOwnerId else {
+                throw PackRatError.httpError(statusCode: 400, message: "Queued photos have no owner")
+            }
+            // The presign route requires keys to start with `{userId}-`.
+            let key = try await UploadService.shared.upload(
+                data: jpeg,
+                fileName: "\(ownerId)-\(UUID().uuidString).jpg",
+                mimeType: "image/jpeg"
+            )
+            sent.append(key)
+            var progress = payload
+            progress.photos = sent + photos.drop(while: { $0 != entry }).dropFirst()
+            mutation.payload = Self.encode(progress)
+        }
+        payload.photos = sent
+        mutation.payload = Self.encode(payload)
+        return payload
     }
 
     /// Decides whether a replay failure is worth retrying.

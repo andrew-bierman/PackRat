@@ -70,6 +70,11 @@ struct TrailConditionsListView: View {
             }
         }
         .task { if authManager.isAuthenticated && viewModel.reports.isEmpty { await viewModel.load() } }
+        // A queued report that just sent picks up its place in the feed.
+        .onChange(of: OutboxService.shared.pendingCount) { old, new in
+            guard new < old, !viewModel.pendingIds.isEmpty, authManager.isAuthenticated else { return }
+            Task { await viewModel.load() }
+        }
         .refreshable { if authManager.isAuthenticated { await viewModel.load() } }
         .sheet(isPresented: $showingSubmitSheet) {
             SubmitTrailConditionView(viewModel: viewModel)
@@ -94,10 +99,10 @@ struct TrailConditionsListView: View {
                 NavigationLink {
                     TrailConditionDetailView(report: report, authorName: viewModel.authorNames[report.id])
                 } label: {
-                    TrailReportRow(report: report, authorName: viewModel.authorNames[report.id])
+                    TrailReportRow(report: report, authorName: viewModel.authorNames[report.id], isWaiting: viewModel.pendingIds.contains(report.id))
                 }
             } else {
-                TrailReportRow(report: report, authorName: viewModel.authorNames[report.id])
+                TrailReportRow(report: report, authorName: viewModel.authorNames[report.id], isWaiting: viewModel.pendingIds.contains(report.id))
             }
         }
         .tag(report.id)
@@ -203,6 +208,7 @@ private struct WatchTrailDraftRow: View {
 private struct TrailReportRow: View {
     let report: TrailConditionReport
     let authorName: String?
+    var isWaiting = false
 
     var body: some View {
         // Photos go under the words, as review lists do: a thumbnail on only
@@ -239,6 +245,7 @@ private struct TrailReportRow: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 if report.isOlder { OlderPill() }
+                if isWaiting { WaitingToSendPill() }
             }
             HazardLine(hazards: report.hazards)
             if let notes = report.notes, !notes.isEmpty {
@@ -734,19 +741,24 @@ struct SubmitTrailConditionView: View {
                 isSubmitting = false
                 uploadProgress = nil
             }
-            let photoKeys: [String]
-            do {
-                photoKeys = try await uploadPhotos()
-            } catch {
-                SentrySDK.capture(error: error) { scope in
-                    scope.setTag(value: "trailConditions", key: "feature")
-                    scope.setTag(value: "uploadReportPhotos", key: "action")
-                    scope.setExtra(value: photos.count, key: "photoCount")
+            // Without signal the photos wait on the device with the report.
+            if NetworkMonitor.shared.isConnected {
+                do {
+                    try await uploadPhotos()
+                } catch {
+                    SentrySDK.capture(error: error) { scope in
+                        scope.setTag(value: "trailConditions", key: "feature")
+                        scope.setTag(value: "uploadReportPhotos", key: "action")
+                        scope.setExtra(value: photos.count, key: "photoCount")
+                    }
+                    // A photo the server refuses won't go later either. Any
+                    // other failure queues the report with the photos that
+                    // didn't make it.
+                    if case .terminal = OutboxService.shared.classify(error, operation: .create) {
+                        self.error = "Your photos didn't upload. Try again, or remove a photo. Nothing you entered was lost."
+                        return
+                    }
                 }
-                // Photos that made it keep their key, so trying again only
-                // sends the rest.
-                self.error = "Your photos didn't upload. Check your connection and try again. Nothing you entered was lost."
-                return
             }
             do {
                 try await viewModel.submitReport(
@@ -756,7 +768,8 @@ struct SubmitTrailConditionView: View {
                     overallCondition: condition,
                     hazards: Array(selectedHazards),
                     notes: notes.isEmpty ? nil : notes,
-                    photos: photoKeys,
+                    photos: photos.map { $0.uploadedKey.map(ReportPhotoInput.uploaded) ?? .local($0.jpeg) },
+                    photoOwnerId: authManager.currentUser?.id,
                     tripId: tripId
                 )
                 // Only now — a draft cleared on a failed submit would lose the
@@ -767,11 +780,11 @@ struct SubmitTrailConditionView: View {
         }
     }
 
-    /// Uploads the photos not yet uploaded and returns every photo's key, in
-    /// the order the hiker added them.
-    private func uploadPhotos() async throws -> [String] {
+    /// Uploads the photos not yet uploaded. Each keeps its key as it lands, so
+    /// a retry, or the queue, only sends the rest.
+    private func uploadPhotos() async throws {
         let pending = photos.filter { $0.uploadedKey == nil }
-        guard !pending.isEmpty else { return photos.compactMap(\.uploadedKey) }
+        guard !pending.isEmpty else { return }
         guard let userId = authManager.currentUser?.id else { throw PackRatError.unauthorized }
         var completed = photos.count - pending.count
         uploadProgress = (completed, photos.count)
@@ -797,7 +810,6 @@ struct SubmitTrailConditionView: View {
                 uploadProgress = (completed, photos.count)
             }
         }
-        return photos.compactMap(\.uploadedKey)
     }
 }
 
