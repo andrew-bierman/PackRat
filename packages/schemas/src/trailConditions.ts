@@ -85,6 +85,37 @@ export const FlagTrailConditionReportRequestSchema = z.object({
   reason: TrailConditionFlagReasonSchema,
 });
 
+// Admin moderation queue: one row per flagged report.
+const AdminPersonSchema = z.object({
+  id: z.string(),
+  firstName: z.string().nullable(),
+  lastName: z.string().nullable(),
+  avatarUrl: z.string().nullable().optional(),
+});
+
+export const AdminTrailFlagSchema = z.object({
+  reportId: z.string(),
+  trailId: z.string().nullable(),
+  trailName: z.string(),
+  overallCondition: z.string(),
+  hazards: z.array(z.string()),
+  notes: z.string().nullable(),
+  photos: z.array(z.string()),
+  author: AdminPersonSchema,
+  writtenAt: z.string().datetime(),
+  flagCount: z.number().int(),
+  reasons: z.array(TrailConditionFlagReasonSchema),
+  reporters: z.array(AdminPersonSchema),
+  firstFlaggedAt: z.string().datetime(),
+  lastFlaggedAt: z.string().datetime(),
+});
+
+export const AdminTrailFlagsResponseSchema = z.object({
+  items: z.array(AdminTrailFlagSchema),
+});
+
+export type AdminTrailFlag = z.infer<typeof AdminTrailFlagSchema>;
+
 // ── Trails (PackRat-owned trail table on the trail database) ─────────
 
 export const TrailRowSchema = z.object({
