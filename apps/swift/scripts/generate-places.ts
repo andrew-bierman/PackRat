@@ -72,7 +72,7 @@ function rings(geometry: Geometry | null): Ring[] {
 }
 
 /** Distance from point p to the segment [a, b]. */
-function perpendicular(p: number[], [a, b]: [number[], number[]]): number {
+function perpendicular({ p, a, b }: { p: number[]; a: number[]; b: number[] }): number {
   const [px = 0, py = 0] = p;
   const [ax = 0, ay = 0] = a;
   const [bx = 0, by = 0] = b;
@@ -84,7 +84,7 @@ function perpendicular(p: number[], [a, b]: [number[], number[]]): number {
 }
 
 /** Iterative Douglas-Peucker, keeping both ends. */
-function simplify(points: Ring, tolerance: number): Ring {
+function simplify({ points, tolerance }: { points: Ring; tolerance: number }): Ring {
   if (points.length <= 3) return points;
   const keep = new Uint8Array(points.length);
   keep[0] = 1;
@@ -95,7 +95,11 @@ function simplify(points: Ring, tolerance: number): Ring {
     let worst = -1;
     let worstDistance = tolerance;
     for (let i = first + 1; i < last; i++) {
-      const d = perpendicular(points[i] ?? [], [points[first] ?? [], points[last] ?? []]);
+      const d = perpendicular({
+        p: points[i] ?? [],
+        a: points[first] ?? [],
+        b: points[last] ?? [],
+      });
       if (d > worstDistance) {
         worst = i;
         worstDistance = d;
@@ -123,7 +127,7 @@ function simplifyRing(ring: Ring): Ring {
   const scale = Math.max(Math.cos((meanLat * Math.PI) / 180), 0.05);
   const scaled = ring.map(([lng = 0, lat = 0]) => [lng * scale, lat]);
   for (const tolerance of [TOLERANCE, TOLERANCE / 4, 0]) {
-    const kept = new Set(tolerance === 0 ? scaled : simplify(scaled, tolerance));
+    const kept = new Set(tolerance === 0 ? scaled : simplify({ points: scaled, tolerance }));
     const out = ring.filter((_, i) => kept.has(scaled[i] as number[]));
     if (out.length >= 4) return out;
   }
