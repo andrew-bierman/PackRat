@@ -35,6 +35,7 @@ export const tripTrailConditionRoutes = new Elysia().use(authPlugin).get(
     const result = await getTripTrailConditions({
       db,
       trailDb: trailDbOrNull(),
+      viewerId: user.userId,
       trip: {
         id: trip.id,
         trailId: trip.trailId,

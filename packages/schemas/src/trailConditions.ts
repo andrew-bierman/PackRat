@@ -79,6 +79,12 @@ export const UpdateTrailConditionReportRequestSchema = TrailConditionReportField
   longitude: true,
 }).partial();
 
+// Flagging someone else's report for review. Hidden from the flagger at once.
+export const TrailConditionFlagReasonSchema = z.enum(['inaccurate', 'offensive', 'spam']);
+export const FlagTrailConditionReportRequestSchema = z.object({
+  reason: TrailConditionFlagReasonSchema,
+});
+
 // ── Trails (PackRat-owned trail table on the trail database) ─────────
 
 export const TrailRowSchema = z.object({

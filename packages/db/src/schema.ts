@@ -608,6 +608,43 @@ export const trailConditionReports = pgTable(
   }),
 );
 
+export const trailConditionFlagReasonEnum = pgEnum('trail_condition_flag_reason', [
+  'inaccurate',
+  'offensive',
+  'spam',
+]);
+export const trailConditionFlagStatusEnum = pgEnum('trail_condition_flag_status', [
+  'pending',
+  'dismissed',
+  'removed',
+]);
+
+// A hiker flagging someone else's trail report for PackRat to review. The
+// report disappears for the flagger at once; review decides it for everyone.
+export const trailConditionReportFlags = pgTable(
+  'trail_condition_report_flags',
+  {
+    id: serial('id').primaryKey(),
+    reporterId: text('reporter_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    reportId: text('report_id')
+      .references(() => trailConditionReports.id, { onDelete: 'cascade' })
+      .notNull(),
+    reason: trailConditionFlagReasonEnum('reason').notNull(),
+    status: trailConditionFlagStatusEnum('status').default('pending').notNull(),
+    reviewedAt: timestamp('reviewed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    unique('trail_condition_report_flags_reporter_report_unique').on(
+      table.reporterId,
+      table.reportId,
+    ),
+    index('trail_condition_report_flags_status_idx').on(table.status),
+  ],
+);
+
 /**
  * What actually happened on a finished trip, read back by trip stats. Distances
  * and elevations are metres whatever the user's display unit. `route` is a
@@ -962,6 +999,7 @@ export type NewPackTemplate = InferInsertModel<typeof packTemplates>;
 export type PackTemplateItem = InferSelectModel<typeof packTemplateItems>;
 export type NewPackTemplateItem = InferInsertModel<typeof packTemplateItems>;
 export type TrailConditionReport = InferSelectModel<typeof trailConditionReports>;
+export type TrailConditionReportFlag = InferSelectModel<typeof trailConditionReportFlags>;
 export type NewTrailConditionReport = InferInsertModel<typeof trailConditionReports>;
 export type Trip = InferSelectModel<typeof trips>;
 export type NewTrip = InferInsertModel<typeof trips>;

@@ -1,5 +1,6 @@
 import type { createDb } from '@packrat/api/db';
 import { queryRows } from '@packrat/api/db/queryRows';
+import { visibleToViewer } from '@packrat/api/services/reportVisibility';
 import type { TrailDb } from '@packrat/api/services/trailIndex';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import { type TrailConditionReport as ReportRow, trailConditionReports } from '@packrat/db/schema';
@@ -98,13 +99,17 @@ export async function getTripTrailConditions({
   db,
   trailDb,
   trip,
+  viewerId,
 }: {
   db: Db;
   /** Null when the trail database isn't configured; nearby then means pins only. */
   trailDb: TrailDb | null;
   trip: { id: string; trailId: string | null; location: Point | null };
+  /** Whose view this is: their flags and blocks hide reports. */
+  viewerId: string;
 }): Promise<TripTrailConditions> {
-  const active = eq(trailConditionReports.deleted, false);
+  // biome-ignore lint/style/noNonNullAssertion: and() of defined conditions is never undefined
+  const active = and(eq(trailConditionReports.deleted, false), visibleToViewer({ db, viewerId }))!;
 
   if (trip.trailId) {
     const reports = await db

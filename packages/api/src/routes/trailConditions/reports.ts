@@ -1,11 +1,13 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
 import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
+import { visibleToViewer } from '@packrat/api/services/reportVisibility';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import type { NewTrailConditionReport } from '@packrat/db/schema';
-import { trailConditionReports } from '@packrat/db/schema';
+import { trailConditionReportFlags, trailConditionReports } from '@packrat/db/schema';
 import {
   CreateTrailConditionReportRequestSchema,
+  FlagTrailConditionReportRequestSchema,
   UpdateTrailConditionReportRequestSchema,
 } from '@packrat/schemas/trailConditions';
 import { and, desc, eq, gte, ilike, type SQL } from 'drizzle-orm';
@@ -38,17 +40,21 @@ export function toReportResponse(row: Record<string, unknown>): Record<string, u
 export const trailConditionRoutes = new Elysia()
   .model({
     'trailConditions.CreateTrailConditionReportRequest': CreateTrailConditionReportRequestSchema,
+    'trailConditions.FlagTrailConditionReportRequest': FlagTrailConditionReportRequestSchema,
     'trailConditions.UpdateTrailConditionReportRequest': UpdateTrailConditionReportRequestSchema,
   })
   .use(authPlugin)
   .get(
     '/',
-    async ({ query }) => {
+    async ({ query, user }) => {
       const db = createDb();
       const { trailId, trailName, limit } = query;
 
       try {
-        const conditions = [eq(trailConditionReports.deleted, false)];
+        const conditions = [
+          eq(trailConditionReports.deleted, false),
+          visibleToViewer({ db, viewerId: user.userId }),
+        ];
         if (trailId) conditions.push(eq(trailConditionReports.trailId, trailId));
         if (trailName) {
           const normalized = trailName.trim();
@@ -293,6 +299,44 @@ export const trailConditionRoutes = new Elysia()
       detail: {
         tags: ['Trail Conditions'],
         summary: 'Update a trail condition report',
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  .post(
+    '/:reportId/flag',
+    async ({ params, body, user }) => {
+      const db = createDb();
+      const [report] = await db
+        .tag('trailConditions.findFlagTarget')
+        .select({ userId: trailConditionReports.userId })
+        .from(trailConditionReports)
+        .where(
+          and(
+            eq(trailConditionReports.id, params.reportId),
+            eq(trailConditionReports.deleted, false),
+          ),
+        )
+        .limit(1);
+      if (!report) return status(404, { error: 'Report not found' });
+      if (report.userId === user.userId) {
+        return status(400, { error: 'You cannot flag your own report' });
+      }
+      // Flagging twice is a no-op: the first reason stands.
+      await db
+        .tag('trailConditions.flagReport')
+        .insert(trailConditionReportFlags)
+        .values({ reporterId: user.userId, reportId: params.reportId, reason: body.reason })
+        .onConflictDoNothing();
+      return { success: true };
+    },
+    {
+      params: z.object({ reportId: z.string() }),
+      body: 'trailConditions.FlagTrailConditionReportRequest',
+      isAuthenticated: true,
+      detail: {
+        tags: ['Trail Conditions'],
+        summary: "Flag someone else's report for review; hides it for you",
         security: [{ bearerAuth: [] }],
       },
     },

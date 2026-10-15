@@ -1,6 +1,7 @@
 import { createDb, createOsmDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
 import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
+import { visibleToViewer } from '@packrat/api/services/reportVisibility';
 import { getTrail, searchTrails } from '@packrat/api/services/trailIndex';
 import { trailConditionReports } from '@packrat/db/schema';
 import { and, desc, eq } from 'drizzle-orm';
@@ -94,7 +95,7 @@ export const trailIndexRoutes = new Elysia({ prefix: '/trails' })
    */
   .get(
     '/:trailId/reports',
-    async ({ params }) => {
+    async ({ params, user }) => {
       const db = createDb();
       const reports = await db
         .tag('trailConditions.trailReports')
@@ -104,6 +105,7 @@ export const trailIndexRoutes = new Elysia({ prefix: '/trails' })
           and(
             eq(trailConditionReports.deleted, false),
             eq(trailConditionReports.trailId, params.trailId),
+            visibleToViewer({ db, viewerId: user.userId }),
           ),
         )
         .orderBy(desc(trailConditionReports.localCreatedAt))
