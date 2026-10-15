@@ -529,6 +529,8 @@
     "selectedPack": "Selected Pack",
     "change": "Change",
     "quantity": "Quantity",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
     "notes": "Notes",
     "notesPlaceholder": "Add any notes about this item...",
     "category": "Category",
