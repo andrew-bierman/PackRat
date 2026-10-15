@@ -13,6 +13,7 @@ struct TripTrailConditionsSection: View {
     @State private var loadFailed = false
     @State private var showingSubmit = false
     @State private var moderation = TrailReportModeration.shared
+    @State private var actions = TrailReportActions()
 
     private let service = TrailConditionsService.shared
 
@@ -35,6 +36,7 @@ struct TripTrailConditionsSection: View {
                 content
             }
             .padding(.horizontal)
+            .trailReportActionDialogs(actions)
             .task(id: loadKey) { await load() }
             .sheet(isPresented: $showingSubmit) {
                 SubmitTrailConditionView(
@@ -91,6 +93,9 @@ struct TripTrailConditionsSection: View {
                             TripConditionRow(item: item, showsTrail: response.scope == .nearby)
                         }
                         .buttonStyle(.plain)
+                        .contextMenu {
+                            TrailReportMenuItems(report: item.report, authorName: item.authorName, actions: actions)
+                        }
                         .accessibilityIdentifier("trip_trail_condition_\(item.id)")
                     }
                 }

@@ -10,6 +10,7 @@ struct TrailConditionsListView: View {
     @Environment(AuthManager.self) private var authManager
     @State private var showingSubmitSheet = false
     @State private var moderation = TrailReportModeration.shared
+    @State private var actions = TrailReportActions()
     /// Ranks trail search results nearest first, when location is already allowed.
     @State private var searchLocation = TrailReportLocationProvider()
     #if os(iOS)
@@ -102,12 +103,7 @@ struct TrailConditionsListView: View {
         .accessibilityIdentifier("trail_report_row_\(report.trailName)")
         .accessibilityLabel(report.trailName)
         .contextMenu {
-            // Someone else's report is flagged or blocked from its detail menu.
-            if report.id.hasPrefix("local-") || report.userId == authManager.currentUser?.id {
-                Button("Delete", systemImage: "trash", role: .destructive) {
-                    Task { try? await viewModel.deleteReport(report.id) }
-                }
-            }
+            TrailReportMenuItems(report: report, authorName: viewModel.authorNames[report.id], actions: actions)
         }
     }
 
@@ -134,6 +130,7 @@ struct TrailConditionsListView: View {
                 reportRow(report)
             }
         }
+        .trailReportActionDialogs(actions)
     }
 
     #if os(iOS)
@@ -280,6 +277,7 @@ struct TrailConditionDetailView: View {
 
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
+    @State private var actions = TrailReportActions()
 
     var body: some View {
         ScrollView {
@@ -382,19 +380,15 @@ struct TrailConditionDetailView: View {
         #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                TrailReportActionsMenu(
-                    report: report,
-                    authorName: authorName,
-                    onDelete: {
-                        Task {
-                            try? await appState.trailConditionsVM.deleteReport(report.id)
-                            close()
-                        }
-                    },
-                    onHidden: close
-                )
+                Menu {
+                    TrailReportMenuItems(report: report, authorName: authorName, actions: actions, onHidden: close)
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                }
+                .accessibilityIdentifier("trail_report_more")
             }
         }
+        .trailReportActionDialogs(actions, onHidden: close)
     }
 
     /// Leaves a report that's gone: pops it on a phone, clears the iPad detail column.

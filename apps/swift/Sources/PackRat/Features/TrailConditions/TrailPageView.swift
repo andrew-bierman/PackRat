@@ -15,6 +15,7 @@ struct TrailPageView: View {
     @State private var showingSubmit = false
     @State private var showingNewTrip = false
     @State private var moderation = TrailReportModeration.shared
+    @State private var reportActions = TrailReportActions()
 
     private let service = TrailConditionsService.shared
 
@@ -41,6 +42,7 @@ struct TrailPageView: View {
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .trailReportActionDialogs(reportActions)
         .task(id: trail.id) { await load() }
         .refreshable { await load() }
         .sheet(isPresented: $showingSubmit) {
@@ -116,6 +118,9 @@ struct TrailPageView: View {
                     LatestReportCard(item: latest)
                 }
                 .buttonStyle(.plain)
+                .contextMenu {
+                    TrailReportMenuItems(report: latest.report, authorName: latest.authorName, actions: reportActions)
+                }
                 .accessibilityIdentifier("trail_page_latest_report")
 
                 let earlier = reports.dropFirst()
@@ -130,6 +135,9 @@ struct TrailPageView: View {
                                 TripConditionRow(item: item, showsTrail: false)
                             }
                             .buttonStyle(.plain)
+                            .contextMenu {
+                                TrailReportMenuItems(report: item.report, authorName: item.authorName, actions: reportActions)
+                            }
                             .accessibilityIdentifier("trail_page_report_\(item.id)")
                         }
                     }
