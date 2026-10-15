@@ -198,9 +198,13 @@ private struct TrailReportRow: View {
     let authorName: String?
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        // Photos go under the words, as review lists do: a thumbnail on only
+        // some rows would leave the text starting at different widths.
+        VStack(alignment: .leading, spacing: 8) {
             details
-            ReportPhotoThumbnail(photos: report.photos)
+            if !report.photos.isEmpty {
+                ReportPhotoPreviewRow(photos: report.photos)
+            }
         }
         .padding(.vertical, 2)
     }

@@ -36,6 +36,37 @@ struct ReportPhotoThumbnail: View {
     }
 }
 
+/// The first few of a report's photos, small and side by side, for list rows
+/// that are themselves links. The last tile counts any that didn't fit.
+struct ReportPhotoPreviewRow: View {
+    let photos: [String]
+    var size: CGFloat = 64
+    var shown = 3
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(Array(photos.prefix(shown).enumerated()), id: \.offset) { index, key in
+                RemoteImage(url: key, contentMode: .fill) {
+                    Rectangle().fill(.fill.secondary)
+                }
+                .frame(width: size, height: size)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .overlay {
+                    if index == shown - 1 && photos.count > shown {
+                        RoundedRectangle(cornerRadius: 8, style: .continuous)
+                            .fill(.black.opacity(0.45))
+                        Text("+\(photos.count - shown)")
+                            .font(.callout.weight(.semibold).monospacedDigit())
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+        }
+        .accessibilityElement()
+        .accessibilityLabel(photos.count == 1 ? "1 photo" : "\(photos.count) photos")
+    }
+}
+
 /// A report's photos in a row. Tapping one opens them full screen when
 /// `opensViewer` is on; inside a row that is itself a link, it is off.
 struct ReportPhotoStrip: View {
