@@ -14,6 +14,7 @@ struct TrailPageView: View {
     @State private var loadFailed = false
     @State private var showingSubmit = false
     @State private var showingNewTrip = false
+    @State private var moderation = TrailReportModeration.shared
 
     private let service = TrailConditionsService.shared
 
@@ -71,10 +72,15 @@ struct TrailPageView: View {
     private var subtitle: String? {
         var parts: [String] = []
         if bestSummary.lengthM > 0 { parts.append(bestSummary.lengthText) }
-        if let count = reports?.count, count > 0 {
+        if let count = visibleReports?.count, count > 0 {
             parts.append(count == 1 ? "1 report" : "\(count) reports")
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
+    }
+
+    /// Reports minus any the hiker flagged or whose author they blocked.
+    private var visibleReports: [TripConditionReport]? {
+        reports?.filter { !moderation.hides($0.report) }
     }
 
     private var actions: some View {
@@ -101,7 +107,7 @@ struct TrailPageView: View {
 
     @ViewBuilder
     private var content: some View {
-        if let reports {
+        if let reports = visibleReports {
             if let latest = reports.first {
                 sectionTitle("Latest")
                 NavigationLink {

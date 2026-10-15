@@ -9,6 +9,7 @@ struct TrailConditionsListView: View {
     var showsGuestLimitInList = true
     @Environment(AuthManager.self) private var authManager
     @State private var showingSubmitSheet = false
+    @State private var moderation = TrailReportModeration.shared
     /// Ranks trail search results nearest first, when location is already allowed.
     @State private var searchLocation = TrailReportLocationProvider()
     #if os(iOS)
@@ -101,8 +102,11 @@ struct TrailConditionsListView: View {
         .accessibilityIdentifier("trail_report_row_\(report.trailName)")
         .accessibilityLabel(report.trailName)
         .contextMenu {
-            Button("Delete", systemImage: "trash", role: .destructive) {
-                Task { try? await viewModel.deleteReport(report.id) }
+            // Someone else's report is flagged or blocked from its detail menu.
+            if report.id.hasPrefix("local-") || report.userId == authManager.currentUser?.id {
+                Button("Delete", systemImage: "trash", role: .destructive) {
+                    Task { try? await viewModel.deleteReport(report.id) }
+                }
             }
         }
     }
@@ -126,7 +130,7 @@ struct TrailConditionsListView: View {
             #if os(iOS)
             watchDraftsSection
             #endif
-            ForEach(viewModel.reports) { report in
+            ForEach(viewModel.reports.filter { !moderation.hides($0) }) { report in
                 reportRow(report)
             }
         }
@@ -274,6 +278,9 @@ struct TrailConditionDetailView: View {
     /// Off on the trail page itself, where a link back to it would loop.
     var showsTrailLink = true
 
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -373,6 +380,27 @@ struct TrailConditionDetailView: View {
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                TrailReportActionsMenu(
+                    report: report,
+                    authorName: authorName,
+                    onDelete: {
+                        Task {
+                            try? await appState.trailConditionsVM.deleteReport(report.id)
+                            close()
+                        }
+                    },
+                    onHidden: close
+                )
+            }
+        }
+    }
+
+    /// Leaves a report that's gone: pops it on a phone, clears the iPad detail column.
+    private func close() {
+        if appState.selectedReportId == report.id { appState.selectedReportId = nil }
+        dismiss()
     }
 
     private var conditionCard: some View {

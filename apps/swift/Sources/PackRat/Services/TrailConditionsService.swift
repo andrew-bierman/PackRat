@@ -122,4 +122,18 @@ final class TrailConditionsService: Sendable {
         let endpoint = Endpoint(.delete, "/api/trail-conditions/\(id)")
         try await api.sendDiscarding(endpoint)
     }
+
+    func flagReport(_ id: String, reason: TrailReportFlagReason) async throws {
+        let endpoint = Endpoint(.post, "/api/trail-conditions/\(id)/flag", body: FlagReportRequest(reason: reason))
+        try await api.sendDiscarding(endpoint)
+    }
+
+    /// Blocks are shared with the feed: one list of people you don't want to see.
+    func blockAuthor(userId: String) async throws {
+        try await FeedService.shared.block(userId: userId)
+    }
+}
+
+private struct FlagReportRequest: Encodable, Sendable {
+    let reason: TrailReportFlagReason
 }

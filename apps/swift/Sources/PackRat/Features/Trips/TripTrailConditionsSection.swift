@@ -12,6 +12,7 @@ struct TripTrailConditionsSection: View {
     @State private var response: TripConditionsResponse?
     @State private var loadFailed = false
     @State private var showingSubmit = false
+    @State private var moderation = TrailReportModeration.shared
 
     private let service = TrailConditionsService.shared
 
@@ -77,11 +78,12 @@ struct TripTrailConditionsSection: View {
     @ViewBuilder
     private var content: some View {
         if let response {
-            if response.reports.isEmpty {
+            let reports = response.reports.filter { !moderation.hides($0.report) }
+            if reports.isEmpty {
                 emptyCard
             } else {
                 VStack(spacing: 0) {
-                    ForEach(Array(response.reports.enumerated()), id: \.element.id) { index, item in
+                    ForEach(Array(reports.enumerated()), id: \.element.id) { index, item in
                         if index > 0 { Divider().padding(.leading, 44) }
                         NavigationLink {
                             TrailConditionDetailView(report: item.report, authorName: item.authorName)
