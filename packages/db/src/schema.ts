@@ -683,7 +683,6 @@ export const trips = pgTable('trips', {
     .references(() => users.id)
     .notNull(),
   packId: text('pack_id').references(() => packs.id, { onDelete: 'set null' }),
-  trailOsmId: bigint('trail_osm_id', { mode: 'bigint' }),
   // The trail the trip is for: `trails.id` on the trail database
   // (OSM_DATABASE_URL), so no FK. The name is kept so the trip can show it
   // without a trail-database round trip.
