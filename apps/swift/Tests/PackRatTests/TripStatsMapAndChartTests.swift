@@ -102,4 +102,28 @@ struct TripStatsMapAndChartTests {
         #expect(TripLogEditor.distance(5_000, .oneWay) == 5_000)
         #expect(TripLogEditor.distance(5_000, .outAndBack) == 10_000)
     }
+
+    @Test func headroomFramesPinsLowerWithRoomAbove() {
+        let pins = [
+            CLLocationCoordinate2D(latitude: 36, longitude: -122),
+            CLLocationCoordinate2D(latitude: 48, longitude: -83),
+        ]
+        let region = MapClusters.region(framing: pins, headroom: true)
+        let delta = region?.span.latitudeDelta ?? 0
+        #expect(abs(delta - 12 * 1.9) < 0.0001)
+        // The northern pin sits below the top edge by more than a fifth of the view.
+        let top = (region?.center.latitude ?? 0) + delta / 2
+        #expect(top - 48 > delta * 0.2)
+        #expect((region?.center.latitude ?? 0) - delta / 2 < 36)
+    }
+
+    @Test func trailLegUsesEveryTrailsLength() {
+        let trails = [
+            TripTrail(id: "a", name: "Mist Trail", lengthMeters: 2_400),
+            TripTrail(id: "b", name: "Half Dome Trail", lengthMeters: 3_200),
+            TripTrail(id: "c", name: "Unmeasured", lengthMeters: nil),
+        ]
+        #expect(TripLogEditor.totalLength(trails) == 5_600)
+        #expect(TripLogEditor.distance(TripLogEditor.totalLength(trails), .outAndBack) == 11_200)
+    }
 }

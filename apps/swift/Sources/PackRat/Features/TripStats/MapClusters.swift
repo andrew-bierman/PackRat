@@ -49,8 +49,9 @@ enum MapClusters {
         }
     }
 
-    /// The region that frames a cluster's pins, padded so none sit on the edge.
-    static func region(framing coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion? {
+    /// The region that frames a set of pins, padded so none sit on the edge.
+    /// `headroom` adds room above, since a marker's head stands above its point.
+    static func region(framing coordinates: [CLLocationCoordinate2D], headroom: Bool = false) -> MKCoordinateRegion? {
         guard let first = coordinates.first else { return nil }
         var minLat = first.latitude, maxLat = first.latitude
         var minLon = first.longitude, maxLon = first.longitude
@@ -58,11 +59,16 @@ enum MapClusters {
             minLat = min(minLat, coordinate.latitude); maxLat = max(maxLat, coordinate.latitude)
             minLon = min(minLon, coordinate.longitude); maxLon = max(maxLon, coordinate.longitude)
         }
+        let latitudeDelta = max((maxLat - minLat) * (headroom ? 1.9 : 1.6), 0.02)
+        let shift = headroom ? latitudeDelta * 0.12 : 0
         return MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2, longitude: (minLon + maxLon) / 2),
+            center: CLLocationCoordinate2D(
+                latitude: min(max((minLat + maxLat) / 2 + shift, -85), 85),
+                longitude: (minLon + maxLon) / 2
+            ),
             span: MKCoordinateSpan(
-                latitudeDelta: max((maxLat - minLat) * 1.6, 0.02),
-                longitudeDelta: max((maxLon - minLon) * 1.6, 0.02)
+                latitudeDelta: min(latitudeDelta, 170),
+                longitudeDelta: min(max((maxLon - minLon) * 1.6, 0.02), 360)
             )
         )
     }

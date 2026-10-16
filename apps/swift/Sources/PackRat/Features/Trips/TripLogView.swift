@@ -271,12 +271,26 @@ struct TripLogEditor: View {
                         Label("Add Trail", systemImage: "plus")
                     }
                     .accessibilityIdentifier("trip_log_add_trail")
+                    if trailLength > 0 {
+                        Picker("How you walked them", selection: Binding(
+                            get: { trailLeg },
+                            set: { leg in
+                                trailLeg = leg
+                                if let leg { distanceText = format(unit.distanceValue(Self.distance(trailLength, leg)), digits: 1) }
+                            }
+                        )) {
+                            ForEach(TrailLeg.allCases) { Text($0.rawValue).tag(Optional($0)) }
+                        }
+                        .pickerStyle(.segmented)
+                        .accessibilityIdentifier("trip_log_trail_leg")
+                    }
                 } header: {
                     Text("Trails")
                 } footer: {
-                    Text(routeCoordinates.count >= 2
+                    Text((routeCoordinates.count >= 2
                         ? "Trails your route follows are suggested first. Trails count toward your Trails list."
                         : "Picking a trail fills in its route and length if you haven't added them. Trails count toward your Trails list.")
+                        + (trailLength > 0 ? " One Way or Out and Back sets the distance from the trails' length." : ""))
                 }
 
                 Section {
@@ -297,19 +311,6 @@ struct TripLogEditor: View {
                 }
 
                 Section {
-                    if trailLeg != nil, let length = trails.first?.lengthMeters {
-                        Picker("Trail", selection: Binding(
-                            get: { trailLeg ?? .oneWay },
-                            set: { leg in
-                                trailLeg = leg
-                                distanceText = format(unit.distanceValue(Self.distance(length, leg)), digits: 1)
-                            }
-                        )) {
-                            ForEach(TrailLeg.allCases) { Text($0.rawValue).tag($0) }
-                        }
-                        .pickerStyle(.segmented)
-                        .accessibilityIdentifier("trip_log_trail_leg")
-                    }
                     numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
                         .accessibilityIdentifier("trip_log_distance")
                     numberField("Elevation gain", text: $elevationText, symbol: unit.elevationSymbol, field: .elevation)
@@ -406,6 +407,15 @@ struct TripLogEditor: View {
                 }
             }
             .onAppear(perform: prefill)
+            .onChange(of: trails) {
+                // Adding or removing a trail keeps a chosen One Way / Out and Back in step.
+                guard let leg = trailLeg else { return }
+                if trailLength > 0 {
+                    distanceText = format(unit.distanceValue(Self.distance(trailLength, leg)), digits: 1)
+                } else {
+                    trailLeg = nil
+                }
+            }
         }
         .formSheetSize(minWidth: 520, minHeight: 640)
     }
@@ -461,9 +471,16 @@ struct TripLogEditor: View {
         summits = log.summits
         trails = log.trails
         landscape = log.landscape
-        if log.source == .trail, let length = log.trails.first?.lengthMeters, let distance = log.distanceMeters {
+        let length = Self.totalLength(log.trails)
+        if length > 0, let distance = log.distanceMeters {
             trailLeg = TrailLeg.allCases.first { abs(Self.distance(length, $0) - distance) < length * 0.01 }
         }
+    }
+
+    private var trailLength: Double { Self.totalLength(trails) }
+
+    static func totalLength(_ trails: [TripTrail]) -> Double {
+        trails.compactMap(\.lengthMeters).reduce(0, +)
     }
 
     /// "Automatic (Mountain)": what the trip reads as with the figures entered so far.

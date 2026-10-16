@@ -686,6 +686,16 @@ private struct TripsMapCard: View {
             .onMapCameraChange(frequency: .onEnd) { context in
                 span = context.region.span
             }
+            .task(id: trips.map(\.id)) {
+                // Frame every trip and route, not `.automatic`: that re-frames as clusters
+                // merge and split, and it lets the pins' heads run off the top.
+                if let region = MapClusters.region(
+                    framing: located.map(\.coordinate) + routes.flatMap(\.coordinates),
+                    headroom: true
+                ) {
+                    position = .region(region)
+                }
+            }
             .onChange(of: selection) { _, id in
                 stacked = []
                 guard let id, let cluster = clusters.first(where: { $0.id == id }), !cluster.isSingle else { return }
