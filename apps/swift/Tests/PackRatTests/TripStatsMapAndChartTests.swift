@@ -98,11 +98,6 @@ struct TripStatsMapAndChartTests {
         #expect(RouteDrawing.region(points: [], center: nil) == nil)
     }
 
-    @Test func outAndBackDoublesTheTrailLength() {
-        #expect(TripLogEditor.distance(5_000, .oneWay) == 5_000)
-        #expect(TripLogEditor.distance(5_000, .outAndBack) == 10_000)
-    }
-
     @Test func headroomFramesPinsLowerWithRoomAbove() {
         let pins = [
             CLLocationCoordinate2D(latitude: 36, longitude: -122),
@@ -117,13 +112,28 @@ struct TripStatsMapAndChartTests {
         #expect((region?.center.latitude ?? 0) - delta / 2 < 36)
     }
 
-    @Test func trailLegUsesEveryTrailsLength() {
+    @Test func outAndBackCountsOnlyThatTrailTwice() {
         let trails = [
-            TripTrail(id: "a", name: "Mist Trail", lengthMeters: 2_400),
+            TripTrail(id: "a", name: "Mist Trail", lengthMeters: 2_400, outAndBack: true),
             TripTrail(id: "b", name: "Half Dome Trail", lengthMeters: 3_200),
-            TripTrail(id: "c", name: "Unmeasured", lengthMeters: nil),
+            TripTrail(id: "c", name: "Unmeasured", lengthMeters: nil, outAndBack: true),
         ]
-        #expect(TripLogEditor.totalLength(trails) == 5_600)
-        #expect(TripLogEditor.distance(TripLogEditor.totalLength(trails), .outAndBack) == 11_200)
+        #expect(TripLogEditor.walkedLength(trails) == 8_000)
+    }
+
+    @Test func distanceFollowsTrailsOnlyWhenItCameFromThem() {
+        let trails = [TripTrail(id: "a", name: "Mist Trail", lengthMeters: 2_400)]
+        #expect(TripLogEditor.matchesTrails(nil, trails))
+        #expect(TripLogEditor.matchesTrails(2_405, trails))
+        #expect(!TripLogEditor.matchesTrails(10_000, trails))
+        #expect(!TripLogEditor.matchesTrails(2_400, []))
+    }
+
+    @Test func outAndBackRoundTripsAndStaysOptional() throws {
+        let marked = TripTrail(id: "a", name: "Mist Trail", lengthMeters: 2_400, outAndBack: true)
+        let decoded = try JSONDecoder().decode(TripTrail.self, from: JSONEncoder().encode(marked))
+        #expect(decoded == marked)
+        let legacy = try JSONDecoder().decode(TripTrail.self, from: Data(#"{"id":"a","name":"Mist Trail"}"#.utf8))
+        #expect(legacy.outAndBack == nil)
     }
 }

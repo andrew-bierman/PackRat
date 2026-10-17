@@ -123,6 +123,11 @@ struct TripTrail: Codable, Equatable, Hashable, Sendable {
     var id: String
     var name: String
     var lengthMeters: Double?
+    /// Walked there and back the same way, so it counts twice toward the distance.
+    var outAndBack: Bool?
+
+    /// What this trail adds to the trip's distance.
+    var walkedMeters: Double? { lengthMeters.map { outAndBack == true ? $0 * 2 : $0 } }
 }
 
 /// The kind of country a trip was in. Mirrors `TripLandscapeSchema`.

@@ -54,6 +54,7 @@ export const TripTrailSchema = z.object({
   id: z.string().uuid(),
   name: z.string().trim().min(1).max(200),
   lengthMeters: z.number().nonnegative().nullable().optional(),
+  outAndBack: z.boolean().nullable().optional(),
 });
 
 /** Set by the user on a trip log; otherwise the app reads it from the map. */
