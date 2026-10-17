@@ -293,7 +293,7 @@ struct TripLogEditor: View {
                     VStack(alignment: .leading, spacing: 10) {
                         numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
                             .accessibilityIdentifier("trip_log_distance")
-                        if trailLength > 0 {
+                        if showsTrailDistances {
                             trailDistanceSuggestions
                         }
                     }
@@ -303,7 +303,7 @@ struct TripLogEditor: View {
                     Text("Distance & Climbing")
                 } footer: {
                     Text("Total for the whole trip. Leave blank if you don't know."
-                        + (trailLength > 0 ? " Tap a trail distance to use the length of the trails you picked." : ""))
+                        + (showsTrailDistances ? " Tap a trail distance to use the length of the trails you picked." : ""))
                 }
 
                 Section {
@@ -449,6 +449,9 @@ struct TripLogEditor: View {
     }
 
     private var trailLength: Double { Self.totalLength(trails) }
+
+    /// A distance read from a GPS track is kept as recorded, so trails offer none.
+    private var showsTrailDistances: Bool { trailLength > 0 && source != .track }
 
     static func totalLength(_ trails: [TripTrail]) -> Double {
         trails.compactMap(\.lengthMeters).reduce(0, +)
