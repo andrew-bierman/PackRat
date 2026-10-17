@@ -290,10 +290,12 @@ struct TripLogEditor: View {
                 }
 
                 Section {
-                    numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
-                        .accessibilityIdentifier("trip_log_distance")
-                    if trailLength > 0 {
-                        trailDistanceSuggestions
+                    VStack(alignment: .leading, spacing: 10) {
+                        numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
+                            .accessibilityIdentifier("trip_log_distance")
+                        if trailLength > 0 {
+                            trailDistanceSuggestions
+                        }
                     }
                     numberField("Elevation gain", text: $elevationText, symbol: unit.elevationSymbol, field: .elevation)
                         .accessibilityIdentifier("trip_log_elevation")
