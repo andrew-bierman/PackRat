@@ -119,7 +119,7 @@ async function naturalEarth(file: string): Promise<Feature[]> {
 
 // MARK: - TIFF (tiled, 8-bit, LZW — the shape of the Köppen file)
 
-function lzwDecode(input: Uint8Array, expected: number): Uint8Array {
+function lzwDecode({ input, expected }: { input: Uint8Array; expected: number }): Uint8Array {
   const out = new Uint8Array(expected);
   let outPos = 0;
   let bitPos = 0;
@@ -197,10 +197,10 @@ function readTiff(buffer: Uint8Array): { width: number; height: number; pixels: 
   const across = Math.ceil(width / tileWidth);
   const pixels = new Uint8Array(width * height);
   offsets.forEach((offset, index) => {
-    const tile = lzwDecode(
-      buffer.subarray(offset, offset + (counts[index] ?? 0)),
-      tileWidth * tileHeight,
-    );
+    const tile = lzwDecode({
+      input: buffer.subarray(offset, offset + (counts[index] ?? 0)),
+      expected: tileWidth * tileHeight,
+    });
     const x0 = (index % across) * tileWidth;
     const y0 = Math.floor(index / across) * tileHeight;
     for (let y = 0; y < tileHeight && y0 + y < height; y++) {
