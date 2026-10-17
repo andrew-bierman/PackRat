@@ -253,8 +253,8 @@ struct TripLogEditor: View {
                 }
 
                 Section {
-                    ForEach($trails, id: \.id) { $trail in
-                        TripTrailRow(trail: $trail, unit: unit)
+                    ForEach(trails, id: \.self) { trail in
+                        TripTrailRow(trail: trail, unit: unit)
                     }
                     .onDelete { trails.remove(atOffsets: $0) }
                     Button {
@@ -268,8 +268,8 @@ struct TripLogEditor: View {
                 } footer: {
                     Text((routeCoordinates.count >= 2
                         ? "Trails your route follows are suggested first. Trails count toward your Trails list."
-                        : "Picking a trail fills in its route and length if you haven't added them. Trails count toward your Trails list.")
-                        + (Self.walkedLength(trails) > 0 ? " Mark the trails you walked there and back to set the distance." : ""))
+                        : "Picking a trail fills in its route if you haven't added one. Trails count toward your Trails list.")
+                        )
                 }
 
                 Section {
@@ -292,12 +292,16 @@ struct TripLogEditor: View {
                 Section {
                     numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
                         .accessibilityIdentifier("trip_log_distance")
+                    if trailLength > 0 {
+                        trailDistanceSuggestions
+                    }
                     numberField("Elevation gain", text: $elevationText, symbol: unit.elevationSymbol, field: .elevation)
                         .accessibilityIdentifier("trip_log_elevation")
                 } header: {
                     Text("Distance & Climbing")
                 } footer: {
-                    Text("Total for the whole trip. Leave blank if you don't know.")
+                    Text("Total for the whole trip. Leave blank if you don't know."
+                        + (trailLength > 0 ? " Tap a trail distance to use the length of the trails you picked." : ""))
                 }
 
                 Section {
@@ -385,13 +389,6 @@ struct TripLogEditor: View {
                 }
             }
             .onAppear(perform: prefill)
-            .onChange(of: trails) { old, new in
-                // A distance that came from the trails follows them as they change.
-                let walked = Self.walkedLength(new)
-                guard walked > 0, Self.walkedLength(old) != walked,
-                      Self.matchesTrails(parse(distanceText).map(unit.metres(fromDistance:)), old) else { return }
-                distanceText = format(unit.distanceValue(walked), digits: 1)
-            }
         }
         .formSheetSize(minWidth: 520, minHeight: 640)
     }
@@ -449,16 +446,37 @@ struct TripLogEditor: View {
         landscape = log.landscape
     }
 
-    /// The distance the trails add up to, counting out-and-back ones twice.
-    static func walkedLength(_ trails: [TripTrail]) -> Double {
-        trails.compactMap(\.walkedMeters).reduce(0, +)
+    private var trailLength: Double { Self.totalLength(trails) }
+
+    static func totalLength(_ trails: [TripTrail]) -> Double {
+        trails.compactMap(\.lengthMeters).reduce(0, +)
     }
 
-    /// Whether a distance is the trails' own (or empty), so it may follow them.
-    static func matchesTrails(_ distance: Double?, _ trails: [TripTrail]) -> Bool {
-        guard let distance, distance > 0 else { return true }
-        let walked = walkedLength(trails)
-        return walked > 0 && abs(walked - distance) <= max(walked * 0.01, 1)
+    /// The trails' length walked one way and there and back, offered under Distance.
+    static func trailDistances(_ length: Double) -> [(label: String, meters: Double)] {
+        [("One way", length), ("There and back", length * 2)]
+    }
+
+    private var trailDistanceSuggestions: some View {
+        HStack(spacing: 8) {
+            ForEach(Self.trailDistances(trailLength), id: \.label) { option in
+                let text = format(unit.distanceValue(option.meters), digits: 1)
+                let chosen = text == distanceText
+                Button {
+                    distanceText = text
+                } label: {
+                    Text("\(option.label) \(text) \(unit.distanceSymbol)")
+                        .font(.caption.weight(.medium))
+                        .lineLimit(1)
+                        .monospacedDigit()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .tint(chosen ? .accentColor : .secondary)
+                .accessibilityAddTraits(chosen ? .isSelected : [])
+                .accessibilityIdentifier("trip_log_trail_distance_\(option.label == "One way" ? "one_way" : "there_and_back")")
+            }
+        }
     }
 
     /// "Automatic (Mountain)": what the trip reads as with the figures entered so far.
@@ -475,8 +493,7 @@ struct TripLogEditor: View {
         return "Automatic (\(automatic.label))"
     }
 
-    /// The first trail picked on an empty log supplies the route; its length
-    /// reaches the distance through the trails' own onChange.
+    /// The first trail picked on an empty log supplies the route.
     private func fillFromTrail(_ trail: TripTrail) async {
         guard route == nil else { return }
         guard let detail = try? await TrailRegistryService.shared.trail(id: trail.id),
@@ -536,7 +553,7 @@ struct TripLogEditor: View {
 }
 
 private struct TripTrailRow: View {
-    @Binding var trail: TripTrail
+    let trail: TripTrail
     let unit: TripDistanceUnit
 
     var body: some View {
@@ -545,24 +562,12 @@ private struct TripTrailRow: View {
                 .foregroundStyle(Color.accentColor)
             VStack(alignment: .leading, spacing: 2) {
                 Text(trail.name)
-                if let walked = trail.walkedMeters {
-                    Text(unit.formatDistance(walked)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                if let length = trail.lengthMeters {
+                    Text(unit.formatDistance(length)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
                 }
             }
-            .accessibilityElement(children: .combine)
-            Spacer(minLength: 8)
-            Toggle(isOn: Binding(
-                get: { trail.outAndBack == true },
-                set: { trail.outAndBack = $0 ? true : nil }
-            )) {
-                Label("Out and Back", systemImage: "arrow.uturn.backward")
-                    .font(.caption.weight(.medium))
-            }
-            .toggleStyle(.button)
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .accessibilityIdentifier("trip_log_trail_out_and_back")
         }
+        .accessibilityElement(children: .combine)
     }
 }
 

@@ -620,7 +620,6 @@ export type TripTrail = {
   id: string;
   name: string;
   lengthMeters?: number | null;
-  outAndBack?: boolean | null;
 };
 
 /** A named peak reached on a trip. `osmId` is the OpenStreetMap node it was picked from. */
