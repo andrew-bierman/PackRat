@@ -114,6 +114,9 @@ export const testIds = Object.freeze({
     viewRetailerBtn: 'view-retailer-button', // keep Maestro value
     packOption: (id: string | number) => `catalog:pack-option-${id}`,
     item: (id: string | number) => `catalog:item-${id}`,
+    addDetailsCategoryInput: 'catalog:add-details-category-input',
+    addDetailsCategoryChip: (category: string) => `catalog:add-details-category-chip-${category}`,
+    addDetailsQuantityInput: 'catalog:add-details-quantity-input',
   }),
 
   // ── Guides ────────────────────────────────────────────────────────────────
