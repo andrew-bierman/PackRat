@@ -1,8 +1,6 @@
 name: Stale Issues and PRs
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # runs daily at midnight UTC
   workflow_dispatch:
 
 permissions:
@@ -11,6 +9,9 @@ permissions:
 
 jobs:
   stale:
+    # Inactivity does not mean a QA report is resolved. Keep this job disabled,
+    # including manual dispatches, until a replacement triage policy is agreed.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v10
