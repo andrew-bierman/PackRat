@@ -296,8 +296,23 @@ struct AddCatalogItemToPackSheet: View {
 
     @State private var selectedPackId: String?
     @State private var quantity = 1
+    @State private var category: String
     @State private var error: String?
     @State private var success = false
+
+    init(item: CatalogItem, packsViewModel: PacksViewModel) {
+        self.item = item
+        self.packsViewModel = packsViewModel
+        _category = State(initialValue: item.categories?.first ?? "")
+    }
+
+    private var categorySuggestions: [String] {
+        let packItems = packsViewModel.packs.first { $0.id == selectedPackId }?.items ?? []
+        return CatalogCategorySuggestions.make(
+            catalogCategories: item.categories ?? [],
+            packCategories: packItems.filter { !$0.deleted }.map(\.category)
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -320,6 +335,14 @@ struct AddCatalogItemToPackSheet: View {
                         }
                     }
                     Stepper("Quantity: \(quantity)", value: $quantity, in: 1...99)
+                }
+
+                Section("Category") {
+                    TextField("Category", text: $category)
+                        .accessibilityIdentifier("catalog_add_category_field")
+                    if !categorySuggestions.isEmpty {
+                        categoryChips
+                    }
                 }
 
                 if let error { Section { InlineErrorView(message: error) } }
@@ -348,7 +371,35 @@ struct AddCatalogItemToPackSheet: View {
                 }
             }
         }
-        .formSheetSize(minWidth: 480, minHeight: 380)
+        .formSheetSize(minWidth: 480, minHeight: 460)
+    }
+
+    private var categoryChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(categorySuggestions, id: \.self) { suggestion in
+                    let isSelected = CatalogCategorySuggestions.matches(suggestion, category)
+                    Button {
+                        category = suggestion
+                    } label: {
+                        Text(suggestion)
+                            .font(.caption.bold())
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 7)
+                            .background(
+                                isSelected ? Color.accentColor : Color.accentColor.opacity(0.1),
+                                in: Capsule()
+                            )
+                            .foregroundStyle(isSelected ? .white : Color.accentColor)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                    .accessibilityIdentifier("catalog_add_category_chip_\(suggestion)")
+                }
+            }
+            .padding(.vertical, 2)
+        }
+        .accessibilityIdentifier("catalog_add_category_chips")
     }
 
     private func addToPack() async {
@@ -361,7 +412,7 @@ struct AddCatalogItemToPackSheet: View {
                 weight: item.weight ?? 0,
                 weightUnit: item.weightUnit?.rawValue ?? WeightUnit.g.rawValue,
                 quantity: quantity,
-                category: item.categories?.first,
+                category: trimmedCategory.isEmpty ? nil : trimmedCategory,
                 consumable: false,
                 worn: false,
                 notes: nil,
@@ -375,5 +426,33 @@ struct AddCatalogItemToPackSheet: View {
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    private var trimmedCategory: String {
+        category.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+/// Category suggestions for the Add to Pack sheet: the catalog item's own
+/// categories first, then the groups already used in the target pack, so a
+/// familiar group is one tap away. Matches Android's ordering and cap.
+enum CatalogCategorySuggestions {
+    static let limit = 8
+
+    static func make(catalogCategories: [String], packCategories: [String?]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for raw in catalogCategories.map(Optional.some) + packCategories {
+            guard let value = raw?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !value.isEmpty,
+                  seen.insert(value.lowercased()).inserted
+            else { continue }
+            result.append(value)
+        }
+        return Array(result.prefix(limit))
+    }
+
+    static func matches(_ suggestion: String, _ category: String) -> Bool {
+        suggestion.lowercased() == category.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 }
