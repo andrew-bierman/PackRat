@@ -6,13 +6,10 @@ import { Form, FormItem, FormSection } from '@packrat/ui/src/form';
 import { TextField } from '@packrat/ui/src/text-field';
 import { useForm } from '@tanstack/react-form';
 import { Icon } from 'expo-app/components/Icon';
-import { useCreatePackFromTemplate } from 'expo-app/features/pack-templates';
-import { getTemplateItems, packTemplatesStore } from 'expo-app/features/pack-templates/store';
-import { TemplateItemsSection } from 'expo-app/features/packs/components/TemplateItemsSection';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -55,8 +52,6 @@ export const PackForm = ({ pack }: { pack?: Pack }) => {
   const { colors } = useColorScheme();
   const createPack = useCreatePack();
   const updatePack = useUpdatePack();
-  const params = useLocalSearchParams();
-  const isCreatingFromTemplate = !!params.templateId;
   const isEditingExistingPack = !!pack;
 
   // Categories with icons and labels
@@ -72,11 +67,6 @@ export const PackForm = ({ pack }: { pack?: Pack }) => {
     { value: 'skiing', label: t('packs.categories.skiing') },
   ];
 
-  const createPackFromTemplate = useCreatePackFromTemplate();
-  const templateId = params.templateId as string;
-  const templateAtom = isCreatingFromTemplate ? packTemplatesStore[templateId] : null;
-  const template = templateAtom ? templateAtom.get() : null;
-  const templateItems = isCreatingFromTemplate ? getTemplateItems(params.templateId as string) : [];
   const [descriptionHeight, setDescriptionHeight] = useState(40);
 
   const hasMounted = useRef(false);
@@ -89,29 +79,18 @@ export const PackForm = ({ pack }: { pack?: Pack }) => {
   }, []);
 
   const form = useForm({
-    defaultValues:
-      isCreatingFromTemplate && template
-        ? {
-            name: template.name,
-            description: template.description,
-            category: fromZod(PackCategorySchema)(template.category) ?? 'hiking',
-            isPublic: false,
-            tags: template.tags,
-          }
-        : {
-            name: pack?.name || '',
-            description: pack?.description || '',
-            category: pack?.category || 'hiking',
-            isPublic: pack?.isPublic || false,
-            tags: pack?.tags || [],
-          },
+    defaultValues: {
+      name: pack?.name || '',
+      description: pack?.description || '',
+      category: pack?.category || 'hiking',
+      isPublic: pack?.isPublic || false,
+      tags: pack?.tags || [],
+    },
     validators: {
       onChange: packFormSchema,
     },
     onSubmit: async ({ value }) => {
-      if (isCreatingFromTemplate) {
-        createPackFromTemplate(params.templateId as string, value);
-      } else if (isEditingExistingPack) {
+      if (isEditingExistingPack) {
         updatePack({ ...pack, ...value });
       } else {
         createPack({ ...value, category: value.category });
@@ -121,22 +100,11 @@ export const PackForm = ({ pack }: { pack?: Pack }) => {
     },
   });
 
-  if (!packTemplatesStore[templateId]) {
-    console.warn(`No template found for ID: ${templateId}`);
-  }
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       className="flex-1"
     >
-      {isCreatingFromTemplate && (
-        <Stack.Screen options={{ title: t('packs.enterNewPackDetails') }} />
-      )}
-      {isCreatingFromTemplate && template && (
-        <View>Creating pack from `{template.name}` template</View>
-      )}
-
       <ScrollView contentContainerClassName="p-8">
         <Form>
           <FormSection ios={{ title: t('packs.packDetails') }} footnote={t('packs.enterBasicInfo')}>
@@ -252,10 +220,6 @@ export const PackForm = ({ pack }: { pack?: Pack }) => {
             </form.Field>
           </FormSection>
         </Form>
-
-        {isCreatingFromTemplate && (
-          <TemplateItemsSection templateItems={templateItems} templateName={template?.name} />
-        )}
 
         <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
           {([canSubmit, isSubmitting]) => (

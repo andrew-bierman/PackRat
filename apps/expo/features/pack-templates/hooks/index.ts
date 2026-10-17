@@ -1,5 +1,5 @@
+export * from './useApplyPackTemplate';
 export * from './useBulkAddCatalogItems';
-export * from './useCreatePackFromTemplate';
 export * from './useCreatePackTemplate';
 export * from './useCreatePackTemplateItem';
 export * from './useDeletePackTemplate';

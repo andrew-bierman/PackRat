@@ -158,8 +158,8 @@ describe('createPackFromTemplate', () => {
       cause: 'network down',
       message: 'Template apply failed: packNotCreated',
     });
-    expect(deps.savePackLocally).not.toHaveBeenCalled();
-    expect(deps.copyTemplateItems).not.toHaveBeenCalled();
+    expect(deps.savePackLocally).toHaveBeenCalledTimes(0);
+    expect(deps.copyTemplateItems).toHaveBeenCalledTimes(0);
   });
 
   it('fails as itemsNotAdded carrying the created pack id', async () => {
@@ -173,7 +173,7 @@ describe('createPackFromTemplate', () => {
       packId: 'p1',
     });
     expect(deps.savePackLocally).toHaveBeenCalledWith(localPack);
-    expect(deps.refresh).not.toHaveBeenCalled();
+    expect(deps.refresh).toHaveBeenCalledTimes(0);
   });
 });
 

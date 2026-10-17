@@ -128,6 +128,18 @@ export const testIds = Object.freeze({
   packTemplates: Object.freeze({
     dashboardTile: 'dashboard-tile-pack-templates',
     card: (id: string | number) => `pack-templates:card-${id}`,
+    officialShelf: 'pack-templates:official-shelf',
+    officialSeeAll: 'pack-templates:official-see-all',
+    officialRow: (id: string) => `pack-templates:official-row-${id}`,
+    mineEmpty: 'pack-templates:mine-empty',
+    detailOfficialBadge: 'pack-templates:detail-official-badge',
+    detailApplyBtn: 'pack-templates:detail-apply',
+    applyNewPack: 'pack-templates:apply-new-pack',
+    applyPackRow: (id: string) => `pack-templates:apply-pack-${id}`,
+    applyError: 'pack-templates:apply-error',
+    newPackName: 'pack-templates:new-pack-name',
+    newPackCreate: 'pack-templates:new-pack-create',
+    newPackError: 'pack-templates:new-pack-error',
   }),
 
   // ── Profile ───────────────────────────────────────────────────────────────
