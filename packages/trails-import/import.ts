@@ -74,15 +74,21 @@ if (!values['reconcile-only']) {
   const [west, south, east, north] = bbox;
   const classes = TRAIL_CLASSES.map((c) => `'${c}'`).join(', ');
 
+  // DuckDB's postgres extension (libpq without SCRAM channel binding) refuses
+  // Neon's `channel_binding=require`; TLS is still enforced by `sslmode`.
+  const duckdbUrl = new URL(DB_URL);
+  duckdbUrl.searchParams.delete('channel_binding');
+
   console.log(`Loading Overture ${release} named trail segments in ${values.bbox}...`);
   await run(
     ['duckdb'],
     `
+.bail on
 INSTALL spatial; LOAD spatial;
 INSTALL httpfs; LOAD httpfs;
 INSTALL postgres; LOAD postgres;
 SET s3_region = 'us-west-2';
-ATTACH '${DB_URL}' AS pg (TYPE postgres);
+ATTACH '${duckdbUrl}' AS pg (TYPE postgres);
 CALL postgres_execute('pg', 'TRUNCATE trail_segments');
 CALL postgres_execute('pg', 'DROP TABLE IF EXISTS trail_segments_load');
 CREATE TABLE pg.trail_segments_load AS
