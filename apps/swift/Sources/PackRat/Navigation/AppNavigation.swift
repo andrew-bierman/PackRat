@@ -324,7 +324,8 @@ struct AppNavigation: View {
         case .weather:
             WeatherView(viewModel: appState.weatherVM)
         case .catalog:
-            CatalogView().environment(appState)
+            // Its own stack so catalog items push a detail screen in the column.
+            NavigationStack { CatalogView().environment(appState) }
         case .chat:
             ChatView(viewModel: appState.chatVM)
         case .feed:

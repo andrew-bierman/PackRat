@@ -4,46 +4,59 @@ import NukeUI
 struct CatalogItemDetailView: View {
     let item: CatalogItem
     let packsViewModel: PacksViewModel
+    /// Pushed onto the catalog's stack rather than presented as a sheet, so it
+    /// brings no stack or Done button of its own.
+    var isPushed = false
     @State private var showingAddToPack = false
     @State private var selectedImageIndex = 0
     @Environment(\.dismiss) private var dismiss
     @Environment(\.weightUnit) private var weightUnit
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    imageCarousel
-                    infoSection
-                    if let desc = item.description, !desc.isEmpty {
-                        descriptionSection(desc)
+        if isPushed {
+            content
+        } else {
+            NavigationStack {
+                content
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Done") { dismiss() }
+                        }
                     }
-                    detailsGrid
-                }
-                .padding(.bottom, 20)
             }
-            .navigationTitle(item.displayName)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
+            #if os(macOS)
+            .frame(minWidth: 480, minHeight: 560)
             #endif
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
+        }
+    }
+
+    private var content: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                imageCarousel
+                infoSection
+                if let desc = item.description, !desc.isEmpty {
+                    descriptionSection(desc)
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Add to Pack", systemImage: "plus.circle") {
-                        showingAddToPack = true
-                    }
-                    .accessibilityIdentifier("catalog_detail_add_to_pack_button")
-                }
+                detailsGrid
             }
-            .sheet(isPresented: $showingAddToPack) {
-                AddCatalogItemToPackSheet(item: item, packsViewModel: packsViewModel)
+            .padding(.bottom, 20)
+        }
+        .navigationTitle(item.displayName)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button("Add to Pack", systemImage: "plus.circle") {
+                    showingAddToPack = true
+                }
+                .accessibilityIdentifier("catalog_detail_add_to_pack_button")
             }
         }
-        #if os(macOS)
-        .frame(minWidth: 480, minHeight: 560)
-        #endif
+        .sheet(isPresented: $showingAddToPack) {
+            AddCatalogItemToPackSheet(item: item, packsViewModel: packsViewModel)
+        }
     }
 
     @ViewBuilder

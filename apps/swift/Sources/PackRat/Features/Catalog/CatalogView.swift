@@ -18,16 +18,18 @@ struct CatalogView: View {
                 )
             } else if vm.isLoading && vm.items.isEmpty {
                 ProgressView("Searching gear…").frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let error = vm.error {
+            } else if let error = vm.error, vm.items.isEmpty {
                 ErrorView(error, retry: { await vm.search(reset: true) })
-            } else if vm.items.isEmpty && vm.hasSearched {
+            } else if vm.items.isEmpty && vm.hasSearched && (!vm.searchText.isEmpty || vm.selectedCategory != nil) {
                 UnavailableStateView(
                     title: "No Results",
-                    subtitle: "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
+                    subtitle: vm.searchText.isEmpty
+                        ? "No gear in this category yet."
+                        : "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
                     systemImage: "magnifyingglass"
                 )
                 .accessibilityIdentifier("catalog_no_results")
-            } else if !vm.hasSearched {
+            } else if vm.items.isEmpty {
                 EmptyStateView(
                     "Search the Gear Catalog",
                     subtitle: "Find weight specs, prices, and reviews for thousands of outdoor products",
@@ -40,7 +42,8 @@ struct CatalogView: View {
                 }
             }
         }
-        .navigationTitle("Gear Catalog")
+        // The active category becomes the title, the way Mail titles a mailbox.
+        .navigationTitle(vm.selectedCategory?.catalogCategoryDisplayName ?? "Gear Catalog")
         // Guests get no search field at all: catalog search is server-backed, so
         // an editable field above "Catalog Requires an Account" is a dead input
         // that accepts a query it can never answer.
@@ -50,12 +53,23 @@ struct CatalogView: View {
                 vm.onSearchTextChanged()
             }
         }
+        .task {
+            if authManager.isAuthenticated {
+                await vm.loadIfNeeded()
+            }
+        }
         .onSubmit(of: .search) {
             if authManager.isAuthenticated {
                 Task { await vm.search(reset: true) }
             }
         }
         .toolbar {
+            // Search spans every category, so the filter only shows while browsing.
+            if authManager.isAuthenticated && !vm.categories.isEmpty && vm.searchText.isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    categoryMenu(vm: vm)
+                }
+            }
             // A re-search over an already-populated list: the footer belongs to
             // paging, so this reports the refresh instead.
             if vm.isLoading && !vm.items.isEmpty {
@@ -66,17 +80,40 @@ struct CatalogView: View {
         }
     }
 
+    private func categoryMenu(vm: CatalogViewModel) -> some View {
+        Menu {
+            Picker("Category", selection: Binding(
+                get: { vm.selectedCategory },
+                set: { vm.selectCategory($0) }
+            )) {
+                Text("All Gear").tag(String?.none)
+                ForEach(vm.categories, id: \.self) { category in
+                    Text(category.catalogCategoryDisplayName).tag(String?.some(category))
+                }
+            }
+        } label: {
+            Label(
+                "Filter",
+                systemImage: vm.selectedCategory == nil
+                    ? "line.3.horizontal.decrease.circle"
+                    : "line.3.horizontal.decrease.circle.fill"
+            )
+        }
+        .accessibilityIdentifier("catalog_category_filter")
+    }
+
     private func itemGrid(vm: CatalogViewModel) -> some View {
         LazyVStack(spacing: 0) {
             ForEach(vm.items) { item in
                 CatalogItemRow(item: item, packsViewModel: appState.packsVM)
                     // Paging is driven by the row, not the divider below it: the
                     // divider is a zero-height view that LazyVStack may never
-                    // consider on-screen, so its .task could go unrun and the
-                    // list would just stop growing.
-                    .task {
+                    // consider on-screen. An unstructured Task, not `.task`, so
+                    // the page fetch survives the row scrolling away instead of
+                    // being cancelled mid-request.
+                    .onAppear {
                         if item.id == vm.items.last?.id {
-                            await vm.loadMore()
+                            Task { await vm.loadMore() }
                         }
                     }
                 Divider().padding(.leading, 76)
@@ -131,18 +168,17 @@ struct CatalogItemRow: View {
     let item: CatalogItem
     let packsViewModel: PacksViewModel
     @State private var showingAddToPack = false
-    @State private var showingDetail = false
     @Environment(\.weightUnit) private var weightUnit
 
     var body: some View {
-        rowContent
-            .contentShape(Rectangle())
-            .onTapGesture { showingDetail = true }
-            .accessibilityIdentifier("catalog_item_row_\(item.id)")
-            .sheet(isPresented: $showingDetail) {
-                CatalogItemDetailView(item: item, packsViewModel: packsViewModel)
-            }
-            .sheet(isPresented: $showingAddToPack) {
+        NavigationLink {
+            CatalogItemDetailView(item: item, packsViewModel: packsViewModel, isPushed: true)
+        } label: {
+            rowContent.contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("catalog_item_row_\(item.id)")
+        .sheet(isPresented: $showingAddToPack) {
                 AddCatalogItemToPackSheet(item: item, packsViewModel: packsViewModel)
             }
     }
