@@ -1,3 +1,4 @@
+import { safeJsonStringify } from '@packrat/utils';
 import * as Sentry from '@sentry/react-native';
 import { packItemsSyncState, packsStore, packsSyncState } from 'expo-app/features/packs/store';
 import type { PackInStore } from 'expo-app/features/packs/types';
@@ -38,7 +39,7 @@ async function ensurePackOnServer(pack: PackInStore): Promise<void> {
   });
   if (error) {
     throw new ApiRequestError({
-      message: `Failed to create pack: ${JSON.stringify(error.value)}`,
+      message: `Failed to create pack: ${safeJsonStringify(error.value)}`,
       httpStatus: error.status,
     });
   }
@@ -54,7 +55,7 @@ async function copyTemplateItems({
   const { data, error } = await apiClient.packs({ packId })['apply-template'].post({ templateId });
   if (error || !data) {
     throw new ApiRequestError({
-      message: `Failed to apply template: ${JSON.stringify(error?.value)}`,
+      message: `Failed to apply template: ${safeJsonStringify(error?.value)}`,
       httpStatus: error?.status ?? 0,
     });
   }
