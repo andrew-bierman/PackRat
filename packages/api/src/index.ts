@@ -24,14 +24,15 @@ import { AppContainer } from '@packrat/api/containers';
 import { createDb } from '@packrat/api/db';
 import { PostLiveRoom } from '@packrat/api/durable-objects/PostLiveRoom';
 import { SafetyCheckInTimer as RawSafetyCheckInTimer } from '@packrat/api/durable-objects/SafetyCheckInTimer';
+import { TripDestinationWatcher as RawTripDestinationWatcher } from '@packrat/api/durable-objects/TripDestinationWatcher';
 import { CatalogService } from '@packrat/api/services';
 import { processQueueBatch } from '@packrat/api/services/etl/queue';
 import { listCachedFeatureFlags } from '@packrat/api/services/featureFlagsService';
 import { takePendingUpgrade } from '@packrat/api/services/feedLive';
 import { sweepInvalidItemLogs } from '@packrat/api/services/retention/invalidLogRetention';
 import { rearmOverdueTimers } from '@packrat/api/services/safetyCheckIn/overdueTimer';
-import { pollTripDestinations } from '@packrat/api/services/weatherMonitoring/pollTripDestinations';
 import { pollWatchedLocations } from '@packrat/api/services/weatherMonitoring/pollWatchedLocations';
+import { rearmTripDestinationTimers } from '@packrat/api/services/weatherMonitoring/tripDestinationTimer';
 import { hasWatchers } from '@packrat/api/services/weatherMonitoring/watcherPresence';
 import type { Env } from '@packrat/api/utils/env-validation';
 import { getEnv, setWorkerEnv } from '@packrat/api/utils/env-validation';
@@ -95,6 +96,11 @@ export const CatalogEtlWorkflow = instrumentWorkflowWithSentry(
 export const SafetyCheckInTimer = instrumentDurableObjectWithSentry(
   sentryOptions,
   RawSafetyCheckInTimer,
+);
+
+export const TripDestinationWatcher = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawTripDestinationWatcher,
 );
 
 type CfFetchFn = (
@@ -577,7 +583,7 @@ const workerHandler = {
             );
           }
           // Postgres is already awake for the retention sweep, so the daily
-          // backstop for safety check-in alarms costs no extra wake-up.
+          // backstops for safety check-in and trip destination timers cost no extra wake-up.
           const rearmed = await record({
             operation: 'safetyCheckIn.rearmOverdueTimers',
             tags: { trigger: 'cron' },
@@ -585,6 +591,13 @@ const workerHandler = {
             fn: async () => rearmOverdueTimers({ env }),
           });
           console.log(`[safetyCheckIn] re-armed overdue timers: armed=${rearmed.armed}`);
+          const rearmedTrips = await record({
+            operation: 'tripReminders.rearmDestinationTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmTripDestinationTimers({ env }),
+          });
+          console.log(`[tripReminders] re-armed destination timers: armed=${rearmedTrips.armed}`);
           return;
         }
         if (controller.cron === '*/15 * * * *') {
@@ -599,18 +612,6 @@ const workerHandler = {
             });
             console.log(
               `[weatherMonitoring] poll: checked=${result.checked} skipped=${result.skipped} ` +
-                `failed=${result.failed} notified=${result.notified}`,
-            );
-          }
-          if (flags[FeatureFlag.EnableTripReminders]) {
-            const result = await record({
-              operation: 'tripReminders.pollDestinations',
-              tags: { trigger: 'cron' },
-              extra: { cron: controller.cron },
-              fn: async () => pollTripDestinations({ env }),
-            });
-            console.log(
-              `[tripReminders] destination poll: checked=${result.checked} skipped=${result.skipped} ` +
                 `failed=${result.failed} notified=${result.notified}`,
             );
           }
