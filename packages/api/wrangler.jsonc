@@ -152,6 +152,10 @@
       {
         "class_name": "PostLiveRoom",
         "name": "POST_LIVE_ROOM"
+      },
+      {
+        "class_name": "SafetyCheckInTimer",
+        "name": "SAFETY_CHECK_IN_TIMER"
       }
     ]
   },
@@ -173,6 +177,10 @@
     {
       "new_sqlite_classes": ["PostLiveRoom"],
       "tag": "v3"
+    },
+    {
+      "new_sqlite_classes": ["SafetyCheckInTimer"],
+      "tag": "v4"
     }
   ],
   "env": {
@@ -285,6 +293,10 @@
           {
             "class_name": "PostLiveRoom",
             "name": "POST_LIVE_ROOM"
+          },
+          {
+            "class_name": "SafetyCheckInTimer",
+            "name": "SAFETY_CHECK_IN_TIMER"
           }
         ]
       },
@@ -305,6 +317,10 @@
         {
           "new_sqlite_classes": ["PostLiveRoom"],
           "tag": "v4"
+        },
+        {
+          "new_sqlite_classes": ["SafetyCheckInTimer"],
+          "tag": "v5"
         }
       ]
     }

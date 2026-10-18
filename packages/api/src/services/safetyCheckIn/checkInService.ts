@@ -26,6 +26,7 @@ import {
   safeMessage,
   tripStartedMessage,
 } from './messages';
+import { armOverdueTimer, disarmOverdueTimer } from './overdueTimer';
 import { detectOffRoute, OFF_ROUTE_CONSECUTIVE_FIXES } from './routeDeviation';
 
 const DEFAULT_API_URL = 'https://api.packrat.app';
@@ -297,6 +298,8 @@ export async function startCheckIn({
     .set({ status: 'in_progress', startedAt, updatedAt: new Date() })
     .where(eq(trips.id, tripId));
 
+  await armOverdueTimer({ checkInId: row.id, at: overdueAt(row) });
+
   const { userName } = await loadTripAndUser(row);
 
   // First message a contact ever receives explains why they're getting it.
@@ -371,6 +374,8 @@ export async function extendCheckIn({
     .returning();
   if (!row) throw new CheckInError({ message: 'Check-in not found', httpStatus: 404 });
 
+  if (!row.overdueAlertSentAt) await armOverdueTimer({ checkInId: row.id, at: overdueAt(row) });
+
   const { trip, userName } = await loadTripAndUser(row);
   await deliverToContacts({
     contacts: await contactsFor(row.id),
@@ -417,6 +422,8 @@ export async function endCheckIn({
     .where(and(eq(safetyCheckIns.id, checkInId), eq(safetyCheckIns.status, 'active')))
     .returning();
   if (!row) return toResponse(await loadOwnedCheckIn({ userId, checkInId }));
+
+  await disarmOverdueTimer({ checkInId });
 
   await db
     .tag('safetyCheckIn.deleteLocations')
