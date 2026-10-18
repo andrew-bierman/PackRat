@@ -78,6 +78,9 @@ vi.mock('@packrat/api/durable-objects/SafetyCheckInTimer', () => ({
 vi.mock('@packrat/api/durable-objects/TripDestinationWatcher', () => ({
   TripDestinationWatcher: class TripDestinationWatcher {},
 }));
+vi.mock('@packrat/api/durable-objects/WatchedPlaceWatcher', () => ({
+  WatchedPlaceWatcher: class WatchedPlaceWatcher {},
+}));
 
 vi.mock('@packrat/api/services', () => ({
   CatalogService: class CatalogService {},

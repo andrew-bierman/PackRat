@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => {
   const tags = vi.fn();
   const selectWhere = vi.fn();
+  const selectLimit = vi.fn();
   const insertValues = vi.fn();
   const onConflictDoUpdate = vi.fn();
   const insertReturning = vi.fn();
@@ -11,13 +12,15 @@ const mocks = vi.hoisted(() => {
   return {
     tags,
     selectWhere,
+    selectLimit,
     insertValues,
     onConflictDoUpdate,
     insertReturning,
     deleteWhere,
     deleteReturning,
     captureApiException: vi.fn(),
-    markHasWatchers: vi.fn(),
+    armWatchedPlaceTimer: vi.fn(),
+    disarmWatchedPlaceTimer: vi.fn(),
     createDb: vi.fn(() => {
       const db = {
         tag: (label: string) => {
@@ -25,7 +28,10 @@ const mocks = vi.hoisted(() => {
           return db;
         },
         select: (_cols: unknown) => ({
-          from: (_table: unknown) => ({ where: selectWhere }),
+          from: (_table: unknown) => ({
+            where: (cond: unknown) =>
+              Object.assign(selectWhere(cond) as Promise<unknown>, { limit: selectLimit }),
+          }),
         }),
         insert: (_table: unknown) => ({
           values: (values: unknown) => {
@@ -51,9 +57,10 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
-const AUTH_KV = {} as KVNamespace;
-vi.mock('@packrat/api/utils/env-validation', () => ({ getEnv: () => ({ AUTH_KV }) }));
-vi.mock('../watcherPresence', () => ({ markHasWatchers: mocks.markHasWatchers }));
+vi.mock('../watchedPlaceTimer', () => ({
+  armWatchedPlaceTimer: mocks.armWatchedPlaceTimer,
+  disarmWatchedPlaceTimer: mocks.disarmWatchedPlaceTimer,
+}));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('@packrat/db/schema', () => ({
   weatherWatchedLocations: {
@@ -203,52 +210,47 @@ describe('addWatchedLocation', () => {
   });
 });
 
-describe('has-watchers marker', () => {
+describe('watched-place timer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.markHasWatchers.mockResolvedValue(undefined);
+    mocks.selectWhere.mockResolvedValue([]);
   });
 
-  it('is set when a location is added, so the polling cron picks it up', async () => {
+  it('is started when a location is added', async () => {
     mocks.insertReturning.mockResolvedValue([storedRow]);
 
     await addWatchedLocation({ userId: 'user-1', request });
 
-    expect(mocks.markHasWatchers).toHaveBeenCalledWith(AUTH_KV);
+    expect(mocks.armWatchedPlaceTimer).toHaveBeenCalledWith({ weatherLocationId: 42 });
   });
 
-  it('is re-asserted when a non-empty watch list is read', async () => {
-    mocks.selectWhere.mockResolvedValue([storedRow]);
+  it('is stopped when the last watcher removes the place', async () => {
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectLimit.mockResolvedValue([]);
 
-    await listWatchedLocations('user-1');
+    await removeWatchedLocation({ userId: 'user-1', watchedLocationId: 'watch-1' });
 
-    expect(mocks.markHasWatchers).toHaveBeenCalledWith(AUTH_KV);
+    expect(mocks.selectWhere).toHaveBeenCalledWith({ col: 'weatherLocationId', val: 42 });
+    expect(mocks.selectLimit).toHaveBeenCalledWith(1);
+    expect(mocks.disarmWatchedPlaceTimer).toHaveBeenCalledWith({ weatherLocationId: 42 });
   });
 
-  it('is left alone when the watch list is empty', async () => {
-    mocks.selectWhere.mockResolvedValue([]);
+  it('keeps running while someone else still watches the place', async () => {
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectLimit.mockResolvedValue([{ id: 'watch-2' }]);
 
-    await listWatchedLocations('user-1');
+    await removeWatchedLocation({ userId: 'user-1', watchedLocationId: 'watch-1' });
 
-    expect(mocks.markHasWatchers).toHaveBeenCalledTimes(0);
-  });
-
-  it('does not fail the add when the marker write fails, but reports it', async () => {
-    mocks.insertReturning.mockResolvedValue([storedRow]);
-    const error = new Error('kv down');
-    mocks.markHasWatchers.mockRejectedValue(error);
-
-    await expect(addWatchedLocation({ userId: 'user-1', request })).resolves.toEqual(storedRow);
-    expect(mocks.captureApiException).toHaveBeenCalledWith(
-      expect.objectContaining({ error, operation: 'weatherMonitoring.markHasWatchers' }),
-    );
+    expect(mocks.disarmWatchedPlaceTimer).toHaveBeenCalledTimes(0);
   });
 });
 
 describe('removeWatchedLocation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.deleteReturning.mockResolvedValue([storedRow]);
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectWhere.mockResolvedValue([]);
+    mocks.selectLimit.mockResolvedValue([{ id: 'watch-2' }]);
   });
 
   it('reports success when a row was deleted', async () => {

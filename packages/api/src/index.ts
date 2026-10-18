@@ -25,15 +25,14 @@ import { createDb } from '@packrat/api/db';
 import { PostLiveRoom } from '@packrat/api/durable-objects/PostLiveRoom';
 import { SafetyCheckInTimer as RawSafetyCheckInTimer } from '@packrat/api/durable-objects/SafetyCheckInTimer';
 import { TripDestinationWatcher as RawTripDestinationWatcher } from '@packrat/api/durable-objects/TripDestinationWatcher';
+import { WatchedPlaceWatcher as RawWatchedPlaceWatcher } from '@packrat/api/durable-objects/WatchedPlaceWatcher';
 import { CatalogService } from '@packrat/api/services';
 import { processQueueBatch } from '@packrat/api/services/etl/queue';
-import { listCachedFeatureFlags } from '@packrat/api/services/featureFlagsService';
 import { takePendingUpgrade } from '@packrat/api/services/feedLive';
 import { sweepInvalidItemLogs } from '@packrat/api/services/retention/invalidLogRetention';
 import { rearmOverdueTimers } from '@packrat/api/services/safetyCheckIn/overdueTimer';
-import { pollWatchedLocations } from '@packrat/api/services/weatherMonitoring/pollWatchedLocations';
 import { rearmTripDestinationTimers } from '@packrat/api/services/weatherMonitoring/tripDestinationTimer';
-import { hasWatchers } from '@packrat/api/services/weatherMonitoring/watcherPresence';
+import { rearmWatchedPlaceTimers } from '@packrat/api/services/weatherMonitoring/watchedPlaceTimer';
 import type { Env } from '@packrat/api/utils/env-validation';
 import { getEnv, setWorkerEnv } from '@packrat/api/utils/env-validation';
 import {
@@ -44,7 +43,6 @@ import {
 } from '@packrat/api/utils/queryMetrics';
 import { captureApiException, record } from '@packrat/api/utils/sentry';
 import { CatalogEtlWorkflow as RawCatalogEtlWorkflow } from '@packrat/api/workflows/catalog-etl-workflow';
-import { FeatureFlag } from '@packrat/config';
 import { renderConsentPage, renderSignInPage } from '@packrat/consent-ui';
 import * as dbSchema from '@packrat/db/schema';
 import { isString, toRecord, toString as toStr } from '@packrat/guards';
@@ -101,6 +99,11 @@ export const SafetyCheckInTimer = instrumentDurableObjectWithSentry(
 export const TripDestinationWatcher = instrumentDurableObjectWithSentry(
   sentryOptions,
   RawTripDestinationWatcher,
+);
+
+export const WatchedPlaceWatcher = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawWatchedPlaceWatcher,
 );
 
 type CfFetchFn = (
@@ -583,7 +586,8 @@ const workerHandler = {
             );
           }
           // Postgres is already awake for the retention sweep, so the daily
-          // backstops for safety check-in and trip destination timers cost no extra wake-up.
+          // backstops for the safety check-in, trip destination and watched-place
+          // timers cost no extra wake-up.
           const rearmed = await record({
             operation: 'safetyCheckIn.rearmOverdueTimers',
             tags: { trigger: 'cron' },
@@ -598,23 +602,13 @@ const workerHandler = {
             fn: async () => rearmTripDestinationTimers({ env }),
           });
           console.log(`[tripReminders] re-armed destination timers: armed=${rearmedTrips.armed}`);
-          return;
-        }
-        if (controller.cron === '*/15 * * * *') {
-          const flags = await listCachedFeatureFlags(env.AUTH_KV);
-          // KV marker first: skips the watch-list queries when nobody watches anything.
-          if (flags[FeatureFlag.EnableWeatherMonitoring] && (await hasWatchers(env.AUTH_KV))) {
-            const result = await record({
-              operation: 'weatherMonitoring.poll',
-              tags: { trigger: 'cron' },
-              extra: { cron: controller.cron },
-              fn: async () => pollWatchedLocations({ env }),
-            });
-            console.log(
-              `[weatherMonitoring] poll: checked=${result.checked} skipped=${result.skipped} ` +
-                `failed=${result.failed} notified=${result.notified}`,
-            );
-          }
+          const rearmedPlaces = await record({
+            operation: 'weatherMonitoring.rearmPlaceTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmWatchedPlaceTimers({ env }),
+          });
+          console.log(`[weatherMonitoring] re-armed place timers: armed=${rearmedPlaces.armed}`);
           return;
         }
         throw new Error(`Unknown cron: ${controller.cron}`);

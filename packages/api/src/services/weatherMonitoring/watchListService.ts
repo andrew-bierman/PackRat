@@ -1,10 +1,9 @@
 import { createDb } from '@packrat/api/db';
-import { getEnv } from '@packrat/api/utils/env-validation';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import { weatherWatchedLocations } from '@packrat/db/schema';
 import type { AddWatchedLocationRequest } from '@packrat/schemas/weatherMonitoring';
 import { and, eq } from 'drizzle-orm';
-import { markHasWatchers } from './watcherPresence';
+import { armWatchedPlaceTimer, disarmWatchedPlaceTimer } from './watchedPlaceTimer';
 
 export type WatchedLocationRow = {
   id: string;
@@ -28,24 +27,6 @@ const SELECT_COLUMNS = {
   createdAt: weatherWatchedLocations.createdAt,
 } as const;
 
-/**
- * Best-effort: a failed marker write must not fail the user's request, but it
- * does mean the cron may skip this watcher until the next add/list, so it is
- * reported.
- */
-async function assertHasWatchers(userId: string): Promise<void> {
-  try {
-    await markHasWatchers(getEnv().AUTH_KV);
-  } catch (error) {
-    captureApiException({
-      error,
-      operation: 'weatherMonitoring.markHasWatchers',
-      userId,
-      tags: { feature: 'weatherMonitoring' },
-    });
-  }
-}
-
 export async function listWatchedLocations(userId: string): Promise<WatchedLocationRow[]> {
   const db = createDb();
   let rows: WatchedLocationRow[];
@@ -64,7 +45,6 @@ export async function listWatchedLocations(userId: string): Promise<WatchedLocat
     });
     throw error;
   }
-  if (rows.length > 0) await assertHasWatchers(userId);
   return rows;
 }
 
@@ -111,7 +91,7 @@ export async function addWatchedLocation({
       .returning();
 
     if (!row) throw new Error('Failed to add watched location');
-    await assertHasWatchers(userId);
+    await armWatchedPlaceTimer({ weatherLocationId: row.weatherLocationId });
     return row;
   } catch (error) {
     captureApiException({
@@ -125,7 +105,10 @@ export async function addWatchedLocation({
   }
 }
 
-/** Returns false if no matching row existed for this user. */
+/**
+ * Returns false if no matching row existed for this user. Stops the place's
+ * timer when this was its last watcher.
+ */
 export async function removeWatchedLocation({
   userId,
   watchedLocationId,
@@ -144,8 +127,22 @@ export async function removeWatchedLocation({
           eq(weatherWatchedLocations.userId, userId),
         ),
       )
+      // The tagged delete only exposes the no-arg `.returning()` (same Drizzle
+      // narrowing as the insert above); the row is small.
       .returning();
-    return deleted.length > 0;
+    const [removed] = deleted;
+    if (!removed) return false;
+
+    const [stillWatched] = await db
+      .tag('weatherMonitoring.findWatcherOfLocation')
+      .select({ id: weatherWatchedLocations.id })
+      .from(weatherWatchedLocations)
+      .where(eq(weatherWatchedLocations.weatherLocationId, removed.weatherLocationId))
+      .limit(1);
+    if (!stillWatched) {
+      await disarmWatchedPlaceTimer({ weatherLocationId: removed.weatherLocationId });
+    }
+    return true;
   } catch (error) {
     captureApiException({
       error,
