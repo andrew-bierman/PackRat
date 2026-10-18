@@ -9,6 +9,7 @@ import {
   resolveFlagsForPlatform,
 } from '@packrat/config';
 import { featureFlagPlatformOverrides, featureFlags } from '@packrat/db/schema';
+import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
 import { and, eq } from 'drizzle-orm';
 
 // All flag keys known to the codebase. Exported so the admin route can build
@@ -125,10 +126,10 @@ export async function listCachedFeatureFlags(kv: FlagsKv): Promise<Record<string
   const cached = await kv.get(GLOBAL_FLAG_OVERRIDES_KEY);
   let globalOverrides: Record<string, boolean>;
   if (cached !== null) {
-    globalOverrides = JSON.parse(cached) as Record<string, boolean>; // safe-cast: written only by this module
+    globalOverrides = safeJsonParse<Record<string, boolean>>(cached);
   } else {
     globalOverrides = await readGlobalOverrides();
-    await kv.put(GLOBAL_FLAG_OVERRIDES_KEY, JSON.stringify(globalOverrides), {
+    await kv.put(GLOBAL_FLAG_OVERRIDES_KEY, safeJsonStringify(globalOverrides), {
       expirationTtl: GLOBAL_FLAG_OVERRIDES_TTL_SECONDS,
     });
   }
