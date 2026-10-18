@@ -4,9 +4,10 @@ import type { SpeciesEntry } from '../types';
 export function buildSpeciesPack(species: readonly SpeciesEntry[]) {
   const speciesById: ReadonlyMap<string, SpeciesEntry> = new Map(species.map((s) => [s.id, s]));
   const regions: ReadonlySet<string> = new Set(species.flatMap((s) => s.regions));
+  const speciesIds: ReadonlySet<string> = new Set(speciesById.keys());
   return {
     speciesById,
-    speciesIds: new Set(speciesById.keys()) as ReadonlySet<string>,
+    speciesIds,
     count: speciesById.size,
     /**
      * Drives "no confident match" versus "not in your species packs": one says
