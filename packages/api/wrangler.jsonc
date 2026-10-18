@@ -129,7 +129,7 @@
   // 5-minute granularity; baseline-tier locations are simply skipped inside
   // the handler when not yet due). Handled by the `scheduled` arm in src/index.ts.
   "triggers": {
-    "crons": ["0 9 * * *", "*/15 * * * *"]
+    "crons": ["0 9 * * *"]
   },
   // OSM / trail database — dedicated Postgres instance with PostGIS.
   // Add a Hyperdrive binding when ready:
@@ -160,6 +160,10 @@
       {
         "class_name": "TripDestinationWatcher",
         "name": "TRIP_DESTINATION_WATCHER"
+      },
+      {
+        "class_name": "WatchedPlaceWatcher",
+        "name": "WATCHED_PLACE_WATCHER"
       }
     ]
   },
@@ -189,6 +193,10 @@
     {
       "new_sqlite_classes": ["TripDestinationWatcher"],
       "tag": "v5"
+    },
+    {
+      "new_sqlite_classes": ["WatchedPlaceWatcher"],
+      "tag": "v6"
     }
   ],
   "env": {
@@ -282,7 +290,7 @@
         }
       ],
       "triggers": {
-        "crons": ["0 9 * * *", "*/15 * * * *"]
+        "crons": ["0 9 * * *"]
       },
       "containers": [
         {
@@ -309,6 +317,10 @@
           {
             "class_name": "TripDestinationWatcher",
             "name": "TRIP_DESTINATION_WATCHER"
+          },
+          {
+            "class_name": "WatchedPlaceWatcher",
+            "name": "WATCHED_PLACE_WATCHER"
           }
         ]
       },
@@ -337,6 +349,10 @@
         {
           "new_sqlite_classes": ["TripDestinationWatcher"],
           "tag": "v6"
+        },
+        {
+          "new_sqlite_classes": ["WatchedPlaceWatcher"],
+          "tag": "v7"
         }
       ]
     }

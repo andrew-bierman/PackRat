@@ -26,6 +26,7 @@ function alertNotificationBody(alerts: WeatherAlertItem[]): { title: string; bod
  *
  * Per-device failures don't abort the batch: an expired token is deleted so
  * the table self-cleans, and any other failure is captured and skipped.
+ * Returns how many users watch the place, so its timer can stop at zero.
  */
 export async function notifyWatchers({
   env,
@@ -35,8 +36,8 @@ export async function notifyWatchers({
   env: ValidatedEnv;
   weatherLocationId: number;
   newAlerts: WeatherAlertItem[];
-}): Promise<void> {
-  if (newAlerts.length === 0) return;
+}): Promise<{ watchers: number }> {
+  if (newAlerts.length === 0) return { watchers: 0 };
 
   const db = createDbClient(env);
 
@@ -45,7 +46,7 @@ export async function notifyWatchers({
     .selectDistinct({ userId: weatherWatchedLocations.userId })
     .from(weatherWatchedLocations)
     .where(eq(weatherWatchedLocations.weatherLocationId, weatherLocationId));
-  if (watchers.length === 0) return;
+  if (watchers.length === 0) return { watchers: 0 };
 
   const watcherIds = watchers.map((w) => w.userId);
   const tokens = await db
@@ -86,4 +87,5 @@ export async function notifyWatchers({
       });
     }
   }
+  return { watchers: watchers.length };
 }

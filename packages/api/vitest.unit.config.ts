@@ -80,7 +80,6 @@ export default defineConfig({
         'src/services/imageDetectionService.ts',
         // DB + WeatherAPI + APNs orchestration — covered by integration tests.
         // diffAlerts.ts (the actual decision logic) is pure and fully unit-tested.
-        'src/services/weatherMonitoring/pollWatchedLocations.ts',
         'src/services/weatherMonitoring/fetchLocationAlerts.ts',
         'src/services/push/apnsClient.ts',
         'src/services/push/notifyWatchers.ts',
