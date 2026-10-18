@@ -1,34 +1,22 @@
 import { getAppBarOptions } from '@packrat/ui/src/app-bar';
+import { Button } from '@packrat/ui/src/button';
 import { SearchOverlay } from '@packrat/ui/src/search-overlay';
-import { SegmentedControl } from '@packrat/ui/src/segmented-control';
+import { Text } from '@packrat/ui/src/text';
 import { Icon } from 'expo-app/components/Icon';
-import { useAuth } from 'expo-app/features/auth/hooks/useAuth';
-import { useUser } from 'expo-app/features/auth/hooks/useUser';
-import type { PackCategory } from 'expo-app/features/packs/types';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
+import { testIds } from 'expo-app/lib/testIds';
 import { Stack, useRouter } from 'expo-router';
 import { useAtom } from 'jotai';
-import { useCallback, useState } from 'react';
-import {
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { FeaturedPacksSection } from '../components/FeaturedPacksSection';
+import { useCallback, useMemo } from 'react';
+import { FlatList, Pressable, SafeAreaView, ScrollView, View } from 'react-native';
+import { OfficialTemplateRow } from '../components/OfficialTemplateRow';
+import { OfficialShelfHeader, OfficialTemplatesShelf } from '../components/OfficialTemplatesShelf';
 import { PackTemplateCard } from '../components/PackTemplateCard';
 import { usePackTemplates } from '../hooks';
-import { activeTemplateFilterAtom, templateSearchValueAtom } from '../packTemplateListAtoms';
+import { usePackTemplateSummaries } from '../hooks/usePackTemplateSummary';
+import { templateSearchValueAtom } from '../packTemplateListAtoms';
 import type { PackTemplate } from '../types';
-
-type FilterOption = {
-  label: string;
-  value: PackCategory | 'all';
-};
 
 function CreateTemplateIconButton({ onPress }: { onPress: () => void }) {
   const { colors } = useColorScheme();
@@ -40,82 +28,42 @@ function CreateTemplateIconButton({ onPress }: { onPress: () => void }) {
   );
 }
 
+function SectionTitle({ children }: { children: string }) {
+  return <Text className="px-4 pb-1 pt-4 text-2xl font-bold text-foreground">{children}</Text>;
+}
+
 export function PackTemplateListScreen() {
   const router = useRouter();
   const templates = usePackTemplates();
   const [searchValue, setSearchValue] = useAtom(templateSearchValueAtom);
-  const [activeFilter, setActiveFilter] = useAtom(activeTemplateFilterAtom);
-  const { isAuthenticated } = useAuth();
-  const user = useUser();
-  const _isAdmin = user?.role === 'ADMIN';
-  const [selectedTemplateTypeIndex, setSelectedTemplateTypeIndex] = useState(0);
   const { t } = useTranslation();
 
-  // Filter options with translations
-  const filterOptions: FilterOption[] = [
-    { label: t('packTemplates.all'), value: 'all' },
-    { label: t('packTemplates.hiking'), value: 'hiking' },
-    { label: t('packTemplates.backpacking'), value: 'backpacking' },
-    { label: t('packTemplates.camping'), value: 'camping' },
-    { label: t('packTemplates.climbing'), value: 'climbing' },
-    { label: t('packTemplates.winter'), value: 'winter' },
-    { label: t('packTemplates.desert'), value: 'desert' },
-    { label: t('packTemplates.custom'), value: 'custom' },
-  ];
+  const official = useMemo(() => templates.filter((tpl) => tpl.isAppTemplate), [templates]);
+  const mine = useMemo(() => templates.filter((tpl) => !tpl.isAppTemplate), [templates]);
+  const officialIds = useMemo(() => official.map((tpl) => tpl.id), [official]);
+  const summaries = usePackTemplateSummaries({ templateIds: officialIds });
 
-  const handleTemplatePress = useCallback(
-    (template: PackTemplate) => {
-      router.push({
-        pathname: '/pack-templates/[id]',
-        params: { id: template.id },
-      });
-    },
+  const query = searchValue.trim().toLowerCase();
+  const matches = useCallback(
+    (tpl: { name: string }) => tpl.name.toLowerCase().includes(query),
+    [query],
+  );
+  const officialResults = useMemo(() => official.filter(matches), [official, matches]);
+  const mineResults = useMemo(() => mine.filter(matches), [mine, matches]);
+
+  const openTemplate = useCallback(
+    (id: string) => router.push({ pathname: '/pack-templates/[id]', params: { id } }),
     [router],
   );
-
-  const handleCreatePackTemplate = () => {
-    router.push({ pathname: '/pack-templates/new' });
-  };
-
-  const filteredTemplates =
-    activeFilter === 'all'
-      ? templates?.filter(
-          (t) =>
-            (selectedTemplateTypeIndex === 0
-              ? true
-              : selectedTemplateTypeIndex === 1
-                ? t.isAppTemplate
-                : !t.isAppTemplate) && t.name.toLowerCase().includes(searchValue.toLowerCase()),
-        )
-      : templates?.filter(
-          (t) =>
-            (selectedTemplateTypeIndex === 0
-              ? true
-              : selectedTemplateTypeIndex === 1
-                ? t.isAppTemplate
-                : !t.isAppTemplate) &&
-            t.category === activeFilter &&
-            t.name.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-
-  const renderFilterChip = ({ label, value }: FilterOption) => (
-    <TouchableOpacity
-      key={value}
-      onPress={() => setActiveFilter(value)}
-      className={`mr-2 rounded-full px-4 py-2 ${activeFilter === value ? 'bg-primary' : 'bg-card'}`}
-    >
-      <Text
-        className={`text-sm font-medium ${activeFilter === value ? 'text-primary-foreground' : 'text-foreground'}`}
-      >
-        {label}
-      </Text>
-    </TouchableOpacity>
+  const handleCardPress = useCallback(
+    (template: PackTemplate) => openTemplate(template.id),
+    [openTemplate],
   );
+  const handleCreatePackTemplate = () => router.push({ pathname: '/pack-templates/new' });
+  const openOfficialList = () => router.push({ pathname: '/pack-templates/official' });
 
   const renderSearchContent = () => {
-    const isSearching = searchValue.trim().length > 0;
-
-    if (!isSearching) {
+    if (!query) {
       return (
         <View className="flex-1 items-center justify-center p-4">
           <Text className="text-muted-foreground">{t('packTemplates.searchTemplates')}</Text>
@@ -123,60 +71,68 @@ export function PackTemplateListScreen() {
       );
     }
 
+    if (officialResults.length === 0 && mineResults.length === 0) {
+      return (
+        <View className="flex-1 items-center justify-center p-8">
+          <View className="mb-4 rounded-full bg-muted p-4">
+            <Icon name="magnify" size={32} color="text-muted-foreground" />
+          </View>
+          <Text className="mb-1 text-lg font-medium text-foreground">
+            {t('packTemplates.noTemplatesFound')}
+          </Text>
+          <Text className="text-center text-muted-foreground">
+            {t('packTemplates.tryDifferentSearch')}
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <View className="px-4 pt-2">
-          {filteredTemplates.length > 0 && (
-            <Text className="text-xs text-muted-foreground">
-              {filteredTemplates.length}{' '}
-              {filteredTemplates.length === 1
-                ? t('packTemplates.result')
-                : t('packTemplates.results')}
-            </Text>
-          )}
-        </View>
-
-        {filteredTemplates.map((template) => (
-          <View className="px-4 pt-4" key={template.id}>
-            <PackTemplateCard templateId={template.id} onPress={handleTemplatePress} />
-          </View>
-        ))}
-
-        {filteredTemplates.length === 0 && (
-          <View className="flex-1 items-center justify-center p-8">
-            <View className="mb-4 rounded-full bg-muted p-4">
-              <Icon name="magnify" size={32} color="text-muted-foreground" />
+        {officialResults.length > 0 && (
+          <>
+            <SectionTitle>{t('packTemplates.official')}</SectionTitle>
+            <View className="px-4">
+              {officialResults.map((template) => (
+                <OfficialTemplateRow
+                  key={template.id}
+                  template={template}
+                  summary={summaries[template.id]}
+                  onPress={openTemplate}
+                />
+              ))}
             </View>
-            <Text className="mb-1 text-lg font-medium text-foreground">
-              {t('packTemplates.noTemplatesFound')}
-            </Text>
-            <Text className="text-center text-muted-foreground">
-              {t('packTemplates.tryDifferentSearch')}
-            </Text>
-          </View>
+          </>
+        )}
+        {mineResults.length > 0 && (
+          <>
+            <SectionTitle>{t('packTemplates.myTemplates')}</SectionTitle>
+            {mineResults.map((template) => (
+              <View className="px-4 pt-4" key={template.id}>
+                <PackTemplateCard templateId={template.id} onPress={handleCardPress} />
+              </View>
+            ))}
+          </>
         )}
       </ScrollView>
     );
   };
 
-  const listHeader = () => {
-    const isSearching = searchValue.trim().length > 0;
-    if (isSearching) return null;
-
-    return selectedTemplateTypeIndex === 0 ? (
-      <View className="bg-background">
-        <FeaturedPacksSection onTemplatePress={handleTemplatePress} />
-        <View className="px-4 pb-2">
-          <Text className="text-muted-foreground">
-            {filteredTemplates.length}{' '}
-            {filteredTemplates.length === 1
-              ? t('packTemplates.template')
-              : t('packTemplates.templates')}
-          </Text>
-        </View>
-      </View>
-    ) : undefined;
-  };
+  const listHeader = (
+    <View>
+      {official.length > 0 && (
+        <>
+          <OfficialShelfHeader onPress={openOfficialList} />
+          <OfficialTemplatesShelf
+            templates={official}
+            summaries={summaries}
+            onTemplatePress={openTemplate}
+          />
+        </>
+      )}
+      <SectionTitle>{t('packTemplates.myTemplates')}</SectionTitle>
+    </View>
+  );
 
   return (
     <SafeAreaView className="flex-1">
@@ -196,57 +152,33 @@ export function PackTemplateListScreen() {
         {renderSearchContent()}
       </SearchOverlay>
 
-      <View className="bg-background gap-2 px-4 pb-2">
-        <SegmentedControl
-          enabled={isAuthenticated}
-          values={[t('packTemplates.all'), t('packTemplates.app'), t('packTemplates.yours')]}
-          selectedIndex={selectedTemplateTypeIndex}
-          onIndexChange={(index) => {
-            setSelectedTemplateTypeIndex(index);
-          }}
-        />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="py-1">
-          {filterOptions.map(renderFilterChip)}
-        </ScrollView>
-      </View>
       <FlatList
-        data={filteredTemplates}
+        data={mine}
         keyExtractor={(item) => item.id}
         contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={{ paddingBottom: 24 }}
+        ListHeaderComponent={listHeader}
         renderItem={({ item }) => (
           <View className="px-4 pt-4">
-            <PackTemplateCard templateId={item.id} onPress={handleTemplatePress} />
+            <PackTemplateCard templateId={item.id} onPress={handleCardPress} />
           </View>
         )}
-        stickyHeaderIndices={listHeader() ? [0] : undefined}
-        stickyHeaderHiddenOnScroll
-        ListHeaderComponent={listHeader()}
         ListEmptyComponent={
-          <View className="flex-1 items-center justify-center p-8">
+          <View className="items-center px-8 py-10" testID={testIds.packTemplates.mineEmpty}>
             <View className="mb-4 rounded-full bg-muted p-4">
-              <Icon name="cog-outline" size={32} color="text-muted-foreground" />
+              <Icon name="file-document-multiple-outline" size={32} color="text-muted-foreground" />
             </View>
             <Text className="mb-1 text-lg font-medium text-foreground">
-              {t('packTemplates.noTemplatesFound')}
+              {t('packTemplates.noTemplatesYet')}
             </Text>
             <Text className="mb-6 text-center text-muted-foreground">
-              {activeFilter === 'all'
-                ? t('packTemplates.noTemplatesCreated')
-                : t('packTemplates.noTemplatesInCategory', {
-                    category: activeFilter,
-                  })}
+              {t('packTemplates.noTemplatesYetMessage')}
             </Text>
-            <TouchableOpacity
-              className="rounded-lg bg-primary px-4 py-2"
-              onPress={handleCreatePackTemplate}
-            >
-              <Text className="font-medium text-primary-foreground">
-                {t('packTemplates.createTemplate')}
-              </Text>
-            </TouchableOpacity>
+            <Button onPress={handleCreatePackTemplate}>
+              <Text>{t('packTemplates.newTemplate')}</Text>
+            </Button>
           </View>
         }
-        // contentContainerStyle={{ flexGrow: 1 }}
       />
     </SafeAreaView>
   );

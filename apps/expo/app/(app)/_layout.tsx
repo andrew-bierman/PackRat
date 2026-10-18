@@ -271,6 +271,19 @@ export default function AppLayout() {
             getPackTemplateDetailOptions((route.params as { id: string })?.id)
           }
         />
+        <Stack.Screen name="pack-templates/official" options={{ title: 'Official' }} />
+        <Stack.Screen
+          name="pack-templates/[id]/apply"
+          options={{
+            headerTitle: 'Apply to Pack',
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
+        <Stack.Screen
+          name="pack-templates/[id]/new-pack"
+          options={{ headerTitle: 'New Pack', presentation: 'modal' }}
+        />
         <Stack.Screen
           name="pack-templates/[id]/edit"
           options={{
