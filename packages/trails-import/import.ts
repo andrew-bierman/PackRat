@@ -12,6 +12,7 @@
  *   bun run import --bbox=-124.48,32.53,-114.13,42.01      # California
  *   bun run import --bbox=... --release=2026-09-23.1
  *   bun run import --reconcile-only --release=2026-09-23.1 # segments already loaded
+ *   bun run import --bbox=... --from-band=12                # resume a stopped run
  *
  * Steps: apply schema.sql, replace `trail_segments` with the release's named
  * path segments inside the bbox (DuckDB reads Overture's S3 parquet and writes
@@ -43,6 +44,7 @@ const { values } = parseArgs({
     bbox: { type: 'string' },
     release: { type: 'string', default: DEFAULT_RELEASE },
     'reconcile-only': { type: 'boolean', default: false },
+    'from-band': { type: 'string', default: '1' },
   },
 });
 
@@ -87,10 +89,14 @@ if (!values['reconcile-only']) {
   // COPY held open for the whole worldwide scan (Neon drops those). Overture's
   // files are spatially sorted, so a band reads only its own row groups. A
   // segment crossing a band edge lands once (ON CONFLICT DO NOTHING).
-  await run(['psql', DB_URL, '-c', 'TRUNCATE trail_segments']);
+  // --from-band resumes a stopped run: earlier bands are already loaded, so
+  // keep them (re-loading the partial band is safe, inserts skip duplicates).
+  const fromBand = Number(values['from-band']);
+  if (fromBand === 1) await run(['psql', DB_URL, '-c', 'TRUNCATE trail_segments']);
   const bands: [number, number][] = [];
   for (let w = west; w < east; w += BAND_DEGREES) bands.push([w, Math.min(w + BAND_DEGREES, east)]);
   for (const [i, [bandWest, bandEast]] of bands.entries()) {
+    if (i + 1 < fromBand) continue;
     console.log(`Loading ${release} band ${i + 1}/${bands.length} (${bandWest}..${bandEast})...`);
     const sql = `
 .bail on
