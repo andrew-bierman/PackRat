@@ -1,4 +1,5 @@
 import { PACK_CATEGORIES, type PackCategory } from '@packrat/constants';
+import { makeEnumGuard } from '@packrat/guards';
 import type { PackInStore } from 'expo-app/features/packs/types';
 
 // Applying a template copies its items into a pack on the server in one
@@ -45,10 +46,10 @@ export type ApplyTemplateDeps = {
   onRefreshError?: (error: unknown) => void;
 };
 
-const PACK_CATEGORY_SET: ReadonlySet<string> = new Set(PACK_CATEGORIES);
+const isPackCategory = makeEnumGuard(PACK_CATEGORIES);
 
 function toPackCategory(value: string | null | undefined): PackCategory {
-  return value && PACK_CATEGORY_SET.has(value) ? (value as PackCategory) : 'custom';
+  return isPackCategory(value) ? value : 'custom';
 }
 
 export function buildPackFromTemplate({
