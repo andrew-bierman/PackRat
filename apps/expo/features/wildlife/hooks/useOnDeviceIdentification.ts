@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react-native';
 import type { SelectedImage } from 'expo-app/features/packs/hooks/useImagePicker';
+import { File, Paths } from 'expo-file-system';
 import { useCallback, useRef, useState } from 'react';
 import { SPECIES_DATABASE } from '../data/speciesDatabase';
 import { classifySpecies, loadSpeciesModel } from '../lib/onDeviceClassifier';
@@ -9,6 +10,16 @@ import { buildSpeciesPack } from '../utils/speciesPack';
 import { identifyOnline } from './useWildlifeIdentification';
 
 const speciesPack = buildSpeciesPack(SPECIES_DATABASE);
+
+/**
+ * The upload works from its own copy: saving the sighting moves the picked
+ * photo out of the picker's cache while the upload may still be reading it.
+ */
+function copyForUpload(image: SelectedImage): { image: SelectedImage; file: File } {
+  const file = new File(Paths.cache, `wildlife-refine-${Date.now()}.jpg`);
+  new File(image.uri).copySync(file);
+  return { image: { ...image, uri: file.uri }, file };
+}
 
 export const ON_DEVICE_SPECIES_COUNT = speciesPack.count;
 
@@ -87,6 +98,7 @@ export function useOnDeviceIdentification() {
         }
         local = outcome.results;
       } catch (error) {
+        console.warn('On-device identification failed:', error);
         Sentry.captureException(error, {
           tags: { feature: 'wildlife', action: 'classifyOnDevice' },
           extra: { imageFileName: selectedImage.fileName },
@@ -96,15 +108,23 @@ export function useOnDeviceIdentification() {
       }
 
       setState({ status: 'results', results: local, isRefining: true });
+      let upload: ReturnType<typeof copyForUpload> | null = null;
+      try {
+        upload = copyForUpload(selectedImage);
+      } catch (error) {
+        Sentry.captureException(error, { tags: { feature: 'wildlife', action: 'copyForUpload' } });
+      }
       onResults(local, 'local');
 
       // Best-effort: the user already has an answer, and being unreachable is
       // the expected case in the field. identifyOnline reports server errors itself.
       let refined = local;
       try {
-        refined = mergeServerResults(local, await identifyOnline(selectedImage));
+        if (upload) refined = mergeServerResults(local, await identifyOnline(upload.image));
       } catch {
         // The local answer stands.
+      } finally {
+        if (upload?.file.exists) upload.file.delete();
       }
       if (!isCurrent()) return;
       setState({ status: 'results', results: refined, isRefining: false });

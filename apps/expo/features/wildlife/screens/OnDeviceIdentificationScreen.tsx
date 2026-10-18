@@ -187,7 +187,7 @@ export function OnDeviceIdentificationScreen() {
           </View>
         )}
 
-        {selectedImage && state.status === 'idle' && (
+        {selectedImage && (state.status === 'idle' || state.status === 'failed') && (
           <View className="mx-4 mb-4">
             <Button
               testID={testIds.wildlife.identifyBtn}

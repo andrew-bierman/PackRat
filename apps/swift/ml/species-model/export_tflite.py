@@ -139,6 +139,28 @@ class ReplayedProgram(torch.nn.Module):
         return F.conv2d(x, weight, bias, stride=strides, dilation=dilations, groups=groups)
 
 
+def inline_buffers(path: Path) -> None:
+    """Rewrites a model so every weight buffer lives inside the flatbuffer.
+
+    The quantizer stores buffers after the flatbuffer and points at them by
+    offset. LiteRT 1.4, the runtime react-native-fast-tflite bundles on
+    Android, loads such a model but fails on invoke, so the app would fail
+    every identification.
+    """
+    import flatbuffers
+    from ai_edge_litert import schema_py_generated as schema
+
+    raw = path.read_bytes()
+    model = schema.ModelT.InitFromPackedBuf(bytearray(raw), 0)
+    for buffer in model.buffers:
+        if buffer.offset > 1:
+            buffer.data = np.frombuffer(raw[buffer.offset : buffer.offset + buffer.size], np.uint8)
+            buffer.offset = buffer.size = 0
+    builder = flatbuffers.Builder(len(raw) + 1024)
+    builder.Finish(model.Pack(builder), file_identifier=b'TFL3')
+    path.write_bytes(builder.Output())
+
+
 def center_crop(image: Image.Image) -> np.ndarray:
     side = min(image.size)
     left, top = (image.width - side) // 2, (image.height - side) // 2
@@ -188,6 +210,7 @@ def main() -> None:
     quant = quantizer.Quantizer(str(float_model), fp16_weights.get_quantization_recipe())
     quant.quantize().export_model(str(MODEL_OUT), overwrite=True)
     float_model.unlink()
+    inline_buffers(MODEL_OUT)
 
     interpreter = Interpreter(model_path=str(MODEL_OUT))
     interpreter.allocate_tensors()
