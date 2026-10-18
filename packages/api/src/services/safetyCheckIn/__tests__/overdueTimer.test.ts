@@ -42,7 +42,7 @@ describe('armOverdueTimer', () => {
     const namespace = fakeNamespace();
     await armOverdueTimer({ checkInId: 'ci-1', at: AT });
     expect(namespace.idFromName).toHaveBeenCalledWith('ci-1');
-    expect(mocks.arm).toHaveBeenCalledWith('ci-1', AT.getTime());
+    expect(mocks.arm).toHaveBeenCalledWith({ checkInId: 'ci-1', at: AT.getTime() });
   });
 
   it('does nothing without the binding', async () => {
@@ -96,8 +96,8 @@ describe('rearmOverdueTimers', () => {
 
     expect(await rearmOverdueTimers({ env: mocks.env as ValidatedEnv })).toEqual({ armed: 2 });
     expect(mocks.arm.mock.calls).toEqual([
-      ['ci-1', AT.getTime()],
-      ['ci-2', new Date('2026-09-15T10:30:00.000Z').getTime()],
+      [{ checkInId: 'ci-1', at: AT.getTime() }],
+      [{ checkInId: 'ci-2', at: new Date('2026-09-15T10:30:00.000Z').getTime() }],
     ]);
   });
 

@@ -17,7 +17,7 @@ const CHECK_IN_ID_KEY = 'checkInId';
  */
 export class SafetyCheckInTimer extends DurableObject<Env> {
   /** Sets (or moves) the alarm. A time in the past fires immediately. */
-  async arm(checkInId: string, at: number): Promise<void> {
+  async arm({ checkInId, at }: { checkInId: string; at: number }): Promise<void> {
     await this.ctx.storage.put(CHECK_IN_ID_KEY, checkInId);
     await this.ctx.storage.setAlarm(at);
   }

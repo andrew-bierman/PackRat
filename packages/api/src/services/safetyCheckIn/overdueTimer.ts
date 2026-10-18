@@ -4,7 +4,7 @@ import { captureApiException } from '@packrat/api/utils/sentry';
 import { safetyCheckIns } from '@packrat/db/schema';
 import { and, eq, isNull } from 'drizzle-orm';
 
-function timerFor(checkInId: string, env: ValidatedEnv = getEnv()) {
+function timerFor({ checkInId, env = getEnv() }: { checkInId: string; env?: ValidatedEnv }) {
   const namespace = env.SAFETY_CHECK_IN_TIMER;
   if (!namespace) return null;
   return namespace.get(namespace.idFromName(checkInId));
@@ -23,7 +23,7 @@ export async function armOverdueTimer({
   at: Date;
 }): Promise<void> {
   try {
-    await timerFor(checkInId)?.arm(checkInId, at.getTime());
+    await timerFor({ checkInId })?.arm({ checkInId, at: at.getTime() });
   } catch (error) {
     captureApiException({
       error,
@@ -37,7 +37,7 @@ export async function armOverdueTimer({
 /** Clears the alarm once a check-in ends. A stray alarm would be a no-op anyway. */
 export async function disarmOverdueTimer({ checkInId }: { checkInId: string }): Promise<void> {
   try {
-    await timerFor(checkInId)?.disarm();
+    await timerFor({ checkInId })?.disarm();
   } catch (error) {
     captureApiException({
       error,
@@ -69,9 +69,12 @@ export async function rearmOverdueTimers({ env }: { env: ValidatedEnv }): Promis
 
   let armed = 0;
   for (const checkIn of pending) {
-    const timer = timerFor(checkIn.id, env);
+    const timer = timerFor({ checkInId: checkIn.id, env });
     if (!timer) break;
-    await timer.arm(checkIn.id, checkIn.expectedReturnAt.getTime() + checkIn.graceMinutes * 60_000);
+    await timer.arm({
+      checkInId: checkIn.id,
+      at: checkIn.expectedReturnAt.getTime() + checkIn.graceMinutes * 60_000,
+    });
     armed++;
   }
   return { armed };
