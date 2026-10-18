@@ -65,7 +65,10 @@ const mocks = vi.hoisted(() => {
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('@packrat/api/utils/env-validation', () => ({
-  getEnv: () => ({ AUTH_KV: { delete: mocks.kvDelete } }),
+  getEnv: () => ({
+    AUTH_KV: { delete: mocks.kvDelete },
+    NEON_DATABASE_URL: 'postgresql://u:p@ep-dev-branch-pooler.neon.tech/db',
+  }),
 }));
 vi.mock('@packrat/db', () => ({
   featureFlags: { key: 'key' },
@@ -81,7 +84,7 @@ vi.mock('drizzle-orm', () => ({
 import { APP_CONFIG, FeatureFlag } from '@packrat/config';
 import {
   deleteFeatureFlagOverride,
-  GLOBAL_FLAG_OVERRIDES_KEY,
+  globalFlagOverridesKey,
   listCachedFeatureFlags,
   listEffectiveFeatureFlags,
   listFeatureFlagsForAdmin,
@@ -89,6 +92,7 @@ import {
   upsertFeatureFlagOverride,
 } from '../featureFlagsService';
 
+const MIRROR_KEY = 'feature-flags:global-overrides:ep-dev-branch-pooler.neon.tech';
 describe('featureFlagsService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -431,6 +435,10 @@ describe('featureFlagsService', () => {
   });
 
   describe('listCachedFeatureFlags()', () => {
+    it("names the mirror after the database it was read from, so environments don't share it", () => {
+      expect(globalFlagOverridesKey()).toBe(MIRROR_KEY);
+    });
+
     const fakeKv = (stored: string | null) => ({
       get: vi.fn(async () => stored),
       put: vi.fn(async () => {}),
@@ -444,7 +452,7 @@ describe('featureFlagsService', () => {
       const result = await listCachedFeatureFlags(kv);
 
       expect(result[key]).toBe(!APP_CONFIG.featureFlags[key]);
-      expect(kv.get).toHaveBeenCalledWith(GLOBAL_FLAG_OVERRIDES_KEY);
+      expect(kv.get).toHaveBeenCalledWith(MIRROR_KEY);
       expect(mocks.findMany).not.toHaveBeenCalled();
       expect(kv.put).not.toHaveBeenCalled();
     });
@@ -457,11 +465,9 @@ describe('featureFlagsService', () => {
       const result = await listCachedFeatureFlags(kv);
 
       expect(result).toEqual({ ...APP_CONFIG.featureFlags, [key]: true });
-      expect(kv.put).toHaveBeenCalledWith(
-        GLOBAL_FLAG_OVERRIDES_KEY,
-        JSON.stringify({ [key]: true }),
-        { expirationTtl: 86_400 },
-      );
+      expect(kv.put).toHaveBeenCalledWith(MIRROR_KEY, JSON.stringify({ [key]: true }), {
+        expirationTtl: 86_400,
+      });
     });
   });
 
@@ -471,13 +477,13 @@ describe('featureFlagsService', () => {
         { key: FeatureFlag.EnableFeed, enabled: true, description: null, updatedAt: new Date() },
       ]);
       await upsertFeatureFlagOverride({ key: FeatureFlag.EnableFeed, enabled: true });
-      expect(mocks.kvDelete).toHaveBeenCalledWith(GLOBAL_FLAG_OVERRIDES_KEY);
+      expect(mocks.kvDelete).toHaveBeenCalledWith(MIRROR_KEY);
     });
 
     it('a delete that removed a row drops the mirror', async () => {
       mocks.deleteReturning.mockResolvedValue([{ key: FeatureFlag.EnableFeed }]);
       await deleteFeatureFlagOverride(FeatureFlag.EnableFeed);
-      expect(mocks.kvDelete).toHaveBeenCalledWith(GLOBAL_FLAG_OVERRIDES_KEY);
+      expect(mocks.kvDelete).toHaveBeenCalledWith(MIRROR_KEY);
     });
 
     it('a delete that removed nothing leaves the mirror', async () => {
