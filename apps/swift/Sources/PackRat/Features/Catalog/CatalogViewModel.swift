@@ -102,22 +102,14 @@ final class CatalogViewModel {
             isLoadingMore = false
         }
         do {
-            // An empty query browses newest-first, as Android does; a query
-            // keeps the server's relevance order.
-            let results: [CatalogItem]
-            if searchText.isEmpty {
-                results = try await service.browse(
+            // An empty query browses newest-first; a query is a meaning-based
+            // search across every category, both as Android does.
+            let results = searchText.isEmpty
+                ? try await service.browse(
                     query: nil, category: selectedCategory, sort: .newest,
                     page: currentPage, limit: Self.pageSize
                 )
-            } else if selectedCategory != nil {
-                results = try await service.browse(
-                    query: searchText, category: selectedCategory, sort: nil,
-                    page: currentPage, limit: Self.pageSize
-                )
-            } else {
-                results = try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
-            }
+                : try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
             // A superseded search or category change must not commit.
             guard !Task.isCancelled else { return }
             if reset {

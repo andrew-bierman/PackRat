@@ -43,7 +43,8 @@ struct CatalogView: View {
             }
         }
         .safeAreaInset(edge: .top, spacing: 0) {
-            if authManager.isAuthenticated && !vm.categories.isEmpty {
+            // Search spans every category, so the filter only shows while browsing.
+            if authManager.isAuthenticated && !vm.categories.isEmpty && vm.searchText.isEmpty {
                 CatalogCategoryChips(
                     categories: vm.categories,
                     selected: vm.selectedCategory,

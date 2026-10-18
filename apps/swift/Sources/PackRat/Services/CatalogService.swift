@@ -6,7 +6,7 @@ import Foundation
 protocol CatalogBrowsing: Sendable {
     func categories(limit: Int) async throws -> [String]
     func browse(query: String?, category: String?, sort: CatalogSort?, page: Int, limit: Int) async throws -> [CatalogItem]
-    /// The keyword search behind the standalone Gear Catalog screen. On the
+    /// The meaning-based search behind the standalone Gear Catalog screen. On the
     /// protocol so `CatalogViewModel`'s paging can be tested without the
     /// network, the same reason `browse` is here.
     func search(query: String, page: Int, limit: Int) async throws -> [CatalogItem]
@@ -37,11 +37,13 @@ final class CatalogService: CatalogBrowsing, Sendable {
 
     init(api: APIClient = .shared) { self.api = api }
 
+    /// Paged embedding search for the Gear Catalog, matching Android, so
+    /// "warm sleeping bag" finds related gear rather than only exact words.
     func search(query: String, page: Int = 1, limit: Int = 20) async throws -> [CatalogItem] {
-        let endpoint = Endpoint(.get, "/api/catalog", query: [
+        let endpoint = Endpoint(.get, "/api/catalog/vector-search", query: [
             "q": query,
-            "page": "\(page)",
             "limit": "\(limit)",
+            "offset": "\((page - 1) * limit)",
         ])
         let data = try await api.sendData(endpoint)
         return try decodeCatalogItems(from: data)
