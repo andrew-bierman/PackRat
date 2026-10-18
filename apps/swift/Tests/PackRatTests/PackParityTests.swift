@@ -438,7 +438,7 @@ private final class StubCatalogService: CatalogBrowsing, @unchecked Sendable {
 
     func categories(limit _: Int) async throws -> [String] { [] }
 
-    func browse(query _: String?, category _: String?, page: Int, limit _: Int) async throws -> [CatalogItem] {
+    func browse(query _: String?, category _: String?, sort _: CatalogSort?, page: Int, limit _: Int) async throws -> [CatalogItem] {
         requestedPages.append(page)
         if shouldFail { throw StubError.failed }
         let index = page - 1

@@ -16,6 +16,9 @@ final class CatalogViewModel {
     /// False once a page comes back short, so scrolling to the bottom stops
     /// asking for pages the server has already run out of.
     var hasMore = true
+    /// Category facets for the filter strip, most-stocked first.
+    var categories: [String] = []
+    var selectedCategory: String?
 
     /// One page as requested from `CatalogService.search`. Anything shorter than
     /// this means the server has no more rows to give.
@@ -23,6 +26,8 @@ final class CatalogViewModel {
 
     private let service: any CatalogBrowsing
     private var searchTask: Task<Void, Never>?
+    /// The pending search or category reload, so tests can await it.
+    var searchTaskForTesting: Task<Void, Never>? { searchTask }
 
     init(service: any CatalogBrowsing = CatalogService.shared) {
         self.service = service
@@ -32,7 +37,22 @@ final class CatalogViewModel {
     /// catalog shows gear before anything is typed, as Android does.
     func loadIfNeeded() async {
         guard !hasSearched, !isLoading, items.isEmpty else { return }
-        await search(reset: true)
+        async let cats: Void = loadCategories()
+        async let list: Void = search(reset: true)
+        _ = await (cats, list)
+    }
+
+    func selectCategory(_ category: String?) {
+        // Take over `searchTask` so a pending search can't land after the
+        // category change and overwrite its results.
+        searchTask?.cancel()
+        selectedCategory = category
+        searchTask = Task { await search(reset: true) }
+    }
+
+    private func loadCategories() async {
+        guard categories.isEmpty, !VisualSampleData.isScreenshotCapture else { return }
+        categories = (try? await service.categories(limit: 20)) ?? []
     }
 
     func onSearchTextChanged() {
@@ -82,10 +102,24 @@ final class CatalogViewModel {
             isLoadingMore = false
         }
         do {
-            // An empty query browses the whole catalog instead of searching it.
-            let results = searchText.isEmpty
-                ? try await service.browse(query: nil, category: nil, page: currentPage, limit: Self.pageSize)
-                : try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
+            // An empty query browses newest-first, as Android does; a query
+            // keeps the server's relevance order.
+            let results: [CatalogItem]
+            if searchText.isEmpty {
+                results = try await service.browse(
+                    query: nil, category: selectedCategory, sort: .newest,
+                    page: currentPage, limit: Self.pageSize
+                )
+            } else if selectedCategory != nil {
+                results = try await service.browse(
+                    query: searchText, category: selectedCategory, sort: nil,
+                    page: currentPage, limit: Self.pageSize
+                )
+            } else {
+                results = try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
+            }
+            // A superseded search or category change must not commit.
+            guard !Task.isCancelled else { return }
             if reset {
                 items = results
             } else {

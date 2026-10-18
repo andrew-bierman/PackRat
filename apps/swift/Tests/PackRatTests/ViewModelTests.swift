@@ -394,6 +394,20 @@ struct CatalogViewModelTests {
         #expect(service.requestedPages == [1, 2])
     }
 
+    @Test("the browse list is newest first and filters by the chosen category")
+    @MainActor func browseSortsNewestAndFilters() async {
+        let service = PagingStubCatalogService(pages: [PagingStubCatalogService.page(count: 3, startingAt: 1)])
+        let vm = CatalogViewModel(service: service)
+        await vm.loadIfNeeded()
+        #expect(service.lastBrowse?.sort == .newest)
+        #expect(service.lastBrowse?.category == nil)
+
+        vm.selectCategory("Tents")
+        await vm.searchTaskForTesting?.value
+        #expect(service.lastBrowse?.category == "Tents")
+        #expect(service.lastBrowse?.sort == .newest)
+    }
+
     // MARK: - Paging (issue #2726)
     //
     // The loading indicator only appeared on the first page because a page
@@ -513,9 +527,11 @@ private final class PagingStubCatalogService: CatalogBrowsing, @unchecked Sendab
     func categories(limit _: Int) async throws -> [String] { [] }
 
     var browsedPages: [Int] = []
+    var lastBrowse: (category: String?, sort: CatalogSort?)?
 
-    func browse(query _: String?, category _: String?, page: Int, limit _: Int) async throws -> [CatalogItem] {
+    func browse(query _: String?, category: String?, sort: CatalogSort?, page: Int, limit _: Int) async throws -> [CatalogItem] {
         browsedPages.append(page)
+        lastBrowse = (category, sort)
         return try serve(page: page)
     }
 

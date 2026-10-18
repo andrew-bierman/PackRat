@@ -20,10 +20,12 @@ struct CatalogView: View {
                 ProgressView("Searching gear…").frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = vm.error {
                 ErrorView(error, retry: { await vm.search(reset: true) })
-            } else if vm.items.isEmpty && vm.hasSearched && !vm.searchText.isEmpty {
+            } else if vm.items.isEmpty && vm.hasSearched && (!vm.searchText.isEmpty || vm.selectedCategory != nil) {
                 UnavailableStateView(
                     title: "No Results",
-                    subtitle: "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
+                    subtitle: vm.searchText.isEmpty
+                        ? "No gear in this category yet."
+                        : "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
                     systemImage: "magnifyingglass"
                 )
                 .accessibilityIdentifier("catalog_no_results")
@@ -38,6 +40,17 @@ struct CatalogView: View {
                     itemGrid(vm: vm)
                         .padding(.bottom)
                 }
+            }
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if authManager.isAuthenticated && !vm.categories.isEmpty {
+                CatalogCategoryChips(
+                    categories: vm.categories,
+                    selected: vm.selectedCategory,
+                    onSelect: vm.selectCategory
+                )
+                .background(.bar)
+                .accessibilityIdentifier("catalog_categories")
             }
         }
         .navigationTitle("Gear Catalog")
