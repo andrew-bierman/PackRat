@@ -13,12 +13,14 @@
  *   bun run import --bbox=... --release=2026-09-23.1
  *   bun run import --reconcile-only --release=2026-09-23.1 # segments already loaded
  *
- * Steps: apply schema.sql, replace `trail_segments` with the release's named
- * path segments inside the bbox (DuckDB reads Overture's S3 parquet directly
- * and writes through its postgres extension), then run reconcile.sql, which
+ * Steps: apply schema.sql, extract the release's named path segments inside
+ * the bbox from Overture's S3 parquet to a local file, replace `trail_segments`
+ * with it (DuckDB's postgres extension), then run reconcile.sql, which
  * carries `trails.id` forward so reports keep pointing at the same trail.
  */
 
+import { rename } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -79,26 +81,46 @@ if (!values['reconcile-only']) {
   const duckdbUrl = new URL(DB_URL);
   duckdbUrl.searchParams.delete('channel_binding');
 
-  console.log(`Loading Overture ${release} named trail segments in ${values.bbox}...`);
+  // Extract to a local file first, then load. Streaming straight from S3 into
+  // Postgres holds one COPY open for the whole download (over an hour
+  // worldwide), and Neon drops it partway. A finished extract is reused, so a
+  // failed load retries without downloading again.
+  const extract = join(tmpdir(), `overture-trails-${release}-${bbox.join('_')}.parquet`);
+  if (await Bun.file(extract).exists()) {
+    console.log(`Reusing ${extract}`);
+  } else {
+    console.log(`Extracting Overture ${release} named trail segments in ${values.bbox}...`);
+    await run(
+      ['duckdb'],
+      `
+.bail on
+INSTALL spatial; LOAD spatial;
+INSTALL httpfs; LOAD httpfs;
+SET s3_region = 'us-west-2';
+COPY (
+  SELECT id AS overture_id, names.primary AS name, class, subtype, ST_AsHEXWKB(geometry) AS wkb
+  FROM read_parquet('s3://overturemaps-us-west-2/release/${release}/theme=transportation/type=segment/*', hive_partitioning = 1)
+  WHERE subtype = 'road'
+    AND class IN (${classes})
+    AND names.primary IS NOT NULL
+    AND bbox.xmin <= ${east} AND bbox.xmax >= ${west}
+    AND bbox.ymin <= ${north} AND bbox.ymax >= ${south}
+) TO '${extract}.partial' (FORMAT parquet);
+`,
+    );
+    await rename(`${extract}.partial`, extract);
+  }
+
+  console.log('Loading trail segments...');
   await run(
     ['duckdb'],
     `
 .bail on
-INSTALL spatial; LOAD spatial;
-INSTALL httpfs; LOAD httpfs;
 INSTALL postgres; LOAD postgres;
-SET s3_region = 'us-west-2';
 ATTACH '${duckdbUrl}' AS pg (TYPE postgres);
 CALL postgres_execute('pg', 'TRUNCATE trail_segments');
 CALL postgres_execute('pg', 'DROP TABLE IF EXISTS trail_segments_load');
-CREATE TABLE pg.trail_segments_load AS
-SELECT id AS overture_id, names.primary AS name, class, subtype, ST_AsHEXWKB(geometry) AS wkb
-FROM read_parquet('s3://overturemaps-us-west-2/release/${release}/theme=transportation/type=segment/*', hive_partitioning = 1)
-WHERE subtype = 'road'
-  AND class IN (${classes})
-  AND names.primary IS NOT NULL
-  AND bbox.xmin <= ${east} AND bbox.xmax >= ${west}
-  AND bbox.ymin <= ${north} AND bbox.ymax >= ${south};
+CREATE TABLE pg.trail_segments_load AS SELECT * FROM read_parquet('${extract}');
 CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name, class, subtype, ST_SetSRID(ST_GeomFromWKB(decode(wkb, ''hex'')), 4326) FROM trail_segments_load ON CONFLICT DO NOTHING; DROP TABLE trail_segments_load; ANALYZE trail_segments;');
 `,
   );
