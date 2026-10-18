@@ -111,7 +111,10 @@ final class CatalogViewModel {
                 )
                 : try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
             // A superseded search or category change must not commit.
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled else {
+                if !reset { currentPage -= 1 }
+                return
+            }
             if reset {
                 items = results
             } else {
@@ -122,10 +125,13 @@ final class CatalogViewModel {
             hasMore = results.count >= Self.pageSize
             hasSearched = true
         } catch {
-            self.error = error.localizedDescription
-            // Don't strand the user mid-list: a failed page can be retried by
-            // scrolling again, but a failed first page owns the error state.
+            // A failed page keeps the list and gives its page number back so
+            // scrolling retries it; only a failed first page owns the screen.
             if !reset { currentPage -= 1 }
+            // A superseded or cancelled request is not a failure to show.
+            if Task.isCancelled || error is CancellationError
+                || (error as? URLError)?.code == .cancelled { return }
+            if reset { self.error = error.localizedDescription }
         }
     }
 
