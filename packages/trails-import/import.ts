@@ -13,14 +13,13 @@
  *   bun run import --bbox=... --release=2026-09-23.1
  *   bun run import --reconcile-only --release=2026-09-23.1 # segments already loaded
  *
- * Steps: apply schema.sql, extract the release's named path segments inside
- * the bbox from Overture's S3 parquet to a local file, replace `trail_segments`
- * with it (DuckDB's postgres extension), then run reconcile.sql, which
- * carries `trails.id` forward so reports keep pointing at the same trail.
+ * Steps: apply schema.sql, replace `trail_segments` with the release's named
+ * path segments inside the bbox (DuckDB reads Overture's S3 parquet and writes
+ * through its postgres extension, one longitude band at a time), then run
+ * reconcile.sql, which carries `trails.id` forward so reports keep pointing at
+ * the same trail.
  */
 
-import { rename } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -29,6 +28,8 @@ import { nodeEnv } from '@packrat/env/node';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const DEFAULT_RELEASE = '2026-09-23.1';
+const BAND_DEGREES = 10;
+const BAND_ATTEMPTS = 3;
 const TRAIL_CLASSES = ['path', 'footway', 'steps', 'track', 'bridleway', 'cycleway'];
 
 const DB_URL = nodeEnv.OSM_DATABASE_URL;
@@ -73,7 +74,7 @@ if (!values['reconcile-only']) {
     console.error('Error: --bbox=west,south,east,north is required');
     process.exit(1);
   }
-  const [west, south, east, north] = bbox;
+  const [west, south, east, north] = bbox as [number, number, number, number];
   const classes = TRAIL_CLASSES.map((c) => `'${c}'`).join(', ');
 
   // DuckDB's postgres extension (libpq without SCRAM channel binding) refuses
@@ -81,49 +82,45 @@ if (!values['reconcile-only']) {
   const duckdbUrl = new URL(DB_URL);
   duckdbUrl.searchParams.delete('channel_binding');
 
-  // Extract to a local file first, then load. Streaming straight from S3 into
-  // Postgres holds one COPY open for the whole download (over an hour
-  // worldwide), and Neon drops it partway. A finished extract is reused, so a
-  // failed load retries without downloading again.
-  const extract = join(tmpdir(), `overture-trails-${release}-${bbox.join('_')}.parquet`);
-  if (await Bun.file(extract).exists()) {
-    console.log(`Reusing ${extract}`);
-  } else {
-    console.log(`Extracting Overture ${release} named trail segments in ${values.bbox}...`);
-    await run(
-      ['duckdb'],
-      `
+  // Load in longitude bands, each its own short connection, straight from S3:
+  // no local copy, so a full disk on this machine can't fail the run, and no
+  // COPY held open for the whole worldwide scan (Neon drops those). Overture's
+  // files are spatially sorted, so a band reads only its own row groups. A
+  // segment crossing a band edge lands once (ON CONFLICT DO NOTHING).
+  await run(['psql', DB_URL, '-c', 'TRUNCATE trail_segments']);
+  const bands: [number, number][] = [];
+  for (let w = west; w < east; w += BAND_DEGREES) bands.push([w, Math.min(w + BAND_DEGREES, east)]);
+  for (const [i, [bandWest, bandEast]] of bands.entries()) {
+    console.log(`Loading ${release} band ${i + 1}/${bands.length} (${bandWest}..${bandEast})...`);
+    const sql = `
 .bail on
 INSTALL spatial; LOAD spatial;
 INSTALL httpfs; LOAD httpfs;
-SET s3_region = 'us-west-2';
-COPY (
-  SELECT id AS overture_id, names.primary AS name, class, subtype, ST_AsHEXWKB(geometry) AS wkb
-  FROM read_parquet('s3://overturemaps-us-west-2/release/${release}/theme=transportation/type=segment/*', hive_partitioning = 1)
-  WHERE subtype = 'road'
-    AND class IN (${classes})
-    AND names.primary IS NOT NULL
-    AND bbox.xmin <= ${east} AND bbox.xmax >= ${west}
-    AND bbox.ymin <= ${north} AND bbox.ymax >= ${south}
-) TO '${extract}.partial' (FORMAT parquet);
-`,
-    );
-    await rename(`${extract}.partial`, extract);
-  }
-
-  console.log('Loading trail segments...');
-  await run(
-    ['duckdb'],
-    `
-.bail on
 INSTALL postgres; LOAD postgres;
+SET s3_region = 'us-west-2';
 ATTACH '${duckdbUrl}' AS pg (TYPE postgres);
-CALL postgres_execute('pg', 'TRUNCATE trail_segments');
 CALL postgres_execute('pg', 'DROP TABLE IF EXISTS trail_segments_load');
-CREATE TABLE pg.trail_segments_load AS SELECT * FROM read_parquet('${extract}');
-CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name, class, subtype, ST_SetSRID(ST_GeomFromWKB(decode(wkb, ''hex'')), 4326) FROM trail_segments_load ON CONFLICT DO NOTHING; DROP TABLE trail_segments_load; ANALYZE trail_segments;');
-`,
-  );
+CREATE TABLE pg.trail_segments_load AS
+SELECT id AS overture_id, names.primary AS name, class, subtype, ST_AsHEXWKB(geometry) AS wkb
+FROM read_parquet('s3://overturemaps-us-west-2/release/${release}/theme=transportation/type=segment/*', hive_partitioning = 1)
+WHERE subtype = 'road'
+  AND class IN (${classes})
+  AND names.primary IS NOT NULL
+  AND bbox.xmin <= ${bandEast} AND bbox.xmax >= ${bandWest}
+  AND bbox.ymin <= ${north} AND bbox.ymax >= ${south};
+CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name, class, subtype, ST_SetSRID(ST_GeomFromWKB(decode(wkb, ''hex'')), 4326) FROM trail_segments_load ON CONFLICT DO NOTHING; DROP TABLE trail_segments_load;');
+`;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await run(['duckdb'], sql);
+        break;
+      } catch (error) {
+        if (attempt === BAND_ATTEMPTS) throw error;
+        console.log(`Band ${i + 1} failed (attempt ${attempt}), retrying...`);
+      }
+    }
+  }
+  await run(['psql', DB_URL, '-c', 'ANALYZE trail_segments']);
 }
 
 console.log(`Reconciling trails for release ${release}...`);
