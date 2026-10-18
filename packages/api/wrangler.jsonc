@@ -156,6 +156,10 @@
       {
         "class_name": "SafetyCheckInTimer",
         "name": "SAFETY_CHECK_IN_TIMER"
+      },
+      {
+        "class_name": "TripDestinationWatcher",
+        "name": "TRIP_DESTINATION_WATCHER"
       }
     ]
   },
@@ -181,6 +185,10 @@
     {
       "new_sqlite_classes": ["SafetyCheckInTimer"],
       "tag": "v4"
+    },
+    {
+      "new_sqlite_classes": ["TripDestinationWatcher"],
+      "tag": "v5"
     }
   ],
   "env": {
@@ -297,6 +305,10 @@
           {
             "class_name": "SafetyCheckInTimer",
             "name": "SAFETY_CHECK_IN_TIMER"
+          },
+          {
+            "class_name": "TripDestinationWatcher",
+            "name": "TRIP_DESTINATION_WATCHER"
           }
         ]
       },
@@ -321,6 +333,10 @@
         {
           "new_sqlite_classes": ["SafetyCheckInTimer"],
           "tag": "v5"
+        },
+        {
+          "new_sqlite_classes": ["TripDestinationWatcher"],
+          "tag": "v6"
         }
       ]
     }
