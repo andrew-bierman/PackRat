@@ -20,14 +20,14 @@ struct CatalogView: View {
                 ProgressView("Searching gear…").frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let error = vm.error {
                 ErrorView(error, retry: { await vm.search(reset: true) })
-            } else if vm.items.isEmpty && vm.hasSearched {
+            } else if vm.items.isEmpty && vm.hasSearched && !vm.searchText.isEmpty {
                 UnavailableStateView(
                     title: "No Results",
                     subtitle: "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
                     systemImage: "magnifyingglass"
                 )
                 .accessibilityIdentifier("catalog_no_results")
-            } else if !vm.hasSearched {
+            } else if vm.items.isEmpty {
                 EmptyStateView(
                     "Search the Gear Catalog",
                     subtitle: "Find weight specs, prices, and reviews for thousands of outdoor products",
@@ -48,6 +48,11 @@ struct CatalogView: View {
         .onChange(of: vm.searchText) {
             if authManager.isAuthenticated {
                 vm.onSearchTextChanged()
+            }
+        }
+        .task {
+            if authManager.isAuthenticated {
+                await vm.loadIfNeeded()
             }
         }
         .onSubmit(of: .search) {

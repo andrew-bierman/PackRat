@@ -373,19 +373,25 @@ private actor FallbackWeatherService: WeatherServicing {
 
 @Suite("CatalogViewModel")
 struct CatalogViewModelTests {
-    @Test("onSearchTextChanged clears items when text empty")
-    @MainActor func clearsOnEmpty() {
-        let vm = CatalogViewModel()
-        vm.items = [CatalogItem(id: 1, name: "Tent", productUrl: "https://example.com",
-                                sku: "TEST-001", weight: 1200, weightUnit: .g,
-                                description: nil, categories: nil, images: nil,
-                                brand: nil, model: nil, ratingValue: nil,
-                                color: nil, size: nil, price: nil,
-                                availability: "in_stock", seller: nil, reviewCount: nil)]
-        vm.searchText = ""
-        vm.onSearchTextChanged()
-        #expect(vm.items.isEmpty)
-        #expect(vm.hasSearched == false)
+    @Test("opening the catalog loads the browse list without a query")
+    @MainActor func loadsBrowseListOnOpen() async {
+        let service = PagingStubCatalogService(pages: [
+            PagingStubCatalogService.page(count: 20, startingAt: 1),
+            PagingStubCatalogService.page(count: 20, startingAt: 21),
+        ])
+        let vm = CatalogViewModel(service: service)
+        await vm.loadIfNeeded()
+        #expect(vm.items.count == 20)
+        #expect(service.browsedPages == [1])
+
+        // Browsing pages like a search does.
+        await vm.loadMore()
+        #expect(vm.items.count == 40)
+        #expect(service.browsedPages == [1, 2])
+
+        // A second open keeps what's already loaded.
+        await vm.loadIfNeeded()
+        #expect(service.requestedPages == [1, 2])
     }
 
     // MARK: - Paging (issue #2726)
@@ -506,8 +512,11 @@ private final class PagingStubCatalogService: CatalogBrowsing, @unchecked Sendab
 
     func categories(limit _: Int) async throws -> [String] { [] }
 
+    var browsedPages: [Int] = []
+
     func browse(query _: String?, category _: String?, page: Int, limit _: Int) async throws -> [CatalogItem] {
-        try serve(page: page)
+        browsedPages.append(page)
+        return try serve(page: page)
     }
 
     func search(query _: String, page: Int, limit _: Int) async throws -> [CatalogItem] {

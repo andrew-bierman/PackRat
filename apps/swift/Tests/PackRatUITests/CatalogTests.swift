@@ -14,12 +14,12 @@ final class CatalogTests: AppUITestCase {
         )
     }
 
-    func testCatalogShowsEmptySearchPrompt() {
+    func testCatalogOpensOnBrowseList() {
         goToCatalog()
-        // Initial state: empty search prompt
+        // Initial state: the browse list
         XCTAssertTrue(
-            app.staticTexts["Search the Gear Catalog"].waitForExistence(timeout: 8),
-            "Catalog should show empty-state search prompt"
+            app.otherElements["catalog_results_list"].waitForExistence(timeout: 8),
+            "Catalog should open on the browse list"
         )
     }
 
@@ -64,10 +64,10 @@ final class CatalogTests: AppUITestCase {
         ).firstMatch
         if clearButton.waitForExistence(timeout: 5) {
             clearButton.tap()
-            // Empty-state prompt should reappear
+            // The browse list should reappear
             XCTAssertTrue(
-                app.staticTexts["Search the Gear Catalog"].waitForExistence(timeout: 5),
-                "Empty state should return after clearing search"
+                app.otherElements["catalog_results_list"].waitForExistence(timeout: 5),
+                "Browse list should return after clearing search"
             )
         }
     }

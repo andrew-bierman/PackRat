@@ -16,11 +16,11 @@ final class CatalogMacOSTests: AppUITestCase {
         )
     }
 
-    func testCatalogShowsEmptySearchPrompt() {
+    func testCatalogOpensOnBrowseList() {
         goToSidebar("Catalog")
         XCTAssertTrue(
-            app.staticTexts["Search the Gear Catalog"].waitForExistence(timeout: 8),
-            "Catalog should show empty-state search prompt"
+            app.otherElements["catalog_results_list"].waitForExistence(timeout: 8),
+            "Catalog should open on the browse list"
         )
     }
 
@@ -61,8 +61,8 @@ final class CatalogMacOSTests: AppUITestCase {
         if clearButton.waitForExistence(timeout: 5) {
             clearButton.click()
             XCTAssertTrue(
-                app.staticTexts["Search the Gear Catalog"].waitForExistence(timeout: 5),
-                "Empty state should return after clearing search"
+                app.otherElements["catalog_results_list"].waitForExistence(timeout: 5),
+                "Browse list should return after clearing search"
             )
         }
     }

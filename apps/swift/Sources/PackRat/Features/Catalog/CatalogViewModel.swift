@@ -28,10 +28,20 @@ final class CatalogViewModel {
         self.service = service
     }
 
+    /// Fills the screen with the browse list the first time it opens, so the
+    /// catalog shows gear before anything is typed, as Android does.
+    func loadIfNeeded() async {
+        guard !hasSearched, !isLoading, items.isEmpty else { return }
+        await search(reset: true)
+    }
+
     func onSearchTextChanged() {
         searchTask?.cancel()
         guard searchText.count >= 2 else {
-            if searchText.isEmpty { items = []; hasSearched = false }
+            // Clearing the field goes back to the browse list.
+            if searchText.isEmpty {
+                searchTask = Task { await search(reset: true) }
+            }
             return
         }
         searchTask = Task {
@@ -72,7 +82,10 @@ final class CatalogViewModel {
             isLoadingMore = false
         }
         do {
-            let results = try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
+            // An empty query browses the whole catalog instead of searching it.
+            let results = searchText.isEmpty
+                ? try await service.browse(query: nil, category: nil, page: currentPage, limit: Self.pageSize)
+                : try await service.search(query: searchText, page: currentPage, limit: Self.pageSize)
             if reset {
                 items = results
             } else {
@@ -92,7 +105,7 @@ final class CatalogViewModel {
 
     func loadMore() async {
         guard !VisualSampleData.isScreenshotCapture else { return }
-        guard !isLoading, !isLoadingMore, hasMore, !searchText.isEmpty else { return }
+        guard !isLoading, !isLoadingMore, hasMore else { return }
         currentPage += 1
         await search(reset: false)
     }
