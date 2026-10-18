@@ -112,20 +112,20 @@ describe('tickTripDestination', () => {
   it('sleeps until the window opens without checking', async () => {
     const result = await run({ now: START - 20 * DAY });
     expect(result).toEqual({ seenIds: [], nextAt: START - 10 * DAY, notified: false });
-    expect(mocks.fetchCoordinateAlerts).not.toHaveBeenCalled();
+    expect(mocks.fetchCoordinateAlerts).toHaveBeenCalledTimes(0);
   });
 
   it('stops once the window has closed', async () => {
     const result = await run({ now: START + 2 * DAY });
     expect(result.nextAt).toBeNull();
-    expect(mocks.fetchCoordinateAlerts).not.toHaveBeenCalled();
+    expect(mocks.fetchCoordinateAlerts).toHaveBeenCalledTimes(0);
   });
 
   it('keeps time without checking while the feature is off', async () => {
     const now = START - DAY;
     const result = await run({ now, enabled: false });
     expect(result).toEqual({ seenIds: [], nextAt: now + POLL_INTERVAL_MS, notified: false });
-    expect(mocks.fetchCoordinateAlerts).not.toHaveBeenCalled();
+    expect(mocks.fetchCoordinateAlerts).toHaveBeenCalledTimes(0);
   });
 
   it('leaves Postgres alone when nothing new is active', async () => {
@@ -137,8 +137,8 @@ describe('tickTripDestination', () => {
       nextAt: now + POLL_INTERVAL_MS,
       notified: false,
     });
-    expect(mocks.insertValues).not.toHaveBeenCalled();
-    expect(mocks.notifyTripOwner).not.toHaveBeenCalled();
+    expect(mocks.insertValues).toHaveBeenCalledTimes(0);
+    expect(mocks.notifyTripOwner).toHaveBeenCalledTimes(0);
   });
 
   it('pushes a new alert and remembers it', async () => {
@@ -193,7 +193,7 @@ describe('deliverTripDestinationAlerts', () => {
       now,
     });
     expect(result).toEqual({ gone: false, notified: false });
-    expect(mocks.notifyTripOwner).not.toHaveBeenCalled();
+    expect(mocks.notifyTripOwner).toHaveBeenCalledTimes(0);
   });
 
   it('treats a trip with no saved state as having seen nothing', async () => {
@@ -219,6 +219,6 @@ describe('deliverTripDestinationAlerts', () => {
       now,
     });
     expect(result).toEqual({ gone: true, notified: false });
-    expect(mocks.insertValues).not.toHaveBeenCalled();
+    expect(mocks.insertValues).toHaveBeenCalledTimes(0);
   });
 });

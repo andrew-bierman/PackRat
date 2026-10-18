@@ -71,12 +71,12 @@ describe('syncTripDestinationTimer', () => {
     fakeNamespace();
     await syncTripDestinationTimer({ trip: trip('t1', { location: null }), now: NOW });
     expect(mocks.disarm).toHaveBeenCalledTimes(1);
-    expect(mocks.arm).not.toHaveBeenCalled();
+    expect(mocks.arm).toHaveBeenCalledTimes(0);
   });
 
   it('does nothing without the binding', async () => {
     await syncTripDestinationTimer({ trip: trip('t1'), now: NOW });
-    expect(mocks.arm).not.toHaveBeenCalled();
+    expect(mocks.arm).toHaveBeenCalledTimes(0);
   });
 
   it('captures a failure instead of failing the trip write', async () => {
@@ -102,7 +102,7 @@ describe('disarmTripDestinationTimer', () => {
 
   it('does nothing without the binding', async () => {
     await disarmTripDestinationTimer({ tripId: 't1' });
-    expect(mocks.disarm).not.toHaveBeenCalled();
+    expect(mocks.disarm).toHaveBeenCalledTimes(0);
   });
 
   it('captures a failure instead of failing the delete', async () => {
@@ -138,6 +138,6 @@ describe('rearmTripDestinationTimers', () => {
     mocks.upcoming = [trip('t1')];
     const result = await rearmTripDestinationTimers({ env: {} as ValidatedEnv });
     expect(result).toEqual({ armed: 0 });
-    expect(mocks.arm).not.toHaveBeenCalled();
+    expect(mocks.arm).toHaveBeenCalledTimes(0);
   });
 });
