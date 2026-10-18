@@ -42,7 +42,7 @@ export function loadSpeciesModel(): Promise<TfliteModel | null> {
  */
 async function modelInputFor(imageUri: string): Promise<Float32Array<ArrayBuffer>> {
   const original = await ImageManipulator.manipulate(imageUri).renderAsync();
-  const crop = centerCropRect(original.width, original.height);
+  const crop = centerCropRect(original);
   original.release();
 
   const scaled = await ImageManipulator.manipulate(imageUri)
@@ -55,7 +55,10 @@ async function modelInputFor(imageUri: string): Promise<Float32Array<ArrayBuffer
   const file = new File(saved.uri);
   try {
     const decoded = jpeg.decode(await file.bytes(), { useTArray: true, formatAsRGBA: true });
-    return rgbaToModelInput(decoded.data, MODEL_INPUT_SIZE * MODEL_INPUT_SIZE);
+    return rgbaToModelInput({
+      rgba: decoded.data,
+      pixelCount: MODEL_INPUT_SIZE * MODEL_INPUT_SIZE,
+    });
   } finally {
     file.delete();
   }
@@ -74,5 +77,9 @@ export async function classifySpecies(opts: {
   const input = await modelInputFor(imageUri);
   const [output] = await model.run([input.buffer]);
   if (!output) throw new Error('Species model returned no output');
-  return toPredictions(new Float32Array(output), { labels: speciesModelLabels, knownSpeciesIds });
+  return toPredictions({
+    probabilities: new Float32Array(output),
+    labels: speciesModelLabels,
+    knownSpeciesIds,
+  });
 }

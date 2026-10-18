@@ -28,7 +28,7 @@ export function useWildlifeLocation(enabled: boolean): WildlifeLocation | null {
     const update = (position: Location.LocationObject | null) => {
       if (cancelled || !position) return;
       const { latitude, longitude } = position.coords;
-      setLocation({ latitude, longitude, region: regionForCoordinate(latitude, longitude) });
+      setLocation({ latitude, longitude, region: regionForCoordinate({ latitude, longitude }) });
     };
 
     (async () => {

@@ -51,10 +51,10 @@ function ids(outcome: ReturnType<typeof rank>) {
 
 describe('confidencePolicy', () => {
   it('holds dangerous species to a lower inclusion floor', () => {
-    expect(clearsFloor(0.1, 'safe')).toBe(false);
-    expect(clearsFloor(0.15, 'safe')).toBe(true);
-    expect(clearsFloor(0.05, 'dangerous')).toBe(true);
-    expect(clearsFloor(0.04, 'dangerous')).toBe(false);
+    expect(clearsFloor({ confidence: 0.1, dangerLevel: 'safe' })).toBe(false);
+    expect(clearsFloor({ confidence: 0.15, dangerLevel: 'safe' })).toBe(true);
+    expect(clearsFloor({ confidence: 0.05, dangerLevel: 'dangerous' })).toBe(true);
+    expect(clearsFloor({ confidence: 0.04, dangerLevel: 'dangerous' })).toBe(false);
   });
 
   it('only calls 65% and above confident', () => {
@@ -161,15 +161,15 @@ describe('mergeServerResults', () => {
     const local = [onDevice('deer', 0.6)];
     const close = [fromServer('elk', 0.7)];
     const clear = [fromServer('elk', 0.75)];
-    expect(mergeServerResults(local, close)).toBe(local);
-    expect(mergeServerResults(local, clear)).toBe(clear);
+    expect(mergeServerResults({ local: local, server: close })).toBe(local);
+    expect(mergeServerResults({ local: local, server: clear })).toBe(clear);
   });
 
   it('falls back to whichever side has an answer', () => {
     const local = [onDevice('deer', 0.6)];
     const server = [fromServer('elk', 0.2)];
-    expect(mergeServerResults(local, [])).toBe(local);
-    expect(mergeServerResults([], server)).toBe(server);
+    expect(mergeServerResults({ local: local, server: [] })).toBe(local);
+    expect(mergeServerResults({ local: [], server: server })).toBe(server);
   });
 });
 

@@ -14,7 +14,7 @@ export const OTHER_LABEL = '__other__';
  * The largest centred square in an image — the crop the model was validated
  * with, and the one Vision's `.centerCrop` applies on iOS.
  */
-export function centerCropRect(width: number, height: number) {
+export function centerCropRect({ width, height }: { width: number; height: number }) {
   const side = Math.min(width, height);
   return {
     originX: Math.floor((width - side) / 2),
@@ -28,7 +28,13 @@ export function centerCropRect(width: number, height: number) {
  * Packs decoded RGBA pixels into the model's input: float32 RGB in 0–255,
  * NHWC. Normalisation lives inside the model graph.
  */
-export function rgbaToModelInput(rgba: Uint8Array, pixelCount: number): Float32Array<ArrayBuffer> {
+export function rgbaToModelInput({
+  rgba,
+  pixelCount,
+}: {
+  rgba: Uint8Array;
+  pixelCount: number;
+}): Float32Array<ArrayBuffer> {
   if (rgba.length < pixelCount * 4) {
     throw new Error(`Expected ${pixelCount * 4} RGBA bytes, got ${rgba.length}`);
   }
@@ -43,11 +49,15 @@ export function rgbaToModelInput(rgba: Uint8Array, pixelCount: number): Float32A
  * Pairs the model's probabilities with its labels, dropping the catch-all and
  * any label the app has no species for.
  */
-export function toPredictions(
-  probabilities: ArrayLike<number>,
-  model: { labels: readonly string[]; knownSpeciesIds: ReadonlySet<string> },
-): SpeciesPrediction[] {
-  const { labels, knownSpeciesIds } = model;
+export function toPredictions({
+  probabilities,
+  labels,
+  knownSpeciesIds,
+}: {
+  probabilities: ArrayLike<number>;
+  labels: readonly string[];
+  knownSpeciesIds: ReadonlySet<string>;
+}): SpeciesPrediction[] {
   if (probabilities.length !== labels.length) {
     throw new Error(
       `Species model returned ${probabilities.length} scores for ${labels.length} labels`,

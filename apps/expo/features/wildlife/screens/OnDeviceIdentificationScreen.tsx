@@ -115,7 +115,7 @@ export function OnDeviceIdentificationScreen() {
     void identify({
       selectedImage,
       region: fix?.region ?? null,
-      onResults: async (results, phase) => {
+      onResults: async ({ results, phase }) => {
         if (phase === 'refined') {
           if (savedId) updateResults(savedId, results);
           return;

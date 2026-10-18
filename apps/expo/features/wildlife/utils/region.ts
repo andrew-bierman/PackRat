@@ -16,7 +16,13 @@ const REGION_BOXES = Object.freeze([
   { region: 'oceania', lat: [-48, -10], lon: [110, 180], latExclusiveMax: true },
 ] as const);
 
-export function regionForCoordinate(latitude: number, longitude: number): string | null {
+export function regionForCoordinate({
+  latitude,
+  longitude,
+}: {
+  latitude: number;
+  longitude: number;
+}): string | null {
   for (const box of REGION_BOXES) {
     const [minLat, maxLat] = box.lat;
     const [minLon, maxLon] = box.lon;

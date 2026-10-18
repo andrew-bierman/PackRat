@@ -25,11 +25,15 @@ const OUT_OF_REGION_PENALTY = 0.4;
 /** The server replaces the device's answer only when it is this much more confident. */
 const SERVER_SUPERSEDE_MARGIN = 0.15;
 
-function score(
-  candidate: { species: SpeciesEntry; confidence: number },
-  region: string | null,
-): number {
-  const { species, confidence } = candidate;
+function score({
+  species,
+  confidence,
+  region,
+}: {
+  species: SpeciesEntry;
+  confidence: number;
+  region: string | null;
+}): number {
   if (!region || species.regions.length === 0 || species.regions.includes(region)) {
     return confidence;
   }
@@ -55,7 +59,9 @@ export function rankPredictions(opts: {
 
   const kept = predictions.flatMap(({ speciesId, confidence }) => {
     const species = speciesById.get(speciesId);
-    return species && clearsFloor(confidence, species.dangerLevel) ? [{ species, confidence }] : [];
+    return species && clearsFloor({ confidence, dangerLevel: species.dangerLevel })
+      ? [{ species, confidence }]
+      : [];
   });
 
   if (kept.length === 0) {
@@ -65,7 +71,7 @@ export function rankPredictions(opts: {
   const results = kept
     .map((candidate) => ({
       ...candidate,
-      score: score(candidate, region),
+      score: score({ ...candidate, region }),
     }))
     // Ties broken by name so identical photos never reshuffle.
     .sort((a, b) =>
@@ -84,12 +90,15 @@ export function rankPredictions(opts: {
  * the server is meaningfully more confident; a marginal improvement is not
  * worth showing a different name for the same photo.
  */
-export function mergeServerResults(
-  local: IdentificationResult[],
-  server: IdentificationResult[],
-): IdentificationResult[] {
-  const bestServer = server[0];
-  const bestLocal = local[0];
+export function mergeServerResults({
+  local,
+  server,
+}: {
+  local: IdentificationResult[];
+  server: IdentificationResult[];
+}): IdentificationResult[] {
+  const bestServer = server.at(0);
+  const bestLocal = local.at(0);
   if (!bestServer) return local;
   if (!bestLocal) return server;
   return bestServer.confidence >= bestLocal.confidence + SERVER_SUPERSEDE_MARGIN ? server : local;

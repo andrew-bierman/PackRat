@@ -17,7 +17,13 @@ export const CONFIDENCE_POLICY = Object.freeze({
   dangerousFloor: 0.05,
 } as const);
 
-export function clearsFloor(confidence: number, dangerLevel: SpeciesEntry['dangerLevel']): boolean {
+export function clearsFloor({
+  confidence,
+  dangerLevel,
+}: {
+  confidence: number;
+  dangerLevel: SpeciesEntry['dangerLevel'];
+}): boolean {
   const floor =
     dangerLevel === 'dangerous' ? CONFIDENCE_POLICY.dangerousFloor : CONFIDENCE_POLICY.floor;
   return confidence >= floor;

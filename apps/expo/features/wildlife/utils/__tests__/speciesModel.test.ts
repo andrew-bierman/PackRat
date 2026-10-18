@@ -7,34 +7,46 @@ import { centerCropRect, OTHER_LABEL, rgbaToModelInput, toPredictions } from '..
 
 describe('centerCropRect', () => {
   it('takes the largest centred square', () => {
-    expect(centerCropRect(400, 300)).toEqual({ originX: 50, originY: 0, width: 300, height: 300 });
-    expect(centerCropRect(301, 500)).toEqual({ originX: 0, originY: 99, width: 301, height: 301 });
+    expect(centerCropRect({ width: 400, height: 300 })).toEqual({
+      originX: 50,
+      originY: 0,
+      width: 300,
+      height: 300,
+    });
+    expect(centerCropRect({ width: 301, height: 500 })).toEqual({
+      originX: 0,
+      originY: 99,
+      width: 301,
+      height: 301,
+    });
   });
 });
 
 describe('rgbaToModelInput', () => {
   it('drops alpha and keeps 0–255 RGB in pixel order', () => {
     const rgba = new Uint8Array([10, 20, 30, 255, 40, 50, 60, 0]);
-    expect(Array.from(rgbaToModelInput(rgba, 2))).toEqual([10, 20, 30, 40, 50, 60]);
+    expect(Array.from(rgbaToModelInput({ rgba, pixelCount: 2 }))).toEqual([10, 20, 30, 40, 50, 60]);
   });
 
   it('rejects a buffer too small for the pixel count', () => {
-    expect(() => rgbaToModelInput(new Uint8Array(4), 2)).toThrow('Expected 8 RGBA bytes, got 4');
+    expect(() => rgbaToModelInput({ rgba: new Uint8Array(4), pixelCount: 2 })).toThrow(
+      'Expected 8 RGBA bytes, got 4',
+    );
   });
 });
 
 describe('toPredictions', () => {
   it('pairs scores with labels and drops the catch-all and unknown labels', () => {
     const labels = ['deer', 'yeti', OTHER_LABEL];
-    expect(toPredictions([0.5, 0.3, 0.2], { labels, knownSpeciesIds: new Set(['deer']) })).toEqual([
-      { speciesId: 'deer', confidence: 0.5 },
-    ]);
+    expect(
+      toPredictions({ probabilities: [0.5, 0.3, 0.2], labels, knownSpeciesIds: new Set(['deer']) }),
+    ).toEqual([{ speciesId: 'deer', confidence: 0.5 }]);
   });
 
   it('rejects an output that does not match the labels', () => {
-    expect(() => toPredictions([1], { labels: ['a', 'b'], knownSpeciesIds: new Set() })).toThrow(
-      'Species model returned 1 scores for 2 labels',
-    );
+    expect(() =>
+      toPredictions({ probabilities: [1], labels: ['a', 'b'], knownSpeciesIds: new Set() }),
+    ).toThrow('Species model returned 1 scores for 2 labels');
   });
 });
 
@@ -62,11 +74,11 @@ describe('regionForCoordinate', () => {
     { lat: -33.9, lon: 151.2, region: 'oceania' },
     { lat: -80, lon: 0, region: null },
   ])('maps $lat,$lon to $region', ({ lat, lon, region }) => {
-    expect(regionForCoordinate(lat, lon)).toBe(region);
+    expect(regionForCoordinate({ latitude: lat, longitude: lon })).toBe(region);
   });
 
   it('treats the upper latitude edge of half-open boxes as exclusive', () => {
-    expect(regionForCoordinate(7, -60)).toBe('north-america');
-    expect(regionForCoordinate(35, 10)).toBe('europe');
+    expect(regionForCoordinate({ latitude: 7, longitude: -60 })).toBe('north-america');
+    expect(regionForCoordinate({ latitude: 35, longitude: 10 })).toBe('europe');
   });
 });

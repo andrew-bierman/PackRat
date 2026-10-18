@@ -57,7 +57,7 @@ export function useOnDeviceIdentification() {
       selectedImage: SelectedImage;
       region: string | null;
       /** Called once with the on-device answer, and again if the server supersedes it. */
-      onResults: (results: IdentificationResult[], phase: 'local' | 'refined') => void;
+      onResults: (update: { results: IdentificationResult[]; phase: 'local' | 'refined' }) => void;
     }) => {
       const { selectedImage, region, onResults } = opts;
       const id = ++requestId.current;
@@ -114,13 +114,14 @@ export function useOnDeviceIdentification() {
       } catch (error) {
         Sentry.captureException(error, { tags: { feature: 'wildlife', action: 'copyForUpload' } });
       }
-      onResults(local, 'local');
+      onResults({ results: local, phase: 'local' });
 
       // Best-effort: the user already has an answer, and being unreachable is
       // the expected case in the field. identifyOnline reports server errors itself.
       let refined = local;
       try {
-        if (upload) refined = mergeServerResults(local, await identifyOnline(upload.image));
+        if (upload)
+          refined = mergeServerResults({ local, server: await identifyOnline(upload.image) });
       } catch {
         // The local answer stands.
       } finally {
@@ -128,7 +129,7 @@ export function useOnDeviceIdentification() {
       }
       if (!isCurrent()) return;
       setState({ status: 'results', results: refined, isRefining: false });
-      if (refined !== local) onResults(refined, 'refined');
+      if (refined !== local) onResults({ results: refined, phase: 'refined' });
     },
     [],
   );
