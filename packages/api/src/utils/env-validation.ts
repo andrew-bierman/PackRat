@@ -1,5 +1,6 @@
 import type { Container } from '@cloudflare/containers';
 import type { PostLiveRoom } from '@packrat/api/durable-objects/PostLiveRoom';
+import type { SafetyCheckInTimer } from '@packrat/api/durable-objects/SafetyCheckInTimer';
 import { isObject } from '@packrat/guards';
 import { z } from 'zod';
 
@@ -148,6 +149,8 @@ export const apiEnvObjectSchema = z.object({
   APP_CONTAINER: z.unknown(),
   // Live comment rooms, one Durable Object per feed post (optional — absent in unit tests)
   POST_LIVE_ROOM: z.unknown().optional(),
+  // Overdue alarms, one Durable Object per safety check-in (optional — absent in unit tests)
+  SAFETY_CHECK_IN_TIMER: z.unknown().optional(),
   // Rate limiting binding (optional — not present in local dev/test)
   TOKEN_RATE_LIMITER: z.unknown().optional(),
   // Hyperdrive binding for the dedicated OSM/trail Postgres instance.
@@ -293,6 +296,7 @@ export type ValidatedEnv = Omit<
   | 'ETL_WORKFLOW'
   | 'APP_CONTAINER'
   | 'POST_LIVE_ROOM'
+  | 'SAFETY_CHECK_IN_TIMER'
   | 'TOKEN_RATE_LIMITER'
   | 'AUTH_KV'
   | 'METRICS_DB'
@@ -308,6 +312,7 @@ export type ValidatedEnv = Omit<
   ETL_WORKFLOW: Workflow;
   APP_CONTAINER: DurableObjectNamespace<Container<unknown>>;
   POST_LIVE_ROOM?: DurableObjectNamespace<PostLiveRoom>;
+  SAFETY_CHECK_IN_TIMER?: DurableObjectNamespace<SafetyCheckInTimer>;
   TOKEN_RATE_LIMITER?: { limit(opts: { key: string }): Promise<{ success: boolean }> };
   OSM_HYPERDRIVE?: Hyperdrive;
   AUTH_KV: KVNamespace;
@@ -359,6 +364,10 @@ function validate(rawEnv: Record<string, unknown>): ValidatedEnv {
       Container<unknown>
     >,
     POST_LIVE_ROOM: rawEnv.POST_LIVE_ROOM as DurableObjectNamespace<PostLiveRoom> | undefined, // safe-cast: Cloudflare Worker binding injected by runtime
+    // safe-cast: Cloudflare Worker binding injected by runtime
+    SAFETY_CHECK_IN_TIMER: rawEnv.SAFETY_CHECK_IN_TIMER as
+      | DurableObjectNamespace<SafetyCheckInTimer>
+      | undefined,
     TOKEN_RATE_LIMITER: rawEnv.TOKEN_RATE_LIMITER as ValidatedEnv['TOKEN_RATE_LIMITER'] | undefined, // safe-cast: Cloudflare Worker binding injected by runtime
     OSM_HYPERDRIVE: rawEnv.OSM_HYPERDRIVE as Hyperdrive | undefined, // safe-cast: Cloudflare Worker binding injected by runtime
     AUTH_KV: rawEnv.AUTH_KV as KVNamespace, // safe-cast: Cloudflare Worker binding injected by runtime

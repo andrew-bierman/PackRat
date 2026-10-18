@@ -23,12 +23,13 @@ import {
 import { AppContainer } from '@packrat/api/containers';
 import { createDb } from '@packrat/api/db';
 import { PostLiveRoom } from '@packrat/api/durable-objects/PostLiveRoom';
+import { SafetyCheckInTimer as RawSafetyCheckInTimer } from '@packrat/api/durable-objects/SafetyCheckInTimer';
 import { CatalogService } from '@packrat/api/services';
 import { processQueueBatch } from '@packrat/api/services/etl/queue';
-import { listEffectiveFeatureFlags } from '@packrat/api/services/featureFlagsService';
+import { listCachedFeatureFlags } from '@packrat/api/services/featureFlagsService';
 import { takePendingUpgrade } from '@packrat/api/services/feedLive';
 import { sweepInvalidItemLogs } from '@packrat/api/services/retention/invalidLogRetention';
-import { sweepSafetyCheckIns } from '@packrat/api/services/safetyCheckIn/sweep';
+import { rearmOverdueTimers } from '@packrat/api/services/safetyCheckIn/overdueTimer';
 import { pollTripDestinations } from '@packrat/api/services/weatherMonitoring/pollTripDestinations';
 import { pollWatchedLocations } from '@packrat/api/services/weatherMonitoring/pollWatchedLocations';
 import { hasWatchers } from '@packrat/api/services/weatherMonitoring/watcherPresence';
@@ -47,7 +48,11 @@ import { renderConsentPage, renderSignInPage } from '@packrat/consent-ui';
 import * as dbSchema from '@packrat/db/schema';
 import { isString, toRecord, toString as toStr } from '@packrat/guards';
 import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
-import { instrumentWorkflowWithSentry, withSentry } from '@sentry/cloudflare';
+import {
+  instrumentDurableObjectWithSentry,
+  instrumentWorkflowWithSentry,
+  withSentry,
+} from '@sentry/cloudflare';
 import { eq } from 'drizzle-orm';
 import type { CatalogETLMessage } from './services/etl/types';
 
@@ -85,6 +90,11 @@ export { AppContainer, PostLiveRoom };
 export const CatalogEtlWorkflow = instrumentWorkflowWithSentry(
   sentryOptions,
   RawCatalogEtlWorkflow,
+);
+
+export const SafetyCheckInTimer = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawSafetyCheckInTimer,
 );
 
 type CfFetchFn = (
@@ -566,10 +576,19 @@ const workerHandler = {
                 `remaining expired rows will be swept on the next run`,
             );
           }
+          // Postgres is already awake for the retention sweep, so the daily
+          // backstop for safety check-in alarms costs no extra wake-up.
+          const rearmed = await record({
+            operation: 'safetyCheckIn.rearmOverdueTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmOverdueTimers({ env }),
+          });
+          console.log(`[safetyCheckIn] re-armed overdue timers: armed=${rearmed.armed}`);
           return;
         }
         if (controller.cron === '*/15 * * * *') {
-          const flags = await listEffectiveFeatureFlags();
+          const flags = await listCachedFeatureFlags(env.AUTH_KV);
           // KV marker first: skips the watch-list queries when nobody watches anything.
           if (flags[FeatureFlag.EnableWeatherMonitoring] && (await hasWatchers(env.AUTH_KV))) {
             const result = await record({
@@ -594,15 +613,6 @@ const workerHandler = {
               `[tripReminders] destination poll: checked=${result.checked} skipped=${result.skipped} ` +
                 `failed=${result.failed} notified=${result.notified}`,
             );
-          }
-          if (flags[FeatureFlag.EnableSafetyCheckIn]) {
-            const result = await record({
-              operation: 'safetyCheckIn.sweep',
-              tags: { trigger: 'cron' },
-              extra: { cron: controller.cron },
-              fn: async () => sweepSafetyCheckIns({ env }),
-            });
-            console.log(`[safetyCheckIn] sweep: alerted=${result.alerted}`);
           }
           return;
         }

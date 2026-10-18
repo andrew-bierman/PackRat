@@ -1,4 +1,5 @@
 import { createDb } from '@packrat/api/db';
+import { getEnv } from '@packrat/api/utils/env-validation';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import {
   APP_CONFIG,
@@ -8,6 +9,7 @@ import {
   resolveFlagsForPlatform,
 } from '@packrat/config';
 import { featureFlagPlatformOverrides, featureFlags } from '@packrat/db/schema';
+import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
 import { and, eq } from 'drizzle-orm';
 
 // All flag keys known to the codebase. Exported so the admin route can build
@@ -91,6 +93,65 @@ export async function listEffectiveFeatureFlags(
   }
 }
 
+/**
+ * KV mirror of the global overrides, for the cron. Neon suspends after 5 idle
+ * minutes, so a cron that reads flags from Postgres every 15 keeps it billing
+ * around the clock; KV reads don't wake it.
+ *
+ * Stores overrides rather than resolved values so a deploy that changes a
+ * coded default takes effect at once. Every admin write drops the key; the
+ * TTL bounds staleness if a drop is ever lost.
+ */
+export const GLOBAL_FLAG_OVERRIDES_KEY = 'feature-flags:global-overrides';
+const GLOBAL_FLAG_OVERRIDES_TTL_SECONDS = 24 * 60 * 60;
+
+/** The slice of `KVNamespace` the mirror uses; any KV binding satisfies it. */
+export type FlagsKv = {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+  delete(key: string): Promise<void>;
+};
+
+async function readGlobalOverrides(): Promise<Record<string, boolean>> {
+  const rows = await createDb()
+    .tag('featureFlags.listGlobalOverrides')
+    .query.featureFlags.findMany({ columns: { key: true, enabled: true } });
+  const overrides: Record<string, boolean> = {};
+  for (const row of rows) overrides[row.key] = row.enabled;
+  return overrides;
+}
+
+/** Globally-resolved flags from the KV mirror; reads Postgres only to refill it. */
+export async function listCachedFeatureFlags(kv: FlagsKv): Promise<Record<string, boolean>> {
+  const cached = await kv.get(GLOBAL_FLAG_OVERRIDES_KEY);
+  let globalOverrides: Record<string, boolean>;
+  if (cached !== null) {
+    globalOverrides = safeJsonParse<Record<string, boolean>>(cached);
+  } else {
+    globalOverrides = await readGlobalOverrides();
+    await kv.put(GLOBAL_FLAG_OVERRIDES_KEY, safeJsonStringify(globalOverrides), {
+      expirationTtl: GLOBAL_FLAG_OVERRIDES_TTL_SECONDS,
+    });
+  }
+  return resolveFlagsForPlatform({
+    platformOverrides: {},
+    globalOverrides,
+    defaults: { ...APP_CONFIG.featureFlags },
+  });
+}
+
+async function invalidateCachedFeatureFlags(): Promise<void> {
+  try {
+    await getEnv().AUTH_KV.delete(GLOBAL_FLAG_OVERRIDES_KEY);
+  } catch (error) {
+    captureApiException({
+      error,
+      operation: 'featureFlags.invalidateCache',
+      tags: { feature: 'featureFlags' },
+    });
+  }
+}
+
 /** Every known flag, with its coded default, any override, and the effective value. Admin-only. */
 export async function listFeatureFlagsForAdmin(): Promise<AdminFeatureFlagItem[]> {
   const db = createDb();
@@ -164,6 +225,7 @@ export async function upsertFeatureFlagOverride({
       // featureFlags isn't a fat table so shipping the full (small) row is fine.
       .returning();
     if (!row) throw new Error('Failed to upsert feature flag override');
+    await invalidateCachedFeatureFlags();
     return {
       key: row.key,
       defaultValue: getDefaultFlagValue(row.key),
@@ -194,6 +256,7 @@ export async function deleteFeatureFlagOverride(key: string): Promise<boolean> {
       .delete(featureFlags)
       .where(eq(featureFlags.key, key))
       .returning();
+    if (deleted.length > 0) await invalidateCachedFeatureFlags();
     return deleted.length > 0;
   } catch (error) {
     captureApiException({

@@ -36,6 +36,10 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock('@packrat/api/db', () => ({ createDbClient: mocks.createDbClient }));
+vi.mock('drizzle-orm', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('drizzle-orm')>();
+  return { ...actual, eq: vi.fn(actual.eq) };
+});
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('../delivery', () => ({ deliverToContacts: mocks.deliverToContacts }));
 vi.mock('../checkInService', () => ({
@@ -45,6 +49,8 @@ vi.mock('../checkInService', () => ({
   shareUrlFor: (token: string) => `https://api.example.com/api/safety/${token}`,
 }));
 
+import { safetyCheckIns } from '@packrat/db/schema';
+import { eq } from 'drizzle-orm';
 import { sweepSafetyCheckIns } from '../sweep';
 
 const when = (label: string, ...values: unknown[]) => mocks.results.set(label, values);
@@ -120,6 +126,16 @@ describe('sweepSafetyCheckIns', () => {
 
     expect(await sweepSafetyCheckIns({ env, now: NOW })).toEqual({ alerted: 0 });
     expect(mocks.captureApiException.mock.calls[0]?.[0].operation).toBe('safetyCheckIn.overdue');
+  });
+
+  it("claims only the alarm's own check-in when given one", async () => {
+    await sweepSafetyCheckIns({ env, checkInId: 'ci-1', now: NOW });
+    expect(vi.mocked(eq)).toHaveBeenCalledWith(safetyCheckIns.id, 'ci-1');
+  });
+
+  it('sweeps every check-in without one', async () => {
+    await sweepSafetyCheckIns({ env, now: NOW });
+    expect(vi.mocked(eq)).not.toHaveBeenCalledWith(safetyCheckIns.id, expect.anything());
   });
 
   it('defaults now to the current time', async () => {
