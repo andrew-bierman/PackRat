@@ -209,4 +209,13 @@ export const testIds = Object.freeze({
     formSubmitBtn: 'trail-conditions:form-submit',
     formCancelBtn: 'trail-conditions:form-cancel',
   }),
+
+  // ── Wildlife ──────────────────────────────────────────────────────────────
+  wildlife: Object.freeze({
+    addPhotoBtn: 'wildlife:add-photo',
+    identifyBtn: 'wildlife:identify',
+    resultsList: 'wildlife:results',
+    resultCard: (speciesId: string) => `wildlife:result-${speciesId}`,
+    outcomeMessage: 'wildlife:outcome-message',
+  }),
 });

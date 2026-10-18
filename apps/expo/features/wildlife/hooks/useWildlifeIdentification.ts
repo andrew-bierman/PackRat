@@ -10,7 +10,9 @@ import type { IdentificationResult } from '../types';
 
 const isIdentifyResponse = zodGuard(z.object({ results: z.array(z.unknown()) }));
 
-async function identifyOnline(selectedImage: SelectedImage): Promise<IdentificationResult[]> {
+export async function identifyOnline(
+  selectedImage: SelectedImage,
+): Promise<IdentificationResult[]> {
   const image = await uploadImage({ fileName: selectedImage.fileName, uri: selectedImage.uri });
   if (!image) {
     throw new Error(
@@ -39,7 +41,7 @@ async function identifyOnline(selectedImage: SelectedImage): Promise<Identificat
   return data.results as IdentificationResult[];
 }
 
-function isNetworkError(error: unknown): boolean {
+export function isNetworkError(error: unknown): boolean {
   // Primitives and null are not classifiable as network errors
   if (!isObject(error)) {
     return false;

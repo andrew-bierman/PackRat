@@ -1237,6 +1237,26 @@
       "mushroom": "mushroom",
       "fish": "fish",
       "other": "other"
+    },
+    "sourceLabel": {
+      "offline": "On this device",
+      "online": "PackRat server"
+    },
+    "onDevice": {
+      "intro": "Point your camera at a plant or animal. Recognition happens on this device, so it works with no signal.",
+      "coverage": "{{count}} species",
+      "rankedMatches": "Ranked matches",
+      "ambiguityNote": "Fine-grained identification is often ambiguous. Check the alternatives before acting on the top match, especially before eating anything.",
+      "possibleMatch": "Possible match · {{percent}}%",
+      "percentConfident": "{{percent}}% confident",
+      "noConfidentMatchTitle": "No confident match",
+      "noConfidentMatchBody": "Nothing in your species packs is a close enough match to name. Try another angle, or get closer to the subject.",
+      "outsidePacksTitle": "Not in your species packs",
+      "outsidePacksBody": "This looks like it is outside the regions your species packs cover.",
+      "unavailableTitle": "Identification unavailable",
+      "unavailableBody": "Species recognition is not available on this device.",
+      "failedTitle": "Identification failed",
+      "failedBody": "Something went wrong identifying this photo. Try again, or choose another photo."
     }
   }
 }
