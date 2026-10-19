@@ -27,25 +27,31 @@ async function sendToken(): Promise<void> {
   await registerDeviceToken(String(token.data));
 }
 
+/** Where push stands for this device after a registration attempt. */
+export type PushRegistrationStatus = 'registered' | 'blocked' | 'unavailable';
+
 /**
  * Asks for notification permission at the moment it is earned — right after
  * the user chooses to watch a place — then registers this device for push.
- * Never asks twice once the user has declined.
+ * Never asks again once the user has declined for good; reports `blocked` so
+ * the caller can point them to system settings instead.
  */
-export async function registerForPushIfNeeded(): Promise<void> {
-  if (Platform.OS !== 'android' || !Device.isDevice) return;
+export async function registerForPushIfNeeded(): Promise<PushRegistrationStatus> {
+  if (Platform.OS !== 'android' || !Device.isDevice) return 'unavailable';
   try {
     await ensureAlertsChannel();
     let permission = await Notifications.getPermissionsAsync();
     if (!permission.granted && permission.canAskAgain) {
       permission = await Notifications.requestPermissionsAsync();
     }
-    if (!permission.granted) return;
+    if (!permission.granted) return 'blocked';
     await sendToken();
+    return 'registered';
   } catch (error) {
     Sentry.captureException(error, {
       tags: { feature: 'weatherMonitoring', action: 'registerForPush' },
     });
+    return 'unavailable';
   }
 }
 

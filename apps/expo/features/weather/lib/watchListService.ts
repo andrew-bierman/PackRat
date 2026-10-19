@@ -1,4 +1,7 @@
-import type { AddWatchedLocationRequest } from '@packrat/schemas/weatherMonitoring';
+import {
+  type AddWatchedLocationRequest,
+  WatchedLocationSchema,
+} from '@packrat/schemas/weatherMonitoring';
 import * as Sentry from '@sentry/react-native';
 import { apiClient } from 'expo-app/lib/api/packrat';
 
@@ -22,7 +25,7 @@ function apiError({
 export async function fetchWatchList() {
   const { data, error } = await apiClient.weather['watch-list'].get();
   if (error) throw apiError({ action: 'fetchWatchList', error });
-  return data ?? [];
+  return WatchedLocationSchema.array().parse(data ?? []);
 }
 
 export async function addWatchedLocation(request: AddWatchedLocationRequest) {
@@ -40,7 +43,7 @@ export async function addWatchedLocation(request: AddWatchedLocationRequest) {
       extra: { weatherLocationId: request.weatherLocationId },
     });
   }
-  return data;
+  return WatchedLocationSchema.parse(data);
 }
 
 export async function removeWatchedLocation(id: string) {

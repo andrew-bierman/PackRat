@@ -1,5 +1,5 @@
 import type { ValidatedEnv } from '@packrat/api/utils/env-validation';
-import { safeJsonStringify } from '@packrat/utils';
+import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
 import { z } from 'zod';
 import type { PushPayload } from './pushPayload';
 
@@ -32,7 +32,7 @@ type ServiceAccount = z.infer<typeof serviceAccountSchema>;
 function readServiceAccount(env: ValidatedEnv): ServiceAccount {
   const raw = env.FCM_SERVICE_ACCOUNT_JSON;
   if (!raw) throw new Error('FCM is not configured (FCM_SERVICE_ACCOUNT_JSON unset)');
-  const parsed = serviceAccountSchema.safeParse(JSON.parse(raw));
+  const parsed = serviceAccountSchema.safeParse(safeJsonParse(raw));
   if (!parsed.success) {
     throw new Error('FCM_SERVICE_ACCOUNT_JSON is missing project_id, client_email or private_key');
   }
@@ -129,7 +129,7 @@ function routingData(payload: PushPayload): Record<string, string> {
  * `INVALID_ARGUMENT` naming the registration token. Any other 400 is a
  * payload bug and must not delete the row.
  */
-function isInvalidTokenResponse(status: number, body: string): boolean {
+function isInvalidTokenResponse({ status, body }: { status: number; body: string }): boolean {
   if (status === 404 && body.includes('UNREGISTERED')) return true;
   return status === 400 && body.includes('registration token');
 }
@@ -181,6 +181,7 @@ export async function sendFcmPush({
   if (response.ok) return { outcome: 'sent' };
 
   const body = await response.text().catch(() => '');
-  if (isInvalidTokenResponse(response.status, body)) return { outcome: 'invalid-token' };
+  if (isInvalidTokenResponse({ status: response.status, body }))
+    return { outcome: 'invalid-token' };
   return { outcome: 'error', status: response.status, body };
 }

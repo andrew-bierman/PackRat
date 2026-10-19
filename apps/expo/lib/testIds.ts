@@ -188,6 +188,18 @@ export const testIds = Object.freeze({
     searchInput: 'weather:search-input',
     addLocationBtn: 'weather:add-location',
     location: (id: string | number) => `weather:location-${id}`,
+    newAlertDot: (id: string | number) => `weather:new-alert-${id}`,
+    moreMenu: 'weather:more-menu',
+    watchListMenuItem: 'weather:menu-watch-list',
+    snackbar: 'weather:snackbar',
+    alertSection: 'weather:alert-section',
+    watchCta: 'weather:watch-cta',
+    watchToggle: 'weather:watch-toggle',
+    saveLocationBtn: 'weather:save-location',
+    watchListAddBtn: 'weather:watch-list-add',
+    watchedLocation: (id: string | number) => `weather:watched-${id}`,
+    removeWatched: (id: string | number) => `weather:remove-watched-${id}`,
+    homeNewAlertDot: 'weather:home-new-alert',
   }),
 
   // ── Trail conditions ──────────────────────────────────────────────────────

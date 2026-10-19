@@ -9,6 +9,7 @@ import {
 } from 'expo-app/features/auth/atoms/authAtoms';
 import { useAuthInit } from 'expo-app/features/auth/hooks/useAuthInit';
 import { isAuthed } from 'expo-app/features/auth/store';
+import { useNotificationSetup } from 'expo-app/features/notifications/hooks/useNotificationSetup';
 import { getPackTemplateDetailOptions } from 'expo-app/features/pack-templates/utils/getPackTemplateDetailOptions';
 import { getPackTemplateItemDetailOptions } from 'expo-app/features/pack-templates/utils/getPackTemplateItemDetailOptions';
 import SyncBanner from 'expo-app/features/packs/components/SyncBanner';
@@ -16,6 +17,7 @@ import { getPackDetailOptions } from 'expo-app/features/packs/utils/getPackDetai
 import { getPackItemDetailOptions } from 'expo-app/features/packs/utils/getPackItemDetailOptions';
 import { useRevenueCatUser } from 'expo-app/features/purchases';
 import { getTripDetailOptions } from 'expo-app/features/trips/utils/getTripDetailOptions';
+import { useWeatherAlertRefresh } from 'expo-app/features/weather/hooks/useWeatherAlertRefresh';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import type { TranslationFunction } from 'expo-app/lib/i18n/types';
 import 'expo-app/lib/devClient';
@@ -35,6 +37,8 @@ export default function AppLayout() {
   const isLoading = useAuthInit();
   const isAuthedValue = use$(isAuthed);
   useRevenueCatUser();
+  useWeatherAlertRefresh({ enabled: isAuthedValue });
+  useNotificationSetup({ isAuthed: isAuthedValue });
   const { t } = useTranslation();
   const needsReauth = useAtomValue(needsReauthAtom);
   const isLoadingGlobal = useAtomValue(isLoadingAtom);
@@ -133,13 +137,13 @@ export default function AppLayout() {
             animation: 'slide_from_bottom',
           }}
         />
-        <Stack.Screen name="weather/preview" />
         <Stack.Screen
           name="weather/[id]"
           options={{
             headerShown: false,
           }}
         />
+        <Stack.Screen name="weather/watch-list" />
         <Stack.Screen
           name="weather/geo"
           options={{

@@ -1,3 +1,5 @@
+import { isNumber, isString } from '@packrat/guards';
+
 /**
  * Where a tapped push should land, from the ids the server puts in its data
  * payload (see packages/api/src/services/push/fcmClient.ts). FCM data values
@@ -9,8 +11,8 @@ export type NotificationRoute =
   | { pathname: '/feed/[id]'; params: { id: string } };
 
 function idFrom(value: unknown): string | null {
-  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
-  if (typeof value === 'string' && value.trim() !== '') return value.trim();
+  if (isNumber(value) && Number.isFinite(value)) return String(value);
+  if (isString(value) && value.trim() !== '') return value.trim();
   return null;
 }
 
