@@ -9,7 +9,7 @@ const config = getSentryExpoConfig(__dirname);
 
 config.resolver = {
   ...config.resolver,
-  assetExts: [...(config.resolver?.assetExts ?? []), 'wasm'],
+  assetExts: [...(config.resolver?.assetExts ?? []), 'wasm', 'tflite'],
   blockList: /node_modules\/.*\/android\/\.cxx\/.*/,
   // Exclude the ESM "import" condition so packages like Jotai resolve to their
   // CJS builds instead of .mjs files that contain import.meta (invalid in

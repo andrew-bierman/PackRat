@@ -3,9 +3,8 @@
 A field guide that recognises what the camera is pointed at, and answers without
 a network. This document describes the feature as it is meant to work.
 
-Scope is `apps/swift`. The Expo app ships the Android counterpart; the
-platforms share the domain model and the product behaviour described here, and
-differ only in inference runtime.
+iOS, macOS and Android share the domain model and the product behaviour
+described here, and differ only in inference runtime.
 
 ## The model in one paragraph
 

@@ -203,6 +203,13 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
+          name="wildlife"
+          options={{
+            // The nested stack owns the headers for the list, identify and detail routes.
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="trail-conditions"
           options={{
             presentation: 'card',

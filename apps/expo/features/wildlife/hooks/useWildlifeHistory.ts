@@ -29,6 +29,15 @@ export function useWildlifeHistory() {
     [setHistory],
   );
 
+  const updateResults = useCallback(
+    (id: string, results: IdentificationResult[]) => {
+      setHistory(async (prev) =>
+        (await prev).map((entry) => (entry.id === id ? { ...entry, results } : entry)),
+      );
+    },
+    [setHistory],
+  );
+
   const deleteIdentification = useCallback(
     (id: string) => {
       setHistory(async (prev) => {
@@ -62,6 +71,7 @@ export function useWildlifeHistory() {
   return {
     historyState,
     addIdentification,
+    updateResults,
     deleteIdentification,
     clearHistory,
   };
