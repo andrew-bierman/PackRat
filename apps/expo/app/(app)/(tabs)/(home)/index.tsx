@@ -29,7 +29,6 @@ import { WeightAnalysisTile } from 'expo-app/features/packs/components/WeightAna
 import { useHasMinimumInventory } from 'expo-app/features/packs/hooks/useHasMinimumInventory';
 import { TrailConditionsTile } from 'expo-app/features/trips/components/TrailConditionsTile';
 import { UpcomingTripsTile } from 'expo-app/features/trips/components/UpcomingTripsTile';
-import { WeatherAlertsTile } from 'expo-app/features/weather/components/WeatherAlertsTile';
 import { WeatherTile } from 'expo-app/features/weather/components/WeatherTile';
 import { WildlifeTile } from 'expo-app/features/wildlife/components/WildlifeTile';
 import { useFeatureFlags } from 'expo-app/hooks/useFeatureFlags';
@@ -100,11 +99,6 @@ const tileInfo = {
     title: 'Weather',
     keywords: ['weather', 'forecast', 'temperature', 'conditions'],
     component: WeatherTile,
-  },
-  'weather-alerts': {
-    title: 'Weather Alerts',
-    keywords: ['weather', 'alerts', 'warnings', 'emergency'],
-    component: WeatherAlertsTile,
   },
   'gear-inventory': {
     title: 'Gear Inventory',
@@ -213,8 +207,6 @@ export default function DashboardScreen() {
       ...(featureFlags.enableTrailConditions
         ? [appConfig.dashboard.layout.conditional.trailConditions]
         : []),
-      ...appConfig.dashboard.layout.weatherSection,
-      ...(featureFlags.enableTrips ? [appConfig.dashboard.layout.conditional.weatherAlerts] : []),
       ...appConfig.dashboard.layout.gearSection,
       ...(featureFlags.enableShoppingList
         ? [appConfig.dashboard.layout.conditional.shoppingList]

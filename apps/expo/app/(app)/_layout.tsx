@@ -183,26 +183,6 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
-          name="weather-alerts"
-          options={{
-            ...getAppBarOptions(),
-            // Navigator-level header default so early loading states still show
-            // the proper large-title header. The screen's own <Stack.Screen>
-            // overrides this with the translated title once content mounts.
-            title: 'Weather Alerts',
-            presentation: 'card',
-            animation: 'default',
-          }}
-        />
-        <Stack.Screen
-          name="weather-alert-preferences"
-          options={{
-            ...getAppBarOptions(),
-            presentation: 'modal',
-            animation: 'slide_from_bottom',
-          }}
-        />
-        <Stack.Screen
           name="wildlife"
           options={{
             // The nested stack owns the headers for the list, identify and detail routes.
