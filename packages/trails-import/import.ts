@@ -84,11 +84,12 @@ if (!values['reconcile-only']) {
   const duckdbUrl = new URL(DB_URL);
   duckdbUrl.searchParams.delete('channel_binding');
 
-  // Load in longitude bands, each its own short connection, straight from S3:
-  // no local copy, so a full disk on this machine can't fail the run, and no
-  // COPY held open for the whole worldwide scan (Neon drops those). Overture's
-  // files are spatially sorted, so a band reads only its own row groups. A
-  // segment crossing a band edge lands once (ON CONFLICT DO NOTHING).
+  // Load in longitude bands straight from S3, no local copy, so a full disk on
+  // this machine can't fail the run. Each band is read into memory before
+  // connecting: a dense band downloads for up to an hour, and Neon drops a
+  // connection held open that long. Overture's files are spatially sorted, so
+  // a band reads only its own row groups. A segment crossing a band edge lands
+  // once (ON CONFLICT DO NOTHING).
   // --from-band resumes a stopped run: earlier bands are already loaded, so
   // keep them (re-loading the partial band is safe, inserts skip duplicates).
   const fromBand = Number(values['from-band']);
@@ -104,9 +105,7 @@ INSTALL spatial; LOAD spatial;
 INSTALL httpfs; LOAD httpfs;
 INSTALL postgres; LOAD postgres;
 SET s3_region = 'us-west-2';
-ATTACH '${duckdbUrl}' AS pg (TYPE postgres);
-CALL postgres_execute('pg', 'DROP TABLE IF EXISTS trail_segments_load');
-CREATE TABLE pg.trail_segments_load AS
+CREATE TABLE band AS
 SELECT id AS overture_id, names.primary AS name, class, subtype, ST_AsHEXWKB(geometry) AS wkb
 FROM read_parquet('s3://overturemaps-us-west-2/release/${release}/theme=transportation/type=segment/*', hive_partitioning = 1)
 WHERE subtype = 'road'
@@ -114,6 +113,9 @@ WHERE subtype = 'road'
   AND names.primary IS NOT NULL
   AND bbox.xmin <= ${bandEast} AND bbox.xmax >= ${bandWest}
   AND bbox.ymin <= ${north} AND bbox.ymax >= ${south};
+ATTACH '${duckdbUrl}' AS pg (TYPE postgres);
+CALL postgres_execute('pg', 'DROP TABLE IF EXISTS trail_segments_load');
+CREATE TABLE pg.trail_segments_load AS SELECT * FROM band;
 CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name, class, subtype, ST_SetSRID(ST_GeomFromWKB(decode(wkb, ''hex'')), 4326) FROM trail_segments_load ON CONFLICT DO NOTHING; DROP TABLE trail_segments_load;');
 `;
     for (let attempt = 1; ; attempt++) {
