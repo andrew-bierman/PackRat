@@ -30,7 +30,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const DEFAULT_RELEASE = '2026-09-23.1';
 const BAND_DEGREES = 10;
-const BAND_ATTEMPTS = 3;
+// A band retries for about an hour, so a dropped connection or a short
+// internet outage pauses the run instead of ending it.
+const BAND_ATTEMPTS = 12;
+const BAND_RETRY_MS = 5 * 60 * 1000;
 const TRAIL_CLASSES = ['path', 'footway', 'steps', 'track', 'bridleway', 'cycleway'];
 
 const DB_URL = nodeEnv.OSM_DATABASE_URL;
@@ -124,7 +127,8 @@ CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name
         break;
       } catch (error) {
         if (attempt === BAND_ATTEMPTS) throw error;
-        console.log(`Band ${i + 1} failed (attempt ${attempt}), retrying...`);
+        console.log(`Band ${i + 1} failed (attempt ${attempt}), retrying in 5 min...`);
+        await Bun.sleep(BAND_RETRY_MS);
       }
     }
   }
