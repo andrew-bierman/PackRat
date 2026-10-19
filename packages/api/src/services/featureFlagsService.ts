@@ -101,8 +101,15 @@ export async function listEffectiveFeatureFlags(
  * Stores overrides rather than resolved values so a deploy that changes a
  * coded default takes effect at once. Every admin write drops the key; the
  * TTL bounds staleness if a drop is ever lost.
+ *
+ * The key names the database host, because the dev and production Workers
+ * share one KV namespace: without it, whichever refilled first would serve
+ * its own flags to the other.
  */
-export const GLOBAL_FLAG_OVERRIDES_KEY = 'feature-flags:global-overrides';
+export function globalFlagOverridesKey(): string {
+  const { hostname } = new URL(getEnv().NEON_DATABASE_URL);
+  return `feature-flags:global-overrides:${hostname}`;
+}
 const GLOBAL_FLAG_OVERRIDES_TTL_SECONDS = 24 * 60 * 60;
 
 /** The slice of `KVNamespace` the mirror uses; any KV binding satisfies it. */
@@ -123,13 +130,14 @@ async function readGlobalOverrides(): Promise<Record<string, boolean>> {
 
 /** Globally-resolved flags from the KV mirror; reads Postgres only to refill it. */
 export async function listCachedFeatureFlags(kv: FlagsKv): Promise<Record<string, boolean>> {
-  const cached = await kv.get(GLOBAL_FLAG_OVERRIDES_KEY);
+  const key = globalFlagOverridesKey();
+  const cached = await kv.get(key);
   let globalOverrides: Record<string, boolean>;
   if (cached !== null) {
     globalOverrides = safeJsonParse<Record<string, boolean>>(cached);
   } else {
     globalOverrides = await readGlobalOverrides();
-    await kv.put(GLOBAL_FLAG_OVERRIDES_KEY, safeJsonStringify(globalOverrides), {
+    await kv.put(key, safeJsonStringify(globalOverrides), {
       expirationTtl: GLOBAL_FLAG_OVERRIDES_TTL_SECONDS,
     });
   }
@@ -142,7 +150,7 @@ export async function listCachedFeatureFlags(kv: FlagsKv): Promise<Record<string
 
 async function invalidateCachedFeatureFlags(): Promise<void> {
   try {
-    await getEnv().AUTH_KV.delete(GLOBAL_FLAG_OVERRIDES_KEY);
+    await getEnv().AUTH_KV.delete(globalFlagOverridesKey());
   } catch (error) {
     captureApiException({
       error,
