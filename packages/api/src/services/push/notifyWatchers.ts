@@ -4,7 +4,7 @@ import { captureApiException } from '@packrat/api/utils/sentry';
 import { userDeviceTokens, weatherWatchedLocations } from '@packrat/db/schema';
 import type { WeatherAlertItem } from '@packrat/schemas/weather';
 import { eq, inArray } from 'drizzle-orm';
-import { sendApnsPush } from './apnsClient';
+import { pushGateway, sendPush } from './sendPush';
 
 function alertNotificationBody(alerts: WeatherAlertItem[]): { title: string; body: string } {
   const first = alerts[0];
@@ -51,7 +51,11 @@ export async function notifyWatchers({
   const watcherIds = watchers.map((w) => w.userId);
   const tokens = await db
     .tag('weatherMonitoring.listDeviceTokensForWatchers')
-    .select({ id: userDeviceTokens.id, deviceToken: userDeviceTokens.deviceToken })
+    .select({
+      id: userDeviceTokens.id,
+      platform: userDeviceTokens.platform,
+      deviceToken: userDeviceTokens.deviceToken,
+    })
     .from(userDeviceTokens)
     .where(inArray(userDeviceTokens.userId, watcherIds));
 
@@ -59,8 +63,9 @@ export async function notifyWatchers({
 
   for (const token of tokens) {
     try {
-      const result = await sendApnsPush({
+      const result = await sendPush({
         env,
+        platform: token.platform,
         deviceToken: token.deviceToken,
         payload: { alert: { title, body }, weatherLocationId },
       });
@@ -72,7 +77,9 @@ export async function notifyWatchers({
           .where(eq(userDeviceTokens.id, token.id));
       } else if (result.outcome === 'error') {
         captureApiException({
-          error: new Error(`APNs push failed: ${result.status} ${result.body}`),
+          error: new Error(
+            `${pushGateway(token.platform)} push failed: ${result.status} ${result.body}`,
+          ),
           operation: 'weatherMonitoring.notifyWatchers',
           tags: { feature: 'weatherMonitoring' },
           extra: { weatherLocationId, httpStatus: result.status },
