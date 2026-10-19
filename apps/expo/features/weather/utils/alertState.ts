@@ -72,7 +72,19 @@ export function alertSeverityTone(severity: string | undefined): AlertSeverityTo
   }
 }
 
+// Some issuers (Environment Canada, via the forecast provider) send the bare
+// word "weather" as the event; the headline names the actual statement.
+const GENERIC_EVENTS = Object.freeze(new Set(['weather', 'alert']));
+
+function sentenceCase(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 /** Card title for an alert: its event name, else its headline. */
 export function alertTitle(alert: Pick<WeatherAlertItem, 'event' | 'headline'>): string {
-  return alert.event || alert.headline || 'Weather Alert';
+  const event = alert.event?.trim() ?? '';
+  const headline = alert.headline?.trim() ?? '';
+  if (event && !GENERIC_EVENTS.has(event.toLowerCase())) return event;
+  if (headline) return sentenceCase(headline);
+  return event ? sentenceCase(event) : 'Weather Alert';
 }

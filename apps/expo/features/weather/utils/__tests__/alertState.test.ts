@@ -85,4 +85,11 @@ describe('alertTitle', () => {
     expect(alertTitle({ event: '', headline: 'Heads up' })).toBe('Heads up');
     expect(alertTitle({ event: '', headline: '' })).toBe('Weather Alert');
   });
+
+  it('skips a generic event word for the headline, in sentence case', () => {
+    expect(alertTitle({ event: 'weather', headline: 'special weather statement in effect' })).toBe(
+      'Special weather statement in effect',
+    );
+    expect(alertTitle({ event: 'weather', headline: '' })).toBe('Weather');
+  });
 });
