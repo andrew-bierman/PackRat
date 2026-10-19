@@ -129,6 +129,7 @@ export function formatWeatherData(data: WeatherAPIForecastResponse) {
         icon: getIconNameFromCode({ code: hour.condition.code, isDay: hour.is_day }) as string,
         weatherCode: hour.condition.code,
         isDay: hour.is_day,
+        chanceOfRain: hour.chance_of_rain,
       };
     });
 
@@ -141,6 +142,7 @@ export function formatWeatherData(data: WeatherAPIForecastResponse) {
       low: Math.round(day.day.mintemp_c),
       icon: getIconNameFromCode({ code: day.day.condition.code, isDay: 1 }) as string,
       weatherCode: day.day.condition.code,
+      chanceOfRain: day.day.daily_chance_of_rain,
     };
   });
 
@@ -159,6 +161,10 @@ export function formatWeatherData(data: WeatherAPIForecastResponse) {
     highTemp: Math.round(todayForecast.day.maxtemp_c),
     lowTemp: Math.round(todayForecast.day.mintemp_c),
     alerts: alertText,
+    alertList: alerts?.alert ?? [],
+    region: location.region,
+    country: location.country,
+    chanceOfRain: todayForecast.day.daily_chance_of_rain,
     lat: location.lat,
     lon: location.lon,
     details: {
