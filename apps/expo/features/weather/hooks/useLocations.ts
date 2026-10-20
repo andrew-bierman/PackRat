@@ -15,8 +15,13 @@ export function useLocations() {
   const [locationsState] = useAtom(locationsAtom);
   const setBaseLocations = useSetAtom(baseLocationsAtom);
 
+  // Synchronous once storage has loaded: handing the atom a promise puts the
+  // list back into its loading state, which left a swiped card stuck on screen.
   const update = useCallback(
-    (updater: Updater) => setBaseLocations(async (current) => updater(await current)),
+    (updater: Updater) =>
+      setBaseLocations((current) =>
+        current instanceof Promise ? current.then(updater) : updater(current),
+      ),
     [setBaseLocations],
   );
 

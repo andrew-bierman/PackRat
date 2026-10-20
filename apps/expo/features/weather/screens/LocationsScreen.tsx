@@ -189,7 +189,8 @@ function LocationsScreen() {
             <Pressable
               onPress={openSearch}
               accessibilityRole="search"
-              className="mb-4 h-14 flex-row items-center gap-4 rounded-full bg-muted px-4"
+              className="mb-4 h-14 flex-row items-center gap-4 rounded-full px-4"
+              style={{ backgroundColor: colors.grey5 }}
               android_ripple={{ color: colors.grey5 }}
               testID={testIds.weather.searchInput}
             >
@@ -208,7 +209,9 @@ function LocationsScreen() {
               </Text>
               <Button className="mt-2" onPress={openSearch}>
                 <Icon name="plus" size={18} color="white" />
-                <Text>{t('weather.addLocation')}</Text>
+                <Text className="font-medium text-primary-foreground">
+                  {t('weather.addLocation')}
+                </Text>
               </Button>
             </View>
           }

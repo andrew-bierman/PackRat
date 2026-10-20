@@ -65,16 +65,19 @@ export function useWatchMutations() {
     },
   });
 
+  // Optimistic: the row leaves at once and comes back if the server refuses.
   const unwatch = useMutation({
     mutationFn: async (watched: WatchedLocation) => {
       await removeWatchedLocation(watched.id);
       return watched;
     },
-    onSuccess: (removed) => {
+    onMutate: async (watched) => {
+      await queryClient.cancelQueries({ queryKey: WATCH_LIST_QUERY_KEY });
       queryClient.setQueryData<WatchedLocation[]>(WATCH_LIST_QUERY_KEY, (current = []) =>
-        current.filter((w) => w.id !== removed.id),
+        current.filter((w) => w.id !== watched.id),
       );
     },
+    onError: () => queryClient.invalidateQueries({ queryKey: WATCH_LIST_QUERY_KEY }),
   });
 
   return { watch, unwatch };

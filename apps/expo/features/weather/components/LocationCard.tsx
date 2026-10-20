@@ -61,9 +61,9 @@ export function LocationCard({
       testID={testIds.weather.location(location.id)}
     >
       <LinearGradient colors={gradient} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>
-        <View className="min-h-[116px] flex-row justify-between p-4">
-          <View className="flex-1 justify-between pr-3">
-            <View>
+        <View className="min-h-[116px] justify-between gap-3 p-4">
+          <View className="flex-row justify-between">
+            <View className="flex-1 pr-3">
               <View className="flex-row items-center gap-1.5">
                 <Text className="text-xl font-medium text-white" numberOfLines={1}>
                   {location.name}
@@ -80,29 +80,32 @@ export function LocationCard({
                 {location.time}
               </Text>
             </View>
-            <View className="flex-row items-center gap-1.5">
-              {lead ? (
-                <Icon name="alert" size={16} color={hasNewAlert ? NEW_ALERT_COLOR : 'white'} />
-              ) : null}
+            <View className="items-end">
               <Text
-                variant="subhead"
-                numberOfLines={1}
-                className="flex-1 font-medium"
-                style={{ color: lead && hasNewAlert ? NEW_ALERT_COLOR : 'white' }}
+                className="text-white"
+                style={{ fontSize: 44, fontWeight: '300', lineHeight: 50 }}
               >
-                {statusLine}
+                {displayTemperature(location.temperature)}
+              </Text>
+              <Text variant="subhead" className="text-white/90">
+                H:{displayTemperature(location.highTemp)} L:{displayTemperature(location.lowTemp)}
               </Text>
             </View>
           </View>
-          <View className="items-end justify-between">
+          {/* Full width so an alert headline reads in full; a long one wraps once. */}
+          <View className="flex-row items-start gap-1.5">
+            {lead ? (
+              <View className="pt-0.5">
+                <Icon name="alert" size={16} color={hasNewAlert ? NEW_ALERT_COLOR : 'white'} />
+              </View>
+            ) : null}
             <Text
-              className="text-white"
-              style={{ fontSize: 44, fontWeight: '300', lineHeight: 50 }}
+              variant="subhead"
+              numberOfLines={2}
+              className="flex-1 font-medium"
+              style={{ color: lead && hasNewAlert ? NEW_ALERT_COLOR : 'white' }}
             >
-              {displayTemperature(location.temperature)}
-            </Text>
-            <Text variant="subhead" className="text-white/90">
-              H:{displayTemperature(location.highTemp)} L:{displayTemperature(location.lowTemp)}
+              {statusLine}
             </Text>
           </View>
         </View>
