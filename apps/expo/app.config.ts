@@ -198,7 +198,14 @@ export default (): ExpoConfig =>
             { iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY },
           ],
           '@sentry/react-native',
-          ['expo-notifications', { color: '#026A9F', defaultChannel: 'alerts' }],
+          [
+            'expo-notifications',
+            {
+              icon: './assets/notification-icon.png',
+              color: '#026A9F',
+              defaultChannel: 'alerts',
+            },
+          ],
           'expo-status-bar',
           ['expo-splash-screen', { image: './assets/splash.png' }],
         ],
