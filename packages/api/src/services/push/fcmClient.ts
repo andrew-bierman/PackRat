@@ -1,6 +1,10 @@
 import type { ValidatedEnv } from '@packrat/api/utils/env-validation';
+import {
+  type FcmServiceAccount,
+  FcmServiceAccountSchema,
+  GoogleAccessTokenResponseSchema,
+} from '@packrat/schemas/push';
 import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
-import { z } from 'zod';
 import type { PushPayload } from './pushPayload';
 
 const OAUTH_TOKEN_URL = 'https://oauth2.googleapis.com/token';
@@ -21,18 +25,10 @@ const TOKEN_SAFETY_MS = 5 * 60 * 1000;
 
 let cachedToken: { token: string; expiresAt: number } | null = null;
 
-const serviceAccountSchema = z.object({
-  project_id: z.string().min(1),
-  client_email: z.string().min(1),
-  private_key: z.string().min(1),
-});
-
-type ServiceAccount = z.infer<typeof serviceAccountSchema>;
-
-function readServiceAccount(env: ValidatedEnv): ServiceAccount {
+function readServiceAccount(env: ValidatedEnv): FcmServiceAccount {
   const raw = env.FCM_SERVICE_ACCOUNT_JSON;
   if (!raw) throw new Error('FCM is not configured (FCM_SERVICE_ACCOUNT_JSON unset)');
-  const parsed = serviceAccountSchema.safeParse(safeJsonParse(raw));
+  const parsed = FcmServiceAccountSchema.safeParse(safeJsonParse(raw));
   if (!parsed.success) {
     throw new Error('FCM_SERVICE_ACCOUNT_JSON is missing project_id, client_email or private_key');
   }
@@ -72,7 +68,7 @@ async function importServiceAccountKey(pkcs8Pem: string): Promise<CryptoKey> {
  * Web Crypto rather than `firebase-admin`, which needs Node APIs workerd
  * does not have — the same reasoning as `apnsClient`.
  */
-async function getAccessToken(account: ServiceAccount): Promise<string> {
+async function getAccessToken(account: FcmServiceAccount): Promise<string> {
   const now = Date.now();
   if (cachedToken && cachedToken.expiresAt > now) return cachedToken.token;
 
@@ -108,9 +104,7 @@ async function getAccessToken(account: ServiceAccount): Promise<string> {
     const body = await response.text().catch(() => '');
     throw new Error(`FCM OAuth token exchange failed: ${response.status} ${body}`);
   }
-  const { access_token, expires_in } = z
-    .object({ access_token: z.string(), expires_in: z.number() })
-    .parse(await response.json());
+  const { access_token, expires_in } = GoogleAccessTokenResponseSchema.parse(await response.json());
 
   cachedToken = { token: access_token, expiresAt: now + expires_in * 1000 - TOKEN_SAFETY_MS };
   return access_token;
