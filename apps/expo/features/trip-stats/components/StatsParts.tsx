@@ -11,7 +11,7 @@ import { Text } from '@packrat/ui/src/text';
 import { Icon } from 'expo-app/components/Icon';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import type { ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 
 /**
  * One Trip Stats section: a Material 3 filled card (the app's Compose `Card`) with a Title Medium
@@ -204,5 +204,80 @@ export function SegmentedButtons<T extends string>({
         ))}
       </SingleChoiceSegmentedButtonRow>
     </Host>
+  );
+}
+
+/**
+ * Material 3 search bar: a full-width pill on the surface-container colour with a leading search
+ * icon, filtering the list beneath it as the user types.
+ */
+export function SearchField({
+  value,
+  onChangeText,
+  placeholder,
+  testID,
+}: {
+  value: string;
+  onChangeText: (value: string) => void;
+  placeholder: string;
+  testID?: string;
+}) {
+  const { colors } = useColorScheme();
+  return (
+    <View
+      className="mx-4 my-2 h-14 flex-row items-center gap-3 rounded-full px-4"
+      style={{ backgroundColor: colors.grey6 }}
+    >
+      <Icon name="magnify" size={24} color={colors.grey} />
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor={colors.grey}
+        returnKeyType="search"
+        autoCorrect={false}
+        testID={testID}
+        className="flex-1 text-base text-foreground"
+      />
+      {value ? (
+        <Pressable onPress={() => onChangeText('')} hitSlop={8} accessibilityRole="button">
+          <Icon name="close" size={20} color={colors.grey} />
+        </Pressable>
+      ) : null}
+    </View>
+  );
+}
+
+/**
+ * Material 3 extended FAB for a screen's primary action: 56dp tall, 16dp corners, the primary
+ * container colour at level-3 elevation, icon then label. Drawn in React Native because the
+ * Compose FAB's icon slot takes only a vector-drawable asset, not the app's icon font.
+ */
+export function ExtendedFab({
+  icon,
+  label,
+  onPress,
+  testID,
+}: {
+  icon: string;
+  label: string;
+  onPress: () => void;
+  testID?: string;
+}) {
+  const { colors } = useColorScheme();
+  return (
+    <Pressable
+      onPress={onPress}
+      testID={testID}
+      accessibilityRole="button"
+      android_ripple={{ color: 'rgba(255,255,255,0.2)' }}
+      className="absolute right-4 bottom-4 h-14 flex-row items-center gap-3 overflow-hidden rounded-2xl pr-5 pl-4"
+      style={{ backgroundColor: colors.primary, elevation: 6 }}
+    >
+      <Icon name={icon} size={24} color="#FFFFFF" />
+      <Text variant="callout" className="font-medium" style={{ color: '#FFFFFF' }}>
+        {label}
+      </Text>
+    </Pressable>
   );
 }
