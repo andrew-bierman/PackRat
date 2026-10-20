@@ -170,6 +170,15 @@ export default function AppLayout() {
             animation: 'slide_from_bottom',
           }}
         />
+        {/* Trip Stats editors are Material full-screen dialogs: they rise from the bottom and
+            close with an X, not a back arrow. */}
+        {['trip-stats/goal', 'trip-stats/add-summit', 'trip/[id]/log'].map((name) => (
+          <Stack.Screen
+            key={name}
+            name={name}
+            options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}
+          />
+        ))}
         <Stack.Screen
           name="weight-analysis/[id]"
           options={{
