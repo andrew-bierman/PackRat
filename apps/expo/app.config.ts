@@ -186,7 +186,10 @@ export default (): ExpoConfig =>
           ],
           [
             'react-native-maps',
-            { iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY },
+            {
+              iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+              androidGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+            },
           ],
           '@sentry/react-native',
           'expo-status-bar',
