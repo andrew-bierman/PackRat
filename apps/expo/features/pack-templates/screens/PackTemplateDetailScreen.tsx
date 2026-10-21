@@ -5,13 +5,14 @@ import { Chip } from 'expo-app/components/initial/Chip';
 import { WeightBadge } from 'expo-app/components/initial/WeightBadge';
 import { useUser } from 'expo-app/features/auth/hooks/useUser';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
+import { testIds } from 'expo-app/lib/testIds';
 import { NotFoundScreen } from 'expo-app/screens/NotFoundScreen';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { Image, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AddPackTemplateItemActions from '../components/AddPackTemplateItemActions';
-import { AppTemplateBadge } from '../components/AppTemplateBadge';
+import { VerifiedSeal } from '../components/OfficialTemplateRow';
 import { PackTemplateItemCard } from '../components/PackTemplateItemCard';
 import { usePackTemplateDetails } from '../hooks';
 import type { PackTemplateItem } from '../types';
@@ -70,10 +71,10 @@ export function PackTemplateDetailScreen() {
     );
   }
 
-  const handleCreate = () => {
+  const handleApply = () => {
     router.push({
-      pathname: '/pack/new',
-      params: { templateId: packTemplate.id },
+      pathname: '/pack-templates/[id]/apply',
+      params: { id: packTemplate.id },
     });
   };
 
@@ -140,15 +141,29 @@ export function PackTemplateDetailScreen() {
                 ))}
               </View>
             )}
-            {packTemplate.isAppTemplate && <AppTemplateBadge />}
+            {packTemplate.isAppTemplate && (
+              <View
+                className="ml-auto flex-row items-center gap-1"
+                testID={testIds.packTemplates.detailOfficialBadge}
+              >
+                <VerifiedSeal size={18} />
+                <Text className="text-sm font-medium text-primary">
+                  {t('packTemplates.official')}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
 
         {/* Actions */}
         <View className="p-4">
           <View className="gap-4 flex-row items-center">
-            <Button className="flex-1" variant="secondary" onPress={handleCreate}>
-              <Text>Use Template</Text>
+            <Button
+              className="flex-1"
+              onPress={handleApply}
+              testID={testIds.packTemplates.detailApplyBtn}
+            >
+              <Text>{t('packTemplates.applyToPack')}</Text>
             </Button>
             {(!packTemplate.isAppTemplate || user?.role === 'ADMIN') && (
               <Button

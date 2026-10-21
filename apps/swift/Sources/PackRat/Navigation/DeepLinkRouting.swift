@@ -24,6 +24,18 @@ extension AppState {
         case .weather:
             navItem = .weather
             return true
+        case .weatherAlert(let weatherLocationId):
+            navItem = .weather
+            weatherVM.pendingAlertDeepLinkLocationId = weatherLocationId
+            return true
+        case .post(let id):
+            guard NavItem.feed.isFeatureEnabled else { return false }
+            pendingPostLink = .id(id)
+            return true
+        case .sharedPost(let publicId):
+            guard NavItem.feed.isFeatureEnabled else { return false }
+            pendingPostLink = .publicId(publicId)
+            return true
         case .unknown:
             return false
         }

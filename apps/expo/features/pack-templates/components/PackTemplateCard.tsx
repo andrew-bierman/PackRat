@@ -14,7 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDeletePackTemplate, usePackTemplateDetails } from '../hooks';
 import { useWritePermissionCheck } from '../hooks/useWritePermissionCheck';
 import type { PackTemplate } from '../types';
-import { AppTemplateBadge } from './AppTemplateBadge';
+import { VerifiedSeal } from './OfficialTemplateRow';
 
 type PackTemplateCard = {
   templateId: string;
@@ -149,7 +149,7 @@ export function PackTemplateCard({ templateId, onPress }: PackTemplateCard) {
             </View>
           ) : null}
 
-          {template.isAppTemplate && <AppTemplateBadge />}
+          {template.isAppTemplate && <VerifiedSeal size={18} />}
         </View>
       </View>
     </Pressable>

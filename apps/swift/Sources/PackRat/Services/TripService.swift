@@ -21,7 +21,10 @@ final class TripService: Sendable {
         endDate: Date? = nil,
         location: TripLocationBody? = nil,
         notes: String? = nil,
-        packId: String? = nil
+        packId: String? = nil,
+        checklist: [TripChecklistItem]? = nil,
+        log: TripLog? = nil,
+        excludedFromStats: Bool = false
     ) async throws -> Trip {
         let now = Date.iso8601Now()
         let body = CreateTripRequest(
@@ -33,6 +36,9 @@ final class TripService: Sendable {
             endDate: endDate.map { $0.iso8601String() },
             notes: notes,
             packId: packId,
+            checklist: checklist,
+            log: log,
+            excludedFromStats: excludedFromStats,
             localCreatedAt: now,
             localUpdatedAt: now
         )
@@ -48,7 +54,14 @@ final class TripService: Sendable {
         endDate: Date? = nil,
         location: TripLocationBody? = nil,
         notes: String? = nil,
-        packId: String? = nil
+        packId: String? = nil,
+        checklist: [TripChecklistItem]? = nil,
+        status: TripStatus? = nil,
+        startedAt: String? = nil,
+        completedAt: String? = nil,
+        plannedRoute: [TripRoutePoint]? = nil,
+        log: TripLog? = nil,
+        excludedFromStats: Bool = false
     ) async throws -> Trip {
         let body = UpdateTripRequest(
             name: name,
@@ -58,6 +71,13 @@ final class TripService: Sendable {
             endDate: endDate.map { $0.iso8601String() },
             notes: notes,
             packId: packId,
+            checklist: checklist,
+            status: status,
+            startedAt: startedAt,
+            completedAt: completedAt,
+            plannedRoute: plannedRoute,
+            log: log,
+            excludedFromStats: excludedFromStats,
             localUpdatedAt: Date.iso8601Now()
         )
         let endpoint = Endpoint(.put, "/api/trips/\(tripId)", body: body)

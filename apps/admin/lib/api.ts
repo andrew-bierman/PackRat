@@ -8,12 +8,18 @@ import type {
   AdminFeatureAccessItem,
   AdminFeatureFlagItem,
   AdminPackItem,
+  AdminPackTemplateDetail,
+  AdminPackTemplateItem,
+  AdminPackTemplateItemUpdateBody,
+  AdminPackTemplateSummary,
+  AdminPackTemplateUpdateBody,
   AdminStats,
   AdminTrailConditionReport,
   AdminUserItem,
   BrandRow,
   BreakdownItem,
   CatalogOverview,
+  ClientPlatform,
   EmbeddingStats,
   EtlFailureSummary,
   EtlJob,
@@ -28,6 +34,7 @@ import type {
   TrailSearchItem,
   TrailSearchResult as TrailSearchResultList,
 } from '@packrat/schemas/admin';
+import type { AdminFeedReport } from '@packrat/schemas/feed';
 import { clearToken, getAuthHeader } from './auth';
 import { adminEnv } from './env';
 
@@ -230,7 +237,7 @@ export async function updateCatalogItem({
 
 // ─── Feature Flags ────────────────────────────────────────────────────────────
 
-export type { AdminFeatureFlagItem };
+export type { AdminFeatureFlagItem, ClientPlatform };
 
 export async function getFeatureFlags(): Promise<AdminFeatureFlagItem[]> {
   const { data, error } = await adminClient['feature-flags'].get();
@@ -253,6 +260,28 @@ export async function upsertFeatureFlag({
   });
   if (error) throwOnError({ error });
   return unwrap({ data, name: 'upsertFeatureFlag' });
+}
+
+/**
+ * Sets a per-platform override, or clears it so the platform inherits the
+ * flag's global value again.
+ *
+ * @param enabled `null` clears the override.
+ */
+export async function setFeatureFlagPlatformOverride({
+  key,
+  platform,
+  enabled,
+}: {
+  key: string;
+  platform: ClientPlatform;
+  enabled: boolean | null;
+}): Promise<{ success: boolean }> {
+  const { data, error } = await adminClient['feature-flags']({ key }).platforms({ platform }).put({
+    enabled,
+  });
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'setFeatureFlagPlatformOverride' });
 }
 
 export async function resetFeatureFlag(key: string): Promise<{ success: boolean }> {
@@ -519,4 +548,113 @@ export function getQueryMetricsByCallSite({
 } = {}): Promise<QueryMetricsByCallSite> {
   const q = month ? `month=${month}&limit=${limit}` : `hours=${hours}&limit=${limit}`;
   return adminFetch({ path: `/analytics/query-metrics/by-callsite?${q}` });
+}
+
+// ─── Featured packs ───────────────────────────────────────────────────────────
+
+export type {
+  AdminPackTemplateDetail,
+  AdminPackTemplateItem,
+  AdminPackTemplateItemUpdateBody,
+  AdminPackTemplateSummary,
+  AdminPackTemplateUpdateBody,
+};
+
+export async function getFeaturedPacks(): Promise<AdminPackTemplateSummary[]> {
+  const { data, error } = await adminClient['pack-templates'].get();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'featuredPacks' });
+}
+
+export async function getFeaturedPack(id: string): Promise<AdminPackTemplateDetail> {
+  const { data, error } = await adminClient['pack-templates']({ id }).get();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'featuredPack' });
+}
+
+export async function importFeaturedPack(contentUrl: string): Promise<AdminPackTemplateDetail> {
+  const { data, error } = await adminClient['pack-templates'].import.post({ contentUrl });
+  if (error) throwOnError({ error, fallback: 'Import failed' });
+  return unwrap({ data, name: 'importFeaturedPack' });
+}
+
+export async function updateFeaturedPack({
+  id,
+  changes,
+}: {
+  id: string;
+  changes: AdminPackTemplateUpdateBody;
+}): Promise<AdminPackTemplateDetail> {
+  const { data, error } = await adminClient['pack-templates']({ id }).patch(changes);
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'updateFeaturedPack' });
+}
+
+export async function deleteFeaturedPack(id: string): Promise<{ success: boolean }> {
+  const { data, error } = await adminClient['pack-templates']({ id }).delete();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'deleteFeaturedPack' });
+}
+
+export async function updateFeaturedPackItem({
+  id,
+  changes,
+}: {
+  id: string;
+  changes: AdminPackTemplateItemUpdateBody;
+}): Promise<AdminPackTemplateItem> {
+  const { data, error } = await adminClient['pack-templates'].items({ id }).patch(changes);
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'updateFeaturedPackItem' });
+}
+
+export async function deleteFeaturedPackItem(id: string): Promise<{ success: boolean }> {
+  const { data, error } = await adminClient['pack-templates'].items({ id }).delete();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'deleteFeaturedPackItem' });
+}
+
+// ─── Feed moderation ──────────────────────────────────────────────────────────
+
+export type { AdminFeedReport };
+
+export type FeedReportAction = 'dismiss' | 'remove';
+
+export async function getFeedReports(): Promise<AdminFeedReport[]> {
+  const { data, error } = await adminClient.feed.reports.get();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'feedReports' }).items;
+}
+
+/**
+ * Resolves every pending report on one item. `dismiss` keeps it up; `remove`
+ * hides it for everyone.
+ */
+export async function resolveFeedReport({
+  targetType,
+  targetId,
+  action,
+}: {
+  targetType: AdminFeedReport['targetType'];
+  targetId: number;
+  action: FeedReportAction;
+}): Promise<{ success: boolean }> {
+  const { data, error } = await adminClient.feed
+    .reports({ targetType })({ targetId })({ action })
+    .post();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'resolveFeedReport' });
+}
+
+/** Suspending hides everything the account has posted until it is reinstated. */
+export async function setFeedUserSuspended({
+  userId,
+  suspended,
+}: {
+  userId: string;
+  suspended: boolean;
+}): Promise<{ suspended: boolean }> {
+  const { data, error } = await adminClient.feed.users({ userId }).suspension.put({ suspended });
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'setFeedUserSuspended' });
 }

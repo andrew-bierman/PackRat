@@ -145,7 +145,7 @@ export default (): ExpoConfig =>
       {
         name: getAppName(),
         slug: 'packrat',
-        version: '2.2.0',
+        version: '2.2.4',
         scheme: 'packrat',
         web: {
           bundler: 'metro',
@@ -157,6 +157,7 @@ export default (): ExpoConfig =>
           'expo-sqlite',
           'expo-font',
           'expo-image',
+          'react-native-fast-tflite',
           [
             '@react-native-google-signin/google-signin',
             {

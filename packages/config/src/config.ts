@@ -12,9 +12,14 @@ const FeatureFlag = Object.freeze({
   EnableTrailConditions: 'enableTrailConditions',
   EnableFeed: 'enableFeed',
   EnableWildlifeIdentification: 'enableWildlifeIdentification',
+  EnableOfflineWildlifeID: 'enableOfflineWildlifeID',
   EnableLocalAI: 'enableLocalAI',
   EnableTrails: 'enableTrails',
   EnableRevenueCat: 'enableRevenueCat',
+  EnableWeatherMonitoring: 'enableWeatherMonitoring',
+  EnableTripReminders: 'enableTripReminders',
+  EnableSafetyCheckIn: 'enableSafetyCheckIn',
+  EnableTripStats: 'enableTripStats',
 });
 
 const DashboardTileId = Object.freeze({
@@ -72,9 +77,14 @@ const APP_CONFIG_SOURCE = {
     [FeatureFlag.EnableTrailConditions]: true,
     [FeatureFlag.EnableFeed]: false,
     [FeatureFlag.EnableWildlifeIdentification]: false,
+    [FeatureFlag.EnableOfflineWildlifeID]: false,
     [FeatureFlag.EnableLocalAI]: true,
     [FeatureFlag.EnableTrails]: false,
     [FeatureFlag.EnableRevenueCat]: true,
+    [FeatureFlag.EnableWeatherMonitoring]: false,
+    [FeatureFlag.EnableTripReminders]: false,
+    [FeatureFlag.EnableSafetyCheckIn]: false,
+    [FeatureFlag.EnableTripStats]: false,
   },
   dashboard: {
     gapPrefix: GAP_PREFIX,

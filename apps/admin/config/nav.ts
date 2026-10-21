@@ -7,6 +7,8 @@ import {
   type LucideIcon,
   Map as MapIcon,
   Package,
+  ShieldAlert,
+  Sparkles,
   ToggleLeft,
   Unlock,
   Users,
@@ -17,6 +19,8 @@ export interface NavItem {
   href: string;
   icon: LucideIcon;
   badge?: string;
+  /** Live count shown beside the item; the sidebar resolves it. */
+  count?: 'pendingFeedReports';
 }
 
 export const navItems: NavItem[] = [
@@ -34,6 +38,17 @@ export const navItems: NavItem[] = [
     title: 'Packs',
     href: '/dashboard/packs',
     icon: Backpack,
+  },
+  {
+    title: 'Featured Packs',
+    href: '/dashboard/featured-packs',
+    icon: Sparkles,
+  },
+  {
+    title: 'Moderation',
+    href: '/dashboard/moderation',
+    icon: ShieldAlert,
+    count: 'pendingFeedReports',
   },
   {
     title: 'Catalog',

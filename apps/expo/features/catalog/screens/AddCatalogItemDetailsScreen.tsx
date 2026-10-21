@@ -1,6 +1,10 @@
+import { FilterChip, FlowRow, Host, Text as JCText } from '@expo/ui/jetpack-compose';
+import { testID as testIDModifier } from '@expo/ui/jetpack-compose/modifiers';
 import { assertDefined } from '@packrat/guards';
 import { Button } from '@packrat/ui/src/button';
 import { Text } from '@packrat/ui/src/text';
+import { TextField } from '@packrat/ui/src/text-field';
+import { Toggle } from '@packrat/ui/src/toggle';
 import { displayWeight, normalize, parseWeightUnit } from '@packrat/units';
 import { useQueryClient } from '@tanstack/react-query';
 import * as Burnt from 'burnt';
@@ -13,18 +17,10 @@ import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { ErrorScreen } from 'expo-app/screens/ErrorScreen';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Switch,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, Pressable, type TextInput as RNTextInput, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CatalogItemImage } from '../components/CatalogItemImage';
 import { useCatalogItemDetails } from '../hooks';
 import { cacheCatalogItemImage } from '../lib/cacheCatalogItemImage';
@@ -43,7 +39,6 @@ export function AddCatalogItemDetailsScreen() {
   const createItem = useCreatePackItem();
   const queryClient = useQueryClient();
   const { unit: preferredWeightUnit, convertWeight } = useWeightUnit();
-  const fadeAnim = useState(new Animated.Value(0))[0];
   const [isAdding, setIsAdding] = useState(false);
   const { t } = useTranslation();
 
@@ -55,14 +50,31 @@ export function AddCatalogItemDetailsScreen() {
   const [category, setCategory] = useState('');
 
   const { colors } = useColorScheme();
+  const insets = useSafeAreaInsets();
+  const notesRef = useRef<RNTextInput>(null);
+  const quantityValue = Math.max(1, Number.parseInt(quantity, 10) || 1);
 
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
+  const contentContainerStyle = useMemo(
+    () => ({ paddingBottom: insets.bottom + 24 }),
+    [insets.bottom],
+  );
+
+  // The catalog's own categories first, then the ones already in this pack, so picking a
+  // familiar group is one tap and typing is the exception rather than the rule.
+  const categorySuggestions = useMemo(() => {
+    const seen = new Set<string>();
+    const result: string[] = [];
+    for (const raw of [
+      ...(catalogItem?.categories ?? []),
+      ...pack.items.map((item) => item.category),
+    ]) {
+      const value = raw?.trim();
+      if (!value || seen.has(value.toLowerCase())) continue;
+      seen.add(value.toLowerCase());
+      result.push(value);
+    }
+    return result.slice(0, 8);
+  }, [catalogItem?.categories, pack.items]);
 
   // Reset form when catalog item changes
   useEffect(() => {
@@ -71,7 +83,7 @@ export function AddCatalogItemDetailsScreen() {
       setNotes('');
       setIsConsumable(false);
       setIsWorn(false);
-      setCategory('');
+      setCategory(catalogItem.categories?.[0] ?? '');
     }
   }, [catalogItem]);
 
@@ -94,8 +106,8 @@ export function AddCatalogItemDetailsScreen() {
           unit: preferredWeightUnit,
         }),
         weightUnit: preferredWeightUnit,
-        quantity: Number.parseInt(quantity, 10) || 1,
-        category,
+        quantity: quantityValue,
+        category: category.trim(),
         consumable: isConsumable,
         worn: isWorn,
         notes,
@@ -126,7 +138,7 @@ export function AddCatalogItemDetailsScreen() {
   if (isLoadingItem) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-background">
-        <ActivityIndicator size="large" color="text-primary" />
+        <ActivityIndicator size="large" color={colors.primary} />
       </SafeAreaView>
     );
   }
@@ -145,165 +157,181 @@ export function AddCatalogItemDetailsScreen() {
   assertDefined(catalogItem);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <KeyboardAwareScrollView
+      bottomOffset={16}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
       className="flex-1 bg-background"
+      contentContainerStyle={contentContainerStyle}
     >
-      <SafeAreaView className="flex-1">
-        <ScrollView className="flex-1">
-          <View className="border-b border-border bg-card px-4 py-3">
-            <View className="flex-row items-center">
-              <CatalogItemImage
-                imageUrl={catalogItem.images?.[0]}
-                className="h-24 w-24 rounded-md"
-                resizeMode="cover"
-              />
-              <View className="ml-3 flex-1">
-                <Text className="text-xs uppercase text-muted-foreground">
-                  {t('catalog.adding')}
-                </Text>
-                <Text variant="title3" color="primary">
-                  {catalogItem.name}
-                </Text>
-                <View className="mt-1 flex-row items-center">
-                  <Icon name="dumbbell" size={14} color={colors.grey2} />
-                  <Text variant="caption2" className="ml-1">
-                    {catalogItem.weight != null
-                      ? `${convertWeight({ weight: catalogItem.weight, fromUnit: catalogItem.weightUnit ?? 'g' })} ${preferredWeightUnit}`
-                      : ''}
-                  </Text>
-                  {catalogItem.brand && (
-                    <>
-                      <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
-                      <Text variant="caption2">{catalogItem.brand}</Text>
-                    </>
-                  )}
-                </View>
-              </View>
-            </View>
-          </View>
-
-          {/* Selected Pack */}
-          <View className="mt-6 border-b border-border bg-card px-4 py-3">
-            <Text className="text-sm text-muted-foreground">{t('catalog.selectedPack')}</Text>
-            <Text className="text-base font-medium text-foreground">{pack.name}</Text>
+      <View className="border-b border-border bg-card px-4 py-3">
+        <View className="flex-row items-center">
+          <CatalogItemImage
+            imageUrl={catalogItem.images?.[0]}
+            className="h-24 w-24 rounded-md"
+            resizeMode="cover"
+          />
+          <View className="ml-3 flex-1">
+            <Text className="text-xs uppercase text-muted-foreground">{t('catalog.adding')}</Text>
+            <Text variant="title3" color="primary">
+              {catalogItem.name}
+            </Text>
             <View className="mt-1 flex-row items-center">
-              <Icon name="basket-outline" size={14} color={colors.grey} />
-              <Text className="ml-1 text-xs text-muted-foreground">
-                {pack.items.length}{' '}
-                {pack.items.length === 1 ? t('catalog.item') : t('catalog.items')}
+              <Icon name="dumbbell" size={14} color={colors.grey2} />
+              <Text variant="caption2" className="ml-1">
+                {catalogItem.weight != null
+                  ? `${convertWeight({ weight: catalogItem.weight, fromUnit: catalogItem.weightUnit ?? 'g' })} ${preferredWeightUnit}`
+                  : ''}
               </Text>
-              <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
-              <Text className="text-xs capitalize text-muted-foreground">{pack.category}</Text>
+              {catalogItem.brand && (
+                <>
+                  <View className="mx-1 h-1 w-1 rounded-full bg-muted-foreground" />
+                  <Text variant="caption2">{catalogItem.brand}</Text>
+                </>
+              )}
             </View>
           </View>
+        </View>
+      </View>
 
-          {/* Item Details Form */}
-          <View className="p-4">
-            <View className="rounded-lg bg-card p-4 shadow-sm">
-              <View className="mb-4">
-                <Text className="mb-1 text-sm font-medium text-foreground">
-                  {t('catalog.quantity')}
-                </Text>
-                <View className="flex-row items-center">
-                  <TouchableOpacity
-                    className="items-center justify-center rounded-l-md border border-r-0 border-border bg-card px-3 py-2"
-                    onPress={() =>
-                      setQuantity((prev) => Math.max(1, Number.parseInt(prev, 10) - 1).toString())
-                    }
-                  >
-                    <Icon name="minus" size={18} color={colors.foreground} />
-                  </TouchableOpacity>
-                  <TextInput
-                    className="flex-1 border-y border-border bg-background px-3 py-2 text-center text-foreground"
-                    value={quantity}
-                    onChangeText={setQuantity}
-                    keyboardType="number-pad"
-                    selectTextOnFocus
-                  />
-                  <TouchableOpacity
-                    className="items-center justify-center rounded-r-md border border-l-0 border-border bg-card px-3 py-2"
-                    onPress={() =>
-                      setQuantity((prev) => (Number.parseInt(prev, 10) + 1).toString())
-                    }
-                  >
-                    <Icon name="plus" size={18} color={colors.foreground} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+      {/* Selected Pack */}
+      <View className="flex-row items-center gap-4 border-b border-border bg-card px-4 py-3">
+        <Icon name="basket-outline" size={24} color={colors.grey} />
+        <View className="flex-1">
+          <Text className="text-xs text-muted-foreground">{t('catalog.selectedPack')}</Text>
+          <Text className="text-base font-medium text-foreground">{pack.name}</Text>
+          <Text className="text-xs capitalize text-muted-foreground">
+            {pack.items.length} {pack.items.length === 1 ? t('catalog.item') : t('catalog.items')}
+            {pack.category ? ` · ${pack.category}` : ''}
+          </Text>
+        </View>
+      </View>
 
-              <View className="mb-4">
-                <Text className="mb-1 text-sm font-medium text-foreground">
-                  {t('catalog.notes')}
-                </Text>
-                <TextInput
-                  className="rounded-md border border-border bg-background px-3 py-2 text-foreground"
-                  value={notes}
-                  onChangeText={setNotes}
-                  placeholder={t('catalog.notesPlaceholder')}
-                  multiline
-                  numberOfLines={3}
-                  textAlignVertical="top"
-                />
-              </View>
+      {/* Item Details Form */}
+      <View className="gap-6 px-4 pt-6">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-base text-foreground">{t('catalog.quantity')}</Text>
+          <View className="flex-row items-center gap-2">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('catalog.decreaseQuantity')}
+              disabled={quantityValue <= 1}
+              className="h-12 w-12 items-center justify-center rounded-full border border-border active:bg-muted disabled:opacity-40"
+              onPress={() => setQuantity(String(Math.max(1, quantityValue - 1)))}
+            >
+              <Icon name="minus" size={20} color={colors.foreground} />
+            </Pressable>
+            <TextInput
+              testID={testIds.catalog.addDetailsQuantityInput}
+              accessibilityLabel={t('catalog.quantity')}
+              className="w-12 text-center text-lg font-medium text-foreground"
+              value={quantity}
+              onChangeText={(text) =>
+                setQuantity([...text].filter((char) => char >= '0' && char <= '9').join(''))
+              }
+              onBlur={() => setQuantity(String(quantityValue))}
+              keyboardType="number-pad"
+              selectTextOnFocus
+            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('catalog.increaseQuantity')}
+              className="h-12 w-12 items-center justify-center rounded-full border border-border active:bg-muted"
+              onPress={() => setQuantity(String(quantityValue + 1))}
+            >
+              <Icon name="plus" size={20} color={colors.foreground} />
+            </Pressable>
+          </View>
+        </View>
 
-              <View className="mb-4">
-                <Text className="mb-1 text-sm font-medium text-foreground">
-                  {t('catalog.category')}
-                </Text>
-                <TextInput
-                  className="rounded-md border border-border bg-background px-3 py-2 text-foreground"
-                  value={category}
-                  onChangeText={setCategory}
-                  placeholder={t('catalog.categoryPlaceholder')}
-                />
-              </View>
-
-              <View className="mb-2 flex-row items-center justify-between">
-                <View>
-                  <Text className="text-sm font-medium text-foreground">
-                    {t('catalog.consumable')}
-                  </Text>
-                  <Text className="text-xs text-muted-foreground" wrap>
-                    {t('catalog.consumableDescription')}
-                  </Text>
-                </View>
-                <Switch value={isConsumable} onValueChange={setIsConsumable} />
-              </View>
-
-              <View className="flex-row items-center justify-between">
-                <View>
-                  <Text className="text-sm font-medium text-foreground">{t('catalog.worn')}</Text>
-                  <Text className="text-xs text-muted-foreground" wrap>
-                    {t('catalog.wornDescription')}
-                  </Text>
-                </View>
-                <Switch value={isWorn} onValueChange={setIsWorn} />
-              </View>
-            </View>
-
-            <View className="mb-2 mt-6">
-              <Button
-                testID={testIds.items.catalogConfirmAddBtn}
-                onPress={handleAddToPack}
-                disabled={isAdding}
+        <View className="gap-3">
+          <TextField
+            testID={testIds.catalog.addDetailsCategoryInput}
+            label={t('catalog.category')}
+            placeholder={t('catalog.categoryPlaceholder')}
+            value={category}
+            onChangeText={setCategory}
+            autoCapitalize="words"
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => notesRef.current?.focus()}
+          />
+          {categorySuggestions.length > 0 && (
+            <Host matchContents={{ vertical: true, horizontal: false }} style={{ width: '100%' }}>
+              <FlowRow
+                horizontalArrangement={{ spacedBy: 8 }}
+                verticalArrangement={{ spacedBy: 8 }}
               >
-                {isAdding ? (
-                  <ActivityIndicator color={colors.foreground} />
-                ) : (
-                  <Text>{t('catalog.addToPack')}</Text>
-                )}
-              </Button>
-            </View>
+                {categorySuggestions.map((suggestion) => (
+                  <FilterChip
+                    key={suggestion}
+                    selected={suggestion.toLowerCase() === category.trim().toLowerCase()}
+                    onClick={() => setCategory(suggestion)}
+                    modifiers={[testIDModifier(testIds.catalog.addDetailsCategoryChip(suggestion))]}
+                    colors={{
+                      selectedContainerColor: colors.primary,
+                      selectedLabelColor: '#FFFFFF',
+                      selectedLeadingIconColor: '#FFFFFF',
+                      labelColor: colors.foreground,
+                    }}
+                  >
+                    <FilterChip.Label>
+                      <JCText>{suggestion}</JCText>
+                    </FilterChip.Label>
+                  </FilterChip>
+                ))}
+              </FlowRow>
+            </Host>
+          )}
+        </View>
 
-            <View>
-              <Button variant="secondary" onPress={() => router.back()} disabled={isAdding}>
-                <Text>{t('catalog.cancel')}</Text>
-              </Button>
+        <TextField
+          ref={notesRef}
+          label={t('catalog.notes')}
+          placeholder={t('catalog.notesPlaceholder')}
+          value={notes}
+          onChangeText={setNotes}
+          multiline
+          numberOfLines={3}
+          textAlignVertical="top"
+        />
+
+        <View>
+          <View className="min-h-[72px] flex-row items-center justify-between gap-4 py-2">
+            <View className="flex-1">
+              <Text className="text-base text-foreground">{t('catalog.consumable')}</Text>
+              <Text className="text-sm text-muted-foreground">
+                {t('catalog.consumableDescription')}
+              </Text>
             </View>
+            <Toggle value={isConsumable} onValueChange={setIsConsumable} />
           </View>
-        </ScrollView>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
+          <View className="min-h-[72px] flex-row items-center justify-between gap-4 py-2">
+            <View className="flex-1">
+              <Text className="text-base text-foreground">{t('catalog.worn')}</Text>
+              <Text className="text-sm text-muted-foreground">{t('catalog.wornDescription')}</Text>
+            </View>
+            <Toggle value={isWorn} onValueChange={setIsWorn} />
+          </View>
+        </View>
+
+        <View className="gap-2">
+          <Button
+            testID={testIds.items.catalogConfirmAddBtn}
+            onPress={handleAddToPack}
+            disabled={isAdding}
+          >
+            {isAdding ? (
+              <ActivityIndicator color={colors.background} />
+            ) : (
+              <Text>{t('catalog.addToPack')}</Text>
+            )}
+          </Button>
+          <Button variant="text" onPress={() => router.back()} disabled={isAdding}>
+            <Text>{t('catalog.cancel')}</Text>
+          </Button>
+        </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }

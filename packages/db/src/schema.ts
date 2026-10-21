@@ -5,16 +5,19 @@ import {
   bigint,
   boolean,
   check,
+  doublePrecision,
   index,
   integer,
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   real,
   serial,
   text,
   timestamp,
   unique,
+  uniqueIndex,
   vector,
 } from 'drizzle-orm/pg-core';
 import type { ValidationError } from './validation';
@@ -106,6 +109,12 @@ export const jwks = pgTable('jwks', {
   publicKey: text('public_key').notNull(),
   privateKey: text('private_key').notNull(),
   createdAt: timestamp('created_at').notNull(),
+  // Added by the Better Auth 1.7 jwt plugin — all optional. `expiresAt` drives
+  // key rotation; `alg`/`crv` record which algorithm a stored key was minted
+  // for, so a key outlives a change to the configured default.
+  expiresAt: timestamp('expires_at'),
+  alg: text('alg'),
+  crv: text('crv'),
 });
 
 // ─── @better-auth/oauth-provider tables (OAuth 2.1 + OIDC AS) ────────────────
@@ -113,7 +122,7 @@ export const jwks = pgTable('jwks', {
 // Added in U1 of the MCP OAuth consolidation refactor
 // (docs/plans/2026-05-25-001-refactor-mcp-auth-onto-better-auth-plan.md).
 //
-// The plugin (`@better-auth/oauth-provider@1.6.x`) auto-registers these four
+// The plugin (`@better-auth/oauth-provider@1.7.x`) auto-registers these seven
 // models when present in the drizzle schema map (see packages/api/src/auth/index.ts
 // `database.schema`). Column shapes mirror `node_modules/@better-auth/oauth-provider/
 // dist/index.mjs` schema declarations — keep this in sync if upgrading the plugin.
@@ -133,11 +142,21 @@ export const oauthClient = pgTable(
     id: text('id').primaryKey(),
     clientId: text('client_id').notNull().unique(),
     clientSecret: text('client_secret'),
+    // Discovery provenance (1.7). Non-null only for clients created through a
+    // registered `clientDiscovery` (e.g. CIMD). PackRat registers via DCR, so
+    // this stays null — but the column must exist for the plugin's fail-closed
+    // ownership check.
+    clientDiscoveryId: text('client_discovery_id'),
     disabled: boolean('disabled').default(false),
     skipConsent: boolean('skip_consent'),
     enableEndSession: boolean('enable_end_session'),
     subjectType: text('subject_type'),
     scopes: jsonb('scopes').$type<string[]>(),
+    // Machine-to-machine (`client_credentials`) scope authority (1.7). Stored
+    // separately from `scopes` and deny-by-default: NULL and [] both refuse
+    // client_credentials issuance. PackRat issues no M2M tokens, so every row
+    // is backfilled to [] and left there.
+    clientCredentialsScopes: jsonb('client_credentials_scopes').$type<string[]>().default([]),
     userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at'),
     updatedAt: timestamp('updated_at'),
@@ -152,12 +171,19 @@ export const oauthClient = pgTable(
     softwareStatement: text('software_statement'),
     redirectUris: jsonb('redirect_uris').$type<string[]>().notNull(),
     postLogoutRedirectUris: jsonb('post_logout_redirect_uris').$type<string[]>(),
+    backchannelLogoutUri: text('backchannel_logout_uri'),
+    backchannelLogoutSessionRequired: boolean('backchannel_logout_session_required'),
     tokenEndpointAuthMethod: text('token_endpoint_auth_method'),
+    // Replaces the removed `public` + `type` columns (1.7). `tokenEndpointAuthMethod`
+    // alone decides confidential vs public ('none' = public); applicationType is
+    // 'web' | 'native' and is metadata only.
+    applicationType: text('application_type'),
+    jwks: text('jwks'),
+    jwksUri: text('jwks_uri'),
     grantTypes: jsonb('grant_types').$type<string[]>(),
     responseTypes: jsonb('response_types').$type<string[]>(),
-    public: boolean('public'),
-    type: text('type'),
     requirePKCE: boolean('require_pkce'),
+    dpopBoundAccessTokens: boolean('dpop_bound_access_tokens'),
     referenceId: text('reference_id'),
     metadata: jsonb('metadata'),
   },
@@ -180,10 +206,20 @@ export const oauthRefreshToken = pgTable(
       .references(() => users.id, { onDelete: 'cascade' })
       .notNull(),
     referenceId: text('reference_id'),
+    authorizationCodeId: text('authorization_code_id'),
+    // RFC 8707 resource indicators the token was issued for (1.7) — replaces
+    // the plugin-level `validAudiences` allowlist.
+    resources: jsonb('resources').$type<string[]>(),
+    requestedUserInfoClaims: jsonb('requested_user_info_claims').$type<string[]>(),
     expiresAt: timestamp('expires_at').notNull(),
     createdAt: timestamp('created_at').notNull(),
     revoked: timestamp('revoked'),
+    // Refresh-token rotation replay detection (1.7).
+    rotatedAt: timestamp('rotated_at'),
+    rotationReplayResponse: jsonb('rotation_replay_response'),
+    rotationReplayExpiresAt: timestamp('rotation_replay_expires_at'),
     authTime: timestamp('auth_time'),
+    confirmation: jsonb('confirmation'),
     scopes: jsonb('scopes').$type<string[]>().notNull(),
   },
   (t) => [
@@ -207,9 +243,16 @@ export const oauthAccessToken = pgTable(
     sessionId: text('session_id').references(() => session.id, { onDelete: 'set null' }),
     userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
     referenceId: text('reference_id'),
+    authorizationCodeId: text('authorization_code_id'),
+    resources: jsonb('resources').$type<string[]>(),
+    requestedUserInfoClaims: jsonb('requested_user_info_claims').$type<string[]>(),
     refreshId: text('refresh_id').references(() => oauthRefreshToken.id, { onDelete: 'set null' }),
     expiresAt: timestamp('expires_at').notNull(),
     createdAt: timestamp('created_at').notNull(),
+    // Back-channel logout / revocation marker (1.7): introspection returns
+    // { active: false } once the originating session ends.
+    revoked: timestamp('revoked'),
+    confirmation: jsonb('confirmation'),
     scopes: jsonb('scopes').$type<string[]>().notNull(),
   },
   (t) => [
@@ -232,6 +275,8 @@ export const oauthConsent = pgTable(
       .notNull(),
     userId: text('user_id').references(() => users.id, { onDelete: 'cascade' }),
     referenceId: text('reference_id'),
+    resources: jsonb('resources').$type<string[]>(),
+    requestedUserInfoClaims: jsonb('requested_user_info_claims').$type<string[]>(),
     scopes: jsonb('scopes').$type<string[]>().notNull(),
     createdAt: timestamp('created_at').notNull(),
     updatedAt: timestamp('updated_at').notNull(),
@@ -241,6 +286,68 @@ export const oauthConsent = pgTable(
     index('oauth_consent_user_id_idx').on(t.userId),
   ],
 );
+
+// OAuth Resource (1.7) — protected resources are now a first-class persisted
+// entity instead of the plugin-level `validAudiences` string array. The
+// `identifier` IS the RFC 8707 `resource` parameter value a client sends.
+// Rows are seeded from the `resources` option at plugin init under
+// `resourceSeedMode: 'insertOnly'`, so admin edits are never reverted on deploy.
+// NULL policy columns mean "inherit the plugin default at issuance time".
+export const oauthResource = pgTable('oauthResource', {
+  id: text('id').primaryKey(),
+  identifier: text('identifier').notNull().unique(),
+  name: text('name').notNull(),
+  accessTokenTtl: integer('access_token_ttl'),
+  refreshTokenTtl: integer('refresh_token_ttl'),
+  signingAlgorithm: text('signing_algorithm'),
+  signingKeyId: text('signing_key_id'),
+  allowedScopes: jsonb('allowed_scopes').$type<string[]>(),
+  customClaims: jsonb('custom_claims'),
+  dpopBoundAccessTokensRequired: boolean('dpop_bound_access_tokens_required').default(false),
+  disabled: boolean('disabled').default(false),
+  createdAt: timestamp('created_at'),
+  updatedAt: timestamp('updated_at'),
+  policyVersion: integer('policy_version').default(1),
+  metadata: jsonb('metadata'),
+});
+
+// OAuth Client ↔ Resource join (1.7) — authoritative only when
+// `enforcePerClientResources` is true, which is the plugin default and what we
+// run. The composite uniqueness on (client_id, resource_id) is load-bearing:
+// the linkage check assumes one row per pair, and the registration endpoint
+// converts the resulting UNIQUE violation into an idempotent "alreadyLinked".
+export const oauthClientResource = pgTable(
+  'oauthClientResource',
+  {
+    id: text('id').primaryKey(),
+    clientId: text('client_id')
+      .references(() => oauthClient.clientId, { onDelete: 'cascade' })
+      .notNull(),
+    // References `oauthResource.identifier`, NOT its `id`. The plugin resolves
+    // a resource by identifier and writes that identifier straight into this
+    // column (see resolveClientRegistrationResources -> adapter.create in
+    // @better-auth/oauth-provider). Pointing the FK at `id` makes every DCR
+    // registration fail with a 23503 foreign-key violation.
+    resourceId: text('resource_id')
+      .references(() => oauthResource.identifier, { onDelete: 'cascade' })
+      .notNull(),
+    metadata: jsonb('metadata'),
+    createdAt: timestamp('created_at'),
+  },
+  (t) => [
+    uniqueIndex('oauth_client_resource_client_resource_idx').on(t.clientId, t.resourceId),
+    index('oauth_client_resource_resource_id_idx').on(t.resourceId),
+  ],
+);
+
+// OAuth Client Assertion (1.7) — replay cache for `private_key_jwt` client
+// authentication (the assertion `jti` is the primary key). PackRat's clients
+// authenticate with `none` (public + PKCE), so this stays empty; the plugin
+// still requires the model to be registered.
+export const oauthClientAssertion = pgTable('oauthClientAssertion', {
+  id: text('id').primaryKey(),
+  expiresAt: timestamp('expires_at').notNull(),
+});
 
 // Packs table
 export const packs = pgTable('packs', {
@@ -491,6 +598,39 @@ export const trailConditionReports = pgTable(
   }),
 );
 
+/**
+ * What actually happened on a finished trip, read back by trip stats. Distances
+ * and elevations are metres whatever the user's display unit. `route` is a
+ * Google encoded polyline (precision 5), simplified on device before upload.
+ */
+export type TripLog = {
+  activities: string[];
+  distanceMeters?: number | null;
+  elevationGainMeters?: number | null;
+  route?: string | null;
+  source?: 'manual' | 'track' | 'trail' | null;
+  summits?: TripSummit[] | null;
+  trails?: TripTrail[] | null;
+  /** Set by the user; null means the app reads it from where the trip was. */
+  landscape?: 'desert' | 'mountain' | 'forest' | 'coastal' | 'water' | 'grassland' | 'polar' | null;
+};
+
+/** A trail walked on a trip; `id` is `trails.id` on the trail database. */
+export type TripTrail = {
+  id: string;
+  name: string;
+  lengthMeters?: number | null;
+};
+
+/** A named peak reached on a trip. `osmId` is the OpenStreetMap node it was picked from. */
+export type TripSummit = {
+  name: string;
+  elevationMeters?: number | null;
+  latitude: number;
+  longitude: number;
+  osmId?: number | null;
+};
+
 export const trips = pgTable('trips', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -499,17 +639,123 @@ export const trips = pgTable('trips', {
   endDate: timestamp('end_date'),
   location: jsonb('location').$type<{ latitude: number; longitude: number; name?: string }>(),
   notes: text('notes'),
+  // The trip's "Before you go" list: non-gear tasks (permits, passes,
+  // reservations) the user ticks off before leaving.
+  checklist: jsonb('checklist').$type<{ id: string; title: string; done: boolean }[]>(),
   userId: text('user_id')
     .references(() => users.id)
     .notNull(),
   packId: text('pack_id').references(() => packs.id, { onDelete: 'set null' }),
   trailOsmId: bigint('trail_osm_id', { mode: 'bigint' }),
+  // Lifecycle: a trip is planned until the user starts it, and complete once
+  // they mark themselves safe (or finish it without a safety check-in).
+  status: text('status', { enum: ['planned', 'in_progress', 'complete'] })
+    .notNull()
+    .default('planned'),
+  startedAt: timestamp('started_at'),
+  completedAt: timestamp('completed_at'),
+  // The route the user intends to follow (e.g. an imported GPX track), used
+  // to notice when a safety check-in drifts well off it.
+  plannedRoute: jsonb('planned_route').$type<{ latitude: number; longitude: number }[]>(),
+  log: jsonb('log').$type<TripLog>(),
+  excludedFromStats: boolean('excluded_from_stats').notNull().default(false),
   localCreatedAt: timestamp('local_created_at').notNull(),
   localUpdatedAt: timestamp('local_updated_at').notNull(),
   deleted: boolean('deleted').notNull().default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+/**
+ * A user's trip stats goal. `annual` goals cover `year` and reset on 1 January;
+ * `custom` goals run from `startDate` to `endDate` and carry a user-chosen name.
+ * The list goals count every trip ever, with an optional `endDate` to pace
+ * against: `longTrail` follows the trail named by `trailCode` (metric
+ * `distance`, target its length in metres), `peakList` ticks off `peaks`
+ * (metric `summits`), and `parkList` ticks off `parkCodes`, or all National
+ * Parks when that is null (metric `parks`).
+ * `target` is in the metric's base unit: a count, or metres for distance and
+ * elevation. Progress is never stored — clients work it out from the trips.
+ */
+export const tripGoals = pgTable(
+  'trip_goals',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    kind: text('kind')
+      .$type<'annual' | 'custom' | 'longTrail' | 'peakList' | 'parkList'>()
+      .notNull(),
+    metric: text('metric')
+      .$type<'trips' | 'nights' | 'days' | 'distance' | 'elevation' | 'summits' | 'parks'>()
+      .notNull(),
+    target: real('target').notNull(),
+    year: integer('year'),
+    name: text('name'),
+    startDate: timestamp('start_date'),
+    endDate: timestamp('end_date'),
+    /** `longTrail` goals only, e.g. "PCT". */
+    trailCode: text('trail_code'),
+    /** `peakList` goals only. */
+    peaks: jsonb('peaks').$type<TripSummit[]>(),
+    /** `parkList` goals only; null means every park. */
+    parkCodes: jsonb('park_codes').$type<string[]>(),
+    localCreatedAt: timestamp('local_created_at').notNull(),
+    localUpdatedAt: timestamp('local_updated_at').notNull(),
+    deleted: boolean('deleted').notNull().default(false),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [index('trip_goals_user_id_idx').on(table.userId)],
+);
+
+/**
+ * Per-user trip stats choices that follow the account across devices: whether
+ * stats are on, and the optional reason given for the break before a comeback.
+ * The reason applies only to the comeback that ended at `breakReasonTripId`.
+ */
+export const tripStatsSettings = pgTable('trip_stats_settings', {
+  userId: text('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  /** Null until the user answers the opt-in; false hides stats and keeps the logs. */
+  enabled: boolean('enabled'),
+  breakReason: text('break_reason').$type<'injury' | 'illness' | 'life' | 'season'>(),
+  breakReasonTripId: text('break_reason_trip_id'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+/**
+ * Park visits and summits a user adds by hand, for outings from before they
+ * used PackRat. Visits and summits that come from trips live on the trip's
+ * log or location instead. `park` rows carry `parkCode` (the NPS unit code);
+ * `summit` rows carry the peak's name, position and elevation.
+ */
+export const tripStatsEntries = pgTable(
+  'trip_stats_entries',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    kind: text('kind').$type<'park' | 'summit'>().notNull(),
+    parkCode: text('park_code'),
+    name: text('name'),
+    elevationMeters: real('elevation_meters'),
+    latitude: doublePrecision('latitude'),
+    longitude: doublePrecision('longitude'),
+    osmId: bigint('osm_id', { mode: 'number' }),
+    /** The day of the visit or climb, as UTC midnight. Null when the user doesn't remember. */
+    date: timestamp('date'),
+    localCreatedAt: timestamp('local_created_at').notNull(),
+    localUpdatedAt: timestamp('local_updated_at').notNull(),
+    deleted: boolean('deleted').notNull().default(false),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [index('trip_stats_entries_user_id_idx').on(table.userId)],
+);
 
 // Relations
 
@@ -724,6 +970,12 @@ export const posts = pgTable('posts', {
     .notNull(),
   caption: text('caption'),
   images: jsonb('images').$type<string[]>().notNull(),
+  // Unguessable id for the public share page, so post pages can't be enumerated.
+  publicId: text('public_id').unique().notNull().default(sql`gen_random_uuid()::text`),
+  captionEditedAt: timestamp('caption_edited_at'),
+  // Set by the author (soft delete) or by a moderator (removal). Either hides the post.
+  deletedAt: timestamp('deleted_at'),
+  removedAt: timestamp('removed_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -757,6 +1009,9 @@ export const postComments = pgTable('post_comments', {
   parentCommentId: integer('parent_comment_id').references((): AnyPgColumn => postComments.id, {
     onDelete: 'cascade',
   }),
+  editedAt: timestamp('edited_at'),
+  deletedAt: timestamp('deleted_at'),
+  removedAt: timestamp('removed_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -781,10 +1036,120 @@ export const commentLikes = pgTable(
   }),
 );
 
+export const postTags = pgTable(
+  'post_tags',
+  {
+    id: serial('id').primaryKey(),
+    postId: integer('post_id')
+      .references(() => posts.id, { onDelete: 'cascade' })
+      .notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    taggedBy: text('tagged_by')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    unique('post_tags_post_id_user_id_unique').on(table.postId, table.userId),
+    index('post_tags_user_id_idx').on(table.userId),
+  ],
+);
+
+export const postSaves = pgTable(
+  'post_saves',
+  {
+    id: serial('id').primaryKey(),
+    postId: integer('post_id')
+      .references(() => posts.id, { onDelete: 'cascade' })
+      .notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [unique('post_saves_post_id_user_id_unique').on(table.postId, table.userId)],
+);
+
+export const userBlocks = pgTable(
+  'user_blocks',
+  {
+    id: serial('id').primaryKey(),
+    blockerId: text('blocker_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    blockedId: text('blocked_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    unique('user_blocks_blocker_id_blocked_id_unique').on(table.blockerId, table.blockedId),
+    index('user_blocks_blocked_id_idx').on(table.blockedId),
+  ],
+);
+
+export const feedReportReasonEnum = pgEnum('feed_report_reason', [
+  'spam',
+  'harassment',
+  'inappropriate',
+]);
+export const feedReportStatusEnum = pgEnum('feed_report_status', [
+  'pending',
+  'dismissed',
+  'removed',
+]);
+
+// A report targets exactly one post or one comment.
+export const feedReports = pgTable(
+  'feed_reports',
+  {
+    id: serial('id').primaryKey(),
+    reporterId: text('reporter_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    postId: integer('post_id').references(() => posts.id, { onDelete: 'cascade' }),
+    commentId: integer('comment_id').references(() => postComments.id, { onDelete: 'cascade' }),
+    reason: feedReportReasonEnum('reason').notNull(),
+    status: feedReportStatusEnum('status').default('pending').notNull(),
+    reviewedAt: timestamp('reviewed_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    check(
+      'feed_reports_one_target',
+      sql`(${table.postId} IS NULL) <> (${table.commentId} IS NULL)`,
+    ),
+    index('feed_reports_status_idx').on(table.status),
+    index('feed_reports_reporter_id_idx').on(table.reporterId),
+  ],
+);
+
+// Per-user social preferences and moderation state. A missing row means defaults.
+export const socialSettings = pgTable('social_settings', {
+  userId: text('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  allowTagging: boolean('allow_tagging').default(true).notNull(),
+  notifyTags: boolean('notify_tags').default(true).notNull(),
+  notifyComments: boolean('notify_comments').default(true).notNull(),
+  notifyReplies: boolean('notify_replies').default(true).notNull(),
+  // Set by a moderator. Hides everything the user has posted until cleared.
+  suspendedAt: timestamp('suspended_at'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 export const postsRelations = relations(posts, ({ one, many }) => ({
   user: one(users, { fields: [posts.userId], references: [users.id] }),
   likes: many(postLikes),
   comments: many(postComments),
+  tags: many(postTags),
+}));
+
+export const postTagsRelations = relations(postTags, ({ one }) => ({
+  post: one(posts, { fields: [postTags.postId], references: [posts.id] }),
+  user: one(users, { fields: [postTags.userId], references: [users.id] }),
 }));
 
 export const postLikesRelations = relations(postLikes, ({ one }) => ({
@@ -811,6 +1176,11 @@ export type PostComment = InferSelectModel<typeof postComments>;
 export type NewPostComment = InferInsertModel<typeof postComments>;
 export type CommentLike = InferSelectModel<typeof commentLikes>;
 export type NewCommentLike = InferInsertModel<typeof commentLikes>;
+export type PostTag = InferSelectModel<typeof postTags>;
+export type PostSave = InferSelectModel<typeof postSaves>;
+export type UserBlock = InferSelectModel<typeof userBlocks>;
+export type FeedReport = InferSelectModel<typeof feedReports>;
+export type SocialSettings = InferSelectModel<typeof socialSettings>;
 
 export const featureAccess = pgTable('feature_access', {
   key: text('key').primaryKey(),
@@ -837,6 +1207,45 @@ export const featureFlags = pgTable('feature_flags', {
 
 export type FeatureFlagRow = InferSelectModel<typeof featureFlags>;
 export type NewFeatureFlagRow = InferInsertModel<typeof featureFlags>;
+
+// The client surfaces a flag can be targeted at. `ios` and `android` cover the
+// Expo app; `ios` and `macos` cover the Swift app.
+//
+// Two absences are deliberate. The watch has no network of its own — it reads
+// what the phone sends — so it inherits the phone's answer. Expo's web build
+// reads flags too, but web is not a targetable platform here: an unrecognised
+// platform resolves to the global value, so web keeps working without being
+// separately steerable.
+export const clientPlatformEnum = pgEnum('client_platform', ['ios', 'android', 'macos']);
+
+// Per-platform overrides layered on top of `feature_flags`. A row here wins for
+// that platform only; a platform with no row inherits the global value, which
+// in turn falls back to the coded default. Kept as a separate table rather than
+// columns on feature_flags so adding a platform is a migration on one enum
+// instead of a schema change per surface, and so a flag with no platform
+// targeting costs no extra storage.
+export const featureFlagPlatformOverrides = pgTable(
+  'feature_flag_platform_overrides',
+  {
+    key: text('key')
+      .notNull()
+      .references(() => featureFlags.key, { onDelete: 'cascade' }),
+    platform: clientPlatformEnum('platform').notNull(),
+    enabled: boolean('enabled').notNull(),
+    // Why this platform differs. Worth recording: a platform-specific override
+    // usually encodes a temporary reason (a broken build, a staged rollout)
+    // that is otherwise lost the moment whoever set it moves on.
+    reason: text('reason'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.key, table.platform] })],
+);
+
+export type FeatureFlagPlatformOverrideRow = InferSelectModel<typeof featureFlagPlatformOverrides>;
+export type NewFeatureFlagPlatformOverrideRow = InferInsertModel<
+  typeof featureFlagPlatformOverrides
+>;
 
 // Per-user RevenueCat entitlement state, kept in sync by the RevenueCat webhook
 // (packages/api's revenuecatWebhook route). This is the server's source of
@@ -878,6 +1287,111 @@ export const entitlements = pgTable(
 export type Entitlement = InferSelectModel<typeof entitlements>;
 export type NewEntitlement = InferInsertModel<typeof entitlements>;
 
+// A user-chosen location to monitor for weather alerts. Watching is always
+// explicit — nothing here is derived from search history or trips. See
+// docs/features/weather-alerts.md ADR-002.
+export const weatherWatchedLocations = pgTable(
+  'weather_watched_locations',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    // WeatherAPI.com's numeric location id — the key used to poll this
+    // location's forecast/alerts.
+    weatherLocationId: integer('weather_location_id').notNull(),
+    locationName: text('location_name').notNull(),
+    region: text('region'),
+    country: text('country'),
+    lat: real('lat').notNull(),
+    lon: real('lon').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [
+    unique('weather_watched_locations_user_location_unique').on(
+      table.userId,
+      table.weatherLocationId,
+    ),
+    index('weather_watched_locations_weather_location_id_idx').on(table.weatherLocationId),
+  ],
+);
+
+export type WeatherWatchedLocation = InferSelectModel<typeof weatherWatchedLocations>;
+export type NewWeatherWatchedLocation = InferInsertModel<typeof weatherWatchedLocations>;
+
+// Last-seen alert state per watched location, keyed by the location itself
+// rather than per-user — the alert is a property of the place, so this row
+// is shared by every user watching it and lets the polling cron dedupe both
+// its own API calls and its notification fan-out across users. Poll tier
+// tracks whether this location currently has an active alert, so the cron
+// can check it more often while something is happening and fall back to a
+// slower cadence once it resolves.
+export const weatherLocationAlertState = pgTable('weather_location_alert_state', {
+  weatherLocationId: integer('weather_location_id').primaryKey(),
+  // Hash of the currently-active alert set (sorted event+effective per
+  // alert — see diffAlerts.ts alertSetHash), used to detect a new or
+  // changed alert without storing the full payload here.
+  lastAlertHash: text('last_alert_hash'),
+  // Identifiers of the alerts currently considered active, for diffing
+  // new-vs-resolved on the next poll.
+  lastAlertIds: jsonb('last_alert_ids').$type<string[]>().notNull().default([]),
+  pollTier: text('poll_tier', { enum: ['baseline', 'elevated'] })
+    .notNull()
+    .default('baseline'),
+  activeSince: timestamp('active_since'),
+  lastPolledAt: timestamp('last_polled_at'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type WeatherLocationAlertState = InferSelectModel<typeof weatherLocationAlertState>;
+
+// Last-seen weather alerts at an upcoming trip's destination, so the trip
+// destination poll pushes each alert to the trip's owner once. Keyed by trip:
+// a trip's destination is a coordinate, not a watched WeatherAPI location.
+export const tripDestinationAlertState = pgTable('trip_destination_alert_state', {
+  tripId: text('trip_id')
+    .primaryKey()
+    .references(() => trips.id, { onDelete: 'cascade' }),
+  lastAlertIds: jsonb('last_alert_ids').$type<string[]>().notNull().default([]),
+  lastPolledAt: timestamp('last_polled_at'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+export type NewWeatherLocationAlertState = InferInsertModel<typeof weatherLocationAlertState>;
+
+// A device registered to receive push notifications. Genuinely new — no push
+// infrastructure predates this feature. 'ios' is the only platform in use
+// today; 'android' is reserved for when the Expo app adopts the same
+// monitoring pipeline.
+export const userDeviceTokens = pgTable(
+  'user_device_tokens',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    platform: text('platform', { enum: ['ios', 'android'] }).notNull(),
+    deviceToken: text('device_token').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    lastSeenAt: timestamp('last_seen_at').defaultNow().notNull(),
+  },
+  (table) => [
+    unique('user_device_tokens_user_id_device_token_unique').on(table.userId, table.deviceToken),
+    index('user_device_tokens_user_id_idx').on(table.userId),
+  ],
+);
+
+export type UserDeviceToken = InferSelectModel<typeof userDeviceTokens>;
+export type NewUserDeviceToken = InferInsertModel<typeof userDeviceTokens>;
+
+export const weatherWatchedLocationsRelations = relations(weatherWatchedLocations, ({ one }) => ({
+  user: one(users, { fields: [weatherWatchedLocations.userId], references: [users.id] }),
+}));
+
+export const userDeviceTokensRelations = relations(userDeviceTokens, ({ one }) => ({
+  user: one(users, { fields: [userDeviceTokens.userId], references: [users.id] }),
+}));
+
 // CapturedQuery is the per-query record stored in D1 metrics (packages/api/src/db/metricsDb.ts).
 // Defined here so both the API (queryMetrics.ts) and the D1 schema (packages/db/src/d1Schema.ts)
 // share the same type without a circular dependency.
@@ -888,3 +1402,127 @@ export interface CapturedQuery {
   durationMs: number;
   resultBytes: number;
 }
+
+// Safety check-in (#1916). Emergency contacts are people outside PackRat who
+// are told when a trip starts, receive check-ins, and get an overdue alert if
+// the user doesn't mark themselves safe by the expected return + grace.
+export const emergencyContacts = pgTable(
+  'emergency_contacts',
+  {
+    id: text('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    name: text('name').notNull(),
+    phone: text('phone'),
+    email: text('email'),
+    isDefault: boolean('is_default').notNull().default(false),
+    // Set when the contact receives their first message, which explains who
+    // added them and what being an emergency contact means.
+    introducedAt: timestamp('introduced_at'),
+    deleted: boolean('deleted').notNull().default(false),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('emergency_contacts_user_id_idx').on(table.userId),
+    check(
+      'emergency_contacts_phone_or_email',
+      sql`${table.phone} IS NOT NULL OR ${table.email} IS NOT NULL`,
+    ),
+  ],
+);
+
+export type EmergencyContact = InferSelectModel<typeof emergencyContacts>;
+export type NewEmergencyContact = InferInsertModel<typeof emergencyContacts>;
+
+export const safetyCheckIns = pgTable(
+  'safety_check_ins',
+  {
+    id: text('id').primaryKey(),
+    tripId: text('trip_id')
+      .references(() => trips.id, { onDelete: 'cascade' })
+      .notNull(),
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    status: text('status', { enum: ['active', 'safe', 'cancelled'] })
+      .notNull()
+      .default('active'),
+    // Unguessable token for the public contacts page; the page stops working
+    // once the check-in is no longer active.
+    shareToken: text('share_token').notNull().unique(),
+    expectedReturnAt: timestamp('expected_return_at').notNull(),
+    // The phone's IANA time zone at start, so messages show times the way the
+    // user and their contacts read them.
+    timeZone: text('time_zone').notNull().default('UTC'),
+    graceMinutes: integer('grace_minutes').notNull().default(120),
+    identifyingGear: jsonb('identifying_gear')
+      .$type<{ name: string; note?: string | null }[]>()
+      .notNull()
+      .default([]),
+    trackingEnabled: boolean('tracking_enabled').notNull().default(false),
+    // When the user started the trip on the phone, which may be earlier than
+    // createdAt if the start was queued offline.
+    startedAt: timestamp('started_at').notNull(),
+    overdueAlertSentAt: timestamp('overdue_alert_sent_at'),
+    offRouteNotifiedAt: timestamp('off_route_notified_at'),
+    endedAt: timestamp('ended_at'),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('safety_check_ins_user_id_idx').on(table.userId),
+    index('safety_check_ins_trip_id_idx').on(table.tripId),
+    index('safety_check_ins_status_expected_return_idx').on(table.status, table.expectedReturnAt),
+  ],
+);
+
+export type SafetyCheckIn = InferSelectModel<typeof safetyCheckIns>;
+export type NewSafetyCheckIn = InferInsertModel<typeof safetyCheckIns>;
+
+// The contacts told about a check-in, snapshotted at start so editing or
+// removing a contact mid-trip doesn't change who gets the overdue alert.
+export const safetyCheckInContacts = pgTable(
+  'safety_check_in_contacts',
+  {
+    id: text('id').primaryKey(),
+    checkInId: text('check_in_id')
+      .references(() => safetyCheckIns.id, { onDelete: 'cascade' })
+      .notNull(),
+    contactId: text('contact_id').references(() => emergencyContacts.id, {
+      onDelete: 'set null',
+    }),
+    name: text('name').notNull(),
+    phone: text('phone'),
+    email: text('email'),
+  },
+  (table) => [index('safety_check_in_contacts_check_in_id_idx').on(table.checkInId)],
+);
+
+export type SafetyCheckInContact = InferSelectModel<typeof safetyCheckInContacts>;
+
+// Every location recorded during a check-in. Deleted when the trip ends.
+export const safetyCheckInLocations = pgTable(
+  'safety_check_in_locations',
+  {
+    id: text('id').primaryKey(),
+    checkInId: text('check_in_id')
+      .references(() => safetyCheckIns.id, { onDelete: 'cascade' })
+      .notNull(),
+    kind: text('kind', { enum: ['check_in', 'track'] }).notNull(),
+    latitude: real('latitude').notNull(),
+    longitude: real('longitude').notNull(),
+    accuracyMeters: real('accuracy_meters'),
+    placeName: text('place_name'),
+    note: text('note'),
+    // When the phone recorded it — may be hours before it was uploaded.
+    recordedAt: timestamp('recorded_at').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => [
+    index('safety_check_in_locations_check_in_recorded_idx').on(table.checkInId, table.recordedAt),
+  ],
+);
+
+export type SafetyCheckInLocation = InferSelectModel<typeof safetyCheckInLocations>;

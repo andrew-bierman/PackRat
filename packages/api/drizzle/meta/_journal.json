@@ -365,6 +365,76 @@
       "when": 1784140912607,
       "tag": "0050_oval_wind_dancer",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1788431743202,
+      "tag": "0051_nostalgic_surge",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1790239091868,
+      "tag": "0052_dapper_pete_wisdom",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1790503831462,
+      "tag": "0053_dapper_photon",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1791279770212,
+      "tag": "0054_flowery_redwing",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1791305635494,
+      "tag": "0055_good_shinko_yamashiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1791378921125,
+      "tag": "0056_low_mystique",
+      "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1791399580239,
+      "tag": "0057_flawless_falcon",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1791390881739,
+      "tag": "0059_curious_susan_delgado",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1791401538871,
+      "tag": "0060_warm_manta",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1791453734665,
+      "tag": "0061_reapply_trip_goal_columns",
+      "breakpoints": true
     }
   ]
 }

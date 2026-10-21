@@ -68,6 +68,20 @@ vi.mock('@packrat/api/containers', () => ({
   AppContainer: class AppContainer {},
 }));
 
+vi.mock('@packrat/api/durable-objects/PostLiveRoom', () => ({
+  PostLiveRoom: class PostLiveRoom {},
+}));
+
+vi.mock('@packrat/api/durable-objects/SafetyCheckInTimer', () => ({
+  SafetyCheckInTimer: class SafetyCheckInTimer {},
+}));
+vi.mock('@packrat/api/durable-objects/TripDestinationWatcher', () => ({
+  TripDestinationWatcher: class TripDestinationWatcher {},
+}));
+vi.mock('@packrat/api/durable-objects/WatchedPlaceWatcher', () => ({
+  WatchedPlaceWatcher: class WatchedPlaceWatcher {},
+}));
+
 vi.mock('@packrat/api/services', () => ({
   CatalogService: class CatalogService {},
 }));
@@ -102,6 +116,7 @@ vi.mock('@packrat/api/workflows/catalog-etl-workflow', () => ({
 }));
 
 vi.mock('@sentry/cloudflare', () => ({
+  instrumentDurableObjectWithSentry: (_opts: unknown, durableObject: unknown) => durableObject,
   instrumentWorkflowWithSentry: mocks.instrumentWorkflowWithSentry,
   withSentry: mocks.withSentry,
 }));

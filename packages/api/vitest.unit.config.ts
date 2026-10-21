@@ -51,6 +51,9 @@ export default defineConfig({
         'src/routes/**',
         // Infrastructure (no business logic)
         'src/containers/**',
+        // Durable Object socket plumbing needs workerd (WebSocketPair, 101 responses);
+        // exercised end to end against `wrangler dev`.
+        'src/durable-objects/**',
         // Index files (just exports, no business logic)
         'src/**/index.ts',
         // CLI stub for `bunx auth generate` — not production logic
@@ -75,6 +78,11 @@ export default defineConfig({
         'src/services/catalogService.ts',
         'src/services/packService.ts',
         'src/services/imageDetectionService.ts',
+        // DB + WeatherAPI + APNs orchestration — covered by integration tests.
+        // diffAlerts.ts (the actual decision logic) is pure and fully unit-tested.
+        'src/services/weatherMonitoring/fetchLocationAlerts.ts',
+        'src/services/push/apnsClient.ts',
+        'src/services/push/notifyWatchers.ts',
         // PostGIS-dependent service (requires live DB with PostGIS extension)
         'src/services/trails.ts',
         // Intentionally thin pass-through (no business logic to unit-test)

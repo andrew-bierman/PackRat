@@ -7,13 +7,40 @@ enum UITestFeatureFlags {
     static let enableFeed = false
     static let enableLocalAI = true
     static let enableOAuth = true
+    static let enableOfflineWildlifeID = false
     static let enablePackInsights = false
     static let enablePackTemplates = true
     static let enableRevenueCat = true
+    static let enableSafetyCheckIn = false
     static let enableSharedPacks = false
     static let enableShoppingList = false
     static let enableTrailConditions = true
     static let enableTrails = false
+    static let enableTripReminders = false
     static let enableTrips = true
+    static let enableTripStats = false
+    static let enableWeatherMonitoring = false
     static let enableWildlifeIdentification = false
+
+    /// Coded defaults keyed by wire name. Defines the known key set that
+    /// `FeatureFlagResolution` normalizes a fetched or cached map against.
+    static let codedDefaults: [String: Bool] = [
+        "enableFeed": false,
+        "enableLocalAI": true,
+        "enableOAuth": true,
+        "enableOfflineWildlifeID": false,
+        "enablePackInsights": false,
+        "enablePackTemplates": true,
+        "enableRevenueCat": true,
+        "enableSafetyCheckIn": false,
+        "enableSharedPacks": false,
+        "enableShoppingList": false,
+        "enableTrailConditions": true,
+        "enableTrails": false,
+        "enableTripReminders": false,
+        "enableTrips": true,
+        "enableTripStats": false,
+        "enableWeatherMonitoring": false,
+        "enableWildlifeIdentification": false,
+    ]
 }

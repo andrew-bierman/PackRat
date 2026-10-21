@@ -3,12 +3,42 @@ import MapKit
 import CoreLocation
 
 struct TripDetailView: View {
-    let trip: Trip
+    /// The trip as it was when this screen opened. Read `trip` instead: a pushed
+    /// destination keeps its original value, so an edit made from this screen
+    /// (linking a pack, moving the dates) would otherwise never show here.
+    private let openedTrip: Trip
     let viewModel: TripsViewModel
 
+    init(trip: Trip, viewModel: TripsViewModel) {
+        openedTrip = trip
+        self.viewModel = viewModel
+    }
+
+    private var trip: Trip {
+        viewModel.trips.first { $0.id == openedTrip.id } ?? openedTrip
+    }
+
+    /// Over once its last day has passed, the point a trip can be logged.
+    private var isFinished: Bool {
+        guard let end = (trip.endDate ?? trip.startDate)?.toDate() else { return false }
+        return Calendar.current.startOfDay(for: end) < Calendar.current.startOfDay(for: .now)
+    }
+
+    private var route: [CLLocationCoordinate2D] {
+        trip.log?.route.map(Polyline.decode) ?? []
+    }
+
     @State private var showingEditSheet = false
+    /// The trip's pack pushed on top of the trip; `true` opens it in packing mode.
+    @State private var pushedPack: PackRoute?
+
+    struct PackRoute: Hashable {
+        let packId: String
+        let packing: Bool
+    }
     @State private var mapPosition: MapCameraPosition = .automatic
     @Environment(AppState.self) private var appState
+    @Environment(\.weightUnit) private var weightUnit
 
     private var coordinate: CLLocationCoordinate2D? {
         guard let lat = trip.location?.latitude, let lon = trip.location?.longitude,
@@ -24,10 +54,37 @@ struct TripDetailView: View {
         || trip.notes?.isEmpty == false
     }
 
+    private var remindersEnabled: Bool {
+        FeatureFlagStore.shared.isEnabled(TripReminderPlanner.flagKey)
+    }
+
+    private var safetyEnabled: Bool { SafetyCheckInStore.isEnabled }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                #if os(iOS)
+                if safetyEnabled {
+                    TripSafetySection(trip: trip, viewModel: viewModel)
+                        .padding(.top, 8)
+                }
+                #endif
+
+                if remindersEnabled, TripReminderPlanner.isDepartureNear(trip, now: Date()) {
+                    TripReadinessCard(
+                        trip: trip,
+                        onLinkPack: { showingEditSheet = true },
+                        onStartPacking: { pushedPack = PackRoute(packId: $0, packing: true) }
+                    )
+                        .padding(.top, 8)
+                }
+
                 metaCards
+                    .padding(.top, 8)
+
+                if isFinished, NavItem.tripStats.isFeatureEnabled {
+                    TripLogSection(trip: trip, viewModel: viewModel)
+                }
 
                 // Map — shown when the trip has coordinates
                 if let coord = coordinate {
@@ -69,6 +126,22 @@ struct TripDetailView: View {
                 }
 
                 packSection
+
+                #if os(iOS)
+                if safetyEnabled {
+                    PlannedRouteSection(trip: trip, viewModel: viewModel)
+                }
+                #endif
+
+                if remindersEnabled {
+                    TripChecklistSection(trip: trip, viewModel: viewModel)
+                }
+
+                #if os(iOS)
+                if remindersEnabled {
+                    TripRemindersRow(trip: trip)
+                }
+                #endif
             }
             .padding(.bottom)
         }
@@ -77,6 +150,16 @@ struct TripDetailView: View {
         .navigationBarTitleDisplayMode(.large)
         #endif
         .toolbar {
+            #if os(iOS)
+            if safetyEnabled, SafetyCheckInStore.shared.checkIn(forTrip: trip.id) != nil {
+                ToolbarItem(placement: .primaryAction) {
+                    Image(systemName: "shield.lefthalf.filled")
+                        .foregroundStyle(.green)
+                        .accessibilityLabel("Safety check-in active")
+                        .accessibilityIdentifier("trip_safety_shield")
+                }
+            }
+            #endif
             ToolbarItem(placement: .primaryAction) {
                 Button("Edit", systemImage: "pencil") { showingEditSheet = true }
                     .accessibilityIdentifier("trip_detail_edit_button")
@@ -85,8 +168,15 @@ struct TripDetailView: View {
         .sheet(isPresented: $showingEditSheet) {
             TripFormView(viewModel: viewModel, existingTrip: trip)
         }
+        .navigationDestination(item: $pushedPack) { route in
+            if let pack = appState.packsVM.packs.first(where: { $0.id == route.packId }) {
+                PackDetailView(pack: pack, viewModel: appState.packsVM, startInPackingMode: route.packing)
+            }
+        }
         .onAppear {
-            if let coord = coordinate {
+            if route.count >= 2 {
+                mapPosition = .automatic
+            } else if let coord = coordinate {
                 mapPosition = .region(MKCoordinateRegion(
                     center: coord,
                     span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
@@ -100,40 +190,51 @@ struct TripDetailView: View {
         let linkedPack = appState.packsVM.packs.first(where: { $0.id == trip.packId })
         labeledSection("Pack") {
             if let pack = linkedPack {
-                Button {
-                    appState.navItem = .packs
-                    appState.selectedPackId = pack.id
-                } label: {
-                    HStack(spacing: 12) {
-                        RoundedRectangle(cornerRadius: 7, style: .continuous)
-                            .fill(Color.blue.gradient)
-                            .frame(width: 30, height: 30)
-                            .overlay {
-                                Image(systemName: "backpack.fill")
-                                    .font(.system(size: 15, weight: .semibold))
-                                    .foregroundStyle(.white)
-                            }
+                let packing = packingState(pack)
+                VStack(spacing: 10) {
+                    Button {
+                        pushedPack = PackRoute(packId: pack.id, packing: false)
+                    } label: {
+                        HStack(spacing: 12) {
+                            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                                .fill(Color.blue.gradient)
+                                .frame(width: 30, height: 30)
+                                .overlay {
+                                    Image(systemName: "backpack.fill")
+                                        .font(.system(size: 15, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                }
 
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(pack.name).font(.callout.bold())
-                            Text("\(pack.itemCount) items")
-                                .font(.caption)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(pack.name).font(.callout.bold())
+                                packStatus(packing)
+                            }
+                            Spacer()
+                            if let total = pack.totalWeight {
+                                Text(pack.formattedWeight(total, in: weightUnit))
+                                    .font(.callout.monospacedDigit().bold())
+                                    .foregroundStyle(.tint)
+                            }
+                            Image(systemName: "chevron.right")
+                                .font(.footnote.weight(.semibold))
                                 .foregroundStyle(.secondary)
                         }
-                        Spacer()
-                        if let total = pack.totalWeight {
-                            Text(pack.formattedWeight(total))
-                                .font(.callout.monospacedDigit().bold())
-                                .foregroundStyle(.tint)
-                        }
-                        Image(systemName: "chevron.right")
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(.secondary)
                     }
+                    .buttonStyle(.plain)
+                    .padding(14)
+                    .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+                    Button {
+                        pushedPack = PackRoute(packId: pack.id, packing: true)
+                    } label: {
+                        Label(packingButtonTitle(packing), systemImage: packing.progress == .done ? "checkmark.circle" : "checklist")
+                            .font(.callout.weight(.semibold))
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .accessibilityIdentifier("trip_detail_start_packing")
                 }
-                .buttonStyle(.plain)
-                .padding(14)
-                .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             } else {
                 Button {
                     showingEditSheet = true
@@ -143,6 +244,44 @@ struct TripDetailView: View {
                 }
                 .buttonStyle(.bordered)
             }
+        }
+    }
+
+    private func packingState(_ pack: Pack) -> TripReminderPlanner.PackState {
+        let packed = Set(PackingModeStore.shared.packedItems(in: pack.id).filter(\.value).keys)
+        return TripReminderPlanner.PackState(pack: pack, packedItemIds: packed)
+    }
+
+    /// Item count, or how far packing has got once it has started — so "All
+    /// packed" shows on the trip whether or not the readiness card is up.
+    @ViewBuilder
+    private func packStatus(_ state: TripReminderPlanner.PackState) -> some View {
+        switch state.progress {
+        case .done:
+            Label("All packed", systemImage: "checkmark.circle.fill")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.green)
+                .accessibilityIdentifier("trip_detail_all_packed")
+        case .partial(let packed, let total) where packed > 0:
+            Text("\(packed) of \(total) packed")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        case .partial(_, let total):
+            Text("\(total) items")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        case .empty, .noPack:
+            Text("0 items")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func packingButtonTitle(_ state: TripReminderPlanner.PackState) -> String {
+        switch state.progress {
+        case .done: "Review Packing"
+        case .partial(let packed, _) where packed > 0: "Continue Packing"
+        default: "Start Packing"
         }
     }
 
@@ -173,6 +312,17 @@ struct TripDetailView: View {
 
     private func tripMap(coord: CLLocationCoordinate2D) -> some View {
         Map(position: $mapPosition) {
+            // The route they meant to follow, dashed, under the one they logged.
+            if let planned = trip.plannedRoute, planned.count >= 2 {
+                MapPolyline(coordinates: planned.map {
+                    CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+                })
+                .stroke(.orange, style: StrokeStyle(lineWidth: 3, dash: [6, 4]))
+            }
+            if route.count >= 2 {
+                MapPolyline(coordinates: route)
+                    .stroke(.orange, style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
+            }
             Annotation(trip.location?.name ?? trip.name, coordinate: coord) {
                 ZStack {
                     Circle().fill(.red).frame(width: 36, height: 36)

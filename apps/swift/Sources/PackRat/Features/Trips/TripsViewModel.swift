@@ -14,9 +14,11 @@ final class TripsViewModel {
     private let service: TripService
     private let outbox: OutboxService
 
-    init(service: TripService = .shared, outbox: OutboxService = .shared) {
+    // See `PacksViewModel.init`: an isolated singleton cannot be a default
+    // argument under the Swift 6 language mode, so resolve it in the body.
+    init(service: TripService = .shared, outbox: OutboxService? = nil) {
         self.service = service
-        self.outbox = outbox
+        self.outbox = outbox ?? .shared
     }
 
     var currentPage = 1
@@ -68,7 +70,7 @@ final class TripsViewModel {
             let cached = (try? context.fetch(FetchDescriptor<CachedTrip>(
                 sortBy: [SortDescriptor(\.cachedAt, order: .reverse)]
             ))) ?? []
-            let cachedTrips = cached.compactMap { $0.toTrip() }
+            let cachedTrips = cached.compactMap { $0.toTrip() }.activeTrips
             if !cachedTrips.isEmpty {
                 trips = cachedTrips
             }
@@ -86,11 +88,13 @@ final class TripsViewModel {
 
         do {
             let fresh = try await service.listTrips(page: 1, limit: pageSize)
-            trips = fresh
+            let active = fresh.activeTrips
+            trips = active
             currentPage = 1
+            // Page-size comparison stays on the raw response — see PacksViewModel.
             hasMore = fresh.count == pageSize
             if let context {
-                writeCacheTrips(fresh, context: context)
+                writeCacheTrips(active, context: context)
             }
         } catch {
             if trips.isEmpty {
@@ -111,10 +115,34 @@ final class TripsViewModel {
         defer { isLoading = false }
         do {
             let more = try await service.listTrips(page: nextPage, limit: pageSize)
-            trips.append(contentsOf: more)
+            // Dedupe by id: `load()` can reassign `trips` while this page is in
+            // flight, and appending blindly then showed the same trip twice —
+            // duplicate ids also collide in `ForEach` identity, so the duplicates
+            // were visible rather than harmless.
+            let known = Set(trips.map(\.id))
+            trips.append(contentsOf: more.activeTrips.filter { !known.contains($0.id) })
             currentPage = nextPage
             hasMore = more.count == pageSize
         } catch { }
+    }
+
+    /// Clears every trace of the signed-in user's trips, including the on-disk
+    /// cache. Without this, signing in as a different user briefly showed the
+    /// previous user's trips from SwiftData, and a re-sign-in as the same user
+    /// kept stale pagination state.
+    func reset(context: ModelContext? = nil) {
+        trips = []
+        isLoading = false
+        isCacheLoaded = false
+        error = nil
+        searchText = ""
+        currentPage = 1
+        hasMore = true
+
+        if let context {
+            try? context.delete(model: CachedTrip.self)
+            try? context.save()
+        }
     }
 
     private func writeCacheTrips(_ freshTrips: [Trip], context: ModelContext) {
@@ -201,19 +229,52 @@ final class TripsViewModel {
             location: location.map { TripLocation(latitude: $0.latitude, longitude: $0.longitude, name: $0.name) },
             notes: notes,
             packId: packId,
+            checklist: existing.checklist,
             updatedAt: Date.iso8601Now()
         )
-        let payload = TripMutationPayload(
-            name: name,
-            description: description,
-            startDate: startDate?.iso8601String(),
-            endDate: endDate?.iso8601String(),
+        await pushUpdate(localUpdated, context: context)
+    }
+
+    /// Saves what happened on a finished trip. `nil` clears the log.
+    func saveLog(_ log: TripLog?, for tripId: String, context: ModelContext? = nil) async {
+        guard var trip = trips.first(where: { $0.id == tripId }) else { return }
+        trip.log = log.flatMap { $0.isEmpty ? nil : $0 }
+        await pushUpdate(trip, context: context)
+    }
+
+    func setExcludedFromStats(_ excluded: Bool, for tripId: String, context: ModelContext? = nil) async {
+        guard var trip = trips.first(where: { $0.id == tripId }) else { return }
+        trip.excludedFromStats = excluded
+        await pushUpdate(trip, context: context)
+    }
+
+    /// Optimistic update of the whole trip. Every write sends the full record,
+    /// log included, so a queued edit folds into a queued create without
+    /// losing fields, and the server copy always matches the local one.
+    private func pushUpdate(_ localUpdated: Trip, context: ModelContext?) async {
+        let tripId = localUpdated.id
+        let startDate = localUpdated.startDate?.toDate()
+        let endDate = localUpdated.endDate?.toDate()
+        let location = localUpdated.location.map {
+            TripLocationBody(latitude: $0.latitude, longitude: $0.longitude, name: $0.name)
+        }
+        var payload = TripMutationPayload(
+            name: localUpdated.name,
+            description: localUpdated.description,
+            startDate: localUpdated.startDate,
+            endDate: localUpdated.endDate,
             latitude: location?.latitude,
             longitude: location?.longitude,
             locationName: location?.name,
-            notes: notes,
-            packId: packId
+            notes: localUpdated.notes,
+            packId: localUpdated.packId,
+            checklist: localUpdated.checklist,
+            log: localUpdated.log,
+            excludedFromStats: localUpdated.excludedFromStats
         )
+        // Updates collapse to the latest payload, so each carries the lifecycle
+        // and route or a later edit would undo Start Trip on replay.
+        payload.carryLifecycle(of: localUpdated)
         func queueUpdate() {
             outbox.enqueue(
                 entityType: .trip,
@@ -228,8 +289,10 @@ final class TripsViewModel {
         if canUseRemotePersonalStore {
             do {
                 updated = try await service.updateTrip(
-                    tripId, name: name, description: description, startDate: startDate, endDate: endDate,
-                    location: location, notes: notes, packId: packId
+                    tripId, name: localUpdated.name, description: localUpdated.description,
+                    startDate: startDate, endDate: endDate, location: location,
+                    notes: localUpdated.notes, packId: localUpdated.packId,
+                    checklist: localUpdated.checklist, log: localUpdated.log, excludedFromStats: localUpdated.isExcludedFromStats
                 )
             } catch {
                 updated = localUpdated
@@ -243,6 +306,133 @@ final class TripsViewModel {
             trips[idx] = updated
         }
         upsertCachedTrip(updated, context: context)
+    }
+
+    /// Saves a trip's Before-you-go list. Local-first: the change shows and is
+    /// cached synchronously — so a second quick tick builds on the first — then
+    /// goes out through the outbox, whose updates collapse to the latest and
+    /// replay in order, so ticks can't land out of order and an offline edit
+    /// syncs when the connection returns.
+    func updateChecklist(_ tripId: String, _ checklist: [TripChecklistItem], context: ModelContext? = nil) {
+        guard let idx = trips.firstIndex(where: { $0.id == tripId }) else { return }
+        let trip = trips[idx]
+        let updated = rebuildTrip(
+            trip,
+            name: trip.name,
+            description: trip.description,
+            startDate: trip.startDate,
+            endDate: trip.endDate,
+            location: trip.location,
+            notes: trip.notes,
+            packId: trip.packId,
+            checklist: checklist,
+            updatedAt: Date.iso8601Now()
+        )
+        trips[idx] = updated
+        upsertCachedTrip(updated, context: context)
+
+        var payload = TripMutationPayload(
+            name: trip.name,
+            description: trip.description,
+            startDate: trip.startDate,
+            endDate: trip.endDate,
+            latitude: trip.location?.latitude,
+            longitude: trip.location?.longitude,
+            locationName: trip.location?.name,
+            notes: trip.notes,
+            packId: trip.packId,
+            checklist: checklist,
+            log: trip.log,
+            excludedFromStats: trip.excludedFromStats
+        )
+        payload.carryLifecycle(of: trip)
+        outbox.enqueue(
+            entityType: .trip,
+            entityId: tripId,
+            operation: .update,
+            payload: OutboxService.encode(payload),
+            context: context
+        )
+        let outbox = outbox
+        Task {
+            // A flush already draining the queue may have started before this row
+            // was written; wait it out so the edit isn't left for the next foreground.
+            while outbox.isFlushing { try? await Task.sleep(for: .milliseconds(200)) }
+            await outbox.flush(context: context)
+        }
+    }
+
+    /// Starts or finishes a trip. Local-first through the outbox like the
+    /// Before-you-go list, so tapping Start Trip at a trailhead with no signal
+    /// still marks the trip in progress and syncs later.
+    func setLifecycle(_ tripId: String, status: TripStatus, at date: Date = Date(), context: ModelContext? = nil) {
+        guard let trip = trips.first(where: { $0.id == tripId }) else { return }
+        var updated = rebuildTrip(
+            trip, name: trip.name, description: trip.description, startDate: trip.startDate,
+            endDate: trip.endDate, location: trip.location, notes: trip.notes, packId: trip.packId,
+            checklist: trip.checklist, updatedAt: Date.iso8601Now()
+        )
+        updated.status = status
+        switch status {
+        case .planned:
+            updated.startedAt = nil
+            updated.completedAt = nil
+        case .inProgress:
+            updated.startedAt = date.iso8601String()
+            updated.completedAt = nil
+        case .complete:
+            updated.completedAt = date.iso8601String()
+        }
+        applyLocalUpdate(updated, context: context)
+    }
+
+    /// Sets or clears (empty array) the route the user plans to follow.
+    func setPlannedRoute(_ tripId: String, _ route: [TripRoutePoint], context: ModelContext? = nil) {
+        guard let trip = trips.first(where: { $0.id == tripId }) else { return }
+        var updated = rebuildTrip(
+            trip, name: trip.name, description: trip.description, startDate: trip.startDate,
+            endDate: trip.endDate, location: trip.location, notes: trip.notes, packId: trip.packId,
+            checklist: trip.checklist, updatedAt: Date.iso8601Now()
+        )
+        updated.plannedRoute = route.isEmpty ? nil : route
+        applyLocalUpdate(updated, context: context, plannedRoute: route)
+    }
+
+    /// Shows and caches an edited trip immediately, then queues it for the server.
+    private func applyLocalUpdate(_ updated: Trip, context: ModelContext?, plannedRoute: [TripRoutePoint]? = nil) {
+        guard let idx = trips.firstIndex(where: { $0.id == updated.id }) else { return }
+        trips[idx] = updated
+        upsertCachedTrip(updated, context: context)
+
+        var payload = TripMutationPayload(
+            name: updated.name,
+            description: updated.description,
+            startDate: updated.startDate,
+            endDate: updated.endDate,
+            latitude: updated.location?.latitude,
+            longitude: updated.location?.longitude,
+            locationName: updated.location?.name,
+            notes: updated.notes,
+            packId: updated.packId,
+            checklist: updated.checklist,
+            log: updated.log,
+            excludedFromStats: updated.excludedFromStats
+        )
+        payload.carryLifecycle(of: updated)
+        // An explicit empty route clears it on the server.
+        if let plannedRoute { payload.plannedRoute = plannedRoute }
+        outbox.enqueue(
+            entityType: .trip,
+            entityId: updated.id,
+            operation: .update,
+            payload: OutboxService.encode(payload),
+            context: context
+        )
+        let outbox = outbox
+        Task {
+            while outbox.isFlushing { try? await Task.sleep(for: .milliseconds(200)) }
+            await outbox.flush(context: context)
+        }
     }
 
     /// Optimistic delete. An unreachable server queues the delete for replay rather
@@ -294,6 +484,7 @@ final class TripsViewModel {
             endDate: endDate?.iso8601String(),
             userId: nil,
             packId: packId,
+            checklist: nil,
             deleted: false,
             createdAt: now,
             updatedAt: now
@@ -309,6 +500,7 @@ final class TripsViewModel {
         location: TripLocation?,
         notes: String?,
         packId: String?,
+        checklist: [TripChecklistItem]?,
         updatedAt: String
     ) -> Trip {
         Trip(
@@ -321,9 +513,16 @@ final class TripsViewModel {
             endDate: endDate,
             userId: trip.userId,
             packId: packId,
+            checklist: checklist,
             deleted: trip.deleted,
             createdAt: trip.createdAt,
-            updatedAt: updatedAt
+            updatedAt: updatedAt,
+            status: trip.status,
+            startedAt: trip.startedAt,
+            completedAt: trip.completedAt,
+            plannedRoute: trip.plannedRoute,
+            log: trip.log,
+            excludedFromStats: trip.excludedFromStats
         )
     }
 

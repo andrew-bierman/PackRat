@@ -1,6 +1,7 @@
 import { createDb } from '@packrat/api/db';
 import { adminAuthPlugin, authPlugin } from '@packrat/api/middleware/auth';
 import { ImageDetectionService, PackService } from '@packrat/api/services';
+import { applyPackTemplate } from '@packrat/api/services/applyPackTemplateService';
 import { generateEmbedding } from '@packrat/api/services/embeddingService';
 import {
   computePackBreakdown,
@@ -33,8 +34,10 @@ import {
   UpdatePackRequestSchema,
 } from '@packrat/schemas/packs';
 import { ErrorResponseSchema } from '@packrat/schemas/shared';
+import { normalize, parseWeightUnit } from '@packrat/units';
 import { safeJsonStringify } from '@packrat/utils';
 import {
+  type AnyColumn,
   and,
   cosineDistance,
   eq,
@@ -98,9 +101,17 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
       const includePublic = Number(query.includePublic ?? 0) === 1;
       const db = createDb();
 
-      const where = includePublic
-        ? and(or(eq(packs.userId, user.userId), eq(packs.isPublic, true)), eq(packs.deleted, false))
-        : eq(packs.userId, user.userId);
+      // `deleted` must be filtered on BOTH branches. It used to hang off the
+      // includePublic branch only, so the default (owned-only) path returned
+      // soft-deleted packs. The Expo client masked it via Legend State's
+      // `fieldDeleted` tombstone handling; the Swift client has no equivalent
+      // and rendered them.
+      const where = and(
+        includePublic
+          ? or(eq(packs.userId, user.userId), eq(packs.isPublic, true))
+          : eq(packs.userId, user.userId),
+        eq(packs.deleted, false),
+      );
 
       // Drop packItems.embedding (1536-dim) from list payload. Mobile hot
       // path — 5 packs × 20 items × ~6KB embedding = 600KB minimum DB→Worker
@@ -132,9 +143,9 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
       const result = await db.tag('packs.list').query.packs.findMany({
         where,
         with: {
-          items: includePublic
-            ? { columns: PACK_ITEM_LIST_COLUMNS, where: eq(packItems.deleted, false) }
-            : { columns: PACK_ITEM_LIST_COLUMNS },
+          // Filter deleted items on both branches too — the owned-only path
+          // previously shipped tombstoned items and let clients count them.
+          items: { columns: PACK_ITEM_LIST_COLUMNS, where: eq(packItems.deleted, false) },
         },
       });
 
@@ -161,6 +172,12 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
 
         // Zod validates all fields at runtime; cast through the Standard Schema
         // inference gap so drizzle's insert accepts the values.
+        //
+        // `id` is client-supplied, so the same create can arrive twice: the offline
+        // outbox replays queued writes, and a retried request is indistinguishable
+        // from a new one. Without a conflict clause the second attempt raised a
+        // primary-key violation, surfaced as a 500, and the client marked the write
+        // permanently failed. Ignoring the conflict makes the replay a no-op instead.
         const [newPack] = await db
           .tag('packs.create')
           .insert(packs)
@@ -176,12 +193,27 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
             localCreatedAt: new Date(data.localCreatedAt as string),
             localUpdatedAt: new Date(data.localUpdatedAt as string),
           } as typeof packs.$inferInsert)
+          .onConflictDoNothing({ target: packs.id })
           .returning();
 
-        if (!newPack) return status(500, { error: 'Failed to create pack' });
+        if (newPack) {
+          const packWithItems: PackWithItems = { ...newPack, items: [] };
+          return PackWithWeightsSchema.parse(computePackWeights({ pack: packWithItems }));
+        }
 
-        const packWithItems: PackWithItems = { ...newPack, items: [] };
-        return PackWithWeightsSchema.parse(computePackWeights({ pack: packWithItems }));
+        // The id already exists. Return the caller's own pack so a replayed create is
+        // idempotent, scoping the read by `userId` so a guessed id can neither
+        // overwrite nor disclose someone else's pack.
+        const existingPack: PackWithItems | undefined = await db
+          .tag('packs.createConflict')
+          .query.packs.findFirst({
+            where: and(eq(packs.id, data.id), eq(packs.userId, user.userId)),
+            with: { items: true },
+          });
+
+        if (!existingPack) return status(409, { error: 'Pack id already exists' });
+
+        return PackWithWeightsSchema.parse(computePackWeights({ pack: existingPack }));
       } catch (error) {
         captureApiException({ error, operation: 'packs.create' });
         return status(500, { error: 'Failed to create pack' });
@@ -192,6 +224,7 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
       response: {
         200: 'packs.PackWithWeights',
         400: 'packs.ErrorResponse',
+        409: 'packs.ErrorResponse',
         500: 'packs.ErrorResponse',
       },
       isAuthenticated: true,
@@ -314,7 +347,7 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
       // Same pattern as the list endpoint above — the audit missed this
       // callsite; folded in here for parity.
       const pack = await db.tag('packs.getById').query.packs.findFirst({
-        where: eq(packs.id, params.packId),
+        where: and(eq(packs.id, params.packId), eq(packs.deleted, false)),
         with: {
           items: {
             columns: {
@@ -364,14 +397,18 @@ export const packsRoutes = new Elysia({ prefix: '/packs' })
       const db = createDb();
       try {
         // Minimal projection: only what computePackBreakdown reads.
-        // `name` is required — `byCategory[].items[]` formats each item as
-        // `<name> (<weight><unit> × <quantity>)`; without it, every entry
-        // renders as `undefined (1200g × 1)`.
+        // `name` is required — `byCategory[].items[]` carries a `label`
+        // formatted as `<name> (<weight><unit> × <quantity>)`; without it,
+        // every entry renders as `undefined (1200g × 1)`.
+        // `id` is required so each breakdown entry carries the pack-item id
+        // that `packrat_similar_pack_items` takes — a caller that spots the
+        // heaviest item here can then look up lighter replacements for it.
         const pack = await db.tag('packs.getById').query.packs.findFirst({
-          where: eq(packs.id, params.packId),
+          where: and(eq(packs.id, params.packId), eq(packs.deleted, false)),
           with: {
             items: {
               columns: {
+                id: true,
                 name: true,
                 weight: true,
                 weightUnit: true,
@@ -762,7 +799,7 @@ Limit to maximum 6 recommendations, prioritizing the most important gaps. Only s
       const db = createDb();
 
       const pack = await db.tag('packs.getById').query.packs.findFirst({
-        where: eq(packs.id, params.packId),
+        where: and(eq(packs.id, params.packId), eq(packs.deleted, false)),
         columns: { id: true, userId: true, isPublic: true },
       });
 
@@ -899,6 +936,43 @@ Limit to maximum 6 recommendations, prioritizing the most important gaps. Only s
       body: 'packs.AddPackItemBody',
       isAuthenticated: true,
       detail: { tags: ['Pack Items'], summary: 'Add item to pack', security: [{ bearerAuth: [] }] },
+    },
+  )
+
+  // Apply template: copy every active template item into the pack in one call
+  .post(
+    '/:packId/apply-template',
+    async ({ params, body, user }) => {
+      const result = await applyPackTemplate({
+        packId: params.packId,
+        templateId: body.templateId,
+        userId: user.userId,
+        env: getEnv(),
+      });
+      if (!result.ok) {
+        return status(404, {
+          error: result.reason === 'pack_not_found' ? 'Pack not found' : 'Template not found',
+        });
+      }
+      return status(201, {
+        items: result.items.map((item) =>
+          PackItemSchema.parse({
+            ...item,
+            createdAt: item.createdAt.toISOString(),
+            updatedAt: item.updatedAt.toISOString(),
+          }),
+        ),
+      });
+    },
+    {
+      params: z.object({ packId: z.string() }),
+      body: z.object({ templateId: z.string().min(1) }),
+      isAuthenticated: true,
+      detail: {
+        tags: ['Pack Items'],
+        summary: "Copy a pack template's items into a pack",
+        security: [{ bearerAuth: [] }],
+      },
     },
   )
 
@@ -1062,6 +1136,7 @@ Limit to maximum 6 recommendations, prioritizing the most important gaps. Only s
       const { itemId } = params;
       const limit = query.limit ? Number(query.limit) : 5;
       const threshold = query.threshold ? Number(query.threshold) : 0.1;
+      const lighterOnly = query.lighter_only === 'true';
 
       const validLimit = Math.min(Math.max(limit, 1), 20);
 
@@ -1086,12 +1161,54 @@ Limit to maximum 6 recommendations, prioritizing the most important gaps. Only s
       const maxCatalogDistance = 1 - threshold;
       const { embedding: _catalogEmbedding, ...catalogColumns } = getTableColumns(catalogItems);
 
+      // `lighter_only`: restrict results to items that actually weigh less
+      // than the source item.
+      //
+      // WHY: similarity alone cannot answer "find me a lighter alternative".
+      // A vector search for a 1200 g tent returns other 2-person tents — and
+      // most of them are heavier (3000 g rows sat at the top of the results
+      // during an OpenAI Apps review run). The caller then either presents a
+      // heavier item as an upgrade or, as happened, abandons the catalog and
+      // sources a figure from the open web.
+      //
+      // Both sides need unit normalisation before they can be compared: the
+      // catalog stores g/kg/oz/lb in `weight_unit`, and so does `pack_items`.
+      // Comparing the raw columns would rank 3 oz (85 g) as lighter than 10 g.
+      const gramsExpr = ({ weight, unit }: { weight: AnyColumn; unit: AnyColumn }): SQL<number> =>
+        sql<number>`(${weight} * CASE lower(${unit})
+          WHEN 'kg' THEN 1000
+          WHEN 'lb' THEN 453.59237
+          WHEN 'oz' THEN 28.349523125
+          ELSE 1
+        END)`;
+      const catalogGrams = gramsExpr({
+        weight: catalogItems.weight,
+        unit: catalogItems.weightUnit,
+      });
+      const sourceGrams =
+        normalize({
+          weight: sourceItem.weight,
+          unit: parseWeightUnit({ value: sourceItem.weightUnit }),
+        }) || 0;
+
+      // A source item with no usable weight cannot anchor a "lighter" filter,
+      // so the flag degrades to plain similarity rather than returning an
+      // empty list.
+      const lighterFilter =
+        lighterOnly && sourceGrams > 0
+          ? and(isNotNull(catalogItems.weight), sql`${catalogGrams} < ${sourceGrams}`)
+          : undefined;
+
       const similarCatalogItems = await db
         .tag('packs.getSimilarItems')
         .select({ ...catalogColumns, similarity: catalogSimilarity })
         .from(catalogItems)
         .where(
-          and(sql`${catalogDistance} < ${maxCatalogDistance}`, isNotNull(catalogItems.embedding)),
+          and(
+            sql`${catalogDistance} < ${maxCatalogDistance}`,
+            isNotNull(catalogItems.embedding),
+            lighterFilter,
+          ),
         )
         .orderBy(catalogDistance)
         .limit(validLimit);
@@ -1109,6 +1226,7 @@ Limit to maximum 6 recommendations, prioritizing the most important gaps. Only s
       query: z.object({
         limit: z.string().optional(),
         threshold: z.string().optional(),
+        lighter_only: z.string().optional(),
       }),
       isAuthenticated: true,
       detail: {

@@ -1,0 +1,87 @@
+#if os(iOS)
+import UIKit
+import UserNotifications
+
+/// Handles APNs registration and notification-tap routing for weather alert
+/// push. iOS-only — macOS has its own `PackRatMacAppDelegate` in
+/// PackRatApp.swift, unrelated to this (no push story on macOS yet).
+final class PackRatIOSAppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        UNUserNotificationCenter.current().delegate = self
+        // Relaunched in the background for a significant location change:
+        // restart monitoring so the update is delivered and queued.
+        Task { @MainActor in SafetyLocationTracker.shared.resumeIfNeeded() }
+        return true
+    }
+
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
+        PushRegistrationService.handleDeviceToken(deviceToken)
+    }
+
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ) {
+        // No Sentry call here deliberately: this is a Foundation-level
+        // registration failure (simulator without push entitlement, no
+        // network), not an application error worth paging on. The device
+        // simply won't receive push until the next successful registration.
+    }
+
+    /// Foreground presentation while the app is open — still show the
+    /// banner/sound so a watched alert isn't silently swallowed just because
+    /// the app happened to be frontmost.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        [.banner, .sound, .badge]
+    }
+
+    /// Notification tap — deep-links a trip reminder to its trip, or a weather
+    /// alert to the alerting location's detail, via
+    /// the same `DeepLink`/`AppState.apply` path a `packrat://` URL uses.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        let userInfo = response.notification.request.content.userInfo
+        // Feed tag, comment and reply notifications carry the post's id.
+        if let postId = (userInfo["postId"] as? Int) ?? (userInfo["postId"] as? String).flatMap(Int.init) {
+            NotificationCenter.default.post(
+                name: .feedPostNotificationTapped,
+                object: nil,
+                userInfo: ["postId": postId]
+            )
+            return
+        }
+        if let tripId = userInfo[TripReminderScheduler.tripIdKey] as? String {
+            NotificationCenter.default.post(
+                name: .tripReminderNotificationTapped,
+                object: nil,
+                userInfo: [TripReminderScheduler.tripIdKey: tripId]
+            )
+            return
+        }
+        guard let weatherLocationId = userInfo["weatherLocationId"] as? Int
+        else { return }
+        NotificationCenter.default.post(
+            name: .weatherAlertNotificationTapped,
+            object: nil,
+            userInfo: ["weatherLocationId": weatherLocationId]
+        )
+    }
+}
+
+extension Notification.Name {
+    static let weatherAlertNotificationTapped = Notification.Name("weatherAlertNotificationTapped")
+    static let feedPostNotificationTapped = Notification.Name("feedPostNotificationTapped")
+    static let tripReminderNotificationTapped = Notification.Name("tripReminderNotificationTapped")
+}
+#endif

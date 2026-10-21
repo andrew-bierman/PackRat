@@ -22,9 +22,17 @@ import {
 } from '@packrat/api/auth/local-e2e';
 import { AppContainer } from '@packrat/api/containers';
 import { createDb } from '@packrat/api/db';
+import { PostLiveRoom } from '@packrat/api/durable-objects/PostLiveRoom';
+import { SafetyCheckInTimer as RawSafetyCheckInTimer } from '@packrat/api/durable-objects/SafetyCheckInTimer';
+import { TripDestinationWatcher as RawTripDestinationWatcher } from '@packrat/api/durable-objects/TripDestinationWatcher';
+import { WatchedPlaceWatcher as RawWatchedPlaceWatcher } from '@packrat/api/durable-objects/WatchedPlaceWatcher';
 import { CatalogService } from '@packrat/api/services';
 import { processQueueBatch } from '@packrat/api/services/etl/queue';
+import { takePendingUpgrade } from '@packrat/api/services/feedLive';
 import { sweepInvalidItemLogs } from '@packrat/api/services/retention/invalidLogRetention';
+import { rearmOverdueTimers } from '@packrat/api/services/safetyCheckIn/overdueTimer';
+import { rearmTripDestinationTimers } from '@packrat/api/services/weatherMonitoring/tripDestinationTimer';
+import { rearmWatchedPlaceTimers } from '@packrat/api/services/weatherMonitoring/watchedPlaceTimer';
 import type { Env } from '@packrat/api/utils/env-validation';
 import { getEnv, setWorkerEnv } from '@packrat/api/utils/env-validation';
 import {
@@ -39,7 +47,11 @@ import { renderConsentPage, renderSignInPage } from '@packrat/consent-ui';
 import * as dbSchema from '@packrat/db/schema';
 import { isString, toRecord, toString as toStr } from '@packrat/guards';
 import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
-import { instrumentWorkflowWithSentry, withSentry } from '@sentry/cloudflare';
+import {
+  instrumentDurableObjectWithSentry,
+  instrumentWorkflowWithSentry,
+  withSentry,
+} from '@sentry/cloudflare';
 import { eq } from 'drizzle-orm';
 import type { CatalogETLMessage } from './services/etl/types';
 
@@ -72,11 +84,26 @@ function sentryOptions(env: Env) {
 // Runtime instance: same routes as `App` plus the branded OAuth consent page.
 export const app = appBase.use(signInRoute).use(consentRoute).compile();
 
-export { AppContainer };
+export { AppContainer, PostLiveRoom };
 
 export const CatalogEtlWorkflow = instrumentWorkflowWithSentry(
   sentryOptions,
   RawCatalogEtlWorkflow,
+);
+
+export const SafetyCheckInTimer = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawSafetyCheckInTimer,
+);
+
+export const TripDestinationWatcher = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawTripDestinationWatcher,
+);
+
+export const WatchedPlaceWatcher = instrumentDurableObjectWithSentry(
+  sentryOptions,
+  RawWatchedPlaceWatcher,
 );
 
 type CfFetchFn = (
@@ -489,7 +516,8 @@ const workerHandler = {
         return response;
       }
 
-      const response = await (app.fetch as unknown as CfFetchFn)(request, e, ctx); // safe-cast: Elysia's fetch has Cloudflare-specific env/ctx params not in the standard type
+      const elysiaResponse = await (app.fetch as unknown as CfFetchFn)(request, e, ctx); // safe-cast: Elysia's fetch has Cloudflare-specific env/ctx params not in the standard type
+      const response = takePendingUpgrade(request) ?? elysiaResponse;
       flushFetchMetrics({ ctx, response });
       return response;
     });
@@ -557,6 +585,30 @@ const workerHandler = {
                 `remaining expired rows will be swept on the next run`,
             );
           }
+          // Postgres is already awake for the retention sweep, so the daily
+          // backstops for the safety check-in, trip destination and watched-place
+          // timers cost no extra wake-up.
+          const rearmed = await record({
+            operation: 'safetyCheckIn.rearmOverdueTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmOverdueTimers({ env }),
+          });
+          console.log(`[safetyCheckIn] re-armed overdue timers: armed=${rearmed.armed}`);
+          const rearmedTrips = await record({
+            operation: 'tripReminders.rearmDestinationTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmTripDestinationTimers({ env }),
+          });
+          console.log(`[tripReminders] re-armed destination timers: armed=${rearmedTrips.armed}`);
+          const rearmedPlaces = await record({
+            operation: 'weatherMonitoring.rearmPlaceTimers',
+            tags: { trigger: 'cron' },
+            extra: { cron: controller.cron },
+            fn: async () => rearmWatchedPlaceTimers({ env }),
+          });
+          console.log(`[weatherMonitoring] re-armed place timers: armed=${rearmedPlaces.armed}`);
           return;
         }
         throw new Error(`Unknown cron: ${controller.cron}`);

@@ -8,7 +8,16 @@ final class PersistenceController {
     let container: ModelContainer
 
     private init() {
-        let schema = Schema([CachedPack.self, CachedTrip.self, ShoppingItem.self, PendingMutation.self])
+        let schema = Schema([
+            CachedPack.self,
+            CachedTrip.self,
+            ShoppingItem.self,
+            PendingMutation.self,
+            CachedWeatherAlertState.self,
+            SavedIdentification.self,
+            CachedTripGoal.self,
+            CachedTripStatsEntry.self,
+        ])
         let config = ModelConfiguration("PackRat", schema: schema)
         do {
             try FileManager.default.createDirectory(

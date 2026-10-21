@@ -203,10 +203,19 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
+          name="wildlife"
+          options={{
+            // The nested stack owns the headers for the list, identify and detail routes.
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="trail-conditions"
           options={{
             presentation: 'card',
             animation: 'slide_from_bottom',
+            // The nested stack owns the headers for the list, detail and submit routes.
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -268,6 +277,19 @@ export default function AppLayout() {
           options={({ route }) =>
             getPackTemplateDetailOptions((route.params as { id: string })?.id)
           }
+        />
+        <Stack.Screen name="pack-templates/official" options={{ title: 'Official' }} />
+        <Stack.Screen
+          name="pack-templates/[id]/apply"
+          options={{
+            headerTitle: 'Apply to Pack',
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
+        <Stack.Screen
+          name="pack-templates/[id]/new-pack"
+          options={{ headerTitle: 'New Pack', presentation: 'modal' }}
         />
         <Stack.Screen
           name="pack-templates/[id]/edit"

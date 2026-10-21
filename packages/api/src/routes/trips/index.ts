@@ -1,5 +1,9 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import {
+  disarmTripDestinationTimer,
+  syncTripDestinationTimer,
+} from '@packrat/api/services/weatherMonitoring/tripDestinationTimer';
 import { trips } from '@packrat/db/schema';
 import { CreateTripBodySchema, TripSchema, UpdateTripBodySchema } from '@packrat/schemas/trips';
 import { and, eq } from 'drizzle-orm';
@@ -64,6 +68,9 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
             endDate: data.endDate ? new Date(data.endDate) : null,
             notes: data.notes ?? null,
             packId: data.packId ?? null,
+            checklist: data.checklist ?? null,
+            log: data.log ?? null,
+            excludedFromStats: data.excludedFromStats ?? false,
             deleted: false,
             localCreatedAt: new Date(data.localCreatedAt),
             localUpdatedAt: new Date(data.localUpdatedAt),
@@ -71,6 +78,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
           .returning();
 
         if (!newTrip) throw new Error('Failed to create trip');
+        await syncTripDestinationTimer({ trip: newTrip });
 
         return TripSchema.parse(newTrip);
       } catch (error) {
@@ -134,6 +142,15 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
         if ('endDate' in data) updateData.endDate = data.endDate ? new Date(data.endDate) : null;
         if ('notes' in data) updateData.notes = data.notes ?? null;
         if ('packId' in data) updateData.packId = data.packId ?? null;
+        if ('checklist' in data) updateData.checklist = data.checklist ?? null;
+        if (data.status) updateData.status = data.status;
+        if ('startedAt' in data)
+          updateData.startedAt = data.startedAt ? new Date(data.startedAt) : null;
+        if ('completedAt' in data)
+          updateData.completedAt = data.completedAt ? new Date(data.completedAt) : null;
+        if ('plannedRoute' in data) updateData.plannedRoute = data.plannedRoute ?? null;
+        if ('log' in data) updateData.log = data.log ?? null;
+        if ('excludedFromStats' in data) updateData.excludedFromStats = data.excludedFromStats;
         if ('localUpdatedAt' in data)
           updateData.localUpdatedAt = data.localUpdatedAt ? new Date(data.localUpdatedAt) : null;
         if ('deleted' in data) updateData.deleted = data.deleted;
@@ -151,6 +168,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
         });
 
         if (!updatedTrip) throw new NotFoundError('Trip not found');
+        await syncTripDestinationTimer({ trip: updatedTrip });
         return TripSchema.parse(updatedTrip);
       } catch (error) {
         console.error('Error updating trip:', error);
@@ -185,6 +203,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
         .returning();
 
       if (!deleted) return status(404, { error: 'Trip not found' });
+      await disarmTripDestinationTimer({ tripId });
       return { success: true };
     },
     {
