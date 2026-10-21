@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle } from '@packrat/ui/src/card';
+import { CardContent, CardTitle } from '@packrat/ui/src/card';
 import { Text } from '@packrat/ui/src/text';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
@@ -20,7 +20,14 @@ export const GuideCard: React.FC<GuideCardProps> = ({ guide, onPress }) => {
       className="pt-4"
       testID={testIds.guides.card(guide.id)}
     >
-      <Card className="mb-3">
+      {/*
+        A plain RN surface, not `Card`. On Android `Card` is a Compose card whose RN children are
+        hosted through `RNHostView matchContents`, which reports its size asynchronously after
+        mount. In a FlatList every row therefore mounts at the wrong height and resizes a frame
+        later, so cards render blank or clipped and the rows below jump while the list loads and
+        scrolls (#2767).
+      */}
+      <View className="mb-3 rounded-xl bg-card" style={{ elevation: 2 }}>
         <CardContent className="p-4">
           <View className="flex-row items-start justify-between">
             <View className="flex-1 pr-3">
@@ -82,7 +89,7 @@ export const GuideCard: React.FC<GuideCardProps> = ({ guide, onPress }) => {
             </View>
           </View>
         </CardContent>
-      </Card>
+      </View>
     </TouchableOpacity>
   );
 };
