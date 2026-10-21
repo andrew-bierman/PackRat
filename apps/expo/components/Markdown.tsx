@@ -1,7 +1,11 @@
 import RNMarkdown from '@ronradtke/react-native-markdown-display';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
+import type { ComponentProps } from 'react';
 
-export function Markdown({ children }: { children: string }) {
+type MarkdownStyles = NonNullable<ComponentProps<typeof RNMarkdown>['style']>;
+
+/** `styles` entries are merged over the defaults per rule, so callers override only what differs. */
+export function Markdown({ children, styles }: { children: string; styles?: MarkdownStyles }) {
   const { colors } = useColorScheme();
 
   const markdownStyles = {
@@ -49,5 +53,10 @@ export function Markdown({ children }: { children: string }) {
     },
   };
 
-  return <RNMarkdown style={markdownStyles}>{children}</RNMarkdown>;
+  const merged: MarkdownStyles = { ...markdownStyles };
+  for (const [rule, style] of Object.entries(styles ?? {})) {
+    merged[rule] = { ...merged[rule], ...style };
+  }
+
+  return <RNMarkdown style={merged}>{children}</RNMarkdown>;
 }
