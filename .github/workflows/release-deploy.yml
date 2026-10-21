@@ -63,10 +63,6 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: EAS Build + Submit · iOS
-        working-directory: apps/expo
-        run: eas build --platform ios --profile production --non-interactive --auto-submit
-
       - name: EAS Build + Submit · Android
         working-directory: apps/expo
         run: eas build --platform android --profile production --non-interactive --auto-submit
