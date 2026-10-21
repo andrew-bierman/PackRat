@@ -343,6 +343,16 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
+  # ── Apple build — immediate path (API unchanged, live run) ──────────────
+  apple:
+    name: Apple Build + Submit
+    needs: [cut]
+    if: needs.cut.outputs.api_changed == 'false' && !inputs.dry_run
+    uses: ./.github/workflows/release-apple.yml
+    with:
+      ref: ${{ needs.cut.outputs.branch }}
+    secrets: inherit
+
   # ── EAS build — immediate path (API unchanged, live run) ────────────────
   eas-build:
     name: EAS Production Build + Submit
