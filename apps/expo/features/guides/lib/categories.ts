@@ -12,7 +12,7 @@ function isKnownCategory(slug: string): slug is KnownCategory {
  * ("food-nutrition" → "Food & Nutrition"); guides also carry free-form tags ("trails", "family"),
  * which are title-cased from the slug.
  */
-export function guideCategoryLabel(slug: string, t: TFunction): string {
+export function guideCategoryLabel({ slug, t }: { slug: string; t: TFunction }): string {
   if (isKnownCategory(slug)) return t(`guides.categories.${slug}`);
   return slug
     .split('-')

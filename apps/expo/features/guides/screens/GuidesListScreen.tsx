@@ -125,7 +125,9 @@ export const GuidesListScreen = () => {
       return (
         <GuidesMessage
           icon="empty"
-          title={t('guides.emptyCategoryTitle', { category: guideCategoryLabel(category, t) })}
+          title={t('guides.emptyCategoryTitle', {
+            category: guideCategoryLabel({ slug: category, t }),
+          })}
           action={{ label: t('guides.showAllGuides'), onPress: () => setCategory(undefined) }}
         />
       );

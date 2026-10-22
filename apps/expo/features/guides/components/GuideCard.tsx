@@ -27,7 +27,7 @@ export const GuideCard = ({ guide, onPress, testID, compact = false }: GuideCard
   const { t } = useTranslation();
   const byline = useGuideByline(guide);
   const topic = guide.categories?.[0] ?? guide.category;
-  const overline = [topic ? guideCategoryLabel(topic, t) : null, guide.difficulty]
+  const overline = [topic ? guideCategoryLabel({ slug: topic, t }) : null, guide.difficulty]
     .filter(Boolean)
     .join(' · ');
 

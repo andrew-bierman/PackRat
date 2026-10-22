@@ -53,7 +53,7 @@ export function GuideCategoryChips({ categories, selected, onSelect }: GuideCate
             modifiers={[testIDModifier(testIds.guides.categoryChip(category))]}
           >
             <FilterChip.Label>
-              <JCText>{guideCategoryLabel(category, t)}</JCText>
+              <JCText>{guideCategoryLabel({ slug: category, t })}</JCText>
             </FilterChip.Label>
           </FilterChip>
         ))}
