@@ -1,8 +1,26 @@
-import RNMarkdown from '@ronradtke/react-native-markdown-display';
+import RNMarkdown, { openUrl, type RenderRules } from '@ronradtke/react-native-markdown-display';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import type { ComponentProps } from 'react';
+import { StyleSheet, Text } from 'react-native';
 
 type MarkdownStyles = NonNullable<ComponentProps<typeof RNMarkdown>['style']>;
+
+// The library renders a link as a `Pressable` (a View) inside the paragraph's Text, so an inline
+// link becomes a box that cannot wrap with the sentence: it floats beside the text and the next
+// line overlaps it. A pressable nested Text stays in the text flow.
+const RULES: RenderRules = {
+  // biome-ignore lint/complexity/useMaxParams: the library fixes the render-rule signature.
+  link: (node, children, _parent, styles) => (
+    <Text
+      key={node.key}
+      accessibilityRole="link"
+      style={styles.link}
+      onPress={() => openUrl(node.attributes.href)}
+    >
+      {children}
+    </Text>
+  ),
+};
 
 /** `styles` entries are merged over the defaults per rule, so callers override only what differs. */
 export function Markdown({ children, styles }: { children: string; styles?: MarkdownStyles }) {
@@ -55,8 +73,12 @@ export function Markdown({ children, styles }: { children: string; styles?: Mark
 
   const merged: MarkdownStyles = { ...markdownStyles };
   for (const [rule, style] of Object.entries(styles ?? {})) {
-    merged[rule] = { ...merged[rule], ...style };
+    merged[rule] = StyleSheet.flatten([merged[rule], style]);
   }
 
-  return <RNMarkdown style={merged}>{children}</RNMarkdown>;
+  return (
+    <RNMarkdown style={merged} rules={RULES}>
+      {children}
+    </RNMarkdown>
+  );
 }

@@ -23,10 +23,22 @@ const CONTENT_STYLE = Object.freeze({
   alignSelf: 'center',
 } as const);
 
+// M3 secondary container / on-secondary container, from the Android palette in global.css.
+// The `bg-secondary` utility resolves to the iOS-derived palette, which in dark mode is a pale
+// cyan behind white text.
+const TAG_COLORS = Object.freeze({
+  light: { background: 'rgb(176, 201, 255)', text: 'rgb(20, 55, 108)' },
+  dark: { background: 'rgb(28, 60, 114)', text: 'rgb(189, 209, 255)' },
+} as const);
+
 function Tag({ label }: { label: string }) {
+  const { isDarkColorScheme } = useColorScheme();
+  const tagColors = TAG_COLORS[isDarkColorScheme ? 'dark' : 'light'];
   return (
-    <View className="rounded-lg bg-secondary px-3 py-1.5">
-      <Text className="text-xs font-medium leading-4 text-secondary-foreground">{label}</Text>
+    <View className="rounded-lg px-3 py-1.5" style={{ backgroundColor: tagColors.background }}>
+      <Text className="text-xs font-medium leading-4" textColor={tagColors.text}>
+        {label}
+      </Text>
     </View>
   );
 }
