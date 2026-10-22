@@ -122,6 +122,9 @@ export const testIds = Object.freeze({
   // ── Guides ────────────────────────────────────────────────────────────────
   guides: Object.freeze({
     card: (id: string | number) => `guides:card-${id}`,
+    categoryChip: (category: string) => `guides:category-chip-${category}`,
+    relatedCard: (id: string | number) => `guides:related-card-${id}`,
+    messageAction: 'guides:message-action',
   }),
 
   // ── Pack templates ────────────────────────────────────────────────────────
