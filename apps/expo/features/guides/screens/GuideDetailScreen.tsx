@@ -103,9 +103,12 @@ export const GuideDetailScreen = () => {
     );
   }
 
+  // Some guides tag their difficulty as a category too ("advanced"), so de-duplicate by label.
   const tags = [
-    ...(guide.categories ?? []).map((category) => guideCategoryLabel(category, t)),
-    ...(guide.difficulty ? [guide.difficulty] : []),
+    ...new Set([
+      ...(guide.categories ?? []).map((category) => guideCategoryLabel(category, t)),
+      ...(guide.difficulty ? [guide.difficulty] : []),
+    ]),
   ];
   const updated = t('guides.updatedOn', {
     date: new Date(guide.updatedAt).toLocaleDateString(undefined, {
