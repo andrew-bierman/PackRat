@@ -39,6 +39,9 @@
  *                            Profile *name* for the iOS app. Set it to sign the
  *                            export manually — automatic signing fails with
  *                            `No Accounts` when Xcode has no Apple ID.
+ *   IOS_SENTRY_DSN           DSN of the Swift app's Sentry project. Without it the
+ *                            build ships with Sentry disabled, so it reports no
+ *                            crashes or errors.
  *   EXPORT_WATCH_PROVISIONING_PROFILE
  *                            Profile *name* for the embedded watch app. Required
  *                            alongside the above once the watch app ships, or the
@@ -215,6 +218,12 @@ function verifyBinary(input: {
   console.log(`✓ Verified ${label} metadata (${result.iosApp}, ${watch})`);
 }
 
+if (!nodeEnv.IOS_SENTRY_DSN) {
+  console.warn(
+    '⚠ IOS_SENTRY_DSN is not set: this build will ship with Sentry disabled and report no crashes or errors.',
+  );
+}
+
 // 1. Archive for a real device (TestFlight cannot accept a simulator build).
 run({
   cmd: 'xcodebuild',
@@ -233,7 +242,7 @@ run({
     // Lets Xcode register the App IDs and generate provisioning profiles for
     // the (new) bundle ids on the fly, using the signed-in account.
     '-allowProvisioningUpdates',
-    ...xcodeArchiveOverrides({ config: uploadConfig, teamId }),
+    ...xcodeArchiveOverrides({ config: uploadConfig, teamId, sentryDsn: nodeEnv.IOS_SENTRY_DSN }),
   ],
 });
 verifyBinary({

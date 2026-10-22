@@ -103,8 +103,9 @@ export function parseTestFlightUploadConfig(input: {
 export function xcodeArchiveOverrides(input: {
   config: TestFlightUploadConfig;
   teamId: string;
+  sentryDsn?: string;
 }): string[] {
-  const { config, teamId } = input;
+  const { config, teamId, sentryDsn } = input;
   return [
     `MARKETING_VERSION=${config.marketingVersion}`,
     `CURRENT_PROJECT_VERSION=${config.buildNumber}`,
@@ -113,6 +114,9 @@ export function xcodeArchiveOverrides(input: {
     `PACKRAT_WATCH_BUNDLE_IDENTIFIER=${config.watchBundleId}`,
     `PACKRAT_COMPANION_BUNDLE_IDENTIFIER=${config.companionBundleId}`,
     `PACKRAT_DISPLAY_NAME=${config.displayName}`,
+    // The Release xcconfig leaves SENTRY_DSN empty, which disables Sentry, so
+    // an archive without this override ships with no crash or error reporting.
+    ...(sentryDsn ? [`SENTRY_DSN=${sentryDsn}`] : []),
   ];
 }
 
