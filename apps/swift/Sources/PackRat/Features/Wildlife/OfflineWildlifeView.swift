@@ -76,7 +76,7 @@ struct OfflineWildlifeView: View {
         case .noConfidentMatch:
             UnavailableStateView(
                 title: "No confident match",
-                subtitle: "The photo may need another angle or a closer shot. Or this species may not be covered yet.",
+                subtitle: "The photo may need another angle or a closer shot. Or this species may not be supported yet.",
                 systemImage: "questionmark.circle"
             ) {
                 captureButtons
