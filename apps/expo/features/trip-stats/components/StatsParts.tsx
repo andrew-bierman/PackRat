@@ -159,11 +159,33 @@ export function StatsRow({
 /** A label and its value on one line, for comparison and highlight lists. */
 export function ValueRow({ label, value }: { label: string; value: string }) {
   return (
-    <View className="min-h-10 flex-row items-center justify-between gap-4">
+    <View className="min-h-10 flex-row items-center justify-between gap-4 py-1">
       <Text variant="body" className="flex-1 text-muted-foreground">
         {label}
       </Text>
-      <Text variant="body" className="font-medium" style={{ fontVariant: ['tabular-nums'] }}>
+      {/* Shrinks and wraps rather than squeezing the label to nothing. */}
+      <Text
+        variant="body"
+        className="max-w-[60%] shrink text-right font-medium"
+        style={{ fontVariant: ['tabular-nums'] }}
+      >
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+/**
+ * A Material 3 two-line list item with the label as supporting text above its value, for values
+ * too long to share a line with their label, such as a trip name and its length.
+ */
+export function StackedValueRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View className="min-h-14 justify-center gap-0.5 py-2">
+      <Text variant="subhead" className="text-muted-foreground">
+        {label}
+      </Text>
+      <Text variant="body" className="font-medium">
         {value}
       </Text>
     </View>

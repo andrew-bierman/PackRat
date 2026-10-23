@@ -1,6 +1,7 @@
 import { FilterChip, FlowRow, Host, Text as JCText } from '@expo/ui/jetpack-compose';
 import { testID as testIDModifier } from '@expo/ui/jetpack-compose/modifiers';
 import type { TripActivity, TripLog, TripSummit } from '@packrat/schemas/trips';
+import { Alert, type AlertMethods } from '@packrat/ui/src/alert';
 import { Button } from '@packrat/ui/src/button';
 import { Text } from '@packrat/ui/src/text';
 import * as Sentry from '@sentry/react-native';
@@ -13,8 +14,8 @@ import { testIds } from 'expo-app/lib/testIds';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FullScreenDialogHeader, OutlinedField, SectionLabel } from '../components/DialogParts';
 import { StatsRow } from '../components/StatsParts';
@@ -60,6 +61,14 @@ export function TripLogEditorScreen() {
   const trip = useTripDetailsFromStore(id);
   const updateTrip = useUpdateTrip();
   const log = trip?.log;
+  // Material 3 AlertDialog (Compose), not the legacy platform dialog `Alert.alert` draws.
+  const alertRef = useRef<AlertMethods>(null);
+  const showImportError = (message?: string) =>
+    alertRef.current?.alert({
+      title: t('tripStats.log.importFailed'),
+      message,
+      buttons: [{ text: t('tripStats.dialog.close'), style: 'default' }],
+    });
 
   const [activities, setActivities] = useState<TripActivity[]>(log?.activities ?? []);
   const [distanceText, setDistanceText] = useState(
@@ -113,8 +122,7 @@ export function TripLogEditorScreen() {
       }
     } catch (error) {
       if (error instanceof GpxParseError) {
-        Alert.alert(
-          t('tripStats.log.importFailed'),
+        showImportError(
           error.reason === 'unreadable'
             ? t('tripStats.log.gpxUnreadable')
             : t('tripStats.log.gpxNoPoints'),
@@ -125,7 +133,7 @@ export function TripLogEditorScreen() {
         tags: { feature: 'tripStats', action: 'importGpx' },
         extra: { tripId: trip.id },
       });
-      Alert.alert(t('tripStats.log.importFailed'));
+      showImportError();
     }
   };
 
@@ -295,6 +303,7 @@ export function TripLogEditorScreen() {
           ) : null}
         </ScrollView>
       </KeyboardAvoidingView>
+      <Alert title="" buttons={[]} ref={alertRef} />
     </SafeAreaView>
   );
 }

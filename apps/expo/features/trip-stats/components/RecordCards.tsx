@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import { formatMonthDay, formatMonthName, formatNumber } from '../lib/useStatsFormat';
 import type { Totals, TripStatsRecord } from '../utils/tripStats';
 import { formatDistance, formatElevation, type TripDistanceUnit } from '../utils/units';
-import { SegmentedButtons, StatsCard, StatTile, ValueRow } from './StatsParts';
+import { SegmentedButtons, StackedValueRow, StatsCard, StatTile, ValueRow } from './StatsParts';
 
 export function TotalsCard({
   title,
@@ -255,7 +255,7 @@ export function HighlightsCard({
     <StatsCard title={t('tripStats.highlights.title')}>
       <View>
         {rows.map((row) => (
-          <ValueRow key={row.key} label={row.label} value={row.value} />
+          <StackedValueRow key={row.key} label={row.label} value={row.value} />
         ))}
       </View>
     </StatsCard>

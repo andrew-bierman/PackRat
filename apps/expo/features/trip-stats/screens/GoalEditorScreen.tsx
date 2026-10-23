@@ -1,5 +1,6 @@
 import { use$ } from '@legendapp/state/react';
 import type { TripGoal, TripGoalMetric } from '@packrat/schemas/tripStats';
+import { Alert, type AlertMethods } from '@packrat/ui/src/alert';
 import { Button } from '@packrat/ui/src/button';
 import { Text } from '@packrat/ui/src/text';
 import { addMonths, addYears, startOfDay } from 'date-fns';
@@ -9,8 +10,8 @@ import { obs } from 'expo-app/lib/store';
 import { testIds } from 'expo-app/lib/testIds';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { nanoid } from 'nanoid';
-import { useMemo, useState } from 'react';
-import { Alert, KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import { useMemo, useRef, useState } from 'react';
+import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { DateField, FullScreenDialogHeader, OutlinedField } from '../components/DialogParts';
 import { MenuField } from '../components/MenuField';
@@ -73,6 +74,7 @@ export function GoalEditorScreen() {
     return String(Math.round(shown * 10) / 10);
   });
   const year = existing?.year ?? today.getFullYear();
+  const alertRef = useRef<AlertMethods>(null);
 
   /** In the metric's base unit, or null while the field can't be saved. */
   const target = useMemo(() => {
@@ -141,20 +143,25 @@ export function GoalEditorScreen() {
 
   const confirmDelete = () => {
     if (!existing) return;
-    Alert.alert(t('tripStats.goals.deleteTitle'), t('tripStats.goals.deleteBody'), [
-      { text: t('tripStats.dialog.cancel'), style: 'cancel' },
-      {
-        text: t('tripStats.dialog.delete'),
-        style: 'destructive',
-        onPress: () => {
-          obs({ store: tripGoalsStore, id: existing.id }).assign({
-            deleted: true,
-            localUpdatedAt: new Date().toISOString(),
-          });
-          router.back();
+    // Material 3 AlertDialog (Compose), not the legacy platform dialog `Alert.alert` draws.
+    alertRef.current?.alert({
+      title: t('tripStats.goals.deleteTitle'),
+      message: t('tripStats.goals.deleteBody'),
+      buttons: [
+        { text: t('tripStats.dialog.cancel'), style: 'cancel' },
+        {
+          text: t('tripStats.dialog.delete'),
+          style: 'destructive',
+          onPress: () => {
+            obs({ store: tripGoalsStore, id: existing.id }).assign({
+              deleted: true,
+              localUpdatedAt: new Date().toISOString(),
+            });
+            router.back();
+          },
         },
-      },
-    ]);
+      ],
+    });
   };
 
   return (
@@ -244,6 +251,7 @@ export function GoalEditorScreen() {
           ) : null}
         </ScrollView>
       </KeyboardAvoidingView>
+      <Alert title="" buttons={[]} ref={alertRef} />
     </SafeAreaView>
   );
 }

@@ -1,4 +1,5 @@
 import { ListItem } from '@packrat/ui/src/list';
+import { Text } from '@packrat/ui/src/text';
 import { Icon } from 'expo-app/components/Icon';
 import { useFeatureFlag } from 'expo-app/hooks/useFeatureFlags';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
@@ -9,8 +10,8 @@ import { View } from 'react-native';
 import { useTripStatsRecord } from '../hooks/useTripStats';
 
 /**
- * The dashboard's Trip Stats row, in the same list-item shape as its neighbours: this year's
- * trips and nights, or all-time totals before the year's first trip. Hidden until a trip has
+ * The dashboard's Trip Stats row, a single line like its neighbours with the count on the right:
+ * this year's trips, or all-time trips before the year's first trip. Hidden until a trip has
  * finished, since there is nothing to show before then.
  */
 export function TripStatsTile() {
@@ -25,11 +26,7 @@ export function TripStatsTile() {
   const totals = useThisYear ? record.thisYear : record.totals;
   const summary = t(useThisYear ? 'tripStats.tileThisYear' : 'tripStats.tileAllTime', {
     trips: t('tripStats.countTrips', { count: totals.trips }),
-    nights: t('tripStats.countNights', { count: totals.nights }),
   });
-  const more = record.lastYearToDate ? record.thisYear.trips - record.lastYearToDate.trips : 0;
-  const subTitle =
-    more > 0 ? `${summary}\n${t('tripStats.tileMoreThanLastYear', { count: more })}` : summary;
 
   return (
     <ListItem
@@ -44,11 +41,12 @@ export function TripStatsTile() {
         </View>
       }
       rightView={
-        <View className="flex-1 flex-row items-center justify-center px-4">
+        <View className="flex-1 flex-row items-center justify-center gap-2 px-4">
+          <Text className="mr-2 text-muted-foreground">{summary}</Text>
           <Icon name="chevron-right" size={17} color={colors.grey} />
         </View>
       }
-      item={{ title: t('tripStats.title'), subTitle }}
+      item={{ title: t('tripStats.title') }}
       onPress={() => router.push('/trip-stats')}
       target="Cell"
       index={0}

@@ -88,17 +88,35 @@ export function OutlinedField({
   const { colors } = useColorScheme();
   const [focused, setFocused] = useState(false);
   return (
-    <View className="px-4 py-2">
-      <View
-        className="rounded-md border px-3"
-        style={{
-          borderColor: focused ? colors.primary : colors.grey3,
-          borderWidth: focused ? 2 : 1,
-        }}
-      >
+    <View className="px-4 py-1">
+      {/* The label sits on the border, M3's outlined style, but inside this View's own top
+          padding: a label drawn above its parent's bounds is clipped on Android. */}
+      <View className="pt-2.5">
+        <View
+          className="rounded-md border px-3"
+          style={{
+            borderColor: focused ? colors.primary : colors.grey3,
+            borderWidth: focused ? 2 : 1,
+          }}
+        >
+          <TextInput
+            {...props}
+            testID={testID}
+            onFocus={(event) => {
+              setFocused(true);
+              props.onFocus?.(event);
+            }}
+            onBlur={(event) => {
+              setFocused(false);
+              props.onBlur?.(event);
+            }}
+            placeholderTextColor={colors.grey}
+            className="min-h-14 text-base text-foreground"
+          />
+        </View>
         <Text
           variant="caption1"
-          className="absolute -top-2.5 left-2 px-1"
+          className="absolute top-0 left-2 px-1"
           style={{
             backgroundColor: colors.background,
             color: focused ? colors.primary : colors.grey,
@@ -106,20 +124,6 @@ export function OutlinedField({
         >
           {label}
         </Text>
-        <TextInput
-          {...props}
-          testID={testID}
-          onFocus={(event) => {
-            setFocused(true);
-            props.onFocus?.(event);
-          }}
-          onBlur={(event) => {
-            setFocused(false);
-            props.onBlur?.(event);
-          }}
-          placeholderTextColor={colors.grey}
-          className="min-h-14 text-base text-foreground"
-        />
       </View>
     </View>
   );
