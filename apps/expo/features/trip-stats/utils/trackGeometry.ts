@@ -30,7 +30,13 @@ const ELEVATION_PATTERN = /<(?:[\w-]+:)?ele>\s*([^<]*?)\s*<\/(?:[\w-]+:)?ele>/;
 const LATITUDE_PATTERN = /\blat\s*=\s*["']([^"']+)["']/;
 const LONGITUDE_PATTERN = /\blon\s*=\s*["']([^"']+)["']/;
 
-function attribute(attributes: string, pattern: RegExp): number | null {
+function attribute({
+  attributes,
+  pattern,
+}: {
+  attributes: string;
+  pattern: RegExp;
+}): number | null {
   const match = pattern.exec(attributes);
   if (!match?.[1]) return null;
   const value = Number(match[1]);
@@ -47,8 +53,8 @@ export function parseGpx(xml: string): TrackPoint[] {
   const routePoints: TrackPoint[] = [];
   for (const match of xml.matchAll(POINT_PATTERN)) {
     const [, element, attributes = '', , body = ''] = match;
-    const latitude = attribute(attributes, LATITUDE_PATTERN);
-    const longitude = attribute(attributes, LONGITUDE_PATTERN);
+    const latitude = attribute({ attributes, pattern: LATITUDE_PATTERN });
+    const longitude = attribute({ attributes, pattern: LONGITUDE_PATTERN });
     if (latitude == null || longitude == null) continue;
     if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) continue;
     const elevationText = ELEVATION_PATTERN.exec(body)?.[1];
@@ -69,12 +75,12 @@ export function summarizeTrack(points: readonly TrackPoint[]): TrackSummary | nu
   if (points.length < 2) return null;
   return {
     distanceMeters: trackDistance(points),
-    elevationGainMeters: elevationGain(points),
-    route: encodePolyline(simplify(points)),
+    elevationGainMeters: elevationGain({ points }),
+    route: encodePolyline(simplify({ points })),
   };
 }
 
-function haversine(a: TrackPoint, b: TrackPoint): number {
+function haversine({ from: a, to: b }: { from: TrackPoint; to: TrackPoint }): number {
   const radius = 6_371_008.8;
   const lat1 = (a.latitude * Math.PI) / 180;
   const lat2 = (b.latitude * Math.PI) / 180;
@@ -90,7 +96,7 @@ export function trackDistance(points: readonly TrackPoint[]): number {
   for (let index = 1; index < points.length; index += 1) {
     const previous = points[index - 1];
     const current = points[index];
-    if (previous && current) total += haversine(previous, current);
+    if (previous && current) total += haversine({ from: previous, to: current });
   }
   return total;
 }
@@ -100,7 +106,13 @@ export function trackDistance(points: readonly TrackPoint[]): number {
  * figure on a flat walk. A climb only counts once it rises `threshold` above the last low point,
  * the hysteresis most fitness apps apply.
  */
-export function elevationGain(points: readonly TrackPoint[], threshold = 3): number | null {
+export function elevationGain({
+  points,
+  threshold = 3,
+}: {
+  points: readonly TrackPoint[];
+  threshold?: number;
+}): number | null {
   const elevations = points.flatMap((point) => point.elevation ?? []);
   const [first, ...rest] = elevations;
   if (first === undefined || rest.length === 0) return null;
@@ -118,21 +130,32 @@ export function elevationGain(points: readonly TrackPoint[], threshold = 3): num
 }
 
 /** Douglas–Peucker, tightened until the line fits in `maxPoints`. */
-export function simplify(
-  points: readonly TrackPoint[],
-  { tolerance = 5, maxPoints = 1_500 }: { tolerance?: number; maxPoints?: number } = {},
-): TrackPoint[] {
+export function simplify({
+  points,
+  tolerance = 5,
+  maxPoints = 1_500,
+}: {
+  points: readonly TrackPoint[];
+  tolerance?: number;
+  maxPoints?: number;
+}): TrackPoint[] {
   if (points.length <= 2) return [...points];
   let current = tolerance;
-  let result = douglasPeucker(points, current);
+  let result = douglasPeucker({ points, tolerance: current });
   while (result.length > maxPoints) {
     current *= 2;
-    result = douglasPeucker(points, current);
+    result = douglasPeucker({ points, tolerance: current });
   }
   return result;
 }
 
-function douglasPeucker(points: readonly TrackPoint[], tolerance: number): TrackPoint[] {
+function douglasPeucker({
+  points,
+  tolerance,
+}: {
+  points: readonly TrackPoint[];
+  tolerance: number;
+}): TrackPoint[] {
   const origin = points[0];
   if (!origin || points.length <= 2) return [...points];
   // Project to local metres once; a single track spans too little of the globe for the
@@ -153,7 +176,7 @@ function douglasPeucker(points: readonly TrackPoint[], tolerance: number): Track
     let maxDistance = 0;
     let index = first;
     for (let i = first + 1; i < last; i += 1) {
-      const distance = perpendicularDistance(xy[i], [xy[first], xy[last]]);
+      const distance = perpendicularDistance({ point: xy[i], from: xy[first], to: xy[last] });
       if (distance > maxDistance) {
         maxDistance = distance;
         index = i;
@@ -169,7 +192,15 @@ function douglasPeucker(points: readonly TrackPoint[], tolerance: number): Track
 
 type XY = { x: number; y: number };
 
-function perpendicularDistance(p: XY | undefined, [a, b]: [XY?, XY?]): number {
+function perpendicularDistance({
+  point: p,
+  from: a,
+  to: b,
+}: {
+  point?: XY;
+  from?: XY;
+  to?: XY;
+}): number {
   if (!p || !a || !b) return 0;
   const dx = b.x - a.x;
   const dy = b.y - a.y;

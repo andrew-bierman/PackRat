@@ -1,5 +1,5 @@
 import type { TripActivity } from '@packrat/schemas/trips';
-import { first, sum } from '@packrat/utils';
+import { first, sort, sum } from '@packrat/utils';
 import {
   addDays,
   addMonths,
@@ -200,7 +200,13 @@ export function dayToString(date: Date): string {
 }
 
 /** Finished, counted trips, oldest first. */
-export function finishedTrips(trips: readonly StatsTrip[], now: Date): FinishedTrip[] {
+export function finishedTrips({
+  trips,
+  now,
+}: {
+  trips: readonly StatsTrip[];
+  now: Date;
+}): FinishedTrip[] {
   const today = startOfDay(now);
   const finished: FinishedTrip[] = [];
   for (const trip of trips) {
@@ -215,7 +221,7 @@ export function finishedTrips(trips: readonly StatsTrip[], now: Date): FinishedT
   return finished.sort((a, b) => a.start.getTime() - b.start.getTime());
 }
 
-export function scopeIncludes(scope: Scope, trip: FinishedTrip): boolean {
+export function scopeIncludes({ scope, trip }: { scope: Scope; trip: FinishedTrip }): boolean {
   if (scope.year != null && trip.start.getFullYear() !== scope.year) return false;
   if (scope.activity != null && !trip.trip.log?.activities.includes(scope.activity)) return false;
   return true;
@@ -254,7 +260,8 @@ function numberOrEmpty(value: number | null | undefined): number[] {
 function distinctPlaces(locations: readonly Coordinate[]): number {
   const places: Coordinate[] = [];
   for (const location of locations) {
-    if (!places.some((place) => distanceMeters(place, location) < 1_000)) places.push(location);
+    if (!places.some((place) => distanceMeters({ from: place, to: location }) < 1_000))
+      places.push(location);
   }
   return places.length;
 }
@@ -263,7 +270,13 @@ function distinctPlaces(locations: readonly Coordinate[]): number {
  * Trips starting inside the window, with their end clipped to it, so a comparison window never
  * counts nights past its last day.
  */
-export function clipTrips(trips: readonly FinishedTrip[], window: DayWindow): FinishedTrip[] {
+export function clipTrips({
+  trips,
+  window,
+}: {
+  trips: readonly FinishedTrip[];
+  window: DayWindow;
+}): FinishedTrip[] {
   return trips.flatMap((trip) => {
     if (trip.start < window.start || trip.start > window.end) return [];
     const end = trip.end < window.end ? trip.end : window.end;
@@ -272,7 +285,7 @@ export function clipTrips(trips: readonly FinishedTrip[], window: DayWindow): Fi
 }
 
 /** Meteorological seasons, flipped south of the equator so a December Patagonia trip is summer. */
-export function seasonOf(month: number, latitude?: number | null): Season {
+export function seasonOf({ month, latitude }: { month: number; latitude?: number | null }): Season {
   const northern: Season =
     month >= 3 && month <= 5
       ? 'spring'
@@ -314,7 +327,13 @@ export function isBackToPace(comeback: Comeback): boolean {
  * The latest break of three months or more and the trip that ended it, if that trip is recent
  * enough to still show and the user isn't yet back to the pace of the year before the break.
  */
-export function findComeback(finished: readonly FinishedTrip[], today: Date): Comeback | null {
+export function findComeback({
+  finished,
+  today,
+}: {
+  finished: readonly FinishedTrip[];
+  today: Date;
+}): Comeback | null {
   const first = finished[0];
   if (!first || finished.length < 2) return null;
   // Trips can overlap, so a break starts at the latest end so far, not the previous trip's end.
@@ -328,10 +347,13 @@ export function findComeback(finished: readonly FinishedTrip[], today: Date): Co
   if (!found) return null;
   if (today >= addMonths(found.trip.start, MAXIMUM_MONTHS_SHOWN)) return null;
 
-  const since = clipTrips(finished, { start: found.trip.start, end: today });
-  const prior = clipTrips(finished, {
-    start: addYears(found.breakStart, -1),
-    end: found.breakStart,
+  const since = clipTrips({ trips: finished, window: { start: found.trip.start, end: today } });
+  const prior = clipTrips({
+    trips: finished,
+    window: {
+      start: addYears(found.breakStart, -1),
+      end: found.breakStart,
+    },
   });
   const daysBack = differenceInCalendarDays(today, found.trip.start);
   // At least a month as the divisor, so the first days back don't inflate to a monthly rate.
@@ -339,14 +361,14 @@ export function findComeback(finished: readonly FinishedTrip[], today: Date): Co
   const comeback: Comeback = {
     trip: found.trip,
     monthsAway: found.months,
-    now: pace(since, monthsBack),
-    before: pace(prior, 12),
+    now: pace({ trips: since, months: monthsBack }),
+    before: pace({ trips: prior, months: 12 }),
     daysBack,
   };
   return isBackToPace(comeback) ? null : comeback;
 }
 
-function pace(trips: readonly FinishedTrip[], months: number): Pace {
+function pace({ trips, months }: { trips: readonly FinishedTrip[]; months: number }): Pace {
   const totals = computeTotals(trips);
   return {
     trips: totals.trips / months,
@@ -361,7 +383,7 @@ interface Tally {
 }
 
 /** Positive when `a` is busier: more nights, then more trips. */
-function compareTally(a: Tally, b: Tally): number {
+function compareTally({ a, b }: { a: Tally; b: Tally }): number {
   return a.nights - b.nights || a.trips - b.trips;
 }
 
@@ -377,18 +399,15 @@ export function computeTripStats({
   now?: Date;
 }): TripStatsRecord {
   const today = startOfDay(now);
-  const allFinished = finishedTrips(trips, now);
+  const allFinished = finishedTrips({ trips, now });
   const logged = new Set(allFinished.flatMap((trip) => trip.trip.log?.activities ?? []));
-  const finished = allFinished.filter((trip) => scopeIncludes(scope, trip));
+  const finished = allFinished.filter((trip) => scopeIncludes({ scope, trip }));
 
   const thisYearStart = new Date(today.getFullYear(), 0, 1);
   const hadEarlierTrips = finished.some((trip) => trip.start < thisYearStart);
 
   const distanceOf = (trip: FinishedTrip) => trip.trip.log?.distanceMeters ?? 0;
   const withDistance = finished.filter((trip) => distanceOf(trip) > 0);
-  // Longest first; ties go to the earlier trip, as on Swift.
-  const longest = (value: (trip: FinishedTrip) => number) => (a: FinishedTrip, b: FinishedTrip) =>
-    value(b) - value(a) || a.start.getTime() - b.start.getTime();
 
   const byActivity = new Map<TripActivity, ActivityBucket>();
   for (const trip of finished) {
@@ -426,7 +445,7 @@ export function computeTripStats({
     const month = trip.start.getMonth() + 1;
     const monthTotal = byMonth.get(month) ?? { nights: 0, trips: 0 };
     byMonth.set(month, { nights: monthTotal.nights + trip.nights, trips: monthTotal.trips + 1 });
-    const season = seasonOf(month, trip.trip.location?.latitude);
+    const season = seasonOf({ month, latitude: trip.trip.location?.latitude });
     const seasonTotal = bySeason.get(season) ?? { nights: 0, trips: 0 };
     bySeason.set(season, {
       nights: seasonTotal.nights + trip.nights,
@@ -435,10 +454,12 @@ export function computeTripStats({
   }
   // By nights, then trips; remaining ties go to the earlier month, as on Swift.
   const busiestMonth = first(
-    [...byMonth.entries()].sort((a, b) => compareTally(b[1], a[1]) || a[0] - b[0]),
+    [...byMonth.entries()].sort((a, b) => compareTally({ a: b[1], b: a[1] }) || a[0] - b[0]),
   );
   const busiestSeason = first(
-    [...bySeason.entries()].sort((a, b) => compareTally(b[1], a[1]) || b[0].localeCompare(a[0])),
+    [...bySeason.entries()].sort(
+      (a, b) => compareTally({ a: b[1], b: a[1] }) || b[0].localeCompare(a[0]),
+    ),
   );
 
   const packsById = new Map(packs.filter((pack) => !pack.deleted).map((pack) => [pack.id, pack]));
@@ -477,16 +498,28 @@ export function computeTripStats({
     finished,
     allFinished,
     totals: computeTotals(finished),
-    thisYear: computeTotals(clipTrips(finished, { start: thisYearStart, end: today })),
+    thisYear: computeTotals(
+      clipTrips({ trips: finished, window: { start: thisYearStart, end: today } }),
+    ),
     lastYearToDate: hadEarlierTrips
       ? computeTotals(
-          clipTrips(finished, { start: addYears(thisYearStart, -1), end: addYears(today, -1) }),
+          clipTrips({
+            trips: finished,
+            window: { start: addYears(thisYearStart, -1), end: addYears(today, -1) },
+          }),
         )
       : null,
+    // Longest first. `finished` is oldest first and the sort is stable, so ties go to the
+    // earlier trip, as on Swift.
     longestByNights:
-      first(finished.filter((trip) => trip.nights > 0).sort(longest((trip) => trip.nights))) ??
-      null,
-    longestByDistance: first([...withDistance].sort(longest(distanceOf))) ?? null,
+      first(
+        sort(
+          finished.filter((trip) => trip.nights > 0),
+          (trip) => trip.nights,
+          true,
+        ),
+      ) ?? null,
+    longestByDistance: first(sort(withDistance, distanceOf, true)) ?? null,
     averageNights: finished.length
       ? finished.reduce((total, trip) => total + trip.nights, 0) / finished.length
       : null,
@@ -505,6 +538,6 @@ export function computeTripStats({
       .sort((a, b) => b.trips - a.trips || a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
       .slice(0, 10),
     packWeights,
-    comeback: findComeback(finished, today),
+    comeback: findComeback({ finished, today }),
   };
 }

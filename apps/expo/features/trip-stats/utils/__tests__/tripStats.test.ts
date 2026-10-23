@@ -52,16 +52,16 @@ describe('finishedTrips', () => {
       trip({ startDate: '2026-05-01', deleted: true }),
       { id: 'nodate', name: 'No date' },
     ];
-    const finished = finishedTrips(trips, NOW);
+    const finished = finishedTrips({ trips, now: NOW });
     expect(finished.map((f) => f.nights)).toEqual([0, 2]);
     expect(finished[0]?.start).toEqual(new Date(2026, 0, 2));
   });
 
   it('clamps an end before the start to the start', () => {
-    const [finished] = finishedTrips(
-      [trip({ startDate: '2026-02-10', endDate: '2026-02-08' })],
-      NOW,
-    );
+    const [finished] = finishedTrips({
+      trips: [trip({ startDate: '2026-02-10', endDate: '2026-02-08' })],
+      now: NOW,
+    });
     expect(finished?.nights).toBe(0);
     expect(finished?.end).toEqual(new Date(2026, 1, 10));
   });
@@ -69,8 +69,8 @@ describe('finishedTrips', () => {
 
 describe('computeTotals', () => {
   it('counts overlapping days once and places within a kilometre once', () => {
-    const finished = finishedTrips(
-      [
+    const finished = finishedTrips({
+      trips: [
         trip({
           startDate: '2026-04-01',
           endDate: '2026-04-03',
@@ -88,8 +88,8 @@ describe('computeTotals', () => {
           log: { activities: [], distanceMeters: 500 },
         }),
       ],
-      NOW,
-    );
+      now: NOW,
+    });
     expect(computeTotals(finished)).toEqual({
       trips: 3,
       nights: 4,
@@ -101,7 +101,9 @@ describe('computeTotals', () => {
   });
 
   it('leaves distance and elevation null when nothing logged one', () => {
-    const totals = computeTotals(finishedTrips([trip({ startDate: '2026-01-01' })], NOW));
+    const totals = computeTotals(
+      finishedTrips({ trips: [trip({ startDate: '2026-01-01' })], now: NOW }),
+    );
     expect(totals.distance).toBeNull();
     expect(totals.elevationGain).toBeNull();
   });
@@ -109,16 +111,19 @@ describe('computeTotals', () => {
 
 describe('clipTrips', () => {
   it('drops trips starting outside the window and clips ends to it', () => {
-    const finished = finishedTrips(
-      [
+    const finished = finishedTrips({
+      trips: [
         trip({ startDate: '2025-12-30', endDate: '2026-01-02' }),
         trip({ startDate: '2026-01-30', endDate: '2026-02-03' }),
       ],
-      NOW,
-    );
-    const clipped = clipTrips(finished, {
-      start: new Date(2026, 0, 1),
-      end: new Date(2026, 0, 31),
+      now: NOW,
+    });
+    const clipped = clipTrips({
+      trips: finished,
+      window: {
+        start: new Date(2026, 0, 1),
+        end: new Date(2026, 0, 31),
+      },
     });
     expect(clipped).toHaveLength(1);
     expect(clipped[0]?.nights).toBe(1);
@@ -127,14 +132,19 @@ describe('clipTrips', () => {
 
 describe('seasonOf', () => {
   it('uses meteorological seasons and flips them south of the equator', () => {
-    expect([1, 4, 7, 10].map((m) => seasonOf(m))).toEqual(['winter', 'spring', 'summer', 'autumn']);
-    expect([1, 4, 7, 10].map((m) => seasonOf(m, -40))).toEqual([
+    expect([1, 4, 7, 10].map((m) => seasonOf({ month: m }))).toEqual([
+      'winter',
+      'spring',
+      'summer',
+      'autumn',
+    ]);
+    expect([1, 4, 7, 10].map((m) => seasonOf({ month: m, latitude: -40 }))).toEqual([
       'summer',
       'autumn',
       'winter',
       'spring',
     ]);
-    expect(seasonOf(12, 10)).toBe('winter');
+    expect(seasonOf({ month: 12, latitude: 10 })).toBe('winter');
   });
 });
 
@@ -270,8 +280,8 @@ describe('findComeback', () => {
   ];
 
   it('finds a recent return after three months away', () => {
-    const finished = finishedTrips(
-      [
+    const finished = finishedTrips({
+      trips: [
         ...before,
         trip({
           startDate: '2026-05-20',
@@ -279,9 +289,9 @@ describe('findComeback', () => {
           log: { activities: [], distanceMeters: 100 },
         }),
       ],
-      NOW,
-    );
-    const comeback = findComeback(finished, new Date(2026, 5, 15));
+      now: NOW,
+    });
+    const comeback = findComeback({ finished, today: new Date(2026, 5, 15) });
     expect(comeback?.monthsAway).toBe(15);
     expect(comeback?.daysBack).toBe(26);
     expect(comeback?.before.trips).toBeCloseTo(2 / 12);
@@ -291,22 +301,30 @@ describe('findComeback', () => {
   });
 
   it('retires after six months and needs a real break', () => {
-    const old = finishedTrips([...before, trip({ startDate: '2025-10-01' })], NOW);
-    expect(findComeback(old, new Date(2026, 5, 15))).toBeNull();
-    const steady = finishedTrips([...before, trip({ startDate: '2025-03-01' })], NOW);
-    expect(findComeback(steady, new Date(2025, 3, 1))).toBeNull();
-    expect(findComeback(finishedTrips(before.slice(0, 1), NOW), NOW)).toBeNull();
+    const old = finishedTrips({ trips: [...before, trip({ startDate: '2025-10-01' })], now: NOW });
+    expect(findComeback({ finished: old, today: new Date(2026, 5, 15) })).toBeNull();
+    const steady = finishedTrips({
+      trips: [...before, trip({ startDate: '2025-03-01' })],
+      now: NOW,
+    });
+    expect(findComeback({ finished: steady, today: new Date(2025, 3, 1) })).toBeNull();
+    expect(
+      findComeback({
+        finished: finishedTrips({ trips: before.slice(0, 1), now: NOW }),
+        today: NOW,
+      }),
+    ).toBeNull();
   });
 
   it('hides once the user is back to their old pace', () => {
-    const finished = finishedTrips(
-      [
+    const finished = finishedTrips({
+      trips: [
         trip({ startDate: '2025-06-01', endDate: '2025-06-02' }),
         trip({ startDate: '2026-04-01', endDate: '2026-04-05' }),
         trip({ startDate: '2026-05-01', endDate: '2026-05-05' }),
       ],
-      NOW,
-    );
-    expect(findComeback(finished, new Date(2026, 5, 15))).toBeNull();
+      now: NOW,
+    });
+    expect(findComeback({ finished, today: new Date(2026, 5, 15) })).toBeNull();
   });
 });

@@ -31,17 +31,21 @@ export function rankPeaks({
   route: readonly Coordinate[];
   center: Coordinate;
 }): { onRoute: PeakSuggestion[]; nearby: PeakSuggestion[] } {
-  const samples = sampleRoute(route, ROUTE_SAMPLE_LIMIT);
+  const samples = sampleRoute({ route, limit: ROUTE_SAMPLE_LIMIT });
   const onRoute: { item: PeakSuggestion; index: number }[] = [];
   const nearby: PeakSuggestion[] = [];
   for (const peak of peaks) {
     if (samples.length < 2) {
-      nearby.push({ peak, distanceMeters: distanceMeters(center, peak), isOnRoute: false });
+      nearby.push({
+        peak,
+        distanceMeters: distanceMeters({ from: center, to: peak }),
+        isOnRoute: false,
+      });
       continue;
     }
     let best = { distance: Number.POSITIVE_INFINITY, index: 0 };
     samples.forEach((sample, index) => {
-      const distance = distanceMeters(sample, peak);
+      const distance = distanceMeters({ from: sample, to: peak });
       if (distance < best.distance) best = { distance, index };
     });
     if (best.distance <= ON_ROUTE_METERS) {

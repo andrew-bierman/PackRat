@@ -18,12 +18,14 @@ export function formatMonthName(month: number): string {
   return new Date(2000, month - 1, 1).toLocaleDateString(undefined, { month: 'long' });
 }
 
-/** Whole numbers with grouping, one decimal for small rates. */
-export function formatNumber(value: number, fractionDigits = 0): string {
-  return value.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: fractionDigits,
-  });
+/** A whole number with grouping, e.g. "1,240". */
+export function formatNumber(value: number): string {
+  return value.toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+
+/** A rate or average to one decimal, dropped when whole: "2.5", "3". */
+export function formatDecimal(value: number): string {
+  return value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 }
 
 /** Formats goal metrics and counts in the user's units and language. */
@@ -36,9 +38,9 @@ export function useStatsFormat() {
       const count = Math.round(value);
       switch (metric) {
         case 'distance':
-          return formatDistance(value, unit);
+          return formatDistance({ metres: value, unit });
         case 'elevation':
-          return formatElevation(value, unit);
+          return formatElevation({ metres: value, unit });
         case 'trips':
           return t('tripStats.countTrips', { count });
         case 'nights':

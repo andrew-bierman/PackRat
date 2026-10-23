@@ -67,9 +67,9 @@ export function GoalEditorScreen() {
     if (!existing) return '';
     const shown =
       existing.metric === 'distance'
-        ? distanceValue(existing.target, unit)
+        ? distanceValue({ metres: existing.target, unit })
         : existing.metric === 'elevation'
-          ? elevationValue(existing.target, unit)
+          ? elevationValue({ metres: existing.target, unit })
           : existing.target;
     return String(Math.round(shown * 10) / 10);
   });
@@ -80,8 +80,8 @@ export function GoalEditorScreen() {
   const target = useMemo(() => {
     const value = Number(targetText.trim().replace(',', '.'));
     if (!Number.isFinite(value) || value <= 0) return null;
-    if (metric === 'distance') return metresFromDistance(value, unit);
-    if (metric === 'elevation') return metresFromElevation(value, unit);
+    if (metric === 'distance') return metresFromDistance({ value, unit });
+    if (metric === 'elevation') return metresFromElevation({ value, unit });
     return Math.round(value) >= 1 ? Math.round(value) : null;
   }, [targetText, metric, unit]);
 
@@ -91,15 +91,15 @@ export function GoalEditorScreen() {
       kind === 'annual'
         ? { start: new Date(year - 1, 0, 1), end: new Date(year - 1, 11, 31) }
         : { start: addYears(startDate, -1), end: addYears(endDate, -1) };
-    const totals = computeTotals(clipTrips(record.allFinished, window));
+    const totals = computeTotals(clipTrips({ trips: record.allFinished, window }));
     const byMetric: Record<TripGoalMetric, number | null> = {
       trips: totals.trips,
       nights: totals.nights,
       days: totals.days,
       distance: totals.distance,
       elevation: totals.elevationGain,
-      summits: peaksSummitedBetween(parksAndPeaks, window),
-      parks: parksVisitedBetween(parksAndPeaks, window),
+      summits: peaksSummitedBetween({ record: parksAndPeaks, window }),
+      parks: parksVisitedBetween({ record: parksAndPeaks, window }),
     };
     const value = byMetric[metric];
     // Hand-added summits and parks count without a trip; everything else needs one.

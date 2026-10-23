@@ -10,7 +10,7 @@ import { testIds } from 'expo-app/lib/testIds';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import type { z } from 'zod';
-import { formatMonthDay, formatNumber, useStatsFormat } from '../lib/useStatsFormat';
+import { formatDecimal, formatMonthDay, useStatsFormat } from '../lib/useStatsFormat';
 import {
   type GoalProgress,
   goalFraction,
@@ -42,7 +42,7 @@ export function ComebackCard({
 }) {
   const { t } = useTranslation();
   const { colors } = useColorScheme();
-  const rate = (value: number) => formatNumber(value, 1);
+  const rate = formatDecimal;
   const rows = [
     {
       key: 'trips',
@@ -61,8 +61,8 @@ export function ComebackCard({
           {
             key: 'distance',
             label: t('tripStats.comeback.distance'),
-            now: formatDistance(comeback.now.distance, unit),
-            before: formatDistance(comeback.before.distance, unit),
+            now: formatDistance({ metres: comeback.now.distance, unit }),
+            before: formatDistance({ metres: comeback.before.distance, unit }),
           },
         ]
       : []),
