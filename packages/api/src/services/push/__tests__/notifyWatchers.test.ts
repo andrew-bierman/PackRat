@@ -163,6 +163,37 @@ describe('notifyWatchers', () => {
     });
   });
 
+  it('pushes only to the named watchers when narrowed to them', async () => {
+    mocks.selectDistinctWhere.mockResolvedValue([{ userId: 'user-1' }, { userId: 'user-2' }]);
+    mocks.selectWhere.mockResolvedValue([
+      { id: 'token-row-2', platform: 'android', deviceToken: 'device-2' },
+    ]);
+
+    const result = await notifyWatchers({
+      env,
+      weatherLocationId: 42,
+      newAlerts: [alert()],
+      onlyUserIds: ['user-2'],
+    });
+
+    expect(mocks.selectWhere).toHaveBeenCalledWith({ col: 'userId', vals: ['user-2'] });
+    expect(result).toEqual({ watchers: 2 });
+  });
+
+  it('sends nothing when the named watcher no longer watches the place', async () => {
+    mocks.selectDistinctWhere.mockResolvedValue([{ userId: 'user-1' }]);
+
+    await notifyWatchers({
+      env,
+      weatherLocationId: 42,
+      newAlerts: [alert()],
+      onlyUserIds: ['user-2'],
+    });
+
+    expect(mocks.selectWhere).toHaveBeenCalledTimes(0);
+    expect(mocks.sendPush).toHaveBeenCalledTimes(0);
+  });
+
   it('pushes to every device of every watcher', async () => {
     mocks.selectDistinctWhere.mockResolvedValue([{ userId: 'user-1' }, { userId: 'user-2' }]);
     mocks.selectWhere.mockResolvedValue([
