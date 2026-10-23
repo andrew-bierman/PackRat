@@ -156,6 +156,21 @@ describe('parseTestFlightUploadConfig', () => {
     );
   });
 
+  it('rejects a staging archive unless the upload opts in by name', () => {
+    const env = { BUILD_NUMBER: '2026071802' };
+    const blocked = verifyTestFlightReplacementReadiness({
+      config: parseTestFlightUploadConfig({ argv: ['--staging'], env }),
+      currentAppStoreBuildNumber: '2026071801',
+    });
+    const allowed = verifyTestFlightReplacementReadiness({
+      config: parseTestFlightUploadConfig({ argv: ['--staging', '--allow-staging-upload'], env }),
+      currentAppStoreBuildNumber: '2026071801',
+    });
+
+    expect(blocked.ok).toBe(false);
+    expect(allowed).toEqual({ ok: true, errors: [], warnings: [] });
+  });
+
   it('rejects stale replacement build numbers', () => {
     const config = parseTestFlightUploadConfig({
       argv: ['--production'],

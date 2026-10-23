@@ -22,7 +22,7 @@ actor APIClient {
     static let environments: [String: String] = [
         "local":      "http://localhost:8787",
         "dev-local":  "http://localhost:8791",
-        "dev":        "https://packrat-api-dev.orange-frost-d665.workers.dev",
+        "dev":        "https://api-dev.packratai.com",
         "production": "https://api.packratai.com",
     ]
 

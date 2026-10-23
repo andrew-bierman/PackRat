@@ -5,6 +5,8 @@ import { safeJsonParse, safeJsonStringify } from '@packrat/utils';
 
 export type TestFlightUploadConfig = {
   staging: boolean;
+  /** Set by --allow-staging-upload: a deliberate dev-API build on the public listing's TestFlight. */
+  allowStagingUpload: boolean;
   dryRun: boolean;
   scheme: string;
   configuration: string;
@@ -77,6 +79,7 @@ export function parseTestFlightUploadConfig(input: {
   const staging = argv.includes('--staging');
   const production = argv.includes('--production');
   const dryRun = argv.includes('--dry-run');
+  const allowStagingUpload = argv.includes('--allow-staging-upload');
 
   if (staging && production) {
     throw new TestFlightConfigError('Use either --staging or --production, not both.');
@@ -87,6 +90,7 @@ export function parseTestFlightUploadConfig(input: {
 
   return {
     staging,
+    allowStagingUpload,
     dryRun,
     scheme: staging ? 'PackRat-iOS-Staging' : 'PackRat-iOS',
     configuration: staging ? 'Staging' : 'Release',
@@ -132,12 +136,14 @@ export function verifyTestFlightReplacementReadiness(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  if (
-    config.staging ||
-    config.configuration !== 'Release' ||
-    config.apiEnvironment !== 'production'
-  ) {
-    errors.push('Use the production Release archive for a seamless TestFlight update.');
+  const isProductionArchive =
+    !config.staging && config.configuration === 'Release' && config.apiEnvironment === 'production';
+  // Every upload lands on the public listing, so a dev-API build reaches all
+  // TestFlight testers. Allow it only when the uploader asks for it by name.
+  if (!isProductionArchive && !config.allowStagingUpload) {
+    errors.push(
+      'Use the production Release archive for a seamless TestFlight update, or pass --allow-staging-upload to put a dev-API build on TestFlight deliberately.',
+    );
   }
   if (config.bundleId !== BUNDLE_ID) {
     errors.push(`Expected iOS bundle id ${BUNDLE_ID}, got ${config.bundleId}.`);

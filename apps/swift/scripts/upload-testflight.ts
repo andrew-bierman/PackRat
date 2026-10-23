@@ -50,6 +50,9 @@
  * Flags:
  *   --staging                Archive the Staging config (PACKRAT_ENV=dev) so the
  *                            build targets the deployed DEV API instead of production.
+ *   --allow-staging-upload   Required with --staging. Every upload targets the public
+ *                            listing, so a staging build reaches all TestFlight
+ *                            testers; this flag says that is intended.
  *   --production             Optional clarity flag; Release/production is the default
  *                            API profile when --staging is absent.
  *   --dry-run                Print the resolved archive identity/settings and exit
@@ -61,7 +64,7 @@
  *   bun apps/swift/scripts/upload-testflight.ts
  *   bun apps/swift/scripts/upload-testflight.ts --dry-run
  *   bun apps/swift/scripts/upload-testflight.ts --verify-archive-only
- *   bun apps/swift/scripts/upload-testflight.ts --staging
+ *   bun apps/swift/scripts/upload-testflight.ts --staging --allow-staging-upload
  */
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync } from 'node:fs';
