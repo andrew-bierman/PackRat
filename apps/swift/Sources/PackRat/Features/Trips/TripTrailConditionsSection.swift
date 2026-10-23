@@ -62,7 +62,8 @@ struct TripTrailConditionsSection: View {
                 }
             }
             Spacer()
-            if response?.reports.isEmpty == false {
+            // Offline the load fails, and a report still has to be startable: it queues.
+            if response?.reports.isEmpty == false || loadFailed {
                 Button("Report", systemImage: "plus") { showingSubmit = true }
                     .font(.caption.weight(.semibold))
                     .buttonStyle(.borderless)
