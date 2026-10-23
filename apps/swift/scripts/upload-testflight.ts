@@ -67,8 +67,8 @@
  *   bun apps/swift/scripts/upload-testflight.ts --staging --allow-staging-upload
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { nodeEnv } from '@packrat/env/node';
 import { safeJsonStringify } from '@packrat/utils';
@@ -192,6 +192,31 @@ const ascApiKeyId = nodeEnv.APPLE_ASC_API_KEY_ID;
 const ascApiIssuer = nodeEnv.APPLE_ASC_API_ISSUER_ID;
 const usesApiKey = Boolean(ascApiKeyId && ascApiIssuer);
 
+// With no Apple ID signed in to Xcode, -allowProvisioningUpdates fails with
+// "No Accounts". Handing xcodebuild the same API key lets it fetch and update
+// profiles headlessly.
+const ascApiKeyPath = ascApiKeyId
+  ? [
+      'private_keys',
+      join(homedir(), 'private_keys'),
+      join(homedir(), '.private_keys'),
+      join(homedir(), '.appstoreconnect', 'private_keys'),
+    ]
+      .map((dir) => join(dir, `AuthKey_${ascApiKeyId}.p8`))
+      .find((path) => existsSync(path))
+  : undefined;
+const xcodeAuthArgs =
+  ascApiKeyId && ascApiIssuer && ascApiKeyPath
+    ? [
+        '-authenticationKeyPath',
+        ascApiKeyPath,
+        '-authenticationKeyID',
+        ascApiKeyId,
+        '-authenticationKeyIssuerID',
+        ascApiIssuer,
+      ]
+    : [];
+
 const appleId = VERIFY_ARCHIVE_ONLY || usesApiKey ? undefined : req({ name: 'APPLE_ID' });
 const appPassword =
   VERIFY_ARCHIVE_ONLY || usesApiKey ? undefined : req({ name: 'APPLE_APP_PASSWORD' });
@@ -245,6 +270,7 @@ run({
     // Lets Xcode register the App IDs and generate provisioning profiles for
     // the (new) bundle ids on the fly, using the signed-in account.
     '-allowProvisioningUpdates',
+    ...xcodeAuthArgs,
     ...xcodeArchiveOverrides({ config: uploadConfig, teamId, sentryDsn: nodeEnv.IOS_SENTRY_DSN }),
   ],
 });
@@ -308,6 +334,7 @@ run({
     // Export also needs to generate the App Store distribution profiles for the
     // new bundle ids on the fly.
     '-allowProvisioningUpdates',
+    ...xcodeAuthArgs,
   ],
 });
 
