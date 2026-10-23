@@ -27,6 +27,7 @@ import { SharedPacksTile } from 'expo-app/features/packs/components/SharedPacksT
 import { ShoppingListTile } from 'expo-app/features/packs/components/ShoppingListTile';
 import { WeightAnalysisTile } from 'expo-app/features/packs/components/WeightAnalysisTile';
 import { useHasMinimumInventory } from 'expo-app/features/packs/hooks/useHasMinimumInventory';
+import { TripStatsTile } from 'expo-app/features/trip-stats/components/TripStatsTile';
 import { TrailConditionsTile } from 'expo-app/features/trips/components/TrailConditionsTile';
 import { UpcomingTripsTile } from 'expo-app/features/trips/components/UpcomingTripsTile';
 import { WeatherTile } from 'expo-app/features/weather/components/WeatherTile';
@@ -89,6 +90,11 @@ const tileInfo = {
     title: 'Upcoming Trips',
     keywords: ['trips', 'upcoming', 'planned', 'schedule'],
     component: UpcomingTripsTile,
+  },
+  'trip-stats': {
+    title: 'Trip Stats',
+    keywords: ['trips', 'stats', 'goals', 'parks', 'peaks', 'nights'],
+    component: TripStatsTile,
   },
   'trail-conditions': {
     title: 'Trail Conditions',
@@ -204,6 +210,9 @@ export default function DashboardScreen() {
         ? [appConfig.dashboard.layout.conditional.tripsOrTrailSpacer]
         : []),
       ...(featureFlags.enableTrips ? [appConfig.dashboard.layout.conditional.trips] : []),
+      ...(featureFlags.enableTrips && featureFlags.enableTripStats
+        ? [appConfig.dashboard.layout.conditional.tripStats]
+        : []),
       ...(featureFlags.enableTrailConditions
         ? [appConfig.dashboard.layout.conditional.trailConditions]
         : []),
