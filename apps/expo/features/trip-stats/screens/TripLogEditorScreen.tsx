@@ -72,10 +72,14 @@ export function TripLogEditorScreen() {
 
   const [activities, setActivities] = useState<TripActivity[]>(log?.activities ?? []);
   const [distanceText, setDistanceText] = useState(
-    shown(log?.distanceMeters != null ? distanceValue(log.distanceMeters, unit) : null),
+    shown(log?.distanceMeters != null ? distanceValue({ metres: log.distanceMeters, unit }) : null),
   );
   const [elevationText, setElevationText] = useState(
-    shown(log?.elevationGainMeters != null ? elevationValue(log.elevationGainMeters, unit) : null),
+    shown(
+      log?.elevationGainMeters != null
+        ? elevationValue({ metres: log.elevationGainMeters, unit })
+        : null,
+    ),
   );
   const [route, setRoute] = useState<string | null>(log?.route ?? null);
   const [source, setSource] = useState<TripLog['source']>(log?.source ?? null);
@@ -115,10 +119,10 @@ export function TripLogEditorScreen() {
       if (!summary) throw new GpxParseError('noPoints');
       setRoute(summary.route);
       setSource('track');
-      setDistanceText(shown(distanceValue(summary.distanceMeters, unit)));
+      setDistanceText(shown(distanceValue({ metres: summary.distanceMeters, unit })));
       // A file without elevations keeps a typed-in figure.
       if (summary.elevationGainMeters != null) {
-        setElevationText(shown(elevationValue(summary.elevationGainMeters, unit)));
+        setElevationText(shown(elevationValue({ metres: summary.elevationGainMeters, unit })));
       }
     } catch (error) {
       if (error instanceof GpxParseError) {
@@ -155,8 +159,9 @@ export function TripLogEditorScreen() {
     const elevation = parsed(elevationText);
     const next: TripLog = {
       activities,
-      distanceMeters: distance == null ? null : metresFromDistance(distance, unit),
-      elevationGainMeters: elevation == null ? null : metresFromElevation(elevation, unit),
+      distanceMeters: distance == null ? null : metresFromDistance({ value: distance, unit }),
+      elevationGainMeters:
+        elevation == null ? null : metresFromElevation({ value: elevation, unit }),
       route,
       source: route ? (source ?? 'track') : distance != null ? 'manual' : null,
       summits,
@@ -272,7 +277,7 @@ export function TripLogEditorScreen() {
               title={summit.name}
               subtitle={
                 summit.elevationMeters != null
-                  ? formatElevation(summit.elevationMeters, unit)
+                  ? formatElevation({ metres: summit.elevationMeters, unit })
                   : null
               }
               trailing={

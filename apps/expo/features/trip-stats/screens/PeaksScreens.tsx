@@ -73,7 +73,7 @@ export function PeaksScreen() {
             title={ascent.summit.name}
             subtitle={[
               ascent.summit.elevationMeters != null
-                ? formatElevation(ascent.summit.elevationMeters, unit)
+                ? formatElevation({ metres: ascent.summit.elevationMeters, unit })
                 : null,
               ascent.tripName ?? t('tripStats.parks.handAdded'),
               ascent.date ? formatDay(ascent.date) : null,
@@ -177,7 +177,9 @@ export function AddSummitScreen() {
             icon="flag-variant-outline"
             title={summit.name}
             subtitle={
-              summit.elevationMeters != null ? formatElevation(summit.elevationMeters, unit) : null
+              summit.elevationMeters != null
+                ? formatElevation({ metres: summit.elevationMeters, unit })
+                : null
             }
           />
         ) : null}
@@ -313,7 +315,7 @@ export function PeakPickerScreen() {
                       name: handName.trim(),
                       elevationMeters:
                         handElevation && Number.isFinite(handElevationMetres)
-                          ? metresFromElevation(handElevationMetres, unit)
+                          ? metresFromElevation({ value: handElevationMetres, unit })
                           : null,
                       latitude: center?.latitude ?? 0,
                       longitude: center?.longitude ?? 0,
@@ -358,14 +360,14 @@ export function PeakPickerScreen() {
             title={item.peak.name}
             subtitle={[
               item.peak.elevationMeters != null
-                ? formatElevation(item.peak.elevationMeters, unit)
+                ? formatElevation({ metres: item.peak.elevationMeters, unit })
                 : null,
               item.isOnRoute
                 ? t('tripStats.peaks.fromRoute', {
-                    distance: formatShortDistance(item.distanceMeters, unit),
+                    distance: formatShortDistance({ metres: item.distanceMeters, unit }),
                   })
                 : t('tripStats.peaks.away', {
-                    distance: formatShortDistance(item.distanceMeters, unit),
+                    distance: formatShortDistance({ metres: item.distanceMeters, unit }),
                   }),
             ]
               .filter(Boolean)

@@ -96,7 +96,7 @@ export function PeaksCard({
             {highest ? (
               <Text variant="subhead" className="text-muted-foreground">
                 {t('tripStats.peaks.highest', {
-                  name: `${highest.summit.name} · ${formatElevation(highest.summit.elevationMeters ?? 0, unit)}`,
+                  name: `${highest.summit.name} · ${formatElevation({ metres: highest.summit.elevationMeters ?? 0, unit })}`,
                 })}
               </Text>
             ) : null}

@@ -58,7 +58,7 @@ export function parkCenter(park: NationalPark): Coordinate {
 }
 
 /** Even-odd ray casting over every ring, after a bounding-box check that rules out most parks. */
-export function parkContains(park: NationalPark, point: Coordinate): boolean {
+export function parkContains({ park, point }: { park: NationalPark; point: Coordinate }): boolean {
   if (
     point.latitude < park.minLatitude ||
     point.latitude > park.maxLatitude ||
@@ -160,17 +160,23 @@ export interface ParksAndPeaks {
 /** A route can hold 1,500 points; every few is plenty against a boundary simplified to 600 m. */
 const ROUTE_SAMPLE_LIMIT = 300;
 
-export function parkCodesVisitedBy(trip: StatsTrip, parks: readonly NationalPark[]): Set<string> {
+export function parkCodesVisitedBy({
+  trip,
+  parks,
+}: {
+  trip: StatsTrip;
+  parks: readonly NationalPark[];
+}): Set<string> {
   const points: Coordinate[] = trip.location ? [trip.location] : [];
   if (trip.log?.route) {
     const route = decodePolyline(trip.log.route);
-    points.push(...sampleRoute(route, ROUTE_SAMPLE_LIMIT));
+    points.push(...sampleRoute({ route, limit: ROUTE_SAMPLE_LIMIT }));
     const last = route.at(-1);
     if (last) points.push(last);
   }
   const codes = new Set<string>();
   for (const park of parks) {
-    if (points.some((point) => parkContains(park, point))) codes.add(park.code);
+    if (points.some((point) => parkContains({ park, point }))) codes.add(park.code);
   }
   return codes;
 }
@@ -186,25 +192,31 @@ export function computeParksAndPeaks({
 }): ParksAndPeaks {
   const active = entries.filter((entry) => !entry.deleted);
   const visitsByPark = new Map<string, ParkVisit[]>();
-  const addVisit = (code: string, visit: ParkVisit) =>
+  const addVisit = ({ code, visit }: { code: string; visit: ParkVisit }) =>
     visitsByPark.set(code, [...(visitsByPark.get(code) ?? []), visit]);
   for (const trip of finished) {
-    for (const code of parkCodesVisitedBy(trip.trip, parks)) {
-      addVisit(code, {
-        id: `trip:${trip.trip.id}`,
-        date: trip.start,
-        tripId: trip.trip.id,
-        tripName: trip.trip.name,
+    for (const code of parkCodesVisitedBy({ trip: trip.trip, parks })) {
+      addVisit({
+        code,
+        visit: {
+          id: `trip:${trip.trip.id}`,
+          date: trip.start,
+          tripId: trip.trip.id,
+          tripName: trip.trip.name,
+        },
       });
     }
   }
   for (const entry of active) {
     if (entry.kind !== 'park' || !entry.parkCode) continue;
-    addVisit(entry.parkCode, {
-      id: entry.id,
-      date: dayFromString(entry.date),
-      tripId: null,
-      tripName: null,
+    addVisit({
+      code: entry.parkCode,
+      visit: {
+        id: entry.id,
+        date: dayFromString(entry.date),
+        tripId: null,
+        tripName: null,
+      },
     });
   }
   const undatedLast = (date: Date | null) => date?.getTime() ?? Number.POSITIVE_INFINITY;
@@ -276,21 +288,33 @@ export function latestParkVisit(record: ParksAndPeaks): { park: NationalPark; da
   return latest;
 }
 
-const inWindow = (date: Date | null, window: DayWindow) =>
+const inWindow = ({ date, window }: { date: Date | null; window: DayWindow }) =>
   date != null && date >= window.start && date <= window.end;
 
 /** Distinct parks with a visit inside the window, both days counted. */
-export function parksVisitedBetween(record: ParksAndPeaks, window: DayWindow): number {
+export function parksVisitedBetween({
+  record,
+  window,
+}: {
+  record: ParksAndPeaks;
+  window: DayWindow;
+}): number {
   return record.parks.filter((status) =>
-    status.visits.some((visit) => inWindow(visit.date, window)),
+    status.visits.some((visit) => inWindow({ date: visit.date, window })),
   ).length;
 }
 
 /** Distinct peaks summited inside the window, both days counted. */
-export function peaksSummitedBetween(record: ParksAndPeaks, window: DayWindow): number {
+export function peaksSummitedBetween({
+  record,
+  window,
+}: {
+  record: ParksAndPeaks;
+  window: DayWindow;
+}): number {
   return new Set(
     record.ascents
-      .filter((ascent) => inWindow(ascent.date, window))
+      .filter((ascent) => inWindow({ date: ascent.date, window }))
       .map((ascent) => peakKey(ascent.summit)),
   ).size;
 }

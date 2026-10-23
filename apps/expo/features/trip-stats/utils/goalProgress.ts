@@ -76,10 +76,13 @@ export function goalRemaining(progress: GoalProgress): number {
  * list goal runs from the day it was made (pace is measured from there) to its finish date, if
  * it has one.
  */
-export function goalWindow(
-  goal: StatsGoal,
-  now: Date = new Date(),
-): { start: Date; end: Date | null } | null {
+export function goalWindow({
+  goal,
+  now = new Date(),
+}: {
+  goal: StatsGoal;
+  now?: Date;
+}): { start: Date; end: Date | null } | null {
   switch (goal.kind) {
     case 'annual':
       if (goal.year == null) return null;
@@ -103,10 +106,13 @@ export function goalWindow(
 }
 
 /** The listed peaks reached; a peak matches by OSM node when both sides have one, else by name. */
-export function peaksClimbed(
-  peaks: readonly TripSummit[],
-  record: ParksAndPeaks | null,
-): Set<string> {
+export function peaksClimbed({
+  peaks,
+  record,
+}: {
+  peaks: readonly TripSummit[];
+  record: ParksAndPeaks | null;
+}): Set<string> {
   if (!record) return new Set();
   const osmIds = new Set(record.ascents.flatMap((ascent) => ascent.summit.osmId ?? []));
   const names = new Set(record.ascents.map((ascent) => normalizedPeakName(ascent.summit.name)));
@@ -139,7 +145,7 @@ export function computeGoalProgress({
   longTrailMeters?: (trailCode: string) => number | null;
   now?: Date;
 }): GoalProgress | null {
-  const window = goalWindow(goal, now);
+  const window = goalWindow({ goal, now });
   if (!window) return null;
   const today = startOfDay(now);
 
@@ -152,7 +158,7 @@ export function computeGoalProgress({
       break;
     }
     case 'peakList':
-      value = peaksClimbed(goal.peaks ?? [], parksAndPeaks).size;
+      value = peaksClimbed({ peaks: goal.peaks ?? [], record: parksAndPeaks }).size;
       break;
     case 'parkList': {
       const listed = goal.parkCodes ? new Set(goal.parkCodes) : null;
@@ -164,15 +170,15 @@ export function computeGoalProgress({
     }
     default: {
       const span = { start: window.start, end: window.end ?? window.start };
-      const totals = computeTotals(clipTrips(finished, span));
+      const totals = computeTotals(clipTrips({ trips: finished, window: span }));
       const byMetric: Record<TripGoalMetric, number> = {
         trips: totals.trips,
         nights: totals.nights,
         days: totals.days,
         distance: totals.distance ?? 0,
         elevation: totals.elevationGain ?? 0,
-        summits: parksAndPeaks ? peaksSummitedBetween(parksAndPeaks, span) : 0,
-        parks: parksAndPeaks ? parksVisitedBetween(parksAndPeaks, span) : 0,
+        summits: parksAndPeaks ? peaksSummitedBetween({ record: parksAndPeaks, window: span }) : 0,
+        parks: parksAndPeaks ? parksVisitedBetween({ record: parksAndPeaks, window: span }) : 0,
       };
       value = byMetric[goal.metric];
     }

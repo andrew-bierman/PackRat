@@ -5,7 +5,12 @@ import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { useState } from 'react';
 import { View } from 'react-native';
-import { formatMonthDay, formatMonthName, formatNumber } from '../lib/useStatsFormat';
+import {
+  formatDecimal,
+  formatMonthDay,
+  formatMonthName,
+  formatNumber,
+} from '../lib/useStatsFormat';
 import type { Totals, TripStatsRecord } from '../utils/tripStats';
 import { formatDistance, formatElevation, type TripDistanceUnit } from '../utils/units';
 import { SegmentedButtons, StackedValueRow, StatsCard, StatTile, ValueRow } from './StatsParts';
@@ -27,13 +32,13 @@ export function TotalsCard({
         {totals.distance != null ? (
           <StatTile
             label={t('tripStats.totals.distance')}
-            value={formatDistance(totals.distance, unit)}
+            value={formatDistance({ metres: totals.distance, unit })}
           />
         ) : null}
         {totals.elevationGain != null ? (
           <StatTile
             label={t('tripStats.totals.elevation')}
-            value={formatElevation(totals.elevationGain, unit)}
+            value={formatElevation({ metres: totals.elevationGain, unit })}
           />
         ) : null}
         <StatTile label={t('tripStats.totals.nights')} value={formatNumber(totals.nights)} />
@@ -45,7 +50,7 @@ export function TotalsCard({
 }
 
 /** A neutral difference, or null when the same: nothing is coloured as a win or a loss. */
-function delta(now: number, before: number): string | null {
+function delta({ now, before }: { now: number; before: number }): string | null {
   const difference = now - before;
   if (difference === 0) return null;
   return `${difference > 0 ? '+' : '−'}${formatNumber(Math.abs(difference))}`;
@@ -82,7 +87,8 @@ export function ThisYearCard({ record }: { record: TripStatsRecord }) {
                 className="w-12 text-right text-muted-foreground"
                 style={{ fontVariant: ['tabular-nums'] }}
               >
-                {delta(row.now, lastYearToDate[row.key]) ?? t('tripStats.thisYear.same')}
+                {delta({ now: row.now, before: lastYearToDate[row.key] }) ??
+                  t('tripStats.thisYear.same')}
               </Text>
             ) : null}
           </View>
@@ -175,7 +181,7 @@ export function ActivitiesCard({
               <Text variant="subhead" className="text-muted-foreground">
                 {[
                   t('tripStats.countTrips', { count: bucket.trips }),
-                  bucket.distance > 0 ? formatDistance(bucket.distance, unit) : null,
+                  bucket.distance > 0 ? formatDistance({ metres: bucket.distance, unit }) : null,
                 ]
                   .filter(Boolean)
                   .join(' · ')}
@@ -217,7 +223,7 @@ export function HighlightsCard({
     rows.push({
       key: 'farthest',
       label: t('tripStats.highlights.farthest'),
-      value: `${record.longestByDistance.trip.name} · ${formatDistance(record.longestByDistance.trip.log?.distanceMeters ?? 0, unit)}`,
+      value: `${record.longestByDistance.trip.name} · ${formatDistance({ metres: record.longestByDistance.trip.log?.distanceMeters ?? 0, unit })}`,
     });
   }
   if (record.averageNights != null) {
@@ -225,7 +231,7 @@ export function HighlightsCard({
       key: 'average',
       label: t('tripStats.highlights.average'),
       value: t('tripStats.highlights.averageNights', {
-        value: formatNumber(record.averageNights, 1),
+        value: formatDecimal(record.averageNights),
       }),
     });
   }
@@ -233,7 +239,7 @@ export function HighlightsCard({
     rows.push({
       key: 'averageDistance',
       label: t('tripStats.highlights.averageDistance'),
-      value: formatDistance(record.averageDistance, unit),
+      value: formatDistance({ metres: record.averageDistance, unit }),
     });
   }
   if (record.busiestMonth != null) {
@@ -296,7 +302,7 @@ export function BaseWeightCard({ record }: { record: TripStatsRecord }) {
                 {`${formatMonthDay(point.date)} · ${point.packName}`}
               </Text>
               <Text variant="subhead" style={{ fontVariant: ['tabular-nums'] }}>
-                {`${formatNumber(convertWeight({ weight: point.grams, fromUnit: 'g' }), 1)} ${unit}`}
+                {`${formatDecimal(convertWeight({ weight: point.grams, fromUnit: 'g' }))} ${unit}`}
               </Text>
             </View>
             <View

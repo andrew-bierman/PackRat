@@ -43,9 +43,9 @@ export function TripLogSection({ trip }: { trip: Trip }) {
   const summary = log
     ? [
         log.activities.map((activity) => t(`tripStats.activities.names.${activity}`)).join(', '),
-        log.distanceMeters != null ? formatDistance(log.distanceMeters, unit) : null,
+        log.distanceMeters != null ? formatDistance({ metres: log.distanceMeters, unit }) : null,
         log.elevationGainMeters != null
-          ? `↑ ${formatElevation(log.elevationGainMeters, unit)}`
+          ? `↑ ${formatElevation({ metres: log.elevationGainMeters, unit })}`
           : null,
         log.summits?.length ? t('tripStats.countPeaks', { count: log.summits.length }) : null,
       ].filter(Boolean)

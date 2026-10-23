@@ -19,23 +19,25 @@ export function elevationSymbol(unit: TripDistanceUnit): string {
   return unit === 'imperial' ? 'ft' : 'm';
 }
 
-export function distanceValue(metres: number, unit: TripDistanceUnit): number {
+/** A length in metres, in the unit's miles or kilometres. */
+export function distanceValue({ metres, unit }: { metres: number; unit: TripDistanceUnit }) {
   return metres / (unit === 'imperial' ? METRES_PER_MILE : 1_000);
 }
 
-export function metresFromDistance(value: number, unit: TripDistanceUnit): number {
+export function metresFromDistance({ value, unit }: { value: number; unit: TripDistanceUnit }) {
   return value * (unit === 'imperial' ? METRES_PER_MILE : 1_000);
 }
 
-export function elevationValue(metres: number, unit: TripDistanceUnit): number {
+/** A height in metres, in the unit's feet or metres. */
+export function elevationValue({ metres, unit }: { metres: number; unit: TripDistanceUnit }) {
   return metres / (unit === 'imperial' ? METRES_PER_FOOT : 1);
 }
 
-export function metresFromElevation(value: number, unit: TripDistanceUnit): number {
+export function metresFromElevation({ value, unit }: { value: number; unit: TripDistanceUnit }) {
   return value * (unit === 'imperial' ? METRES_PER_FOOT : 1);
 }
 
-function formatNumber(value: number, fractionDigits: number): string {
+function formatFixed({ value, fractionDigits }: { value: number; fractionDigits: number }) {
   return value.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
@@ -43,18 +45,19 @@ function formatNumber(value: number, fractionDigits: number): string {
 }
 
 /** "12.4 mi", or "1,240 km" once the decimal stops adding anything. */
-export function formatDistance(metres: number, unit: TripDistanceUnit): string {
-  const value = distanceValue(metres, unit);
-  return `${formatNumber(value, value >= 100 ? 0 : 1)} ${distanceSymbol(unit)}`;
+export function formatDistance({ metres, unit }: { metres: number; unit: TripDistanceUnit }) {
+  const value = distanceValue({ metres, unit });
+  return `${formatFixed({ value, fractionDigits: value >= 100 ? 0 : 1 })} ${distanceSymbol(unit)}`;
 }
 
-export function formatElevation(metres: number, unit: TripDistanceUnit): string {
-  return `${formatNumber(elevationValue(metres, unit), 0)} ${elevationSymbol(unit)}`;
+export function formatElevation({ metres, unit }: { metres: number; unit: TripDistanceUnit }) {
+  const value = elevationValue({ metres, unit });
+  return `${formatFixed({ value, fractionDigits: 0 })} ${elevationSymbol(unit)}`;
 }
 
 /** Short gaps, like how far a peak sits from a route: "0.4 mi" or "650 m". */
-export function formatShortDistance(metres: number, unit: TripDistanceUnit): string {
+export function formatShortDistance({ metres, unit }: { metres: number; unit: TripDistanceUnit }) {
   if (unit === 'metric' && metres < 1_000) return `${Math.round(metres / 10) * 10} m`;
-  const value = distanceValue(metres, unit);
-  return `${formatNumber(value, value < 10 ? 1 : 0)} ${distanceSymbol(unit)}`;
+  const value = distanceValue({ metres, unit });
+  return `${formatFixed({ value, fractionDigits: value < 10 ? 1 : 0 })} ${distanceSymbol(unit)}`;
 }

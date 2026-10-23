@@ -53,10 +53,12 @@ function entry(overrides: Partial<StatsEntry> & Pick<StatsEntry, 'id' | 'kind'>)
 describe('national parks', () => {
   it('builds bounds and tests containment with holes', () => {
     expect(parkCenter(SQUARE)).toEqual({ latitude: 37.5, longitude: -119.5 });
-    expect(parkContains(SQUARE, { latitude: 37.2, longitude: -119.8 })).toBe(true);
-    expect(parkContains(SQUARE, { latitude: 37.5, longitude: -119.5 })).toBe(false);
-    expect(parkContains(SQUARE, { latitude: 39, longitude: -119.5 })).toBe(false);
-    expect(parkContains(EMPTY, { latitude: 0, longitude: 0 })).toBe(false);
+    expect(parkContains({ park: SQUARE, point: { latitude: 37.2, longitude: -119.8 } })).toBe(true);
+    expect(parkContains({ park: SQUARE, point: { latitude: 37.5, longitude: -119.5 } })).toBe(
+      false,
+    );
+    expect(parkContains({ park: SQUARE, point: { latitude: 39, longitude: -119.5 } })).toBe(false);
+    expect(parkContains({ park: EMPTY, point: { latitude: 0, longitude: 0 } })).toBe(false);
     expect(EMPTY.minLatitude).toBe(0);
   });
 });
@@ -122,7 +124,7 @@ const entries: StatsEntry[] = [
   entry({ id: 's2', kind: 'summit', name: 'Clouds Rest', osmId: 9, date: '2026-01-05' }),
 ];
 
-const finished = finishedTrips(trips, NOW);
+const finished = finishedTrips({ trips, now: NOW });
 const record = computeParksAndPeaks({ finished, entries, parks: [SQUARE, OTHER, EMPTY] });
 
 describe('computeParksAndPeaks', () => {
@@ -144,8 +146,8 @@ describe('computeParksAndPeaks', () => {
   it('counts parks and peaks inside a window', () => {
     const start = new Date(2026, 0, 1);
     const end = new Date(2026, 11, 31);
-    expect(parksVisitedBetween(record, { start, end })).toBe(2);
-    expect(peaksSummitedBetween(record, { start, end })).toBe(2);
+    expect(parksVisitedBetween({ record, window: { start, end } })).toBe(2);
+    expect(peaksSummitedBetween({ record, window: { start, end } })).toBe(2);
   });
 
   it('has no latest visit or highest ascent when empty', () => {
@@ -161,27 +163,31 @@ function goal(overrides: Partial<StatsGoal>): StatsGoal {
 
 describe('goal windows', () => {
   it('resolves each kind of window', () => {
-    expect(goalWindow(goal({ year: 2026 }))).toEqual({
+    expect(goalWindow({ goal: goal({ year: 2026 }) })).toEqual({
       start: new Date(2026, 0, 1),
       end: new Date(2026, 11, 31),
     });
-    expect(goalWindow(goal({ year: null }))).toBeNull();
+    expect(goalWindow({ goal: goal({ year: null }) })).toBeNull();
     expect(
-      goalWindow(goal({ kind: 'custom', startDate: '2026-03-01', endDate: '2026-02-01' })),
+      goalWindow({
+        goal: goal({ kind: 'custom', startDate: '2026-03-01', endDate: '2026-02-01' }),
+      }),
     ).toBeNull();
-    expect(goalWindow(goal({ kind: 'custom', startDate: '2026-03-01' }))).toBeNull();
+    expect(goalWindow({ goal: goal({ kind: 'custom', startDate: '2026-03-01' }) })).toBeNull();
     expect(
-      goalWindow(
-        goal({ kind: 'parkList', localCreatedAt: '2026-02-03T12:00:00.000Z' }),
-        NOW,
-      )?.start.getMonth(),
+      goalWindow({
+        goal: goal({ kind: 'parkList', localCreatedAt: '2026-02-03T12:00:00.000Z' }),
+        now: NOW,
+      })?.start.getMonth(),
     ).toBe(1);
-    expect(goalWindow(goal({ kind: 'parkList' }), NOW)).toEqual({
+    expect(goalWindow({ goal: goal({ kind: 'parkList' }), now: NOW })).toEqual({
       start: new Date(2026, 5, 15),
       end: null,
     });
     expect(
-      goalWindow(goal({ kind: 'peakList', startDate: '2026-05-01', endDate: '2026-04-01' })),
+      goalWindow({
+        goal: goal({ kind: 'peakList', startDate: '2026-05-01', endDate: '2026-04-01' }),
+      }),
     ).toBeNull();
   });
 });
@@ -288,7 +294,9 @@ describe('computeGoalProgress', () => {
         now: NOW,
       })?.value,
     ).toBe(0);
-    expect(peaksClimbed([{ name: 'X', latitude: 0, longitude: 0 }], null).size).toBe(0);
+    expect(
+      peaksClimbed({ peaks: [{ name: 'X', latitude: 0, longitude: 0 }], record: null }).size,
+    ).toBe(0);
   });
 
   it('reads long-trail goals from the given progress only', () => {

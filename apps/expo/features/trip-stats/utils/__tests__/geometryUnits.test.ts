@@ -37,10 +37,10 @@ describe('polyline', () => {
 
   it('measures and samples', () => {
     expect(
-      distanceMeters({ latitude: 0, longitude: 0 }, { latitude: 0, longitude: 1 }),
+      distanceMeters({ from: { latitude: 0, longitude: 0 }, to: { latitude: 0, longitude: 1 } }),
     ).toBeCloseTo(111_195, -2);
-    expect(sampleRoute([1, 2, 3, 4, 5, 6], 3)).toEqual([1, 3, 5]);
-    expect(sampleRoute([1, 2], 10)).toEqual([1, 2]);
+    expect(sampleRoute({ route: [1, 2, 3, 4, 5, 6], limit: 3 })).toEqual([1, 3, 5]);
+    expect(sampleRoute({ route: [1, 2], limit: 10 })).toEqual([1, 2]);
   });
 });
 
@@ -88,8 +88,8 @@ describe('track maths', () => {
 
   it('ignores elevation jitter under the threshold', () => {
     const at = (elevation: number | null) => ({ latitude: 0, longitude: 0, elevation });
-    expect(elevationGain([at(100), at(102), at(99), at(104)])).toBe(5);
-    expect(elevationGain([at(100), at(null)])).toBeNull();
+    expect(elevationGain({ points: [at(100), at(102), at(99), at(104)] })).toBe(5);
+    expect(elevationGain({ points: [at(100), at(null)] })).toBeNull();
     expect(trackDistance([])).toBe(0);
   });
 
@@ -99,20 +99,20 @@ describe('track maths', () => {
       longitude: i * 0.001,
       elevation: null,
     }));
-    expect(simplify(line)).toHaveLength(2);
+    expect(simplify({ points: line })).toHaveLength(2);
     const zigzag = Array.from({ length: 50 }, (_, i) => ({
       latitude: (i % 2) * 0.01,
       longitude: i * 0.001,
       elevation: null,
     }));
-    expect(simplify(zigzag, { maxPoints: 10 }).length).toBeLessThanOrEqual(10);
+    expect(simplify({ points: zigzag, maxPoints: 10 }).length).toBeLessThanOrEqual(10);
     const loop = [
       { latitude: 0, longitude: 0, elevation: null },
       { latitude: 0.01, longitude: 0, elevation: null },
       { latitude: 0, longitude: 0, elevation: null },
     ];
-    expect(simplify(loop)).toHaveLength(3);
-    expect(simplify(loop.slice(0, 2))).toHaveLength(2);
+    expect(simplify({ points: loop })).toHaveLength(3);
+    expect(simplify({ points: loop.slice(0, 2) })).toHaveLength(2);
   });
 });
 
@@ -123,17 +123,17 @@ describe('units', () => {
   });
 
   it('converts and formats', () => {
-    expect(formatDistance(12_400, 'metric')).toBe('12.4 km');
-    expect(formatDistance(160_934.4, 'imperial')).toBe('100 mi');
-    expect(formatElevation(1000, 'imperial')).toBe('3,281 ft');
-    expect(formatElevation(1000, 'metric')).toBe('1,000 m');
-    expect(formatShortDistance(648, 'metric')).toBe('650 m');
-    expect(formatShortDistance(2500, 'metric')).toBe('2.5 km');
-    expect(formatShortDistance(32_186.88, 'imperial')).toBe('20 mi');
-    expect(metresFromDistance(1, 'imperial')).toBe(1609.344);
-    expect(metresFromDistance(1, 'metric')).toBe(1000);
-    expect(metresFromElevation(1, 'imperial')).toBe(0.3048);
-    expect(metresFromElevation(1, 'metric')).toBe(1);
-    expect(elevationValue(3.048, 'imperial')).toBeCloseTo(10);
+    expect(formatDistance({ metres: 12_400, unit: 'metric' })).toBe('12.4 km');
+    expect(formatDistance({ metres: 160_934.4, unit: 'imperial' })).toBe('100 mi');
+    expect(formatElevation({ metres: 1000, unit: 'imperial' })).toBe('3,281 ft');
+    expect(formatElevation({ metres: 1000, unit: 'metric' })).toBe('1,000 m');
+    expect(formatShortDistance({ metres: 648, unit: 'metric' })).toBe('650 m');
+    expect(formatShortDistance({ metres: 2500, unit: 'metric' })).toBe('2.5 km');
+    expect(formatShortDistance({ metres: 32_186.88, unit: 'imperial' })).toBe('20 mi');
+    expect(metresFromDistance({ value: 1, unit: 'imperial' })).toBe(1609.344);
+    expect(metresFromDistance({ value: 1, unit: 'metric' })).toBe(1000);
+    expect(metresFromElevation({ value: 1, unit: 'imperial' })).toBe(0.3048);
+    expect(metresFromElevation({ value: 1, unit: 'metric' })).toBe(1);
+    expect(elevationValue({ metres: 3.048, unit: 'imperial' })).toBeCloseTo(10);
   });
 });

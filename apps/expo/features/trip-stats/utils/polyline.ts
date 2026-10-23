@@ -14,8 +14,8 @@ export function decodePolyline(encoded: string): Coordinate[] {
   let latitude = 0;
   let longitude = 0;
   while (index < encoded.length) {
-    const lat = readValue(encoded, index);
-    const lng = lat ? readValue(encoded, lat.next) : null;
+    const lat = readValue({ encoded, start: index });
+    const lng = lat ? readValue({ encoded, start: lat.next }) : null;
     if (!lat || !lng) return [];
     index = lng.next;
     latitude += lat.value;
@@ -25,7 +25,13 @@ export function decodePolyline(encoded: string): Coordinate[] {
   return points;
 }
 
-function readValue(encoded: string, start: number): { value: number; next: number } | null {
+function readValue({
+  encoded,
+  start,
+}: {
+  encoded: string;
+  start: number;
+}): { value: number; next: number } | null {
   let result = 0;
   let shift = 0;
   let index = start;
@@ -73,7 +79,7 @@ function encodeValue(value: number): string {
 const EARTH_RADIUS_METERS = 6_371_000;
 
 /** Great-circle distance in metres. */
-export function distanceMeters(a: Coordinate, b: Coordinate): number {
+export function distanceMeters({ from: a, to: b }: { from: Coordinate; to: Coordinate }): number {
   const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
   const dLat = toRadians(b.latitude - a.latitude);
   const dLng = toRadians(b.longitude - a.longitude);
@@ -83,8 +89,8 @@ export function distanceMeters(a: Coordinate, b: Coordinate): number {
   return 2 * EARTH_RADIUS_METERS * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
-/** Every `step`-th point plus the last, so a long route is checked cheaply but end to end. */
-export function sampleRoute<T>(route: readonly T[], limit: number): T[] {
+/** About `limit` evenly spaced points, so a long route is checked cheaply end to end. */
+export function sampleRoute<T>({ route, limit }: { route: readonly T[]; limit: number }): T[] {
   const step = Math.max(Math.floor(route.length / limit), 1);
   const samples: T[] = [];
   for (let index = 0; index < route.length; index += step) {
