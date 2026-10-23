@@ -1,6 +1,6 @@
 # Trip Stats, weather and guides: beta tester guide
 
-PackRat 2.3 brings Trip Stats and a rebuilt weather section to Android, along with a calmer, redesigned Guides section. Weather alerts now reach you as notifications on both phones. On iPhone, signing in and Wildlife ID have also changed. The Android build is an APK from the link in the release announcement, and the iPhone build comes from TestFlight.
+PackRat 2.3 is the first round for Trip Stats and weather on both phones. Trip Stats builds a record of your time outdoors from your trips, and weather now has a watch list that sends you a notification when an alert is issued for a place you care about. Android also gets a redesigned Guides section, and on iPhone, signing in and Wildlife ID have changed. The Android build is an APK from the link in the release announcement, and the iPhone build comes from TestFlight.
 
 The app should feel the same on both phones. It is worth reporting where it does not.
 
@@ -8,7 +8,7 @@ The app should feel the same on both phones. It is worth reporting where it does
 
 Download the APK from the link in the release announcement and install it over your current PackRat. Your phone may ask you to allow installs from your browser first.
 
-Six tabs run along the bottom: Dashboard, Packs, Trips, Catalog and Profile, plus Feed if it is switched on for you. Trip Stats, Weather and Guides are tiles on the Dashboard.
+Five tabs run along the bottom: Dashboard, Packs, Trips, Catalog and Profile, with Feed as a sixth if it is switched on for you. Trip Stats, Weather and Guides are tiles on the Dashboard.
 
 ### Trip Stats
 
@@ -90,6 +90,54 @@ Alerts come from official weather warnings, so the test needs a place that has o
 
 Install the update from TestFlight.
 
+Five tabs run along the bottom: Home, Packs, Trips, Assistant and Profile. Trip Stats is a card on Home and in Profile, and Weather is on Home.
+
+### Trip Stats
+
+As on Android, Trip Stats needs a few trips whose end dates have passed, with real places and dates.
+
+- Open Trip Stats from its card on Home, then again from Profile. Expect the same screen both ways.
+- On an account with no finished trips, expect "Your Record Starts Here" rather than an empty page.
+- With finished trips, check the All Time totals against your own count of trips, nights out and days outdoors. Expect them to match.
+- Change the year and activity filters at the top. Expect every section below to follow the filter, and "No Trips Match" when nothing fits.
+- Scroll to Where You've Been. Expect a pin for each place, grouped into a single numbered pin where several sit close together and splitting apart as you zoom in.
+- Open Countries & States. Expect the places you have been, and nothing you have not.
+- Open Landscapes. Expect your trips grouped by the kind of landscape they took place in. Touch and hold a trip to move it to another landscape, and expect it to stay there.
+- Scroll to Not Packed in a Year. Expect gear that has sat in your packs for over a year without going on a finished trip, or "Every item in your packs has been on a trip in the last year."
+- Open your Year in Review. Expect it to look back over the year with your own trips and numbers.
+- Tap Share and choose Share Image. Expect a card of your stats you can send in Messages or save to your photos.
+- Use Export Trips and pick Trips Spreadsheet (CSV), then Routes (GPX). Expect files that open in Numbers or a mapping app and contain your trips.
+
+### Goals
+
+- Tap Add Goal, choose Nights Out and set a target for this year. Expect it under Goals with its progress and a pace note such as "On pace".
+- Make a second goal for your own dates, using a name like "Ten nights out before the baby arrives". Expect your name to show on it.
+- Use Follow a Long Trail and pick one. Expect your progress along it to show, and Stop Following to remove it with "Your trips still count. Follow it again any time."
+- Open a goal and use Share Goal. Expect an image of the goal you can send.
+- Delete a goal. Expect "Your trips and stats stay as they are." and your stats unchanged afterwards.
+
+### Trip log
+
+- Open a finished trip and tap Log This Trip. Add an activity, a distance and an elevation gain. Expect them to count in Trip Stats straight away.
+- Import a GPX file of a route. Expect the distance, climbing and route to be filled in from the file.
+- Use Draw Route to tap out the way you went on the map. Expect a distance to appear as you draw. Tap Out and Back and expect the distance to double.
+- Turn off Count in Trip Stats on one trip. Expect it marked "Not in Trip Stats" and gone from your totals, then back when you turn it on again.
+
+### National Parks and peaks
+
+- Open National Parks. Expect parks your trips passed through already ticked off, with "Visits from trips follow the trip. Change the trip to change them."
+- Use Add a Past Visit for a park you went to before you used PackRat. Expect it marked "Added by hand".
+- Open Peaks and tap Add a Past Summit, then Choose a Peak. Expect a full-screen map with peaks On Your Route and Nearby, and a list that follows the map.
+- Try Enter a Peak by Hand for a peak that is not on the map. Expect it to save like any other.
+
+### Weather
+
+- Open Weather from Home. Search for a city with Add Location and add it. Expect its temperature and conditions in your list.
+- Open it. Expect the current conditions, an hourly strip and a daily forecast.
+- Tap Watch This Location. Expect "You are watching this location", and the place on your Watch List.
+- Switch between Celsius and Fahrenheit. Expect every temperature to change.
+- Remove a location. Expect it to disappear from your list and stay gone after you reopen the app.
+
 ### Signing in
 
 - Sign out, then sign back in with Apple. Expect to land in the app within a few seconds, not a spinner that ends in "The request timed out."
@@ -114,6 +162,9 @@ Use the same maps as on Android to find a town with an alert right now.
 
 - Turn on airplane mode and try to sign in. Expect a clear message about the connection rather than a long spinner.
 - While signed in, turn on airplane mode and reopen the app. Expect your packs and trips to still be there.
+- Still offline, open Trip Stats. Expect the same numbers you saw online.
+- Add a goal and log a trip offline, then turn airplane mode off. Expect both to still be there, with no duplicates, and to show up on your other devices.
+- Open Weather offline. Expect your saved locations with their last known conditions.
 
 ## Reporting
 
