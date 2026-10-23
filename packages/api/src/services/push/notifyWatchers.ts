@@ -27,15 +27,19 @@ function alertNotificationBody(alerts: WeatherAlertItem[]): { title: string; bod
  * Per-device failures don't abort the batch: an expired token is deleted so
  * the table self-cleans, and any other failure is captured and skipped.
  * Returns how many users watch the place, so its timer can stop at zero.
+ * `onlyUserIds` narrows the push to those watchers, for telling a new watcher
+ * about alerts everyone else already heard.
  */
 export async function notifyWatchers({
   env,
   weatherLocationId,
   newAlerts,
+  onlyUserIds,
 }: {
   env: ValidatedEnv;
   weatherLocationId: number;
   newAlerts: WeatherAlertItem[];
+  onlyUserIds?: readonly string[];
 }): Promise<{ watchers: number }> {
   if (newAlerts.length === 0) return { watchers: 0 };
 
@@ -48,7 +52,11 @@ export async function notifyWatchers({
     .where(eq(weatherWatchedLocations.weatherLocationId, weatherLocationId));
   if (watchers.length === 0) return { watchers: 0 };
 
-  const watcherIds = watchers.map((w) => w.userId);
+  const recipients = onlyUserIds ? new Set(onlyUserIds) : null;
+  const watcherIds = watchers
+    .map((w) => w.userId)
+    .filter((userId) => !recipients || recipients.has(userId));
+  if (watcherIds.length === 0) return { watchers: watchers.length };
   const tokens = await db
     .tag('weatherMonitoring.listDeviceTokensForWatchers')
     .select({
