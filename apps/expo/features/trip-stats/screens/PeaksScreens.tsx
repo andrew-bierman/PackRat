@@ -257,7 +257,7 @@ export function PeakPickerScreen() {
     ].filter((section) => section.data.length > 0);
   }, [data, center, route, query, excluded, t]);
 
-  const pick = (summit: TripSummit) => {
+  const selectPeak = (summit: TripSummit) => {
     pickedPeak$.set(summit);
     router.back();
   };
@@ -309,7 +309,7 @@ export function PeakPickerScreen() {
                   className="mx-4 mt-2 self-start"
                   disabled={!handName.trim()}
                   onPress={() =>
-                    pick({
+                    selectPeak({
                       name: handName.trim(),
                       elevationMeters:
                         handElevation && Number.isFinite(handElevationMetres)
@@ -371,7 +371,7 @@ export function PeakPickerScreen() {
               .filter(Boolean)
               .join(' · ')}
             onPress={() =>
-              pick({
+              selectPeak({
                 name: item.peak.name,
                 elevationMeters: item.peak.elevationMeters,
                 latitude: item.peak.latitude,

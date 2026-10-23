@@ -1,4 +1,5 @@
 import type { TripActivity } from '@packrat/schemas/trips';
+import { first, sum } from '@packrat/utils';
 import {
   addDays,
   addMonths,
@@ -245,10 +246,6 @@ function numberOrEmpty(value: number | null | undefined): number[] {
   return value == null ? [] : [value];
 }
 
-function sum(values: readonly number[]): number {
-  return values.reduce((total, value) => total + value, 0);
-}
-
 /**
  * The same spot reached twice counts once: a location within a kilometre of one already counted
  * is the same place. A distance check rather than rounded coordinates, which split two points
@@ -368,14 +365,6 @@ function compareTally(a: Tally, b: Tally): number {
   return a.nights - b.nights || a.trips - b.trips;
 }
 
-function maxBy<T>(items: readonly T[], isGreater: (a: T, b: T) => boolean): T | null {
-  let best: T | null = null;
-  for (const item of items) {
-    if (best === null || isGreater(item, best)) best = item;
-  }
-  return best;
-}
-
 export function computeTripStats({
   trips,
   packs,
@@ -397,9 +386,9 @@ export function computeTripStats({
 
   const distanceOf = (trip: FinishedTrip) => trip.trip.log?.distanceMeters ?? 0;
   const withDistance = finished.filter((trip) => distanceOf(trip) > 0);
-  // Ties go to the earlier trip, as on Swift.
-  const longer = (value: (trip: FinishedTrip) => number) => (a: FinishedTrip, b: FinishedTrip) =>
-    value(a) > value(b) || (value(a) === value(b) && a.start < b.start);
+  // Longest first; ties go to the earlier trip, as on Swift.
+  const longest = (value: (trip: FinishedTrip) => number) => (a: FinishedTrip, b: FinishedTrip) =>
+    value(b) - value(a) || a.start.getTime() - b.start.getTime();
 
   const byActivity = new Map<TripActivity, ActivityBucket>();
   for (const trip of finished) {
@@ -445,13 +434,11 @@ export function computeTripStats({
     });
   }
   // By nights, then trips; remaining ties go to the earlier month, as on Swift.
-  const busiestMonth = maxBy(
-    [...byMonth.entries()],
-    (a, b) => compareTally(a[1], b[1]) > 0 || (compareTally(a[1], b[1]) === 0 && a[0] < b[0]),
+  const busiestMonth = first(
+    [...byMonth.entries()].sort((a, b) => compareTally(b[1], a[1]) || a[0] - b[0]),
   );
-  const busiestSeason = maxBy(
-    [...bySeason.entries()],
-    (a, b) => compareTally(a[1], b[1]) > 0 || (compareTally(a[1], b[1]) === 0 && a[0] > b[0]),
+  const busiestSeason = first(
+    [...bySeason.entries()].sort((a, b) => compareTally(b[1], a[1]) || b[0].localeCompare(a[0])),
   );
 
   const packsById = new Map(packs.filter((pack) => !pack.deleted).map((pack) => [pack.id, pack]));
@@ -496,11 +483,10 @@ export function computeTripStats({
           clipTrips(finished, { start: addYears(thisYearStart, -1), end: addYears(today, -1) }),
         )
       : null,
-    longestByNights: maxBy(
-      finished.filter((trip) => trip.nights > 0),
-      longer((trip) => trip.nights),
-    ),
-    longestByDistance: maxBy(withDistance, longer(distanceOf)),
+    longestByNights:
+      first(finished.filter((trip) => trip.nights > 0).sort(longest((trip) => trip.nights))) ??
+      null,
+    longestByDistance: first([...withDistance].sort(longest(distanceOf))) ?? null,
     averageNights: finished.length
       ? finished.reduce((total, trip) => total + trip.nights, 0) / finished.length
       : null,

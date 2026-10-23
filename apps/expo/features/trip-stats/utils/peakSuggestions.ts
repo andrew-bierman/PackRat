@@ -1,4 +1,5 @@
 import type { NearbyPeak } from '@packrat/schemas/tripStats';
+import { clamp } from '@packrat/utils';
 import { type Coordinate, distanceMeters, sampleRoute } from './polyline';
 
 /**
@@ -80,18 +81,14 @@ export function peakSearchBox(points: readonly Coordinate[]): BoundingBox | null
   const lngs = points.map((point) => point.longitude);
   const midLat = (Math.min(...lats) + Math.max(...lats)) / 2;
   const midLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
-  const latSpan = clamp((Math.max(...lats) - Math.min(...lats)) * 1.2, [0.02, 0.98]);
-  const lngSpan = clamp((Math.max(...lngs) - Math.min(...lngs)) * 1.2, [0.02, 1.48]);
+  const latSpan = clamp((Math.max(...lats) - Math.min(...lats)) * 1.2, 0.02, 0.98);
+  const lngSpan = clamp((Math.max(...lngs) - Math.min(...lngs)) * 1.2, 0.02, 1.48);
   const snapDown = (value: number) => Math.floor(value * 100) / 100;
   const snapUp = (value: number) => Math.ceil(value * 100) / 100;
   return {
-    south: clamp(snapDown(midLat - latSpan / 2), [-90, 90]),
-    north: clamp(snapUp(midLat + latSpan / 2), [-90, 90]),
-    west: clamp(snapDown(midLng - lngSpan / 2), [-180, 180]),
-    east: clamp(snapUp(midLng + lngSpan / 2), [-180, 180]),
+    south: clamp(snapDown(midLat - latSpan / 2), -90, 90),
+    north: clamp(snapUp(midLat + latSpan / 2), -90, 90),
+    west: clamp(snapDown(midLng - lngSpan / 2), -180, 180),
+    east: clamp(snapUp(midLng + lngSpan / 2), -180, 180),
   };
-}
-
-function clamp(value: number, [min, max]: [number, number]): number {
-  return Math.min(Math.max(value, min), max);
 }
