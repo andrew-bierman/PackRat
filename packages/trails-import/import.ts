@@ -57,18 +57,18 @@ if (!/^\d{4}-\d{2}-\d{2}\.\d+$/.test(release)) {
   process.exit(1);
 }
 
-async function run(cmd: string[], stdin?: string): Promise<void> {
+async function run({ cmd, stdin }: { cmd: string[]; stdin?: string }): Promise<void> {
   const proc = Bun.spawn(cmd, {
     stdin: stdin === undefined ? 'inherit' : new TextEncoder().encode(stdin),
     stdout: 'inherit',
     stderr: 'inherit',
   });
   const code = await proc.exited;
-  if (code !== 0) throw new Error(`${cmd[0]} exited with ${code}`);
+  if (code !== 0) throw new Error(`${cmd.at(0)} exited with ${code}`);
 }
 
 const psql = (file: string) =>
-  run(['psql', DB_URL, '-v', 'ON_ERROR_STOP=1', '-v', `release=${release}`, '-f', file]);
+  run({ cmd: ['psql', DB_URL, '-v', 'ON_ERROR_STOP=1', '-v', `release=${release}`, '-f', file] });
 
 console.log('Applying schema...');
 await psql(join(__dirname, 'schema.sql'));
@@ -96,7 +96,7 @@ if (!values['reconcile-only']) {
   // --from-band resumes a stopped run: earlier bands are already loaded, so
   // keep them (re-loading the partial band is safe, inserts skip duplicates).
   const fromBand = Number(values['from-band']);
-  if (fromBand === 1) await run(['psql', DB_URL, '-c', 'TRUNCATE trail_segments']);
+  if (fromBand === 1) await run({ cmd: ['psql', DB_URL, '-c', 'TRUNCATE trail_segments'] });
   const bands: [number, number][] = [];
   for (let w = west; w < east; w += BAND_DEGREES) bands.push([w, Math.min(w + BAND_DEGREES, east)]);
   for (const [i, [bandWest, bandEast]] of bands.entries()) {
@@ -123,7 +123,7 @@ CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name
 `;
     for (let attempt = 1; ; attempt++) {
       try {
-        await run(['duckdb'], sql);
+        await run({ cmd: ['duckdb'], stdin: sql });
         break;
       } catch (error) {
         if (attempt === BAND_ATTEMPTS) throw error;
@@ -132,7 +132,7 @@ CALL postgres_execute('pg', 'INSERT INTO trail_segments SELECT overture_id, name
       }
     }
   }
-  await run(['psql', DB_URL, '-c', 'ANALYZE trail_segments']);
+  await run({ cmd: ['psql', DB_URL, '-c', 'ANALYZE trail_segments'] });
 }
 
 console.log(`Reconciling trails for release ${release}...`);

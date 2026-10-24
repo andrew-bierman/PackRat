@@ -137,7 +137,7 @@ final class NavigationMacOSTests: AppUITestCase {
             return app.textFields["chat_input"].waitForExistence(timeout: timeout)
         case "Catalog":
             return app.searchFields["Search tents, packs, sleeping bags\u{2026}"].waitForExistence(timeout: timeout)
-                || app.staticTexts["Search the Gear Catalog"].waitForExistence(timeout: 1)
+                || app.otherElements["catalog_results_list"].waitForExistence(timeout: 1)
         case "Templates":
             return app.buttons["New Template"].waitForExistence(timeout: timeout)
                 || app.tables.firstMatch.waitForExistence(timeout: 1)

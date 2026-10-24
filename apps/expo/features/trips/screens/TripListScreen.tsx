@@ -20,16 +20,18 @@ function TrailConditionsBanner() {
     <Link href="/trail-conditions" asChild>
       <Pressable>
         <View className="mx-4 mb-2 mt-3 flex-row items-center justify-between rounded-xl bg-violet-500/10 px-4 py-3">
-          <View className="flex-row items-center">
+          <View className="flex-1 flex-row items-center">
             <View className="h-8 w-8 items-center justify-center rounded-full bg-violet-500">
               <Icon name="map" size={18} color="white" />
             </View>
-            <View className="ml-3">
+            <View className="ml-3 flex-1">
               <Text className="font-semibold text-foreground">{t('trips.trailConditions')}</Text>
               <Text className="text-xs text-muted-foreground">{t('trailConditions.subtitle')}</Text>
             </View>
           </View>
-          <Icon name="chevron-right" size={18} color={colors.grey} />
+          <View className="ml-2">
+            <Icon name="chevron-right" size={18} color={colors.grey} />
+          </View>
         </View>
       </Pressable>
     </Link>

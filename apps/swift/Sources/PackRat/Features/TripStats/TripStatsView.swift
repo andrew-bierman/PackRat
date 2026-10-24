@@ -6,7 +6,7 @@ import SwiftUI
 /// packs already loaded into `AppState`; nothing here fetches on its own.
 ///
 /// Layout follows big picture → story → detail: the lifetime grid, this year against the same stretch of last year, the monthly
-/// chart, highlights, the map, parks and peaks, then gear. A section with nothing to show is
+/// chart, highlights, the map, countries and states, parks and peaks, then gear. A section with nothing to show is
 /// left out rather than rendered as zeros.
 struct TripStatsView: View {
     @Environment(AppState.self) private var appState
@@ -19,17 +19,18 @@ struct TripStatsView: View {
     @State private var editingGoal: TripGoal?
     @State private var addingGoal = false
     @State private var followingTrail = false
+    @State private var sharing: TripShareRequest?
+    @State private var reviewing: YearInReview?
+    @State private var scope = TripStats.Scope.all
 
     private var stats: TripStats {
-        TripStats(trips: appState.tripsVM.trips, packs: appState.packsVM.packs)
+        TripStats(trips: appState.tripsVM.trips, packs: appState.packsVM.packs, scope: scope)
     }
 
     var body: some View {
         let stats = stats
         Group {
-            if !appState.tripGoalsVM.isEnabled {
-                TripStatsOptInView()
-            } else if stats.isEmpty {
+            if !stats.hasTrips {
                 EmptyStateView(
                     "Your Record Starts Here",
                     subtitle: "Once a trip's end date passes, it counts here: nights out, days outdoors, the places you've been and the gear that came along.",
@@ -45,23 +46,34 @@ struct TripStatsView: View {
         }
         .navigationTitle("Trip Stats")
         .toolbar {
-            if appState.tripGoalsVM.isEnabled {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
-                        Divider()
-                        Button(role: .destructive) {
-                            Task { await appState.tripGoalsVM.setEnabled(false, context: modelContext) }
-                        } label: {
-                            Label("Turn Off Trip Stats", systemImage: "eye.slash")
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button { addingGoal = true } label: { Label("Add Goal", systemImage: "target") }
+                    if let review = yearInReview(stats) {
+                        Button { reviewing = review } label: {
+                            Label("\(String(review.year)) in Review", systemImage: "sparkles")
                         }
-                    } label: {
-                        Label("More", systemImage: "ellipsis.circle")
                     }
-                    .accessibilityIdentifier("trip_stats_menu")
+                    exportMenu
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
                 }
+                .accessibilityIdentifier("trip_stats_menu")
             }
         }
+        .sheet(item: $sharing) { request in
+            TripShareSheet(content: request.content, unit: distanceUnit)
+        }
+        #if os(iOS)
+        .fullScreenCover(item: $reviewing) { review in
+            YearInReviewView(review: review, unit: distanceUnit)
+        }
+        #else
+        .sheet(item: $reviewing) { review in
+            YearInReviewView(review: review, unit: distanceUnit)
+                .frame(minWidth: 420, minHeight: 780)
+        }
+        #endif
         .sheet(isPresented: $addingGoal) {
             GoalEditorView(goal: nil, finished: stats.finished, parksAndPeaks: parksAndPeaks(stats), unit: distanceUnit)
         }
@@ -89,50 +101,79 @@ struct TripStatsView: View {
         TripParksAndPeaks(finished: stats.finished, entries: appState.tripGoalsVM.entries)
     }
 
+    private func goalProgress(_ stats: TripStats, record: TripParksAndPeaks, trails: [LongTrailProgress]) -> [TripGoalProgress] {
+        appState.tripGoalsVM.goals.compactMap {
+            TripGoalProgress(goal: $0, finished: stats.finished, parksAndPeaks: record, longTrails: trails)
+        }
+    }
+
+    /// The review on offer this month, when its year holds a finished trip.
+    private func yearInReview(_ stats: TripStats) -> YearInReview? {
+        guard !stats.isEmpty, let year = YearInReview.offeredYear(force: Self.forceYearInReview) else { return nil }
+        let record = parksAndPeaks(stats)
+        let trails = LongTrails.all.map { LongTrailProgress(trail: $0, finished: stats.finished) }
+        return YearInReview(year: year, finished: stats.finished, record: record, goals: goalProgress(stats, record: record, trails: trails))
+    }
+
+    /// `--year-in-review` offers the review outside December and January in a
+    /// debug build, so it can be seen and tested any time of year.
+    private static var forceYearInReview: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("--year-in-review")
+        #else
+        false
+        #endif
+    }
+
+    @ViewBuilder
+    private var exportMenu: some View {
+        let trips = TripExport.finishedTrips(appState.tripsVM.trips)
+        if !trips.isEmpty {
+            Menu {
+                ShareLink(
+                    item: TripsCSVFile(contents: TripExport.csv(trips, unit: distanceUnit), name: TripExport.fileName("PackRat Trips", ext: "csv")),
+                    preview: SharePreview("PackRat Trips (\(trips.count))")
+                ) {
+                    Label("Trips Spreadsheet (CSV)", systemImage: "tablecells")
+                }
+                .accessibilityIdentifier("trip_stats_export_csv")
+                if let gpx = TripExport.gpx(trips) {
+                    ShareLink(
+                        item: RoutesGPXFile(contents: gpx, name: TripExport.fileName("PackRat Routes", ext: "gpx")),
+                        preview: SharePreview("PackRat Routes")
+                    ) {
+                        Label("Routes (GPX)", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+                    }
+                    .accessibilityIdentifier("trip_stats_export_gpx")
+                }
+            } label: {
+                Label("Export Trips", systemImage: "square.and.arrow.up.on.square")
+            }
+        }
+    }
+
     private func content(_ stats: TripStats) -> some View {
         let record = parksAndPeaks(stats)
         let trails = LongTrails.all.map { LongTrailProgress(trail: $0, finished: stats.finished) }
+        let goals = goalProgress(stats, record: record, trails: trails)
         return ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                TotalsGrid(totals: stats.totals, unit: distanceUnit)
-
-                if let comeback = stats.comeback {
-                    ComebackCard(comeback: comeback, unit: distanceUnit)
+                if stats.availableYears.count > 1 || !stats.availableActivities.isEmpty {
+                    TripStatsScopeBar(scope: $scope, years: stats.availableYears, activities: stats.availableActivities)
                 }
 
-                GoalsCard(
-                    progress: appState.tripGoalsVM.goals.compactMap { TripGoalProgress(goal: $0, finished: stats.finished, parksAndPeaks: record, longTrails: trails) },
-                    unit: distanceUnit,
-                    onAdd: { addingGoal = true },
-                    onEdit: { editingGoal = $0 }
-                )
-
-                if stats.thisYear.trips > 0 || stats.lastYearToDate != nil {
-                    YearComparisonCard(thisYear: stats.thisYear, lastYear: stats.lastYearToDate)
-                }
-
-                MonthlyChartCard(months: stats.months)
-
-                if !stats.activities.isEmpty {
-                    ActivitiesCard(activities: stats.activities, unit: distanceUnit)
-                }
-
-                HighlightsCard(stats: stats, unit: distanceUnit)
-
-                if stats.finished.contains(where: { $0.trip.location != nil }) || !stats.routes.isEmpty {
-                    TripsMapCard(trips: stats.finished, routes: stats.routes)
-                }
-
-                ParksCard(record: record, unit: distanceUnit)
-                PeaksCard(record: record, unit: distanceUnit)
-                LongTrailsCard(progress: trails, unit: distanceUnit) { _ in followingTrail = true }
-
-                if !stats.topGear.isEmpty {
-                    TopGearCard(gear: stats.topGear)
-                }
-
-                if stats.packWeights.count >= 2 {
-                    PackWeightCard(points: stats.packWeights, unit: weightUnit)
+                if stats.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Trips Match", systemImage: "line.3.horizontal.decrease.circle")
+                    } description: {
+                        Text("No finished trip fits \(TripStatsScopeBar.title(scope)).")
+                    } actions: {
+                        Button("Show All Trips") { scope = .all }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .accessibilityIdentifier("trip_stats_scope_empty")
+                } else {
+                    scopedContent(stats, record: record, trails: trails, goals: goals)
                 }
             }
             .padding(16)
@@ -142,6 +183,118 @@ struct TripStatsView: View {
         .background(.background.secondary)
         .accessibilityIdentifier("trip_stats_screen")
     }
+
+    /// Everything below the scope bar. Lifetime collections (goals, parks,
+    /// peaks, long trails) and the this-year comparisons show under All Time only.
+    @ViewBuilder
+    private func scopedContent(
+        _ stats: TripStats, record: TripParksAndPeaks, trails: [LongTrailProgress], goals: [TripGoalProgress]
+    ) -> some View {
+        let isAll = scope.isAll
+        if isAll, let review = yearInReview(stats) {
+            YearInReviewBanner(review: review) { reviewing = review }
+        }
+
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(TripStatsScopeBar.title(scope)).font(.headline)
+                Spacer()
+                if isAll {
+                    TripShareButton(accessibilityId: "trip_stats_share_totals") {
+                        sharing = TripShareRequest(content: .totals(stats.totals))
+                    }
+                } else if let year = scope.year, scope.activity == nil {
+                    TripShareButton(accessibilityId: "trip_stats_share_totals") {
+                        sharing = TripShareRequest(content: .year(year, stats.totals, lastYear: nil))
+                    }
+                }
+            }
+            TotalsGrid(totals: stats.totals, unit: distanceUnit)
+        }
+
+        if isAll, let comeback = stats.comeback {
+            ComebackCard(comeback: comeback, unit: distanceUnit)
+        }
+
+        if isAll {
+            GoalsCard(
+                progress: goals,
+                unit: distanceUnit,
+                onAdd: { addingGoal = true },
+                onEdit: { editingGoal = $0 },
+                onShare: { sharing = TripShareRequest(content: .goal($0)) }
+            )
+        }
+
+        if isAll, stats.thisYear.trips > 0 || stats.lastYearToDate != nil {
+            YearComparisonCard(thisYear: stats.thisYear, lastYear: stats.lastYearToDate) {
+                let year = Calendar.current.component(.year, from: .now)
+                sharing = TripShareRequest(content: .year(year, stats.thisYear, lastYear: stats.lastYearToDate))
+            }
+        }
+
+        MonthlyChartCard(months: stats.months, title: scope.year.map(String.init) ?? "Last 12 Months")
+
+        if !stats.activities.isEmpty {
+            ActivitiesCard(activities: stats.activities, unit: distanceUnit) { activity in
+                scope.activity = scope.activity == activity ? nil : activity
+            }
+        }
+
+        HighlightsCard(stats: stats, unit: distanceUnit)
+
+        if stats.finished.contains(where: { $0.trip.location != nil }) || !stats.routes.isEmpty {
+            TripsMapCard(trips: stats.finished, routes: stats.routes) {
+                sharing = TripShareRequest(content: .map(
+                    routes: stats.routes.map(\.coordinates),
+                    pins: stats.finished.compactMap { trip in
+                        trip.trip.location.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+                    },
+                    trips: stats.totals.trips,
+                    distance: stats.totals.distance
+                ))
+            }
+        }
+
+        let places = TripPlaces(finished: stats.finished, lifetime: stats.allFinished)
+        if !places.isEmpty {
+            PlacesCard(places: places, scope: scope)
+        }
+
+        let landscapes = TripLandscapes(finished: stats.finished)
+        if !landscapes.isEmpty {
+            LandscapesCard(landscapes: landscapes, scope: scope)
+        }
+
+        if isAll {
+            ParksCard(record: record, unit: distanceUnit)
+            PeaksCard(record: record, unit: distanceUnit)
+            TrailsCard(record: TripTrailsRecord(finished: stats.finished), unit: distanceUnit)
+            LongTrailsCard(progress: trails, unit: distanceUnit) { _ in followingTrail = true }
+        }
+
+        if !stats.topGear.isEmpty {
+            TopGearCard(gear: stats.topGear)
+        }
+
+        if isAll {
+            let idle = IdleGear(finished: stats.allFinished, packs: appState.packsVM.packs)
+            if !idle.isEmpty {
+                IdleGearCard(gear: idle, unit: weightUnit)
+            }
+        }
+
+        if stats.packWeights.count >= 2 {
+            PackWeightCard(points: stats.packWeights, unit: weightUnit)
+        }
+
+        if !isAll {
+            Text("Goals, parks, peaks, long trails and gear not packed in a year show under All Time.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .center)
+        }
+    }
 }
 
 // MARK: - Card chrome
@@ -149,14 +302,25 @@ struct TripStatsView: View {
 struct StatsCard<Content: View>: View {
     let title: String
     var subtitle: String?
+    /// Shows a share button in the header.
+    var onShare: (() -> Void)?
+    var shareId = "trip_stats_share"
     @ViewBuilder let content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.headline)
-                if let subtitle {
-                    Text(subtitle).font(.caption).foregroundStyle(.secondary)
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title).font(.headline)
+                    if let subtitle {
+                        Text(subtitle).font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                if let onShare {
+                    Spacer()
+                    TripShareButton(accessibilityId: shareId, action: onShare)
+                        .padding(.top, -6)
+                        .padding(.trailing, -6)
                 }
             }
             content
@@ -218,11 +382,14 @@ private struct TotalsGrid: View {
 private struct YearComparisonCard: View {
     let thisYear: TripStats.Totals
     let lastYear: TripStats.Totals?
+    let onShare: () -> Void
 
     var body: some View {
         StatsCard(
             title: "This Year",
-            subtitle: lastYear == nil ? "Your first year on the record" : "Compared with the same dates last year"
+            subtitle: lastYear == nil ? "Your first year on the record" : "Compared with the same dates last year",
+            onShare: onShare,
+            shareId: "trip_stats_share_year"
         ) {
             VStack(spacing: 10) {
                 row("Trips", thisYear.trips, lastYear?.trips)
@@ -266,6 +433,7 @@ private struct YearComparisonCard: View {
 
 private struct MonthlyChartCard: View {
     let months: [TripStats.MonthBucket]
+    let title: String
 
     enum Metric: String, CaseIterable, Identifiable {
         case nights = "Nights"
@@ -287,7 +455,7 @@ private struct MonthlyChartCard: View {
     }
 
     var body: some View {
-        StatsCard(title: "Last 12 Months") {
+        StatsCard(title: title) {
             Picker("Metric", selection: $metric) {
                 ForEach(Metric.allCases) { Text($0.rawValue).tag($0) }
             }
@@ -331,6 +499,9 @@ private struct MonthlyChartCard: View {
             }
             .frame(height: 180)
             .animation(.snappy, value: metric)
+            .accessibilityChartDescriptor(TripStatsChartDescriptor(
+                descriptor: TripStatsChartDescriptors.monthly(months, metric: metric.rawValue, title: title)
+            ))
         }
     }
 }
@@ -340,9 +511,13 @@ private struct MonthlyChartCard: View {
 private struct ActivitiesCard: View {
     let activities: [TripStats.ActivityBucket]
     let unit: TripDistanceUnit
+    /// Tapping a bar narrows the screen to that activity; tapping it again clears it.
+    let onSelect: (TripActivity) -> Void
+
+    @State private var selectedLabel: String?
 
     var body: some View {
-        StatsCard(title: "Activities", subtitle: "From your trip logs") {
+        StatsCard(title: "Activities", subtitle: "From your trip logs. Tap one to see only those trips.") {
             Chart(activities) { bucket in
                 BarMark(
                     x: .value("Trips", bucket.trips),
@@ -364,6 +539,16 @@ private struct ActivitiesCard: View {
                 AxisMarks(position: .leading) { AxisValueLabel() }
             }
             .frame(height: CGFloat(activities.count) * 34 + 8)
+            .chartYSelection(value: $selectedLabel)
+            .onChange(of: selectedLabel) { _, label in
+                guard let label, let bucket = activities.first(where: { $0.activity.label == label }) else { return }
+                selectedLabel = nil
+                onSelect(bucket.activity)
+            }
+            .accessibilityChartDescriptor(TripStatsChartDescriptor(
+                descriptor: TripStatsChartDescriptors.activities(activities)
+            ))
+            .accessibilityIdentifier("trip_stats_activities_chart")
         }
     }
 
@@ -453,40 +638,82 @@ private struct TripsMapCard: View {
     @Environment(AppState.self) private var appState
     let trips: [TripStats.FinishedTrip]
     let routes: [TripStats.Route]
+    let onShare: () -> Void
 
     @State private var position: MapCameraPosition = .automatic
     @State private var selection: String?
+    @State private var span: MKCoordinateSpan?
+    /// Trips under a cluster that can't split any further (same spot).
+    @State private var stacked: [String] = []
 
-    private var located: [(trip: TripStats.FinishedTrip, coordinate: CLLocationCoordinate2D)] {
+    private var located: [(id: String, coordinate: CLLocationCoordinate2D)] {
         trips.compactMap { trip in
-            trip.trip.location.map { (trip, CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) }
+            trip.trip.location.map { (trip.id, CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)) }
         }
     }
 
-    private var selectedTrip: TripStats.FinishedTrip? {
-        trips.first { $0.id == selection }
+    private var clusters: [MapCluster<String>] {
+        MapClusters.cluster(located, span: span)
+    }
+
+    /// The trips listed under the map: the tapped pin, or a stack of trips at one spot.
+    private var listed: [TripStats.FinishedTrip] {
+        let ids = stacked.isEmpty ? selection.map { [$0] } ?? [] : stacked
+        return ids.compactMap { id in trips.first { $0.id == id } }
     }
 
     var body: some View {
-        StatsCard(title: "Where You've Been") {
+        StatsCard(title: "Where You've Been", onShare: onShare, shareId: "trip_stats_share_map") {
             Map(position: $position, selection: $selection) {
                 // Translucent strokes: a trail walked more than once draws darker.
                 ForEach(routes) { route in
                     MapPolyline(coordinates: route.coordinates)
                         .stroke(Color.orange.opacity(0.55), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 }
-                ForEach(located, id: \.trip.id) { item in
-                    Marker(item.trip.trip.name, systemImage: "tent.fill", coordinate: item.coordinate)
-                        .tint(Color.accentColor)
-                        .tag(item.trip.id)
+                ForEach(clusters) { cluster in
+                    if cluster.isSingle, let id = cluster.members.first, let trip = trips.first(where: { $0.id == id }) {
+                        Marker(trip.trip.name, systemImage: "tent.fill", coordinate: cluster.coordinate)
+                            .tint(Color.accentColor)
+                            .tag(id)
+                    } else {
+                        Marker("\(cluster.members.count) trips", monogram: Text("\(cluster.members.count)"), coordinate: cluster.coordinate)
+                            .tint(Color.accentColor)
+                            .tag(cluster.id)
+                    }
                 }
             }
             .mapStyle(.standard(elevation: .realistic, pointsOfInterest: .excludingAll))
+            .onMapCameraChange(frequency: .onEnd) { context in
+                span = context.region.span
+            }
+            .task(id: trips.map(\.id)) {
+                // Frame every trip and route, not `.automatic`: that re-frames as clusters
+                // merge and split, and it lets the pins' heads run off the top.
+                if let region = MapClusters.region(
+                    framing: located.map(\.coordinate) + routes.flatMap(\.coordinates),
+                    headroom: true
+                ) {
+                    position = .region(region)
+                }
+            }
+            .onChange(of: selection) { _, id in
+                stacked = []
+                guard let id, let cluster = clusters.first(where: { $0.id == id }), !cluster.isSingle else { return }
+                selection = nil
+                let coordinates = located.filter { cluster.members.contains($0.id) }.map(\.coordinate)
+                guard let region = MapClusters.region(framing: coordinates) else { return }
+                if let span, region.span.latitudeDelta >= span.latitudeDelta * 0.9 {
+                    // Already as close as it gets: the trips share a spot, so list them.
+                    stacked = cluster.members
+                } else {
+                    withAnimation { position = .region(region) }
+                }
+            }
             .frame(height: 240)
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .accessibilityIdentifier("trip_stats_map")
 
-            if let trip = selectedTrip {
+            ForEach(listed) { trip in
                 Button {
                     appState.selectedTripId = trip.id
                     appState.navItem = .trips
@@ -547,7 +774,7 @@ private struct PackWeightCard: View {
                     x: .value("Date", point.date),
                     y: .value("Base weight", point.grams / unit.gramsPerUnit)
                 )
-                                .foregroundStyle(Color.accentColor.opacity(0.6))
+                .foregroundStyle(Color.accentColor.opacity(0.6))
                 PointMark(
                     x: .value("Date", point.date),
                     y: .value("Base weight", point.grams / unit.gramsPerUnit)
@@ -564,6 +791,9 @@ private struct PackWeightCard: View {
             }
             .chartYAxis { AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) }
             .frame(height: 160)
+            .accessibilityChartDescriptor(TripStatsChartDescriptor(
+                descriptor: TripStatsChartDescriptors.weight(points, unit: unit)
+            ))
         }
     }
 }

@@ -27,9 +27,9 @@ import { SharedPacksTile } from 'expo-app/features/packs/components/SharedPacksT
 import { ShoppingListTile } from 'expo-app/features/packs/components/ShoppingListTile';
 import { WeightAnalysisTile } from 'expo-app/features/packs/components/WeightAnalysisTile';
 import { useHasMinimumInventory } from 'expo-app/features/packs/hooks/useHasMinimumInventory';
+import { TripStatsTile } from 'expo-app/features/trip-stats/components/TripStatsTile';
 import { TrailConditionsTile } from 'expo-app/features/trips/components/TrailConditionsTile';
 import { UpcomingTripsTile } from 'expo-app/features/trips/components/UpcomingTripsTile';
-import { WeatherAlertsTile } from 'expo-app/features/weather/components/WeatherAlertsTile';
 import { WeatherTile } from 'expo-app/features/weather/components/WeatherTile';
 import { WildlifeTile } from 'expo-app/features/wildlife/components/WildlifeTile';
 import { useFeatureFlags } from 'expo-app/hooks/useFeatureFlags';
@@ -91,6 +91,11 @@ const tileInfo = {
     keywords: ['trips', 'upcoming', 'planned', 'schedule'],
     component: UpcomingTripsTile,
   },
+  'trip-stats': {
+    title: 'Trip Stats',
+    keywords: ['trips', 'stats', 'goals', 'parks', 'peaks', 'nights'],
+    component: TripStatsTile,
+  },
   'trail-conditions': {
     title: 'Trail Conditions',
     keywords: ['trail', 'conditions', 'terrain', 'path'],
@@ -100,11 +105,6 @@ const tileInfo = {
     title: 'Weather',
     keywords: ['weather', 'forecast', 'temperature', 'conditions'],
     component: WeatherTile,
-  },
-  'weather-alerts': {
-    title: 'Weather Alerts',
-    keywords: ['weather', 'alerts', 'warnings', 'emergency'],
-    component: WeatherAlertsTile,
   },
   'gear-inventory': {
     title: 'Gear Inventory',
@@ -210,11 +210,12 @@ export default function DashboardScreen() {
         ? [appConfig.dashboard.layout.conditional.tripsOrTrailSpacer]
         : []),
       ...(featureFlags.enableTrips ? [appConfig.dashboard.layout.conditional.trips] : []),
+      ...(featureFlags.enableTrips && featureFlags.enableTripStats
+        ? [appConfig.dashboard.layout.conditional.tripStats]
+        : []),
       ...(featureFlags.enableTrailConditions
         ? [appConfig.dashboard.layout.conditional.trailConditions]
         : []),
-      ...appConfig.dashboard.layout.weatherSection,
-      ...(featureFlags.enableTrips ? [appConfig.dashboard.layout.conditional.weatherAlerts] : []),
       ...appConfig.dashboard.layout.gearSection,
       ...(featureFlags.enableShoppingList
         ? [appConfig.dashboard.layout.conditional.shoppingList]

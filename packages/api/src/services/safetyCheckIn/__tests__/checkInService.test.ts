@@ -31,12 +31,18 @@ const mocks = vi.hoisted(() => {
     createDb: vi.fn(() => ({ tag: (label: string) => chain(label) })),
     getEnv: vi.fn(),
     deliverToContacts: vi.fn(),
+    armOverdueTimer: vi.fn(),
+    disarmOverdueTimer: vi.fn(),
   };
 });
 
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
 vi.mock('@packrat/api/utils/env-validation', () => ({ getEnv: mocks.getEnv }));
 vi.mock('../delivery', () => ({ deliverToContacts: mocks.deliverToContacts }));
+vi.mock('../overdueTimer', () => ({
+  armOverdueTimer: mocks.armOverdueTimer,
+  disarmOverdueTimer: mocks.disarmOverdueTimer,
+}));
 
 import {
   addLocations,
@@ -237,6 +243,11 @@ describe('startCheckIn', () => {
       'Track live progress: https://api.example.com/api/safety/',
     );
     expect(callsFor('safetyCheckIn.markContactsIntroduced', 'set')).toHaveLength(1);
+    // Return 02:00 plus 120 minutes of grace.
+    expect(mocks.armOverdueTimer).toHaveBeenCalledWith({
+      checkInId: 'ci-1',
+      at: new Date('2026-09-14T04:00:00.000Z'),
+    });
   });
 
   it('skips the intro when every contact has already been introduced', async () => {
@@ -255,6 +266,7 @@ describe('startCheckIn', () => {
     expect(result.id).toBe('ci-1');
     expect(callsFor('safetyCheckIn.create', 'values')).toHaveLength(0);
     expect(mocks.deliverToContacts).toHaveBeenCalledTimes(0);
+    expect(mocks.armOverdueTimer).toHaveBeenCalledTimes(0);
   });
 
   it("409s when the id is another user's check-in", async () => {
@@ -334,6 +346,22 @@ describe('extendCheckIn', () => {
       expectedReturnAt: new Date(future),
     });
     expect(deliveries()[0]?.operation).toBe('extend');
+    expect(mocks.armOverdueTimer).toHaveBeenCalledWith({
+      checkInId: 'ci-1',
+      at: new Date(new Date(future).getTime() + 120 * 60_000),
+    });
+  });
+
+  it('leaves the alarm alone once the overdue alert has already gone out', async () => {
+    when('safetyCheckIn.get', [checkInRow()]);
+    when('safetyCheckIn.extend', [
+      checkInRow({ expectedReturnAt: new Date(future), overdueAlertSentAt: RETURN }),
+    ]);
+
+    await extendCheckIn({ userId: 'u1', checkInId: 'ci-1', expectedReturnAt: future });
+
+    expect(mocks.armOverdueTimer).toHaveBeenCalledTimes(0);
+    expect(deliveries()[0]?.operation).toBe('extend');
   });
 
   it('404s for an unknown check-in', async () => {
@@ -385,6 +413,7 @@ describe('endCheckIn', () => {
     expect(deliveries()[0]?.message.text).toBe(
       'Alex is back safe from Enchantments. Thanks for keeping an eye out.',
     );
+    expect(mocks.disarmOverdueTimer).toHaveBeenCalledWith({ checkInId: 'ci-1' });
   });
 
   it("I'm Safe after the overdue alert sends the follow-up", async () => {
@@ -426,6 +455,7 @@ describe('endCheckIn', () => {
     const result = await endCheckIn({ userId: 'u1', checkInId: 'ci-1', outcome: 'safe', endedAt });
     expect(result.status).toBe('cancelled');
     expect(mocks.deliverToContacts).toHaveBeenCalledTimes(0);
+    expect(mocks.disarmOverdueTimer).toHaveBeenCalledTimes(0);
   });
 });
 

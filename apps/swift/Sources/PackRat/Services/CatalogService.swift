@@ -5,11 +5,30 @@ import Foundation
 /// `CatalogService.shared` and issuing real requests.
 protocol CatalogBrowsing: Sendable {
     func categories(limit: Int) async throws -> [String]
-    func browse(query: String?, category: String?, page: Int, limit: Int) async throws -> [CatalogItem]
-    /// The keyword search behind the standalone Gear Catalog screen. On the
+    func browse(query: String?, category: String?, sort: CatalogSort?, page: Int, limit: Int) async throws -> [CatalogItem]
+    /// The meaning-based search behind the standalone Gear Catalog screen. On the
     /// protocol so `CatalogViewModel`'s paging can be tested without the
     /// network, the same reason `browse` is here.
     func search(query: String, page: Int, limit: Int) async throws -> [CatalogItem]
+}
+
+extension CatalogBrowsing {
+    /// Browse in the server's default order (popularity, or relevance for a query).
+    func browse(query: String?, category: String?, page: Int, limit: Int) async throws -> [CatalogItem] {
+        try await browse(query: query, category: category, sort: nil, page: page, limit: limit)
+    }
+}
+
+/// Orderings the catalog list route accepts in its `sort` param.
+enum CatalogSort: Sendable {
+    case newest
+
+    /// The route parses `sort` as a JSON object (`SortSchema`), not a flat field.
+    var queryValue: String {
+        switch self {
+        case .newest: #"{"field":"createdAt","order":"desc"}"#
+        }
+    }
 }
 
 final class CatalogService: CatalogBrowsing, Sendable {
@@ -18,11 +37,13 @@ final class CatalogService: CatalogBrowsing, Sendable {
 
     init(api: APIClient = .shared) { self.api = api }
 
+    /// Paged embedding search for the Gear Catalog, matching Android, so
+    /// "warm sleeping bag" finds related gear rather than only exact words.
     func search(query: String, page: Int = 1, limit: Int = 20) async throws -> [CatalogItem] {
-        let endpoint = Endpoint(.get, "/api/catalog", query: [
+        let endpoint = Endpoint(.get, "/api/catalog/vector-search", query: [
             "q": query,
-            "page": "\(page)",
             "limit": "\(limit)",
+            "offset": "\((page - 1) * limit)",
         ])
         let data = try await api.sendData(endpoint)
         return try decodeCatalogItems(from: data)
@@ -51,12 +72,14 @@ final class CatalogService: CatalogBrowsing, Sendable {
     func browse(
         query: String?,
         category: String?,
+        sort: CatalogSort?,
         page: Int = 1,
         limit: Int = 20
     ) async throws -> [CatalogItem] {
         var params = ["page": "\(page)", "limit": "\(limit)"]
         if let query, !query.isEmpty { params["q"] = query }
         if let category, !category.isEmpty { params["category"] = category }
+        if let sort { params["sort"] = sort.queryValue }
         let endpoint = Endpoint(.get, "/api/catalog", query: params)
         let data = try await api.sendData(endpoint)
         return try decodeCatalogItems(from: data)

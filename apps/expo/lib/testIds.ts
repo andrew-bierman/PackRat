@@ -81,6 +81,51 @@ export const testIds = Object.freeze({
   }),
 
   // ── Trips ─────────────────────────────────────────────────────────────────
+  tripStats: Object.freeze({
+    screen: 'trip-stats:screen',
+    profileRow: 'trip-stats:profile-row',
+    dashboardTile: 'trip-stats:dashboard-tile',
+    emptyPlanTripBtn: 'trip-stats:empty-plan-trip',
+    addGoalBtn: 'trip-stats:add-goal',
+    setGoalBtn: 'trip-stats:set-goal',
+    goalRow: (id: string) => `trip-stats:goal-${id}`,
+    pastGoalsToggle: 'trip-stats:past-goals',
+    monthsMetric: (metric: string) => `trip-stats:months-${metric}`,
+    whyAwayBtn: 'trip-stats:why-away',
+    parksCard: 'trip-stats:parks-card',
+    peaksCard: 'trip-stats:peaks-card',
+    parkRow: (code: string) => `trip-stats:park-${code}`,
+    parkSearchInput: 'trip-stats:park-search',
+    addPastVisitBtn: 'trip-stats:add-past-visit',
+    removeVisitBtn: (id: string) => `trip-stats:remove-visit-${id}`,
+    addSummitFab: 'trip-stats:add-summit',
+    choosePeakBtn: 'trip-stats:choose-peak',
+    peakRow: (key: string) => `trip-stats:peak-${key}`,
+    peakSearchInput: 'trip-stats:peak-search',
+    peakByHandBtn: 'trip-stats:peak-by-hand',
+    peakNameInput: 'trip-stats:peak-name',
+    peakElevationInput: 'trip-stats:peak-elevation',
+    dialogCloseBtn: 'trip-stats:dialog-close',
+    dialogSaveBtn: 'trip-stats:dialog-save',
+    goalKind: (kind: string) => `trip-stats:goal-kind-${kind}`,
+    goalMetric: (metric: string) => `trip-stats:goal-metric-${metric}`,
+    goalTargetInput: 'trip-stats:goal-target',
+    goalNameInput: 'trip-stats:goal-name',
+    goalStartDate: 'trip-stats:goal-start',
+    goalEndDate: 'trip-stats:goal-end',
+    deleteGoalBtn: 'trip-stats:delete-goal',
+    logSection: 'trip-stats:log-section',
+    logTripBtn: 'trip-stats:log-trip',
+    countInStatsToggle: 'trip-stats:count-in-stats',
+    notInStatsLabel: (id: string) => `trip-stats:not-in-stats-${id}`,
+    logActivity: (activity: string) => `trip-stats:log-activity-${activity}`,
+    logDistanceInput: 'trip-stats:log-distance',
+    logElevationInput: 'trip-stats:log-elevation',
+    importGpxBtn: 'trip-stats:import-gpx',
+    removeRouteBtn: 'trip-stats:remove-route',
+    logAddSummitBtn: 'trip-stats:log-add-summit',
+    logRemoveSummit: (index: number) => `trip-stats:log-remove-summit-${index}`,
+  }),
   trips: Object.freeze({
     createBtn: 'create-trip-button', // keep Maestro value
     emptyCreateBtn: 'create-trip-empty-button',
@@ -114,17 +159,35 @@ export const testIds = Object.freeze({
     viewRetailerBtn: 'view-retailer-button', // keep Maestro value
     packOption: (id: string | number) => `catalog:pack-option-${id}`,
     item: (id: string | number) => `catalog:item-${id}`,
+    addDetailsCategoryInput: 'catalog:add-details-category-input',
+    addDetailsCategoryChip: (category: string) => `catalog:add-details-category-chip-${category}`,
+    addDetailsQuantityInput: 'catalog:add-details-quantity-input',
   }),
 
   // ── Guides ────────────────────────────────────────────────────────────────
   guides: Object.freeze({
     card: (id: string | number) => `guides:card-${id}`,
+    categoryChip: (category: string) => `guides:category-chip-${category}`,
+    relatedCard: (id: string | number) => `guides:related-card-${id}`,
+    messageAction: 'guides:message-action',
   }),
 
   // ── Pack templates ────────────────────────────────────────────────────────
   packTemplates: Object.freeze({
     dashboardTile: 'dashboard-tile-pack-templates',
     card: (id: string | number) => `pack-templates:card-${id}`,
+    officialShelf: 'pack-templates:official-shelf',
+    officialSeeAll: 'pack-templates:official-see-all',
+    officialRow: (id: string) => `pack-templates:official-row-${id}`,
+    mineEmpty: 'pack-templates:mine-empty',
+    detailOfficialBadge: 'pack-templates:detail-official-badge',
+    detailApplyBtn: 'pack-templates:detail-apply',
+    applyNewPack: 'pack-templates:apply-new-pack',
+    applyPackRow: (id: string) => `pack-templates:apply-pack-${id}`,
+    applyError: 'pack-templates:apply-error',
+    newPackName: 'pack-templates:new-pack-name',
+    newPackCreate: 'pack-templates:new-pack-create',
+    newPackError: 'pack-templates:new-pack-error',
   }),
 
   // ── Profile ───────────────────────────────────────────────────────────────
@@ -173,6 +236,18 @@ export const testIds = Object.freeze({
     searchInput: 'weather:search-input',
     addLocationBtn: 'weather:add-location',
     location: (id: string | number) => `weather:location-${id}`,
+    newAlertDot: (id: string | number) => `weather:new-alert-${id}`,
+    moreMenu: 'weather:more-menu',
+    watchListMenuItem: 'weather:menu-watch-list',
+    snackbar: 'weather:snackbar',
+    alertSection: 'weather:alert-section',
+    watchCta: 'weather:watch-cta',
+    watchToggle: 'weather:watch-toggle',
+    saveLocationBtn: 'weather:save-location',
+    watchListAddBtn: 'weather:watch-list-add',
+    watchedLocation: (id: string | number) => `weather:watched-${id}`,
+    removeWatched: (id: string | number) => `weather:remove-watched-${id}`,
+    homeNewAlertDot: 'weather:home-new-alert',
   }),
 
   // ── Trail conditions ──────────────────────────────────────────────────────
@@ -193,5 +268,14 @@ export const testIds = Object.freeze({
     hazardChip: (hazard: string) => `trail-conditions:hazard-${hazard.split(' ').join('-')}`,
     formSubmitBtn: 'trail-conditions:form-submit',
     formCancelBtn: 'trail-conditions:form-cancel',
+  }),
+
+  // ── Wildlife ──────────────────────────────────────────────────────────────
+  wildlife: Object.freeze({
+    addPhotoBtn: 'wildlife:add-photo',
+    identifyBtn: 'wildlife:identify',
+    resultsList: 'wildlife:results',
+    resultCard: (speciesId: string) => `wildlife:result-${speciesId}`,
+    outcomeMessage: 'wildlife:outcome-message',
   }),
 });

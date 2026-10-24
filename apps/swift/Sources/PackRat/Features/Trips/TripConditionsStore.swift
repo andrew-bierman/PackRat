@@ -5,7 +5,7 @@ import Sentry
 /// Fetches and keeps the destination forecast for upcoming trips. The last
 /// result is persisted so the readiness summary and reminders still have "the
 /// latest the app has" with no signal. New weather alerts at the destination
-/// arrive as a server push (`pollTripDestinations`), not from here.
+/// arrive as a server push (`TripDestinationWatcher`), not from here.
 @Observable
 @MainActor
 final class TripConditionsStore {

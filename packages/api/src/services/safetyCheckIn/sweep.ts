@@ -12,19 +12,24 @@ export interface SweepResult {
 }
 
 /**
- * Runs every five minutes. Once a check-in's expected return plus grace has
- * passed, sends the overdue alert to every contact. Runs on the server so the
- * alert goes out even if the phone is dead. (The hour-before reminder is a
- * local notification on the phone, so it arrives with no signal.)
+ * Once a check-in's expected return plus grace has passed, sends the overdue
+ * alert to every contact. Runs on the server so the alert goes out even if the
+ * phone is dead. (The hour-before reminder is a local notification on the
+ * phone, so it arrives with no signal.)
+ *
+ * Called by the check-in's own `SafetyCheckInTimer` alarm with its
+ * `checkInId`; without one it sweeps every overdue check-in.
  *
  * Each row is claimed with a conditional UPDATE before anything is sent, so an
  * overlapping run can never send the same alert twice.
  */
 export async function sweepSafetyCheckIns({
   env,
+  checkInId,
   now = new Date(),
 }: {
   env: ValidatedEnv;
+  checkInId?: string;
   now?: Date;
 }): Promise<SweepResult> {
   const db = createDbClient(env);
@@ -36,6 +41,7 @@ export async function sweepSafetyCheckIns({
     .set({ overdueAlertSentAt: now })
     .where(
       and(
+        checkInId ? eq(safetyCheckIns.id, checkInId) : undefined,
         eq(safetyCheckIns.status, 'active'),
         isNull(safetyCheckIns.overdueAlertSentAt),
         lte(

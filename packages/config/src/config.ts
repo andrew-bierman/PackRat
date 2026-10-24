@@ -33,9 +33,9 @@ const DashboardTileId = Object.freeze({
   WeightAnalysis: 'weight-analysis',
   PackCategories: 'pack-categories',
   UpcomingTrips: 'upcoming-trips',
+  TripStats: 'trip-stats',
   TrailConditions: 'trail-conditions',
   Weather: 'weather',
-  WeatherAlerts: 'weather-alerts',
   GearInventory: 'gear-inventory',
   ShoppingList: 'shopping-list',
   SharedPacks: 'shared-packs',
@@ -49,7 +49,6 @@ const DashboardLayoutId = Object.freeze({
   Gap1: `${GAP_PREFIX}1`,
   Gap15: `${GAP_PREFIX}1.5`,
   Gap2: `${GAP_PREFIX}2`,
-  Gap25: `${GAP_PREFIX}2.5`,
   Gap3: `${GAP_PREFIX}3`,
   Gap4: `${GAP_PREFIX}4`,
 });
@@ -96,6 +95,7 @@ const APP_CONFIG_SOURCE = {
     layout: {
       base: [
         DashboardTileId.CurrentPack,
+        DashboardTileId.Weather,
         DashboardTileId.RecentPacks,
         DashboardTileId.SeasonSuggestions,
         DashboardLayoutId.Gap1,
@@ -107,14 +107,13 @@ const APP_CONFIG_SOURCE = {
         DashboardTileId.WeightAnalysis,
         DashboardTileId.PackCategories,
       ],
-      weatherSection: [DashboardLayoutId.Gap25, DashboardTileId.Weather],
       gearSection: [DashboardLayoutId.Gap3, DashboardTileId.GearInventory],
       footerSection: [DashboardLayoutId.Gap4, DashboardTileId.Guides],
       conditional: {
         tripsOrTrailSpacer: DashboardLayoutId.Gap2,
         trips: DashboardTileId.UpcomingTrips,
+        tripStats: DashboardTileId.TripStats,
         trailConditions: DashboardTileId.TrailConditions,
-        weatherAlerts: DashboardTileId.WeatherAlerts,
         shoppingList: DashboardTileId.ShoppingList,
         sharedPacks: DashboardTileId.SharedPacks,
         packTemplates: DashboardTileId.PackTemplates,

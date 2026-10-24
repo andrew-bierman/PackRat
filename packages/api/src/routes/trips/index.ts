@@ -1,5 +1,9 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import {
+  disarmTripDestinationTimer,
+  syncTripDestinationTimer,
+} from '@packrat/api/services/weatherMonitoring/tripDestinationTimer';
 import { trips } from '@packrat/db/schema';
 import { CreateTripBodySchema, TripSchema, UpdateTripBodySchema } from '@packrat/schemas/trips';
 import { and, eq } from 'drizzle-orm';
@@ -76,6 +80,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
           .returning();
 
         if (!newTrip) throw new Error('Failed to create trip');
+        await syncTripDestinationTimer({ trip: newTrip });
 
         return TripSchema.parse(newTrip);
       } catch (error) {
@@ -169,6 +174,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
         });
 
         if (!updatedTrip) throw new NotFoundError('Trip not found');
+        await syncTripDestinationTimer({ trip: updatedTrip });
         return TripSchema.parse(updatedTrip);
       } catch (error) {
         console.error('Error updating trip:', error);
@@ -203,6 +209,7 @@ export const tripsRoutes = new Elysia({ prefix: '/trips' })
         .returning();
 
       if (!deleted) return status(404, { error: 'Trip not found' });
+      await disarmTripDestinationTimer({ tripId });
       return { success: true };
     },
     {

@@ -265,7 +265,9 @@ struct AppNavigation: View {
 
     private var sidebar: some View {
         @Bindable var state = appState
-        return List(NavItem.allCases.filter(\.isFeatureEnabled)) { item in
+        // Trip Stats leaves the sidebar once the user turns it off; Settings turns it back on.
+        let items = NavItem.allCases.filter { $0.isFeatureEnabled }
+        return List(items) { item in
             Button {
                 state.navItem = item
             } label: {
@@ -322,7 +324,8 @@ struct AppNavigation: View {
         case .weather:
             WeatherView(viewModel: appState.weatherVM)
         case .catalog:
-            CatalogView().environment(appState)
+            // Its own stack so catalog items push a detail screen in the column.
+            NavigationStack { CatalogView().environment(appState) }
         case .chat:
             ChatView(viewModel: appState.chatVM)
         case .feed:

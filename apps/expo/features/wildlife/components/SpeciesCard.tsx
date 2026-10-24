@@ -2,10 +2,18 @@ import { Text } from '@packrat/ui/src/text';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { Pressable, View } from 'react-native';
 import type { IdentificationResult } from '../types';
+import { displayPercentage, isConfident } from '../utils/confidencePolicy';
 
 interface SpeciesCardProps {
   result: IdentificationResult;
   onPress?: () => void;
+  /**
+   * Set for ranked on-device results. Confidence is floored rather than
+   * rounded, and a top result below the confident threshold reads as a
+   * possible match, never an identification.
+   */
+  ranked?: { isTopResult: boolean };
+  testID?: string;
 }
 
 const DANGER_COLORS = {
@@ -20,14 +28,20 @@ const DANGER_TEXT_COLORS = {
   dangerous: 'text-red-700 dark:text-red-400',
 } as const;
 
-export function SpeciesCard({ result, onPress }: SpeciesCardProps) {
+export function SpeciesCard({ result, onPress, ranked, testID }: SpeciesCardProps) {
   const { t } = useTranslation();
   const { species, confidence, source } = result;
 
-  const confidencePercent = Math.round(confidence * 100);
+  const confidencePercent = ranked ? displayPercentage(confidence) : Math.round(confidence * 100);
+  const confidenceText = !ranked
+    ? `${confidencePercent}%`
+    : ranked.isTopResult && !isConfident(confidence)
+      ? t('wildlife.onDevice.possibleMatch', { percent: confidencePercent })
+      : t('wildlife.onDevice.percentConfident', { percent: confidencePercent });
 
   return (
     <Pressable
+      testID={testID}
       onPress={onPress}
       className="bg-card border border-border rounded-xl p-4 mb-3"
       style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
@@ -39,8 +53,18 @@ export function SpeciesCard({ result, onPress }: SpeciesCardProps) {
         </View>
         {confidence > 0 && (
           <View className="items-end">
-            <Text className="text-sm font-medium text-primary">{confidencePercent}%</Text>
-            <Text className="text-xs text-muted-foreground">{t(`wildlife.source.${source}`)}</Text>
+            <Text
+              className={
+                ranked && !isConfident(confidence)
+                  ? 'text-sm font-medium text-muted-foreground'
+                  : 'text-sm font-medium text-primary'
+              }
+            >
+              {confidenceText}
+            </Text>
+            <Text className="text-xs text-muted-foreground">
+              {ranked ? t(`wildlife.sourceLabel.${source}`) : t(`wildlife.source.${source}`)}
+            </Text>
           </View>
         )}
       </View>

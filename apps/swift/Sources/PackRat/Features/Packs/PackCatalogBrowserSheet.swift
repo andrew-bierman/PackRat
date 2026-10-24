@@ -252,38 +252,12 @@ struct PackCatalogBrowserSheet: View {
     }
 
     private var categoryChips: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                chip(label: "All", isSelected: viewModel.selectedCategory == nil) {
-                    viewModel.selectCategory(nil)
-                }
-                ForEach(viewModel.categories, id: \.self) { category in
-                    chip(label: category.catalogCategoryDisplayName, isSelected: viewModel.selectedCategory == category) {
-                        viewModel.selectCategory(
-                            viewModel.selectedCategory == category ? nil : category
-                        )
-                    }
-                }
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-        }
+        CatalogCategoryChips(
+            categories: viewModel.categories,
+            selected: viewModel.selectedCategory,
+            onSelect: viewModel.selectCategory
+        )
         .accessibilityIdentifier("pack_catalog_categories")
-    }
-
-    private func chip(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(label)
-                .font(.caption.bold())
-                .padding(.horizontal, 14)
-                .padding(.vertical, 7)
-                .background(
-                    isSelected ? Color.accentColor : Color.accentColor.opacity(0.1),
-                    in: Capsule()
-                )
-                .foregroundStyle(isSelected ? .white : Color.accentColor)
-        }
-        .buttonStyle(.plain)
     }
 
     @ViewBuilder

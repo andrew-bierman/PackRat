@@ -18,16 +18,18 @@ struct CatalogView: View {
                 )
             } else if vm.isLoading && vm.items.isEmpty {
                 ProgressView("Searching gear…").frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let error = vm.error {
+            } else if let error = vm.error, vm.items.isEmpty {
                 ErrorView(error, retry: { await vm.search(reset: true) })
-            } else if vm.items.isEmpty && vm.hasSearched {
+            } else if vm.items.isEmpty && vm.hasSearched && (!vm.searchText.isEmpty || vm.selectedCategory != nil) {
                 UnavailableStateView(
                     title: "No Results",
-                    subtitle: "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
+                    subtitle: vm.searchText.isEmpty
+                        ? "No gear in this category yet."
+                        : "No gear matched “\(vm.searchText)”. Try a brand, model, or category.",
                     systemImage: "magnifyingglass"
                 )
                 .accessibilityIdentifier("catalog_no_results")
-            } else if !vm.hasSearched {
+            } else if vm.items.isEmpty {
                 EmptyStateView(
                     "Search the Gear Catalog",
                     subtitle: "Find weight specs, prices, and reviews for thousands of outdoor products",
@@ -40,7 +42,8 @@ struct CatalogView: View {
                 }
             }
         }
-        .navigationTitle("Gear Catalog")
+        // The active category becomes the title, the way Mail titles a mailbox.
+        .navigationTitle(vm.selectedCategory?.catalogCategoryDisplayName ?? "Gear Catalog")
         // Guests get no search field at all: catalog search is server-backed, so
         // an editable field above "Catalog Requires an Account" is a dead input
         // that accepts a query it can never answer.
@@ -50,12 +53,23 @@ struct CatalogView: View {
                 vm.onSearchTextChanged()
             }
         }
+        .task {
+            if authManager.isAuthenticated {
+                await vm.loadIfNeeded()
+            }
+        }
         .onSubmit(of: .search) {
             if authManager.isAuthenticated {
                 Task { await vm.search(reset: true) }
             }
         }
         .toolbar {
+            // Search spans every category, so the filter only shows while browsing.
+            if authManager.isAuthenticated && !vm.categories.isEmpty && vm.searchText.isEmpty {
+                ToolbarItem(placement: .primaryAction) {
+                    categoryMenu(vm: vm)
+                }
+            }
             // A re-search over an already-populated list: the footer belongs to
             // paging, so this reports the refresh instead.
             if vm.isLoading && !vm.items.isEmpty {
@@ -66,17 +80,40 @@ struct CatalogView: View {
         }
     }
 
+    private func categoryMenu(vm: CatalogViewModel) -> some View {
+        Menu {
+            Picker("Category", selection: Binding(
+                get: { vm.selectedCategory },
+                set: { vm.selectCategory($0) }
+            )) {
+                Text("All Gear").tag(String?.none)
+                ForEach(vm.categories, id: \.self) { category in
+                    Text(category.catalogCategoryDisplayName).tag(String?.some(category))
+                }
+            }
+        } label: {
+            Label(
+                "Filter",
+                systemImage: vm.selectedCategory == nil
+                    ? "line.3.horizontal.decrease.circle"
+                    : "line.3.horizontal.decrease.circle.fill"
+            )
+        }
+        .accessibilityIdentifier("catalog_category_filter")
+    }
+
     private func itemGrid(vm: CatalogViewModel) -> some View {
         LazyVStack(spacing: 0) {
             ForEach(vm.items) { item in
                 CatalogItemRow(item: item, packsViewModel: appState.packsVM)
                     // Paging is driven by the row, not the divider below it: the
                     // divider is a zero-height view that LazyVStack may never
-                    // consider on-screen, so its .task could go unrun and the
-                    // list would just stop growing.
-                    .task {
+                    // consider on-screen. An unstructured Task, not `.task`, so
+                    // the page fetch survives the row scrolling away instead of
+                    // being cancelled mid-request.
+                    .onAppear {
                         if item.id == vm.items.last?.id {
-                            await vm.loadMore()
+                            Task { await vm.loadMore() }
                         }
                     }
                 Divider().padding(.leading, 76)
@@ -131,18 +168,17 @@ struct CatalogItemRow: View {
     let item: CatalogItem
     let packsViewModel: PacksViewModel
     @State private var showingAddToPack = false
-    @State private var showingDetail = false
     @Environment(\.weightUnit) private var weightUnit
 
     var body: some View {
-        rowContent
-            .contentShape(Rectangle())
-            .onTapGesture { showingDetail = true }
-            .accessibilityIdentifier("catalog_item_row_\(item.id)")
-            .sheet(isPresented: $showingDetail) {
-                CatalogItemDetailView(item: item, packsViewModel: packsViewModel)
-            }
-            .sheet(isPresented: $showingAddToPack) {
+        NavigationLink {
+            CatalogItemDetailView(item: item, packsViewModel: packsViewModel, isPushed: true)
+        } label: {
+            rowContent.contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("catalog_item_row_\(item.id)")
+        .sheet(isPresented: $showingAddToPack) {
                 AddCatalogItemToPackSheet(item: item, packsViewModel: packsViewModel)
             }
     }
@@ -296,8 +332,23 @@ struct AddCatalogItemToPackSheet: View {
 
     @State private var selectedPackId: String?
     @State private var quantity = 1
+    @State private var category: String
     @State private var error: String?
     @State private var success = false
+
+    init(item: CatalogItem, packsViewModel: PacksViewModel) {
+        self.item = item
+        self.packsViewModel = packsViewModel
+        _category = State(initialValue: item.categories?.first ?? "")
+    }
+
+    private var categorySuggestions: [String] {
+        let packItems = packsViewModel.packs.first { $0.id == selectedPackId }?.items ?? []
+        return CatalogCategorySuggestions.make(
+            catalogCategories: item.categories ?? [],
+            packCategories: packItems.filter { !$0.deleted }.map(\.category)
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -320,6 +371,14 @@ struct AddCatalogItemToPackSheet: View {
                         }
                     }
                     Stepper("Quantity: \(quantity)", value: $quantity, in: 1...99)
+                }
+
+                Section("Category") {
+                    TextField("Category", text: $category)
+                        .accessibilityIdentifier("catalog_add_category_field")
+                    if !categorySuggestions.isEmpty {
+                        categoryChips
+                    }
                 }
 
                 if let error { Section { InlineErrorView(message: error) } }
@@ -348,7 +407,35 @@ struct AddCatalogItemToPackSheet: View {
                 }
             }
         }
-        .formSheetSize(minWidth: 480, minHeight: 380)
+        .formSheetSize(minWidth: 480, minHeight: 460)
+    }
+
+    private var categoryChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(categorySuggestions, id: \.self) { suggestion in
+                    let isSelected = CatalogCategorySuggestions.matches(suggestion, category)
+                    Button {
+                        category = suggestion
+                    } label: {
+                        Text(suggestion)
+                            .font(.caption.bold())
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 7)
+                            .background(
+                                isSelected ? Color.accentColor : Color.accentColor.opacity(0.1),
+                                in: Capsule()
+                            )
+                            .foregroundStyle(isSelected ? .white : Color.accentColor)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                    .accessibilityIdentifier("catalog_add_category_chip_\(suggestion)")
+                }
+            }
+            .padding(.vertical, 2)
+        }
+        .accessibilityIdentifier("catalog_add_category_chips")
     }
 
     private func addToPack() async {
@@ -361,7 +448,7 @@ struct AddCatalogItemToPackSheet: View {
                 weight: item.weight ?? 0,
                 weightUnit: item.weightUnit?.rawValue ?? WeightUnit.g.rawValue,
                 quantity: quantity,
-                category: item.categories?.first,
+                category: trimmedCategory.isEmpty ? nil : trimmedCategory,
                 consumable: false,
                 worn: false,
                 notes: nil,
@@ -375,5 +462,33 @@ struct AddCatalogItemToPackSheet: View {
         } catch {
             self.error = error.localizedDescription
         }
+    }
+
+    private var trimmedCategory: String {
+        category.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+/// Category suggestions for the Add to Pack sheet: the catalog item's own
+/// categories first, then the groups already used in the target pack, so a
+/// familiar group is one tap away. Matches Android's ordering and cap.
+enum CatalogCategorySuggestions {
+    static let limit = 8
+
+    static func make(catalogCategories: [String], packCategories: [String?]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for raw in catalogCategories.map(Optional.some) + packCategories {
+            guard let value = raw?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !value.isEmpty,
+                  seen.insert(value.lowercased()).inserted
+            else { continue }
+            result.append(value)
+        }
+        return Array(result.prefix(limit))
+    }
+
+    static func matches(_ suggestion: String, _ category: String) -> Bool {
+        suggestion.lowercased() == category.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 }

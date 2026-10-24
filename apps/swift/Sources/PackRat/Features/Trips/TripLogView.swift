@@ -110,7 +110,17 @@ struct TripLogSection: View {
                     .lineLimit(2)
                     .accessibilityIdentifier("trip_log_summits")
                 }
-                if log.distanceMeters == nil, log.elevationGainMeters == nil, log.activities.isEmpty, log.summits.isEmpty {
+                if !log.trails.isEmpty {
+                    Label(
+                        log.trails.map(\.name).formatted(.list(type: .and)),
+                        systemImage: "point.bottomleft.forward.to.point.topright.scurvepath"
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+                    .accessibilityIdentifier("trip_log_trails")
+                }
+                if log.distanceMeters == nil, log.elevationGainMeters == nil, log.activities.isEmpty, log.summits.isEmpty, log.trails.isEmpty {
                     Text("Route saved").font(.callout).foregroundStyle(.secondary)
                 }
             }
@@ -171,8 +181,12 @@ struct TripLogEditor: View {
     @State private var route: String?
     @State private var source: TripLog.Source?
     @State private var summits: [TripSummit] = []
+    @State private var trails: [TripTrail] = []
+    @State private var landscape: TripLandscape?
     @State private var showingPeakPicker = false
+    @State private var showingTrailPicker = false
     @State private var showingImporter = false
+    @State private var showingDrawing = false
     @State private var importError: String?
     @State private var isSaving = false
     @State private var confirmingClear = false
@@ -207,6 +221,10 @@ struct TripLogEditor: View {
                         Button("Replace Track", systemImage: "arrow.triangle.2.circlepath") {
                             showingImporter = true
                         }
+                        if source == .manual {
+                            Button("Edit Route on Map", systemImage: "scribble") { showingDrawing = true }
+                                .accessibilityIdentifier("trip_log_edit_route")
+                        }
                         Button("Remove Route", systemImage: "trash", role: .destructive) {
                             route = nil
                             if source == .track { source = .manual }
@@ -218,6 +236,12 @@ struct TripLogEditor: View {
                             Label("Import GPS Track", systemImage: "square.and.arrow.down")
                         }
                         .accessibilityIdentifier("trip_log_import_track")
+                        Button {
+                            showingDrawing = true
+                        } label: {
+                            Label("Draw on Map", systemImage: "scribble")
+                        }
+                        .accessibilityIdentifier("trip_log_draw_route")
                     }
                     if let importError {
                         Text(importError).font(.footnote).foregroundStyle(.red)
@@ -225,7 +249,27 @@ struct TripLogEditor: View {
                 } header: {
                     Text("Route")
                 } footer: {
-                    Text("Export a GPX file from your watch, Strava, AllTrails, Gaia GPS or another app. PackRat reads the distance, climbing and route from it.")
+                    Text("Export a GPX file from your watch, Strava, AllTrails, Gaia GPS or another app. PackRat reads the distance, climbing and route from it. Or tap out the way you went on the map.")
+                }
+
+                Section {
+                    ForEach(trails, id: \.self) { trail in
+                        TripTrailRow(trail: trail, unit: unit)
+                    }
+                    .onDelete { trails.remove(atOffsets: $0) }
+                    Button {
+                        showingTrailPicker = true
+                    } label: {
+                        Label("Add Trail", systemImage: "plus")
+                    }
+                    .accessibilityIdentifier("trip_log_add_trail")
+                } header: {
+                    Text("Trails")
+                } footer: {
+                    Text((routeCoordinates.count >= 2
+                        ? "Trails your route follows are suggested first. Trails count toward your Trails list."
+                        : "Picking a trail fills in its route if you haven't added one. Trails count toward your Trails list.")
+                        )
                 }
 
                 Section {
@@ -246,14 +290,32 @@ struct TripLogEditor: View {
                 }
 
                 Section {
-                    numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
-                        .accessibilityIdentifier("trip_log_distance")
+                    VStack(alignment: .leading, spacing: 10) {
+                        numberField("Distance", text: $distanceText, symbol: unit.distanceSymbol, field: .distance)
+                            .accessibilityIdentifier("trip_log_distance")
+                        if showsTrailDistances {
+                            trailDistanceSuggestions
+                        }
+                    }
                     numberField("Elevation gain", text: $elevationText, symbol: unit.elevationSymbol, field: .elevation)
                         .accessibilityIdentifier("trip_log_elevation")
                 } header: {
                     Text("Distance & Climbing")
                 } footer: {
-                    Text("Total for the whole trip. Leave blank if you don't know.")
+                    Text("Total for the whole trip. Leave blank if you don't know."
+                        + (showsTrailDistances ? " Tap a trail distance to use the length of the trails you picked." : ""))
+                }
+
+                Section {
+                    Picker("Landscape", selection: $landscape) {
+                        Text(automaticLandscapeLabel).tag(TripLandscape?.none)
+                        ForEach(TripLandscape.allCases) { option in
+                            Label(option.label, systemImage: option.symbol).tag(Optional(option))
+                        }
+                    }
+                    .accessibilityIdentifier("trip_log_landscape")
+                } footer: {
+                    Text("Where this trip counts in Landscapes.")
                 }
 
                 if trip.log != nil {
@@ -295,7 +357,7 @@ struct TripLogEditor: View {
                     }
                 }
             } message: {
-                Text("The trip stays, but its activity, distance, climbing, route and summits stop counting in your stats.")
+                Text("The trip stays, but its activity, distance, climbing, route, summits and trails stop counting in your stats.")
             }
             .peakPicker(isPresented: $showingPeakPicker) {
                 PeakPickerView(
@@ -304,6 +366,28 @@ struct TripLogEditor: View {
                     excluded: Set(summits.map(\.peakKey))
                 ) { picked in
                     if !summits.contains(where: { $0.peakKey == picked.peakKey }) { summits.append(picked) }
+                }
+            }
+            .sheet(isPresented: $showingTrailPicker) {
+                TrailPickerView(
+                    route: routeCoordinates,
+                    location: trip.location,
+                    excluded: Set(trails.map(\.id))
+                ) { picked in
+                    guard !trails.contains(where: { $0.id == picked.id }) else { return }
+                    trails.append(picked)
+                    Task { await fillFromTrail(picked) }
+                }
+            }
+            .sheet(isPresented: $showingDrawing) {
+                RouteDrawingView(
+                    initial: source == .manual ? routeCoordinates : [],
+                    center: trip.location.map { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) },
+                    unit: unit
+                ) { points in
+                    route = Polyline.encode(points)
+                    source = .manual
+                    distanceText = format(unit.distanceValue(RouteDrawing.distance(points)), digits: 1)
                 }
             }
             .onAppear(perform: prefill)
@@ -360,6 +444,67 @@ struct TripLogEditor: View {
         route = log.route
         source = log.source
         summits = log.summits
+        trails = log.trails
+        landscape = log.landscape
+    }
+
+    private var trailLength: Double { Self.totalLength(trails) }
+
+    /// A distance read from a GPS track is kept as recorded, so trails offer none.
+    private var showsTrailDistances: Bool { trailLength > 0 && source != .track }
+
+    static func totalLength(_ trails: [TripTrail]) -> Double {
+        trails.compactMap(\.lengthMeters).reduce(0, +)
+    }
+
+    /// The trails' length walked one way and there and back, offered under Distance.
+    static func trailDistances(_ length: Double) -> [(label: String, meters: Double)] {
+        [("One way", length), ("There and back", length * 2)]
+    }
+
+    private var trailDistanceSuggestions: some View {
+        HStack(spacing: 8) {
+            ForEach(Self.trailDistances(trailLength), id: \.label) { option in
+                let text = format(unit.distanceValue(option.meters), digits: 1)
+                let chosen = text == distanceText
+                Button {
+                    distanceText = text
+                } label: {
+                    Text("\(option.label) \(text) \(unit.distanceSymbol)")
+                        .font(.caption.weight(.medium))
+                        .lineLimit(1)
+                        .monospacedDigit()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .tint(chosen ? .accentColor : .secondary)
+                .accessibilityAddTraits(chosen ? .isSelected : [])
+                .accessibilityIdentifier("trip_log_trail_distance_\(option.label == "One way" ? "one_way" : "there_and_back")")
+            }
+        }
+    }
+
+    /// "Automatic (Mountain)": what the trip reads as with the figures entered so far.
+    private var automaticLandscapeLabel: String {
+        var draft = trip
+        draft.log = TripLog(
+            activities: activities,
+            distanceMeters: parse(distanceText).map(unit.metres(fromDistance:)),
+            elevationGainMeters: parse(elevationText).map(unit.metres(fromElevation:)),
+            route: route,
+            summits: summits
+        )
+        guard let automatic = TripLandscapes.landscape(of: draft) else { return "Automatic" }
+        return "Automatic (\(automatic.label))"
+    }
+
+    /// The first trail picked on an empty log supplies the route.
+    private func fillFromTrail(_ trail: TripTrail) async {
+        guard route == nil else { return }
+        guard let detail = try? await TrailRegistryService.shared.trail(id: trail.id),
+              route == nil, let line = TrailRoute.encoded(detail.parts) else { return }
+        route = line
+        source = .trail
     }
 
     private func format(_ value: Double, digits: Int) -> String {
@@ -400,13 +545,34 @@ struct TripLogEditor: View {
             elevationGainMeters: parse(elevationText).map(unit.metres(fromElevation:)),
             route: route,
             source: source ?? .manual,
-            summits: summits
+            summits: summits,
+            trails: trails,
+            landscape: landscape
         )
         Task {
             await viewModel.saveLog(log, for: trip.id, context: modelContext)
             isSaving = false
             dismiss()
         }
+    }
+}
+
+private struct TripTrailRow: View {
+    let trail: TripTrail
+    let unit: TripDistanceUnit
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "point.bottomleft.forward.to.point.topright.scurvepath")
+                .foregroundStyle(Color.accentColor)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(trail.name)
+                if let length = trail.lengthMeters {
+                    Text(unit.formatDistance(length)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                }
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 

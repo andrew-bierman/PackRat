@@ -24,6 +24,7 @@ const mocks = vi.hoisted(() => {
     onConflictDoUpdate,
     deleteWhere,
     captureApiException: vi.fn(),
+    kvDelete: vi.fn(),
     createDb: vi.fn(() => {
       const db = {
         tag: (label: string) => {
@@ -63,6 +64,12 @@ const mocks = vi.hoisted(() => {
 
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
+vi.mock('@packrat/api/utils/env-validation', () => ({
+  getEnv: () => ({
+    AUTH_KV: { delete: mocks.kvDelete },
+    NEON_DATABASE_URL: 'postgresql://u:p@ep-dev-branch-pooler.neon.tech/db',
+  }),
+}));
 vi.mock('@packrat/db', () => ({
   featureFlags: { key: 'key' },
   featureFlagPlatformOverrides: { key: 'key', platform: 'platform' },
@@ -77,12 +84,15 @@ vi.mock('drizzle-orm', () => ({
 import { APP_CONFIG, FeatureFlag } from '@packrat/config';
 import {
   deleteFeatureFlagOverride,
+  globalFlagOverridesKey,
+  listCachedFeatureFlags,
   listEffectiveFeatureFlags,
   listFeatureFlagsForAdmin,
   setFeatureFlagPlatformOverride,
   upsertFeatureFlagOverride,
 } from '../featureFlagsService';
 
+const MIRROR_KEY = 'feature-flags:global-overrides:ep-dev-branch-pooler.neon.tech';
 describe('featureFlagsService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -420,6 +430,74 @@ describe('featureFlagsService', () => {
           error: boom,
           operation: 'featureFlags.setPlatformOverride',
         }),
+      );
+    });
+  });
+
+  describe('listCachedFeatureFlags()', () => {
+    it("names the mirror after the database it was read from, so environments don't share it", () => {
+      expect(globalFlagOverridesKey()).toBe(MIRROR_KEY);
+    });
+
+    const fakeKv = (stored: string | null) => ({
+      get: vi.fn(async () => stored),
+      put: vi.fn(async () => {}),
+      delete: vi.fn(async () => {}),
+    });
+
+    it('resolves from the KV mirror without touching Postgres', async () => {
+      const key = FeatureFlag.EnableSafetyCheckIn;
+      const kv = fakeKv(JSON.stringify({ [key]: !APP_CONFIG.featureFlags[key] }));
+
+      const result = await listCachedFeatureFlags(kv);
+
+      expect(result[key]).toBe(!APP_CONFIG.featureFlags[key]);
+      expect(kv.get).toHaveBeenCalledWith(MIRROR_KEY);
+      expect(mocks.findMany).not.toHaveBeenCalled();
+      expect(kv.put).not.toHaveBeenCalled();
+    });
+
+    it('refills the mirror from Postgres on a miss, storing overrides only', async () => {
+      const key = FeatureFlag.EnableSafetyCheckIn;
+      mocks.findMany.mockResolvedValue([{ key, enabled: true }]);
+      const kv = fakeKv(null);
+
+      const result = await listCachedFeatureFlags(kv);
+
+      expect(result).toEqual({ ...APP_CONFIG.featureFlags, [key]: true });
+      expect(kv.put).toHaveBeenCalledWith(MIRROR_KEY, JSON.stringify({ [key]: true }), {
+        expirationTtl: 86_400,
+      });
+    });
+  });
+
+  describe('mirror invalidation', () => {
+    it('an upsert drops the mirror', async () => {
+      mocks.insertReturning.mockResolvedValue([
+        { key: FeatureFlag.EnableFeed, enabled: true, description: null, updatedAt: new Date() },
+      ]);
+      await upsertFeatureFlagOverride({ key: FeatureFlag.EnableFeed, enabled: true });
+      expect(mocks.kvDelete).toHaveBeenCalledWith(MIRROR_KEY);
+    });
+
+    it('a delete that removed a row drops the mirror', async () => {
+      mocks.deleteReturning.mockResolvedValue([{ key: FeatureFlag.EnableFeed }]);
+      await deleteFeatureFlagOverride(FeatureFlag.EnableFeed);
+      expect(mocks.kvDelete).toHaveBeenCalledWith(MIRROR_KEY);
+    });
+
+    it('a delete that removed nothing leaves the mirror', async () => {
+      mocks.deleteReturning.mockResolvedValue([]);
+      await deleteFeatureFlagOverride(FeatureFlag.EnableFeed);
+      expect(mocks.kvDelete).not.toHaveBeenCalled();
+    });
+
+    it('a failed drop is captured without failing the write', async () => {
+      mocks.deleteReturning.mockResolvedValue([{ key: FeatureFlag.EnableFeed }]);
+      mocks.kvDelete.mockRejectedValueOnce(new Error('kv down'));
+      await expect(deleteFeatureFlagOverride(FeatureFlag.EnableFeed)).resolves.toBe(true);
+      expect(mocks.captureApiException).toHaveBeenCalledWith(
+        expect.objectContaining({ operation: 'featureFlags.invalidateCache' }),
       );
     });
   });

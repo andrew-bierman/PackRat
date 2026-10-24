@@ -129,7 +129,7 @@
   // 5-minute granularity; baseline-tier locations are simply skipped inside
   // the handler when not yet due). Handled by the `scheduled` arm in src/index.ts.
   "triggers": {
-    "crons": ["0 9 * * *", "*/5 * * * *"]
+    "crons": ["0 9 * * *"]
   },
   // OSM / trail database — dedicated Postgres instance with PostGIS.
   // Add a Hyperdrive binding when ready:
@@ -152,6 +152,18 @@
       {
         "class_name": "PostLiveRoom",
         "name": "POST_LIVE_ROOM"
+      },
+      {
+        "class_name": "SafetyCheckInTimer",
+        "name": "SAFETY_CHECK_IN_TIMER"
+      },
+      {
+        "class_name": "TripDestinationWatcher",
+        "name": "TRIP_DESTINATION_WATCHER"
+      },
+      {
+        "class_name": "WatchedPlaceWatcher",
+        "name": "WATCHED_PLACE_WATCHER"
       }
     ]
   },
@@ -173,10 +185,27 @@
     {
       "new_sqlite_classes": ["PostLiveRoom"],
       "tag": "v3"
+    },
+    {
+      "new_sqlite_classes": ["SafetyCheckInTimer"],
+      "tag": "v4"
+    },
+    {
+      "new_sqlite_classes": ["TripDestinationWatcher"],
+      "tag": "v5"
+    },
+    {
+      "new_sqlite_classes": ["WatchedPlaceWatcher"],
+      "tag": "v6"
     }
   ],
   "env": {
     "dev": {
+      // The Swift staging build calls api-dev.packratai.com; workers.dev stays
+      // on for clients that still use it. Declaring routes would otherwise
+      // turn workers.dev off by default.
+      "workers_dev": true,
+      "routes": [{ "pattern": "api-dev.packratai.com", "custom_domain": true }],
       "kv_namespaces": [
         {
           "binding": "AUTH_KV",
@@ -266,7 +295,7 @@
         }
       ],
       "triggers": {
-        "crons": ["0 9 * * *", "*/5 * * * *"]
+        "crons": ["0 9 * * *"]
       },
       "containers": [
         {
@@ -285,6 +314,18 @@
           {
             "class_name": "PostLiveRoom",
             "name": "POST_LIVE_ROOM"
+          },
+          {
+            "class_name": "SafetyCheckInTimer",
+            "name": "SAFETY_CHECK_IN_TIMER"
+          },
+          {
+            "class_name": "TripDestinationWatcher",
+            "name": "TRIP_DESTINATION_WATCHER"
+          },
+          {
+            "class_name": "WatchedPlaceWatcher",
+            "name": "WATCHED_PLACE_WATCHER"
           }
         ]
       },
@@ -305,6 +346,18 @@
         {
           "new_sqlite_classes": ["PostLiveRoom"],
           "tag": "v4"
+        },
+        {
+          "new_sqlite_classes": ["SafetyCheckInTimer"],
+          "tag": "v5"
+        },
+        {
+          "new_sqlite_classes": ["TripDestinationWatcher"],
+          "tag": "v6"
+        },
+        {
+          "new_sqlite_classes": ["WatchedPlaceWatcher"],
+          "tag": "v7"
         }
       ]
     }

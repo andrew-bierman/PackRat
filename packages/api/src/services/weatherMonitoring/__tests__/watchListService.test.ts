@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mocks = vi.hoisted(() => {
   const tags = vi.fn();
   const selectWhere = vi.fn();
+  const selectLimit = vi.fn();
   const insertValues = vi.fn();
   const onConflictDoUpdate = vi.fn();
   const insertReturning = vi.fn();
@@ -11,12 +12,16 @@ const mocks = vi.hoisted(() => {
   return {
     tags,
     selectWhere,
+    selectLimit,
     insertValues,
     onConflictDoUpdate,
     insertReturning,
     deleteWhere,
     deleteReturning,
     captureApiException: vi.fn(),
+    armWatchedPlaceTimer: vi.fn(),
+    disarmWatchedPlaceTimer: vi.fn(),
+    announceActiveAlertsToNewWatcher: vi.fn(),
     createDb: vi.fn(() => {
       const db = {
         tag: (label: string) => {
@@ -24,7 +29,10 @@ const mocks = vi.hoisted(() => {
           return db;
         },
         select: (_cols: unknown) => ({
-          from: (_table: unknown) => ({ where: selectWhere }),
+          from: (_table: unknown) => ({
+            where: (cond: unknown) =>
+              Object.assign(selectWhere(cond) as Promise<unknown>, { limit: selectLimit }),
+          }),
         }),
         insert: (_table: unknown) => ({
           values: (values: unknown) => {
@@ -50,6 +58,14 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock('@packrat/api/db', () => ({ createDb: mocks.createDb }));
+vi.mock('../watchedPlaceTimer', () => ({
+  armWatchedPlaceTimer: mocks.armWatchedPlaceTimer,
+  disarmWatchedPlaceTimer: mocks.disarmWatchedPlaceTimer,
+}));
+vi.mock('../announceToNewWatcher', () => ({
+  announceActiveAlertsToNewWatcher: mocks.announceActiveAlertsToNewWatcher,
+}));
+vi.mock('@packrat/api/utils/env-validation', () => ({ getEnv: () => ({ env: 'test' }) }));
 vi.mock('@packrat/api/utils/sentry', () => ({ captureApiException: mocks.captureApiException }));
 vi.mock('@packrat/db/schema', () => ({
   weatherWatchedLocations: {
@@ -84,7 +100,14 @@ const request = {
   lon: -105.27,
 };
 
-const storedRow = { id: 'watch-1', ...request, createdAt: new Date('2026-01-01') };
+const storedRow = {
+  id: 'watch-1',
+  ...request,
+  createdAt: new Date('2026-01-01'),
+  updatedAt: new Date('2026-01-01'),
+};
+// A re-add keeps the original createdAt and bumps updatedAt.
+const reAddedRow = { ...storedRow, updatedAt: new Date('2026-02-01') };
 
 describe('listWatchedLocations', () => {
   beforeEach(() => {
@@ -199,10 +222,88 @@ describe('addWatchedLocation', () => {
   });
 });
 
+describe('alerts already in effect', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('are announced to someone who just started watching the place', async () => {
+    mocks.insertReturning.mockResolvedValue([storedRow]);
+
+    await addWatchedLocation({ userId: 'user-1', request });
+
+    expect(mocks.announceActiveAlertsToNewWatcher).toHaveBeenCalledWith({
+      env: { env: 'test' },
+      userId: 'user-1',
+      weatherLocationId: 42,
+    });
+  });
+
+  it('are not announced again when an existing watcher re-adds the place', async () => {
+    mocks.insertReturning.mockResolvedValue([reAddedRow]);
+
+    await addWatchedLocation({ userId: 'user-1', request });
+
+    expect(mocks.announceActiveAlertsToNewWatcher).toHaveBeenCalledTimes(0);
+  });
+
+  it('do not fail the watch when announcing them fails, and the failure is reported', async () => {
+    const failure = new Error('WeatherAPI HTTP 503');
+    mocks.insertReturning.mockResolvedValue([storedRow]);
+    mocks.announceActiveAlertsToNewWatcher.mockRejectedValue(failure);
+
+    expect(await addWatchedLocation({ userId: 'user-1', request })).toEqual(storedRow);
+    expect(mocks.captureApiException).toHaveBeenCalledWith(
+      expect.objectContaining({
+        error: failure,
+        operation: 'weatherMonitoring.announceToNewWatcher',
+        extra: { weatherLocationId: 42 },
+      }),
+    );
+  });
+});
+
+describe('watched-place timer', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.selectWhere.mockResolvedValue([]);
+  });
+
+  it('is started when a location is added', async () => {
+    mocks.insertReturning.mockResolvedValue([storedRow]);
+
+    await addWatchedLocation({ userId: 'user-1', request });
+
+    expect(mocks.armWatchedPlaceTimer).toHaveBeenCalledWith({ weatherLocationId: 42 });
+  });
+
+  it('is stopped when the last watcher removes the place', async () => {
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectLimit.mockResolvedValue([]);
+
+    await removeWatchedLocation({ userId: 'user-1', watchedLocationId: 'watch-1' });
+
+    expect(mocks.selectWhere).toHaveBeenCalledWith({ col: 'weatherLocationId', val: 42 });
+    expect(mocks.selectLimit).toHaveBeenCalledWith(1);
+    expect(mocks.disarmWatchedPlaceTimer).toHaveBeenCalledWith({ weatherLocationId: 42 });
+  });
+
+  it('keeps running while someone else still watches the place', async () => {
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectLimit.mockResolvedValue([{ id: 'watch-2' }]);
+
+    await removeWatchedLocation({ userId: 'user-1', watchedLocationId: 'watch-1' });
+
+    expect(mocks.disarmWatchedPlaceTimer).toHaveBeenCalledTimes(0);
+  });
+});
+
 describe('removeWatchedLocation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks.deleteReturning.mockResolvedValue([storedRow]);
+    mocks.deleteReturning.mockResolvedValue([{ weatherLocationId: 42 }]);
+    mocks.selectWhere.mockResolvedValue([]);
+    mocks.selectLimit.mockResolvedValue([{ id: 'watch-2' }]);
   });
 
   it('reports success when a row was deleted', async () => {

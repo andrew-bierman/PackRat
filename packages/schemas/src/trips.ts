@@ -49,6 +49,24 @@ export const TripSummitSchema = z.object({
   osmId: z.number().int().nullable().optional(),
 });
 
+/** A registry trail walked on a trip (`trails.id` on the trail database). */
+export const TripTrailSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().trim().min(1).max(200),
+  lengthMeters: z.number().nonnegative().nullable().optional(),
+});
+
+/** Set by the user on a trip log; otherwise the app reads it from the map. */
+export const TripLandscapeSchema = z.enum([
+  'desert',
+  'mountain',
+  'forest',
+  'coastal',
+  'water',
+  'grassland',
+  'polar',
+]);
+
 export const TripLogSchema = z.object({
   activities: z.array(TripActivitySchema),
   distanceMeters: z.number().nonnegative().nullable().optional(),
@@ -56,6 +74,8 @@ export const TripLogSchema = z.object({
   route: z.string().max(100_000).nullable().optional(),
   source: z.enum(['manual', 'track', 'trail']).nullable().optional(),
   summits: z.array(TripSummitSchema).max(100).nullable().optional(),
+  trails: z.array(TripTrailSchema).max(50).nullable().optional(),
+  landscape: TripLandscapeSchema.nullable().optional(),
 });
 
 export const TripSchema = z.object({
@@ -130,3 +150,4 @@ export type TripStatus = z.infer<typeof TripStatusSchema>;
 export type TripPlannedRoute = z.infer<typeof TripPlannedRouteSchema>;
 export type TripActivity = z.infer<typeof TripActivitySchema>;
 export type TripSummit = z.infer<typeof TripSummitSchema>;
+export type TripLog = z.infer<typeof TripLogSchema>;

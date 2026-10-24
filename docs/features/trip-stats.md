@@ -195,9 +195,10 @@ instead of a grid of zeros.
 
 ## What the user controls
 
-- **Whether stats are on.** Trip stats is opt-in: the first visit explains
-  what it shows and asks the user to turn it on. Turning it off hides the
-  screen and the dashboard figures, and keeps the logs.
+- **No on/off switch.** Stats show as soon as a trip finishes, with no
+  opt-in and no setting to hide them, as in Strava, AllTrails and
+  Polarsteps. They are private to the user, so there is nothing to consent
+  to; leaving one trip out is done per trip (below).
 - **Year in view.** The comparison, charts and annual goals default to the
   current year. A picker steps back through every year the user has trips
   in.

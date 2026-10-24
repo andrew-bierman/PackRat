@@ -26,6 +26,15 @@ const getAndroidPackage = () => {
   return 'com.packratai.mobile';
 };
 
+// Firebase config for FCM push. EAS builds supply it as a file environment
+// variable; a local build falls back to a checked-out copy if one exists. With
+// neither, the build still succeeds and Android simply never registers for push.
+const getGoogleServicesFile = () => {
+  if (process.env.GOOGLE_SERVICES_JSON) return process.env.GOOGLE_SERVICES_JSON;
+  const local = path.join(__dirname, 'google-services.json');
+  return fs.existsSync(local) ? './google-services.json' : undefined;
+};
+
 const getIcon = () => {
   if (IS_DEV) return './assets/packrat-app-icon-gradient-dev.png';
   return './assets/packrat-app-icon-gradient.png';
@@ -145,7 +154,7 @@ export default (): ExpoConfig =>
       {
         name: getAppName(),
         slug: 'packrat',
-        version: '2.2.3',
+        version: '2.3.0',
         scheme: 'packrat',
         web: {
           bundler: 'metro',
@@ -157,6 +166,7 @@ export default (): ExpoConfig =>
           'expo-sqlite',
           'expo-font',
           'expo-image',
+          'react-native-fast-tflite',
           [
             '@react-native-google-signin/google-signin',
             {
@@ -185,9 +195,20 @@ export default (): ExpoConfig =>
           ],
           [
             'react-native-maps',
-            { iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY },
+            {
+              iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+              androidGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+            },
           ],
           '@sentry/react-native',
+          [
+            'expo-notifications',
+            {
+              icon: './assets/notification-icon.png',
+              color: '#026A9F',
+              defaultChannel: 'alerts',
+            },
+          ],
           'expo-status-bar',
           ['expo-splash-screen', { image: './assets/splash.png' }],
         ],
@@ -273,6 +294,7 @@ export default (): ExpoConfig =>
             backgroundColor: '#026A9F',
           },
           package: getAndroidPackage(),
+          googleServicesFile: getGoogleServicesFile(),
           config: {
             googleMaps: {
               apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
