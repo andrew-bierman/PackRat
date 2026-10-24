@@ -13,7 +13,7 @@ import {
   stationsWalked,
   walkedLines,
 } from '../longTrails';
-import { encodePolyline } from '../polyline';
+import { type Coordinate, encodePolyline } from '../polyline';
 import { finishedTrips, type StatsTrip } from '../tripStats';
 
 const NOW = new Date(2026, 9, 5, 12);
@@ -34,7 +34,7 @@ const TRAIL = makeLongTrail({
 
 /** A route along the trail between two shares of its length, `offset` degrees off it. */
 function route({ from, to, offset = 0.001 }: { from: number; to: number; offset?: number }) {
-  const points = [];
+  const points: Coordinate[] = [];
   for (let share = from; share <= to + 1e-9; share += 0.01) {
     points.push({ latitude: 40 + offset, longitude: -120 + share });
   }
