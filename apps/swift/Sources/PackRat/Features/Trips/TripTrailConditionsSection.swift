@@ -62,13 +62,11 @@ struct TripTrailConditionsSection: View {
                 }
             }
             Spacer()
-            // Offline the load fails, and a report still has to be startable: it queues.
-            if response?.reports.isEmpty == false || loadFailed {
-                Button("Report", systemImage: "plus") { showingSubmit = true }
-                    .font(.caption.weight(.semibold))
-                    .buttonStyle(.borderless)
-                    .accessibilityIdentifier("trip_trail_conditions_report")
-            }
+            // Always there: reporting never waits on, or depends on, loading others' reports.
+            Button("Report", systemImage: "plus") { showingSubmit = true }
+                .font(.caption.weight(.semibold))
+                .buttonStyle(.borderless)
+                .accessibilityIdentifier("trip_trail_conditions_report")
         }
     }
 
