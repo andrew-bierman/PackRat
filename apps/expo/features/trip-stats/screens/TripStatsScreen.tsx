@@ -7,7 +7,7 @@ import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { Stack, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionCards } from '../components/CollectionCards';
@@ -32,7 +32,14 @@ export function TripStatsScreen() {
   const router = useRouter();
   const { colors } = useColorScheme();
   const unit = useDistanceUnit();
-  const [scope, setScope] = useState<Scope>(ALL_SCOPE);
+  const [scope, setScopeState] = useState<Scope>(ALL_SCOPE);
+  const scrollRef = useRef<ScrollView>(null);
+  // Back to the top on every change, so the chips and the totals title show what the record is
+  // now narrowed to rather than the cards rearranging out of view.
+  const setScope = (next: Scope) => {
+    setScopeState(next);
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+  };
   const record = useTripStatsRecord(scope);
   const parksAndPeaks = useParksAndPeaks(record);
   const goals = useGoalProgress({ record, parksAndPeaks });
@@ -77,6 +84,7 @@ export function TripStatsScreen() {
       />
       {record.hasTrips ? (
         <ScrollView
+          ref={scrollRef}
           contentContainerClassName="gap-4 p-4"
           contentInsetAdjustmentBehavior="automatic"
         >
@@ -107,7 +115,9 @@ export function TripStatsScreen() {
               </Button>
             </View>
           ) : (
-            <>
+            // Keyed by the scope so the cards remount: a Compose card sizes to its content once,
+            // and one that grows in place (a cleared filter's longer list) stays clipped.
+            <Fragment key={`${scope.year ?? 'all'}-${scope.activity ?? 'all'}`}>
               <TotalsCard title={scopeTitle} totals={record.totals} unit={unit} />
               {isAll && comeback ? (
                 <ComebackCard
@@ -158,7 +168,7 @@ export function TripStatsScreen() {
                   {t('tripStats.scope.lifetimeNote')}
                 </Text>
               )}
-            </>
+            </Fragment>
           )}
         </ScrollView>
       ) : (
