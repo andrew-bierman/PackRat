@@ -1,5 +1,6 @@
 'use client';
 
+import { capitalize } from '@packrat/utils';
 import { Badge } from '@packrat/web-ui/components/badge';
 import { Button } from '@packrat/web-ui/components/button';
 import {
@@ -19,10 +20,6 @@ const REASON_LABELS: Readonly<Record<AdminTrailFlag['reasons'][number], string>>
 } as const);
 
 const MAX_THUMBNAILS = 4;
-
-function capitalize(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
 
 function ReportPreview({ flag }: { flag: AdminTrailFlag }) {
   const shown = flag.photos.slice(0, MAX_THUMBNAILS);
