@@ -15,8 +15,7 @@ import {
   type TripPlaces,
 } from '../utils/tripPlaces';
 import type { Scope } from '../utils/tripStats';
-import { CardLink } from './CollectionCards';
-import { StatsCard } from './StatsParts';
+import { CardLink, StatsCard } from './StatsParts';
 
 const FLAG_LIMIT = 8;
 const PREVIEW_LIMIT = 3;
