@@ -134,3 +134,6 @@ export const TrailDetailRowSchema = TrailRowSchema.extend({
 
 export type TrailRow = z.infer<typeof TrailRowSchema>;
 export type TrailDetailRow = z.infer<typeof TrailDetailRowSchema>;
+
+/** Which trail-condition pushes the user receives. */
+export const TrailConditionNotificationSettingsSchema = z.object({ trailConditions: z.boolean() });

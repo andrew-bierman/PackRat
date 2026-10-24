@@ -645,6 +645,39 @@ export const trailConditionReportFlags = pgTable(
   ],
 );
 
+// Reports a hiker has opened or seen in a trip's conditions section. What's
+// absent here is unread: it marks the trip and holds back no notification.
+export const trailConditionReportReads = pgTable(
+  'trail_condition_report_reads',
+  {
+    userId: text('user_id')
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    reportId: text('report_id')
+      .references(() => trailConditionReports.id, { onDelete: 'cascade' })
+      .notNull(),
+    readAt: timestamp('read_at').defaultNow().notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.reportId] })],
+);
+
+// When a trip last got a trail-conditions notification, so it gets at most one a day.
+export const tripConditionNotificationState = pgTable('trip_condition_notification_state', {
+  tripId: text('trip_id')
+    .primaryKey()
+    .references(() => trips.id, { onDelete: 'cascade' }),
+  lastNotifiedAt: timestamp('last_notified_at').notNull(),
+});
+
+// Per-user notification switches. A missing row means every switch is on.
+export const notificationPreferences = pgTable('notification_preferences', {
+  userId: text('user_id')
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  trailConditions: boolean('trail_conditions').default(true).notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 /**
  * What actually happened on a finished trip, read back by trip stats. Distances
  * and elevations are metres whatever the user's display unit. `route` is a

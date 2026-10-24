@@ -32,7 +32,7 @@ export interface TripTrailConditions {
   reports: TripReport[];
 }
 
-export function distanceMeters(a: Point, b: Point): number {
+export function distanceMeters({ from: a, to: b }: { from: Point; to: Point }): number {
   const rad = (d: number) => (d * Math.PI) / 180;
   const dLat = rad(b.latitude - a.latitude);
   const dLon = rad(b.longitude - a.longitude);
@@ -67,7 +67,10 @@ export function rankNearbyReports({
   });
   const fromPins = pinReports.flatMap((r) => {
     if (r.latitude === null || r.longitude === null) return [];
-    const d = distanceMeters(origin, { latitude: r.latitude, longitude: r.longitude });
+    const d = distanceMeters({
+      from: origin,
+      to: { latitude: r.latitude, longitude: r.longitude },
+    });
     return d <= TRIP_NEARBY_RADIUS_M ? [{ ...r, distanceM: Math.round(d) }] : [];
   });
   return [...fromTrails, ...fromPins]
@@ -79,7 +82,13 @@ export function rankNearbyReports({
 }
 
 /** Trails within the trip radius of `origin`, by id, with their distance in metres. */
-async function nearbyTrailDistances(trailDb: TrailDb, origin: Point): Promise<Map<string, number>> {
+async function nearbyTrailDistances({
+  trailDb,
+  origin,
+}: {
+  trailDb: TrailDb;
+  origin: Point;
+}): Promise<Map<string, number>> {
   const point = sql`ST_SetSRID(ST_MakePoint(${origin.longitude}, ${origin.latitude}), 4326)`;
   const result = await trailDb.tag('tripTrailConditions.nearbyTrails').execute(sql`
     SELECT id::text, ST_Distance(geom::geography, ${point}::geography) AS distance_m
@@ -128,7 +137,7 @@ export async function getTripTrailConditions({
   let trailDistances = new Map<string, number>();
   if (trailDb) {
     try {
-      trailDistances = await nearbyTrailDistances(trailDb, origin);
+      trailDistances = await nearbyTrailDistances({ trailDb, origin });
     } catch (error) {
       // Pins still answer the question; a trail-db outage shouldn't blank the section.
       captureApiException({

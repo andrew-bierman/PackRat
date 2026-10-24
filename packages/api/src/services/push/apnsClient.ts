@@ -126,7 +126,7 @@ export async function sendApnsPush({
       ...('weatherLocationId' in payload
         ? { weatherLocationId: payload.weatherLocationId }
         : 'tripId' in payload
-          ? { tripId: payload.tripId }
+          ? { tripId: payload.tripId, ...(payload.reportId ? { reportId: payload.reportId } : {}) }
           : { postId: payload.postId }),
     }),
   });

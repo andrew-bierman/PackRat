@@ -190,6 +190,7 @@ struct AppNavigation: View {
             }
             .onReceive(NotificationCenter.default.publisher(for: .tripReminderNotificationTapped)) { notification in
                 guard let tripId = notification.userInfo?[TripReminderScheduler.tripIdKey] as? String else { return }
+                appState.pendingTrailReport = (notification.userInfo?["reportId"] as? String).map { (tripId, $0) }
                 appState.apply(.trip(id: tripId))
             }
             #endif
