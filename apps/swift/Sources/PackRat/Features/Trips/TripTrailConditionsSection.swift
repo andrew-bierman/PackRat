@@ -14,6 +14,8 @@ struct TripTrailConditionsSection: View {
     @State private var showingSubmit = false
     @State private var moderation = TrailReportModeration.shared
     @State private var actions = TrailReportActions()
+    /// The report a notification tap asked for, pushed over the trip.
+    @State private var linkedReport: TripConditionReport?
 
     private let service = TrailConditionsService.shared
 
@@ -38,6 +40,15 @@ struct TripTrailConditionsSection: View {
             .padding(.horizontal)
             .trailReportActionDialogs(actions)
             .task(id: loadKey) { await load() }
+            .onChange(of: appState.pendingTrailReport?.reportId) { _, _ in openLinkedReport() }
+            .navigationDestination(isPresented: Binding(
+                get: { linkedReport != nil },
+                set: { if !$0 { linkedReport = nil } }
+            )) {
+                if let item = linkedReport {
+                    TrailConditionDetailView(report: item.report, authorName: item.authorName)
+                }
+            }
             .sheet(isPresented: $showingSubmit) {
                 SubmitTrailConditionView(
                     viewModel: appState.trailConditionsVM,
@@ -158,6 +169,7 @@ struct TripTrailConditionsSection: View {
             guard !Task.isCancelled else { return }
             response = fresh
             loadFailed = false
+            openLinkedReport()
             // Seen now, so read: the "New" labels stay for this visit only.
             await TrailReportUnreadStore.shared.markRead(
                 fresh.reports.filter(\.unread).map(\.id),
@@ -170,6 +182,17 @@ struct TripTrailConditionsSection: View {
             // Keep what's on screen; only an empty section turns into an error.
             if response == nil { loadFailed = true }
         }
+    }
+
+    /// Opens the report a notification tap named, once it's among this trip's
+    /// reports. A report no longer shown (hidden, removed) leaves the trip open.
+    private func openLinkedReport() {
+        guard let link = appState.pendingTrailReport, link.tripId == trip.id,
+              let item = response?.reports.first(where: { $0.id == link.reportId })
+        else { return }
+        appState.pendingTrailReport = nil
+        guard !moderation.hides(item.report) else { return }
+        linkedReport = item
     }
 }
 
