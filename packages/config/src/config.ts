@@ -75,6 +75,7 @@ const APP_CONFIG_SOURCE = {
     [FeatureFlag.EnableSharedPacks]: false,
     [FeatureFlag.EnablePackTemplates]: true,
     [FeatureFlag.EnableTrailConditions]: true,
+    [FeatureFlag.EnableTrailConditionNotifications]: false,
     [FeatureFlag.EnableFeed]: false,
     [FeatureFlag.EnableWildlifeIdentification]: false,
     [FeatureFlag.EnableOfflineWildlifeID]: false,
