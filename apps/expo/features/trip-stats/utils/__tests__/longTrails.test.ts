@@ -201,6 +201,7 @@ describe('long-trail goals', () => {
       target: TRAIL.officialMeters,
       startDate: '2026-01-01',
       trailCode: 'TST',
+      deleted: false,
     };
     const longTrailMeters = (code: string) => (code === 'TST' ? progress.meters : null);
     const open = computeGoalProgress({ goal, finished: [], longTrailMeters, now: NOW });
