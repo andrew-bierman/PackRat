@@ -128,6 +128,33 @@ final class TrailConditionsService: Sendable {
         try await api.sendDiscarding(endpoint)
     }
 
+    /// The user's upcoming and in-progress trips with a trail report they haven't read.
+    func unreadTripIds() async throws -> [String] {
+        let response: UnreadTripsResponse = try await api.send(Endpoint(.get, "/api/trail-conditions/unread-trips"))
+        return response.tripIds
+    }
+
+    func markRead(_ reportIds: [String]) async throws {
+        let endpoint = Endpoint(.post, "/api/trail-conditions/reads", body: MarkReadRequest(reportIds: reportIds))
+        try await api.sendDiscarding(endpoint)
+    }
+
+    func notificationsEnabled() async throws -> Bool {
+        let settings: TrailNotificationSettings = try await api.send(
+            Endpoint(.get, "/api/trail-conditions/notification-settings")
+        )
+        return settings.trailConditions
+    }
+
+    func setNotificationsEnabled(_ enabled: Bool) async throws {
+        let endpoint = Endpoint(
+            .put,
+            "/api/trail-conditions/notification-settings",
+            body: TrailNotificationSettings(trailConditions: enabled)
+        )
+        try await api.sendDiscarding(endpoint)
+    }
+
     /// Blocks are shared with the feed: one list of people you don't want to see.
     func blockAuthor(userId: String) async throws {
         try await FeedService.shared.block(userId: userId)
@@ -136,4 +163,16 @@ final class TrailConditionsService: Sendable {
 
 private struct FlagReportRequest: Encodable, Sendable {
     let reason: TrailReportFlagReason
+}
+
+private struct UnreadTripsResponse: Decodable, Sendable {
+    let tripIds: [String]
+}
+
+private struct MarkReadRequest: Encodable, Sendable {
+    let reportIds: [String]
+}
+
+private struct TrailNotificationSettings: Codable, Sendable {
+    let trailConditions: Bool
 }

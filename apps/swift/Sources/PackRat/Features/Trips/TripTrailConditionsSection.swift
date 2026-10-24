@@ -158,6 +158,11 @@ struct TripTrailConditionsSection: View {
             guard !Task.isCancelled else { return }
             response = fresh
             loadFailed = false
+            // Seen now, so read: the "New" labels stay for this visit only.
+            await TrailReportUnreadStore.shared.markRead(
+                fresh.reports.filter(\.unread).map(\.id),
+                onTrip: trip.id
+            )
         } catch is CancellationError {
             return
         } catch {
@@ -200,6 +205,7 @@ struct TripConditionRow: View {
                     Text(report.overallCondition.capitalized)
                         .font(.callout.weight(.semibold))
                         .foregroundStyle(color)
+                    if item.unread { NewReportPill() }
                     if isOlder { OlderPill() }
                 }
                 Text(byline)

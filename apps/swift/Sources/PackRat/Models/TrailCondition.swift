@@ -111,22 +111,26 @@ struct TripConditionReport: Decodable, Identifiable, Sendable {
     let report: TrailConditionReport
     let distanceM: Int?
     let authorName: String?
+    /// New on one of the viewer's upcoming trips and not yet read. Only the trip section sends it.
+    let unread: Bool
 
     var id: String { report.id }
 
-    private enum CodingKeys: String, CodingKey { case distanceM, authorName }
+    private enum CodingKeys: String, CodingKey { case distanceM, authorName, unread }
 
     init(from decoder: any Decoder) throws {
         report = try TrailConditionReport(from: decoder)
         let container = try decoder.container(keyedBy: CodingKeys.self)
         distanceM = try container.decodeIfPresent(Int.self, forKey: .distanceM)
         authorName = try container.decodeIfPresent(String.self, forKey: .authorName)
+        unread = try container.decodeIfPresent(Bool.self, forKey: .unread) ?? false
     }
 
-    init(report: TrailConditionReport, distanceM: Int?, authorName: String?) {
+    init(report: TrailConditionReport, distanceM: Int?, authorName: String?, unread: Bool = false) {
         self.report = report
         self.distanceM = distanceM
         self.authorName = authorName
+        self.unread = unread
     }
 }
 

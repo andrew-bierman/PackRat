@@ -85,6 +85,18 @@ struct OlderPill: View {
     }
 }
 
+/// "New": a report on one of the hiker's upcoming trips they hadn't read yet.
+struct NewReportPill: View {
+    var body: some View {
+        Text("New")
+            .font(.caption2.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 6).padding(.vertical, 2)
+            .background(.tint, in: Capsule())
+            .accessibilityIdentifier("trail_report_new")
+    }
+}
+
 /// A report saved on the device that goes out once there's signal.
 struct WaitingToSendPill: View {
     var body: some View {

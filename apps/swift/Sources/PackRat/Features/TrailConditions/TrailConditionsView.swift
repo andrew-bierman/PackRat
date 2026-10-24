@@ -327,6 +327,10 @@ struct TrailConditionDetailView: View {
             }
         }
         .trailReportActionDialogs(actions, onHidden: close)
+        .task(id: report.id) {
+            // Opened from anywhere counts as read, so the trip it's on loses its marker.
+            await TrailReportUnreadStore.shared.markRead([report.id])
+        }
     }
 
     // MARK: Header
