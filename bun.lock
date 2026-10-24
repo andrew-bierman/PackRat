@@ -31,7 +31,7 @@
     },
     "apps/admin": {
       "name": "packrat-admin-app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@elysiajs/eden": "catalog:",
         "@packrat/api-client": "workspace:*",
@@ -81,7 +81,7 @@
     },
     "apps/expo": {
       "name": "packrat-expo-app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@ai-sdk/react": "^3.0.170",
         "@better-auth/expo": "^1.7.5",
@@ -223,7 +223,7 @@
     },
     "apps/guides": {
       "name": "packrat-guides-app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@ai-sdk/openai": "catalog:",
         "@elysiajs/eden": "catalog:",
@@ -313,7 +313,7 @@
     },
     "apps/landing": {
       "name": "packrat-landing-app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@emotion/is-prop-valid": "^1.3.1",
         "@hookform/resolvers": "catalog:",
@@ -384,7 +384,7 @@
     },
     "apps/trails": {
       "name": "packrat-trails-app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/api-client": "workspace:*",
         "@packrat/app": "workspace:*",
@@ -459,7 +459,7 @@
     },
     "packages/analytics": {
       "name": "@packrat/analytics",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@duckdb/node-api": "catalog:",
         "@packrat/env": "workspace:*",
@@ -476,7 +476,7 @@
     },
     "packages/api": {
       "name": "@packrat/api",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@ai-sdk/google": "^3.0.64",
         "@ai-sdk/openai": "catalog:",
@@ -504,7 +504,7 @@
         "@sinclair/typebox": "^0.34.15",
         "ai": "catalog:",
         "bcryptjs": "^3.0.2",
-        "csv-parse": "^6.2.1",
+        "csv-parse": "^7.0.2",
         "drizzle-kit": "catalog:",
         "drizzle-orm": "catalog:",
         "drizzle-zod": "catalog:",
@@ -540,7 +540,7 @@
     },
     "packages/api-client": {
       "name": "@packrat/api-client",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@elysiajs/eden": "catalog:",
         "@packrat/guards": "workspace:*",
@@ -559,7 +559,7 @@
     },
     "packages/app": {
       "name": "@packrat/app",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/api-client": "workspace:*",
         "@packrat/schemas": "workspace:*",
@@ -580,11 +580,11 @@
     },
     "packages/checks": {
       "name": "@packrat/checks",
-      "version": "2.2.3",
+      "version": "2.3.0",
     },
     "packages/cli": {
       "name": "@packrat/cli",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "bin": {
         "packrat": "./src/index.ts",
       },
@@ -609,14 +609,14 @@
     },
     "packages/config": {
       "name": "@packrat/config",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/guards": "workspace:*",
       },
     },
     "packages/consent-ui": {
       "name": "@packrat/consent-ui",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@kitajs/html": "^4.2.13",
         "@packrat/guards": "workspace:*",
@@ -627,14 +627,14 @@
     },
     "packages/constants": {
       "name": "@packrat/constants",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "devDependencies": {
         "typescript": "catalog:",
       },
     },
     "packages/db": {
       "name": "@packrat/db",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/constants": "workspace:*",
         "drizzle-orm": "catalog:",
@@ -646,14 +646,14 @@
     },
     "packages/env": {
       "name": "@packrat/env",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "zod": "catalog:",
       },
     },
     "packages/guards": {
       "name": "@packrat/guards",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/utils": "workspace:*",
         "ts-extras": "catalog:",
@@ -662,7 +662,7 @@
     },
     "packages/mcp": {
       "name": "@packrat/mcp",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@modelcontextprotocol/sdk": "^1.29.0",
         "@packrat/api-client": "workspace:*",
@@ -686,7 +686,7 @@
     },
     "packages/osm-db": {
       "name": "@packrat/osm-db",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@neondatabase/serverless": "catalog:",
         "drizzle-orm": "catalog:",
@@ -700,7 +700,7 @@
     },
     "packages/osm-import": {
       "name": "@packrat/osm-import",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/env": "workspace:*",
         "pg": "catalog:",
@@ -708,7 +708,7 @@
     },
     "packages/overpass": {
       "name": "@packrat/overpass",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/guards": "workspace:*",
         "zod": "catalog:",
@@ -720,7 +720,7 @@
     },
     "packages/schemas": {
       "name": "@packrat/schemas",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/config": "workspace:*",
         "@packrat/constants": "workspace:*",
@@ -735,14 +735,14 @@
     },
     "packages/trails-import": {
       "name": "@packrat/trails-import",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/env": "workspace:*",
       },
     },
     "packages/types": {
       "name": "@packrat/types",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/constants": "workspace:*",
         "@packrat/schemas": "workspace:*",
@@ -753,11 +753,11 @@
     },
     "packages/typescript-config": {
       "name": "@packrat/typescript-config",
-      "version": "2.2.3",
+      "version": "2.3.0",
     },
     "packages/ui": {
       "name": "@packrat/ui",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@expo/ui": "~57.0.9",
         "@packrat/guards": "workspace:*",
@@ -774,7 +774,7 @@
     },
     "packages/units": {
       "name": "@packrat/units",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/constants": "workspace:*",
         "@packrat/guards": "workspace:*",
@@ -786,7 +786,7 @@
     },
     "packages/utils": {
       "name": "@packrat/utils",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "destr": "^2.0.5",
         "es-toolkit": "^1.47.0",
@@ -803,7 +803,7 @@
     },
     "packages/web-ui": {
       "name": "@packrat/web-ui",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "dependencies": {
         "@packrat/guards": "workspace:*",
         "@radix-ui/react-accordion": "catalog:",
@@ -2791,7 +2791,7 @@
 
     "csstype": ["csstype@3.2.3", "", {}, "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="],
 
-    "csv-parse": ["csv-parse@6.2.1", "", {}, "sha512-LRLMV+UCyfMokp8Wb411duBf1gaBKJfOfBWU9eHMJ+b+cJYZsNu3AFmjJf3+yPGd59Exz1TsMjaSFyxnYB9+IQ=="],
+    "csv-parse": ["csv-parse@7.0.3", "", {}, "sha512-YFd3QM/yo17vH91L1IOZuvl09zM0zEEtdfTcOCKWcMdM++MNaQSyp09slXyFCLaPXvHstQFx/xC8myiFHSMUvw=="],
 
     "currently-unhandled": ["currently-unhandled@0.4.1", "", { "dependencies": { "array-find-index": "^1.0.1" } }, "sha512-/fITjgjGU50vjQ4FH6eUoYu+iUoUKIXws2hL15JJpIR+BbTxaXQsMuuyjtNh2WqsSBS5nsaZHFsFecyw5CCAng=="],
 
@@ -5301,7 +5301,7 @@
 
     "@packrat/analytics/@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
 
-    "@packrat/api/@types/bun": ["@types/bun@1.4.3", "", { "dependencies": { "bun-types": "1.4.3" } }, "sha512-N67Pqy8JXbAY/j0tNraS3V5mubGvc6rrrNDmDCtZLlFzccbUJPDb0tvgUBC5q4m8ybkP93Jcn1QB+RYQ6PvBhw=="],
+    "@packrat/api/@types/bun": ["@types/bun@1.4.4", "", { "dependencies": { "bun-types": "1.4.4" } }, "sha512-9wkRDXUXK124pEnAutE6n/l18j+i9GC5IAHK8TmX/2nlySETmky0OU6yL5U8pW1AoKh++AN9auDCr647BfurjQ=="],
 
     "@packrat/cli/@types/bun": ["@types/bun@1.4.2", "", { "dependencies": { "bun-types": "1.4.2" } }, "sha512-GimotNn7+ZV0uVArItBbriZsR1oNf0+WTzPkdcFrzShI7k2norL0uzEaJT8T33dWr7O/c9ZDuAFQrctKCi72oQ=="],
 
@@ -6197,7 +6197,7 @@
 
     "@packrat/analytics/@types/bun/bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
 
-    "@packrat/api/@types/bun/bun-types": ["bun-types@1.4.3", "", { "dependencies": { "@types/node": "*", "undici-types": "*" } }, "sha512-tinRJNGOmUN+tEAsn2y2e942n9JHRHR42iUYzDH75NmhJqVBokGSQkkfSFdNWwsANIdrK6ACH9t01M452YyTwg=="],
+    "@packrat/api/@types/bun/bun-types": ["bun-types@1.4.4", "", { "dependencies": { "@types/node": "*", "undici-types": "*" } }, "sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ=="],
 
     "@packrat/cli/@types/bun/bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
 
