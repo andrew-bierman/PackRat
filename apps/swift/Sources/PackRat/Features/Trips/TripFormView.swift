@@ -164,7 +164,7 @@ struct TripFormView: View {
             }
             .onAppear { prefill() }
             .navigationDestination(isPresented: $showingTrailPicker) {
-                TrailPickerView(
+                ReportTrailPickerView(
                     selectedTrailId: trail?.id,
                     location: trailLocation,
                     origin: destination,

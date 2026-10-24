@@ -713,7 +713,7 @@ struct SubmitTrailConditionView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .navigationDestination(isPresented: $showingTrailPicker) {
-                TrailPickerView(selectedTrailId: place?.trailId, location: location) { picked in
+                ReportTrailPickerView(selectedTrailId: place?.trailId, location: location) { picked in
                     place = picked
                     showingTrailPicker = false
                 }
