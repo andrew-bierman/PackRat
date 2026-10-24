@@ -303,3 +303,28 @@ export function ExtendedFab({
     </Pressable>
   );
 }
+
+/** The whole card opens its list, like a Material 3 clickable card. */
+export function CardLink({
+  onPress,
+  testID,
+  children,
+}: {
+  onPress: () => void;
+  testID: string;
+  children: ReactNode;
+}) {
+  const { colors } = useColorScheme();
+  return (
+    <Pressable
+      onPress={onPress}
+      testID={testID}
+      accessibilityRole="button"
+      android_ripple={{ color: colors.grey5 }}
+      className="flex-row items-center gap-3"
+    >
+      <View className="flex-1 gap-2">{children}</View>
+      <Icon name="chevron-right" size={24} color={colors.grey} />
+    </Pressable>
+  );
+}

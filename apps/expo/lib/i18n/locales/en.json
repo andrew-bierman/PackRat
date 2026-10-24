@@ -535,7 +535,7 @@
       "emptyTitle": "No Trips Match",
       "emptyBody": "No finished trip fits {{scope}}.",
       "showAllTrips": "Show All Trips",
-      "lifetimeNote": "Goals, parks, peaks and long trails show under All Time."
+      "lifetimeNote": "Goals, parks, peaks and gear not packed in a year show under All Time."
     },
     "activities": {
       "title": "Activities",
@@ -570,6 +570,27 @@
     },
     "map": {
       "title": "Where You've Been"
+    },
+    "places": {
+      "title": "Countries & States",
+      "countries_one": "Country",
+      "countries_other": "Countries",
+      "nouns": {
+        "states": "States",
+        "provinces": "Provinces & Territories",
+        "statesAndTerritories": "States & Territories",
+        "statesAndProvinces": "States & Provinces"
+      },
+      "newIn": "New in {{year}}: {{places}}",
+      "more_one": "{{count}} more",
+      "more_other": "{{count}} more",
+      "mostVisited": "Most visited: {{name}} · {{trips}}",
+      "scopeNote": "Trips in {{scope}}. First visits are from all your trips.",
+      "footer": "A trip counts in every country and state its location or route passes through.",
+      "emptyTitle": "No Places Yet",
+      "emptyBody": "Give a trip a location and it shows up here.",
+      "firstVisit": "First visit {{date}}",
+      "trips": "Trips"
     },
     "parks": {
       "title": "National Parks",
@@ -615,6 +636,20 @@
       "subtitle": "From packs linked to finished trips",
       "trips_one": "{{count}} trip",
       "trips_other": "{{count}} trips"
+    },
+    "idleGear": {
+      "title": "Not Packed in a Year",
+      "subtitle": "In your packs, not on a trip since {{date}}",
+      "items_one": "Item",
+      "items_other": "Items",
+      "combinedWeight": "Combined Weight",
+      "neverTitle": "Never on a Trip",
+      "neverFooter": "In your packs for over a year without going on a finished trip.",
+      "lastTitle": "Last on a Trip",
+      "lastDetail": "{{packs}} · last {{trip}}, {{date}}",
+      "footer": "Based on the packs linked to your trips. Food and other consumables aren't counted.",
+      "emptyTitle": "Everything's Been Out",
+      "emptyBody": "Every item in your packs has been on a trip in the last year."
     },
     "weight": {
       "title": "Base Weight by Trip",

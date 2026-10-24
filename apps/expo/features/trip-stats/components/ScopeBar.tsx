@@ -6,6 +6,7 @@ import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { Pressable, ScrollView, View } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { ALL_SCOPE, isAllScope, type Scope } from '../utils/tripStats';
 
 const ALL_KEY = 'all';
@@ -70,17 +71,21 @@ export function ScopeBar({
         />
       ) : null}
       {isAllScope(scope) ? null : (
-        <Pressable
-          onPress={() => onChange(ALL_SCOPE)}
-          hitSlop={8}
-          className="h-12 w-12 items-center justify-center"
-          accessibilityRole="button"
-          accessibilityLabel={t('tripStats.scope.showAll')}
-          android_ripple={{ borderless: true, color: colors.grey5 }}
-          testID={testIds.tripStats.scopeClear}
-        >
-          <Icon name="close-circle" size={24} color={colors.grey} />
-        </Pressable>
+        // Fades rather than vanishing: the tap that clears also removes it, and an instant unmount
+        // cuts its ripple off before it draws.
+        <Animated.View entering={FadeIn.duration(150)} exiting={FadeOut.duration(250)}>
+          <Pressable
+            onPress={() => onChange(ALL_SCOPE)}
+            hitSlop={8}
+            className="h-12 w-12 items-center justify-center"
+            accessibilityRole="button"
+            accessibilityLabel={t('tripStats.scope.showAll')}
+            android_ripple={{ borderless: true, color: colors.grey5 }}
+            testID={testIds.tripStats.scopeClear}
+          >
+            <Icon name="close-circle" size={24} color={colors.grey} />
+          </Pressable>
+        </Animated.View>
       )}
     </ScrollView>
   );

@@ -1,13 +1,13 @@
 import { Text } from '@packrat/ui/src/text';
-import { Icon } from 'expo-app/components/Icon';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { formatDay } from '../lib/useStatsFormat';
+import { scopeParams } from '../screens/PlacesScreens';
 import {
   highestAscent,
   latestParkVisit,
@@ -17,34 +17,11 @@ import {
   visitedParks,
 } from '../utils/parksAndPeaks';
 import type { Coordinate } from '../utils/polyline';
+import type { TripPlaces } from '../utils/tripPlaces';
 import type { TripStatsRecord } from '../utils/tripStats';
 import { formatElevation, type TripDistanceUnit } from '../utils/units';
-import { ProgressBar, StatsCard } from './StatsParts';
-
-/** The whole card opens its list, like a Material 3 clickable card. */
-function CardLink({
-  onPress,
-  testID,
-  children,
-}: {
-  onPress: () => void;
-  testID: string;
-  children: React.ReactNode;
-}) {
-  const { colors } = useColorScheme();
-  return (
-    <Pressable
-      onPress={onPress}
-      testID={testID}
-      accessibilityRole="button"
-      android_ripple={{ color: colors.grey5 }}
-      className="flex-row items-center gap-3"
-    >
-      <View className="flex-1 gap-2">{children}</View>
-      <Icon name="chevron-right" size={24} color={colors.grey} />
-    </Pressable>
-  );
-}
+import { PlacesCard } from './PlacesAndGearCards';
+import { CardLink, ProgressBar, StatsCard } from './StatsParts';
 
 export function ParksCard({
   parksAndPeaks,
@@ -180,14 +157,16 @@ export function TripsMapCard({ record }: { record: TripStatsRecord }) {
   );
 }
 
-/** The map, then the lifetime collections, which open their own lists. */
+/** The map, countries and states, then the lifetime collections, which open their own lists. */
 export function CollectionCards({
   record,
+  places,
   parksAndPeaks,
   unit,
   showLifetime,
 }: {
   record: TripStatsRecord;
+  places: TripPlaces;
   parksAndPeaks: ParksAndPeaks;
   unit: TripDistanceUnit;
   /** Parks and peaks are lifetime collections, shown only while the record isn't filtered. */
@@ -197,6 +176,13 @@ export function CollectionCards({
   return (
     <>
       <TripsMapCard record={record} />
+      <PlacesCard
+        places={places}
+        scope={record.scope}
+        onPress={() =>
+          router.push({ pathname: '/trip-stats/places', params: scopeParams(record.scope) })
+        }
+      />
       {showLifetime ? (
         <>
           <ParksCard
