@@ -34,8 +34,8 @@ export function TripStatsScreen() {
   const unit = useDistanceUnit();
   const [scope, setScopeState] = useState<Scope>(ALL_SCOPE);
   const scrollRef = useRef<ScrollView>(null);
-  // Back to the top on every change, so the chips and the totals title show what the record is
-  // now narrowed to rather than the cards rearranging out of view.
+  // Back to the top on every change: the cards above the reader change with the filter, so the
+  // top of the narrowed record is the only stable place to land.
   const setScope = (next: Scope) => {
     setScopeState(next);
     scrollRef.current?.scrollTo({ y: 0, animated: true });
@@ -87,14 +87,22 @@ export function TripStatsScreen() {
           ref={scrollRef}
           contentContainerClassName="gap-4 p-4"
           contentInsetAdjustmentBehavior="automatic"
+          // The filters stay pinned under the app bar, so the active filter is in view wherever
+          // the record is scrolled to, as Google Play and Gmail pin their filter rows.
+          stickyHeaderIndices={showScopeBar ? [0] : undefined}
         >
           {showScopeBar ? (
-            <ScopeBar
-              scope={scope}
-              years={record.availableYears}
-              activities={record.availableActivities}
-              onChange={setScope}
-            />
+            <View
+              className="-mx-4 -mt-4 px-4 pt-4 pb-2"
+              style={{ backgroundColor: colors.background }}
+            >
+              <ScopeBar
+                scope={scope}
+                years={record.availableYears}
+                activities={record.availableActivities}
+                onChange={setScope}
+              />
+            </View>
           ) : null}
           {record.finished.length === 0 ? (
             <View className="items-center gap-3 px-4 py-12" testID={testIds.tripStats.scopeEmpty}>
