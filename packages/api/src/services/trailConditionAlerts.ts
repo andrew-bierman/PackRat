@@ -400,6 +400,7 @@ export async function notifyTripsOfReport({
             nearby: section.scope === 'nearby',
           }),
           tripId: row.id,
+          reportId: report.id,
         },
         operation: 'trailConditionAlerts.push',
         extra: { tripId: row.id, reportId: report.id },

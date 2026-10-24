@@ -306,7 +306,7 @@ describe('notifyTripsOfReport', () => {
     expect(calls).toHaveLength(0);
   });
 
-  it('notifies the owner of a trip on the trail, opening that trip', async () => {
+  it('notifies the owner of a trip on the trail, opening the report on that trip', async () => {
     const { db } = fakeDb({
       'trailConditionAlerts.candidateTrips': [tripRow('a')],
       'trailConditionAlerts.claimNotification': [{ tripId: 'a' }],
@@ -319,6 +319,7 @@ describe('notifyTripsOfReport', () => {
         payload: {
           alert: { title: 'New trail report for Trip a', body: 'Mist Trail: Tough going. Ice.' },
           tripId: 'a',
+          reportId: 'report-1',
         },
       }),
     );

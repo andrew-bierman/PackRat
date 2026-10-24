@@ -149,6 +149,18 @@ describe('sendFcmPush', () => {
     expect(sentMessage().data).toEqual({ tripId: 'trip-9' });
   });
 
+  it('carries the report id alongside its trip for a trail report', async () => {
+    const { sendFcmPush } = await loadClient();
+
+    await sendFcmPush({
+      env,
+      deviceToken: 'device-1',
+      payload: { alert: { title: 'Trip', body: 'Ice' }, tripId: 'trip-9', reportId: 'report-3' },
+    });
+
+    expect(sentMessage().data).toEqual({ tripId: 'trip-9', reportId: 'report-3' });
+  });
+
   it('carries a post id and badge count', async () => {
     const { sendFcmPush } = await loadClient();
 

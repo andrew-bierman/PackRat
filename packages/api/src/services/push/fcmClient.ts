@@ -114,7 +114,8 @@ async function getAccessToken(account: FcmServiceAccount): Promise<string> {
 function routingData(payload: PushPayload): Record<string, string> {
   if ('weatherLocationId' in payload)
     return { weatherLocationId: String(payload.weatherLocationId) };
-  if ('tripId' in payload) return { tripId: payload.tripId };
+  if ('tripId' in payload)
+    return { tripId: payload.tripId, ...(payload.reportId ? { reportId: payload.reportId } : {}) };
   return { postId: String(payload.postId) };
 }
 
