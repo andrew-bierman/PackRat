@@ -1,29 +1,29 @@
-import { createDb, createOsmDb } from '@packrat/api/db';
+import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
 import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
-import type { TrailDb } from '@packrat/api/services/trailIndex';
+import { unreadReportIds } from '@packrat/api/services/trailConditionAlerts';
 import { getTripTrailConditions } from '@packrat/api/services/tripTrailConditions';
 import { trips } from '@packrat/db/schema';
 import { and, eq } from 'drizzle-orm';
 import { Elysia, status } from 'elysia';
 import { z } from 'zod';
 import { toReportResponse } from './reports';
-
-/** The trail database, or null when this server has none configured. */
-function trailDbOrNull(): TrailDb | null {
-  try {
-    return createOsmDb();
-  } catch {
-    return null;
-  }
-}
+import { trailDbOrNull } from './trailDb';
 
 export const tripTrailConditionRoutes = new Elysia().use(authPlugin).get(
   '/trip/:tripId',
   async ({ params, user }) => {
     const db = createDb();
     const trip = await db.tag('tripTrailConditions.trip').query.trips.findFirst({
-      columns: { id: true, trailId: true, location: true },
+      columns: {
+        id: true,
+        trailId: true,
+        location: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        createdAt: true,
+      },
       where: and(
         eq(trips.id, params.tripId),
         eq(trips.userId, user.userId),
@@ -48,6 +48,13 @@ export const tripTrailConditionRoutes = new Elysia().use(authPlugin).get(
       db,
       userIds: result.reports.map((r) => r.userId),
     });
+    const unread = await unreadReportIds({
+      db,
+      trip,
+      reports: result.reports,
+      viewerId: user.userId,
+      now: new Date(),
+    });
 
     return {
       scope: result.scope,
@@ -55,6 +62,7 @@ export const tripTrailConditionRoutes = new Elysia().use(authPlugin).get(
         ...toReportResponse(r),
         distanceM: r.distanceM,
         authorName: authorName.get(r.userId) ?? null,
+        unread: unread.has(r.id),
       })),
     };
   },

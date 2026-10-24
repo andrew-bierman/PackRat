@@ -1,9 +1,14 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import { listCachedFeatureFlags } from '@packrat/api/services/featureFlagsService';
+import { runAfterResponse } from '@packrat/api/services/push/notifyFeed';
 import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
 import { visibleToViewer } from '@packrat/api/services/reportVisibility';
+import { notifyTripsOfReport } from '@packrat/api/services/trailConditionAlerts';
+import { getEnv } from '@packrat/api/utils/env-validation';
 import { captureApiException } from '@packrat/api/utils/sentry';
-import type { NewTrailConditionReport } from '@packrat/db/schema';
+import { FeatureFlag } from '@packrat/config';
+import type { NewTrailConditionReport, TrailConditionReport } from '@packrat/db/schema';
 import { trailConditionReportFlags, trailConditionReports } from '@packrat/db/schema';
 import {
   CreateTrailConditionReportRequestSchema,
@@ -13,6 +18,7 @@ import {
 import { and, desc, eq, gte, ilike, type SQL } from 'drizzle-orm';
 import { Elysia, status } from 'elysia';
 import { z } from 'zod';
+import { trailDbOrNull } from './trailDb';
 
 // ── LIKE-clause escape patterns ───────────────────────────────────────
 const LIKE_ESCAPE_BACKSLASH = /\\/g;
@@ -35,6 +41,29 @@ export function toReportResponse(row: Record<string, unknown>): Record<string, u
         ? row.localUpdatedAt.toISOString()
         : String(row.localUpdatedAt),
   };
+}
+
+/** Tells owners of trips this report concerns, when notifications are switched on. */
+async function notifyTripOwnersOfReport(report: TrailConditionReport): Promise<void> {
+  try {
+    const env = getEnv();
+    const flags = await listCachedFeatureFlags(env.AUTH_KV);
+    if (flags[FeatureFlag.EnableTrailConditionNotifications] !== true) return;
+    await notifyTripsOfReport({
+      env,
+      db: createDb(),
+      trailDb: trailDbOrNull(),
+      report,
+      now: new Date(),
+    });
+  } catch (error) {
+    captureApiException({
+      error,
+      operation: 'trailConditions.notifyTripOwners',
+      tags: { feature: 'trailConditions' },
+      extra: { reportId: report.id },
+    });
+  }
 }
 
 export const trailConditionRoutes = new Elysia()
@@ -149,6 +178,7 @@ export const trailConditionRoutes = new Elysia()
 
         if (!newReport) return status(400, { error: 'Failed to submit report' });
 
+        await runAfterResponse(() => notifyTripOwnersOfReport(newReport));
         return toReportResponse(newReport);
       } catch (error) {
         const pgCode = (error as { code?: string })?.code;
