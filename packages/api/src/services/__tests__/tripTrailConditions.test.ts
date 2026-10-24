@@ -32,12 +32,15 @@ const report = (overrides: Partial<TrailConditionReport>): TrailConditionReport 
 
 describe('distanceMeters', () => {
   it('measures Yosemite Valley to Half Dome summit at about 4 km', () => {
-    const d = distanceMeters(YOSEMITE_VALLEY, { latitude: 37.7459, longitude: -119.5332 + 0.0455 });
+    const d = distanceMeters({
+      from: YOSEMITE_VALLEY,
+      to: { latitude: 37.7459, longitude: -119.5332 + 0.0455 },
+    });
     expect(Math.round(d / 100)).toBe(40);
   });
 
   it('is zero between a point and itself', () => {
-    expect(distanceMeters(YOSEMITE_VALLEY, YOSEMITE_VALLEY)).toBe(0);
+    expect(distanceMeters({ from: YOSEMITE_VALLEY, to: YOSEMITE_VALLEY })).toBe(0);
   });
 });
 
@@ -56,10 +59,10 @@ describe('rankNearbyReports', () => {
       pinReports: [report({ id: 'pin', ...PIN })],
     });
 
-    expect(Math.round(distanceMeters(YOSEMITE_VALLEY, PIN) / 1000)).toBe(4);
+    expect(Math.round(distanceMeters({ from: YOSEMITE_VALLEY, to: PIN }) / 1000)).toBe(4);
     expect(ranked.map((r) => [r.id, r.distanceM])).toEqual([
       ['near', 1201],
-      ['pin', Math.round(distanceMeters(YOSEMITE_VALLEY, PIN))],
+      ['pin', Math.round(distanceMeters({ from: YOSEMITE_VALLEY, to: PIN }))],
       ['far', 9000],
     ]);
   });

@@ -81,26 +81,38 @@ const env = {} as ValidatedEnv;
 describe('isTripActive', () => {
   it('counts a trip starting within two weeks as upcoming', () => {
     expect(
-      isTripActive({ status: 'planned', startDate: daysFromNow(13), endDate: null }, NOW),
+      isTripActive({
+        trip: { status: 'planned', startDate: daysFromNow(13), endDate: null },
+        now: NOW,
+      }),
     ).toBe(true);
   });
 
   it('leaves out a trip starting more than two weeks away', () => {
     expect(
-      isTripActive({ status: 'planned', startDate: daysFromNow(15), endDate: null }, NOW),
+      isTripActive({
+        trip: { status: 'planned', startDate: daysFromNow(15), endDate: null },
+        now: NOW,
+      }),
     ).toBe(false);
   });
 
   it('keeps a planned trip active until a day after its last day', () => {
     const trip = { status: 'planned' as const, startDate: daysFromNow(-5), endDate: NOW };
-    expect(isTripActive(trip, NOW)).toBe(true);
-    expect(isTripActive({ ...trip, endDate: daysFromNow(-2) }, NOW)).toBe(false);
+    expect(isTripActive({ trip, now: NOW })).toBe(true);
+    expect(isTripActive({ trip: { ...trip, endDate: daysFromNow(-2) }, now: NOW })).toBe(false);
   });
 
   it('treats a trip in progress as active and a finished or undated one as not', () => {
-    expect(isTripActive({ status: 'in_progress', startDate: null, endDate: null }, NOW)).toBe(true);
-    expect(isTripActive({ status: 'complete', startDate: NOW, endDate: NOW }, NOW)).toBe(false);
-    expect(isTripActive({ status: 'planned', startDate: null, endDate: null }, NOW)).toBe(false);
+    expect(
+      isTripActive({ trip: { status: 'in_progress', startDate: null, endDate: null }, now: NOW }),
+    ).toBe(true);
+    expect(
+      isTripActive({ trip: { status: 'complete', startDate: NOW, endDate: NOW }, now: NOW }),
+    ).toBe(false);
+    expect(
+      isTripActive({ trip: { status: 'planned', startDate: null, endDate: null }, now: NOW }),
+    ).toBe(false);
   });
 });
 

@@ -17,6 +17,7 @@ import {
   tripConditionNotificationState,
   trips,
 } from '@packrat/db/schema';
+import { safeJsonStringify } from '@packrat/utils';
 import { and, eq, gte, inArray, isNotNull, isNull, lte, ne, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -48,10 +49,13 @@ export interface AlertTrip {
  * Upcoming (starting within two weeks and not yet over) or in progress. A
  * finished trip is history: it gets no marker and no notification.
  */
-export function isTripActive(
-  trip: Pick<AlertTrip, 'status' | 'startDate' | 'endDate'>,
-  now: Date,
-): boolean {
+export function isTripActive({
+  trip,
+  now,
+}: {
+  trip: Pick<AlertTrip, 'status' | 'startDate' | 'endDate'>;
+  now: Date;
+}): boolean {
   if (trip.status === 'complete') return false;
   if (trip.status === 'in_progress') return true;
   if (!trip.startDate) return false;
@@ -118,7 +122,7 @@ export async function unreadReportIds({
   viewerId: string;
   now: Date;
 }): Promise<Set<string>> {
-  if (!isTripActive(trip, now)) return new Set();
+  if (!isTripActive({ trip, now })) return new Set();
   const candidates = reports.filter(
     (r) =>
       r.userId !== viewerId &&
@@ -267,7 +271,7 @@ async function tripsNearTrail({
   trailId: string;
   candidates: { id: string; latitude: number; longitude: number }[];
 }): Promise<Set<string>> {
-  const points = JSON.stringify(
+  const points = safeJsonStringify(
     candidates.map((c) => ({ trip_id: c.id, lat: c.latitude, lon: c.longitude })),
   );
   const result = await trailDb.tag('trailConditionAlerts.tripsNearTrail').execute(sql`
