@@ -7,12 +7,11 @@ import {
   setTrailConditionNotificationsEnabled,
 } from '@packrat/api/services/trailConditionAlerts';
 import { trailConditionReports } from '@packrat/db/schema';
+import { TrailConditionNotificationSettingsSchema } from '@packrat/schemas/trailConditions';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Elysia } from 'elysia';
 import { z } from 'zod';
 import { trailDbOrNull } from './trailDb';
-
-const NotificationSettingsSchema = z.object({ trailConditions: z.boolean() });
 
 export const trailConditionAlertRoutes = new Elysia()
   .use(authPlugin)
@@ -73,7 +72,7 @@ export const trailConditionAlertRoutes = new Elysia()
       }),
     }),
     {
-      response: NotificationSettingsSchema,
+      response: TrailConditionNotificationSettingsSchema,
       isAuthenticated: true,
       detail: {
         tags: ['Trail Conditions'],
@@ -93,8 +92,8 @@ export const trailConditionAlertRoutes = new Elysia()
       return body;
     },
     {
-      body: NotificationSettingsSchema,
-      response: NotificationSettingsSchema,
+      body: TrailConditionNotificationSettingsSchema,
+      response: TrailConditionNotificationSettingsSchema,
       isAuthenticated: true,
       detail: {
         tags: ['Trail Conditions'],
