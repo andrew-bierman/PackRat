@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Picks the trail a report is about. Trails near the hiker come first; typing
 /// narrows by name. When the trail isn't in PackRat, the hiker drops a pin.
-struct TrailPickerView: View {
+struct ReportTrailPickerView: View {
     /// The trail currently chosen, so the picker can mark it.
     let selectedTrailId: String?
     let location: TrailReportLocationProvider
