@@ -185,21 +185,31 @@ export function CollectionCards({
   record,
   parksAndPeaks,
   unit,
+  showLifetime,
 }: {
   record: TripStatsRecord;
   parksAndPeaks: ParksAndPeaks;
   unit: TripDistanceUnit;
+  /** Parks and peaks are lifetime collections, shown only while the record isn't filtered. */
+  showLifetime: boolean;
 }) {
   const router = useRouter();
   return (
     <>
       <TripsMapCard record={record} />
-      <ParksCard parksAndPeaks={parksAndPeaks} onPress={() => router.push('/trip-stats/parks')} />
-      <PeaksCard
-        parksAndPeaks={parksAndPeaks}
-        unit={unit}
-        onPress={() => router.push('/trip-stats/peaks')}
-      />
+      {showLifetime ? (
+        <>
+          <ParksCard
+            parksAndPeaks={parksAndPeaks}
+            onPress={() => router.push('/trip-stats/parks')}
+          />
+          <PeaksCard
+            parksAndPeaks={parksAndPeaks}
+            unit={unit}
+            onPress={() => router.push('/trip-stats/peaks')}
+          />
+        </>
+      ) : null}
     </>
   );
 }
