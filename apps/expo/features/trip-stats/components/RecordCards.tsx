@@ -1,10 +1,11 @@
+import type { TripActivity } from '@packrat/schemas/trips';
 import { Text } from '@packrat/ui/src/text';
 import { useWeightUnit } from 'expo-app/features/auth/hooks/useWeightUnit';
 import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import {
   formatDecimal,
   formatMonthDay,
@@ -160,9 +161,12 @@ export function MonthsCard({ record }: { record: TripStatsRecord }) {
 export function ActivitiesCard({
   record,
   unit,
+  onSelect,
 }: {
   record: TripStatsRecord;
   unit: TripDistanceUnit;
+  /** Tapping a row narrows the screen to that activity; tapping it again clears it. */
+  onSelect: (activity: TripActivity) => void;
 }) {
   const { t } = useTranslation();
   const { colors } = useColorScheme();
@@ -173,9 +177,17 @@ export function ActivitiesCard({
       title={t('tripStats.activities.title')}
       subtitle={t('tripStats.activities.subtitle')}
     >
-      <View className="gap-3">
+      <View>
         {record.activities.map((bucket) => (
-          <View key={bucket.activity} className="gap-1">
+          <Pressable
+            key={bucket.activity}
+            onPress={() => onSelect(bucket.activity)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: record.scope.activity === bucket.activity }}
+            android_ripple={{ color: colors.grey5 }}
+            testID={testIds.tripStats.activityRow(bucket.activity)}
+            className="min-h-12 justify-center gap-1 py-1.5"
+          >
             <View className="flex-row items-baseline justify-between gap-2">
               <Text variant="body">{t(`tripStats.activities.names.${bucket.activity}`)}</Text>
               <Text variant="subhead" className="text-muted-foreground">
@@ -196,7 +208,7 @@ export function ActivitiesCard({
                 style={{ width: `${(bucket.trips / max) * 100}%`, backgroundColor: colors.primary }}
               />
             </View>
-          </View>
+          </Pressable>
         ))}
       </View>
     </StatsCard>

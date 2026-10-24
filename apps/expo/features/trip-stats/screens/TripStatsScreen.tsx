@@ -7,6 +7,7 @@ import { useColorScheme } from 'expo-app/lib/hooks/useColorScheme';
 import { useTranslation } from 'expo-app/lib/hooks/useTranslation';
 import { testIds } from 'expo-app/lib/testIds';
 import { Stack, useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionCards } from '../components/CollectionCards';
@@ -20,16 +21,19 @@ import {
   TopGearCard,
   TotalsCard,
 } from '../components/RecordCards';
+import { ScopeBar } from '../components/ScopeBar';
 import { useDistanceUnit } from '../hooks/useDistanceUnit';
 import { useGoalProgress, useParksAndPeaks, useTripStatsRecord } from '../hooks/useTripStats';
 import { tripStatsSettingsStore } from '../store/settings';
+import { ALL_SCOPE, isAllScope, type Scope } from '../utils/tripStats';
 
 export function TripStatsScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { colors } = useColorScheme();
   const unit = useDistanceUnit();
-  const record = useTripStatsRecord();
+  const [scope, setScope] = useState<Scope>(ALL_SCOPE);
+  const record = useTripStatsRecord(scope);
   const parksAndPeaks = useParksAndPeaks(record);
   const goals = useGoalProgress({ record, parksAndPeaks });
   const settings = use$(tripStatsSettingsStore);
@@ -41,6 +45,13 @@ export function TripStatsScreen() {
     comeback && settings.breakReasonTripId === comeback.trip.trip.id
       ? (settings.breakReason ?? null)
       : null;
+  const isAll = isAllScope(scope);
+  const activityName = scope.activity ? t(`tripStats.activities.names.${scope.activity}`) : null;
+  const scopeTitle =
+    scope.year != null && activityName
+      ? t('tripStats.scope.activityInYear', { activity: activityName, year: scope.year })
+      : (activityName ?? (scope.year != null ? String(scope.year) : t('tripStats.totals.allTime')));
+  const showScopeBar = record.availableYears.length > 1 || record.availableActivities.length > 0;
 
   return (
     <SafeAreaView className="flex-1" edges={['bottom']} testID={testIds.tripStats.screen}>
@@ -69,33 +80,86 @@ export function TripStatsScreen() {
           contentContainerClassName="gap-4 p-4"
           contentInsetAdjustmentBehavior="automatic"
         >
-          <TotalsCard title={t('tripStats.totals.allTime')} totals={record.totals} unit={unit} />
-          {comeback ? (
-            <ComebackCard
-              comeback={comeback}
-              reason={reason}
-              unit={unit}
-              onReasonChange={(next) =>
-                tripStatsSettingsStore.set({
-                  ...tripStatsSettingsStore.peek(),
-                  breakReason: next,
-                  breakReasonTripId: next ? comeback.trip.trip.id : null,
-                })
-              }
+          {showScopeBar ? (
+            <ScopeBar
+              scope={scope}
+              years={record.availableYears}
+              activities={record.availableActivities}
+              onChange={setScope}
             />
           ) : null}
-          <GoalsCard
-            progress={goals}
-            onAdd={addGoal}
-            onEdit={(goalId) => router.push({ pathname: '/trip-stats/goal', params: { goalId } })}
-          />
-          <ThisYearCard record={record} />
-          <MonthsCard record={record} />
-          <ActivitiesCard record={record} unit={unit} />
-          <HighlightsCard record={record} unit={unit} />
-          <CollectionCards record={record} parksAndPeaks={parksAndPeaks} unit={unit} />
-          <TopGearCard record={record} />
-          <BaseWeightCard record={record} />
+          {record.finished.length === 0 ? (
+            <View className="items-center gap-3 px-4 py-12" testID={testIds.tripStats.scopeEmpty}>
+              <Icon name="filter-variant-remove" size={48} color={colors.grey} />
+              <Text variant="title3" className="text-center font-medium">
+                {t('tripStats.scope.emptyTitle')}
+              </Text>
+              <Text variant="body" className="text-center text-muted-foreground">
+                {t('tripStats.scope.emptyBody', { scope: scopeTitle })}
+              </Text>
+              <Button
+                variant="tonal"
+                className="mt-2"
+                onPress={() => setScope(ALL_SCOPE)}
+                testID={testIds.tripStats.scopeEmptyShowAllBtn}
+              >
+                <Text>{t('tripStats.scope.showAllTrips')}</Text>
+              </Button>
+            </View>
+          ) : (
+            <>
+              <TotalsCard title={scopeTitle} totals={record.totals} unit={unit} />
+              {isAll && comeback ? (
+                <ComebackCard
+                  comeback={comeback}
+                  reason={reason}
+                  unit={unit}
+                  onReasonChange={(next) =>
+                    tripStatsSettingsStore.set({
+                      ...tripStatsSettingsStore.peek(),
+                      breakReason: next,
+                      breakReasonTripId: next ? comeback.trip.trip.id : null,
+                    })
+                  }
+                />
+              ) : null}
+              {isAll ? (
+                <GoalsCard
+                  progress={goals}
+                  onAdd={addGoal}
+                  onEdit={(goalId) =>
+                    router.push({ pathname: '/trip-stats/goal', params: { goalId } })
+                  }
+                />
+              ) : null}
+              {isAll ? <ThisYearCard record={record} /> : null}
+              <MonthsCard record={record} />
+              <ActivitiesCard
+                record={record}
+                unit={unit}
+                onSelect={(activity) =>
+                  setScope({
+                    ...scope,
+                    activity: scope.activity === activity ? null : activity,
+                  })
+                }
+              />
+              <HighlightsCard record={record} unit={unit} />
+              <CollectionCards
+                record={record}
+                parksAndPeaks={parksAndPeaks}
+                unit={unit}
+                showLifetime={isAll}
+              />
+              <TopGearCard record={record} />
+              <BaseWeightCard record={record} />
+              {isAll ? null : (
+                <Text variant="footnote" className="text-center text-muted-foreground">
+                  {t('tripStats.scope.lifetimeNote')}
+                </Text>
+              )}
+            </>
+          )}
         </ScrollView>
       ) : (
         <View className="flex-1 items-center justify-center gap-3 px-8">

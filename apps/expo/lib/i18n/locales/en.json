@@ -526,9 +526,20 @@
       "trips": "Trips",
       "busiest": "Busiest: {{month}}"
     },
+    "scope": {
+      "allActivities": "All Activities",
+      "activityInYear": "{{activity}} in {{year}}",
+      "yearLabel": "Year, {{value}}",
+      "activityLabel": "Activity, {{value}}",
+      "showAll": "Show all trips",
+      "emptyTitle": "No Trips Match",
+      "emptyBody": "No finished trip fits {{scope}}.",
+      "showAllTrips": "Show All Trips",
+      "lifetimeNote": "Goals, parks, peaks and long trails show under All Time."
+    },
     "activities": {
       "title": "Activities",
-      "subtitle": "From your trip logs",
+      "subtitle": "From your trip logs. Tap one to see only those trips.",
       "names": {
         "hiking": "Hiking",
         "backpacking": "Backpacking",
