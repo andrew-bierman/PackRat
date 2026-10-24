@@ -45,6 +45,10 @@ export const queryKeys = {
     feedReports: {
       all: () => [...queryKeys.admin.all(), 'feedReports'] as const,
     },
+
+    trailFlags: {
+      all: () => [...queryKeys.admin.all(), 'trailFlags'] as const,
+    },
   },
 
   platform: {

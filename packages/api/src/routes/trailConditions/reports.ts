@@ -1,10 +1,13 @@
 import { createDb } from '@packrat/api/db';
 import { authPlugin } from '@packrat/api/middleware/auth';
+import { reportAuthorNames } from '@packrat/api/services/reportAuthors';
+import { visibleToViewer } from '@packrat/api/services/reportVisibility';
 import { captureApiException } from '@packrat/api/utils/sentry';
 import type { NewTrailConditionReport } from '@packrat/db/schema';
-import { trailConditionReports } from '@packrat/db/schema';
+import { trailConditionReportFlags, trailConditionReports } from '@packrat/db/schema';
 import {
   CreateTrailConditionReportRequestSchema,
+  FlagTrailConditionReportRequestSchema,
   UpdateTrailConditionReportRequestSchema,
 } from '@packrat/schemas/trailConditions';
 import { and, desc, eq, gte, ilike, type SQL } from 'drizzle-orm';
@@ -16,7 +19,9 @@ const LIKE_ESCAPE_BACKSLASH = /\\/g;
 const LIKE_ESCAPE_PERCENT = /%/g;
 const LIKE_ESCAPE_UNDERSCORE = /_/g;
 
-function toReportResponse(row: Record<string, unknown>): Record<string, unknown> {
+const earliest = (a: Date, b: Date) => (a.getTime() <= b.getTime() ? a : b);
+
+export function toReportResponse(row: Record<string, unknown>): Record<string, unknown> {
   return {
     ...row,
     createdAt: row.createdAt instanceof Date ? row.createdAt.toISOString() : String(row.createdAt),
@@ -35,17 +40,22 @@ function toReportResponse(row: Record<string, unknown>): Record<string, unknown>
 export const trailConditionRoutes = new Elysia()
   .model({
     'trailConditions.CreateTrailConditionReportRequest': CreateTrailConditionReportRequestSchema,
+    'trailConditions.FlagTrailConditionReportRequest': FlagTrailConditionReportRequestSchema,
     'trailConditions.UpdateTrailConditionReportRequest': UpdateTrailConditionReportRequestSchema,
   })
   .use(authPlugin)
   .get(
     '/',
-    async ({ query }) => {
+    async ({ query, user }) => {
       const db = createDb();
-      const { trailName, limit } = query;
+      const { trailId, trailName, limit } = query;
 
       try {
-        const conditions = [eq(trailConditionReports.deleted, false)];
+        const conditions = [
+          eq(trailConditionReports.deleted, false),
+          visibleToViewer({ db, viewerId: user.userId }),
+        ];
+        if (trailId) conditions.push(eq(trailConditionReports.trailId, trailId));
         if (trailName) {
           const normalized = trailName.trim();
           if (normalized.length > 0) {
@@ -62,22 +72,34 @@ export const trailConditionRoutes = new Elysia()
           .select()
           .from(trailConditionReports)
           .where(and(...conditions))
-          .orderBy(desc(trailConditionReports.createdAt))
+          .orderBy(desc(trailConditionReports.localCreatedAt))
           .limit(limit ?? 50);
 
-        return reports.map(toReportResponse);
+        // The feed signs each report, like the trip section and trail page.
+        const authorName = await reportAuthorNames({ db, userIds: reports.map((r) => r.userId) });
+        return reports.map((r) => ({
+          ...toReportResponse(r),
+          authorName: authorName.get(r.userId) ?? null,
+        }));
       } catch (error) {
         captureApiException({
           error: error,
           operation: 'trailConditions.list',
           tags: { feature: 'trailConditions' },
-          extra: { trailName, limit, httpStatus: 500, errorCode: 'TRAIL_CONDITIONS_LIST_ERROR' },
+          extra: {
+            trailId,
+            trailName,
+            limit,
+            httpStatus: 500,
+            errorCode: 'TRAIL_CONDITIONS_LIST_ERROR',
+          },
         });
         return status(500, { error: 'Failed to list trail condition reports' });
       }
     },
     {
       query: z.object({
+        trailId: z.string().uuid().optional(),
         trailName: z.string().optional(),
         // Handler defaults to 50 via `?? 50`; keep schema truly optional.
         limit: z.coerce.number().int().min(1).max(100).optional(),
@@ -102,8 +124,11 @@ export const trailConditionRoutes = new Elysia()
           .insert(trailConditionReports)
           .values({
             id: data.id,
+            trailId: data.trailId ?? null,
             trailName: data.trailName,
             trailRegion: data.trailRegion ?? null,
+            latitude: data.latitude ?? null,
+            longitude: data.longitude ?? null,
             surface: data.surface,
             overallCondition: data.overallCondition,
             hazards: data.hazards ?? [],
@@ -114,7 +139,10 @@ export const trailConditionRoutes = new Elysia()
             userId: user.userId,
             tripId: data.tripId ?? null,
             deleted: false,
-            localCreatedAt: new Date(data.localCreatedAt),
+            // When it was written, which is what readers judge it by: a report
+            // sent late from no signal keeps its age. Clamped so a phone with
+            // its clock ahead can't post a report from the future.
+            localCreatedAt: earliest(new Date(data.localCreatedAt), new Date()),
             localUpdatedAt: new Date(data.localUpdatedAt),
           })
           .returning();
@@ -180,7 +208,7 @@ export const trailConditionRoutes = new Elysia()
           .select()
           .from(trailConditionReports)
           .where(and(...conditions))
-          .orderBy(desc(trailConditionReports.createdAt));
+          .orderBy(desc(trailConditionReports.localCreatedAt));
 
         return reports.map(toReportResponse);
       } catch (error) {
@@ -271,6 +299,44 @@ export const trailConditionRoutes = new Elysia()
       detail: {
         tags: ['Trail Conditions'],
         summary: 'Update a trail condition report',
+        security: [{ bearerAuth: [] }],
+      },
+    },
+  )
+  .post(
+    '/:reportId/flag',
+    async ({ params, body, user }) => {
+      const db = createDb();
+      const [report] = await db
+        .tag('trailConditions.findFlagTarget')
+        .select({ userId: trailConditionReports.userId })
+        .from(trailConditionReports)
+        .where(
+          and(
+            eq(trailConditionReports.id, params.reportId),
+            eq(trailConditionReports.deleted, false),
+          ),
+        )
+        .limit(1);
+      if (!report) return status(404, { error: 'Report not found' });
+      if (report.userId === user.userId) {
+        return status(400, { error: 'You cannot flag your own report' });
+      }
+      // Flagging twice is a no-op: the first reason stands.
+      await db
+        .tag('trailConditions.flagReport')
+        .insert(trailConditionReportFlags)
+        .values({ reporterId: user.userId, reportId: params.reportId, reason: body.reason })
+        .onConflictDoNothing();
+      return { success: true };
+    },
+    {
+      params: z.object({ reportId: z.string() }),
+      body: 'trailConditions.FlagTrailConditionReportRequest',
+      isAuthenticated: true,
+      detail: {
+        tags: ['Trail Conditions'],
+        summary: "Flag someone else's report for review; hides it for you",
         security: [{ bearerAuth: [] }],
       },
     },

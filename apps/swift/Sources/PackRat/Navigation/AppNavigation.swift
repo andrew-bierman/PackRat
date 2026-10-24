@@ -389,8 +389,17 @@ struct AppNavigation: View {
                     systemImage: "figure.hiking"
                 )
             } else if let id = appState.selectedReportId,
-               let report = appState.trailConditionsVM.reports.first(where: { $0.id == id }) {
-                TrailConditionDetailView(report: report)
+               let report = appState.trailConditionsVM.reports.first(where: { $0.id == id }),
+               // Gone once flagged, blocked or deleted from the list's menu.
+               !TrailReportModeration.shared.hides(report) {
+                // A stack of its own so the report can open its trail page.
+                NavigationStack {
+                    TrailConditionDetailView(
+                        report: report,
+                        authorName: appState.trailConditionsVM.authorNames[report.id]
+                    )
+                }
+                .id(report.id)
             } else {
                 placeholder("Select a Report", symbol: "figure.hiking")
             }

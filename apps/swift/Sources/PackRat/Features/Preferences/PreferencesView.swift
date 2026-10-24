@@ -270,6 +270,20 @@ struct PreferencesView: View {
             } footer: {
                 Text("Who can tag you, feed notifications, and blocked people.")
             }
+        } else if FeatureFlagStore.shared.isEnabled("enableTrailConditions") && authManager.isAuthenticated {
+            // Without the feed, trail-report blocks still need undoing somewhere.
+            Section {
+                NavigationLink {
+                    BlockedPeopleScreen()
+                } label: {
+                    Label("Blocked People", systemImage: "hand.raised")
+                }
+                .accessibilityIdentifier("preferences_blocked_people")
+            } header: {
+                Text("Community")
+            } footer: {
+                Text("People whose trail reports you've hidden by blocking them.")
+            }
         }
     }
 

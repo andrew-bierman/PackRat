@@ -35,6 +35,7 @@ import type {
   TrailSearchResult as TrailSearchResultList,
 } from '@packrat/schemas/admin';
 import type { AdminFeedReport } from '@packrat/schemas/feed';
+import type { AdminTrailFlag } from '@packrat/schemas/trailConditions';
 import { clearToken, getAuthHeader } from './auth';
 import { adminEnv } from './env';
 
@@ -657,4 +658,32 @@ export async function setFeedUserSuspended({
   const { data, error } = await adminClient.feed.users({ userId }).suspension.put({ suspended });
   if (error) throwOnError({ error });
   return unwrap({ data, name: 'setFeedUserSuspended' });
+}
+
+// ─── Trail report moderation ──────────────────────────────────────────────────
+
+export type { AdminTrailFlag };
+
+export async function getTrailFlags(): Promise<AdminTrailFlag[]> {
+  const { data, error } = await adminClient['trail-conditions'].flags.get();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'trailFlags' }).items;
+}
+
+/**
+ * Resolves every pending flag on one trail report. `dismiss` keeps it up;
+ * `remove` deletes it for everyone.
+ */
+export async function resolveTrailFlags({
+  reportId,
+  action,
+}: {
+  reportId: string;
+  action: FeedReportAction;
+}): Promise<{ success: boolean }> {
+  const { data, error } = await adminClient['trail-conditions']
+    .flags({ reportId })({ action })
+    .post();
+  if (error) throwOnError({ error });
+  return unwrap({ data, name: 'resolveTrailFlags' });
 }

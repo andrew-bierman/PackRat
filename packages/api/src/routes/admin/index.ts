@@ -27,6 +27,7 @@ import { adminFeatureAccessRoutes } from './featureAccess';
 import { adminFeatureFlagsRoutes } from './featureFlags';
 import { adminFeedModerationRoutes } from './feedModeration';
 import { adminPackTemplatesRoutes } from './packTemplates';
+import { adminTrailConditionModerationRoutes } from './trailConditionModeration';
 import { adminTrailsRoutes } from './trails';
 
 /**
@@ -807,4 +808,5 @@ export const adminRoutes = new Elysia({ prefix: '/admin' })
   .use(adminFeatureFlagsRoutes)
   .use(adminFeatureAccessRoutes)
   .use(adminPackTemplatesRoutes)
-  .use(adminFeedModerationRoutes);
+  .use(adminFeedModerationRoutes)
+  .use(adminTrailConditionModerationRoutes);
