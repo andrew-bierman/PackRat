@@ -10,6 +10,7 @@ const FeatureFlag = Object.freeze({
   EnableSharedPacks: 'enableSharedPacks',
   EnablePackTemplates: 'enablePackTemplates',
   EnableTrailConditions: 'enableTrailConditions',
+  EnableTrailConditionNotifications: 'enableTrailConditionNotifications',
   EnableFeed: 'enableFeed',
   EnableWildlifeIdentification: 'enableWildlifeIdentification',
   EnableOfflineWildlifeID: 'enableOfflineWildlifeID',
