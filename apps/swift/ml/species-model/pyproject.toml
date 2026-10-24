@@ -7,7 +7,7 @@ dependencies = [
   "coremltools>=8.3",
   "numpy<2.3",
   "open-clip-torch>=2.32",
-  "pillow>=11",
+  "pillow>=13",
   "requests>=2.32",
   "scikit-learn>=1.5",
   "timm>=1.0.15",
