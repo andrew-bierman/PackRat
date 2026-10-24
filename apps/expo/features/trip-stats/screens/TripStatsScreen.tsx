@@ -12,6 +12,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CollectionCards } from '../components/CollectionCards';
 import { ComebackCard, GoalsCard } from '../components/GoalCards';
+import { IdleGearCard } from '../components/PlacesAndGearCards';
 import {
   ActivitiesCard,
   BaseWeightCard,
@@ -23,7 +24,14 @@ import {
 } from '../components/RecordCards';
 import { ScopeBar } from '../components/ScopeBar';
 import { useDistanceUnit } from '../hooks/useDistanceUnit';
-import { useGoalProgress, useParksAndPeaks, useTripStatsRecord } from '../hooks/useTripStats';
+import {
+  useGoalProgress,
+  useIdleGear,
+  useParksAndPeaks,
+  useTripPlaces,
+  useTripStatsRecord,
+} from '../hooks/useTripStats';
+import { useScopeTitle } from '../lib/useStatsFormat';
 import { tripStatsSettingsStore } from '../store/settings';
 import { ALL_SCOPE, isAllScope, type Scope } from '../utils/tripStats';
 
@@ -43,6 +51,8 @@ export function TripStatsScreen() {
   const record = useTripStatsRecord(scope);
   const parksAndPeaks = useParksAndPeaks(record);
   const goals = useGoalProgress({ record, parksAndPeaks });
+  const places = useTripPlaces(record);
+  const idleGear = useIdleGear(record);
   const settings = use$(tripStatsSettingsStore);
 
   const addGoal = () => router.push('/trip-stats/goal');
@@ -53,11 +63,7 @@ export function TripStatsScreen() {
       ? (settings.breakReason ?? null)
       : null;
   const isAll = isAllScope(scope);
-  const activityName = scope.activity ? t(`tripStats.activities.names.${scope.activity}`) : null;
-  const scopeTitle =
-    scope.year != null && activityName
-      ? t('tripStats.scope.activityInYear', { activity: activityName, year: scope.year })
-      : (activityName ?? (scope.year != null ? String(scope.year) : t('tripStats.totals.allTime')));
+  const scopeTitle = useScopeTitle(scope);
   const showScopeBar = record.availableYears.length > 1 || record.availableActivities.length > 0;
 
   return (
@@ -165,11 +171,18 @@ export function TripStatsScreen() {
               <HighlightsCard record={record} unit={unit} />
               <CollectionCards
                 record={record}
+                places={places}
                 parksAndPeaks={parksAndPeaks}
                 unit={unit}
                 showLifetime={isAll}
               />
               <TopGearCard record={record} />
+              {isAll ? (
+                <IdleGearCard
+                  gear={idleGear}
+                  onPress={() => router.push('/trip-stats/idle-gear')}
+                />
+              ) : null}
               <BaseWeightCard record={record} />
               {isAll ? null : (
                 <Text variant="footnote" className="text-center text-muted-foreground">

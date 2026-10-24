@@ -59,11 +59,14 @@ function cacheKey(trip: StatsTrip): string {
 }
 
 /** Busiest first, then the earliest visited, then by name. */
-function byBusiest(a: { visits: unknown[]; firstVisit: Date; name: string }, b: typeof a): number {
-  return (
-    b.visits.length - a.visits.length ||
-    a.firstVisit.getTime() - b.firstVisit.getTime() ||
-    a.name.localeCompare(b.name)
+function sortByBusiest<T extends { visits: unknown[]; firstVisit: Date; name: string }>(
+  places: T[],
+): T[] {
+  return places.sort(
+    (a, b) =>
+      b.visits.length - a.visits.length ||
+      a.firstVisit.getTime() - b.firstVisit.getTime() ||
+      a.name.localeCompare(b.name),
   );
 }
 
@@ -141,16 +144,16 @@ export function computeTripPlaces({
   }
 
   const countries = [...countryVisits.entries()].map(([code, visits]): CountryStatus => {
-    const regions = [...(regionVisits.get(code) ?? new Map<string, PlaceVisit[]>()).entries()]
-      .map(
+    const regions = sortByBusiest(
+      [...(regionVisits.get(code) ?? new Map<string, PlaceVisit[]>()).entries()].map(
         ([regionCode, regionVisitList]): RegionStatus => ({
           code: regionCode,
           name: atlas.regionsByCode.get(regionCode)?.name ?? regionCode,
           visits: newestFirst(regionVisitList),
           firstVisit: firstRegion.get(regionCode) ?? earliest(regionVisitList),
         }),
-      )
-      .sort(byBusiest);
+      ),
+    );
     return {
       code,
       name: countryName(code),
@@ -160,7 +163,7 @@ export function computeTripPlaces({
       regions,
     };
   });
-  return { countries: countries.sort(byBusiest) };
+  return { countries: sortByBusiest(countries) };
 }
 
 export function regionCount(places: TripPlaces): number {
@@ -192,7 +195,7 @@ export function newPlaces({
 
 /** The most-visited region, else country, once it has more than one trip. */
 export function mostVisitedPlace(places: TripPlaces): { name: string; trips: number } | null {
-  const pick = (list: readonly { name: string; visits: PlaceVisit[] }[]) => {
+  const busiest = (list: readonly { name: string; visits: PlaceVisit[] }[]) => {
     let best: { name: string; trips: number } | null = null;
     for (const place of list) {
       const trips = place.visits.length;
@@ -203,8 +206,8 @@ export function mostVisitedPlace(places: TripPlaces): { name: string; trips: num
     return best && best.trips > 1 ? best : null;
   };
   return (
-    pick(places.countries.flatMap((country) => country.regions)) ??
-    pick(places.countries.slice(0, 1))
+    busiest(places.countries.flatMap((country) => country.regions)) ??
+    busiest(places.countries.slice(0, 1))
   );
 }
 

@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { formatDay } from '../lib/useStatsFormat';
+import { scopeParams } from '../screens/PlacesScreens';
 import {
   highestAscent,
   latestParkVisit,
@@ -17,12 +18,14 @@ import {
   visitedParks,
 } from '../utils/parksAndPeaks';
 import type { Coordinate } from '../utils/polyline';
+import type { TripPlaces } from '../utils/tripPlaces';
 import type { TripStatsRecord } from '../utils/tripStats';
 import { formatElevation, type TripDistanceUnit } from '../utils/units';
+import { PlacesCard } from './PlacesAndGearCards';
 import { ProgressBar, StatsCard } from './StatsParts';
 
 /** The whole card opens its list, like a Material 3 clickable card. */
-function CardLink({
+export function CardLink({
   onPress,
   testID,
   children,
@@ -180,14 +183,16 @@ export function TripsMapCard({ record }: { record: TripStatsRecord }) {
   );
 }
 
-/** The map, then the lifetime collections, which open their own lists. */
+/** The map, countries and states, then the lifetime collections, which open their own lists. */
 export function CollectionCards({
   record,
+  places,
   parksAndPeaks,
   unit,
   showLifetime,
 }: {
   record: TripStatsRecord;
+  places: TripPlaces;
   parksAndPeaks: ParksAndPeaks;
   unit: TripDistanceUnit;
   /** Parks and peaks are lifetime collections, shown only while the record isn't filtered. */
@@ -197,6 +202,13 @@ export function CollectionCards({
   return (
     <>
       <TripsMapCard record={record} />
+      <PlacesCard
+        places={places}
+        scope={record.scope}
+        onPress={() =>
+          router.push({ pathname: '/trip-stats/places', params: scopeParams(record.scope) })
+        }
+      />
       {showLifetime ? (
         <>
           <ParksCard
