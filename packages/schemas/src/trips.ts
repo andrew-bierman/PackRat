@@ -144,3 +144,4 @@ export type TripStatus = z.infer<typeof TripStatusSchema>;
 export type TripPlannedRoute = z.infer<typeof TripPlannedRouteSchema>;
 export type TripActivity = z.infer<typeof TripActivitySchema>;
 export type TripSummit = z.infer<typeof TripSummitSchema>;
+export type TripLog = z.infer<typeof TripLogSchema>;

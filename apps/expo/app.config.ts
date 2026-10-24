@@ -154,7 +154,7 @@ export default (): ExpoConfig =>
       {
         name: getAppName(),
         slug: 'packrat',
-        version: '2.2.4',
+        version: '2.3.0',
         scheme: 'packrat',
         web: {
           bundler: 'metro',
@@ -195,7 +195,10 @@ export default (): ExpoConfig =>
           ],
           [
             'react-native-maps',
-            { iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY },
+            {
+              iosGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+              androidGoogleMapsApiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
+            },
           ],
           '@sentry/react-native',
           [

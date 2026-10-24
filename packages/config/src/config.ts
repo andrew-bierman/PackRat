@@ -33,6 +33,7 @@ const DashboardTileId = Object.freeze({
   WeightAnalysis: 'weight-analysis',
   PackCategories: 'pack-categories',
   UpcomingTrips: 'upcoming-trips',
+  TripStats: 'trip-stats',
   TrailConditions: 'trail-conditions',
   Weather: 'weather',
   GearInventory: 'gear-inventory',
@@ -111,6 +112,7 @@ const APP_CONFIG_SOURCE = {
       conditional: {
         tripsOrTrailSpacer: DashboardLayoutId.Gap2,
         trips: DashboardTileId.UpcomingTrips,
+        tripStats: DashboardTileId.TripStats,
         trailConditions: DashboardTileId.TrailConditions,
         shoppingList: DashboardTileId.ShoppingList,
         sharedPacks: DashboardTileId.SharedPacks,

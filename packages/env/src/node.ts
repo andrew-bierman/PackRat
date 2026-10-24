@@ -132,6 +132,9 @@ export const nodeEnvSchema = z.object({
   // apps/swift/scripts/submit-app-store-review.ts
   APPLE_ASC_API_KEY_PATH: z.string().min(1).optional(),
   ASC_APP_ID: z.string().regex(/^\d+$/).optional(),
+  // Sentry DSN for the Swift app's own Sentry project, passed to the archive
+  // as the SENTRY_DSN build setting. Separate from the API's SENTRY_DSN.
+  IOS_SENTRY_DSN: z.string().url().optional(),
 });
 
 export type NodeEnv = z.infer<typeof nodeEnvSchema>;
@@ -222,4 +225,5 @@ export const nodeEnv = nodeEnvSchema.parse({
   APP_STORE_CURRENT_BUILD_NUMBER: process.env.APP_STORE_CURRENT_BUILD_NUMBER,
   APPLE_ASC_API_KEY_PATH: process.env.APPLE_ASC_API_KEY_PATH,
   ASC_APP_ID: process.env.ASC_APP_ID,
+  IOS_SENTRY_DSN: optionalEnv(process.env.IOS_SENTRY_DSN),
 });
